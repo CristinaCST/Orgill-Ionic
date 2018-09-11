@@ -1,0 +1,7 @@
+{
+  "name": "Orgill-Ionic",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
