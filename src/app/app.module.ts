@@ -9,7 +9,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthServiceProvider} from "../providers/authservice/authservice";
 import { ApiProvider} from "../providers/api-provider";
-import { LoginPage} from "../pages/login/login";
+import { Login} from "../pages/login/login";
 import { HttpClient, HttpClientModule} from "@angular/common/http";
 import { LoadingProvider } from '../providers/loading/loading';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -20,7 +20,7 @@ import { TranslateProvider } from '../providers/translate/translate';
   declarations: [
     MyApp,
     HomePage,
-    Catalog, LoginPage
+    Catalog, Login
   ],
   imports: [
     BrowserModule,
@@ -38,7 +38,7 @@ import { TranslateProvider } from '../providers/translate/translate';
   entryComponents: [
     MyApp,
     HomePage,
-    Catalog, LoginPage
+    Catalog, Login
   ],
   providers: [
     StatusBar,

@@ -5,6 +5,7 @@ import * as Constants from "../../util/constants";
 import {LoadingProvider} from "../../providers/loading/loading";
 import {TranslateProvider} from "../../providers/translate/translate";
 import {LoginRequest} from "../../interfaces/request-body/login-request";
+import {Catalog} from "../catalog/catalog";
 
 
 @Component({
@@ -12,7 +13,7 @@ import {LoginRequest} from "../../interfaces/request-body/login-request";
   templateUrl: 'login.html',
 })
 
-export class LoginPage {
+export class Login {
 
   username: string;
   password: string;
@@ -34,10 +35,15 @@ export class LoginPage {
     let loginRequest = {username: this.username, password: this.password};
 
     this.authService.login(loginRequest).subscribe(
-      () =>
-        this.loading.hideLoading()
+      () => {
+        this.loading.hideLoading();
+        this.authService.getUserInfo();
+        this.navCtrl.setRoot(Catalog);
+      }
       ,
       error => {
+        //TODO: login failed popup
+        console.error("something went wrong", error);
       }
     )
     ;
@@ -50,7 +56,7 @@ export class LoginPage {
       return true;
     }
 
-    //TODO: add alert
+    //TODO: add alert required username and password
     return false;
   }
 
