@@ -1,10 +1,10 @@
 import {Component} from '@angular/core';
-import {IonicPage, Loading, NavController, NavParams} from 'ionic-angular';
+import {NavController, NavParams} from 'ionic-angular';
 import {AuthServiceProvider} from "../../providers/authservice/authservice";
 import * as Constants from "../../util/constants";
 import {LoadingProvider} from "../../providers/loading/loading";
 import {TranslateProvider} from "../../providers/translate/translate";
-import {LoginRequest} from "../../interfaces/request-body/login-request";
+import {PopoversProvider} from "../../providers/popovers/popovers";
 
 
 @Component({
@@ -21,7 +21,8 @@ export class LoginPage {
               private navParams: NavParams,
               private authService: AuthServiceProvider,
               private loading: LoadingProvider,
-              private translateProvider: TranslateProvider) {
+              private translateProvider: TranslateProvider,
+              private popoversProvider: PopoversProvider) {
   }
 
   login() {
@@ -34,13 +35,15 @@ export class LoginPage {
     let loginRequest = {username: this.username, password: this.password};
 
     this.authService.login(loginRequest).subscribe(
-      () =>
-        this.loading.hideLoading()
+      () => {
+        console.log('success');
+        this.loading.hideLoading();
+      }
       ,
       error => {
+        console.error(error);
       }
-    )
-    ;
+    );
   }
 
 
