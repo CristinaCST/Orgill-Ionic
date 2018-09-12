@@ -15,14 +15,17 @@ import { LoadingProvider } from '../providers/loading/loading';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateProvider } from '../providers/translate/translate';
+import {ComponentsModule} from "../components/components.module";
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    Catalog, Login
+    Catalog,
+    Login
   ],
   imports: [
+    ComponentsModule,
     BrowserModule,
     IonicModule.forRoot(MyApp),
     HttpClientModule,
