@@ -15,7 +15,7 @@ import "rxjs/add/operator/mergeMap";
 @Injectable()
 export class AuthServiceProvider {
 
-  private user: User;
+  private user: User = new User();
 
   constructor(private apiProvider: ApiProvider) {
   }
