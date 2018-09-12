@@ -1,4 +1,4 @@
-export class User {
+export interface User {
   userToken: string;
   customer_number?: string;
   division?: string;
@@ -7,6 +7,6 @@ export class User {
   time_stamp?: string;
   password: string;
 
-  constructor(){}
+  // constructor(){}
 
 }

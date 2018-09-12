@@ -1,11 +1,10 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {IonicPage, Loading, NavController, NavParams} from 'ionic-angular';
 import {AuthServiceProvider} from "../../providers/authservice/authservice";
-import {User} from "../../interfaces/models/user";
-import {LocalStorageHelper} from "../../helpers/local-storage-helper";
-import * as Constants from  "../../util/constants";
+import * as Constants from "../../util/constants";
 import {LoadingProvider} from "../../providers/loading/loading";
 import {TranslateProvider} from "../../providers/translate/translate";
+import {LoginRequest} from "../../interfaces/request-body/login-request";
 
 
 @Component({
@@ -15,48 +14,39 @@ import {TranslateProvider} from "../../providers/translate/translate";
 
 export class LoginPage {
 
-  user : User;
+  username: string;
+  password: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private authService : AuthServiceProvider, private loading : LoadingProvider, private translateProvider: TranslateProvider) {
-    this.user = new User();
+  constructor(private navCtrl: NavController,
+              private navParams: NavParams,
+              private authService: AuthServiceProvider,
+              private loading: LoadingProvider,
+              private translateProvider: TranslateProvider) {
   }
 
-  login(){
+  login() {
     if (this.isValidInput() === false) {
       return;
     }
 
     this.loading.presentLoading(this.translateProvider.translate(Constants.LOADING_ALERT_CONTENT_LOGIN));
-    const loginParams = {'username': this.user.user_name, 'password': this.user.password};
 
-    this.authService.login(loginParams).subscribe(
-      response => {
-       this.onLoginSuccess(response);
+    let loginRequest = {username: this.username, password: this.password};
 
-      },
-      errorResponse => {
-        this.onLoginFailed(errorResponse);
+    this.authService.login(loginRequest).subscribe(
+      () =>
+        this.loading.hideLoading()
+      ,
+      error => {
       }
-    );
+    )
+    ;
   }
-
-  private onLoginSuccess(response){
-      this.user.userToken = JSON.parse(response.d)['User_Token'];
-      LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
-      this.loading.hideLoading();
-
-  }
-
-  private onLoginFailed(error){
-
-  }
-
-
 
 
   private isValidInput(): boolean {
 
-    if (this.user.user_name && this.user.password) {
+    if (this.username && this.password) {
       return true;
     }
 

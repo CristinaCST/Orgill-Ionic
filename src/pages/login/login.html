@@ -1,33 +1,27 @@
 <ion-header>
 
-
 </ion-header>
 
-
 <ion-content padding>
-
   <div>
-      <ion-row>
-        <ion-col>
-          <ion-list inset>
-
-            <ion-item>
-              <ion-input type="text" placeholder="{{'username' | translate }}" name="username" [(ngModel)]="user.user_name" required></ion-input>
-            </ion-item>
-
-            <ion-item>
-              <ion-input type="password" placeholder="{{'password' | translate }}" name="password" [(ngModel)]="user.password" required></ion-input>
-            </ion-item>
-
-          </ion-list>
-        </ion-col>
-      </ion-row>
-
-      <ion-row>
-        <ion-col>
-          <button ion-button round (click)="login()">{{'login' | translate}}</button>
-        </ion-col>
-      </ion-row>
-
+    <ion-row>
+      <ion-col>
+        <ion-list inset>
+          <ion-item>
+            <ion-input type="text" placeholder="{{'username' | translate }}" name="username"
+                       [(ngModel)]="username" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input type="password" placeholder="{{'password' | translate }}" name="password"
+                       [(ngModel)]="password" required></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <button ion-button round (click)="login()">{{'login' | translate}}</button>
+      </ion-col>
+    </ion-row>
   </div>
 </ion-content>
