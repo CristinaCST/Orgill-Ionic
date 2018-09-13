@@ -5,6 +5,7 @@ import * as Constants from "../../util/constants";
 import {LoadingProvider} from "../../providers/loading/loading";
 import {TranslateProvider} from "../../providers/translate/translate";
 import {PopoversProvider} from "../../providers/popovers/popovers";
+import {Catalog} from "../catalog/catalog";
 
 
 @Component({
@@ -12,7 +13,7 @@ import {PopoversProvider} from "../../providers/popovers/popovers";
   templateUrl: 'login.html',
 })
 
-export class Login{
+export class Login {
 
   username: string;
   password: string;
@@ -37,6 +38,8 @@ export class Login{
     this.authService.login(loginRequest).subscribe(
       () => {
         this.loading.hideLoading();
+        this.authService.getUserInfo();
+        this.navCtrl.setRoot(Catalog).then(() => console.log('To catalog Page'));
       }
       ,
       error => {
