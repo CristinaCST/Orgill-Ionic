@@ -1,0 +1,45 @@
+@import "../../theme/variables";
+
+/* modal header style */
+ion-header {
+  ion-navbar {
+    ion-title {
+      text-align: center;
+    }
+  }
+}
+
+/* modal content style */
+ion-content {
+  p {
+    text-align: center;
+  }
+  .modal-btn-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 5px;
+
+    .modals-btn {
+      width: 95%;
+      display: flex;
+
+      button{
+        width: 100%;
+      }
+      .round {
+        border-radius: 10px;
+      }
+      .bg-dark {
+        background-color: transparent;
+        color: color($colors, OrgillDarkGray);
+      }
+      .bg-light {
+        background-color: color($colors, OrgillRed);
+      }
+    }
+  }
+}
+
+
+

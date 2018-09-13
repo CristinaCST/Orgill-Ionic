@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-navbar *ngIf="data">
+    <ion-title *ngIf="data.title">{{data.title | translate }}</ion-title>
+    <ion-buttons end *ngIf="data.closeOptionAvailable === true">
+      <button ion-button icon-only (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content *ngIf="data">
+  <p *ngIf="data.message">
+    {{data.message | translate }}
+  </p>
+  <div *ngIf="data.isNewListAlert">
+    <ion-list>
+      <ion-item no-padding>
+        <ion-input [(ngModel)]="listName" type="text"
+                   placeholder="{{'new_list_hint_name' | translate }}"></ion-input>
+      </ion-item>
+      <ion-item no-padding>
+        <ion-input [(ngModel)]="listDescription" type="text"
+                   placeholder="{{'new_list_hint_desc'| translate }}"></ion-input>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div class="modal-btn-container">
+    <div class="modals-btn">
+      <button *ngIf="data.dismissButtonText" class="round bg-dark" ion-button outline>
+        {{data.dismissButtonText | translate }}
+      </button>
+      <button *ngIf="data.negativeButtonText" class="round bg-dark" ion-button outline>
+        {{data.negativeButtonText | translate }}
+      </button>
+      <button *ngIf="data.positiveButtonText" class="round bg-light" ion-button>
+        {{data.positiveButtonText | translate }}
+      </button>
+    </div>
+  </div>
+
+</ion-content>
