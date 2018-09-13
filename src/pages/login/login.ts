@@ -12,7 +12,7 @@ import {PopoversProvider} from "../../providers/popovers/popovers";
   templateUrl: 'login.html',
 })
 
-export class LoginPage {
+export class Login{
 
   username: string;
   password: string;
@@ -36,12 +36,13 @@ export class LoginPage {
 
     this.authService.login(loginRequest).subscribe(
       () => {
-        console.log('success');
         this.loading.hideLoading();
       }
       ,
       error => {
-        console.error(error);
+        this.loading.hideLoading();
+        let content = {title: Constants.LOGIN_ERROR_TITLE, message: Constants.LOGIN_ERROR_INVALID};
+        this.popoversProvider.show(content);
       }
     );
   }
@@ -53,7 +54,8 @@ export class LoginPage {
       return true;
     }
 
-    //TODO: add alert
+    let content = {title: Constants.LOGIN_ERROR_TITLE, message: Constants.LOGIN_ERROR_REQUIRED};
+    this.popoversProvider.show(content);
     return false;
   }
 

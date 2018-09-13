@@ -5,9 +5,10 @@ export class User {
   price_type?: string;
   user_name?: string;
   time_stamp?: string;
-  password: string;
+  password?: string;
 
-  constructor() {
-  }
+  constructor(){
+
+}
 
 }

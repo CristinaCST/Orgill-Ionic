@@ -34,7 +34,7 @@ export class PopoverComponent {
   }
 
   public dismiss() {
-    let data = {text: 'aa'};
+    let data = {};
     this.viewCtrl.dismiss(data).then(() => console.log('modal closed'));
   }
 
