@@ -2,23 +2,17 @@ import {Component} from '@angular/core';
 import {NavParams} from "ionic-angular";
 import * as Constants from "../../util/constants";
 import {ViewController} from "ionic-angular";
-import {TranslateProvider} from "../../providers/translate/translate";
 
 @Component({
   selector: 'popover',
   templateUrl: 'popover.html'
 })
 export class PopoverComponent {
-
+  data: any;
   listName: string;
   listDescription: string;
 
-  data: any = null;
-
-  constructor(private navParams: NavParams, public viewCtrl: ViewController, private translateProvider: TranslateProvider) {
-    this.translateProvider.translate(Constants.SHOPPING_LIST_NEW_DIALOG_HINT_NAME);
-    this.translateProvider.translate(Constants.SHOPPING_LIST_NEW_DIALOG_HINT_DESCRIPTION);
-
+  constructor(private navParams: NavParams, public viewCtrl: ViewController ) {
     this.data = this.navParams.data;
 
     if (this.data) {
@@ -33,8 +27,8 @@ export class PopoverComponent {
     }
   }
 
-  public dismiss() {
-    let data = {};
+  public dismiss(option) {
+    let data = {type: this.data.type, optionSelected: option};
     this.viewCtrl.dismiss(data).then(() => console.log('modal closed'));
   }
 

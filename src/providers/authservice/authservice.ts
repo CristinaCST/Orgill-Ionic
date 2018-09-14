@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {Observable} from "rxjs/Observable";
 import {Md5} from "ts-md5";
 import {LoginRequest} from "../../interfaces/request-body/login-request";
 import {ApiProvider} from "../api-provider";
@@ -8,9 +7,6 @@ import 'rxjs/add/operator/map';
 import {LocalStorageHelper} from "../../helpers/local-storage-helper";
 import * as Constants from "../../util/constants";
 import {User} from "../../interfaces/models/user";
-import "rxjs/add/operator/do";
-import "rxjs/add/operator/mergeMap";
-
 
 @Injectable()
 export class AuthServiceProvider {
@@ -35,7 +31,13 @@ export class AuthServiceProvider {
     });
   }
 
+  logout() {
+    LocalStorageHelper.removeFromLocalStorage(Constants.USER);
+  }
 
+  logoutDeleteData(){
+
+  }
   getUserInfo() {
     const params = {'user_token': this.user.userToken};
     this.apiProvider.post(ConstantsURL.URL_USER_INFO, params).subscribe(response => {
@@ -43,7 +45,6 @@ export class AuthServiceProvider {
       this.user.userToken = params.user_token;
       LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
     });
-
   }
 
 }

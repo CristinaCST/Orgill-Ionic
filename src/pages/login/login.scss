@@ -1,3 +1,45 @@
+@import "../../theme/variables";
+
 page-login {
 
+  ion-content {
+    background: linear-gradient(to bottom, color($colors, OrgillWhiteGray) 0%, color($colors, OrgillLightGray) 100%);
+
+    .scroll-content {
+      padding-bottom: 0 !important;
+    }
+
+    .login-page-content {
+      width: 100%;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+
+      .input-item {
+        padding-left: 0;
+        background-color: transparent;
+        .gray-icon {
+          color: color($colors, OrgillDarkGray);
+        }
+        .item-inner {
+          margin-left: 0;
+        }
+      }
+      .login-button {
+        width: 100%;
+        padding: 1.3em;
+        background-color: color($colors, OrgillRed);
+        font-size: $font-size-medium;
+      }
+      .button-container {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        padding: 0;
+        margin: 0 0 10px;
+      }
+    }
+  }
 }

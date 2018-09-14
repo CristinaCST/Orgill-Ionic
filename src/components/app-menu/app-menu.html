@@ -1,10 +1,7 @@
-<ion-content class="content">
+<ion-item-group class="group">
+  <button ion-item class="item" detail-none menuClose (click)="logout()">
+    <ion-icon name="log-out" ></ion-icon>
+    {{"menu_account_logout"| translate }}
+  </button>
+</ion-item-group>
 
-  <ion-item-group class="group">
-    <button ion-item class="item" detail-none menuClose (click)="logout()">
-      <ion-icon name="log-out"></ion-icon>
-      {{"menu_account_logout"}}
-    </button>
-  </ion-item-group>
-
-</ion-content>

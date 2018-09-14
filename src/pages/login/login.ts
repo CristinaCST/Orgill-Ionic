@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {NavController,} from 'ionic-angular';
 import {AuthServiceProvider} from "../../providers/authservice/authservice";
 import * as Constants from "../../util/constants";
 import {LoadingProvider} from "../../providers/loading/loading";
@@ -19,7 +19,6 @@ export class Login {
   password: string;
 
   constructor(private navCtrl: NavController,
-              private navParams: NavParams,
               private authService: AuthServiceProvider,
               private loading: LoadingProvider,
               private translateProvider: TranslateProvider,
@@ -57,7 +56,7 @@ export class Login {
       return true;
     }
 
-    let content = {title: Constants.LOGIN_ERROR_TITLE, message: Constants.LOGIN_ERROR_REQUIRED};
+    let content = {title: Constants.LOGIN_ERROR_TITLE, message: Constants.LOGIN_ERROR_REQUIRED,positiveButtonText:Constants.OK};
     this.popoversProvider.show(content);
     return false;
   }

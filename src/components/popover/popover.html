@@ -28,13 +28,10 @@
 
   <div class="modal-btn-container">
     <div class="modals-btn">
-      <button *ngIf="data.dismissButtonText" class="round bg-dark" ion-button outline (click)="dismiss()">
-        {{data.dismissButtonText | translate }}
-      </button>
-      <button *ngIf="data.negativeButtonText" class="round bg-dark" ion-button outline (click)="dismiss()">
+      <button *ngIf="data.negativeButtonText" class="round bg-dark" ion-button outline (click)="dismiss('NO')">
         {{data.negativeButtonText | translate }}
       </button>
-      <button *ngIf="data.positiveButtonText" class="round bg-light" ion-button (click)="dismiss()">
+      <button *ngIf="data.positiveButtonText" class="round bg-light" ion-button (click)="dismiss('OK')">
         {{data.positiveButtonText | translate }}
       </button>
     </div>

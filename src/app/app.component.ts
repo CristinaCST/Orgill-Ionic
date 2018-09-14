@@ -1,16 +1,15 @@
-import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
+import {Component, ViewChild} from '@angular/core';
+import {Nav, Platform} from 'ionic-angular';
+import {StatusBar} from '@ionic-native/status-bar';
+import {SplashScreen} from '@ionic-native/splash-screen';
 
-import { HomePage } from '../pages/home/home';
-import { Catalog } from '../pages/catalog/catalog';
+import {HomePage} from '../pages/home/home';
+import {Catalog} from '../pages/catalog/catalog';
 import {Login} from "../pages/login/login";
-import { TranslateService } from '@ngx-translate/core';
+import {TranslateService} from '@ngx-translate/core';
 import {LocalStorageHelper} from "../helpers/local-storage-helper";
 import * as Constants from '../util/constants';
 import {DateTime} from "../providers/datetime/DateTime";
-
 
 @Component({
   templateUrl: 'app.html'
@@ -20,16 +19,20 @@ export class MyApp {
 
   rootPage: any = Login;
 
-  pages: Array<{title: string, component: any}>;
+  pages: Array<{ title: string, component: any }>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, private translate: TranslateService) {
+  constructor(public platform: Platform,
+              public statusBar: StatusBar,
+              private splashScreen: SplashScreen,
+              private translate: TranslateService) {
+
     this.setAppLanguage();
     this.initializeApp();
 
     this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'Catalog', component: Catalog },
-      { title : "Login", component: Login}
+      {title: 'Home', component: HomePage},
+      {title: 'Catalog', component: Catalog},
+      {title: "Login", component: Login}
     ];
 
   }
@@ -48,16 +51,16 @@ export class MyApp {
   }
 
 
-  private setAppLanguage(){
-      let language = navigator.language;
-      if(language.includes("fr"))
-        this.translate.setDefaultLang("fr");
-      else this.translate.setDefaultLang("en");
+  private setAppLanguage() {
+    let language = navigator.language;
+    if (language.includes("fr"))
+      this.translate.setDefaultLang("fr");
+    else this.translate.setDefaultLang("en");
   }
 
   private checkSession() {
 
-    if(this.isValidSession()) {
+    if (this.isValidSession()) {
       this.rootPage = Catalog;
     } else {
       this.rootPage = Login;
@@ -75,6 +78,5 @@ export class MyApp {
 
     return now <= sessionTimestampWith4Days;
   }
-
 
 }
