@@ -5,8 +5,9 @@ import {PopoverComponent} from "./popover/popover";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {HttpClient} from "@angular/common/http";
 import {createTranslateLoader} from "../app/app.module";
+import {NavbarComponent} from "./navbar/navbar";
 
-let components = [AppMenuComponent, PopoverComponent];
+let components = [AppMenuComponent, PopoverComponent, NavbarComponent];
 
 @NgModule({
   declarations: components,

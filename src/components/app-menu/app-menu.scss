@@ -1,0 +1,55 @@
+@import "../../theme/variables";
+
+app-menu {
+  #main_menu {
+    .content {
+      background-color: color($colors, OrgillDarkGray);
+
+      .group {
+        & * {
+          background-color: transparent;
+          padding-left: 0 !important;
+        }
+
+        .item-md.item-block .item-inner {
+          border-bottom: 1px solid color($colors, OrgillMediumGray);
+        }
+
+        button {
+          color: white;
+          .label {
+            padding-left: 16px !important;
+            &.label-md {
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+            }
+          }
+          .menu-icon {
+            line-height: 1;
+            padding-right: 0 !important;
+            margin-right: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+        }
+      }
+    }
+  }
+
+  .item-inner {
+    padding-right: $ion-app-padding;
+    .label {
+      padding-left: $ion-app-padding;
+      margin-right: 0;
+    }
+  }
+
+  .item-divider {
+    background-color: transparent;
+    margin-bottom: 0 !important;
+    margin-left: $ion-app-padding-half;
+    margin-right: $ion-app-padding-half;
+  }
+}

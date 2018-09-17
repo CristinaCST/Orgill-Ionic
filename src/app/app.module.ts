@@ -1,29 +1,31 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { ErrorHandler, NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {ErrorHandler, NgModule} from '@angular/core';
 import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
-import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
-import { Catalog } from '../pages/catalog/catalog';
+import {MyApp} from './app.component';
+import {HomePage} from '../pages/home/home';
+import {Catalog} from '../pages/catalog/catalog';
 import {Login} from "../pages/login/login";
 
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { AuthServiceProvider} from "../providers/authservice/authservice";
-import { ApiProvider} from "../providers/api-provider";
-import { HttpClient, HttpClientModule} from "@angular/common/http";
-import { LoadingProvider } from '../providers/loading/loading';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { TranslateProvider } from '../providers/translate/translate';
+import {StatusBar} from '@ionic-native/status-bar';
+import {SplashScreen} from '@ionic-native/splash-screen';
+import {AuthServiceProvider} from "../providers/authservice/authservice";
+import {ApiProvider} from "../providers/api-provider";
+import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {LoadingProvider} from '../providers/loading/loading';
+import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {TranslateProvider} from '../providers/translate/translate';
 import {ComponentsModule} from "../components/components.module";
 import {PopoversProvider} from "../providers/popovers/popovers";
+import {AboutPage} from "../pages/about/about";
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     Catalog,
-    Login
+    Login,
+    AboutPage
   ],
   imports: [
     BrowserModule,
@@ -43,7 +45,8 @@ import {PopoversProvider} from "../providers/popovers/popovers";
     MyApp,
     HomePage,
     Catalog,
-    Login
+    Login,
+    AboutPage
   ],
   providers: [
     StatusBar,
@@ -58,7 +61,8 @@ import {PopoversProvider} from "../providers/popovers/popovers";
 })
 
 
-export class AppModule {}
+export class AppModule {
+}
 
 
 export function createTranslateLoader(http: HttpClient) {

@@ -1,16 +1,18 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {App} from "ionic-angular";
 import {Login} from "../../pages/login/login";
 import * as Constants from "../../util/constants";
 import {AuthServiceProvider} from "../../providers/authservice/authservice";
 import {PopoversProvider} from "../../providers/popovers/popovers";
-import "rxjs/add/operator/map";
+import {AboutPage} from "../../pages/about/about";
 
 @Component({
   selector: 'app-menu',
   templateUrl: 'app-menu.html'
 })
 export class AppMenuComponent {
+  public menuPages = {aboutPage: AboutPage};
+  @Input('rootPage') rootPage;
 
   constructor(private app: App,
               private popoversProvider: PopoversProvider,
@@ -18,9 +20,7 @@ export class AppMenuComponent {
 
   }
 
-
   public logout() {
-
     let content = {
       type: Constants.POPOVER_LOGOUT,
       title: Constants.LOGOUT_TITLE,
@@ -30,8 +30,9 @@ export class AppMenuComponent {
       positiveButtonText: Constants.OK
     };
 
-    this.popoversProvider.show(content).map((data) => {
+    this.popoversProvider.show(content).subscribe((data) => {
       if (data.type === Constants.POPOVER_LOGOUT) {
+
         if (data.optionSelected === "NO") {
           //TODO MAKE SERVICE FOR DELETE DATA
           this.authServiceProvider.logoutDeleteData();
@@ -41,4 +42,10 @@ export class AppMenuComponent {
       }
     });
   }
+
+  public goToPage(page) {
+    ////.setRoot(page)
+    this.app.getActiveNav().push(page).then(() => console.log('To ', page));
+  }
+
 }

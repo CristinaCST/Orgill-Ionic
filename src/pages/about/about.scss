@@ -1,0 +1,21 @@
+page-about {
+  .content {
+    height: 100%;
+    width: 100%;
+    position: relative !important;
+    background-size: 100% 100%;
+    background: url("../../assets/imgs/login_background.png") no-repeat center center;
+    background-size: cover;
+
+    .about-page-container {
+      width: 90%;
+      display: flex;
+      justify-content: center;
+      margin: 10% 5%;
+      #info {
+        font-size: 20px;
+        font-weight: bold;
+      }
+    }
+  }
+}
