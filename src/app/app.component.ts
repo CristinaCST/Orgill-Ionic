@@ -73,10 +73,10 @@ export class MyApp {
       return false;
     }
     const now = DateTime.getCurrentDateTime();
-    const receivedTimestamp = (JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER)).time_stamp).toString();
+    const receivedTimestamp = (JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER)).time_stamp);
     const sessionTimestampWith4Days = DateTime.getTimeAfter4Days(receivedTimestamp);
 
-    return now <= sessionTimestampWith4Days;
+    return sessionTimestampWith4Days.isSameOrAfter(now);
   }
 
 }

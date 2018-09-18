@@ -18,6 +18,7 @@ import {TranslateProvider} from '../providers/translate/translate';
 import {ComponentsModule} from "../components/components.module";
 import {PopoversProvider} from "../providers/popovers/popovers";
 import {AboutPage} from "../pages/about/about";
+import {CatalogsProvider} from '../providers/catalogs/catalogs';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import {AboutPage} from "../pages/about/about";
     ApiProvider,
     LoadingProvider,
     TranslateProvider,
-    PopoversProvider
+    PopoversProvider,
+    CatalogsProvider
   ]
 })
 

@@ -8,9 +8,8 @@ export class LocalStorageHelper {
   }
 
   public static hasKey(key: string): boolean {
-    if (localStorage.getItem(key))
-      return true;
-    return false;
+    return !!localStorage.getItem(key);
+
   }
 
   public static getFromLocalStorage(key: string) {

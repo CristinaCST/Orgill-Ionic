@@ -1,4 +1,4 @@
-<ion-menu id="main_menu" [content]="menu_content" persistent = 'true'>
+<ion-menu id="main_menu" [content]="menu_content" persistent='true'>
   <!-- Menu Header-->
   <ion-header>
     <ion-toolbar>
@@ -10,7 +10,28 @@
   <!--Menu content -->
   <ion-content class="content">
     <ion-item-group class="group">
+      <!-- Every day catalog -->
       <ion-item-divider no-lines>{{"menu_header_everyday_catalog" | translate}}:</ion-item-divider>
+      <button ion-item class="item" menuClose *ngFor="let program of everyDayPrograms">
+        {{program .NAME}}
+      </button>
+      <ion-item *ngIf="!everyDayPrograms.length" class="item" detail-none> {{"menu_error_loading_programs" | translate}}
+      </ion-item>
+
+      <!-- Market Only catalog -->
+      <ion-item-divider *ngIf="marketOnlyPrograms.length" no-lines>{{"menu_header_market_catalog" | translate}}:
+      </ion-item-divider>
+      <button ion-item class="item" menuClose *ngFor="let program of marketOnlyPrograms">
+        {{program.NAME}}
+      </button>
+
+      <!-- Door Buster catalog -->
+      <ion-item-divider *ngIf="doorBusterPrograms.length" no-lines>{{"menu_header_door_buster_bookings_catalog" | translate}}:
+      </ion-item-divider>
+      <button ion-item class="item" menuClose  *ngFor="let program of doorBusterPrograms">
+        {{program.NAME}}
+      </button>
+
       <ion-item-divider no-lines>{{"menu_header_account" | translate}}:</ion-item-divider>
       <button ion-item detail-none menuClose icon-left (click)="goToPage(menuPages.aboutPage)">
         <ion-icon class="menu-icon" name="information-circle"></ion-icon>
