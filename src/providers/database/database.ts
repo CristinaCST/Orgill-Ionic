@@ -86,15 +86,15 @@ export class DatabaseProvider {
 
   fillDatabase() {
 
-    this.http.get('assets/db.sql')
-      .map((res: Response) => res.json())
-      .subscribe(
-        data => {
-          this.databaseReady.next(true);
-          this.storage.set('database_filled', true);
-        }
+    this.http.get('assets/db.sql', {responseType: 'text'})
+      .subscribe(sql => {
+        this.sqlitePorter.importSqlToDb(this.database, sql )
+          .then(data => {
+            this.databaseReady.next(true);
+            this.storage.set('database_filled', true);
+          })
+          .catch(e => console.log(e));}
       );
-
   }
 
   /* PRODUCTS  & SHOPPING LISTS */
