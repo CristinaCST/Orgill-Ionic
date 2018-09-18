@@ -11,12 +11,16 @@ export class CatalogsProvider {
 
   constructor(private apiProvider: ApiProvider) {
     let userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
-    this.userToken = userInfo.userToken;
+    if (userInfo) {
+      this.userToken = userInfo.userToken;
+    }
   }
 
   getPrograms() {
-    let params = {"user_token": this.userToken};
-    return this.apiProvider.post(ConstantsUrl.URL_PROGRAMS, params);
+    if (this.userToken) {
+      let params = {"user_token": this.userToken};
+      return this.apiProvider.post(ConstantsUrl.URL_PROGRAMS, params);
+    }
   }
 
 }
