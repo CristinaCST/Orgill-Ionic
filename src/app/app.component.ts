@@ -10,6 +10,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {LocalStorageHelper} from "../helpers/local-storage-helper";
 import * as Constants from '../util/constants';
 import {DateTime} from "../providers/datetime/DateTime";
+import {DatabaseProvider} from "../providers/database/database";
 
 @Component({
   templateUrl: 'app.html'
@@ -19,12 +20,15 @@ export class MyApp {
 
   rootPage: any = Login;
   pages: Array<{ title: string, component: any }>;
+  static databaseProvider: DatabaseProvider;
+
 
   constructor(public platform: Platform,
               public statusBar: StatusBar,
               private splashScreen: SplashScreen,
-              private translate: TranslateService) {
+              private translate: TranslateService, public databaseProvider: DatabaseProvider) {
 
+    MyApp.databaseProvider = this.databaseProvider;
     this.setAppLanguage();
     this.initializeApp();
 
@@ -41,7 +45,13 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
-      this.checkSession();
+      MyApp.databaseProvider.getDatabaseState()
+        .subscribe(isDatabaseOpen => {
+          if (isDatabaseOpen) {
+            this.checkSession();
+          }
+        });
+
     });
   }
 
