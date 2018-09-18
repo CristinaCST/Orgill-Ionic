@@ -19,6 +19,7 @@ export class AppMenuComponent implements OnInit {
   public doorBusterPrograms: Array<any> = [];
 
   @Input('rootPage') rootPage;
+  @Input('validSession') validSession;
 
   constructor(private app: App,
               private popoversProvider: PopoversProvider,
@@ -28,7 +29,9 @@ export class AppMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPrograms();
+    if (this.validSession === true) {
+      this.getPrograms();
+    }
   }
 
   public logout() {
