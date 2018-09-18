@@ -19,6 +19,10 @@ import {ComponentsModule} from "../components/components.module";
 import {PopoversProvider} from "../providers/popovers/popovers";
 import {AboutPage} from "../pages/about/about";
 import {CatalogsProvider} from '../providers/catalogs/catalogs';
+import { DatabaseProvider } from '../providers/database/database';
+import {SQLitePorter} from "@ionic-native/sqlite-porter";
+import {SQLite} from "@ionic-native/sqlite";
+import {IonicStorageModule} from "@ionic/storage";
 
 @NgModule({
   declarations: [
@@ -31,6 +35,7 @@ import {CatalogsProvider} from '../providers/catalogs/catalogs';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot(),
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
@@ -58,7 +63,11 @@ import {CatalogsProvider} from '../providers/catalogs/catalogs';
     LoadingProvider,
     TranslateProvider,
     PopoversProvider,
-    CatalogsProvider
+    CatalogsProvider,
+    DatabaseProvider,
+    SQLitePorter,
+    SQLite,
+
   ]
 })
 
