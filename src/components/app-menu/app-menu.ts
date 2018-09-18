@@ -19,7 +19,6 @@ export class AppMenuComponent implements OnInit {
   public doorBusterPrograms: Array<any> = [];
 
   @Input('rootPage') rootPage;
-  @Input('validSession') validSession;
 
   constructor(private app: App,
               private popoversProvider: PopoversProvider,
@@ -29,9 +28,7 @@ export class AppMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.validSession === true) {
-      this.getPrograms();
-    }
+    this.getPrograms();
   }
 
   public logout() {
@@ -61,13 +58,15 @@ export class AppMenuComponent implements OnInit {
 
   public getPrograms() {
     this.catalogsProvider.getPrograms().subscribe(response => {
-      let programs = JSON.parse(response.d);
-      programs.map(program => {
-        program.MARKETONLY.toUpperCase().includes("Y") ?
-          program.NAME.toUpperCase().includes("DOOR BUSTER BOOKING") ?
-            this.doorBusterPrograms.push(program) : this.marketOnlyPrograms.push(program) :
-          this.everyDayPrograms.push(program);
-      })
+      if (response) {
+        let programs = JSON.parse(response.d);
+        programs.map(program => {
+          program.MARKETONLY.toUpperCase().includes("Y") ?
+            program.NAME.toUpperCase().includes("DOOR BUSTER BOOKING") ?
+              this.doorBusterPrograms.push(program) : this.marketOnlyPrograms.push(program) :
+            this.everyDayPrograms.push(program);
+        })
+      }
     })
   }
 

@@ -18,8 +18,6 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = Login;
-  validSession: boolean = false;
-
   pages: Array<{ title: string, component: any }>;
 
   constructor(public platform: Platform,
@@ -60,9 +58,7 @@ export class MyApp {
   }
 
   private checkSession() {
-    this.validSession = this.isValidSession();
-    console.log(this.validSession);
-    if (this.validSession === true) {
+    if (this.isValidSession() === true) {
       this.rootPage = Catalog;
     } else {
       this.rootPage = Login;
