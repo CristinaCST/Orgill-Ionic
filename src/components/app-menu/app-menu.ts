@@ -6,6 +6,10 @@ import {AuthServiceProvider} from "../../providers/authservice/authservice";
 import {PopoversProvider} from "../../providers/popovers/popovers";
 import {AboutPage} from "../../pages/about/about";
 import {CatalogsProvider} from "../../providers/catalogs/catalogs";
+import {TranslateProvider} from "../../providers/translate/translate";
+import {DatabaseProvider} from "../../providers/database/database";
+import {ShoppingList} from "../../interfaces/models/shopping-list";
+import {Program} from "../../interfaces/models/program";
 
 @Component({
   selector: 'app-menu',
@@ -13,22 +17,29 @@ import {CatalogsProvider} from "../../providers/catalogs/catalogs";
 })
 export class AppMenuComponent implements OnInit {
 
-  public menuPages = {aboutPage: AboutPage};
-  public everyDayPrograms: Array<any> = [];
-  public marketOnlyPrograms: Array<any> = [];
-  public doorBusterPrograms: Array<any> = [];
+  public menuPages = {aboutPage: AboutPage,};
+  public everyDayPrograms: Array<Program> = [];
+  public marketOnlyPrograms: Array<Program> = [];
+  public doorBusterPrograms: Array<Program> = [];
+  public defaultShoppingLists: Array<ShoppingList> = [];
+  public customShoppingLists: Array<ShoppingList> = [];
+  public showShoppingListsMenu: boolean = false;
 
   @Input('rootPage') rootPage;
+  @Input('menuContent') menuContent;
 
   constructor(private app: App,
               private popoversProvider: PopoversProvider,
               private authServiceProvider: AuthServiceProvider,
-              private catalogsProvider: CatalogsProvider) {
+              private catalogsProvider: CatalogsProvider,
+              private translateProvider: TranslateProvider,
+              public databaseProvider: DatabaseProvider) {
 
   }
 
   ngOnInit(): void {
     this.getPrograms();
+    this.getLocalShoppingLists();
   }
 
   public logout() {
@@ -56,18 +67,71 @@ export class AppMenuComponent implements OnInit {
     this.app.getActiveNav().push(page).then(() => console.log('To ', page));
   }
 
+  getLocalShoppingLists() {
+    this.databaseProvider.getAllShoppingLists()
+      .then(data => {
+        if (data) {
+          for (let i = 0; i < data.rows.length; i++) {
+            let list: ShoppingList = {
+              "id": data.rows.item(i).id,
+              "name": data.rows.item(i).name,
+              "description": data.rows.item(i).description
+            };
+            if (data.rows.item(i).id == Constants.DEFAULT_LIST_ID || data.rows.item(i).id == Constants.MARKET_ONLY_LIST_ID) {
+              this.defaultShoppingLists.push(list)
+            }
+            else {
+              this.customShoppingLists.push(list)
+            }
+          }
+        }
+      }).catch(error => console.error(error));
+  }
+
   public getPrograms() {
     this.catalogsProvider.getPrograms().subscribe(response => {
       if (response) {
         let programs = JSON.parse(response.d);
+        this.addProgramsToDB(programs);
         programs.map(program => {
-          program.MARKETONLY.toUpperCase().includes("Y") ?
-            program.NAME.toUpperCase().includes("DOOR BUSTER BOOKING") ?
-              this.doorBusterPrograms.push(program) : this.marketOnlyPrograms.push(program) :
+          if (program.MARKETONLY.toUpperCase().includes("Y")) {
+            if (program.NAME.toUpperCase().includes("DOOR BUSTER BOOKING")) {
+              program.NAME.replace("DOOR BUSTER BOOKING", "")
+              this.doorBusterPrograms.push(program);
+            }
+            else {
+              this.marketOnlyPrograms.push(program)
+            }
+          }
+          else {
             this.everyDayPrograms.push(program);
+          }
         })
       }
     })
+  }
+
+  addProgramsToDB(programs) {
+    let regularPrograme = {
+      NAME: this.translateProvider.translate(Constants.REGULAR_CATALOG),
+      PROGRAMNO: "",
+      MARKETONLY: "N",
+      STARTDATE: "01/01/2014",
+      ENDDATE: "01/01/2024",
+      SHIPDATE: "01/01/2014",
+    };
+    programs.push(regularPrograme);
+    this.databaseProvider.addPrograms(programs);
+  }
+
+  showCustomShoppingListsMenu() {
+    this.showShoppingListsMenu = true;
+  }
+
+  public onBack($event) {
+    if ($event === 'backToMainMenu') {
+      this.showShoppingListsMenu = false;
+    }
   }
 
 }

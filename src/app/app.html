@@ -1,1 +1,2 @@
-<app-menu [rootPage]="rootPage"></app-menu>
+<app-menu *ngIf="isLoading===false" [menuContent]="menu_content" [rootPage]="rootPage"></app-menu>
+<ion-nav hideBackButton="true" [root]="rootPage" #menu_content swipeBackEnabled="false"></ion-nav>
