@@ -1,0 +1,27 @@
+@import "../app-menu/app-menu";
+
+custom-shopping-list-menu {
+  ion-header {
+    .back-icon {
+      padding: 0;
+      border: none;
+      background: none;
+      color: white;
+      box-shadow: none;
+    }
+  }
+
+  .content {
+    background-color: color($colors, OrgillDarkGray);
+    .divider-button {
+      background-color: transparent;
+      color: color($colors, OrgillLightGray);
+      font-weight: bold;
+    }
+    .item {
+      background-color: transparent;
+      color: white;
+    }
+  }
+
+}
