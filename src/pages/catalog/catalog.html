@@ -9,8 +9,8 @@
 
 <ion-content>
   <ion-list>
-    <button class="red-arrow" ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
-      {{item.title}}
+    <button class="red-arrow" ion-item *ngFor="let category of categories" (click)="getSubCategoryOrProducts(category)">
+      {{category.CatName}}
     </button>
   </ion-list>
 </ion-content>

@@ -23,6 +23,7 @@ import { DatabaseProvider } from '../providers/database/database';
 import {SQLitePorter} from "@ionic-native/sqlite-porter";
 import {SQLite} from "@ionic-native/sqlite";
 import {IonicStorageModule} from "@ionic/storage";
+import {ProductsPage} from "../pages/products/products";
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import {IonicStorageModule} from "@ionic/storage";
     HomePage,
     Catalog,
     Login,
-    AboutPage
+    AboutPage,
+    ProductsPage
   ],
   imports: [
     BrowserModule,
@@ -52,7 +54,8 @@ import {IonicStorageModule} from "@ionic/storage";
     HomePage,
     Catalog,
     Login,
-    AboutPage
+    AboutPage,
+    ProductsPage
   ],
   providers: [
     StatusBar,

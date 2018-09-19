@@ -3,7 +3,7 @@
     <name>Orgill</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="cristina.nicolae@cst-us.com" href="http://cst-us.com/">CST Team</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.0.179:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -89,7 +89,6 @@
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
     <allow-navigation href="http://192.168.0.178:8100" sessionid="2a25fc91" />
     <plugin name="cordova-sqlite-storage" spec="^2.4.0" />
-    <allow-navigation href="http://192.168.0.179:8100" sessionid="a3a3c388" />
+    <allow-navigation href="http://192.168.0.179:8100" sessionid="16493fe7" />
     <engine name="android" spec="7.0.0" />
-    <plugin name="uk.co.workingedge.cordova.plugin.sqliteporter" spec="^1.0.5" />
 </widget>
