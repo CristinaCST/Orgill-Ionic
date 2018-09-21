@@ -17,38 +17,42 @@ import {TranslateProvider} from "../../providers/translate/translate";
   selector: 'page-catalog',
   templateUrl: 'catalog.html'
 })
-export class Catalog implements OnInit{
+export class Catalog implements OnInit {
 
   programNumber: string;
   programName: string;
-  categories : Category[];
+  categories: Category[];
   userToken: string;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public apiProvider : ApiProvider, public catalogProvider : CatalogsProvider, public loading : LoadingProvider, public translateProvider : TranslateProvider) {
-    //TODO: put from menu program name and program number
-    this.programName = this.navParams.get('programName');
-    this.programNumber = this.navParams.get('programNumber');
-    this.userToken = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER)).userToken;
-
+  constructor(public navCtrl: NavController, public navParams: NavParams, public apiProvider: ApiProvider, public catalogProvider: CatalogsProvider, public loading: LoadingProvider, public translateProvider: TranslateProvider) {
   }
 
   ngOnInit(): void {
-    if(this.navParams.get('categories')){
+    this.programName = this.navParams.get('programName');
+    this.programNumber = this.navParams.get('programNumber');
+    if (!this.programName) {
+      this.programName = this.translateProvider.translate(Constants.REGULAR_CATALOG);
+    }
+    if (!this.programNumber) {
+      this.programNumber = '';
+    }
+    this.userToken = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER)).userToken;
+    if (this.navParams.get('categories')) {
       this.categories = this.navParams.get('categories');
     }
     else {
-      this.getCategories(this.programNumber);
+      this.getCategories();
     }
   }
 
-  private getCategories(programNumber){
+  private getCategories() {
     this.loading.presentLoading(this.translateProvider.translate(Constants.LOADING_ALERT_CONTENT_CATEGORIES));
     const params: CategoriesRequest = {
       'user_token': this.userToken,
       'p': '1',
       'rpp': String(Constants.CATEGORIES_PER_PAGE),
-      'program_number': programNumber,
+      'program_number': this.programNumber,
       'last_modified': '',
     };
 
@@ -65,7 +69,7 @@ export class Catalog implements OnInit{
     });
   }
 
-  getSubCategoryOrProducts(category : Category){
+  getSubCategoryOrProducts(category: Category) {
     this.loading.presentLoading(this.translateProvider.translate(Constants.LOADING_ALERT_CONTENT_CATEGORIES));
     const params: SubcategoriesRequest = {
       'user_token': this.userToken,
@@ -78,16 +82,16 @@ export class Catalog implements OnInit{
 
     this.catalogProvider.getSubcategories(params).subscribe(response => {
       const responseData = JSON.parse(response.d);
-      if(responseData.length > 0){
+      if (responseData.length > 0) {
         let categories = this.sortCategories(responseData);
         this.navCtrl.push(Catalog, {categories});
         this.loading.hideLoading();
       }
-      else{
+      else {
         this.loading.hideLoading();
         const params = {
           'subCategoryId': category.CatID,
-          'programNumber' : this.programNumber
+          'programNumber': this.programNumber
         };
         this.navCtrl.push(ProductsPage, params);
       }

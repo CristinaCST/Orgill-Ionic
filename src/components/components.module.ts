@@ -7,8 +7,9 @@ import {HttpClient} from "@angular/common/http";
 import {createTranslateLoader} from "../app/app.module";
 import {NavbarComponent} from "./navbar/navbar";
 import {CustomShoppingListMenuComponent} from "./custom-shopping-list-menu/custom-shopping-list-menu";
+import {ProductComponent} from "./product/product";
 
-let components = [AppMenuComponent, PopoverComponent, NavbarComponent, CustomShoppingListMenuComponent];
+let components = [AppMenuComponent, PopoverComponent, NavbarComponent, CustomShoppingListMenuComponent, ProductComponent];
 
 @NgModule({
   declarations: components,

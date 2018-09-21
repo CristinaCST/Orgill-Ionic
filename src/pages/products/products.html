@@ -1,19 +1,13 @@
-<!--
-  Generated template for the ProductsPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
   <ion-navbar>
     <ion-title>products</ion-title>
   </ion-navbar>
-
 </ion-header>
 
-
-<ion-content padding>
-  yfsdhsdwkhjdsghjdsghj
-
+<ion-content>
+  <ion-list>
+    <div *ngFor="let product of products">
+      <product [product]="product"></product>
+    </div>
+  </ion-list>
 </ion-content>

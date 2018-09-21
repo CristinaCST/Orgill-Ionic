@@ -10,6 +10,7 @@ import {TranslateProvider} from "../../providers/translate/translate";
 import {DatabaseProvider} from "../../providers/database/database";
 import {ShoppingList} from "../../interfaces/models/shopping-list";
 import {Program} from "../../interfaces/models/program";
+import {Catalog} from "../../pages/catalog/catalog";
 
 @Component({
   selector: 'app-menu',
@@ -113,14 +114,14 @@ export class AppMenuComponent implements OnInit {
 
   addProgramsToDB(programs) {
     let regularPrograme = {
-      NAME: this.translateProvider.translate(Constants.REGULAR_CATALOG),
+      NAME: this.translateProvider.translate(Constants.REGULAR_CATALOG).toUpperCase(),
       PROGRAMNO: "",
       MARKETONLY: "N",
       STARTDATE: "01/01/2014",
       ENDDATE: "01/01/2024",
       SHIPDATE: "01/01/2014",
     };
-    programs.push(regularPrograme);
+    programs.unshift(regularPrograme);
     this.databaseProvider.addPrograms(programs);
   }
 
@@ -132,6 +133,14 @@ export class AppMenuComponent implements OnInit {
     if ($event === 'backToMainMenu') {
       this.showShoppingListsMenu = false;
     }
+  }
+
+  showCategories(program) {
+    let params = {
+      'programName': program.NAME,
+      'programNumber': program.PROGRAMNO
+    };
+    this.app.getActiveNav().push(Catalog, params).then(() => console.log('To ProductPage', params));
   }
 
 }

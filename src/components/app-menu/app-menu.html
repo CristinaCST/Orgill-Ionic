@@ -10,22 +10,12 @@
   <!--Menu content -->
   <ion-content *ngIf="showShoppingListsMenu===false" class="content">
     <ion-item-group class="group">
-      <!-- Shopping lists -->
-      <ion-item-divider no-lines>{{"menu_header_shopping_lists" | translate}}:</ion-item-divider>
-      <button ion-item class="item" icon-left (click)="showCustomShoppingListsMenu()">
-        <ion-icon class="menu-icon" name="list-box"></ion-icon>
-        {{"menu_shopping_lists" | translate}}
-      </button>
-      <button menuClose icon-left detail-none ion-item *ngFor="let list of defaultShoppingLists">
-        <ion-icon class="menu-icon" name="cart"></ion-icon>
-        {{list.name}}
-      </button>
       <!-- Every day catalog -->
       <ion-item-divider no-lines>
         {{"menu_header_everyday_catalog" | translate}}:
       </ion-item-divider>
-      <button ion-item class="item" menuClose *ngFor="let program of everyDayPrograms">
-        {{program .NAME}}
+      <button ion-item class="item" menuClose *ngFor="let program of everyDayPrograms" (click)="showCategories(program)">
+        {{program.NAME}}
       </button>
       <ion-item *ngIf="!everyDayPrograms.length" class="item" detail-none>
         {{"menu_error_loading_programs" | translate}}
@@ -34,14 +24,14 @@
       <ion-item-divider *ngIf="marketOnlyPrograms.length" no-lines>
         {{"menu_header_market_catalog" | translate}}:
       </ion-item-divider>
-      <button ion-item class="item" menuClose *ngFor="let program of marketOnlyPrograms">
+      <button ion-item class="item" menuClose *ngFor="let program of marketOnlyPrograms" (click)="showCategories(program)">
         {{program.NAME}}
       </button>
       <!-- Door Buster catalog -->
       <ion-item-divider *ngIf="doorBusterPrograms.length" no-lines>
         {{"menu_header_door_buster_bookings_catalog" | translate}}:
       </ion-item-divider>
-      <button ion-item class="item" menuClose *ngFor="let program of doorBusterPrograms">
+      <button ion-item class="item" menuClose *ngFor="let program of doorBusterPrograms" (click)="showCategories(program)">
         {{program.NAME}}
       </button>
 

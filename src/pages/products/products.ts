@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NavController, NavParams } from 'ionic-angular';
+import {NavParams} from 'ionic-angular';
 import {Product} from "../../interfaces/models/product";
 import {ProductsRequest} from "../../interfaces/request-body/products-request";
 import * as Constants from '../../util/constants';
@@ -11,27 +11,27 @@ import {LocalStorageHelper} from "../../helpers/local-storage-helper";
   selector: 'page-products',
   templateUrl: 'products.html',
 })
-export class ProductsPage implements OnInit{
+export class ProductsPage implements OnInit {
 
-  userToken : string;
-  subCategoryId : string;
-  programNumber : string;
-  pageNumber : number;
-  products : Array<Product> = [];
+  userToken: string;
+  subCategoryId: string;
+  programNumber: string;
+  pageNumber: number;
+  products: Array<Product> = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public catalogProvider : CatalogsProvider) {
+  constructor(public navParams: NavParams, public catalogProvider: CatalogsProvider) {
     this.pageNumber = 1;
     this.userToken = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER)).userToken;
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.subCategoryId = this.navParams.get('subCategoryId');
     this.programNumber = this.navParams.get('programNumber');
     this.getProducts(this.subCategoryId, this.programNumber);
   }
 
-  getProducts(subcategoryId : string, programNumber :string) {
-    if(!programNumber)
+  getProducts(subcategoryId: string, programNumber: string) {
+    if (!programNumber)
       programNumber = '';
 
     const params: ProductsRequest = {
@@ -45,10 +45,10 @@ export class ProductsPage implements OnInit{
 
     this.catalogProvider.getProducts(params).subscribe(response => {
       const responseData = JSON.parse(response.d);
+      this.products = this.sortProducts(responseData);
     })
   }
 
-  //TODO: check if necessary
   sortProducts(responseData) {
     return responseData.sort((product1, product2): number => {
       return product1.NAME.localeCompare(product2.NAME);

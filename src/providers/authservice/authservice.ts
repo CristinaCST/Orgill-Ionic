@@ -36,8 +36,8 @@ export class AuthServiceProvider {
   }
 
   logoutDeleteData(){
-
   }
+
   getUserInfo() {
     const params = {'user_token': this.user.userToken};
     this.apiProvider.post(ConstantsURL.URL_USER_INFO, params).subscribe(response => {

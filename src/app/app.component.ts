@@ -40,12 +40,11 @@ export class MyApp {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      this.checkSession();
 
       MyApp.databaseProvider.getDatabaseState()
         .subscribe(isDatabaseOpen => {
           if (isDatabaseOpen) {
-            this.loading.hideLoading();
+            this.checkSession();
             this.isLoading = false;
           }
         });
@@ -66,6 +65,7 @@ export class MyApp {
     } else {
       this.rootPage = Login;
     }
+    this.loading.hideLoading();
   }
 
   private isValidSession(): boolean {
