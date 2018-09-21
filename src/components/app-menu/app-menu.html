@@ -37,7 +37,7 @@
 
       <!-- Search -->
       <ion-item-divider no-lines>{{"menu_header_search" | translate}}:</ion-item-divider>
-      <button ion-item class="item" detail-none menuClose icon-left>
+      <button ion-item class="item" detail-none menuClose icon-left (click)="openBarcode()">
         <ion-icon class="menu-icon" name="barcode"></ion-icon>
         {{"menu_search_scan" | translate}}
       </button>

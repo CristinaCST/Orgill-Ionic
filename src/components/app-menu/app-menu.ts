@@ -11,6 +11,8 @@ import {DatabaseProvider} from "../../providers/database/database";
 import {ShoppingList} from "../../interfaces/models/shopping-list";
 import {Program} from "../../interfaces/models/program";
 import {Catalog} from "../../pages/catalog/catalog";
+import {BarcodeScanner} from "@ionic-native/barcode-scanner";
+import {ScannerPage} from "../../pages/scanner/scanner";
 
 @Component({
   selector: 'app-menu',
@@ -141,6 +143,10 @@ export class AppMenuComponent implements OnInit {
       'programNumber': program.PROGRAMNO
     };
     this.app.getActiveNav().push(Catalog, params).then(() => console.log('To ProductPage', params));
+  }
+
+  openBarcode(){
+    this.app.getActiveNav().push(ScannerPage);
   }
 
 }
