@@ -1,0 +1,35 @@
+<div>
+  <div class="main" ion-item no-lines (click)="showProductDescription()">
+    <div id="image-container">
+      <img
+        [src]="product.IMAGE !== '0000000.jpg'?('http://images.orgill.com/200x200/'+product.SKU+'.JPG'):'../../assets/imgs/product_placeholder.png'">
+    </div>
+    <div id="product-main-info">
+      <p>{{product.NAME}}</p>
+      <p>{{product.VENDOR_NAME}}</p>
+    </div>
+    <ion-icon name="ios-arrow-forward"></ion-icon>
+  </div>
+  <ion-item class="product-info-container">
+    <div class="info">
+      <span>{{"product_SKU" | translate}}:</span>
+      <span>{{product.SKU}} {{product.QTY_ROUND_OPTION}}</span>
+    </div>
+    <div class="info">
+      <span>{{"product_retail_upc" | translate}}:</span>
+      <span>{{product.UPC_CODE}}</span>
+    </div>
+    <div class="info">
+      <span>{{"product_vendor" | translate}}:</span>
+      <span>{{product.VENDOR_NAME}}</span>
+    </div>
+    <div class="info">
+      <span>{{"product_model_number" | translate}}:</span>
+      <span>{{product.MODEL}}</span>
+    </div>
+    <div class="info">
+      <span>{{"product_shelf_pack" | translate}}:</span>
+      <span>{{product.SHELF_PACK}}</span>
+    </div>
+  </ion-item>
+</div>

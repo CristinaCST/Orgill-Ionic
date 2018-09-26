@@ -6,7 +6,7 @@
 
 <ion-content>
   <ion-list>
-    <div *ngFor="let product of products">
+    <div *ngFor="let product of products" (click)="goToProductPage(product)">
       <product [product]="product"></product>
     </div>
   </ion-list>

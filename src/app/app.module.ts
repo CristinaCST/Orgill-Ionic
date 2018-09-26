@@ -19,21 +19,20 @@ import {ComponentsModule} from "../components/components.module";
 import {PopoversProvider} from "../providers/popovers/popovers";
 import {AboutPage} from "../pages/about/about";
 import {CatalogsProvider} from '../providers/catalogs/catalogs';
-import { DatabaseProvider } from '../providers/database/database';
+import {DatabaseProvider} from '../providers/database/database';
 import {SQLitePorter} from "@ionic-native/sqlite-porter";
 import {SQLite} from "@ionic-native/sqlite";
 import {IonicStorageModule} from "@ionic/storage";
 import {ProductsPage} from "../pages/products/products";
+import {ProductPage} from "../pages/product/product";
+import {ProgramProvider} from '../providers/program/program';
+import {ProductDescriptionPage} from "../pages/product-description/product-description";
+import {DirectivesModule} from "../directives/directives.module";
+
+let pages = [MyApp, HomePage, Catalog, Login, AboutPage, ProductsPage, ProductPage, ProductDescriptionPage];
 
 @NgModule({
-  declarations: [
-    MyApp,
-    HomePage,
-    Catalog,
-    Login,
-    AboutPage,
-    ProductsPage
-  ],
+  declarations: pages,
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
@@ -46,17 +45,11 @@ import {ProductsPage} from "../pages/products/products";
         deps: [HttpClient]
       }
     }),
-    ComponentsModule
+    ComponentsModule,
+    DirectivesModule
   ],
   bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-    HomePage,
-    Catalog,
-    Login,
-    AboutPage,
-    ProductsPage
-  ],
+  entryComponents: pages,
   providers: [
     StatusBar,
     SplashScreen,
@@ -70,7 +63,7 @@ import {ProductsPage} from "../pages/products/products";
     DatabaseProvider,
     SQLitePorter,
     SQLite,
-
+    ProgramProvider
   ]
 })
 

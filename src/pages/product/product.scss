@@ -1,0 +1,68 @@
+@import "../../theme/variables";
+
+page-product {
+  ion-segment-button {
+    background: linear-gradient(to right, color($colors, OrgillGradientLeft) 0%, color($colors, OrgillGradientRight) 100%);
+  }
+  ion-header {
+    #subcategory {
+      .toolbar-background {
+        background: color($colors, OrgillRed);
+      }
+
+      ion-title {
+        text-align: center;
+      }
+      ion-buttons {
+        button {
+          ion-icon {
+            font-size: 25px;
+          }
+        }
+      }
+    }
+    ion-segment {
+      &.segment-md {
+        ion-segment-button {
+          background: rgba(204, 204, 204, 0.5) !important;
+          &.segment-button {
+            color: black;
+            font-size: $font-size-small;
+            font-weight: 600;
+            opacity: 1;
+            &.segment-activated {
+              background: color($colors, OrgillWhiteGray) !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .content {
+    margin-bottom: 60px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    .tabs {
+
+    }
+  }
+  .scroll-content {
+    height: 100%;
+    display: flex;
+  }
+  #add-shopping {
+    width: 100%;
+    color: white;
+    height: 60px;
+    position: fixed;
+    bottom: 0;
+    font-size: $font-size-medium;
+    background-color: color($colors, OrgillRed);
+    font-weight: bold;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    text-transform: uppercase;
+  }
+}

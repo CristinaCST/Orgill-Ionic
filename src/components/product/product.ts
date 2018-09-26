@@ -7,7 +7,6 @@ import {Component, Input, OnInit} from '@angular/core';
 export class ProductComponent implements OnInit {
 
   @Input('product') product;
-  productIsLoading: boolean = true;
 
   constructor() {
   }

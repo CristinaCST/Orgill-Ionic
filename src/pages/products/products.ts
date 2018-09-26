@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {NavParams} from 'ionic-angular';
+import {NavController, NavParams} from 'ionic-angular';
 import {Product} from "../../interfaces/models/product";
 import {ProductsRequest} from "../../interfaces/request-body/products-request";
 import * as Constants from '../../util/constants';
 import {CatalogsProvider} from "../../providers/catalogs/catalogs";
 import {LocalStorageHelper} from "../../helpers/local-storage-helper";
+import {ProductPage} from "../product/product";
 
 
 @Component({
@@ -13,13 +14,14 @@ import {LocalStorageHelper} from "../../helpers/local-storage-helper";
 })
 export class ProductsPage implements OnInit {
 
+  categoryName: string;
   userToken: string;
   subCategoryId: string;
   programNumber: string;
   pageNumber: number;
   products: Array<Product> = [];
 
-  constructor(public navParams: NavParams, public catalogProvider: CatalogsProvider) {
+  constructor(private navParams: NavParams, private catalogProvider: CatalogsProvider, private navController: NavController) {
     this.pageNumber = 1;
     this.userToken = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER)).userToken;
   }
@@ -27,6 +29,7 @@ export class ProductsPage implements OnInit {
   ngOnInit() {
     this.subCategoryId = this.navParams.get('subCategoryId');
     this.programNumber = this.navParams.get('programNumber');
+    this.categoryName = this.navParams.get('categoryName');
     this.getProducts(this.subCategoryId, this.programNumber);
   }
 
@@ -53,6 +56,14 @@ export class ProductsPage implements OnInit {
     return responseData.sort((product1, product2): number => {
       return product1.NAME.localeCompare(product2.NAME);
     });
+  }
+
+  goToProductPage(product: Product) {
+    this.navController.push(ProductPage, {
+      'product': product,
+      'categoryName': this.categoryName,
+      'programNumber':this.programNumber
+    }).then(() => console.log('to product details page'));
   }
 
 }

@@ -1,0 +1,20 @@
+<div>
+  <ion-item-group *ngIf="productPrograms" [(ngModel)]="selectedProgram" radio-group>
+    <ion-item-divider no-lines>
+      {{"product_program_option" | translate}}:
+    </ion-item-divider>
+    <ion-item *ngFor="let program of productPrograms">
+      <ion-label *ngIf="selectedProgram" [class]="program.PROGRAM_NO === selectedProgram.PROGRAM_NO? 'selected_list_item':'unselected_list_item'">
+        <div class="list_left_div">
+          <p id="catalog_name" class="uppercase multiline_paragraph">{{program.PROGRAMNAME}}</p>
+          <p *ngIf="program.RELEASEDATE">{{"product_release_date" | translate}}{{program.RELEASEDATE |
+            date:"MM/dd/yyyy"}}</p>
+        </div>
+        <div class="list_right_div">
+          <p id="price">{{"product_currency" | translate}}{{program.PRICE}}<br>/{{product.SELLING_UNIT}}</p>
+        </div>
+      </ion-label>
+      <ion-radio value="{{program.PROGRAM_NO}}" (ionSelect)="selectProgram(program)"></ion-radio>
+    </ion-item>
+  </ion-item-group>
+</div>

@@ -27,11 +27,15 @@ product {
         }
       }
       #product-info-container {
-        margin-left: 10px;
+        padding-left: 10px;
         width: 75%;
+        //max-width: 75%;
+        //min-width: 75%;
         display: flex;
         #product-info {
           width: 80%;
+          max-width: 80%;
+          min-width: 80%;
           p {
             width: 100%;
             text-align: left;
@@ -46,6 +50,7 @@ product {
         }
         #price-container {
           width: 20%;
+          max-width: 20%;
           margin: 10px;
           display: flex;
           align-items: center;
