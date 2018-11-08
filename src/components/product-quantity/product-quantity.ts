@@ -1,23 +1,18 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Product} from "../../interfaces/models/product";
 import {ProgramProvider} from "../../providers/program/program";
 import {ItemProgram} from "../../interfaces/models/item-program";
 
-/**
- * Generated class for the ProductQuantityComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
 @Component({
   selector: 'product-quantity',
   templateUrl: 'product-quantity.html'
 })
 export class ProductQuantityComponent implements OnInit {
   @Input() product: Product;
-  public productPrice: number = 0;
-  public total: number = 0;
-  public quantity = 1;
+  @Output() quantityChange = new EventEmitter<any>();
+  public quantity: number = 1;
+  public productPrice = 0;
+  public total = 0;
   public program: ItemProgram;
 
   constructor(private programProvider: ProgramProvider) {
@@ -27,34 +22,79 @@ export class ProductQuantityComponent implements OnInit {
     this.programProvider.getSelectedProgram().subscribe(program => {
       if (program) {
         this.program = program;
-        this.total = parseInt(this.program.PRICE);
-        this.productPrice = parseInt(this.program.PRICE);
+        if (this.product.QTY_ROUND_OPTION === 'X') {
+          this.quantity = Number(this.product.SHELF_PACK);
+        }
+        this.handleQuantityChange();
+        this.productPrice = this.getDecimalPrice();
       }
-    })
+    });
+
+    this.programProvider.isPackQuantity().subscribe(value => {
+      if (value === true && this.product) {
+        this.quantity = Number(this.product.SHELF_PACK);
+        this.handleQuantityChange();
+      }
+    });
+  }
+
+  getDecimalPrice() {
+    return parseFloat(parseFloat(this.program.PRICE).toFixed(2));
   }
 
   add() {
-    this.quantity++;
-    this.setTotal();
+    if (this.product.QTY_ROUND_OPTION === 'X') {
+      this.setPackQuantity('ADD');
+    }
+    else {
+      this.quantity++;
+    }
+    this.handleQuantityChange();
   }
 
   remove() {
-    if (this.quantity > 1) {
-      this.quantity--;
+    if (this.product.QTY_ROUND_OPTION === 'X') {
+      if (this.quantity > Number(this.product.SHELF_PACK)) {
+        this.setPackQuantity('REMOVE');
+      }
     }
-    this.setTotal();
+    else {
+      if (this.quantity > 1) {
+        this.quantity--;
+      }
+    }
+    this.handleQuantityChange();
   }
 
   setTotal() {
     if (this.program) {
-      this.total = this.quantity * parseInt(this.program.PRICE);
+      this.total = this.quantity * this.getDecimalPrice();
     }
   }
 
-  quantityChange() {
-    if (isNaN(this.quantity)) {
-      this.quantity = 1;
+  setPackQuantity(actionType) {
+    let selfPackQuantity = Number(this.product.SHELF_PACK);
+    if (this.quantity < selfPackQuantity) {
+      this.quantity = selfPackQuantity;
+    } else {
+      if (this.quantity % selfPackQuantity === 0) {
+        switch (actionType) {
+          case 'ADD':
+            this.quantity = this.quantity + selfPackQuantity;
+            break;
+          case 'REMOVE':
+            this.quantity = this.quantity - selfPackQuantity;
+            break;
+        }
+      } else {
+        this.quantity = (selfPackQuantity * Math.floor(this.quantity / selfPackQuantity));
+      }
     }
   }
 
+
+  handleQuantityChange() {
+    this.setTotal();
+    this.quantityChange.emit(this.quantity);
+  }
 }

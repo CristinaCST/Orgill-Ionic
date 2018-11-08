@@ -8,13 +8,15 @@ import {ViewController} from "ionic-angular";
   templateUrl: 'popover.html'
 })
 export class PopoverComponent {
-  data: any;
-  listName: string;
-  listDescription: string;
+  public data: any = {};
+  public listName: string = '';
+  public listDescription: string = '';
+  public isMarketOnlyList: boolean = false;
 
-  constructor(private navParams: NavParams, public viewCtrl: ViewController ) {
+  constructor(private navParams: NavParams,
+              public viewCtrl: ViewController) {
+
     this.data = this.navParams.data;
-
     if (this.data) {
       this.checkPopoverType();
     }
@@ -27,8 +29,18 @@ export class PopoverComponent {
     }
   }
 
+  updateCheck() {
+    this.isMarketOnlyList = !this.isMarketOnlyList;
+  }
+
   public dismiss(option) {
-    let data = {type: this.data.type, optionSelected: option};
+    let data: any = {type: this.data.type, optionSelected: option};
+
+    if (this.data.isNewListAlert === true) {
+      data.listName = this.listName;
+      data.listDescription = this.listDescription;
+      data.type = this.isMarketOnlyList === true ? 'market_only' : 'default'
+    }
     this.viewCtrl.dismiss(data).then(() => console.log('modal closed'));
   }
 

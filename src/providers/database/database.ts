@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
-import { SQLitePorter } from '@ionic-native/sqlite-porter';
-import { Storage } from '@ionic/storage';
-import { Platform } from 'ionic-angular';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/Rx';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {SQLite, SQLiteObject} from '@ionic-native/sqlite';
+import {SQLitePorter} from '@ionic-native/sqlite-porter';
+import {Storage} from '@ionic/storage';
+import {Platform} from 'ionic-angular';
+import {Observable} from 'rxjs/Observable';
+import {BehaviorSubject} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 
-import { Program } from '../../interfaces/models/program';
-import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
+import {Program} from '../../interfaces/models/program';
+import {ShoppingListItem} from '../../interfaces/models/shopping-list-item';
 
 @Injectable()
 export class DatabaseProvider {
@@ -38,7 +38,7 @@ export class DatabaseProvider {
 
     this.queries = {
       // insert
-      addShoppingList: 'INSERT INTO shopping_list (name, description) VALUES (?, ?)',
+      addShoppingList: 'INSERT INTO shopping_list (name, description, type) VALUES (?, ?, ?)',
       insertShoppingListItem: 'INSERT INTO shopping_list_item (shopping_list_id, product_sku, program_number, quantity, item_price) VALUES (?, ?, ?, ?, ?)',
 
       // insert or replace
@@ -88,20 +88,20 @@ export class DatabaseProvider {
 
     this.http.get('assets/db.sql', {responseType: 'text'})
       .subscribe(sql => {
-        this.sqlitePorter.importSqlToDb(this.database, sql )
-          .then(data => {
-            this.databaseReady.next(true);
-            this.storage.set('database_filled', true);
-          })
-          .catch(e => console.log(e));}
+          this.sqlitePorter.importSqlToDb(this.database, sql)
+            .then(data => {
+              this.databaseReady.next(true);
+              this.storage.set('database_filled', true);
+            })
+            .catch(e => console.log(e));
+        }
       );
   }
 
   /* PRODUCTS  & SHOPPING LISTS */
 
-  addShoppingList(name, description): Promise<any> {
-    const data = [name, description];
-
+  addShoppingList(name, description, type): Promise<any> {
+    const data = [name, description, type];
     return this.database.executeSql(this.queries.addShoppingList, data);
   }
 
@@ -282,7 +282,6 @@ export class DatabaseProvider {
     ];
 
     console.log('in db: ', purchaseData);
-
     return this.database.executeSql(this.queries.insertPurchase, purchaseData);
   }
 

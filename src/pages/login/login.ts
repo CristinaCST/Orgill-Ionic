@@ -26,22 +26,19 @@ export class Login {
   }
 
   login() {
-    if (this.isValidInput() === false) {
+    if (!this.isValidInput()) {
       return;
     }
 
     this.loading.presentLoading(this.translateProvider.translate(Constants.LOADING_ALERT_CONTENT_LOGIN));
-
     let loginRequest = {username: this.username, password: this.password};
-
     this.authService.login(loginRequest).subscribe(
       () => {
-        this.loading.hideLoading();
-        this.authService.getUserInfo();
-        this.navCtrl.setRoot(Catalog).then(() => console.log('To catalog Page'));
-      }
-      ,
-      error => {
+        this.authService.getUserInfo().then(() => {
+          this.navCtrl.setRoot(Catalog);
+          this.loading.hideLoading();
+        });
+      }, error => {
         this.loading.hideLoading();
         let content = {title: Constants.LOGIN_ERROR_TITLE, message: Constants.LOGIN_ERROR_INVALID};
         this.popoversProvider.show(content);
@@ -56,7 +53,11 @@ export class Login {
       return true;
     }
 
-    let content = {title: Constants.LOGIN_ERROR_TITLE, message: Constants.LOGIN_ERROR_REQUIRED,positiveButtonText:Constants.OK};
+    let content = {
+      title: Constants.LOGIN_ERROR_TITLE,
+      message: Constants.LOGIN_ERROR_REQUIRED,
+      positiveButtonText: Constants.OK
+    };
     this.popoversProvider.show(content);
     return false;
   }

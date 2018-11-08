@@ -20,7 +20,8 @@
           <ion-icon name="remove" color="OrgillRed"></ion-icon>
         </button>
         <label>
-          <input maxlength="4" type="tel" inputmode="numeric" pattern="^[0-9]" (input)="quantityChange()" [(ngModel)]="quantity"/>
+          <input maxlength="4" type="tel" inputmode="numeric" pattern="^[0-9]" (input)="handleQuantityChange()"
+                 [(ngModel)]="quantity"/>
         </label>
         <button ion-button icon-only small clear (click)="add()">
           <ion-icon name="add" color="OrgillRed"></ion-icon>

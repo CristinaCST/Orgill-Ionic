@@ -17,10 +17,10 @@ export class ProductPricingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.productPrograms);
     this.programProvider.getSelectedProgram().subscribe(selectedProgram => {
       this.selectedProgram = selectedProgram;
-    })
+      console.log(this.selectedProgram)
+    });
   }
 
   public selectProgram(program) {

@@ -11,13 +11,13 @@ export class KeyboardDirective {
   // }
 
   constructor() {
-    window.addEventListener('keyboardDidShow', () => {
-      document.body.classList.add('keyboard-is-open');
-    });
-
-    window.addEventListener('keyboardDidHide', () => {
-      document.body.classList.remove('keyboard-is-open');
-    });
+    // window.addEventListener('keyboardDidShow', () => {
+    //   document.body.classList.add('keyboard-is-open');
+    // });
+    //
+    // window.addEventListener('keyboardDidHide', () => {
+    //   document.body.classList.remove('keyboard-is-open');
+    // });
   }
 
 }

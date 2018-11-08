@@ -97,7 +97,7 @@ export class AppMenuComponent implements OnInit {
         programs.map(program => {
           if (program.MARKETONLY.toUpperCase().includes("Y")) {
             if (program.NAME.toUpperCase().includes("DOOR BUSTER BOOKING")) {
-              program.NAME.replace("DOOR BUSTER BOOKING", "")
+              program.NAME.replace("DOOR BUSTER BOOKING", "");
               this.doorBusterPrograms.push(program);
             }
             else {
@@ -113,7 +113,7 @@ export class AppMenuComponent implements OnInit {
   }
 
   addProgramsToDB(programs) {
-    let regularPrograme = {
+    let regularProgram = {
       NAME: this.translateProvider.translate(Constants.REGULAR_CATALOG).toUpperCase(),
       PROGRAMNO: "",
       MARKETONLY: "N",
@@ -121,7 +121,7 @@ export class AppMenuComponent implements OnInit {
       ENDDATE: "01/01/2024",
       SHIPDATE: "01/01/2014",
     };
-    programs.unshift(regularPrograme);
+    programs.unshift(regularProgram);
     this.databaseProvider.addPrograms(programs);
   }
 

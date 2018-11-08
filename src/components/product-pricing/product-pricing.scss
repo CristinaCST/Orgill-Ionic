@@ -1,77 +1,38 @@
 @import "../../theme/variables";
 
 product-pricing {
-  .item-radio{
-    margin-left: $ion-app-padding !important;
-    margin-right: $ion-app-padding !important;
-
-    .label{
-      padding-left: 0px !important;
+  .item-radio {
+    .label {
+      padding-left: 0 !important;
+    }
+    .radio {
+      margin-right: $ion-app-padding !important;
     }
   }
-
-
-  .radio{
-    margin-right: $ion-app-padding !important;
-  }
-
-  .list_left_div {
-    float: left;
-    width: 70%;
-  }
-
-  .list_right_div {
-    float: right;
-    width: 30%;
-    display: flex;
-    justify-content: center;
-  }
-  font-weight: bold;
-  .common_list_item_style {
-
-  }
-
-  .selected_list_item {
-
-    #catalog_name {
-      font-size: $font-size-medium;
-      font-weight: bold;
-      color: color($colors, OrgillRed);
-    }
-
-    #regular_catalog_release_date, #release_date {
-      p {
-        font-weight: bold;
+  ion-item {
+    &.item-radio-checked {
+      .catalog-info, .price-info {
+        p {
+          color: color($colors, OrgillRed);
+        }
       }
-
     }
-
-    #price {
-      font-weight: bold;
-      color: color($colors, OrgillRed);
-    }
-
-  }
-
-  .unselected_list_item {
-
-    #catalog_name {
-      font-size: $font-size-medium;
-      font-weight: bold;
-      color: color($colors, OrgillDarkGray);
-    }
-
-    #regular_catalog_release_date {
-      font-weight: bold;
-    }
-
-    #release_date {
-      font-weight: bold;
-    }
-
-    #price {
-      font-weight: bold;
-      color: color($colors, OrgillDarkGray);
+    ion-label {
+      display: flex;
+      .catalog-info {
+        width: 70%;
+      }
+      .price-info {
+        width: 30%;
+      }
+      .catalog-info, .price-info {
+        p {
+          font-size: $font-size-medium;
+          font-weight: bold;
+          color: color($colors, OrgillDarkGray);
+        }
+      }
     }
   }
+
 }

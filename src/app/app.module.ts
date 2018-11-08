@@ -28,8 +28,10 @@ import {ProductPage} from "../pages/product/product";
 import {ProgramProvider} from '../providers/program/program';
 import {ProductDescriptionPage} from "../pages/product-description/product-description";
 import {DirectivesModule} from "../directives/directives.module";
+import {AddToShoppingListPage} from "../pages/add-to-shopping-list/add-to-shopping-list";
+import { ShoppingListsProvider } from '../providers/shopping-lists/shopping-lists';
 
-let pages = [MyApp, HomePage, Catalog, Login, AboutPage, ProductsPage, ProductPage, ProductDescriptionPage];
+let pages = [MyApp, HomePage, Catalog, Login, AboutPage, ProductsPage, ProductPage, ProductDescriptionPage, AddToShoppingListPage];
 
 @NgModule({
   declarations: pages,
@@ -63,7 +65,8 @@ let pages = [MyApp, HomePage, Catalog, Login, AboutPage, ProductsPage, ProductPa
     DatabaseProvider,
     SQLitePorter,
     SQLite,
-    ProgramProvider
+    ProgramProvider,
+    ShoppingListsProvider
   ]
 })
 

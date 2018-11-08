@@ -34,6 +34,7 @@ export class ProductsPage implements OnInit {
   }
 
   getProducts(subcategoryId: string, programNumber: string) {
+    console.log('Get products');
     if (!programNumber)
       programNumber = '';
 
@@ -47,6 +48,7 @@ export class ProductsPage implements OnInit {
     };
 
     this.catalogProvider.getProducts(params).subscribe(response => {
+      console.log('Get products subscription');
       const responseData = JSON.parse(response.d);
       this.products = this.sortProducts(responseData);
     })

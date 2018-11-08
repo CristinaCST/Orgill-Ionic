@@ -28,10 +28,11 @@
       <product-pricing *ngSwitchCase="'pricing_tab'" [product]="product"
                        [productPrograms]="productPrograms"></product-pricing>
     </div>
-    <product-quantity [product]="product"></product-quantity>
+    <product-quantity (quantityChange)="onQuantityChange($event)"
+                      [product]="product"></product-quantity>
   </div>
 </ion-content>
 
 <ion-footer>
-  <button class="hide-on-keyboard-open" id="add-shopping">{{"button_add_to_list" | translate}}</button>
+  <button id="add-shopping" (click)="addToShoppingList()">{{"button_add_to_list" | translate}}</button>
 </ion-footer>
