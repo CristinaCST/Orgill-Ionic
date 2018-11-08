@@ -24,28 +24,28 @@ export class CustomShoppingListMenuComponent {
   }
 
   addNewList() {
-      let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined, Constants.SAVE, Constants.CANCEL, Constants.POPOVER_NEW_SHOPPING_LIST);
-      let subscription = this.popoversProvider.show(content).subscribe(data => {
-        if (data && data.listName) {
-          this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
-            if (status === 'available') {
-              this.shoppingListsProvider.createNewShoppingList(data.listName, data.description, data.type).then(addedList => {
-                let list: ShoppingList =
-                  {
-                    id: addedList.insertId,
-                    name: data.listName,
-                    description: data.description
-                  };
-                this.shoppingLists.push(list);
-                this.listForm.value.listOptions = list.id;
-              });
-            } else {
-              let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);
-              this.popoversProvider.show(content);
-            }
-            subscription.unsubscribe();
-          });
-        }
-      });
+      // let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined, Constants.SAVE, Constants.CANCEL, Constants.POPOVER_NEW_SHOPPING_LIST);
+      // let subscription = this.popoversProvider.show(content).subscribe(data => {
+      //   if (data && data.listName) {
+      //     this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
+      //       if (status === 'available') {
+      //         this.shoppingListsProvider.createNewShoppingList(data.listName, data.description, data.type).then(addedList => {
+      //           let list: ShoppingList =
+      //             {
+      //               id: addedList.insertId,
+      //               name: data.listName,
+      //               description: data.description
+      //             };
+      //           this.shoppingLists.push(list);
+      //           this.listForm.value.listOptions = list.id;
+      //         });
+      //       } else {
+      //         let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);
+      //         this.popoversProvider.show(content);
+      //       }
+      //       subscription.unsubscribe();
+      //     });
+      //   }
+      // });
   }
 }
