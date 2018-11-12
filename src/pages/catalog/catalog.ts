@@ -1,13 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {LoadingController, NavController, NavParams} from 'ionic-angular';
+import {NavController, NavParams} from 'ionic-angular';
 import {Category} from "../../interfaces/models/category";
 import {CategoriesRequest} from "../../interfaces/request-body/categories-request";
 import * as Constants from '../../util/constants';
 import {LocalStorageHelper} from "../../helpers/local-storage-helper";
-import {ApiProvider} from "../../providers/api-provider";
 import {CatalogsProvider} from "../../providers/catalogs/catalogs";
 import {SubcategoriesRequest} from "../../interfaces/request-body/subcategories-request";
-import {Product} from "../../interfaces/models/product";
 import {ProductsPage} from "../products/products";
 import {LoadingProvider} from "../../providers/loading/loading";
 import {TranslateProvider} from "../../providers/translate/translate";
@@ -25,7 +23,7 @@ export class Catalog implements OnInit {
   userToken: string;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public apiProvider: ApiProvider, public catalogProvider: CatalogsProvider, public loading: LoadingProvider, public translateProvider: TranslateProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public catalogProvider: CatalogsProvider, public loading: LoadingProvider, public translateProvider: TranslateProvider) {
   }
 
   ngOnInit(): void {
@@ -91,7 +89,9 @@ export class Catalog implements OnInit {
         this.loading.hideLoading();
         const params = {
           'subCategoryId': category.CatID,
-          'programNumber': this.programNumber
+          'programNumber': this.programNumber,
+          'categoryName': this.programName,
+          'subCategory': category.CatName
         };
         this.navCtrl.push(ProductsPage, params);
       }

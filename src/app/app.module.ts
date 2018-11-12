@@ -19,29 +19,26 @@ import {ComponentsModule} from "../components/components.module";
 import {PopoversProvider} from "../providers/popovers/popovers";
 import {AboutPage} from "../pages/about/about";
 import {CatalogsProvider} from '../providers/catalogs/catalogs';
-import {DatabaseProvider } from '../providers/database/database';
+import {DatabaseProvider} from '../providers/database/database';
 import {SQLitePorter} from "@ionic-native/sqlite-porter";
 import {SQLite} from "@ionic-native/sqlite";
 import {IonicStorageModule} from "@ionic/storage";
 import {ProductsPage} from "../pages/products/products";
+import {ProductPage} from "../pages/product/product";
+import {ProgramProvider} from '../providers/program/program';
+import {ProductDescriptionPage} from "../pages/product-description/product-description";
+import {DirectivesModule} from "../directives/directives.module";
+import {AddToShoppingListPage} from "../pages/add-to-shopping-list/add-to-shopping-list";
+import { ShoppingListsProvider } from '../providers/shopping-lists/shopping-lists';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { ScannerProvider } from '../providers/scanner/scanner';
 import {ScannerPage} from "../pages/scanner/scanner";
-import {ProductDetailsPage} from "../pages/product-details/product-details";
-import { ProductProvider } from '../providers/product/product';
 
+
+let pages = [MyApp, HomePage, Catalog, Login, AboutPage, ProductsPage, ProductPage, ProductDescriptionPage, ScannerPage, AddToShoppingListPage];
 
 @NgModule({
-  declarations: [
-    MyApp,
-    HomePage,
-    Catalog,
-    Login,
-    AboutPage,
-    ProductsPage,
-    ScannerPage,
-    ProductDetailsPage
-  ],
+  declarations: pages,
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
@@ -54,19 +51,11 @@ import { ProductProvider } from '../providers/product/product';
         deps: [HttpClient]
       }
     }),
-    ComponentsModule
+    ComponentsModule,
+    DirectivesModule
   ],
   bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-    HomePage,
-    Catalog,
-    Login,
-    AboutPage,
-    ProductsPage,
-    ScannerPage,
-    ProductDetailsPage
-  ],
+  entryComponents: pages,
   providers: [
     StatusBar,
     SplashScreen,
@@ -80,9 +69,10 @@ import { ProductProvider } from '../providers/product/product';
     DatabaseProvider,
     SQLitePorter,
     SQLite,
+    ProgramProvider,
+    ShoppingListsProvider,
     BarcodeScanner,
-    ScannerProvider,
-    ProductProvider
+    ScannerProvider
   ]
 })
 

@@ -1,36 +1,46 @@
 import {Injectable} from '@angular/core';
-import {Popover, PopoverController} from "ionic-angular";
+import { PopoverController} from "ionic-angular";
 import {PopoverComponent} from "../../components/popover/popover";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import * as Constants from "../../util/constants";
+import {Subject} from "rxjs/Subject";
 
 @Injectable()
 export class PopoversProvider {
 
-  private close = new BehaviorSubject<any>({});
+  private close = new Subject<any>();
   private isOpened = false;
-  private popover: Popover;
 
   constructor(private popoverController: PopoverController) {
   }
 
   public show(content) {
-
-    this.popover = this.popoverController.create(PopoverComponent, content, {'enableBackdropDismiss': false});
-
-    if (this.popover) {
-      if (this.isOpened === false) {
-        this.popover.present().then(() => console.log('popover showed')).catch(err => console.error(err));
-        this.isOpened = true;
-      }
+    let popover = this.popoverController.create(PopoverComponent, content);
+    if (this.isOpened === false) {
+      this.isOpened = true;
     }
-
-    this.popover.onDidDismiss(data => {
-      console.log('dismiss');
+    else {
+      popover.dismiss(null).then(() => {
+        popover.present();
+        this.isOpened = true;
+      });
+    }
+    popover.onDidDismiss(data => {
       this.isOpened = false;
       this.close.next(data);
     });
-
+    popover.present();
     return this.close.asObservable();
   }
+
+  public setContent(title, message, positiveButtonText = Constants.OK, dismissButtonText = undefined, type = undefined) {
+    return {
+      type: type,
+      title: title,
+      message: message,
+      positiveButtonText: positiveButtonText,
+      dismissButtonText: dismissButtonText
+    };
+  }
+
 
 }

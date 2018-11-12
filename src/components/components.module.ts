@@ -8,8 +8,18 @@ import {createTranslateLoader} from "../app/app.module";
 import {NavbarComponent} from "./navbar/navbar";
 import {CustomShoppingListMenuComponent} from "./custom-shopping-list-menu/custom-shopping-list-menu";
 import {ProductComponent} from "./product/product";
+import {ProductPricingComponent} from "./product-pricing/product-pricing";
+import {ProductDetailsComponent} from "./product-details/product-details";
+import {ProductQuantityComponent} from "./product-quantity/product-quantity";
 
-let components = [AppMenuComponent, PopoverComponent, NavbarComponent, CustomShoppingListMenuComponent, ProductComponent];
+let components = [AppMenuComponent,
+  PopoverComponent,
+  NavbarComponent,
+  CustomShoppingListMenuComponent,
+  ProductComponent,
+  ProductPricingComponent,
+  ProductDetailsComponent,
+  ProductQuantityComponent];
 
 @NgModule({
   declarations: components,

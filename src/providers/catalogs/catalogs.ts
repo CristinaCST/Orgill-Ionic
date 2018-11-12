@@ -29,7 +29,7 @@ export class CatalogsProvider {
     }
   }
 
-  getCategories(params: CategoriesRequest){
+  getCategories(params: CategoriesRequest) {
     return this.apiProvider.post(ConstantsUrl.URL_CATEGORIES, params);
   }
 
@@ -39,6 +39,14 @@ export class CatalogsProvider {
 
   getProducts(params: ProductsRequest) {
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCTS, params);
+  }
+
+  getProductDetails(productSku) {
+    let params = {
+      "user_token": this.userToken,
+      "sku": productSku
+    };
+    return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_DETAIL, params);
   }
 
 }

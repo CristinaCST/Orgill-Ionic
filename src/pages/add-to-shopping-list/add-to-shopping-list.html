@@ -1,0 +1,36 @@
+<ion-content>
+  <!-- Shopping lists -->
+  <form [formGroup]="listForm">
+    <ion-list radio-group formControlName="listOptions" [(ngModel)]="listForm.value.listOptions">
+      <ion-item-divider no-lines>
+        {{"shopping_list_add_select_message" | translate}}
+      </ion-item-divider>
+      <ion-item *ngFor="let shoppingList of shoppingLists">
+        <ion-label>
+          {{shoppingList.name}}
+          <ion-radio [value]="shoppingList.id" (ionSelect)="selectList(shoppingList.id)"></ion-radio>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </form>
+
+  <!-- Create new List -->
+  <ion-item-divider>
+    {{"shopping_list_add_new_message" | translate}}
+  </ion-item-divider>
+  <button padding class="add-shopping-list" ion-button icon-start (click)="newShoppingList()">
+    <ion-icon name="add"></ion-icon>
+    {{"menu_shopping_lists_new" | translate}}
+  </button>
+</ion-content>
+
+<ion-footer>
+  <div class="container">
+    <button ion-button outline (click)="cancel()">
+      {{"cancel" | translate}}
+    </button>
+    <button ion-button [disabled]="isAddBtnDisabled" (click)="add()">
+      {{"ok" | translate}}
+    </button>
+  </div>
+</ion-footer>

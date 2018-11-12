@@ -1,0 +1,94 @@
+@import "../../theme/variables";
+
+product-quantity {
+
+  ion-item {
+    &.item-md {
+      padding-left: 0;
+    }
+    .info {
+      width: 100%;
+      padding-left: 16px;
+      display: flex;
+      span {
+        line-height: 1.5;
+      }
+      span:nth-child(1) {
+        text-align: left;
+        width: 50%;
+        color: color($colors, OrgillLightGray);
+      }
+      span:nth-child(2) {
+        width: 50%;
+        text-align: right;
+        font-weight: 500;
+      }
+    }
+  }
+  #quantity-content {
+    ion-label {
+      display: flex;
+      margin: 0;
+      width: 100%;
+      #title {
+        width: 50%;
+        padding-left: 16px;
+        display: flex;
+        align-items: center;
+        p {
+          text-align: left;
+          color: color($colors, OrgillLightGray);
+          font-size: $font-size-medium;
+        }
+      }
+      .buttons {
+        width: 50%;
+        max-width: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: right;
+        div {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          label {
+            width: 50%;
+            padding: $ion-app-padding;
+            input {
+              border-radius: 25px;
+              border: 1px solid color($colors, OrgillWhiteGray);
+              text-align: center;
+              width: 100%;
+              padding: 5px;
+            }
+          }
+        }
+      }
+    }
+  }
+  .total-price {
+    width: 100%;
+    display: flex;
+    .label {
+      display: flex;
+    }
+    .item-inner {
+      border: 0!important;
+    }
+    span:nth-child(1) {
+      margin-left: 16px;
+      width: 50%;
+      text-align: left;
+      font-size: $font-size-large;
+      color: color($colors, OrgillDarkGray);
+      font-weight: bold;
+    }
+    span:nth-child(2) {
+      text-align: right;
+      width: 50%;
+      font-size: $font-size-large;
+      color: color($colors, OrgillRed);
+      font-weight: bold;
+    }
+  }
+}

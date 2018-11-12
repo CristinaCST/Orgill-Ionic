@@ -35,15 +35,21 @@ export class AuthServiceProvider {
     LocalStorageHelper.removeFromLocalStorage(Constants.USER);
   }
 
-  logoutDeleteData(){
+  logoutDeleteData() {
   }
 
   getUserInfo() {
-    const params = {'user_token': this.user.userToken};
-    this.apiProvider.post(ConstantsURL.URL_USER_INFO, params).subscribe(response => {
-      this.user = JSON.parse(response.d);
-      this.user.userToken = params.user_token;
-      LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
+    return new Promise((resolve, reject) => {
+      const params = {'user_token': this.user.userToken};
+      this.apiProvider.post(ConstantsURL.URL_USER_INFO, params).subscribe(response => {
+        this.user = JSON.parse(response.d);
+        this.user.userToken = params.user_token;
+        resolve();
+        LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
+      }, (error) => {
+        console.error(error);
+        reject(error);
+      });
     });
   }
 

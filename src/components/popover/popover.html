@@ -23,12 +23,16 @@
         <ion-input [(ngModel)]="listDescription" type="text"
                    placeholder="{{'new_list_hint_desc'| translate }}"></ion-input>
       </ion-item>
+      <ion-item>
+        <ion-label>Is Market Only</ion-label>
+        <ion-checkbox [(ngModel)]="isMarketOnlyList" (ionChange)="updateCheck()"></ion-checkbox>
+      </ion-item>
     </ion-list>
   </div>
   <div class="modal-btn-container">
     <div class="modals-btn">
-      <button *ngIf="data.negativeButtonText" class="round bg-dark" ion-button outline (click)="dismiss('NO')">
-        {{data.negativeButtonText | translate }}
+      <button *ngIf="data.dismissButtonText" class="round bg-dark" ion-button outline (click)="dismiss('NO')">
+        {{data.dismissButtonText | translate }}
       </button>
       <button *ngIf="data.positiveButtonText" class="round bg-light" ion-button (click)="dismiss('OK')">
         {{data.positiveButtonText | translate }}

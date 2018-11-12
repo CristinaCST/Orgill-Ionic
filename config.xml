@@ -3,7 +3,7 @@
     <name>Orgill</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="cristina.nicolae@cst-us.com" href="http://cst-us.com/">CST Team</author>
-    <content original-src="index.html" src="http://192.168.0.179:8100" />
+    <content original-src="index.html" src="http://192.168.0.142:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -15,11 +15,12 @@
     <preference name="android-minSdkVersion" value="19" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashMaintainAspectRatio" value="true" />
-    <preference name="FadeSplashScreenDuration" value="300" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="SplashScreen" value="screen" />
-    <preference name="SplashScreenDelay" value="3000" />
+    <preference name="FadeSplashScreen" value="true" />
+    <preference name="AutoHideSplashScreen" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="FadeSplashScreenDuration" value="300" />
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="mdpi" src="resources/android/icon/icon_mdpi.png" />
@@ -89,10 +90,8 @@
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
     <allow-navigation href="http://192.168.0.178:8100" sessionid="2a25fc91" />
     <plugin name="cordova-sqlite-storage" spec="^2.4.0" />
-    <plugin name="phonegap-plugin-barcodescanner" spec="^8.0.0">
-        <variable name="ANDROID_SUPPORT_V4_VERSION" value="27.+" />
-    </plugin>
-    <allow-navigation href="http://192.168.0.179:8100" sessionid="1913936d" />
+    <allow-navigation href="http://192.168.0.179:8100" sessionid="16493fe7" />
+    <allow-navigation href="http://192.168.0.142:8100" sessionid="1a2eed66" />
     <engine name="android" spec="7.0.0" />
     <engine name="ios" spec="4.5.5" />
 </widget>

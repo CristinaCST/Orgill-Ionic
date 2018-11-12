@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{product.NAME}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div class="main" ion-item no-lines>
+    <div id="image-container">
+      <img
+        [src]="product.IMAGE !== '0000000.jpg'?('http://images.orgill.com/200x200/'+product.SKU+'.JPG'):'../../assets/imgs/product_placeholder.png'">
+    </div>
+    <div id="product-main-info">
+      <p>{{product.NAME}}</p>
+      <p>{{product.VENDOR_NAME}}</p>
+    </div>
+  </div>
+  <div [innerHTML]="description" padding>
+  </div>
+</ion-content>

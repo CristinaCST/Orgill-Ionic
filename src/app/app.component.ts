@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Platform} from 'ionic-angular';
+import {App, Platform} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {Catalog} from '../pages/catalog/catalog';
@@ -9,8 +9,6 @@ import {LocalStorageHelper} from "../helpers/local-storage-helper";
 import * as Constants from '../util/constants';
 import {DateTime} from "../providers/datetime/DateTime";
 import {DatabaseProvider} from "../providers/database/database";
-import {LoadingProvider} from "../providers/loading/loading";
-import {TranslateProvider} from "../providers/translate/translate";
 
 @Component({
   templateUrl: 'app.html'
@@ -19,33 +17,27 @@ export class MyApp {
 
   rootPage: any = Login;
   isLoading = true;
-  static databaseProvider: DatabaseProvider;
 
   constructor(public platform: Platform,
+              public app: App,
               public statusBar: StatusBar,
               private splashScreen: SplashScreen,
               private translate: TranslateService,
-              public databaseProvider: DatabaseProvider,
-              private loading: LoadingProvider,
-              private translateProvider: TranslateProvider) {
+              public databaseProvider: DatabaseProvider) {
 
-    MyApp.databaseProvider = this.databaseProvider;
     this.setAppLanguage();
     this.initializeApp();
   }
 
   initializeApp() {
     this.isLoading = true;
-    this.loading.presentLoading(this.translateProvider.translate(Constants.LOADING_ALERT_CONTENT_LOGIN));
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
-      this.splashScreen.hide();
 
-      MyApp.databaseProvider.getDatabaseState()
+      this.databaseProvider.getDatabaseState()
         .subscribe(isDatabaseOpen => {
           if (isDatabaseOpen) {
             this.checkSession();
-            this.isLoading = false;
           }
         });
 
@@ -54,18 +46,29 @@ export class MyApp {
 
   private setAppLanguage() {
     let language = navigator.language;
-    if (language.includes("fr"))
+    if (language.includes("fr")) {
       this.translate.setDefaultLang("fr");
-    else this.translate.setDefaultLang("en");
+    }
+    else {
+      this.translate.setDefaultLang("en");
+    }
+  }
+
+  stopLoading() {
+    this.splashScreen.hide();
+    this.isLoading = false;
   }
 
   private checkSession() {
     if (this.isValidSession() === true) {
-      this.rootPage = Catalog;
+      this.app.getRootNavs()[0].setRoot(Catalog).then(() => {
+        this.stopLoading();
+      })
     } else {
-      this.rootPage = Login;
+      this.app.getRootNavs()[0].setRoot(Login).then(() => {
+        this.stopLoading();
+      })
     }
-    this.loading.hideLoading();
   }
 
   private isValidSession(): boolean {
