@@ -176,6 +176,7 @@ export const SCAN_REGULAR_PRODUCT = 'scan_regular_product';
 export const SCAN_NO_PERMISSION_ALERT = 'scan_no_permission_alert';
 export const SCAN_GRANT_PERMISSION = 'scan_grant_button';
 export const SCAN_NO_PERMISSION_ALERT_RESULT = 'scan_no_permission_alert_result';
+export const SCAN_ERROR = 'scan_error';
 
 /**
 * Marker : Shopping Lists

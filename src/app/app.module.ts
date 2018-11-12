@@ -27,6 +27,8 @@ import {ProductsPage} from "../pages/products/products";
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { ScannerProvider } from '../providers/scanner/scanner';
 import {ScannerPage} from "../pages/scanner/scanner";
+import {ProductDetailsPage} from "../pages/product-details/product-details";
+import { ProductProvider } from '../providers/product/product';
 
 
 @NgModule({
@@ -37,7 +39,8 @@ import {ScannerPage} from "../pages/scanner/scanner";
     Login,
     AboutPage,
     ProductsPage,
-    ScannerPage
+    ScannerPage,
+    ProductDetailsPage
   ],
   imports: [
     BrowserModule,
@@ -60,7 +63,9 @@ import {ScannerPage} from "../pages/scanner/scanner";
     Catalog,
     Login,
     AboutPage,
-    ProductsPage, ScannerPage
+    ProductsPage,
+    ScannerPage,
+    ProductDetailsPage
   ],
   providers: [
     StatusBar,
@@ -76,7 +81,8 @@ import {ScannerPage} from "../pages/scanner/scanner";
     SQLitePorter,
     SQLite,
     BarcodeScanner,
-    ScannerProvider
+    ScannerProvider,
+    ProductProvider
   ]
 })
 
