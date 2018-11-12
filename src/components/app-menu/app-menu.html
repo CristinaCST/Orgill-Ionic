@@ -52,7 +52,7 @@
         <ion-icon class="menu-icon" name="list-box"></ion-icon>
         {{"menu_shopping_lists" | translate}}
       </button>
-      <button menuClose icon-left detail-none ion-item *ngFor="let list of defaultShoppingLists">
+      <button (click)="goToListPage(list)"  menuClose icon-left detail-none ion-item *ngFor="let list of defaultShoppingLists">
         <ion-icon class="menu-icon" name="cart"></ion-icon>
         {{list.name}}
       </button>

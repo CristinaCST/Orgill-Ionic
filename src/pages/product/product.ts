@@ -19,6 +19,7 @@ export class ProductPage implements OnInit {
   public productPrograms: Array<ItemProgram> = [];
   public programNumber: number;
   public selectedProgram: ItemProgram;
+  public quantityItemPrice: number = 0;
 
   constructor(public navController: NavController, public navParams: NavParams,
               private programProvider: ProgramProvider, private popoversProvider: PopoversProvider) {
@@ -52,6 +53,8 @@ export class ProductPage implements OnInit {
     this.programProvider.getSelectedProgram().subscribe(selectedProgram => this.selectedProgram = selectedProgram);
   }
 
+
+
   getInitialProgram() {
     let programs = this.productPrograms.filter(program => parseInt(program.PROGRAM_NO) === this.programNumber);
     return programs.length > 0 ? programs[0] : this.productPrograms[0];
@@ -83,13 +86,15 @@ export class ProductPage implements OnInit {
       this.navController.push(AddToShoppingListPage, {
         'product': this.product,
         'quantity': this.quantity,
-        'selectedProgram': this.selectedProgram
+        'selectedProgram': this.selectedProgram,
+        'quantityItemPrice': this.quantityItemPrice
       });
     }
   }
 
   onQuantityChange($event) {
-    this.quantity = $event;
+    this.quantity = $event.quantity;
+    this.quantityItemPrice = $event.total;
     this.programProvider.setPackQuantity(false);
   }
 

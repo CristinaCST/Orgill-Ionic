@@ -1,37 +1,43 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
 import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
+import {StatusBar} from '@ionic-native/status-bar';
+import {SplashScreen} from '@ionic-native/splash-screen';
+import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {SQLite} from "@ionic-native/sqlite";
+import {SQLitePorter} from "@ionic-native/sqlite-porter";
+
+//Modules
+import {ComponentsModule} from "../components/components.module";
+import {DirectivesModule} from "../directives/directives.module";
+import {IonicStorageModule} from "@ionic/storage";
+
+//Providers
+import {ApiProvider} from "../providers/api-provider";
+import {CatalogsProvider} from '../providers/catalogs/catalogs';
+import {DatabaseProvider} from '../providers/database/database';
+import {TranslateProvider} from '../providers/translate/translate';
+import {LoadingProvider} from '../providers/loading/loading';
+import {PopoversProvider} from "../providers/popovers/popovers";
+import { ShoppingListsProvider } from '../providers/shopping-lists/shopping-lists';
+import {ProgramProvider} from '../providers/program/program';
+import {AuthServiceProvider} from "../providers/authservice/authservice";
+
+//Pages
 import {MyApp} from './app.component';
 import {HomePage} from '../pages/home/home';
 import {Catalog} from '../pages/catalog/catalog';
 import {Login} from "../pages/login/login";
-
-import {StatusBar} from '@ionic-native/status-bar';
-import {SplashScreen} from '@ionic-native/splash-screen';
-import {AuthServiceProvider} from "../providers/authservice/authservice";
-import {ApiProvider} from "../providers/api-provider";
-import {HttpClient, HttpClientModule} from "@angular/common/http";
-import {LoadingProvider} from '../providers/loading/loading';
-import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {TranslateProvider} from '../providers/translate/translate';
-import {ComponentsModule} from "../components/components.module";
-import {PopoversProvider} from "../providers/popovers/popovers";
 import {AboutPage} from "../pages/about/about";
-import {CatalogsProvider} from '../providers/catalogs/catalogs';
-import {DatabaseProvider} from '../providers/database/database';
-import {SQLitePorter} from "@ionic-native/sqlite-porter";
-import {SQLite} from "@ionic-native/sqlite";
-import {IonicStorageModule} from "@ionic/storage";
 import {ProductsPage} from "../pages/products/products";
 import {ProductPage} from "../pages/product/product";
-import {ProgramProvider} from '../providers/program/program';
 import {ProductDescriptionPage} from "../pages/product-description/product-description";
-import {DirectivesModule} from "../directives/directives.module";
 import {AddToShoppingListPage} from "../pages/add-to-shopping-list/add-to-shopping-list";
-import { ShoppingListsProvider } from '../providers/shopping-lists/shopping-lists';
+import {ShoppingListPage} from "../pages/shopping-list/shopping-list";
 
-let pages = [MyApp, HomePage, Catalog, Login, AboutPage, ProductsPage, ProductPage, ProductDescriptionPage, AddToShoppingListPage];
+let pages = [MyApp, HomePage, Catalog, Login, AboutPage, ProductsPage, ProductPage, ProductDescriptionPage, AddToShoppingListPage, ShoppingListPage];
 
 @NgModule({
   declarations: pages,

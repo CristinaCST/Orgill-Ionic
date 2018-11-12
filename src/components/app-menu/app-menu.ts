@@ -11,6 +11,7 @@ import {DatabaseProvider} from "../../providers/database/database";
 import {ShoppingList} from "../../interfaces/models/shopping-list";
 import {Program} from "../../interfaces/models/program";
 import {Catalog} from "../../pages/catalog/catalog";
+import {ShoppingListPage} from "../../pages/shopping-list/shopping-list";
 
 @Component({
   selector: 'app-menu',
@@ -140,7 +141,13 @@ export class AppMenuComponent implements OnInit {
       'programName': program.NAME,
       'programNumber': program.PROGRAMNO
     };
-    this.app.getActiveNav().push(Catalog, params).then(() => console.log('To ProductPage', params));
+    this.app.getActiveNavs()[0].push(Catalog, params).then(() => console.log('To ProductPage', params));
   }
 
+  goToListPage(list: ShoppingList) {
+    let params = {
+      list: list
+    };
+    this.app.getActiveNavs()[0].push(ShoppingListPage, params);
+  }
 }

@@ -17,11 +17,11 @@ export class DateTime {
   }
 
   static getCurrentDateTime() {
-    return moment();//.format(this.formatWithTime);
+    return moment();
   }
 
   static getCurrentDate() {
-    return moment();//.format(this.formatWithMonthYearDay);
+    return moment();
   }
 
   static getTimeAfter4Days(date: string) {

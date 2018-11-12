@@ -95,6 +95,10 @@ export class ProductQuantityComponent implements OnInit {
 
   handleQuantityChange() {
     this.setTotal();
-    this.quantityChange.emit(this.quantity);
+    let data = {
+      quantity: this.quantity,
+      total: this.total
+    };
+    this.quantityChange.emit(data);
   }
 }

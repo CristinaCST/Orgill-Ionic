@@ -13,13 +13,11 @@ export class ProductPricingComponent implements OnInit {
   public selectedProgram;
 
   constructor(private programProvider: ProgramProvider) {
-
   }
 
   ngOnInit(): void {
     this.programProvider.getSelectedProgram().subscribe(selectedProgram => {
       this.selectedProgram = selectedProgram;
-      console.log(this.selectedProgram)
     });
   }
 

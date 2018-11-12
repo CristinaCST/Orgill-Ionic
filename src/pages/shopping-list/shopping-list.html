@@ -1,0 +1,47 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <button ion-button menuToggle start>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-item-group *ngIf="shoppingListItems.length">
+    <ion-item-divider no-lines>
+      <span> {{"shopping_list_items_label" | translate}}: </span>
+      <span> {{"product_quantity" | translate}}: </span>
+    </ion-item-divider>
+    <shopping-list-product *ngFor="let shoppingListItem of shoppingListItems"
+                           [isDisabled]="false"
+                           (checked)="onChecked($event)"
+                           [shoppingListItem]="shoppingListItem">
+    </shopping-list-product>
+  </ion-item-group>
+  <p *ngIf="!shoppingListItems.length">{{"shopping_list_no_items_added" | translate}}</p>
+</ion-content>
+
+<ion-footer padding *ngIf="shoppingListItems.length">
+  <div>
+    <button ion-button outline block color="OrgillRed" (click)="delete()">
+      {{"delete" | translate}}
+    </button>
+    <button ion-button outline block color="OrgillDarkGray">
+      {{ allItemsSelected ? ("shopping_list_deselect_all" | translate) : ("shopping_list_select_all" | translate) }}
+    </button>
+  </div>
+  <div>
+    <div>
+      {{"order_review_total" | translate}}:
+    </div>
+    <div>
+      {{"product_currency" | translate}} {{orderTotal| number: '1.2-2'}}
+    </div>
+  </div>
+  <div>
+    <button ion-button block (click)="checkout()" color="OrgillRed">
+      {{"shopping_list_checkout" | translate}}
+    </button>
+  </div>
+</ion-footer>
