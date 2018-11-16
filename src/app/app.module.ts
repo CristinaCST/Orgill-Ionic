@@ -34,10 +34,12 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { ScannerProvider } from '../providers/scanner/scanner';
 import {ScannerPage} from "../pages/scanner/scanner";
 import {ProductProvider} from "../providers/product/product";
+import { PurchasesProvider } from '../providers/purchases/purchases';
+import {PurchaseDetailsPage} from "../pages/purchase-details/purchase-details";
 
 
 let pages = [MyApp, HomePage, Catalog, Login, AboutPage, ProductsPage, ProductPage, ProductDescriptionPage, ScannerPage,
-  AddToShoppingListPage];
+  AddToShoppingListPage, PurchaseDetailsPage];
 
 @NgModule({
   declarations: pages,
@@ -75,7 +77,8 @@ let pages = [MyApp, HomePage, Catalog, Login, AboutPage, ProductsPage, ProductPa
     ShoppingListsProvider,
     BarcodeScanner,
     ScannerProvider,
-    ProductProvider
+    ProductProvider,
+    PurchasesProvider
   ]
 })
 

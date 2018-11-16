@@ -156,7 +156,7 @@
   "orders_history_date": "Date",
   "orders_history_type": "Type",
   "orders_history_po": "PO",
-  "orders_history_no_purcahse": "No existing past purchases",
+  "orders_history_no_purchase": "No existing past purchases",
 
   "offline_browsing_description": "For maximum convenience you can download the limited Orgill product Catalog.<br/></br>You will be able to browse products when local and cell networks are not available",
   "offline_browsing_wifi": "Download Only over WIFI",

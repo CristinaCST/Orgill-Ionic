@@ -160,7 +160,7 @@
   "orders_history_date": "Date",
   "orders_history_type": "Sorte",
   "orders_history_po": "PO",
-  "orders_history_no_purcahse": "Aucun achat passé existant",
+  "orders_history_no_purchase": "Aucun achat passé existant",
 
   "offline_browsing_description": "Il est suggéré de télécharger l'Orgill limité catalogue pour pouvoir le consulter si les réseaux locaux ou cellulaires n'étaient pas disponibles.",
   "offline_browsing_wifi": "Télécharger Seulement sur WIFI",
