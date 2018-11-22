@@ -1,71 +1,110 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {Product} from "../../interfaces/models/product";
-import {ProductsRequest} from "../../interfaces/request-body/products-request";
-import * as Constants from '../../util/constants';
 import {CatalogsProvider} from "../../providers/catalogs/catalogs";
-import {LocalStorageHelper} from "../../helpers/local-storage-helper";
 import {ProductPage} from "../product/product";
+import {Category} from "../../interfaces/models/category";
+import {Subscription} from "rxjs/Subscription";
+import {ProductsSearchPage} from "../products-search/products-search";
+import {LoadingProvider} from "../../providers/loading/loading";
+import * as Constants from "../../util/constants";
 
 
 @Component({
   selector: 'page-products',
   templateUrl: 'products.html',
 })
-export class ProductsPage implements OnInit {
+export class ProductsPage implements OnInit, OnDestroy {
+  private getProductSubscription: Subscription;
+  private programName: string;
+  private programNumber: string;
+  public isPaginationEnabled: boolean = false;
+  public totalNumberOfProducts: number = 0;
+  public category: Category;
+  public page: number = 1;
+  public products: Array<Product> = [];
 
-  categoryName: string;
-  userToken: string;
-  subCategoryId: string;
-  programNumber: string;
-  pageNumber: number;
-  products: Array<Product> = [];
-
-  constructor(private navParams: NavParams, private catalogProvider: CatalogsProvider, private navController: NavController) {
-    this.pageNumber = 1;
-    this.userToken = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER)).userToken;
+  constructor(private navParams: NavParams,
+              public loading: LoadingProvider,
+              private catalogProvider: CatalogsProvider, private navController: NavController) {
   }
 
   ngOnInit() {
-    this.subCategoryId = this.navParams.get('subCategoryId');
     this.programNumber = this.navParams.get('programNumber');
-    this.categoryName = this.navParams.get('categoryName');
-    this.getProducts(this.subCategoryId, this.programNumber);
+    this.programName = this.navParams.get('programName');
+    this.category = this.navParams.get('category');
+
+    this.getProducts(this.category.CatID, this.programNumber);
+    this.setPaginationInfo();
   }
 
   getProducts(subcategoryId: string, programNumber: string) {
-    console.log('Get products');
     if (!programNumber)
       programNumber = '';
-
-    const params: ProductsRequest = {
-      'user_token': this.userToken,
-      'subcategory_id': subcategoryId,
-      'p': String(this.pageNumber),
-      'rpp': String(Constants.PRODUCTS_PER_PAGE),
-      'program_number': programNumber,
-      'last_modified': '',
-    };
-
-    this.catalogProvider.getProducts(params).subscribe(response => {
-      console.log('Get products subscription');
-      const responseData = JSON.parse(response.d);
-      this.products = this.sortProducts(responseData);
+    this.loading.presentSimpleLoading();
+    this.getProductSubscription = this.catalogProvider.getProducts(subcategoryId, programNumber, this.page).subscribe(response => {
+      this.products = this.sortProducts(JSON.parse(response.d));
+      this.loading.hideLoading();
     })
   }
 
   sortProducts(responseData) {
-    return responseData.sort((product1, product2): number => {
-      return product1.NAME.localeCompare(product2.NAME);
-    });
+    return responseData.sort((product1, product2): number =>
+      product1.NAME.localeCompare(product2.NAME)
+    );
   }
 
   goToProductPage(product: Product) {
+    this.loading.presentSimpleLoading();
     this.navController.push(ProductPage, {
       'product': product,
-      'categoryName': this.categoryName,
-      'programNumber':this.programNumber
-    }).then(() => console.log('to product details page'));
+      'programName': this.programName,
+      'programNumber': this.programNumber
+    }).then(() => {
+      console.log('%cTo product details page', 'color:pink');
+      this.loading.hideLoading();
+    });
   }
 
+  ngOnDestroy(): void {
+    if (this.page > 1) {
+      this.getProductSubscription.unsubscribe();
+    }
+  }
+
+  onSearched($event) {
+    this.loading.presentSimpleLoading();
+    this.catalogProvider.search($event, this.category ? this.category.CatID : '', this.programNumber).subscribe(data => {
+      const params = {
+        searchData: JSON.parse(data.d),
+        programNumber: this.programNumber,
+        programName: this.programName,
+        category: this.category
+      };
+      this.navController.push(ProductsSearchPage, params).then(() => console.log('%cTo product search page', 'color:blue'));
+      this.loading.hideLoading();
+    });
+  }
+
+  next() {
+    this.page += 1;
+    this.loadNextProducts();
+  }
+
+  loadNextProducts() {
+    this.loading.presentSimpleLoading();
+    this.getProductSubscription = this.catalogProvider.getProducts(this.category ? this.category.CatID : '', this.programNumber, this.page)
+      .subscribe((response) => {
+        this.products = this.products.concat(this.sortProducts(JSON.parse(response.d)));
+        this.setPaginationInfo();
+        this.loading.hideLoading();
+      })
+  }
+
+  setPaginationInfo() {
+    if (this.products.length) {
+      this.totalNumberOfProducts = parseInt(this.products[0].TOTAL_REC_COUNT);
+    }
+    this.isPaginationEnabled = this.page * Constants.SEARCH_RESULTS_PER_PAGE < this.totalNumberOfProducts;
+  }
 }

@@ -1,2 +1,3 @@
-<app-menu *ngIf="isLoading===false" [menuContent]="menu_content" [rootPage]="rootPage"></app-menu>
+<app-menu *ngIf="isLoading===false&&isValidSession()===true" [menuContent]="menu_content"
+          [rootPage]="rootPage"></app-menu>
 <ion-nav keyboardDirective hideBackButton="true" [root]="rootPage" #menu_content swipeBackEnabled="false"></ion-nav>

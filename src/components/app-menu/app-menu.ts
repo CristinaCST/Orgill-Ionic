@@ -36,7 +36,6 @@ export class AppMenuComponent implements OnInit {
               private catalogsProvider: CatalogsProvider,
               private translateProvider: TranslateProvider,
               public databaseProvider: DatabaseProvider) {
-
   }
 
   ngOnInit(): void {
@@ -141,7 +140,7 @@ export class AppMenuComponent implements OnInit {
       'programName': program.NAME,
       'programNumber': program.PROGRAMNO
     };
-    this.app.getActiveNavs()[0].push(Catalog, params).then(() => console.log('To ProductPage', params));
+    this.app.getActiveNavs()[0].push(Catalog, params).then(() => console.log('To CatalogPage', params));
   }
 
   goToListPage(list: ShoppingList) {

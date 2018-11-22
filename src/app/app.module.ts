@@ -21,7 +21,7 @@ import {DatabaseProvider} from '../providers/database/database';
 import {TranslateProvider} from '../providers/translate/translate';
 import {LoadingProvider} from '../providers/loading/loading';
 import {PopoversProvider} from "../providers/popovers/popovers";
-import { ShoppingListsProvider } from '../providers/shopping-lists/shopping-lists';
+import {ShoppingListsProvider} from '../providers/shopping-lists/shopping-lists';
 import {ProgramProvider} from '../providers/program/program';
 import {AuthServiceProvider} from "../providers/authservice/authservice";
 
@@ -36,8 +36,26 @@ import {ProductPage} from "../pages/product/product";
 import {ProductDescriptionPage} from "../pages/product-description/product-description";
 import {AddToShoppingListPage} from "../pages/add-to-shopping-list/add-to-shopping-list";
 import {ShoppingListPage} from "../pages/shopping-list/shopping-list";
+import {UserInfoProvider} from '../providers/user-info/user-info';
+import {CustomerLocationPage} from "../pages/customer-location/customer-location";
+import {OrderReviewPage} from "../pages/order-review/order-review";
+import {OrderConfirmationPage} from "../pages/order-confirmation/order-confirmation";
+import {ProductsSearchPage} from "../pages/products-search/products-search";
 
-let pages = [MyApp, HomePage, Catalog, Login, AboutPage, ProductsPage, ProductPage, ProductDescriptionPage, AddToShoppingListPage, ShoppingListPage];
+let pages = [MyApp,
+  HomePage,
+  Catalog,
+  Login,
+  AboutPage,
+  ProductsPage,
+  ProductPage,
+  ProductDescriptionPage,
+  AddToShoppingListPage,
+  ShoppingListPage,
+  CustomerLocationPage,
+  OrderReviewPage,
+  OrderConfirmationPage,
+  ProductsSearchPage];
 
 @NgModule({
   declarations: pages,
@@ -72,14 +90,14 @@ let pages = [MyApp, HomePage, Catalog, Login, AboutPage, ProductsPage, ProductPa
     SQLitePorter,
     SQLite,
     ProgramProvider,
-    ShoppingListsProvider
+    ShoppingListsProvider,
+    UserInfoProvider
   ]
 })
 
 
 export class AppModule {
 }
-
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');

@@ -9,11 +9,15 @@ product {
     padding-right: 10px;
     width: 100%;
 
+    .item-inner {
+      padding: 0;
+    }
     .label {
       display: flex;
       justify-content: center;
       align-items: center;
       width: 100%;
+      margin-right: 0;
 
       #image-container {
         width: 25%;
@@ -33,9 +37,10 @@ product {
         //min-width: 75%;
         display: flex;
         #product-info {
-          width: 80%;
-          max-width: 80%;
-          min-width: 80%;
+          width: 70%;
+          max-width: 70%;
+          min-width: 70%;
+          margin-right: 5%;
           p {
             width: 100%;
             text-align: left;
@@ -51,10 +56,10 @@ product {
         #price-container {
           width: 20%;
           max-width: 20%;
-          margin: 10px;
           display: flex;
           align-items: center;
-          justify-content: center;
+          justify-content: flex-end;
+          margin: 0;
           div {
             display: block;
           }

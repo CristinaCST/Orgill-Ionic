@@ -1,3 +1,12 @@
 page-shopping-list {
-
+  .footer {
+    button {
+      border-radius: 8px;
+      height: 5rem;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+    }
+  }
 }

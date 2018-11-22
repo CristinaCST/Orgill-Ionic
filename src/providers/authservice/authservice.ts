@@ -26,7 +26,6 @@ export class AuthServiceProvider {
     credentials.password = AuthServiceProvider.encryption(credentials.password);
 
     return this.apiProvider.post(ConstantsURL.URL_LOGIN, credentials).map(response => {
-      console.log(response);
       this.user = {'userToken': JSON.parse(response.d)['User_Token']};
     });
   }
@@ -44,8 +43,8 @@ export class AuthServiceProvider {
       this.apiProvider.post(ConstantsURL.URL_USER_INFO, params).subscribe(response => {
         this.user = JSON.parse(response.d);
         this.user.userToken = params.user_token;
-        resolve();
         LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
+        resolve();
       }, (error) => {
         console.error(error);
         reject(error);

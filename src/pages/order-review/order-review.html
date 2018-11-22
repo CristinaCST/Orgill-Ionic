@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{"order_review" | translate}}</ion-title>
+  </ion-navbar>
+  <p *ngIf="orderMethod">
+    {{orderMethod===sendToOrgillMethod?("order_review_orgill_message"| translate):(
+    "order_review_checkout_message"|translate)}}
+  </p>
+</ion-header>
+
+<!-- Order review main content -->
+<ion-content>
+  <ion-item-group>
+    <div *ngIf="location">
+      <ion-item-divider no-lines>
+        <p>{{"customer_locations" | translate}}:</p>
+        <p>{{"order_review_total" | translate}}:</p>
+      </ion-item-divider>
+      <ion-item>
+        <span>{{"customer_locations_po" | translate}}:</span>
+        <span>{{postOffice}}</span>
+        <span>{{"order_review_location" | translate}}:</span>
+        <span>{{location.SHIPTONO}}</span>
+        <p>{{"product_currency"| translate}} {{orderTotal | number: '1.2-2'}}</p>
+      </ion-item>
+
+      <ion-item-divider no-lines>{{"order_review_ship_to" | translate}}:</ion-item-divider>
+      <ion-item>
+        <span> {{location.CUSTOMERNAME}} </span>
+        <span> {{location.ADDRESS}} </span>
+      </ion-item>
+    </div>
+
+    <shopping-list-product *ngFor="let shoppingListItem of shoppingListItems"
+                           [isDisabled]="isCheckout"
+                           [shoppingListItem]="shoppingListItem">
+    </shopping-list-product>
+  </ion-item-group>
+</ion-content>
+
+<!-- Shopping footer-->
+<ion-footer padding>
+  <p>{{"order_review_note" | translate}}</p>
+  <button ion-button outline block color="OrgillDarkGray"  (click)="cancel()">
+    {{"cancel" | translate}}
+  </button>
+  <button ion-button block color="OrgillRed" (click)="purchase()">
+    {{"order_review_purchase" | translate}}
+  </button>
+</ion-footer>

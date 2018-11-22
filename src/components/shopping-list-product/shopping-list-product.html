@@ -10,10 +10,12 @@
       </div>
 
       <div class="shopping-list-container">
-        <img *ngIf="shoppingListItem.product.IMAGE != '0000000.jpg'"
-             src="http://images.orgill.com/200x200/{{shoppingListItem.product.SKU}}.JPG">
-        <img *ngIf="shoppingListItem.product.IMAGE == '0000000.jpg'" src="assets/imgs/product_placeholder.png">
-        <div>
+        <div class="img-container">
+          <img *ngIf="shoppingListItem.product.IMAGE != '0000000.jpg'"
+                  src="http://images.orgill.com/200x200/{{shoppingListItem.product.SKU}}.JPG">
+          <img *ngIf="shoppingListItem.product.IMAGE == '0000000.jpg'" src="assets/imgs/product_placeholder.png">
+        </div>
+        <div class="info">
           <div>
             <span>{{"product_SKU" | translate}}:</span>
             <span>{{shoppingListItem.product.SKU}} {{shoppingListItem.product.QTY_ROUND_OPTION}}</span>
@@ -27,6 +29,8 @@
             <span>{{"product_currency" | translate}}{{shoppingListItem.quantity * shoppingListItem.item_price |
               number:'1.2-2'}}</span>
           </div>
+        </div>
+        <div class="quantity">
           <p> {{shoppingListItem.quantity}} </p>
         </div>
       </div>

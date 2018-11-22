@@ -2,10 +2,20 @@ import {Injectable} from '@angular/core';
 import {DatabaseProvider} from "../database/database";
 import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
 import {DateTime} from "../datetime/DateTime";
+import {ApiProvider} from "../api-provider";
+import * as ConstantsUrl from "../../util/constants-url";
+import * as Constants from "../../util/constants";
+import {LocalStorageHelper} from "../../helpers/local-storage-helper";
 
 @Injectable()
 export class ShoppingListsProvider {
-  constructor(private databaseProvider: DatabaseProvider) {
+  private readonly userToken;
+
+  constructor(private databaseProvider: DatabaseProvider, private apiProvider: ApiProvider) {
+    let userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
+    if (userInfo) {
+      this.userToken = userInfo.userToken;
+    }
   }
 
   getLocalShoppingLists(): Promise<any> {
@@ -89,5 +99,37 @@ export class ShoppingListsProvider {
 
   deleteProductFromList(listId, productIdsArr) {
     return this.databaseProvider.removeProductsFromShoppingList(listId, productIdsArr);
+  }
+
+  insertPurchaseToDB(purchaseInfo) {
+    return this.databaseProvider.insertPurchase(purchaseInfo);
+  }
+
+  orderProducts(productInfoList, insertToDBInfo) {
+    return new Promise((resolve, reject) => {
+        productInfoList.user_token = this.userToken;
+        try {
+          this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_PRODUCTS, productInfoList).subscribe(async (response) => {
+            if (response) {
+              insertToDBInfo.confirmation_number = JSON.parse(response.d);
+              let insertedPurchaseToDBInfo = await this.insertPurchaseToDB(insertToDBInfo);
+              resolve({insertedPurchaseToDBInfo: insertedPurchaseToDBInfo, confirmationNumber: JSON.parse(response.d)});
+            } else {
+              reject(response);
+            }
+          })
+        } catch (e) {
+          reject(e);
+        }
+      }
+    )
+  }
+
+  getOrderConfirmation(confirmationNumbers) {
+    let params = {
+      "user_token": this.userToken,
+      "confirmation_numbers": confirmationNumbers
+    }
+    return this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_CONFIRMATION, params);
   }
 }

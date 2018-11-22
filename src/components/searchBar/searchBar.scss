@@ -1,0 +1,27 @@
+.search-container {
+  display: flex;
+  .back-button-container {
+    width: 20%;
+    height: auto;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .search-input-container {
+    width: -webkit-fill-availabl;
+    background: linear-gradient(to right, color($colors, OrgillGradientLeft) 0%, color($colors, OrgillGradientRight) 100%);
+    .input {
+      color: color($colors, OrgillDarkGray);
+      font-style: italic;
+
+      ::placeholder {
+        color: color($colors, OrgillMediumGray);
+        font-style: italic;
+      }
+    }
+    ion-icon {
+      color: color($colors, OrgillDarkGray);
+    }
+  }
+}

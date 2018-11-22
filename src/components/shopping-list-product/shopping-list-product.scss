@@ -1,5 +1,33 @@
 shopping-list-product {
-  .shopping-list-container {
-    display: flex;
+  ion-item {
+    padding: 0;
+    border-bottom: 1px solid lightgray;
+    .label {
+      margin: 0;
+      button {
+        padding: 0;
+        margin: 0;
+      }
+      .shopping-list-container {
+        display: flex;
+        flex: 1;
+        .img-container {
+          max-width: 20%;
+          max-height: 20%;
+        }
+        .info {
+          width: 70%;
+          .info-row {
+
+          }
+        }
+        .quantity {
+          width: 10%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
   }
 }

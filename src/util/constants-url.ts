@@ -16,3 +16,6 @@ export const URL_PRODUCT_DETAIL = "/service.asmx/product_detail";
 export const URL_PRODUCT_SEARCH = "/service.asmx/product_search";
 export const URL_PRODUCT_PRICE = "/service.asmx/item_price";
 
+export const URL_SHOPPING_LISTS_ORDER_PRODUCTS = "/service.asmx/order_products";
+export const URL_SHOPPING_LISTS_ORDER_CONFIRMATION = "/service.asmx/order_confirmation";
+

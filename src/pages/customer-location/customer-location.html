@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title> {{"customer_locations" | translate}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-item-group padding>
+    <ion-item-divider no-lines>{{"customer_locations_po" | translate}}:</ion-item-divider>
+    <ion-item>
+      <ion-input [(ngModel)]="postOffice" type="text"
+                 placeholder="{{'customer_locations_po_hint' | translate}}"></ion-input>
+    </ion-item>
+  </ion-item-group>
+  <ion-item-group [(ngModel)]="selectedLocation" padding radio-group>
+    <ion-item-divider no-lines>{{"customer_locations_list_header" | translate}}:</ion-item-divider>
+    <ion-item *ngFor="let userLocation of userLocations">
+      <ion-label>
+        <p> {{userLocation.CUSTOMERNAME}} </p>
+        <p> {{userLocation.ADDRESS}}</p>
+      </ion-label>
+      <ion-radio [value]="userLocation"></ion-radio>
+    </ion-item>
+  </ion-item-group>
+</ion-content>
+
+<ion-footer padding>
+  <button ion-button block outline color="OrgillLightGray" (click)="sendToOrgill()">
+    {{"customer_locations_send_to_orgill" | translate}}
+  </button>
+  <button ion-button block color="OrgillRed" (click)="checkout()">
+    {{"shopping_list_checkout" | translate}}
+  </button>
+</ion-footer>
+

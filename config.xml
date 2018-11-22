@@ -110,6 +110,7 @@
         <variable name="DEEPLINK_5_SCHEME" value=" " />
         <variable name="DEEPLINK_5_HOST" value=" " />
     </plugin>
+    <allow-navigation href="http://192.168.0.160:8100" sessionid="10f2a6dc" />
     <engine name="android" spec="7.0.0" />
     <engine name="ios" spec="4.5.5" />
 </widget>
