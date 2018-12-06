@@ -40,7 +40,7 @@ export class Login {
         });
       }, error => {
         this.loading.hideLoading();
-        let content = {title: Constants.LOGIN_ERROR_TITLE, message: Constants.LOGIN_ERROR_INVALID};
+        let content = this.popoversProvider.setContent(Constants.LOGIN_ERROR_TITLE,Constants.LOGIN_ERROR_INVALID);
         this.popoversProvider.show(content);
       }
     );
@@ -53,11 +53,7 @@ export class Login {
       return true;
     }
 
-    let content = {
-      title: Constants.LOGIN_ERROR_TITLE,
-      message: Constants.LOGIN_ERROR_REQUIRED,
-      positiveButtonText: Constants.OK
-    };
+    let content = this.popoversProvider.setContent(Constants.LOGIN_ERROR_TITLE,Constants.LOGIN_ERROR_REQUIRED);
     this.popoversProvider.show(content);
     return false;
   }

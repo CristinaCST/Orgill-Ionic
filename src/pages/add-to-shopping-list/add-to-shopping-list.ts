@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {Product} from "../../interfaces/models/product";
 import {ItemProgram} from "../../interfaces/models/item-program";
@@ -44,6 +44,7 @@ export class AddToShoppingListPage implements OnInit {
     this.product = this.navParams.get('product');
     this.selectedProgram = this.navParams.get('selectedProgram');
     this.quantity = this.navParams.get('quantity');
+    this.quantityItemPrice = this.navParams.get('quantityItemPrice');
 
     this.listForm = this.formBuilder.group({
       listOptions: [this.model.listOptions, Validators.required],

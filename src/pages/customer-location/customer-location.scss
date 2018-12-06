@@ -1,0 +1,56 @@
+@import "../../theme/variables";
+
+page-customer-location {
+  .post-container {
+    background-color: #f1eded;
+    ion-item, ion-item-divider {
+      background-color: inherit;
+      padding: 0;
+    }
+    .text-input-md {
+      margin-left: 0;
+      margin-right: 0;
+      width: 100%;
+      font-style: italic;
+    }
+    ion-input {
+      border-bottom: 1px solid #a9a6a6;
+    }
+    input::placeholder {
+      color: color($colors, OrgillRed);
+      opacity: 1;
+    }
+  }
+  .locations-container {
+    ion-item, ion-item-divider {
+      padding: 0 !important;
+    }
+    ion-item-divider {
+      text-transform: uppercase;
+    }
+    ion-label {
+      p {
+        white-space: pre-line;
+        text-align: left;
+        color: black;
+      }
+      p:nth-child(1) {
+        font-size: $font-size-medium;
+        font-weight: bold;
+        &.active {
+          color: color($colors, OrgillRed);
+        }
+      }
+    }
+  }
+  ion-footer {
+    background-color: white;
+    button {
+      padding: 25px !important;
+      border-radius: 7px !important;
+    }
+    button:nth-child(1) {
+      margin-bottom: 10px;
+    }
+  }
+}

@@ -1,43 +1,63 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
 import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
-import {MyApp} from './app.component';
-import {HomePage} from '../pages/home/home';
-import {Catalog} from '../pages/catalog/catalog';
-import {Login} from "../pages/login/login";
-
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
-import {AuthServiceProvider} from "../providers/authservice/authservice";
-import {ApiProvider} from "../providers/api-provider";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
-import {LoadingProvider} from '../providers/loading/loading';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {TranslateProvider} from '../providers/translate/translate';
+import {SQLite} from "@ionic-native/sqlite";
+import {SQLitePorter} from "@ionic-native/sqlite-porter";
+import {BarcodeScanner} from '@ionic-native/barcode-scanner';
+
+//Modules
 import {ComponentsModule} from "../components/components.module";
-import {PopoversProvider} from "../providers/popovers/popovers";
-import {AboutPage} from "../pages/about/about";
+import {IonicStorageModule} from "@ionic/storage";
+// import {OneSignal} from '@ionic-native/onesignal';
+
+//Providers
+import {ApiProvider} from "../providers/api-provider";
 import {CatalogsProvider} from '../providers/catalogs/catalogs';
 import {DatabaseProvider} from '../providers/database/database';
-import {SQLitePorter} from "@ionic-native/sqlite-porter";
-import {SQLite} from "@ionic-native/sqlite";
-import {IonicStorageModule} from "@ionic/storage";
+import {TranslateProvider} from '../providers/translate/translate';
+import {LoadingProvider} from '../providers/loading/loading';
+import {PopoversProvider} from "../providers/popovers/popovers";
+import {ShoppingListsProvider} from '../providers/shopping-lists/shopping-lists';
+import {ProgramProvider} from '../providers/program/program';
+import {AuthServiceProvider} from "../providers/authservice/authservice";
+import {ProductProvider} from "../providers/product/product";
+import {ScannerProvider} from '../providers/scanner/scanner';
+import {UserInfoProvider} from '../providers/user-info/user-info';
+
+//Pages
+import {MyApp} from './app.component';
+import {Catalog} from '../pages/catalog/catalog';
+import {Login} from "../pages/login/login";
+import {AboutPage} from "../pages/about/about";
 import {ProductsPage} from "../pages/products/products";
 import {ProductPage} from "../pages/product/product";
-import {ProgramProvider} from '../providers/program/program';
 import {ProductDescriptionPage} from "../pages/product-description/product-description";
-import {DirectivesModule} from "../directives/directives.module";
 import {AddToShoppingListPage} from "../pages/add-to-shopping-list/add-to-shopping-list";
-import { ShoppingListsProvider } from '../providers/shopping-lists/shopping-lists';
-import { BarcodeScanner } from '@ionic-native/barcode-scanner';
-import { ScannerProvider } from '../providers/scanner/scanner';
 import {ScannerPage} from "../pages/scanner/scanner";
-import {ProductProvider} from "../providers/product/product";
+import {ShoppingListPage} from "../pages/shopping-list/shopping-list";
+import {CustomerLocationPage} from "../pages/customer-location/customer-location";
+import {OrderReviewPage} from "../pages/order-review/order-review";
+import {OrderConfirmationPage} from "../pages/order-confirmation/order-confirmation";
+import {ProductsSearchPage} from "../pages/products-search/products-search";
 
-
-let pages = [MyApp, HomePage, Catalog, Login, AboutPage, ProductsPage, ProductPage, ProductDescriptionPage, ScannerPage,
-  AddToShoppingListPage];
+let pages = [MyApp,
+  Catalog,
+  Login,
+  AboutPage,
+  ProductsPage,
+  ProductPage,
+  ProductDescriptionPage,
+  AddToShoppingListPage,
+  ShoppingListPage,
+  CustomerLocationPage,
+  OrderReviewPage,
+  OrderConfirmationPage,
+  ProductsSearchPage, ScannerPage];
 
 @NgModule({
   declarations: pages,
@@ -53,9 +73,7 @@ let pages = [MyApp, HomePage, Catalog, Login, AboutPage, ProductsPage, ProductPa
         deps: [HttpClient]
       }
     }),
-    ComponentsModule,
-    DirectivesModule
-  ],
+    ComponentsModule],
   bootstrap: [IonicApp],
   entryComponents: pages,
   providers: [
@@ -75,14 +93,15 @@ let pages = [MyApp, HomePage, Catalog, Login, AboutPage, ProductsPage, ProductPa
     ShoppingListsProvider,
     BarcodeScanner,
     ScannerProvider,
-    ProductProvider
+    ProductProvider,
+    UserInfoProvider,
+    // OneSignal
   ]
 })
 
 
 export class AppModule {
 }
-
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');

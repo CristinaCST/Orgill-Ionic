@@ -6,6 +6,8 @@ import {ItemProgram} from "../../interfaces/models/item-program";
 import {PopoversProvider} from "../../providers/popovers/popovers";
 import * as Constants from "../../util/constants";
 import {AddToShoppingListPage} from "../add-to-shopping-list/add-to-shopping-list";
+import {LoadingProvider} from "../../providers/loading/loading";
+import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
 
 @Component({
   selector: 'page-product',
@@ -19,33 +21,50 @@ export class ProductPage implements OnInit {
   public productPrograms: Array<ItemProgram> = [];
   public programNumber: number;
   public selectedProgram: ItemProgram;
+  public quantityItemPrice: number = 0;
+  public programName: string;
 
-  constructor(public navController: NavController, public navParams: NavParams,
-              private programProvider: ProgramProvider, private popoversProvider: PopoversProvider) {
+  public fromShoppingList;
+  private shoppingListId;
+  private id;
+  public quantityFromList;
+
+  constructor(public navController: NavController,
+              public navParams: NavParams,
+              private loading: LoadingProvider,
+              private programProvider: ProgramProvider,
+              private popoversProvider: PopoversProvider,
+              private shoppingListProvider: ShoppingListsProvider) {
   }
 
   ngOnInit(): void {
+    this.loading.presentSimpleLoading();
+
     this.product = this.navParams.get('product');
     this.programNumber = this.navParams.get('programNumber');
-    this.subCategoryName = this.navParams.get('categoryName');
+    this.programName = this.navParams.get('programName');
+    this.subCategoryName = this.navParams.get('subcategoryName');
+
+    this.fromShoppingList = this.navParams.get('fromShoppingList');
+    if (this.fromShoppingList) {
+      this.shoppingListId = this.navParams.get('shoppingListId');
+      this.id = this.navParams.get('id');
+      this.quantityFromList = this.navParams.get('quantity');
+    }
 
     this.programProvider.getProductPrograms(this.product.SKU).subscribe(programs => {
       if (programs) {
         this.productPrograms = JSON.parse(programs.d);
         if (this.productPrograms.length === 0) {
-          let content = {
-            type: Constants.POPOVER_ERROR,
-            title: Constants.O_ZONE,
-            message: Constants.PRODUCT_NOT_AVAILABLE,
-            dismissButtonText: Constants.OK
-          };
+          let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.PRODUCT_NOT_AVAILABLE, undefined, Constants.OK, Constants.POPOVER_ERROR);
           this.popoversProvider.show(content);
-          this.navController.pop();
+          this.navController.pop().catch(err => console.error(err));
           return;
         }
         let initialProgram: ItemProgram = this.getInitialProgram();
         this.selectedProgram = initialProgram;
         this.programProvider.selectProgram(initialProgram);
+        this.loading.hideLoading();
       }
     });
 
@@ -58,39 +77,35 @@ export class ProductPage implements OnInit {
   }
 
   close() {
-    this.navController.pop();
+    this.navController.pop().catch(err => console.error(err));
   }
 
   addToShoppingList() {
     if (this.product.QTY_ROUND_OPTION === 'Y' && this.isMinimum70percentQuantity()) {
-      let content = {
-        type: Constants.Y_SHELF_PACK_QUANTITY_WARNING,
-        title: Constants.O_ZONE,
-        message: Constants.Y_SHELF_PACK_QUANTITY_WARNING,
-        dismissButtonText: Constants.OK
-      };
+      let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.Y_SHELF_PACK_QUANTITY_WARNING, undefined, Constants.OK, Constants.Y_SHELF_PACK_QUANTITY_WARNING);
       this.popoversProvider.show(content);
       this.programProvider.setPackQuantity(true);
     } else if (this.product.QTY_ROUND_OPTION === 'X' && this.quantity % Number(this.product.SHELF_PACK) !== 0) {
-      let content = {
-        type: 'X category',
-        title: Constants.O_ZONE,
-        message: Constants.X_SHELF_PACK_QUANTITY_WARNING,
-        dismissButtonText: Constants.OK
-      };
+      let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.X_SHELF_PACK_QUANTITY_WARNING, undefined, Constants.OK, 'X category');
       this.popoversProvider.show(content);
     } else {
       this.navController.push(AddToShoppingListPage, {
         'product': this.product,
         'quantity': this.quantity,
-        'selectedProgram': this.selectedProgram
-      });
+        'selectedProgram': this.selectedProgram,
+        'quantityItemPrice': this.quantityItemPrice
+      }).catch(err => console.error(err));
     }
   }
 
   onQuantityChange($event) {
-    this.quantity = $event;
+    this.quantity = $event.quantity;
+    this.quantityItemPrice = $event.total;
     this.programProvider.setPackQuantity(false);
+
+    if (this.fromShoppingList) {
+      this.shoppingListProvider.updateShoppingListItem(this.id, this.shoppingListId, this.programNumber.toString(), $event.productPrice, this.quantity);
+    }
   }
 
   public isMinimum70percentQuantity(): boolean {

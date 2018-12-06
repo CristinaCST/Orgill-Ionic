@@ -3,6 +3,7 @@ import {Injectable} from "@angular/core";
 @Injectable()
 export class LocalStorageHelper {
 
+
   public static saveToLocalStorage(key: string, item: any) {
     localStorage.setItem(key, item);
   }

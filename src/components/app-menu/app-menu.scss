@@ -3,7 +3,7 @@
 app-menu {
   #main_menu {
     .content {
-      background-color: color($colors, OrgillDarkGray);
+      background: color($colors, OrgillDarkGray) linear-gradient(to left, #4c4c4c, #333333);
 
       .group {
         & * {

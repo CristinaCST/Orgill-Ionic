@@ -1,0 +1,38 @@
+<!-- Customer Location Page Header -->
+<ion-header>
+  <!-- Customer Location Page Navigation Bar -->
+  <navbar [title]="'customer_locations'" [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
+  <!-- Customer Location Page Search Bar -->
+  <search-bar [showBackButton]="true"
+              (searched)="onSearched($event)"></search-bar>
+</ion-header>
+
+<ion-content>
+  <ion-item-group padding class="post-container">
+    <ion-item-divider no-lines>{{"customer_locations_po" | translate}}:</ion-item-divider>
+    <ion-item>
+      <ion-input [(ngModel)]="postOffice" type="text"
+                 placeholder="{{'customer_locations_po_hint' | translate}}"></ion-input>
+    </ion-item>
+  </ion-item-group>
+  <ion-item-group [(ngModel)]="selectedLocation" padding radio-group class="locations-container">
+    <ion-item-divider no-lines>{{"customer_locations_list_header" | translate}}:</ion-item-divider>
+    <ion-item *ngFor="let userLocation of userLocations">
+      <ion-label>
+        <p [class]="selectedLocation===userLocation?'active':''"> {{userLocation.CUSTOMERNAME}} </p>
+        <p> {{userLocation.ADDRESS}}</p>
+      </ion-label>
+      <ion-radio [value]="userLocation"></ion-radio>
+    </ion-item>
+  </ion-item-group>
+</ion-content>
+
+<ion-footer padding>
+  <button ion-button block outline color="OrgillLightGray" (click)="sendToOrgill()">
+    {{"customer_locations_send_to_orgill" | translate}}
+  </button>
+  <button ion-button block color="OrgillRed" (click)="checkout()">
+    {{"shopping_list_checkout" | translate}}
+  </button>
+</ion-footer>
+

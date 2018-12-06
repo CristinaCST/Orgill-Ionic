@@ -7,22 +7,23 @@ import {SubcategoriesRequest} from "../../interfaces/request-body/subcategories-
 import {CategoriesRequest} from "../../interfaces/request-body/categories-request";
 import {ProductsRequest} from "../../interfaces/request-body/products-request";
 import {EmptyObservable} from "rxjs/observable/EmptyObservable";
+import {SearchProductRequest} from "../../interfaces/request-body/search-product-request";
 
 @Injectable()
 export class CatalogsProvider {
 
-  private readonly userToken;
+  private readonly user;
 
   constructor(private apiProvider: ApiProvider) {
     let userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     if (userInfo) {
-      this.userToken = userInfo.userToken;
+      this.user = userInfo;
     }
   }
 
   getPrograms() {
-    if (this.userToken) {
-      let params = {"user_token": this.userToken};
+    if (this.user) {
+      let params = {"user_token": this.user.userToken};
       return this.apiProvider.post(ConstantsUrl.URL_PROGRAMS, params);
     } else {
       return new EmptyObservable;
@@ -37,16 +38,39 @@ export class CatalogsProvider {
     return this.apiProvider.post(ConstantsUrl.URL_SUBCATEGORIES, params);
   }
 
-  getProducts(params: ProductsRequest) {
+  getProducts(categoryId, programNumber, page = 0, rpp = Constants.PRODUCTS_PER_PAGE, lastModified = '') {
+    let params: ProductsRequest = {
+      user_token: this.user.userToken,
+
+      subcategory_id: categoryId,
+      p: page + '',
+      rpp: rpp + '',
+      program_number: programNumber,
+      last_modified: lastModified
+    };
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCTS, params);
   }
 
   getProductDetails(productSku) {
     let params = {
-      "user_token": this.userToken,
+      "user_token": this.user.userToken,
       "sku": productSku
     };
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_DETAIL, params);
   }
 
+  search(searchString, categoryId, programNumber, page = 1) {
+    let params: SearchProductRequest = {
+      user_token: this.user.userToken,
+      division: this.user.division,
+      price_type: this.user.price_type,
+      search_string: searchString,
+      category_id: categoryId,
+      program_number: programNumber,
+      p: page + '',
+      rpp: String(Constants.SEARCH_RESULTS_PER_PAGE),
+      last_modified: ''
+    };
+    return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params);
+  }
 }

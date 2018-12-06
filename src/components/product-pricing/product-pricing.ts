@@ -10,16 +10,14 @@ import {ProgramProvider} from "../../providers/program/program";
 export class ProductPricingComponent implements OnInit {
   @Input() product: Product;
   @Input() productPrograms: Array<ItemProgram>;
-  public selectedProgram;
+  public selectedProgramNumber;
 
   constructor(private programProvider: ProgramProvider) {
-
   }
 
   ngOnInit(): void {
     this.programProvider.getSelectedProgram().subscribe(selectedProgram => {
-      this.selectedProgram = selectedProgram;
-      console.log(this.selectedProgram)
+      this.selectedProgramNumber = selectedProgram.PROGRAM_NO;
     });
   }
 

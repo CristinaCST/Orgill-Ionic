@@ -1,0 +1,42 @@
+@import "../../theme/variables";
+
+page-products-search {
+  .no-products {
+    display: flex;
+    margin-top: 15px;
+    justify-content: center;
+    font-size: $font-size-large;
+    font-weight: bold;
+  }
+
+  .list-md {
+    margin: -1px 0 10px;
+  }
+
+  .show-more {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 10px;
+
+    button {
+      width: 50%;
+      color: white;
+      background-color: red;
+      border-radius: 22px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: $font-size-small;
+      background-color: color($colors, OrgillRed);
+      font-weight: bold;
+      text-transform: uppercase;
+      margin: 0;
+      padding: 0;
+      box-shadow: 0 3px 4px rgba(0, 0, 0, 0.4);
+
+      p {
+        margin: 0;
+      }
+    }
+  }
+}

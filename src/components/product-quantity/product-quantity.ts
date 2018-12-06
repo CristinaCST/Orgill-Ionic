@@ -9,6 +9,7 @@ import {ItemProgram} from "../../interfaces/models/item-program";
 })
 export class ProductQuantityComponent implements OnInit {
   @Input() product: Product;
+  @Input() quantityFromList;
   @Output() quantityChange = new EventEmitter<any>();
   public quantity: number = 1;
   public productPrice = 0;
@@ -23,7 +24,7 @@ export class ProductQuantityComponent implements OnInit {
       if (program) {
         this.program = program;
         if (this.product.QTY_ROUND_OPTION === 'X') {
-          this.quantity = Number(this.product.SHELF_PACK);
+          this.quantity = this.quantityFromList ? this.quantityFromList : Number(this.product.SHELF_PACK);
         }
         this.handleQuantityChange();
         this.productPrice = this.getDecimalPrice();
@@ -32,7 +33,7 @@ export class ProductQuantityComponent implements OnInit {
 
     this.programProvider.isPackQuantity().subscribe(value => {
       if (value === true && this.product) {
-        this.quantity = Number(this.product.SHELF_PACK);
+        this.quantity = this.quantityFromList ? this.quantityFromList : Number(this.product.SHELF_PACK);
         this.handleQuantityChange();
       }
     });
@@ -95,6 +96,11 @@ export class ProductQuantityComponent implements OnInit {
 
   handleQuantityChange() {
     this.setTotal();
-    this.quantityChange.emit(this.quantity);
+    let data = {
+      quantity: this.quantity,
+      total: this.total,
+      productPrice: this.getDecimalPrice()
+    };
+    this.quantityChange.emit(data);
   }
 }

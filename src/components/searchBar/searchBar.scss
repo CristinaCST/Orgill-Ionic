@@ -1,0 +1,47 @@
+.search-container {
+  display: flex;
+  .back-button-container {
+    width: 20%;
+    height: auto;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .search-input-container {
+    width: -webkit-fill-available;
+    background: linear-gradient(to right, color($colors, OrgillGradientLeft) 0%, color($colors, OrgillGradientRight) 100%);
+
+    &.has-btn {
+      .input-wrapper {
+        margin-left: 0 !important;
+      }
+      .text-input-md {
+        margin: 13px 8px;
+      }
+    }
+
+    .text-input-md {
+      margin: 0;
+    }
+
+    .input {
+      color: color($colors, OrgillDarkGray);
+      font-style: italic;
+
+      ::placeholder {
+        color: color($colors, OrgillMediumGray);
+        font-style: italic;
+      }
+    }
+    ion-icon {
+      color: color($colors, OrgillDarkGray);
+    }
+  }
+}
+
+.item-md.item-input.item-input-has-focus .item-inner, .item-md.item-input.input-has-focus .item-inner {
+  border-bottom: 0 !important;
+  box-shadow: unset;
+  -webkit-box-shadow: unset;
+}

@@ -1,12 +1,17 @@
 @import "../../theme/variables";
 
 product-pricing {
+  ion-item-group {
+    border-bottom: 1px solid #dedede;
+  }
   .item-radio {
     .label {
       padding-left: 0 !important;
     }
     .radio {
-      margin-right: $ion-app-padding !important;
+      margin: 0!important;
+      display: flex !important;
+      justify-content: center !important;
     }
   }
   ion-item {
@@ -17,13 +22,27 @@ product-pricing {
         }
       }
     }
+    &.item-md {
+      padding-right: 16px;
+    }
     ion-label {
       display: flex;
       .catalog-info {
         width: 70%;
+        min-width: 70%;
+        p {
+          text-align: left !important;
+        }
+        p:nth-child(2) {
+          font-size: $font-size-small;
+          font-weight: 300;
+        }
       }
       .price-info {
         width: 30%;
+        p {
+          text-align: right !important;
+        }
       }
       .catalog-info, .price-info {
         p {

@@ -11,8 +11,8 @@ import {DatabaseProvider} from "../../providers/database/database";
 import {ShoppingList} from "../../interfaces/models/shopping-list";
 import {Program} from "../../interfaces/models/program";
 import {Catalog} from "../../pages/catalog/catalog";
-import {BarcodeScanner} from "@ionic-native/barcode-scanner";
 import {ScannerPage} from "../../pages/scanner/scanner";
+import {ShoppingListPage} from "../../pages/shopping-list/shopping-list";
 
 @Component({
   selector: 'app-menu',
@@ -37,7 +37,6 @@ export class AppMenuComponent implements OnInit {
               private catalogsProvider: CatalogsProvider,
               private translateProvider: TranslateProvider,
               public databaseProvider: DatabaseProvider) {
-
   }
 
   ngOnInit(): void {
@@ -61,13 +60,13 @@ export class AppMenuComponent implements OnInit {
           this.authServiceProvider.logoutDeleteData();
         }
         this.authServiceProvider.logout();
-        this.app.getActiveNav().setRoot(Login).then(() => console.log('To Login'));
+        this.app.getActiveNav().setRoot(Login);//.then(() => console.log('To Login'));
       }
     });
   }
 
   public goToPage(page) {
-    this.app.getActiveNav().push(page).then(() => console.log('To ', page));
+    this.app.getActiveNav().push(page);//.then(() => console.log('To ', page));
   }
 
   getLocalShoppingLists() {
@@ -142,11 +141,18 @@ export class AppMenuComponent implements OnInit {
       'programName': program.NAME,
       'programNumber': program.PROGRAMNO
     };
-    this.app.getActiveNav().push(Catalog, params).then(() => console.log('To ProductPage', params));
+    this.app.getRootNav().setRoot(Catalog, params);
+    //this.app.getActiveNavs()[0].push(Catalog, params);//.then(() => console.log('To CatalogPage', params));
   }
 
-  openBarcode(){
-    this.app.getActiveNav().push(ScannerPage);
+  openBarcode() {
+    this.app.getActiveNav()[0].push(ScannerPage);
   }
 
+  goToListPage(list: ShoppingList) {
+    let params = {
+      list: list
+    };
+    this.app.getActiveNavs()[0].push(ShoppingListPage, params).catch(err => console.error(err));
+  }
 }

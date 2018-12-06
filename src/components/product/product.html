@@ -1,7 +1,7 @@
 <div id="product-container" ion-item detail-none>
   <div id="image-container">
-    <img *ngIf="product.IMAGE != '0000000.jpg'" src="http://images.orgill.com/200x200/{{product.SKU}}.JPG">
-    <img *ngIf="product.IMAGE === '0000000.jpg'" src="../../assets/imgs/product_placeholder.png">
+    <img *ngIf="!imageIsLoading" [src]="product.IMAGE">
+    <ion-spinner *ngIf="imageIsLoading===true"></ion-spinner>
   </div>
 
   <div id="product-info-container">
