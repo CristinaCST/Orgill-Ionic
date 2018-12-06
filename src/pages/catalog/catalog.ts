@@ -48,6 +48,7 @@ export class Catalog implements OnInit {
     else {
       this.getCategories();
     }
+    //console.log('categories', this.categories);
   }
 
   checkValidParams(type, value) {
@@ -87,26 +88,28 @@ export class Catalog implements OnInit {
       category_id: category.CatID,
       p: '1',
       rpp: String(Constants.CATEGORIES_PER_PAGE),
-      program_number: ' ',
+      program_number: this.programNumber,
       last_modified: '',
     };
+
 
     this.catalogProvider.getSubcategories(params).subscribe(response => {
       const responseData = JSON.parse(response.d);
       if (responseData.length > 0) {
         let categories = this.sortCategories(responseData);
+
         this.navCtrl.push(Catalog, {
-          programName: this.programNumber,
+          programName: category.CatName,
           programNumber: this.programNumber,
           categories: categories,
-          subcategory: category,
+          currentSubCategory: category,
           catalogIndex: (this.catalogIndex + 1)
         });
         this.loading.hideLoading();
       } else {
         const params = {
           programNumber: this.programNumber,
-          programName: this.programName,
+          programName: category.CatName,
           category: category,
         };
         this.navCtrl.push(ProductsPage, params);
@@ -126,7 +129,7 @@ export class Catalog implements OnInit {
           programName: this.programName,
           category: this.currentSubCategory
         };
-        this.navCtrl.push(ProductsSearchPage, params).then(() => console.log('%cTo product search page','color:green'));
+        this.navCtrl.push(ProductsSearchPage, params).then(() => console.log('%cTo product search page', 'color:green'));
         this.loading.hideLoading();
       }
     });

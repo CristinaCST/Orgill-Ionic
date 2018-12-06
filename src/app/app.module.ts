@@ -11,8 +11,8 @@ import {SQLitePorter} from "@ionic-native/sqlite-porter";
 
 //Modules
 import {ComponentsModule} from "../components/components.module";
-import {DirectivesModule} from "../directives/directives.module";
 import {IonicStorageModule} from "@ionic/storage";
+// import {OneSignal} from '@ionic-native/onesignal';
 
 //Providers
 import {ApiProvider} from "../providers/api-provider";
@@ -27,7 +27,6 @@ import {AuthServiceProvider} from "../providers/authservice/authservice";
 
 //Pages
 import {MyApp} from './app.component';
-import {HomePage} from '../pages/home/home';
 import {Catalog} from '../pages/catalog/catalog';
 import {Login} from "../pages/login/login";
 import {AboutPage} from "../pages/about/about";
@@ -43,7 +42,6 @@ import {OrderConfirmationPage} from "../pages/order-confirmation/order-confirmat
 import {ProductsSearchPage} from "../pages/products-search/products-search";
 
 let pages = [MyApp,
-  HomePage,
   Catalog,
   Login,
   AboutPage,
@@ -71,9 +69,7 @@ let pages = [MyApp,
         deps: [HttpClient]
       }
     }),
-    ComponentsModule,
-    DirectivesModule
-  ],
+    ComponentsModule],
   bootstrap: [IonicApp],
   entryComponents: pages,
   providers: [
@@ -91,7 +87,8 @@ let pages = [MyApp,
     SQLite,
     ProgramProvider,
     ShoppingListsProvider,
-    UserInfoProvider
+    UserInfoProvider,
+    // OneSignal
   ]
 })
 

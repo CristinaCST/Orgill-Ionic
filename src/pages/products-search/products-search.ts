@@ -1,11 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
-import {Product} from "../../interfaces/models/product";
-import {ProductPage} from "../product/product";
-import {CatalogsProvider} from "../../providers/catalogs/catalogs";
-import {LoadingProvider} from "../../providers/loading/loading";
-import {Category} from "../../interfaces/models/category";
-import {Subscription} from "rxjs/Subscription";
+import {Product} from '../../interfaces/models/product';
+import {ProductPage} from '../product/product';
+import {CatalogsProvider} from '../../providers/catalogs/catalogs';
+import {LoadingProvider} from '../../providers/loading/loading';
+import {Category} from '../../interfaces/models/category';
+import {Subscription} from 'rxjs/Subscription';
 import * as Constants from '../../util/constants';
 
 @Component({
@@ -32,6 +32,7 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
     this.category = this.navParams.get('category');
     this.programNumber = this.navParams.get('programNumber');
     this.programName = this.navParams.get('programName');
+
     this.getProduct(this.navParams.get('searchData'));
     this.setPaginationInfo();
   }
@@ -62,10 +63,10 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
 
   goToProductPage(product: Product) {
     this.navController.push(ProductPage, {
-      'product': product,
-      'programName': this.programName,
-      'programNumber': this.programNumber,
-      'subcategoryName': this.category ? this.category.CatName : ''
+      product: product,
+      programName: this.programName,
+      programNumber: this.programNumber,
+      subcategoryName: this.category ? this.category.CatName : ''
     }).then(() => console.log('%cTo product details page', 'color:pink'));
   }
 

@@ -9,7 +9,6 @@ import {ProductsSearchPage} from "../products-search/products-search";
 import {LoadingProvider} from "../../providers/loading/loading";
 import * as Constants from "../../util/constants";
 
-
 @Component({
   selector: 'page-products',
   templateUrl: 'products.html',
@@ -23,6 +22,7 @@ export class ProductsPage implements OnInit, OnDestroy {
   public category: Category;
   public page: number = 1;
   public products: Array<Product> = [];
+  public isLoading:boolean = true;
 
   constructor(private navParams: NavParams,
               public loading: LoadingProvider,
@@ -34,17 +34,16 @@ export class ProductsPage implements OnInit, OnDestroy {
     this.programName = this.navParams.get('programName');
     this.category = this.navParams.get('category');
 
-    this.getProducts(this.category.CatID, this.programNumber);
+    this.getProducts();
     this.setPaginationInfo();
   }
 
-  getProducts(subcategoryId: string, programNumber: string) {
-    if (!programNumber)
-      programNumber = '';
+  getProducts() {
     this.loading.presentSimpleLoading();
-    this.getProductSubscription = this.catalogProvider.getProducts(subcategoryId, programNumber, this.page).subscribe(response => {
+    this.getProductSubscription = this.catalogProvider.getProducts(this.category ? this.category.CatID : '', this.programNumber, this.page).subscribe(response => {
       this.products = this.sortProducts(JSON.parse(response.d));
       this.loading.hideLoading();
+      this.isLoading = false;
     })
   }
 
@@ -55,14 +54,12 @@ export class ProductsPage implements OnInit, OnDestroy {
   }
 
   goToProductPage(product: Product) {
-    this.loading.presentSimpleLoading();
     this.navController.push(ProductPage, {
       'product': product,
       'programName': this.programName,
       'programNumber': this.programNumber
     }).then(() => {
       console.log('%cTo product details page', 'color:pink');
-      this.loading.hideLoading();
     });
   }
 
@@ -81,8 +78,8 @@ export class ProductsPage implements OnInit, OnDestroy {
         programName: this.programName,
         category: this.category
       };
-      this.navController.push(ProductsSearchPage, params).then(() => console.log('%cTo product search page', 'color:blue'));
       this.loading.hideLoading();
+      this.navController.push(ProductsSearchPage, params).then(() => console.log('%cTo product search page', 'color:blue'));
     });
   }
 

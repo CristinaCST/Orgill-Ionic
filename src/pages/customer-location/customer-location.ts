@@ -64,7 +64,7 @@ export class CustomerLocationPage implements OnInit {
   }
 
   redirectToOrderReview(orderMethod: number) {
-    if (this.postOffice && this.shoppingListId) {
+    if (this.shoppingListId) {
       let params = {
         orderMethod: orderMethod,
         postOffice: this.postOffice,

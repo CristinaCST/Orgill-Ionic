@@ -3,7 +3,7 @@
 ion-header {
   ion-navbar, ion-toolbar {
     div.toolbar-background {
-      background: url('../assets/imgs/navbar_background.png') no-repeat;
+      background: url('../assets/imgs/navbar_background.jpg') no-repeat;
       background-size: cover;
       text-align: center;
     }
@@ -13,7 +13,7 @@ ion-header {
 ion-menu {
   ion-header {
     .toolbar-background {
-      background: url('../assets/imgs/navbar_background.png') no-repeat;
+      background: url('../assets/imgs/navbar_background.jpg') no-repeat;
       background-size: cover;
       text-align: center;
     }
@@ -24,6 +24,3 @@ ion-backdrop {
   opacity: 0.6;
 }
 
-body.keyboard-is-open .hide-on-keyboard-open {
-  display: none;
-}

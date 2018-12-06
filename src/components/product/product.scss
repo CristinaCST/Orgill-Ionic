@@ -33,8 +33,6 @@ product {
       #product-info-container {
         padding-left: 10px;
         width: 75%;
-        //max-width: 75%;
-        //min-width: 75%;
         display: flex;
         #product-info {
           width: 70%;
@@ -62,6 +60,12 @@ product {
           margin: 0;
           div {
             display: block;
+          }
+          p:nth-child(1) {
+            font-size: $font-size-medium;
+          }
+          p:nth-child(2), p:nth-child(3) {
+            font-size: $font-size-small;
           }
         }
       }

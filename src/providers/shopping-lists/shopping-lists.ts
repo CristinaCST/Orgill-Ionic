@@ -6,6 +6,8 @@ import {ApiProvider} from "../api-provider";
 import * as ConstantsUrl from "../../util/constants-url";
 import * as Constants from "../../util/constants";
 import {LocalStorageHelper} from "../../helpers/local-storage-helper";
+import {SearchProductRequest} from "../../interfaces/request-body/search-product-request";
+import {Subject} from "rxjs/Subject";
 
 @Injectable()
 export class ShoppingListsProvider {
@@ -129,7 +131,17 @@ export class ShoppingListsProvider {
     let params = {
       "user_token": this.userToken,
       "confirmation_numbers": confirmationNumbers
-    }
+    };
     return this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_CONFIRMATION, params);
   }
+
+  search(shoppingListItems, searchString) {
+    let searchFn = (value) => value.toLocaleLowerCase().search(searchString.toLowerCase()) !== -1;
+    return shoppingListItems.filter(item => searchFn(item.product.NAME) || searchFn(item.product.SKU) || searchFn(item.product.UPC_CODE));
+  }
+
+  updateShoppingListItem(id: number, shoppingListId: number, programNumber: string, price: number, quantity: number) {
+    return this.databaseProvider.updateShoppingListItem(id, shoppingListId, programNumber, price, quantity);
+  }
+
 }

@@ -1,18 +1,20 @@
-<ion-header no-border>
-  <ion-toolbar>
-    <button ion-button menuToggle start>
-      <ion-icon name="menu"></ion-icon>
-      <ion-title>{{categoryName ? categoryName: "product_item_details" | translate}}</ion-title>
-    </button>
-  </ion-toolbar>
+<!-- Product Page Header -->
+<ion-header>
+  <!-- Product Page Navigation Bar -->
+  <navbar [title]="programName ? programName: 'product_item_details'" [isMenuEnabled]="true"
+          [isBackEnabled]="false"></navbar>
+
+  <!-- Product Page SubHeader -->
   <ion-toolbar id="subcategory" padding-left padding-right>
     <ion-buttons left>
       <button ion-button large (click)="close()">
         <ion-icon name="ios-arrow-back"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>{{subCategoryName}}</ion-title>
+    <ion-title>{{ subCategoryName? subCategoryName : product.NAME }}</ion-title>
   </ion-toolbar>
+
+  <!-- Product Page Tabs-->
   <ion-segment [(ngModel)]="activeTab">
     <ion-segment-button value="summary_tab"> {{"summary_tab" | translate}}
     </ion-segment-button>
@@ -20,6 +22,7 @@
     </ion-segment-button>
   </ion-segment>
 </ion-header>
+
 
 <ion-content>
   <div class="content">
@@ -29,10 +32,11 @@
                        [productPrograms]="productPrograms"></product-pricing>
     </div>
     <product-quantity (quantityChange)="onQuantityChange($event)"
+                      [quantityFromList]="quantityFromList"
                       [product]="product"></product-quantity>
   </div>
 </ion-content>
 
-<ion-footer>
+<ion-footer *ngIf="!fromShoppingList">
   <button id="add-shopping" (click)="addToShoppingList()">{{"button_add_to_list" | translate}}</button>
 </ion-footer>

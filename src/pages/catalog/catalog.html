@@ -1,7 +1,7 @@
 <!-- Catalog Page Header -->
 <ion-header>
   <!-- Catalog Page Navigation Bar -->
-  <navbar [title]="programName"></navbar>
+  <navbar [title]="programName" [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
   <!-- Catalog Page Search Bar -->
   <search-bar [showBackButton]="catalogIndex!==0"
               (searched)="onSearched($event)"></search-bar>

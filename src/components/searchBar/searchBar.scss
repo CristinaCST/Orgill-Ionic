@@ -9,8 +9,22 @@
     }
   }
   .search-input-container {
-    width: -webkit-fill-availabl;
+    width: -webkit-fill-available;
     background: linear-gradient(to right, color($colors, OrgillGradientLeft) 0%, color($colors, OrgillGradientRight) 100%);
+
+    &.has-btn {
+      .input-wrapper {
+        margin-left: 0 !important;
+      }
+      .text-input-md {
+        margin: 13px 8px;
+      }
+    }
+
+    .text-input-md {
+      margin: 0;
+    }
+
     .input {
       color: color($colors, OrgillDarkGray);
       font-style: italic;
@@ -24,4 +38,10 @@
       color: color($colors, OrgillDarkGray);
     }
   }
+}
+
+.item-md.item-input.item-input-has-focus .item-inner, .item-md.item-input.input-has-focus .item-inner {
+  border-bottom: 0 !important;
+  box-shadow: unset;
+  -webkit-box-shadow: unset;
 }

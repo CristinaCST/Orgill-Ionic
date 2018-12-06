@@ -59,13 +59,13 @@ export class AppMenuComponent implements OnInit {
           this.authServiceProvider.logoutDeleteData();
         }
         this.authServiceProvider.logout();
-        this.app.getActiveNav().setRoot(Login).then(() => console.log('To Login'));
+        this.app.getActiveNav().setRoot(Login);//.then(() => console.log('To Login'));
       }
     });
   }
 
   public goToPage(page) {
-    this.app.getActiveNav().push(page).then(() => console.log('To ', page));
+    this.app.getActiveNav().push(page);//.then(() => console.log('To ', page));
   }
 
   getLocalShoppingLists() {
@@ -140,13 +140,13 @@ export class AppMenuComponent implements OnInit {
       'programName': program.NAME,
       'programNumber': program.PROGRAMNO
     };
-    this.app.getActiveNavs()[0].push(Catalog, params).then(() => console.log('To CatalogPage', params));
+    this.app.getActiveNavs()[0].push(Catalog, params);//.then(() => console.log('To CatalogPage', params));
   }
 
   goToListPage(list: ShoppingList) {
     let params = {
       list: list
     };
-    this.app.getActiveNavs()[0].push(ShoppingListPage, params);
+    this.app.getActiveNavs()[0].push(ShoppingListPage, params).catch(err => console.error(err));
   }
 }

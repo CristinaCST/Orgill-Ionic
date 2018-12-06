@@ -4,7 +4,7 @@
     <img src="assets/imgs/back_button.png">
   </div>
 
-  <ion-item class="search-input-container" no-lines no-border>
+  <ion-item class="search-input-container" [ngClass]="showBackButton?'has-btn':''" no-lines no-border>
     <ion-input type="text" placeholder="{{'search_hint' | translate}}"
                [(ngModel)]="searchString"
                (keyup.enter)="search()"></ion-input>

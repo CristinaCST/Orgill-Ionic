@@ -1,11 +1,11 @@
-<ion-header no-border>
-  <ion-toolbar>
-    <button ion-button menuToggle start>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-  </ion-toolbar>
+<!-- Shopping Lists Page Header -->
+<ion-header>
+  <!-- Shopping Lists Navigation Bar -->
+  <navbar [title]="shoppingList ? shoppingList.name: ''" [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
+  <!-- Shopping Lists Search Bar -->
+  <search-bar [showBackButton]="true"
+              (searched)="onSearched($event)"></search-bar>
 </ion-header>
-
 
 <ion-content>
   <ion-item-group *ngIf="shoppingListItems.length">
@@ -16,6 +16,7 @@
     <shopping-list-product *ngFor="let shoppingListItem of shoppingListItems; index as i"
                            [isDisabled]="isCheckout"
                            (checked)="onChecked($event,i)"
+                           (goToDetails)="onCheckedToDetails($event)"
                            [shoppingListItem]="shoppingListItem">
     </shopping-list-product>
   </ion-item-group>

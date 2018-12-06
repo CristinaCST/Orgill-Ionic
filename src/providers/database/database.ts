@@ -228,7 +228,7 @@ export class DatabaseProvider {
       programData = [program.PROGRAMNO, program.NAME, program.STARTDATE, program.ENDDATE, program.SHIPDATE, program.MARKETONLY];
       this.database.executeSql(this.queries.addOrReplacePrograms, programData)
         .then(data => {
-            console.log('added one program to database: ', data);
+            //console.log('added one program to database: ', data);
           },
           error => {
             console.error('add program to database error: ', error);

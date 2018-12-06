@@ -41,6 +41,7 @@ export class CatalogsProvider {
   getProducts(categoryId, programNumber, page = 0, rpp = Constants.PRODUCTS_PER_PAGE, lastModified = '') {
     let params: ProductsRequest = {
       user_token: this.user.userToken,
+
       subcategory_id: categoryId,
       p: page + '',
       rpp: rpp + '',

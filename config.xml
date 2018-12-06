@@ -3,7 +3,7 @@
     <name>Orgill</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="cristina.nicolae@cst-us.com" href="http://cst-us.com/">CST Team</author>
-    <content original-src="index.html" src="http://192.168.0.142:8100" />
+    <content original-src="index.html" src="http://192.168.0.145:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -88,29 +88,8 @@
     <plugin name="cordova-plugin-ionic-webview" spec="^2.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
-    <allow-navigation href="http://192.168.0.178:8100" sessionid="2a25fc91" />
     <plugin name="cordova-sqlite-storage" spec="^2.4.0" />
-    <allow-navigation href="http://192.168.0.179:8100" sessionid="16493fe7" />
-    <allow-navigation href="http://192.168.0.142:8100" sessionid="1a2eed66" />
-    <plugin name="ionic-plugin-deeplinks" spec="^1.0.17">
-        <variable name="URL_SCHEME" value="Orgill" />
-        <variable name="DEEPLINK_SCHEME" value="https" />
-        <variable name="DEEPLINK_HOST" value="orgill.com" />
-        <variable name="ANDROID_PATH_PREFIX" value="/" />
-        <variable name="ANDROID_2_PATH_PREFIX" value="/" />
-        <variable name="ANDROID_3_PATH_PREFIX" value="/" />
-        <variable name="ANDROID_4_PATH_PREFIX" value="/" />
-        <variable name="ANDROID_5_PATH_PREFIX" value="/" />
-        <variable name="DEEPLINK_2_SCHEME" value=" " />
-        <variable name="DEEPLINK_2_HOST" value=" " />
-        <variable name="DEEPLINK_3_SCHEME" value=" " />
-        <variable name="DEEPLINK_3_HOST" value=" " />
-        <variable name="DEEPLINK_4_SCHEME" value=" " />
-        <variable name="DEEPLINK_4_HOST" value=" " />
-        <variable name="DEEPLINK_5_SCHEME" value=" " />
-        <variable name="DEEPLINK_5_HOST" value=" " />
-    </plugin>
-    <allow-navigation href="http://192.168.0.160:8100" sessionid="10f2a6dc" />
+    <allow-navigation href="http://192.168.0.145:8100" sessionid="e4f3c69c" />
     <engine name="android" spec="7.0.0" />
     <engine name="ios" spec="4.5.5" />
 </widget>

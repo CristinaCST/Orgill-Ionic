@@ -1,19 +1,19 @@
-<ion-item [ngClass]="shoppingListItem.isExpired?'expired':'active'">
+<div class="product-title-container" [ngClass]="shoppingListItem.isCheckedInShoppingList&&!isDisabled?'checked':''">
+  <p>{{shoppingListItem.product.NAME}}</p>
+  <p>{{shoppingListItem.product.VENDOR_NAME}}</p>
+</div>
+
+<ion-item class='ion-item-border' [ngClass]="shoppingListItem.isExpired?'expired':'active'">
   <ion-checkbox *ngIf="!isDisabled"
                 (click)="updateCheckedItems()"
                 [(ngModel)]="shoppingListItem.isCheckedInShoppingList" item-end></ion-checkbox>
-  <ion-label>
+  <ion-label (click)="goToProductDetails()">
     <button ion-item no-lines detail-none>
-      <div [ngClass]="shoppingListItem.isCheckedInShoppingList?'checked':''">
-        <p>{{shoppingListItem.product.NAME}}</p>
-        <p>{{shoppingListItem.product.VENDOR_NAME}}</p>
-      </div>
-
       <div class="shopping-list-container">
         <div class="img-container">
-          <img *ngIf="shoppingListItem.product.IMAGE != '0000000.jpg'"
-                  src="http://images.orgill.com/200x200/{{shoppingListItem.product.SKU}}.JPG">
-          <img *ngIf="shoppingListItem.product.IMAGE == '0000000.jpg'" src="assets/imgs/product_placeholder.png">
+          <img *ngIf="shoppingListItem.product.IMAGE !== '0000000.jpg'"
+               src="http://images.orgill.com/200x200/{{shoppingListItem.product.SKU}}.JPG">
+          <img *ngIf="shoppingListItem.product.IMAGE === '0000000.jpg'" src="assets/imgs/product_placeholder.png">
         </div>
         <div class="info">
           <div>
@@ -22,7 +22,8 @@
           </div>
           <div>
             <span>{{"product_item_price" | translate}}:</span>
-            <span>{{"product_currency" | translate}}{{shoppingListItem.item_price}}/{{shoppingListItem.product.SELLING_UNIT}}</span>
+            <span>{{"product_currency" | translate}}{{shoppingListItem.item_price|
+              number:'1.2-2'}}/{{shoppingListItem.product.SELLING_UNIT}}</span>
           </div>
           <div>
             <span>{{"product_total_price" | translate}}:</span>

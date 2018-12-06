@@ -1,8 +1,15 @@
+<!-- Add To List Page Header -->
+<ion-header>
+  <!-- Add To List Page Navigation Bar -->
+  <navbar [title]=" 'ADD TO LIST'" [isMenuEnabled]="false" [isBackEnabled]="true"></navbar>
+</ion-header>
+
+<!-- Add To List Page Content -->
 <ion-content>
   <!-- Shopping lists -->
   <form [formGroup]="listForm">
     <ion-list radio-group formControlName="listOptions" [(ngModel)]="listForm.value.listOptions">
-      <ion-item-divider no-lines>
+      <ion-item-divider no-lines class="header">
         {{"shopping_list_add_select_message" | translate}}
       </ion-item-divider>
       <ion-item *ngFor="let shoppingList of shoppingLists">
@@ -15,22 +22,21 @@
   </form>
 
   <!-- Create new List -->
-  <ion-item-divider>
+  <ion-item-divider no-lines class="header">
     {{"shopping_list_add_new_message" | translate}}
   </ion-item-divider>
-  <button padding class="add-shopping-list" ion-button icon-start (click)="newShoppingList()">
-    <ion-icon name="add"></ion-icon>
-    {{"menu_shopping_lists_new" | translate}}
+  <button class="add-shopping-list" ion-button icon-start (click)="newShoppingList()">
+    <ion-icon name="add">
+     {{"   "}} {{"menu_shopping_lists_new" | translate}}
+    </ion-icon>
   </button>
 </ion-content>
 
-<ion-footer>
-  <div class="container">
+<ion-footer padding class="footer-container">
     <button ion-button outline (click)="cancel()">
       {{"cancel" | translate}}
     </button>
     <button ion-button [disabled]="isAddBtnDisabled" (click)="add()">
       {{"ok" | translate}}
     </button>
-  </div>
 </ion-footer>

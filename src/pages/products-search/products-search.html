@@ -1,7 +1,7 @@
 <!-- Products Search Results Page Header -->
 <ion-header>
   <!-- Products Search Results Navigation Bar -->
-  <navbar [title]="category ? category.CatName : programName"></navbar>
+  <navbar [title]="category ? category.CatName : programName" [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
   <!-- Products Search Results Search Bar -->
   <search-bar [showBackButton]="true"
               (searched)="onSearched($event)"></search-bar>
@@ -9,16 +9,21 @@
 
 <!-- Products Search Results Content-->
 <ion-content>
-  <ion-list>
+  <ion-list *ngIf="products.length">
     <div *ngFor="let product of products" (click)="goToProductPage(product)">
       <product [product]="product"></product>
     </div>
   </ion-list>
+  <div *ngIf="!products.length" class="no-products">
+    No Products Found!
+  </div>
   <!--Products Search Result Pagination -->
-  <button ion-button clear block
-          *ngIf="isPaginationEnabled"
-          (click)="next()">
-    <p>{{"load_more_results" | translate}}</p>
-  </button>
+  <div class="show-more">
+    <button ion-button clear block class="show-more"
+            *ngIf="isPaginationEnabled"
+            (click)="next()">
+      <p>{{"load_more_results" | translate}}</p>
+    </button>
+  </div>
 
 </ion-content>

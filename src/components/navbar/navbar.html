@@ -1,6 +1,11 @@
+<!-- App navbar -->
 <ion-navbar hideBackButton>
-  <button ion-button menuToggle>
+  <!-- NavBar Menu Icon -->
+  <button *ngIf="isMenuEnabled" ion-button menuToggle>
     <ion-icon name="menu"></ion-icon>
   </button>
-  <ion-title>{{title}}</ion-title>
+  <!-- NavBar Back Icon -->
+  <ion-icon class='back' *ngIf="isBackEnabled" name="ios-arrow-back" (click)="back()"></ion-icon>
+  <!-- NavBar Title -->
+  <ion-title>{{title|translate}}</ion-title>
 </ion-navbar>

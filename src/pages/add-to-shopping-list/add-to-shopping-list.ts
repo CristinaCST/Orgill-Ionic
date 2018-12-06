@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {Product} from "../../interfaces/models/product";
 import {ItemProgram} from "../../interfaces/models/item-program";

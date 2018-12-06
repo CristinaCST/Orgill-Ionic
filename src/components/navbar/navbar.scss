@@ -1,5 +1,14 @@
 navbar {
-  ion-header {
-    position: relative !important;
+  ion-navbar {
+    .toolbar-content {
+      display: flex !important;
+    }
+    .back {
+      width: 10%;
+      color: white;
+      position: relative;
+      left: 15px;
+      font-size: 35px;
+    }
   }
 }

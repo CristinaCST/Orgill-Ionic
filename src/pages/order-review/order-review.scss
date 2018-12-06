@@ -1,3 +1,103 @@
-page-order-review {
+@import "../../theme/variables";
 
+page-order-review {
+  ion-header {
+    #order-review-sub-header {
+      .toolbar-background {
+        background: color($colors, OrgillRed);
+      }
+      ion-title {
+        .toolbar-title-md {
+          font-weight: bold;
+          white-space: pre-line;
+          font-size: $font-size-small;
+          text-align: center;
+        }
+      }
+    }
+  }
+  .location-container {
+    * {
+      background-color: #f1eded;
+    }
+    .location-headers {
+      ion-label {
+        display: flex;
+        margin-right: 16px;
+
+        p {
+          display: flex;
+          width: 50%;
+        }
+        p:nth-child(1) {
+          justify-content: flex-start;
+        }
+        p:nth-child(2) {
+          justify-content: flex-end;
+        }
+      }
+    }
+    .info-container {
+      ion-label {
+        display: flex;
+      }
+
+      .info {
+        width: 50%;
+        div {
+          width: 100%;
+          display: flex;
+
+          span {
+            display: flex;
+            flex: 1;
+          }
+          span:nth-child(1) {
+            justify-content: flex-start;
+          }
+          span:nth-child(2) {
+            justify-content: flex-end;
+            font-weight: bold;
+          }
+        }
+      }
+      p {
+        width: 50%;
+        display: flex;
+        justify-content: flex-end;
+        color: color($colors, OrgillRed);
+        font-weight: bold;
+        font-size: $font-size-large;
+      }
+    }
+    .ship-container {
+      p {
+        text-align: left;
+        white-space: pre-line;
+      }
+      p:nth-child(1) {
+        font-weight: bold;
+      }
+    }
+  }
+  ion-footer {
+    p {
+      text-align: center;
+      color: color($colors, OrgillLightGray);
+    }
+    div {
+      display: flex;
+      button {
+        display: flex;
+        flex: 1;
+        border-radius: 10px;
+      }
+      button:nth-child(1) {
+        margin-right: 5px;
+      }
+      button:nth-child(2) {
+        margin-left: 5px;
+      }
+    }
+  }
 }
