@@ -12,7 +12,6 @@ import {OrderConfirmationPage} from "../order-confirmation/order-confirmation";
 })
 export class OrderReviewPage implements OnInit {
   public readonly sendToOrgillMethod: number = 1;
-  public readonly checkoutMethod: number = 2;
 
   public orderMethod;
   public postOffice = '-';
@@ -65,13 +64,13 @@ export class OrderReviewPage implements OnInit {
       };
       let insertToDBInfo = {
         PO: this.postOffice,
-        date: moment(),
+        date: moment().format('MM/DD/YYYY'),
         location: this.location.SHIPTONO,
         type: this.orderMethod,
         total: this.orderTotal,
         program_number: programNumber
       };
-//TODO change moment to format
+      //TODO change moment to format
       this.shoppingListsProvider.orderProducts(productListInfo, insertToDBInfo).then((data: any) => {
         if (data.insertedPurchaseToDBInfo.insertId) {
           this.confirmationNumbers.push(data.confirmationNumber);
