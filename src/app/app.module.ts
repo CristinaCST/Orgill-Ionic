@@ -28,6 +28,8 @@ import {AuthServiceProvider} from "../providers/authservice/authservice";
 import {ProductProvider} from "../providers/product/product";
 import {ScannerProvider} from '../providers/scanner/scanner';
 import {UserInfoProvider} from '../providers/user-info/user-info';
+import { PurchasesProvider } from '../providers/purchases/purchases';
+
 
 //Pages
 import {MyApp} from './app.component';
@@ -44,6 +46,8 @@ import {CustomerLocationPage} from "../pages/customer-location/customer-location
 import {OrderReviewPage} from "../pages/order-review/order-review";
 import {OrderConfirmationPage} from "../pages/order-confirmation/order-confirmation";
 import {ProductsSearchPage} from "../pages/products-search/products-search";
+import {PurchaseDetailsPage} from "../pages/purchase-details/purchase-details";
+import {PurchasesPage} from "../pages/purchases/purchases";
 
 let pages = [MyApp,
   Catalog,
@@ -57,7 +61,8 @@ let pages = [MyApp,
   CustomerLocationPage,
   OrderReviewPage,
   OrderConfirmationPage,
-  ProductsSearchPage, ScannerPage];
+  ProductsSearchPage, ScannerPage, PurchasesPage, PurchaseDetailsPage];
+
 
 @NgModule({
   declarations: pages,
@@ -96,6 +101,7 @@ let pages = [MyApp,
     ProductProvider,
     UserInfoProvider,
     // OneSignal
+    PurchasesProvider
   ]
 })
 
