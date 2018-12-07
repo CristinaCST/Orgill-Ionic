@@ -57,7 +57,8 @@ let pages = [MyApp,
   CustomerLocationPage,
   OrderReviewPage,
   OrderConfirmationPage,
-  ProductsSearchPage, ScannerPage];
+  ProductsSearchPage,
+  ScannerPage];
 
 @NgModule({
   declarations: pages,

@@ -47,16 +47,12 @@ export class ScannerPage {
     this.selectedProduct = {};
     this.barcodeScanner.scan().then((barcodeData) => {
       const scanResult = barcodeData.text;
-      console.log("barcodeData", barcodeData.text);
       if (this.isValidScanResult(scanResult)) {
         this.loading.presentLoading(this.translator.translate(Constants.SCAN_RESULTS_SEARCHING));
         this.setProgramFromScanResult(scanResult);
         this.setSearchStringFromScanResult(scanResult);
         this.searchProduct();
       }
-
-    }, (err) => {
-
     });
   }
 
@@ -101,10 +97,7 @@ export class ScannerPage {
 
           if (responseData.length > 0) {
             this.foundProduct = responseData[0];
-
-            if (!this.shoppingListId) {
-              console.log('foundP', this.foundProduct);
-              //TODO: no product found/product not available
+            if (this.shoppingListId) {
               this.navCtrl.push(ProductPage, {
                 'product': this.foundProduct,
                 'programNumber': this.programNumber,
@@ -115,9 +108,7 @@ export class ScannerPage {
             }
 
             else {
-              //adding product to shopping list
               if (!this.isProductInList(this.shoppingListId)) {
-
                 const newItem: ShoppingListItem = {
 
                   'product': this.foundProduct,
@@ -159,28 +150,17 @@ export class ScannerPage {
   }
 
   protected isProductInList(listId: number): boolean {
-
     //TODO: check if product in shopping list
     //if()
-
-
     return false;
   }
 
   private isPermissionError(scannerError: string): boolean {
 
     if (this.platform.is('android')) {
-      if (scannerError.localeCompare('Illegal access') === 0) {
-        return true;
-      } else {
-        return false;
-      }
+      return scannerError.localeCompare('Illegal access') === 0;
     } else if (this.platform.is('ios')) {
-      if (scannerError.includes('Access to the camera has been prohibited')) {
-        return true;
-      } else {
-        return false;
-      }
+      return scannerError.includes('Access to the camera has been prohibited');
     }
 
   }

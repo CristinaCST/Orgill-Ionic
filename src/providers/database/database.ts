@@ -180,15 +180,16 @@ export class DatabaseProvider {
     return this.database.executeSql(this.queries.getAllShoppingLists, []);
   }
 
-  updateShoppingList(shopping_list_id: Number, shopping_list_item: ShoppingListItem) {
-    this.database.executeSql(this.queries.updateShoppingList, [shopping_list_item.quantity, shopping_list_item.program_number, shopping_list_item.item_price, shopping_list_id])
-      .then(data => {
-        return data;
-      }, err => {
-        console.log('Error: ', err);
-        return err;
-      });
-  }
+  //TODO REMOVE UNUSED
+  // updateShoppingList(shopping_list_id: Number, shopping_list_item: ShoppingListItem) {
+  //   this.database.executeSql(this.queries.updateShoppingList, [shopping_list_item.quantity, shopping_list_item.program_number, shopping_list_item.item_price, shopping_list_id])
+  //     .then(data => {
+  //       return data;
+  //     }, err => {
+  //       console.log('Error: ', err);
+  //       return err;
+  //     });
+  // }
 
   updateShoppingListItem(id: number, shopping_list_id: number, programNumber: string, price: number, quantity: number): Promise<any> {
     const params = [programNumber, price, quantity, shopping_list_id, id];
@@ -237,9 +238,10 @@ export class DatabaseProvider {
 
   }
 
-  getProgram(program_no: string): Promise<any> {
-    return this.database.executeSql(this.queries.getProgram, [program_no]);
-  }
+  //TODO REMOVE UNUSED
+  // getProgram(program_no: string): Promise<any> {
+  //   return this.database.executeSql(this.queries.getProgram, [program_no]);
+  // }
 
   getMarketTypeForProgram(programNo: string): Promise<any> {
     return this.database.executeSql(this.queries.getMarketTypeForProgram, [programNo]);

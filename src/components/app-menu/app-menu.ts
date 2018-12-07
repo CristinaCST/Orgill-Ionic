@@ -20,7 +20,7 @@ import {ShoppingListPage} from "../../pages/shopping-list/shopping-list";
 })
 export class AppMenuComponent implements OnInit {
 
-  public menuPages = {aboutPage: AboutPage,};
+  public menuPages = {aboutPage: AboutPage, pastPurchases: ''};
   public everyDayPrograms: Array<Program> = [];
   public marketOnlyPrograms: Array<Program> = [];
   public doorBusterPrograms: Array<Program> = [];
@@ -60,13 +60,13 @@ export class AppMenuComponent implements OnInit {
           this.authServiceProvider.logoutDeleteData();
         }
         this.authServiceProvider.logout();
-        this.app.getActiveNav().setRoot(Login);//.then(() => console.log('To Login'));
+        this.app.getActiveNav().setRoot(Login).catch(err => console.error(err));
       }
     });
   }
 
   public goToPage(page) {
-    this.app.getActiveNav().push(page);//.then(() => console.log('To ', page));
+    this.app.getActiveNavs()[0].push(page).catch(err => console.error(err));
   }
 
   getLocalShoppingLists() {
@@ -141,12 +141,11 @@ export class AppMenuComponent implements OnInit {
       'programName': program.NAME,
       'programNumber': program.PROGRAMNO
     };
-    this.app.getRootNav().setRoot(Catalog, params);
-    //this.app.getActiveNavs()[0].push(Catalog, params);//.then(() => console.log('To CatalogPage', params));
+    this.app.getRootNav().setRoot(Catalog, params).catch(err => console.error(err));
   }
 
-  openBarcode() {
-    this.app.getActiveNav()[0].push(ScannerPage);
+  openBarcode(type?) {
+    this.app.getActiveNavs()[0].push(ScannerPage).catch(err => console.error(err));
   }
 
   goToListPage(list: ShoppingList) {
