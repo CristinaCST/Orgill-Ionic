@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {App, Platform} from 'ionic-angular';
+import {App, NavController, Platform} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {Catalog} from '../pages/catalog/catalog';
@@ -10,14 +10,16 @@ import * as Constants from '../util/constants';
 import {DateTime} from "../providers/datetime/DateTime";
 import {DatabaseProvider} from "../providers/database/database";
 import {OneSignal} from '@ionic-native/onesignal';
+import {FlashDealTestPage} from "../pages/flash-deal-test/flash-deal-test";
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
 
-  rootPage: any = Login;
+  rootPage: any;
   isLoading = true;
+  openedFromNotification = false;
 
   constructor(public platform: Platform,
               public app: App,
@@ -50,14 +52,24 @@ export class MyApp {
     this.isLoading = true;
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
+      this.oneSignal.setLocationShared(true);
+
       this.oneSignal.startInit('13626e23-946e-4a25-8713-05d4dee9f03b', 'orgill-5a5ba');
-      // this.oneSignal.setLocationShared(true);
+
+      this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.InAppAlert);
+
       this.oneSignal.handleNotificationReceived().subscribe((data) => {
-        console.log("NOTIFICATION RECEIVED", data)
+        console.log("NOTIFICATION RECEIVED", data);
+        this.openedFromNotification = true;
       });
       this.oneSignal.handleNotificationOpened().subscribe((data) => {
-        console.log("NOTIFICATION opened", data)
+        console.log("NOTIFICATION opened", data);
+        this.app.getRootNav().setRoot(FlashDealTestPage, {'data': data}).catch(err => console.error(err));
+        this.openedFromNotification = true;
+
       });
+
+      this.oneSignal.endInit();
 
       this.databaseProvider.getDatabaseState()
         .subscribe(isDatabaseOpen => {
@@ -85,14 +97,21 @@ export class MyApp {
   }
 
   private checkSession() {
-    if (this.isValidSession() === true) {
-      this.app.getRootNavs()[0].setRoot(Catalog).then(() => {
-        this.stopLoading();
-      })
+    console.log("ENTERED CHECK SESSION..")
+    this.stopLoading();
+    if(this.openedFromNotification){
+
+    }
+    else  if (this.isValidSession() === true) {
+      // this.app.getRootNavs()[0].setRoot(Catalog).then(() => {
+      //   this.stopLoading();
+      this.rootPage = Catalog;
+      // })
     } else {
-      this.app.getRootNavs()[0].setRoot(Login).then(() => {
-        this.stopLoading();
-      })
+      this.rootPage = Login;
+      // this.app.getRootNavs()[0].setRoot(Login).then(() => {
+      //   this.stopLoading();
+      // })
     }
   }
 

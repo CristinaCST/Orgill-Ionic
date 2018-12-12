@@ -48,6 +48,7 @@ import {OrderConfirmationPage} from "../pages/order-confirmation/order-confirmat
 import {ProductsSearchPage} from "../pages/products-search/products-search";
 import {PurchaseDetailsPage} from "../pages/purchase-details/purchase-details";
 import {PurchasesPage} from "../pages/purchases/purchases";
+import {FlashDealTestPage} from "../pages/flash-deal-test/flash-deal-test";
 
 let pages = [MyApp,
   Catalog,
@@ -64,7 +65,7 @@ let pages = [MyApp,
   ProductsSearchPage,
   ScannerPage,
   PurchasesPage,
-  PurchaseDetailsPage];
+  PurchaseDetailsPage, FlashDealTestPage];
 
 
 @NgModule({
