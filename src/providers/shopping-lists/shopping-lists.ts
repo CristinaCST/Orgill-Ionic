@@ -6,8 +6,6 @@ import {ApiProvider} from "../api-provider";
 import * as ConstantsUrl from "../../util/constants-url";
 import * as Constants from "../../util/constants";
 import {LocalStorageHelper} from "../../helpers/local-storage-helper";
-import {SearchProductRequest} from "../../interfaces/request-body/search-product-request";
-import {Subject} from "rxjs/Subject";
 
 @Injectable()
 export class ShoppingListsProvider {
@@ -144,4 +142,14 @@ export class ShoppingListsProvider {
     return this.databaseProvider.updateShoppingListItem(id, shoppingListId, programNumber, price, quantity);
   }
 
+  checkProductInList(productSKU, listId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let data = await this.databaseProvider.checkProductInList(productSKU, listId);
+        resolve(data.rows.item(0) > 0);
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
 }

@@ -37,11 +37,11 @@
 
       <!-- Search -->
       <ion-item-divider no-lines>{{"menu_header_search" | translate}}:</ion-item-divider>
-      <button ion-item class="item" detail-none menuClose icon-left (click)="openBarcode()">
+      <button ion-item class="item" detail-none menuClose icon-left (click)="openBarcode('scan_barcode_tab')">
         <ion-icon class="menu-icon" name="barcode"></ion-icon>
         {{"menu_search_scan" | translate}}
       </button>
-      <button ion-item class="item" detail-none menuClose icon-left (click)="openBarcode('search')">
+      <button ion-item class="item" detail-none menuClose icon-left (click)="openBarcode('search_code_tab')">
         <ion-icon class="menu-icon" name="search"></ion-icon>
         {{"menu_search_code" | translate}}
       </button>

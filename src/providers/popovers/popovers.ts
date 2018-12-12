@@ -41,6 +41,4 @@ export class PopoversProvider {
       dismissButtonText: dismissButtonText
     };
   }
-
-
 }

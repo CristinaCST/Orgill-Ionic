@@ -15,6 +15,7 @@ import {ProductDetailsComponent} from "./product-details/product-details";
 import {ProductQuantityComponent} from "./product-quantity/product-quantity";
 import {ShoppingListProductComponent} from "./shopping-list-product/shopping-list-product";
 import {SearchBarComponent} from "./searchBar/searchBar";
+import {OrderItemComponent} from "./order-item/order-item";
 
 let components = [AppMenuComponent,
   PopoverComponent,
@@ -25,7 +26,8 @@ let components = [AppMenuComponent,
   ProductPricingComponent,
   ProductDetailsComponent,
   ProductQuantityComponent,
-  ShoppingListProductComponent];
+  ShoppingListProductComponent,
+  OrderItemComponent];
 
 @NgModule({
   declarations: components,

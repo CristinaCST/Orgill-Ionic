@@ -9,10 +9,13 @@ import {CatalogsProvider} from "../../providers/catalogs/catalogs";
 import {TranslateProvider} from "../../providers/translate/translate";
 import {DatabaseProvider} from "../../providers/database/database";
 import {ShoppingList} from "../../interfaces/models/shopping-list";
+
+//Pages
 import {Program} from "../../interfaces/models/program";
 import {Catalog} from "../../pages/catalog/catalog";
 import {ScannerPage} from "../../pages/scanner/scanner";
 import {ShoppingListPage} from "../../pages/shopping-list/shopping-list";
+import {PurchasesPage} from "../../pages/purchases/purchases";
 
 @Component({
   selector: 'app-menu',
@@ -20,7 +23,7 @@ import {ShoppingListPage} from "../../pages/shopping-list/shopping-list";
 })
 export class AppMenuComponent implements OnInit {
 
-  public menuPages = {aboutPage: AboutPage, pastPurchases: ''};
+  public menuPages = {aboutPage: AboutPage, pastPurchases: PurchasesPage};
   public everyDayPrograms: Array<Program> = [];
   public marketOnlyPrograms: Array<Program> = [];
   public doorBusterPrograms: Array<Program> = [];
@@ -144,8 +147,8 @@ export class AppMenuComponent implements OnInit {
     this.app.getRootNav().setRoot(Catalog, params).catch(err => console.error(err));
   }
 
-  openBarcode(type?) {
-    this.app.getActiveNavs()[0].push(ScannerPage).catch(err => console.error(err));
+  openBarcode(type) {
+    this.app.getActiveNavs()[0].push(ScannerPage, {'type': type}).catch(err => console.error(err));
   }
 
   goToListPage(list: ShoppingList) {

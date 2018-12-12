@@ -9,7 +9,7 @@ import {LocalStorageHelper} from "../helpers/local-storage-helper";
 import * as Constants from '../util/constants';
 import {DateTime} from "../providers/datetime/DateTime";
 import {DatabaseProvider} from "../providers/database/database";
-// import {OneSignal} from '@ionic-native/onesignal';
+import {OneSignal} from '@ionic-native/onesignal';
 
 @Component({
   templateUrl: 'app.html'
@@ -25,7 +25,7 @@ export class MyApp {
               private splashScreen: SplashScreen,
               private translate: TranslateService,
               private databaseProvider: DatabaseProvider,
-              // private oneSignal: OneSignal
+              private oneSignal: OneSignal
   ) {
 
     this.setAppLanguage();
@@ -36,12 +36,6 @@ export class MyApp {
     //Notifications
     // this.oneSignal.promptLocation();
     // this.oneSignal.setLocationShared(true);
-    // this.oneSignal.startInit('13626e23-946e-4a25-8713-05d4dee9f03b', 'orgill-5a5ba');
-    // //this.oneSignal.setLocationShared(true);
-    // this.oneSignal.handleNotificationReceived().subscribe((data) => {
-    //   console.log("NOTIFICATION RECEIVED", data)
-    // });
-
 
     // let notificationOpenedCallback = function (jsonData) {
     //   console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
@@ -56,6 +50,14 @@ export class MyApp {
     this.isLoading = true;
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
+      this.oneSignal.startInit('13626e23-946e-4a25-8713-05d4dee9f03b', 'orgill-5a5ba');
+      // this.oneSignal.setLocationShared(true);
+      this.oneSignal.handleNotificationReceived().subscribe((data) => {
+        console.log("NOTIFICATION RECEIVED", data)
+      });
+      this.oneSignal.handleNotificationOpened().subscribe((data) => {
+        console.log("NOTIFICATION opened", data)
+      });
 
       this.databaseProvider.getDatabaseState()
         .subscribe(isDatabaseOpen => {

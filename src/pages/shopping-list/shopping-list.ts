@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {ShoppingList} from "../../interfaces/models/shopping-list";
 import {NavParams} from "ionic-angular";
 import * as Constants from "../../util/constants";

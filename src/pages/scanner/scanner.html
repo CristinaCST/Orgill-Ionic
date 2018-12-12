@@ -1,22 +1,32 @@
-<!--
-  Generated template for the ScannerPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
+<!-- Scanner Page Header -->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>scanner</ion-title>
-  </ion-navbar>
-
+  <!-- Scanner Page Navigation Bar -->
+  <navbar [title]="'scanner'" [isMenuEnabled]="true"
+          [isBackEnabled]="false"></navbar>
+  <!-- Scanner Page Tabs-->
+  <ion-segment [(ngModel)]="searchTab">
+    <ion-segment-button value="scan_barcode_tab">
+      {{"scan_barcode_tab" | translate}}
+    </ion-segment-button>
+    <ion-segment-button value="search_code_tab">
+      {{"search_code_tab" | translate}}
+    </ion-segment-button>
+  </ion-segment>
+  <!-- Scanner Page Search Bar -->
+  <search-bar *ngIf="searchTab==='search_code_tab'" [showBackButton]="true"
+              (searched)="onSearched($event)"></search-bar>
 </ion-header>
 
-
+<!-- Scanner Page Content -->
 <ion-content padding>
-
-  <h1>
-    <button ion-button color="dark" full round (click)="scan()">Start Scan</button>
-  </h1>
-
+  <p *ngIf="productAlreadyInList && searchTab==='scan_barcode_tab'"> Product is already in list</p>
+  <p *ngIf="noProductFound">{{"no_products_found" | translate}}</p>
+  <!-- Scanner Page scan button -->
+  <button *ngIf="searchTab==='scan_barcode_tab'" ion-button color="dark" full round (click)="scan()">Start Scan
+  </button>
+  <ion-list *ngIf="products&& searchTab==='search_code_tab'">
+    <div *ngFor="let product of products" (click)="goToProductPage(product)">
+      <product [product]="product"></product>
+    </div>
+  </ion-list>
 </ion-content>

@@ -6,7 +6,6 @@ import {Storage} from '@ionic/storage';
 import {Platform} from 'ionic-angular';
 import {Observable} from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs/Rx';
-import 'rxjs/add/operator/map';
 
 import {Program} from '../../interfaces/models/program';
 import {ShoppingListItem} from '../../interfaces/models/shopping-list-item';
@@ -73,9 +72,9 @@ export class DatabaseProvider {
       'JOIN product ON (shopping_list_item.product_sku = product.sku) ' +
       'WHERE purchase_order_id = ?',
       getProgram: 'SELECT * FROM program WHERE program_no = ?',
-
-    }
-    ;
+      checkProductInList: 'Select count(*) as is_item_in_list from shopping_list_item  where product_sku =?' +
+      'AND shopping_list_id=?'
+    };
   }
 
   /* DATABASE */
@@ -85,28 +84,25 @@ export class DatabaseProvider {
   }
 
   fillDatabase() {
-
     this.http.get('assets/db.sql', {responseType: 'text'})
       .subscribe(sql => {
           this.sqlitePorter.importSqlToDb(this.database, sql)
-            .then(data => {
+            .then(() => {
               this.databaseReady.next(true);
-              this.storage.set('database_filled', true);
+              this.storage.set('database_filled', true).catch(err => console.error(err));
             })
-            .catch(e => console.log(e));
+            .catch(e => console.error(e));
         }
       );
   }
 
   /* PRODUCTS  & SHOPPING LISTS */
-
   addShoppingList(name, description, type): Promise<any> {
     const data = [name, description, type];
     return this.database.executeSql(this.queries.addShoppingList, data);
   }
 
   getNumOfListsWithName(name: string): Promise<any> {
-
     return this.database.executeSql(this.queries.getNumOfListsWithName, [name]);
   }
 
@@ -127,7 +123,6 @@ export class DatabaseProvider {
       product.VENDOR_NAME,
       product.UPC_CODE,
       product.YOURCOST];
-
     this.database.executeSql(this.queries.insertOrReplaceProduct, productData)
       .then(data => {
         console.log('Added Product Data: ', data);
@@ -138,9 +133,7 @@ export class DatabaseProvider {
       });
 
     const item_data = [shopping_list_id, product.SKU, shopping_list_item.program_number, shopping_list_item.quantity, shopping_list_item.item_price];
-
     return this.database.executeSql(this.queries.insertShoppingListItem, item_data);
-
   }
 
   getShoppingListsForProduct(product_sku: string) {
@@ -157,7 +150,6 @@ export class DatabaseProvider {
       }
     }
     const deleteQuery = 'DELETE FROM shopping_list_item WHERE shopping_list_id = ' + shopping_list_id + ' AND id IN (' + placeholders + ')';
-
     return this.database.executeSql(deleteQuery, shopping_item_ids);
   }
 
@@ -287,4 +279,11 @@ export class DatabaseProvider {
     return this.database.executeSql(this.queries.insertPurchase, purchaseData);
   }
 
+  checkProductInList(productSKU, listId) {
+    const checkData = [
+      productSKU,
+      listId
+    ];
+    return this.database.executeSql(this.queries.checkProductInList, checkData);
+  }
 }

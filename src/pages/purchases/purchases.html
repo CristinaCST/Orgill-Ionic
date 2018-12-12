@@ -1,0 +1,22 @@
+<ion-content>
+
+  <!--<ion-list *ngFor="let purchase of purchases">-->
+
+  <!--<orders-list-item [purchase]="purchase"-->
+  <!--[isDetailsPage]="false"-->
+  <!--(onItemTapped)="openOrderDetails($event)">-->
+
+  <!--</orders-list-item>-->
+
+  <!--</ion-list>-->
+  <ion-list *ngFor="let purchase of purchases">
+    <order-item [purchase]="purchase" (onItemTap)="openOrderDetails($event)">
+
+    </order-item>
+  </ion-list>
+
+  <p id="no_items_label" *ngIf="(purchases == null || purchases.length == 0)">
+    {{"orders_history_no_purchase" | translate}}</p>
+
+</ion-content>
+

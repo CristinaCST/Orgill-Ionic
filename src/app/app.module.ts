@@ -13,7 +13,7 @@ import {BarcodeScanner} from '@ionic-native/barcode-scanner';
 //Modules
 import {ComponentsModule} from "../components/components.module";
 import {IonicStorageModule} from "@ionic/storage";
-// import {OneSignal} from '@ionic-native/onesignal';
+import {OneSignal} from '@ionic-native/onesignal';
 
 //Providers
 import {ApiProvider} from "../providers/api-provider";
@@ -28,6 +28,8 @@ import {AuthServiceProvider} from "../providers/authservice/authservice";
 import {ProductProvider} from "../providers/product/product";
 import {ScannerProvider} from '../providers/scanner/scanner';
 import {UserInfoProvider} from '../providers/user-info/user-info';
+import {PurchasesProvider} from '../providers/purchases/purchases';
+
 
 //Pages
 import {MyApp} from './app.component';
@@ -44,6 +46,8 @@ import {CustomerLocationPage} from "../pages/customer-location/customer-location
 import {OrderReviewPage} from "../pages/order-review/order-review";
 import {OrderConfirmationPage} from "../pages/order-confirmation/order-confirmation";
 import {ProductsSearchPage} from "../pages/products-search/products-search";
+import {PurchaseDetailsPage} from "../pages/purchase-details/purchase-details";
+import {PurchasesPage} from "../pages/purchases/purchases";
 
 let pages = [MyApp,
   Catalog,
@@ -58,7 +62,10 @@ let pages = [MyApp,
   OrderReviewPage,
   OrderConfirmationPage,
   ProductsSearchPage,
-  ScannerPage];
+  ScannerPage,
+  PurchasesPage,
+  PurchaseDetailsPage];
+
 
 @NgModule({
   declarations: pages,
@@ -96,7 +103,8 @@ let pages = [MyApp,
     ScannerProvider,
     ProductProvider,
     UserInfoProvider,
-    // OneSignal
+    PurchasesProvider,
+    OneSignal
   ]
 })
 

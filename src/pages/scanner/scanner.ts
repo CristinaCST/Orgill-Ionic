@@ -1,34 +1,31 @@
-import {Component} from '@angular/core';
-import {IonicPage, LoadingController, NavController, NavParams, Platform} from 'ionic-angular';
+import {Component, OnInit} from '@angular/core';
+import {NavController, NavParams, Platform} from 'ionic-angular';
 import {BarcodeScanner} from "@ionic-native/barcode-scanner";
 import {LoadingProvider} from "../../providers/loading/loading";
 import {TranslateProvider} from "../../providers/translate/translate";
 import * as Constants from '../../util/constants';
-import {User} from "../../interfaces/models/user";
-import {LocalStorageHelper} from "../../helpers/local-storage-helper";
-import {SearchProductRequest} from "../../interfaces/request-body/search-product-request";
 import {ScannerProvider} from "../../providers/scanner/scanner";
 import {Product} from "../../interfaces/models/product";
-import {ProductProvider} from "../../providers/product/product";
-import {ProductDetailsPage} from "../product-details/product-details";
 import {PopoversProvider} from "../../providers/popovers/popovers";
-import {MyApp} from "../../app/app.component";
-import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
 import {ProductPage} from "../product/product";
-
+import {CatalogsProvider} from "../../providers/catalogs/catalogs";
+import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
 
 @Component({
   selector: 'page-scanner',
   templateUrl: 'scanner.html',
 })
-export class ScannerPage {
+export class ScannerPage implements OnInit {
 
   selectedProduct: any;
-  programNumber: string;
+  programNumber: string = '';
   searchString: string;
   foundProduct: Product;
   shoppingListId: number;
-
+  public productAlreadyInList: boolean = false;
+  public searchTab;
+  public products: Array<Product> = [];
+  public noProductFound: boolean = false;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -36,11 +33,16 @@ export class ScannerPage {
               private loading: LoadingProvider,
               private translator: TranslateProvider,
               private scannerProvider: ScannerProvider,
-              private productProvider: ProductProvider,
               private platform: Platform,
-              private popoversProvider: PopoversProvider) {
+              private catalogsProvider: CatalogsProvider,
+              private popoversProvider: PopoversProvider,
+              private shoppingListProvider: ShoppingListsProvider) {
+  }
 
+  ngOnInit(): void {
     this.shoppingListId = this.navParams.get("shoppingListId");
+    this.searchTab = this.navParams.get('type');
+    this.products = this.navParams.get('products');
   }
 
   scan() {
@@ -74,96 +76,90 @@ export class ScannerPage {
     }
   }
 
+  getInitialQuantity() {
+    if (this.foundProduct.QTY_ROUND_OPTION === 'X')
+      return Number(this.foundProduct.SHELF_PACK);
+    else
+      return 1;
+  }
+
   searchProduct() {
-    const user: User = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
-
-    const params: SearchProductRequest = {
-      'user_token': user.userToken,
-      'division': user.division,
-      'price_type': user.price_type,
-      'search_string': this.searchString,
-      'category_id': '-1',
-      'program_number': this.programNumber,
-      'p': '1',
-      'rpp': String(Constants.SEARCH_RESULTS_PER_PAGE),
-      'last_modified': ''
-    };
-
-    this.scannerProvider.searchProduct(params)
+    this.scannerProvider.searchProduct(this.searchString, this.programNumber)
       .subscribe(response => {
-          this.loading.hideLoading();
-          const responseData = response.d;
-          console.log('response', response);
-
-          if (responseData.length > 0) {
-            this.foundProduct = responseData[0];
-            if (this.shoppingListId) {
-              this.navCtrl.push(ProductPage, {
-                'product': this.foundProduct,
-                'programNumber': this.programNumber,
-                'quantity': this.getInitialQuantity(),
-                'isAddButtonVisible': true,
-                'subCategoryName': ''
-              });
-            }
-
-            else {
-              if (!this.isProductInList(this.shoppingListId)) {
-                const newItem: ShoppingListItem = {
-
+        this.loading.hideLoading();
+        const responseData = JSON.parse(response.d);
+        if (responseData.length > 0) {
+          this.foundProduct = responseData[0];
+          if (!this.shoppingListId) {
+            this.navCtrl.push(ProductPage, {
+              'product': this.foundProduct,
+              'programNumber': this.programNumber,
+            }).catch(err => console.error(err));
+          } else {
+            this.isProductInList().then((data) => {
+              if (!data) {
+                const newItem = {
                   'product': this.foundProduct,
                   'program_number': '',
-                  'quantity': this.getInitialQuantity(),
                   'item_price': Number(this.foundProduct.YOURCOST),
+                  'quantity': this.getInitialQuantity()
                 };
-
-                //TODO: add product to shopping list in DB
+                this.shoppingListProvider.addItemToShoppingList(this.shoppingListId, newItem);
+                this.productAlreadyInList = false;
               }
-            }
-
+              else {
+                this.productAlreadyInList = true;
+              }
+            });
           }
-          else {
-            this.loading.presentLoading(this.translator.translate(Constants.NO_PRODUCTS_FOUND));
-            this.scan();
-          }
-        },
-        errorResponse => {
-          this.loading.hideLoading();
-          if (this.isPermissionError(errorResponse)) {
-            let content = {title: Constants.ERROR, message: Constants.POPOVER_CAMERA_PERMISSION_NOT_GRANTED};
-            this.popoversProvider.show(content);
-          } else {
-            let content = {title: Constants.ERROR, message: Constants.SCAN_ERROR};
-            this.popoversProvider.show(content);
-          }
-
-
-        });
-
+        }
+        else {
+          this.noProductFound = true;
+          this.scan();
+        }
+      }, errorResponse => {
+        this.loading.hideLoading();
+        if (this.isPermissionError(errorResponse)) {
+          let content = {title: Constants.ERROR, message: Constants.POPOVER_CAMERA_PERMISSION_NOT_GRANTED};
+          this.popoversProvider.show(content);
+        } else {
+          let content = {title: Constants.ERROR, message: Constants.SCAN_ERROR};
+          this.popoversProvider.show(content);
+        }
+      });
   }
 
-  private getInitialQuantity(): number {
-    if (this.productProvider.isXCategoryProduct(this.foundProduct)) {
-      return Number(this.foundProduct.SHELF_PACK);
-    }
-    return 1;
-  }
-
-  protected isProductInList(listId: number): boolean {
-    //TODO: check if product in shopping list
-    //if()
-    return false;
+  private isProductInList() {
+    return this.shoppingListProvider.checkProductInList(this.foundProduct.SKU, this.shoppingListId);
   }
 
   private isPermissionError(scannerError: string): boolean {
-
     if (this.platform.is('android')) {
       return scannerError.localeCompare('Illegal access') === 0;
     } else if (this.platform.is('ios')) {
       return scannerError.includes('Access to the camera has been prohibited');
     }
-
   }
 
+  onSearched($event) {
+    this.loading.presentSimpleLoading();
+    this.catalogsProvider.search($event, '', this.programNumber).subscribe(data => {
+      if (data) {
+        this.loading.hideLoading();
+        let params = {
+          type: this.searchTab,
+          shoppingListId: this.shoppingListId,
+          products: JSON.parse(data.d)
+        };
+        this.navCtrl.push(ScannerPage, params).catch(err => console.error(err));
+      }
+    });
+  }
 
+  goToProductPage(product: Product) {
+    this.navCtrl.push(ProductPage, {
+      'product': product,
+      'programNumber': this.programNumber
+    }).catch(err => console.error(err));
+  }
 }
