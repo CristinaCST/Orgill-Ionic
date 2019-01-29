@@ -1,25 +1,29 @@
 import {Component, OnInit} from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
 import {PurchasesProvider} from "../../providers/purchases/purchases";
+import {Purchase} from "../../interfaces/models/purchase";
+import {NavParams} from "ionic-angular";
+import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
 
 
 @Component({
   selector: 'page-purchase-details',
   templateUrl: 'purchase-details.html',
 })
-export class PurchaseDetailsPage implements  OnInit{
+export class PurchaseDetailsPage implements OnInit {
+  purchase: Purchase;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public purchaseProvider : PurchasesProvider) {
-
+  constructor(public purchasesProvider: PurchasesProvider, public navParams: NavParams,) {
   }
 
-  ngOnInit(){
+  ngOnInit() {
+    this.purchase = this.navParams.get('purchase');
     this.getLocalPurchaseItems();
   }
 
-  getLocalPurchaseItems(){
-      //TODO: use PurchaseProvider
+  getLocalPurchaseItems() {
+    this.purchasesProvider.getAllProductsFromPurchase(this.purchase.purchase_id).then(
+      (data: Array<ShoppingListItem>) =>
+        this.purchase.purchase_items = data);
   }
-
 
 }

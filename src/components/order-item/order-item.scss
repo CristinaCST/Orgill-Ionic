@@ -1,3 +1,67 @@
-order-item {
+@import "../../theme/variables";
 
+order-item {
+  button {
+    width: 100%;
+    margin: 0;
+    padding: 0 !important;
+    .container {
+      display: flex;
+      margin-left: 16px;
+      margin-right: 16px;
+      &.header {
+        p:nth-child(1) {
+          width: 25%;
+          display: flex;
+          justify-content: flex-start;
+        }
+        p:nth-child(2) {
+          width: inherit;
+          display: flex;
+          justify-content: flex-start;
+          font-weight: bold;
+        }
+      }
+      &.info {
+        .purchase-row {
+          width: calc(50% - 8px);
+          display: block;
+
+          .info-cel {
+            display: flex;
+            flex: 1;
+
+            p {
+              width: 50%;
+            }
+            p:nth-child(1) {
+              display: flex;
+              justify-content: flex-start;
+            }
+            p:nth-child(2) {
+              display: flex;
+              justify-content: flex-end;
+              font-weight: bold;
+            }
+          }
+        }
+        .purchase-row:nth-child(1) {
+          margin-right: 8px;
+        }
+        .purchase-row:nth-child(2) {
+          margin-left: 8px;
+        }
+      }
+    }
+    p {
+      margin-bottom: 0;
+      margin-top: 10px;
+    }
+    &.details {
+      background-color: color($colors, OrgillRed);
+      * {
+        color: white;
+      }
+    }
+  }
 }

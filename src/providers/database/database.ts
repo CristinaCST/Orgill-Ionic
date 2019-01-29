@@ -153,14 +153,11 @@ export class DatabaseProvider {
     return this.database.executeSql(deleteQuery, shopping_item_ids);
   }
 
-  removeShoppingList(shopping_list_id: number): Promise<any> {
-    this.database.executeSql(this.queries.deleteAllFromShoppingListWithId, [shopping_list_id]).then(data => {
-      return data;
-    }, err => {
-      console.error('Delete all items from shopping list Error: ', err);
+  async removeShoppingList(shopping_list_id: number): Promise<any> {
+    const [err, data] = await this.database.executeSql(this.queries.deleteAllFromShoppingListWithId, [shopping_list_id]);
+    if (err) {
       return err;
-    });
-
+    }
     return this.database.executeSql(this.queries.deleteShoppingList, [shopping_list_id]);
   }
 
@@ -171,17 +168,6 @@ export class DatabaseProvider {
   getAllShoppingLists(): Promise<any> {
     return this.database.executeSql(this.queries.getAllShoppingLists, []);
   }
-
-  //TODO REMOVE UNUSED
-  // updateShoppingList(shopping_list_id: Number, shopping_list_item: ShoppingListItem) {
-  //   this.database.executeSql(this.queries.updateShoppingList, [shopping_list_item.quantity, shopping_list_item.program_number, shopping_list_item.item_price, shopping_list_id])
-  //     .then(data => {
-  //       return data;
-  //     }, err => {
-  //       console.log('Error: ', err);
-  //       return err;
-  //     });
-  // }
 
   updateShoppingListItem(id: number, shopping_list_id: number, programNumber: string, price: number, quantity: number): Promise<any> {
     const params = [programNumber, price, quantity, shopping_list_id, id];
@@ -230,16 +216,11 @@ export class DatabaseProvider {
 
   }
 
-  //TODO REMOVE UNUSED
-  // getProgram(program_no: string): Promise<any> {
-  //   return this.database.executeSql(this.queries.getProgram, [program_no]);
-  // }
 
   getMarketTypeForProgram(programNo: string): Promise<any> {
     return this.database.executeSql(this.queries.getMarketTypeForProgram, [programNo]);
   }
 
-  /* PURCHASES */
 
   finalizePurchase(purchase_order_id: number, shopping_list_item_ids: number[], shopping_list_id: number): Promise<any> {
 

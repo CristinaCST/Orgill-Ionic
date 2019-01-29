@@ -1,29 +1,20 @@
 <ion-header>
-
   <ion-navbar>
     <ion-title>{{"order_confirmation" | translate}}</ion-title>
   </ion-navbar>
-  <div>
+  <div class="sub-header">
     <p>{{"order_confirmation_message_status" | translate}} </p>
     <p> {{"order_confirmation_message_method" | translate}} {{orderMethod}}</p>
   </div>
-
 </ion-header>
-
 
 <ion-content padding>
   <div [innerHTML]="confirmation"></div>
 </ion-content>
 
 <ion-footer padding>
-  <div id="order_total_div">
-    <div id="left_div" class="uppercase">
-      {{"order_review_total" | translate}}:
-    </div>
-
-    <div id="right_div">
-      {{"product_currency" | translate}}{{orderTotal | number: '1.2-2'}}
-    </div>
-
+  <div class="total-container">
+    {{"order_review_total" | translate}}:
+    {{"product_currency" | translate}}{{orderTotal | number: '1.2-2'}}
   </div>
 </ion-footer>

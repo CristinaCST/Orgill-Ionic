@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {ShoppingList} from "../../interfaces/models/shopping-list";
-import {NavParams} from "ionic-angular";
+import {Content, Events, NavParams} from "ionic-angular";
 import * as Constants from "../../util/constants";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
 import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
@@ -8,12 +8,14 @@ import {NavController} from 'ionic-angular';
 import {PopoversProvider} from "../../providers/popovers/popovers";
 import {CustomerLocationPage} from "../customer-location/customer-location";
 import {ProductPage} from "../product/product";
+import {TranslateProvider} from "../../providers/translate/translate";
 
 @Component({
   selector: 'page-shopping-list',
   templateUrl: 'shopping-list.html',
 })
 export class ShoppingListPage {
+  @ViewChild(Content) content: Content;
 
   private shoppingList: ShoppingList;
   private selectedItems: Array<ShoppingListItem> = [];
@@ -23,12 +25,15 @@ export class ShoppingListPage {
   public isCheckout: boolean = true;
   public isSelectAll: boolean = false;
   public nrOfSelectedItems: number = 0;
-
+  public menuCustomButtons = [];
 
   constructor(public navParams: NavParams,
               private navCtrl: NavController,
               private shoppingListProvider: ShoppingListsProvider,
-              private popoversProvider: PopoversProvider) {
+              private popoversProvider: PopoversProvider,
+              private translator: TranslateProvider,
+              private events: Events) {
+    this.menuCustomButtons = [{action: 'detailsList', icon: 'information-circle'}];
   }
 
   ionViewWillEnter() {
@@ -42,13 +47,21 @@ export class ShoppingListPage {
     }
     if (this.navParams.get('shoppingListItems')) {
       this.shoppingListItems = this.navParams.get('shoppingListItems');
+      this.content.resize();
     }
     else {
-      this.isCustomList = !(this.shoppingList.id === Constants.DEFAULT_LIST_ID || this.shoppingList.id === Constants.MARKET_ONLY_LIST_ID);
+      this.isCustomList = !(this.shoppingList.id !== Constants.DEFAULT_LIST_ID && this.shoppingList.id !== Constants.MARKET_ONLY_LIST_ID);
+      if (!this.isCustomList) {
+        this.menuCustomButtons.push({
+          action: 'deleteList',
+          icon: 'trash'
+        });
+      }
       this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.id).then((data: Array<ShoppingListItem>) => {
         if (data) {
           this.shoppingListItems = data;
           this.checkExpiredItems();
+          this.content.resize();
         }
       }).catch(error => console.error(error));
     }
@@ -91,12 +104,12 @@ export class ShoppingListPage {
       case 'checkedItem':
         this.selectedItems[index] = this.shoppingListItems[index];
         this.nrOfSelectedItems += 1;
-        this.orderTotal += event.price;
+        this.orderTotal += parseFloat(event.price);
         break;
       case 'uncheckedItem':
         this.selectedItems[index] = null;
         this.nrOfSelectedItems -= 1;
-        this.orderTotal -= event.price;
+        this.orderTotal -= parseFloat(event.price);
         break;
     }
   }
@@ -110,11 +123,10 @@ export class ShoppingListPage {
     this.isSelectAll = !this.isSelectAll;
     this.orderTotal = 0;
     this.nrOfSelectedItems = 0;
-
     this.shoppingListItems.map((item, index) => {
       if (this.isSelectAll === true) {
         item.isCheckedInShoppingList = true;
-        this.setOrderTotal({status: 'checkedItem', price: item.item_price}, index);
+        this.setOrderTotal({status: 'checkedItem', price: item.quantity * item.item_price}, index);
       } else {
         item.isCheckedInShoppingList = false;
         this.selectedItems = [];
@@ -137,7 +149,6 @@ export class ShoppingListPage {
     }
   }
 
-
   onSearched($event) {
     let params = {
       list: this.shoppingList,
@@ -149,12 +160,46 @@ export class ShoppingListPage {
 
   onCheckedToDetails($event) {
     this.navCtrl.push(ProductPage, {
-      'product': $event.product,
-      'programNumber': $event.program_number,
-      'fromShoppingList': true,
-      'shoppingListId': this.shoppingList.id,
-      'id': $event.id,
-      'quantity': $event.quantity
+      product: $event.product,
+      programNumber: $event.program_number,
+      fromShoppingList: true,
+      shoppingListId: this.shoppingList.id,
+      id: $event.id,
+      quantity: $event.quantity
     }).catch(err => console.error(err))
+  }
+
+  buttonClicked($event) {
+    switch ($event.type) {
+      case 'detailsList':
+        this.getListDetails();
+        break;
+      case 'deleteList':
+        this.removeList();
+        break;
+    }
+  }
+
+  getListDetails() {
+    let message = "";
+    if (this.isCustomList) {
+      message = this.translator.translate(Constants.SHOPPING_LIST_CUSTOM_DESCRIPTION);
+    }
+    let content = this.popoversProvider.setContent(this.shoppingList.name, message + this.shoppingList.description);
+    this.popoversProvider.show(content);
+  }
+
+  removeList() {
+    let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_DELETE_CONF_TITLE, Constants.SHOPPING_LIST_DELETE_CONF_MESSAGE,
+      Constants.OK, Constants.CANCEL, Constants.POPOVER_DELETE_LIST_CONFIRMATION);
+    this.popoversProvider.show(content).subscribe(data => {
+      if (data.optionSelected === "OK") {
+        this.shoppingListProvider.removeShoppingList(this.shoppingList.id).then(data => {
+          console.log(data);
+          this.events.publish('DeletedList', this.shoppingList.id);
+          this.navCtrl.pop().catch(err => console.error(err));
+        }).catch(err => console.error(err));
+      }
+    });
   }
 }

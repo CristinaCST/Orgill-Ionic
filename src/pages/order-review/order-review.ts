@@ -11,7 +11,6 @@ import {OrderConfirmationPage} from "../order-confirmation/order-confirmation";
   templateUrl: 'order-review.html',
 })
 export class OrderReviewPage implements OnInit {
-  public readonly sendToOrgillMethod: number = 1;
 
   public orderMethod;
   public postOffice = '-';
@@ -27,8 +26,8 @@ export class OrderReviewPage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.orderMethod = this.checkValidParams('shoppingListId');
-    this.postOffice = this.checkValidParams('postOffice');
+    this.orderMethod = this.checkValidParams('orderMethod');
+     this.postOffice = this.checkValidParams('postOffice');
     this.location = this.checkValidParams('location');
     this.shoppingListId = this.checkValidParams('shoppingListId');
     this.shoppingListItems = this.checkValidParams('shoppingListItems');
@@ -46,18 +45,17 @@ export class OrderReviewPage implements OnInit {
   }
 
   private getOrderQuery(programNumber: string, items: Array<ShoppingListItem>): string {
-
     let query = this.location.SHIPTONO + ":" + (this.postOffice ? this.postOffice : "") + ":" + programNumber + ":";
-    items.forEach(item => {
-      query += item.product.SKU + "|" + item.quantity + ":"
+    items.forEach((item, index) => {
+      query += item.product.SKU + "|" + item.quantity + (index < items.length - 1 ? ":" : "");
     });
-    query = query.substring(0, query.length - 1);
     return query;
   }
 
   purchase() {
     Object.keys(this.shoppingListProgramNumbers).map((programNumber, index) => {
       let orderItems = this.shoppingListItems.filter(item => item.program_number == programNumber);
+      let itemsIds = orderItems.reduce((arr, item) => arr.concat(item.id), []);
       let productListInfo = {
         order_method: this.orderMethod,
         order_query: this.getOrderQuery(programNumber, orderItems)
@@ -70,8 +68,7 @@ export class OrderReviewPage implements OnInit {
         total: this.orderTotal,
         program_number: programNumber
       };
-      //TODO change moment to format
-      this.shoppingListsProvider.orderProducts(productListInfo, insertToDBInfo).then((data: any) => {
+      this.shoppingListsProvider.orderProducts(productListInfo, insertToDBInfo, itemsIds, this.shoppingListId).then((data: any) => {
         if (data.insertedPurchaseToDBInfo.insertId) {
           this.confirmationNumbers.push(data.confirmationNumber);
           if (index === Object.keys(this.shoppingListProgramNumbers).length - 1) {
@@ -80,15 +77,15 @@ export class OrderReviewPage implements OnInit {
               orderTotal: this.orderTotal,
               orderMethod: this.orderMethod
             };
-            this.navController.push(OrderConfirmationPage, navigationParams);
+            this.navController.push(OrderConfirmationPage, navigationParams).catch(err => console.error(err));
           }
         }
-      })
+      }).catch(err => console.error(err));
     });
   }
 
   cancel() {
-    this.navController.pop();
+    this.navController.pop().catch(err => console.error(err));
   }
 
 }

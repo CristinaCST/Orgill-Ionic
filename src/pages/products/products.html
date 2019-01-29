@@ -6,14 +6,16 @@
   <search-bar [showBackButton]="true"
               (searched)="onSearched($event)"></search-bar>
 </ion-header>
-
 <!-- Products  Content-->
 <ion-content>
+  <!-- Products list -->
   <ion-list *ngIf="products.length">
     <div *ngFor="let product of products" (click)="goToProductPage(product)">
+      <!-- Product Component-->
       <product [product]="product"></product>
     </div>
   </ion-list>
+  <!-- Products Page error message -->
   <div *ngIf="!products.length && !isLoading" class="no-products">
     No Products Found!
   </div>

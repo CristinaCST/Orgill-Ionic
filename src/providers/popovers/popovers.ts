@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { PopoverController} from "ionic-angular";
+import {PopoverController} from "ionic-angular";
 import {PopoverComponent} from "../../components/popover/popover";
 import * as Constants from "../../util/constants";
 import {Subject} from "rxjs/Subject";
@@ -20,7 +20,7 @@ export class PopoversProvider {
     }
     else {
       popover.dismiss(null).then(() => {
-        popover.present();
+        popover.present().catch(err => console.error(err));
         this.isOpened = true;
       });
     }
@@ -28,7 +28,7 @@ export class PopoversProvider {
       this.isOpened = false;
       this.close.next(data);
     });
-    popover.present();
+    popover.present().catch(err => console.error(err));
     return this.close.asObservable();
   }
 

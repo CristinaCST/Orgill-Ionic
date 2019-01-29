@@ -51,6 +51,7 @@ export class ProductQuantityComponent implements OnInit {
       this.quantity++;
     }
     this.handleQuantityChange();
+
   }
 
   remove() {

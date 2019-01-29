@@ -45,7 +45,6 @@ export class AddToShoppingListPage implements OnInit {
     this.selectedProgram = this.navParams.get('selectedProgram');
     this.quantity = this.navParams.get('quantity');
     this.quantityItemPrice = this.navParams.get('quantityItemPrice');
-
     this.listForm = this.formBuilder.group({
       listOptions: [this.model.listOptions, Validators.required],
     });
@@ -59,8 +58,8 @@ export class AddToShoppingListPage implements OnInit {
         this.shoppingListsProvider.getShoppingListForProduct(this.product.SKU),
         this.shoppingListsProvider.getLocalShoppingLists()]
     ).then(([programData, productLists, shoppingLists]) => {
-      this.checkMarketOnlyProduct(programData);
       this.setProductList(productLists);
+      this.checkMarketOnlyProduct(programData);
       this.setAllShoppingList(shoppingLists);
       this.loading.hideLoading();
     }).catch(error => console.error(error));
@@ -77,6 +76,7 @@ export class AddToShoppingListPage implements OnInit {
       this.isMarketOnlyProduct = data.rows.item(0) === Constants.MARKET_ONLY_PROGRAM;
     }
     this.listForm.value.listOptions = data.rows.item(0) === Constants.MARKET_ONLY_PROGRAM ? Constants.MARKET_ONLY_LIST_ID : Constants.DEFAULT_LIST_ID;
+    this.checkProductInList(this.listForm.value.listOptions);
   }
 
   setAllShoppingList(shoppingLists) {
@@ -98,12 +98,12 @@ export class AddToShoppingListPage implements OnInit {
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
           if (status === 'available') {
-            this.shoppingListsProvider.createNewShoppingList(data.listName, data.description, data.type).then(addedList => {
+            this.shoppingListsProvider.createNewShoppingList(data.listName, data.listDescription, data.type).then(addedList => {
               let list: ShoppingList =
                 {
                   id: addedList.insertId,
                   name: data.listName,
-                  description: data.description
+                  description: data.listDescription
                 };
               this.shoppingLists.push(list);
               this.listForm.value.listOptions = list.id;
@@ -119,7 +119,7 @@ export class AddToShoppingListPage implements OnInit {
   }
 
   cancel() {
-    this.navCtrl.pop();
+    this.navCtrl.pop().catch(err => console.error(err));
   }
 
   add() {
@@ -128,7 +128,8 @@ export class AddToShoppingListPage implements OnInit {
       this.popoversProvider.show(content);
       return;
     }
-    this.saveItemToList()
+
+    this.saveItemToList();
   }
 
   saveItemToList() {
@@ -140,7 +141,7 @@ export class AddToShoppingListPage implements OnInit {
     };
 
     this.loading.presentSimpleLoading();
-    this.shoppingListsProvider.addItemToShoppingList(this.listForm.value.listOptions, listItem).then((data) => {
+    this.shoppingListsProvider.addItemToShoppingList(this.listForm.value.listOptions, listItem).then(() => {
       this.loading.hideLoading();
       this.cancel();
     }).catch(error => console.error(error));

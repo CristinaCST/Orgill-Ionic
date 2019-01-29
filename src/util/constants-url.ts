@@ -4,7 +4,6 @@ export const URL_BASE_FR = "http://dmwebservice-cafr.orgill.com";
 export const URL_LOGIN: string = "/service.asmx/Authenticate";
 export const URL_USER_INFO = "/service.asmx/get_user";
 export const URL_CUSTOMER_LOCATIONS = "/service.asmx/customer_locations";
-export const URL_APP_CONFIGURATION = "/service.asmx/app_configuration";
 
 export const URL_PROGRAMS = "/service.asmx/programs";
 export const URL_CATEGORIES = "/service.asmx/categories";
@@ -19,3 +18,4 @@ export const URL_PRODUCT_PRICE = "/service.asmx/item_price";
 export const URL_SHOPPING_LISTS_ORDER_PRODUCTS = "/service.asmx/order_products";
 export const URL_SHOPPING_LISTS_ORDER_CONFIRMATION = "/service.asmx/order_confirmation";
 
+export const GET_FLASHDEALS_PRODUCT = "/get_flashprogram_item";

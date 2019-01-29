@@ -104,7 +104,8 @@ export class ProductPage implements OnInit {
     this.programProvider.setPackQuantity(false);
 
     if (this.fromShoppingList) {
-      this.shoppingListProvider.updateShoppingListItem(this.id, this.shoppingListId, this.programNumber.toString(), $event.productPrice, this.quantity);
+      this.shoppingListProvider.updateShoppingListItem(this.id, this.shoppingListId, this.programNumber.toString(),
+        $event.productPrice, this.quantity).catch(err => console.error(err));
     }
   }
 

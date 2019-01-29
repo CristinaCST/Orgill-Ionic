@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {NavParams} from 'ionic-angular';
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
 
 
@@ -14,7 +14,7 @@ export class OrderConfirmationPage implements OnInit {
   public orderMethod;
   public confirmation;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private shoppingListsProvider: ShoppingListsProvider) {
+  constructor(private navParams: NavParams, private shoppingListsProvider: ShoppingListsProvider) {
   }
 
   ngOnInit(): void {
@@ -33,7 +33,7 @@ export class OrderConfirmationPage implements OnInit {
   private getConfirmationNumbersQuery(): string {
     let query: string = '';
     this.confirmationNumbers.map((number, index) => {
-      query += number + (index < this.confirmationNumbers.length ? ',' : '');
+      query += number + (index < this.confirmationNumbers.length - 1 ? ',' : '');
     });
     return query;
   }

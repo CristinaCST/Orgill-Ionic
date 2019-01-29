@@ -1,18 +1,16 @@
 import {Injectable} from '@angular/core';
 import {DatabaseProvider} from "../database/database";
-import {MyApp} from "../../app/app.component";
 import {Purchase} from "../../interfaces/models/purchase";
 import {Program} from "../../interfaces/models/program";
+import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
 
 @Injectable()
 export class PurchasesProvider {
 
   constructor(private databaseProvider: DatabaseProvider) {
-
   }
 
-
-  getLocalPurchasingHistory() {
+  getLocalPurchaseHistory() {
     return new Promise((resolve, reject) =>
       this.databaseProvider.getAllPurchases().then((data) => {
         if (!data.rows) {
@@ -57,8 +55,47 @@ export class PurchasesProvider {
   }
 
 
-  getLocalPurchaseDetail(purchaseId){
-    //TODO
+  getAllProductsFromPurchase(purchaseId) {
+    return new Promise(async (resolve, reject) => {
+        try {
+          let data = await this.databaseProvider.getAllProductsFromPurchase(purchaseId);
+          let purchaseItems = [];
+          if (data) {
+            if (data.rows.length > 0) {
+              for (let i = 0; i < data.rows.length; i++) {
+                let receivedItem = data.rows.item(i);
+                let listItem: ShoppingListItem = {
+                  id: receivedItem.id,
+                  product: {
+                    CatID: receivedItem.cat_id,
+                    SKU: receivedItem.sku,
+                    QTY_ROUND_OPTION: receivedItem.qty_round_option,
+                    MODEL: receivedItem.model,
+                    NAME: receivedItem.name,
+                    VENDOR_NAME: receivedItem.vendor_name,
+                    SELLING_UNIT: receivedItem.selling_unit,
+                    UPC_CODE: receivedItem.upc_code,
+                    SUGGESTED_RETAIL: receivedItem.suggested_retail,
+                    YOURCOST: receivedItem.your_cost,
+                    IMAGE: receivedItem.image,
+                    SHELF_PACK: receivedItem.shelf_pack,
+                    VELOCITY_CODE: receivedItem.velocity_code,
+                    TOTAL_REC_COUNT: receivedItem.total_rec_count
+                  },
+                  program_number: receivedItem.program_number,
+                  quantity: receivedItem.quantity,
+                  item_price: receivedItem.item_price
+                };
+                purchaseItems.push(listItem)
+              }
+            }
+          }
+          resolve(purchaseItems);
+        } catch (error) {
+          reject(error);
+        }
+      }
+    );
   }
 
 }

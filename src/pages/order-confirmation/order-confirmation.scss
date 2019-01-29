@@ -1,3 +1,22 @@
-page-order-confirmation {
+@import "../../theme/variables";
 
+page-order-confirmation {
+  ion-header {
+    .sub-header {
+      padding: 5px;
+      text-align: center;
+      color: white;
+      background-color: color($colors, OrgillRed);
+      p {
+        margin: 0;
+        font-weight: bold;
+      }
+      p:nth-child(1) {
+        font-size: $font-size-medium;
+      }
+      p:nth-child(2) {
+        font-size: $font-size-small;
+      }
+    }
+  }
 }

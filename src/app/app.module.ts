@@ -9,11 +9,12 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {SQLite} from "@ionic-native/sqlite";
 import {SQLitePorter} from "@ionic-native/sqlite-porter";
 import {BarcodeScanner} from '@ionic-native/barcode-scanner';
+import {OneSignal} from '@ionic-native/onesignal';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 //Modules
 import {ComponentsModule} from "../components/components.module";
 import {IonicStorageModule} from "@ionic/storage";
-import {OneSignal} from '@ionic-native/onesignal';
 
 //Providers
 import {ApiProvider} from "../providers/api-provider";
@@ -29,7 +30,6 @@ import {ProductProvider} from "../providers/product/product";
 import {ScannerProvider} from '../providers/scanner/scanner';
 import {UserInfoProvider} from '../providers/user-info/user-info';
 import {PurchasesProvider} from '../providers/purchases/purchases';
-
 
 //Pages
 import {MyApp} from './app.component';
@@ -48,7 +48,6 @@ import {OrderConfirmationPage} from "../pages/order-confirmation/order-confirmat
 import {ProductsSearchPage} from "../pages/products-search/products-search";
 import {PurchaseDetailsPage} from "../pages/purchase-details/purchase-details";
 import {PurchasesPage} from "../pages/purchases/purchases";
-import {FlashDealTestPage} from "../pages/flash-deal-test/flash-deal-test";
 
 let pages = [MyApp,
   Catalog,
@@ -65,8 +64,7 @@ let pages = [MyApp,
   ProductsSearchPage,
   ScannerPage,
   PurchasesPage,
-  PurchaseDetailsPage, FlashDealTestPage];
-
+  PurchaseDetailsPage];
 
 @NgModule({
   declarations: pages,
@@ -75,20 +73,19 @@ let pages = [MyApp,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     HttpClientModule,
+    ComponentsModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
         useFactory: (createTranslateLoader),
         deps: [HttpClient]
       }
-    }),
-    ComponentsModule],
+    })],
   bootstrap: [IonicApp],
   entryComponents: pages,
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthServiceProvider,
     ApiProvider,
     LoadingProvider,
@@ -105,10 +102,11 @@ let pages = [MyApp,
     ProductProvider,
     UserInfoProvider,
     PurchasesProvider,
-    OneSignal
+    OneSignal,
+    AndroidPermissions,
+    {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
-
 
 export class AppModule {
 }

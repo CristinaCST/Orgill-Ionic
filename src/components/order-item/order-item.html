@@ -1,0 +1,41 @@
+<button ion-item [ngClass]="isButtonDisabled?'details':''"
+        [attr.detail-none]="isButtonDisabled ? 'true': null"
+        [attr.no-lines]="isButtonDisabled ? 'true': null">
+  <div class="header container">
+    <p>{{"orders_history_program" | translate}}:</p>
+    <p>{{purchase.item_program.PROGRAMNO ==
+      ''?purchase.item_program.NAME:purchase.item_program.NAME+''+purchase.item_program.PROGRAMNO}}</p>
+  </div>
+
+  <div class="info container">
+    <div class="purchase-row">
+      <div class="info-cel">
+        <p>{{"orders_history_order" | translate}}: </p>
+        <p>{{purchase.confirmation_number}}</p>
+      </div>
+      <div class="info-cel">
+        <p>{{"orders_history_date" | translate}}:</p>
+        <p>{{purchase.date}}</p>
+      </div>
+      <div class="info-cel">
+        <p>{{"orders_history_type" | translate}}:</p>
+        <p>{{purchaseType | translate}}</p>
+      </div>
+    </div>
+
+    <div class="purchase-row">
+      <div class="info-cel">
+        <p>{{"orders_history_po" | translate}}:</p>
+        <p>{{purchase.PO ? purchase.PO : '-' }}</p>
+      </div>
+      <div class="info-cel">
+        <p>{{"order_review_location" | translate}}:</p>
+        <p>{{purchase.location_number}}</p>
+      </div>
+      <div class="info-cel">
+        <p>{{"order_confirmation_total" | translate}}:
+        <p>{{purchase.total | number: '1.1-2'}}</p>
+      </div>
+    </div>
+  </div>
+</button>

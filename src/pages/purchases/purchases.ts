@@ -1,6 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
-import {LocalStorageHelper} from "../../helpers/local-storage-helper";
+import {Component} from '@angular/core';
+import {NavController, NavParams} from 'ionic-angular';
 import {PurchasesProvider} from "../../providers/purchases/purchases";
 import {Purchase} from "../../interfaces/models/purchase";
 import {PurchaseDetailsPage} from "../purchase-details/purchase-details";
@@ -9,7 +8,7 @@ import {PurchaseDetailsPage} from "../purchase-details/purchase-details";
   selector: 'page-purchases',
   templateUrl: 'purchases.html',
 })
-export class PurchasesPage implements OnInit {
+export class PurchasesPage {
 
   userToken: string;
   purchases: Array<Purchase> = [];
@@ -18,8 +17,10 @@ export class PurchasesPage implements OnInit {
   }
 
   ngOnInit() {
-    this.purchasesProvider.getLocalPurchasingHistory().then((data: Array<Purchase>) => {
-      this.purchases = data;
+    this.purchasesProvider.getLocalPurchaseHistory().then((data: Array<Purchase>) => {
+      if (data) {
+        this.purchases = data;
+      }
     });
   }
 

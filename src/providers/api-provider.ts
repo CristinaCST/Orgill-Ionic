@@ -20,9 +20,8 @@ export class ApiProvider {
     return headers;
   }
 
-
-  get(path: string, params = {}): Observable<any> {
-    return this.http.get(this.baseUrl + path, { headers: this.setHeaders(), params: params })
+  get(baseUrl = this.baseUrl,path: string, params = {}): Observable<any> {
+    return this.http.get(baseUrl + path, { headers: this.setHeaders(), params: params })
   }
 
   post(path: string, body: Object = {}): Observable<any> {
@@ -33,12 +32,15 @@ export class ApiProvider {
     )
   }
 
+  requestWithBaseUrl(baseUrl, type){
+
+  }
+
   private getServiceBaseURL(): string {
 
     if (! LocalStorageHelper.hasKey(Constants.DEVICE_LANGUAGE)) {
       return ConstantsURL.URL_BASE_EN;
     }
-
     if (LocalStorageHelper.getFromLocalStorage(Constants.DEVICE_LANGUAGE).toLowerCase().includes(Constants.LANG_FR)) {
       return ConstantsURL.URL_BASE_FR;
     } else {

@@ -1,6 +1,6 @@
 <!-- App navbar -->
 <ion-navbar hideBackButton>
-  <!-- NavBar Menu Icon -->
+  <!-- NavBar Menu Icon Button -->
   <button *ngIf="isMenuEnabled" ion-button menuToggle>
     <ion-icon name="menu"></ion-icon>
   </button>
@@ -8,4 +8,21 @@
   <ion-icon class='back' *ngIf="isBackEnabled" name="ios-arrow-back" (click)="back()"></ion-icon>
   <!-- NavBar Title -->
   <ion-title>{{title|translate}}</ion-title>
+
+  <!-- Custom Icons Buttons for Pages -->
+  <ion-buttons end *ngIf="customButtons">
+    <button
+      *ngFor="let button of customButtons" ion-button icon-only
+      (click)="buttonActions(button.action)">
+      <ion-icon [name]="button.icon"></ion-icon>
+    </button>
+  </ion-buttons>
+
+  <!-- Scan Icon Button -->
+  <ion-buttons end *ngIf="showScanButton">
+    <button ion-button large (click)="redirectToScan()">
+      <ion-icon name="barcode"></ion-icon>
+    </button>
+  </ion-buttons>
+
 </ion-navbar>

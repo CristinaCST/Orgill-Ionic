@@ -105,7 +105,11 @@ export class ShoppingListsProvider {
     return this.databaseProvider.insertPurchase(purchaseInfo);
   }
 
-  orderProducts(productInfoList, insertToDBInfo) {
+  deleteItemsFromList(insertId, itemsIdsArr, shoppingListId) {
+    return this.databaseProvider.finalizePurchase(insertId, itemsIdsArr, shoppingListId);
+  }
+
+  orderProducts(productInfoList, insertToDBInfo, itemsIdsArr, shoppingListId) {
     return new Promise((resolve, reject) => {
         productInfoList.user_token = this.userToken;
         try {
@@ -113,7 +117,11 @@ export class ShoppingListsProvider {
             if (response) {
               insertToDBInfo.confirmation_number = JSON.parse(response.d);
               let insertedPurchaseToDBInfo = await this.insertPurchaseToDB(insertToDBInfo);
-              resolve({insertedPurchaseToDBInfo: insertedPurchaseToDBInfo, confirmationNumber: JSON.parse(response.d)});
+              let removedItemsFromShoppingList = await this.deleteItemsFromList(insertedPurchaseToDBInfo.insertId, itemsIdsArr, shoppingListId);
+              resolve({
+                insertedPurchaseToDBInfo: insertedPurchaseToDBInfo, confirmationNumber: JSON.parse(response.d),
+                removedItemsFromShoppingList: removedItemsFromShoppingList
+              });
             } else {
               reject(response);
             }
@@ -151,5 +159,9 @@ export class ShoppingListsProvider {
         reject(e);
       }
     });
+  }
+
+  removeShoppingList(listId) {
+   return this.databaseProvider.removeShoppingList(listId);
   }
 }
