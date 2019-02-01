@@ -9,7 +9,6 @@ export class NavbarComponent {
   @Input('title') title;
   @Input('isMenuEnabled') isMenuEnabled;
   @Input('isBackEnabled') isBackEnabled;
-  @Input('showScanButton') showScanButton;
   @Input('customButtons') customButtons = [];
   @Output() buttonClicked = new EventEmitter<any>();
 
@@ -22,8 +21,5 @@ export class NavbarComponent {
 
   buttonActions(type) {
     this.buttonClicked.emit({type});
-  }
-
-  redirectToScan() {
   }
 }

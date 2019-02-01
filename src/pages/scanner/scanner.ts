@@ -104,8 +104,9 @@ export class ScannerPage implements OnInit {
                   'item_price': Number(this.foundProduct.YOURCOST),
                   'quantity': this.getInitialQuantity()
                 };
-                this.shoppingListProvider.addItemToShoppingList(this.shoppingListId, newItem);
-                this.productAlreadyInList = false;
+                this.shoppingListProvider.addItemToShoppingList(this.shoppingListId, newItem).then(
+                  data => this.productAlreadyInList = false)
+                  .catch(err => console.log(err));
               }
               else {
                 this.productAlreadyInList = true;

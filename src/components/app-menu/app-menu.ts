@@ -59,7 +59,7 @@ export class AppMenuComponent implements OnInit {
 
     this.popoversProvider.show(content).subscribe((data) => {
       if (data.type === Constants.POPOVER_LOGOUT) {
-        if (data.optionSelected === "NO") {
+        if (data.optionSelected === "DISMISS") {
           this.authServiceProvider.logoutDeleteData();
         }
         this.authServiceProvider.logout();

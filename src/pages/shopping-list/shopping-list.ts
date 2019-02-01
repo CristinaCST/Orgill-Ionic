@@ -9,6 +9,7 @@ import {PopoversProvider} from "../../providers/popovers/popovers";
 import {CustomerLocationPage} from "../customer-location/customer-location";
 import {ProductPage} from "../product/product";
 import {TranslateProvider} from "../../providers/translate/translate";
+import {ScannerPage} from "../scanner/scanner";
 
 @Component({
   selector: 'page-shopping-list',
@@ -33,7 +34,8 @@ export class ShoppingListPage {
               private popoversProvider: PopoversProvider,
               private translator: TranslateProvider,
               private events: Events) {
-    this.menuCustomButtons = [{action: 'detailsList', icon: 'information-circle'}];
+    this.menuCustomButtons = [{action: 'detailsList', icon: 'information-circle'},
+      {action: 'scan', icon: 'barcode'}];
   }
 
   ionViewWillEnter() {
@@ -177,7 +179,17 @@ export class ShoppingListPage {
       case 'deleteList':
         this.removeList();
         break;
+      case 'scan':
+        this.goToScanPage();
+        break;
     }
+  }
+
+  goToScanPage() {
+    this.navCtrl.push(ScannerPage, {
+      'type': 'scan_barcode_tab',
+      shoppingListId: this.shoppingList.id
+    }).catch(err => console.error(err));
   }
 
   getListDetails() {

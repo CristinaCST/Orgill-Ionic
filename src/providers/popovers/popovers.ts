@@ -32,12 +32,14 @@ export class PopoversProvider {
     return this.close.asObservable();
   }
 
-  public setContent(title, message, positiveButtonText = Constants.OK, dismissButtonText = undefined, type = undefined) {
+  public setContent(title, message, positiveButtonText = Constants.OK,
+                    dismissButtonText = undefined, negativeButtonText = undefined, type = undefined) {
     return {
       type: type,
       title: title,
       message: message,
       positiveButtonText: positiveButtonText,
+      negativeButtonText: negativeButtonText,
       dismissButtonText: dismissButtonText
     };
   }

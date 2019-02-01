@@ -242,3 +242,18 @@ export const ERROR = 'error';
 export const DATABASE_DEPRECATED_TITLE = 'deprecated_database_title';
 export const DATABASE_DEPRECATED_MESSAGE = 'deprecated_database_message';
 export const DATABASE_DEPRECATED_CANCELED_TEXT = 'deprecated_database_canceled_text';
+
+/**
+ * Marker : FlashDeals
+ * =============================================================================================
+ */
+
+export const NOTIFICATIONS_PERMISIONS_MESSAGE = 'notifications_permissions_message';
+export const NOTIFICATIONS_PERMISIONS_BTN_SUCCESS = 'notifications_permissions_btn_success';
+export const NOTIFICATIONS_PERMISIONS_BTN_DISMISS = 'notifications_permissions_btn_dismiss';
+
+
+//Location
+export const LOCATION_PERMISSIONS_MESSAGE = "location_permissions_message";
+export const LOCATION_NEVER_SHOW = "location_never_show";
+export const LOCATION_PERMISSIONS_NOT_GRANTED = "location_permissions_not_granted";

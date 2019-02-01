@@ -154,7 +154,7 @@ export class ShoppingListsProvider {
     return new Promise(async (resolve, reject) => {
       try {
         let data = await this.databaseProvider.checkProductInList(productSKU, listId);
-        resolve(data.rows.item(0) > 0);
+        resolve(data.rows.item(0).is_item_in_list > 0);
       } catch (e) {
         reject(e);
       }
@@ -162,6 +162,6 @@ export class ShoppingListsProvider {
   }
 
   removeShoppingList(listId) {
-   return this.databaseProvider.removeShoppingList(listId);
+    return this.databaseProvider.removeShoppingList(listId);
   }
 }
