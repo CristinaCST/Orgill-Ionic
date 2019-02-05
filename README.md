@@ -1,16 +1,48 @@
-#Instaltion
+# Installation
+```sh
 npm install
-cordova prepare android/ios
-cordova platform add android/ios
+cordova prepare android
+cordova prepare ios
+cordova platform add android
+cordova platform add ios
+```
+# Run
+On device 
+```sh
+ionic cordova run android/ios --device 
+```
+On emulator
+```sh
+ionic cordova run android/ios 
+```
+Livereload
+```sh
+ionic cordova run android/ios --device --livereload 
+```
 
-#Run
-ionic cordova run android/ios --device (for running on device)
-ionic cordova run android/ios (for runnin on emulator)
-ionic cordova run android/ios --device --livereload (for enabling livereload)
+# Build
 
-#Build
-ionic cordova build android/ios --prod --release (build apk or ipa file for release)
+Development
+```sh
 ionic cordova build android/ios --dev
+```
+Production 
 
-#Clean
+```sh
+ionic cordova build android/ios --prod --release 
+```
+
+
+
+# Clean
+```sh
+npm rm -rf node_modules/
+npm rm -rf plugins/
+cordova platform rm android
+cordova platform add android
+cordova prepare
 cordova clean
+```
+
+
+
