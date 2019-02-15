@@ -10,6 +10,7 @@ import {ProductsPage} from "../products/products";
 import {LoadingProvider} from "../../providers/loading/loading";
 import {TranslateProvider} from "../../providers/translate/translate";
 import {ProductsSearchPage} from "../products-search/products-search";
+import {ScannerPage} from "../scanner/scanner";
 
 
 @Component({
@@ -24,9 +25,11 @@ export class Catalog implements OnInit {
   userToken: string;
   catalogIndex: number = 0;
   currentSubCategory: Category;
+  menuCustomButtons = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public catalogProvider: CatalogsProvider,
               public loading: LoadingProvider, public translateProvider: TranslateProvider) {
+    this.menuCustomButtons.push({action: 'scan', icon: 'barcode'});
   }
 
   ngOnInit(): void {
@@ -48,7 +51,6 @@ export class Catalog implements OnInit {
     else {
       this.getCategories();
     }
-    //console.log('categories', this.categories);
   }
 
   checkValidParams(type, value) {
@@ -104,7 +106,7 @@ export class Catalog implements OnInit {
           categories: categories,
           currentSubCategory: category,
           catalogIndex: (this.catalogIndex + 1)
-        });
+        }).catch(err => console.error(err));
         this.loading.hideLoading();
       } else {
         const params = {
@@ -112,7 +114,7 @@ export class Catalog implements OnInit {
           programName: category.CatName,
           category: category,
         };
-        this.navCtrl.push(ProductsPage, params);
+        this.navCtrl.push(ProductsPage, params).catch(err => console.error(err));
         this.loading.hideLoading();
       }
     });
@@ -122,16 +124,24 @@ export class Catalog implements OnInit {
     this.loading.presentSimpleLoading();
     this.catalogProvider.search($event, this.currentSubCategory ? this.currentSubCategory.CatID : '', this.programNumber).subscribe(data => {
       if (data) {
+        let dataFound = JSON.parse(data.d);
         const params = {
           searchString: $event,
-          searchData: JSON.parse(data.d),
+          searchData: dataFound,
           programNumber: this.programNumber,
           programName: this.programName,
-          category: this.currentSubCategory
+          category: this.currentSubCategory,
+          numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
         };
         this.navCtrl.push(ProductsSearchPage, params).then(() => console.log('%cTo product search page', 'color:green'));
         this.loading.hideLoading();
       }
     });
+  }
+
+  goToScanPage() {
+    this.navCtrl.push(ScannerPage, {
+      'type': 'scan_barcode_tab',
+    }).catch(err => console.error(err));
   }
 }

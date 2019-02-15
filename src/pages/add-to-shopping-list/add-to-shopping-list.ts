@@ -29,6 +29,7 @@ export class AddToShoppingListPage implements OnInit {
   public model: any = {};
   public isMarketOnlyProduct: boolean = false;
   public subscription: Subscription;
+  public menuCustomButtons = [];
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -37,6 +38,7 @@ export class AddToShoppingListPage implements OnInit {
               private formBuilder: FormBuilder,
               private loading: LoadingProvider,
               private programProvider: ProgramProvider) {
+    this.menuCustomButtons.push({action: 'addList', icon: 'add'})
   }
 
   ngOnInit(): void {
@@ -45,6 +47,7 @@ export class AddToShoppingListPage implements OnInit {
     this.selectedProgram = this.navParams.get('selectedProgram');
     this.quantity = this.navParams.get('quantity');
     this.quantityItemPrice = this.navParams.get('quantityItemPrice');
+
     this.listForm = this.formBuilder.group({
       listOptions: [this.model.listOptions, Validators.required],
     });
@@ -93,7 +96,8 @@ export class AddToShoppingListPage implements OnInit {
   }
 
   newShoppingList() {
-    let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined, Constants.SAVE, Constants.CANCEL, Constants.POPOVER_NEW_SHOPPING_LIST);
+    let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined,
+      Constants.SAVE, Constants.CANCEL, undefined, Constants.POPOVER_NEW_SHOPPING_LIST);
     this.subscription = this.popoversProvider.show(content).subscribe(data => {
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {

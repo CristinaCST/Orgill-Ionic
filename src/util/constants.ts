@@ -257,3 +257,7 @@ export const NOTIFICATIONS_PERMISIONS_BTN_DISMISS = 'notifications_permissions_b
 export const LOCATION_PERMISSIONS_MESSAGE = "location_permissions_message";
 export const LOCATION_NEVER_SHOW = "location_never_show";
 export const LOCATION_PERMISSIONS_NOT_GRANTED = "location_permissions_not_granted";
+
+export const DEFAULT_HTTP_ERROR = "default_http_error";
+export const NO_ACCES = "no_acces";
+export const SOMETHING_WENT_WROMG = "something_went_wrong";

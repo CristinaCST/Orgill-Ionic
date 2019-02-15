@@ -4,6 +4,8 @@
   <navbar [title]="category ? category.CatName : programName" [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
   <!-- Products Search Results Search Bar -->
   <search-bar [showBackButton]="true"
+              [initialSearchString]="searchString"
+              [numberOfProducts]="totalNumberOfProducts"
               (searched)="onSearched($event)"></search-bar>
 </ion-header>
 

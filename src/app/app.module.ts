@@ -7,14 +7,17 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {SQLite} from "@ionic-native/sqlite";
-import {SQLitePorter} from "@ionic-native/sqlite-porter";
 import {BarcodeScanner} from '@ionic-native/barcode-scanner';
-import {OneSignal} from '@ionic-native/onesignal';
-import { AndroidPermissions } from '@ionic-native/android-permissions';
+import {OneSignal} from '@ionic-native/onesignal/ngx';
+import {SQLitePorter} from "@ionic-native/sqlite-porter";
+import {Network} from '@ionic-native/network';
+import {IonicStorageModule} from "@ionic/storage";
+
+//Environments
+import {environment} from '@app/env';
 
 //Modules
 import {ComponentsModule} from "../components/components.module";
-import {IonicStorageModule} from "@ionic/storage";
 
 //Providers
 import {ApiProvider} from "../providers/api-provider";
@@ -30,6 +33,7 @@ import {ProductProvider} from "../providers/product/product";
 import {ScannerProvider} from '../providers/scanner/scanner';
 import {UserInfoProvider} from '../providers/user-info/user-info';
 import {PurchasesProvider} from '../providers/purchases/purchases';
+import {NetworkProvider} from '../providers/network/network';
 
 //Pages
 import {MyApp} from './app.component';
@@ -66,6 +70,11 @@ let pages = [MyApp,
   PurchasesPage,
   PurchaseDetailsPage];
 
+
+//Error Handlers
+import {CustomErrorHandler} from "../providers/CustomErrorHandler";
+const errorHandler = environment.production ? CustomErrorHandler : IonicErrorHandler;
+
 @NgModule({
   declarations: pages,
   imports: [
@@ -86,6 +95,10 @@ let pages = [MyApp,
   providers: [
     StatusBar,
     SplashScreen,
+    SQLitePorter,
+    SQLite,
+    Network,
+    OneSignal,
     AuthServiceProvider,
     ApiProvider,
     LoadingProvider,
@@ -93,8 +106,6 @@ let pages = [MyApp,
     PopoversProvider,
     CatalogsProvider,
     DatabaseProvider,
-    SQLitePorter,
-    SQLite,
     ProgramProvider,
     ShoppingListsProvider,
     BarcodeScanner,
@@ -102,9 +113,8 @@ let pages = [MyApp,
     ProductProvider,
     UserInfoProvider,
     PurchasesProvider,
-    OneSignal,
-    AndroidPermissions,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    NetworkProvider,
+    {provide: ErrorHandler, useClass: CustomErrorHandler}
   ]
 })
 

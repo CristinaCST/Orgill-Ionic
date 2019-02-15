@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {App, Platform} from 'ionic-angular';
+import {Component, OnInit} from '@angular/core';
+import {App, Events, Platform} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {Catalog} from '../pages/catalog/catalog';
@@ -9,6 +9,7 @@ import {LocalStorageHelper} from "../helpers/local-storage-helper";
 import * as Constants from '../util/constants';
 import {DateTime} from "../providers/datetime/DateTime";
 import {DatabaseProvider} from "../providers/database/database";
+import {NetworkProvider} from "../providers/network/network";
 
 @Component({
   templateUrl: 'app.html'
@@ -24,7 +25,8 @@ export class MyApp {
               public statusBar: StatusBar,
               private splashScreen: SplashScreen,
               private translate: TranslateService,
-              private databaseProvider: DatabaseProvider) {
+              private databaseProvider: DatabaseProvider,
+              private networkProvider: NetworkProvider) {
     this.setAppLanguage();
     this.initializeApp();
   }
@@ -32,6 +34,7 @@ export class MyApp {
   initializeApp() {
     this.isLoading = true;
     this.platform.ready().then(() => {
+      this.networkProvider.listenForNetworkEvents();
       this.statusBar.styleDefault();
       this.databaseProvider.getDatabaseState()
         .subscribe(isDatabaseOpen => {

@@ -16,6 +16,7 @@
   <ion-item-group>
     <shopping-list-product *ngFor="let purchaseItem of purchase.purchase_items"
                            [isDisabled]="true"
+                           (goToDetails)="onCheckedToDetails($event)"
                            [shoppingListItem]="purchaseItem">
     </shopping-list-product>
   </ion-item-group>

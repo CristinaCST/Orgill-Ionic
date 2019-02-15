@@ -165,5 +165,8 @@
   "offline_browsing_status": "Status:",
 
   "button_update": "Update",
-  "button_uninstall": "Uninstall"
+  "button_uninstall": "Uninstall",
+  "default_http_error":"Error",
+  "no_acces":"You have no access!",
+  "something_went_wrong":"Someting went wrong..."
 }

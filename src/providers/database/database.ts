@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {SQLite, SQLiteObject} from '@ionic-native/sqlite';
-import {SQLitePorter} from '@ionic-native/sqlite-porter';
 import {Storage} from '@ionic/storage';
 import {Platform} from 'ionic-angular';
 import {Observable} from 'rxjs/Observable';
@@ -9,6 +8,7 @@ import {BehaviorSubject} from 'rxjs/Rx';
 
 import {Program} from '../../interfaces/models/program';
 import {ShoppingListItem} from '../../interfaces/models/shopping-list-item';
+import {SQLitePorter} from "@ionic-native/sqlite-porter";
 
 @Injectable()
 export class DatabaseProvider {
@@ -16,7 +16,7 @@ export class DatabaseProvider {
   private databaseReady: BehaviorSubject<boolean>;
   private queries;
 
-  constructor(public sqlitePorter: SQLitePorter, private storage: Storage, private sqlite: SQLite, private platform: Platform, private http: HttpClient) {
+  constructor(public SQLitePorter: SQLitePorter, private storage: Storage, private sqlite: SQLite, private platform: Platform, private http: HttpClient) {
     this.databaseReady = new BehaviorSubject(false);
     this.platform.ready().then(() => {
       this.sqlite.create({
@@ -86,7 +86,7 @@ export class DatabaseProvider {
   fillDatabase() {
     this.http.get('assets/db.sql', {responseType: 'text'})
       .subscribe(sql => {
-          this.sqlitePorter.importSqlToDb(this.database, sql)
+          this.SQLitePorter.importSqlToDb(this.database, sql)
             .then(() => {
               this.databaseReady.next(true);
               this.storage.set('database_filled', true).catch(err => console.error(err));

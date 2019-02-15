@@ -46,3 +46,10 @@
   box-shadow: unset;
   -webkit-box-shadow: unset;
 }
+
+#products-found-container {
+  background: linear-gradient(to right, color($colors, OrgillGradientLeft) 20%, color($colors, OrgillGradientRight) 100%);
+  text-align: right;
+  padding: 2px;
+  color: grey;
+}

@@ -32,7 +32,7 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
     this.category = this.navParams.get('category');
     this.programNumber = this.navParams.get('programNumber');
     this.programName = this.navParams.get('programName');
-
+    this.totalNumberOfProducts = this.navParams.get('numberOfProductsFound');
     this.getProduct(this.navParams.get('searchData'));
     this.setPaginationInfo();
   }
@@ -50,11 +50,13 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
   onSearched($event) {
     this.loading.presentSimpleLoading();
     this.catalogProvider.search($event, this.category ? this.category.CatID : '', this.programNumber).subscribe(data => {
+      let dataFound = JSON.parse(data.d);
       const params = {
-        searchData: JSON.parse(data.d),
+        searchData: dataFound,
         programNumber: this.programNumber,
         programName: this.programName,
-        category: this.category
+        category: this.category,
+        numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
       };
       this.navController.push(ProductsSearchPage, params).then(() => console.log('%cTo product search page', 'color:blue'));
       this.loading.hideLoading();

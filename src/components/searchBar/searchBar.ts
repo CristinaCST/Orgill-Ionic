@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {App} from "ionic-angular";
 import {PopoversProvider} from "../../providers/popovers/popovers";
 import * as Constants from "../../util/constants";
@@ -9,6 +9,8 @@ import * as Constants from "../../util/constants";
 })
 export class SearchBarComponent {
   @Input('showBackButton') showBackButton;
+  @Input('numberOfProducts') numberOfProducts;
+  @Input('initialSearchString') initialSearchString;
   @Output() searched = new EventEmitter<any>();
 
   public searchString: string;

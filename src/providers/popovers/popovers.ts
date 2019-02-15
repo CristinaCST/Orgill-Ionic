@@ -9,27 +9,35 @@ export class PopoversProvider {
 
   private close = new Subject<any>();
   private isOpened = false;
+  private popover;
 
   constructor(private popoverController: PopoverController) {
   }
 
   public show(content) {
-    let popover = this.popoverController.create(PopoverComponent, content);
+    this.popover = this.popoverController.create(PopoverComponent, content);
     if (this.isOpened === false) {
       this.isOpened = true;
     }
     else {
-      popover.dismiss(null).then(() => {
-        popover.present().catch(err => console.error(err));
+      this.popover.dismiss(null).then(() => {
+        this.popover.present().catch(err => console.error(err));
         this.isOpened = true;
       });
     }
-    popover.onDidDismiss(data => {
+    this.popover.onDidDismiss(data => {
       this.isOpened = false;
       this.close.next(data);
     });
-    popover.present().catch(err => console.error(err));
+    this.popover.present().catch(err => console.error(err));
     return this.close.asObservable();
+  }
+
+  public closeModal() {
+    if (this.isOpened === true) {
+      this.popover.dismiss();
+      this.isOpened = false;
+    }
   }
 
   public setContent(title, message, positiveButtonText = Constants.OK,

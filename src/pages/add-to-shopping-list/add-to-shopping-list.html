@@ -1,7 +1,11 @@
 <!-- Add To List Page Header -->
 <ion-header>
   <!-- Add To List Page Navigation Bar -->
-  <navbar [title]=" 'ADD TO LIST'" [isMenuEnabled]="false" [isBackEnabled]="true"></navbar>
+  <navbar [title]=" 'ADD TO LIST'"
+          [customButtons]='menuCustomButtons'
+          [isMenuEnabled]="false"
+          [isBackEnabled]="true"
+          (buttonClicked)="newShoppingList()"></navbar>
 </ion-header>
 
 <!-- Add To List Page Content -->
@@ -21,22 +25,26 @@
     </ion-list>
   </form>
 
-  <!-- Create new List -->
+  <!-- Create new List Section -->
   <ion-item-divider no-lines class="header">
     {{"shopping_list_add_new_message" | translate}}
   </ion-item-divider>
+  <!-- Create new List Button -->
   <button class="add-shopping-list" ion-button icon-start (click)="newShoppingList()">
     <ion-icon name="add">
-     {{"   "}} {{"menu_shopping_lists_new" | translate}}
+      {{" "}} {{"menu_shopping_lists_new" | translate}}
     </ion-icon>
   </button>
 </ion-content>
 
+<!-- Add To List Page Footer -->
 <ion-footer padding class="footer-container">
-    <button ion-button outline (click)="cancel()">
-      {{"cancel" | translate}}
-    </button>
-    <button ion-button [disabled]="isAddBtnDisabled" (click)="add()">
-      {{"ok" | translate}}
-    </button>
+  <!-- Cancel Add To List Button -->
+  <button ion-button outline (click)="cancel()">
+    {{"cancel" | translate}}
+  </button>
+  <!-- Add To List Button -->
+  <button ion-button [disabled]="isAddBtnDisabled" (click)="add()">
+    {{"ok" | translate}}
+  </button>
 </ion-footer>
