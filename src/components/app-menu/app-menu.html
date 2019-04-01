@@ -7,6 +7,7 @@
       </button>
     </ion-toolbar>
   </ion-header>
+
   <!--Menu content -->
   <ion-content *ngIf="showShoppingListsMenu===false" class="content">
     <ion-item-group class="group">
@@ -40,16 +41,18 @@
 
       <!-- Search -->
       <ion-item-divider no-lines>{{"menu_header_search" | translate}}:</ion-item-divider>
+      <!-- Button for Scan Barcode-->
       <button ion-item class="item" detail-none menuClose icon-left (click)="openBarcode('scan_barcode_tab')">
         <ion-icon class="menu-icon" name="barcode"></ion-icon>
         {{"menu_search_scan" | translate}}
       </button>
+      <!-- Button for Search By SKU-->
       <button ion-item class="item" detail-none menuClose icon-left (click)="openBarcode('search_code_tab')">
         <ion-icon class="menu-icon" name="search"></ion-icon>
         {{"menu_search_code" | translate}}
       </button>
 
-      <!-- Shopping lists -->
+      <!-- Custom Shopping Lists -->
       <ion-item-divider no-lines>{{"menu_header_shopping_lists" | translate}}:</ion-item-divider>
       <button ion-item class="item" icon-left (click)="showCustomShoppingListsMenu()">
         <ion-icon class="menu-icon" name="list-box"></ion-icon>
@@ -70,16 +73,20 @@
 
       <!-- Account -->
       <ion-item-divider no-lines>{{"menu_header_account" | translate}}:</ion-item-divider>
+      <!-- Button for About Page-->
       <button ion-item detail-none menuClose icon-left (click)="goToPage(menuPages.aboutPage)">
         <ion-icon class="menu-icon" name="information-circle"></ion-icon>
         {{"menu_about" | translate}}
       </button>
+      <!-- Button for Logout-->
       <button ion-item detail-none menuClose (click)="logout()" icon-left>
         <ion-icon class="menu-icon" name="log-out"></ion-icon>
         {{"menu_account_logout"| translate }}
       </button>
     </ion-item-group>
   </ion-content>
+
+  <!-- Secondary Menu With Custom Shopping Lists -->
   <custom-shopping-list-menu [customShoppingLists]="customShoppingLists" (back)="onBack($event)"
                              *ngIf="showShoppingListsMenu===true"></custom-shopping-list-menu>
 </ion-menu>

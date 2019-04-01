@@ -19,7 +19,7 @@
       <ion-item *ngFor="let shoppingList of shoppingLists">
         <ion-label>
           {{shoppingList.name}}
-          <ion-radio [value]="shoppingList.id" (ionSelect)="selectList(shoppingList.id)"></ion-radio>
+          <ion-radio [value]="shoppingList.id" (ionSelect)="selectList(shoppingList)"></ion-radio>
         </ion-label>
       </ion-item>
     </ion-list>

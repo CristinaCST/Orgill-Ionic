@@ -26,9 +26,9 @@ export class LoadingProvider {
   }
 
   hideLoading() {
-    if (this.isLoadingPresent === true) {
+    //if (this.isLoadingPresent === true) {
       this.loading.dismiss().then(() => this.isLoadingPresent = false).catch(err => console.error(err));
-    }
+    //}
   }
 
 }

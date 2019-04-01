@@ -16,6 +16,7 @@ import {Catalog} from "../../pages/catalog/catalog";
 import {ScannerPage} from "../../pages/scanner/scanner";
 import {ShoppingListPage} from "../../pages/shopping-list/shopping-list";
 import {PurchasesPage} from "../../pages/purchases/purchases";
+import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
 
 @Component({
   selector: 'app-menu',
@@ -39,7 +40,8 @@ export class AppMenuComponent implements OnInit {
               private authServiceProvider: AuthServiceProvider,
               private catalogsProvider: CatalogsProvider,
               private translateProvider: TranslateProvider,
-              public databaseProvider: DatabaseProvider) {
+              public databaseProvider: DatabaseProvider,
+              public shoppingListsProvider: ShoppingListsProvider) {
   }
 
   ngOnInit(): void {
@@ -73,8 +75,8 @@ export class AppMenuComponent implements OnInit {
   }
 
   getLocalShoppingLists() {
-    this.databaseProvider.getAllShoppingLists()
-      .then(data => {
+    this.shoppingListsProvider.getAllShoppingLists()
+      .subscribe(data => {
         if (data) {
           for (let i = 0; i < data.rows.length; i++) {
             let list: ShoppingList = {
@@ -90,7 +92,7 @@ export class AppMenuComponent implements OnInit {
             }
           }
         }
-      }).catch(error => console.error(error));
+      });
   }
 
   public getPrograms() {

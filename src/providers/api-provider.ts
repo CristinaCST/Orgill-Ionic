@@ -32,12 +32,7 @@ export class ApiProvider {
     )
   }
 
-  requestWithBaseUrl(baseUrl, type){
-
-  }
-
   private getServiceBaseURL(): string {
-
     if (! LocalStorageHelper.hasKey(Constants.DEVICE_LANGUAGE)) {
       return ConstantsURL.URL_BASE_EN;
     }

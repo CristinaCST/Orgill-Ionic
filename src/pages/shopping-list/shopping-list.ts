@@ -81,7 +81,7 @@ export class ShoppingListPage {
     let array = this.selectedItems.filter((item) => item != null);
     if (array) {
       let idItem = array.map(item => item.id);
-      this.shoppingListProvider.deleteProductFromList(this.shoppingList.id, idItem).then(
+      this.shoppingListProvider.deleteProductFromList(this.shoppingList.id, idItem).subscribe(
         () => this.selectedItems.map((item, index) => {
           if (item !== null) {
             let price = (item.item_price * item.quantity).toFixed(Constants.DECIMAL_NUMBER);
@@ -188,7 +188,7 @@ export class ShoppingListPage {
   goToScanPage() {
     this.navCtrl.push(ScannerPage, {
       'type': 'scan_barcode_tab',
-      shoppingListId: this.shoppingList.id
+      shoppingList: this.shoppingList
     }).catch(err => console.error(err));
   }
 
@@ -206,11 +206,11 @@ export class ShoppingListPage {
       Constants.OK, Constants.CANCEL, Constants.POPOVER_DELETE_LIST_CONFIRMATION);
     this.popoversProvider.show(content).subscribe(data => {
       if (data.optionSelected === "OK") {
-        this.shoppingListProvider.removeShoppingList(this.shoppingList.id).then(data => {
+        this.shoppingListProvider.removeShoppingList(this.shoppingList.id).subscribe(data => {
           console.log(data);
           this.events.publish('DeletedList', this.shoppingList.id);
           this.navCtrl.pop().catch(err => console.error(err));
-        }).catch(err => console.error(err));
+        });
       }
     });
   }

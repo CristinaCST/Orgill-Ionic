@@ -114,7 +114,7 @@ const errorHandler = environment.production ? CustomErrorHandler : IonicErrorHan
     UserInfoProvider,
     PurchasesProvider,
     NetworkProvider,
-    {provide: ErrorHandler, useClass: CustomErrorHandler}
+    {provide: ErrorHandler, useClass: errorHandler}
   ]
 })
 

@@ -56,6 +56,16 @@ export class AddToShoppingListPage implements OnInit {
   }
 
   initShoppingListInformation() {
+    //let subscription = Rx.Observable.forkJoin(this.programProvider.isMarketOnlyProgram(this.selectedProgram.PROGRAM_NO),
+    //         this.shoppingListsProvider.getShoppingListForProduct(this.product.SKU),
+    //         this.shoppingListsProvider.getLocalShoppingLists());
+    //subscription.subscribe(args=>{
+    //  this.setProductList(args[1]);
+    //       this.checkMarketOnlyProduct(args[0);
+    //       this.setAllShoppingList(args[2);
+    //       this.loading.hideLoading();
+    // })
+
     Promise.all(
       [this.programProvider.isMarketOnlyProgram(this.selectedProgram.PROGRAM_NO),
         this.shoppingListsProvider.getShoppingListForProduct(this.product.SKU),
@@ -102,7 +112,7 @@ export class AddToShoppingListPage implements OnInit {
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
           if (status === 'available') {
-            this.shoppingListsProvider.createNewShoppingList(data.listName, data.listDescription, data.type).then(addedList => {
+            this.shoppingListsProvider.createNewShoppingList(data.listName, data.listDescription, data.type).subscribe(addedList => {
               let list: ShoppingList =
                 {
                   id: addedList.insertId,
@@ -145,10 +155,11 @@ export class AddToShoppingListPage implements OnInit {
     };
 
     this.loading.presentSimpleLoading();
-    this.shoppingListsProvider.addItemToShoppingList(this.listForm.value.listOptions, listItem).then(() => {
+    //TODO UPDATE WHEN APIS ARE READY
+    this.shoppingListsProvider.addItemToShoppingList(this.listForm.value.listOptions.id, listItem, this.listForm.value.listOptions.isMarketOnly).subscribe(() => {
       this.loading.hideLoading();
       this.cancel();
-    }).catch(error => console.error(error));
+    });
   }
 
   checkProductInList(listId: number) {

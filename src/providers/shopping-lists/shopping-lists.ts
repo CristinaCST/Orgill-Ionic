@@ -22,16 +22,63 @@ export class ShoppingListsProvider {
     return this.databaseProvider.getAllShoppingLists();
   }
 
-  addItemToShoppingList(listId: number, shoppingListItem: ShoppingListItem): Promise<any> {
-    return this.databaseProvider.addProductToShoppingList(listId, shoppingListItem);
+  addItemToShoppingList(listId: number, shoppingListItem: ShoppingListItem, marketOnly) {
+    //return this.databaseProvider.addProductToShoppingList(listId, shoppingListItem);
+    return this.apiProvider.post(ConstantsUrl.ADD_SHOPPING_LIST_ITEM, {
+      user_token:
+      this.userToken,
+      shopping_list_id: listId,
+      is_market_only: marketOnly,
+      item: shoppingListItem
+    });
   }
 
-  getShoppingListForProduct(productSKU: string): Promise<any> {
-    return this.databaseProvider.getShoppingListsForProduct(productSKU);
+  getShoppingListForProduct(productSKU: string) {
+    // return this.databaseProvider.getShoppingListsForProduct(productSKU);
+    return this.apiProvider.post(ConstantsUrl.CHECK_PRODUCT_SHOPPING_LIST, {
+      user_token: this.userToken,
+      product_SKU: productSKU
+    });
   }
 
   createNewShoppingList(name, description = '', type = 'default') {
-    return this.databaseProvider.addShoppingList(name, description, type);
+    //return this.databaseProvider.addShoppingList(name, description, type);
+    return this.apiProvider.post(ConstantsUrl.ADD_SHOPPING_NEW_LIST, {
+      user_token: this.userToken,
+      list_name: name,
+      list_description: description,
+      type: type
+    });
+  }
+
+  removeShoppingList(listId) {
+    //return this.databaseProvider.removeShoppingList(listId);
+    return this.apiProvider.post(ConstantsUrl.DELETE_SHOPPING_LIST, {
+      user_token: this.userToken,
+      list_name: listId
+    });
+  }
+
+  getAllShoppingLists() {
+    return this.apiProvider.post(ConstantsUrl.GET_USER_SHOPPING_LISTS, {user_token: this.userToken});
+  }
+
+  getAllProductsInShoppingList(listId) {
+    // return new Promise((resolve, reject) => {
+    //   this.databaseProvider.getAllProductsFromShoppingList(listId).then(data => {
+    //     let productList = this.setProducts(data);
+    //     resolve(productList);
+    //   }).catch(error => reject(error));
+    // });
+    return new Promise((resolve, reject) => {
+      this.apiProvider.post(ConstantsUrl.GET_SHOPPING_LIST_ITEMS, {
+        user_token: this.userToken,
+        shopping_list_id: listId
+      }).subscribe(data => {
+        let productList = this.setProducts(data);
+        resolve(productList);
+      });
+    });
   }
 
   checkNameAvailability(name): Promise<any> {
@@ -88,17 +135,14 @@ export class ShoppingListsProvider {
     return list;
   }
 
-  getAllProductsInShoppingList(listId) {
-    return new Promise((resolve, reject) => {
-      this.databaseProvider.getAllProductsFromShoppingList(listId).then(data => {
-        let productList = this.setProducts(data);
-        resolve(productList);
-      }).catch(error => reject(error));
-    });
-  }
-
   deleteProductFromList(listId, productIdsArr) {
-    return this.databaseProvider.removeProductsFromShoppingList(listId, productIdsArr);
+    //return this.databaseProvider.removeProductsFromShoppingList(listId, productIdsArr);
+    return this.apiProvider.post(ConstantsUrl.REMOVE_SHOPPING_LIST_ITEM,
+      {
+        user_token: this.userToken,
+        shopping_list_id: listId,
+        product_SKUs: productIdsArr
+      })
   }
 
   insertPurchaseToDB(purchaseInfo) {
@@ -146,22 +190,30 @@ export class ShoppingListsProvider {
     return shoppingListItems.filter(item => searchFn(item.product.NAME) || searchFn(item.product.SKU) || searchFn(item.product.UPC_CODE));
   }
 
-  updateShoppingListItem(id: number, shoppingListId: number, programNumber: string, price: number, quantity: number) {
-    return this.databaseProvider.updateShoppingListItem(id, shoppingListId, programNumber, price, quantity);
+  updateShoppingListItem(product, shoppingListId: number, programNumber: string, price: number, quantity: number) {
+    //return this.databaseProvider.updateShoppingListItem(id, shoppingListId, programNumber, price, quantity);
+    return this.apiProvider.post(ConstantsUrl.UPDATE_SHOPPING_LIST_ITEM, {
+      product: product,
+      program_number: programNumber,
+      quantity: quantity,
+      price: price
+    })
   }
 
   checkProductInList(productSKU, listId) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let data = await this.databaseProvider.checkProductInList(productSKU, listId);
-        resolve(data.rows.item(0).is_item_in_list > 0);
-      } catch (e) {
-        reject(e);
-      }
+    // return new Promise(async (resolve, reject) => {
+    //   try {
+    //     let data = await this.databaseProvider.checkProductInList(productSKU, listId);
+    //     resolve(data.rows.item(0).is_item_in_list > 0);
+    //   } catch (e) {
+    //     reject(e);
+    //   }
+    // });
+    return this.apiProvider.post(ConstantsUrl.CHECK_PRODUCT_SHOPPING_LIST, {
+      user_token: this.userToken,
+      product_SKU: productSKU,
+      shopping_list_id: listId
     });
   }
 
-  removeShoppingList(listId) {
-    return this.databaseProvider.removeShoppingList(listId);
-  }
 }

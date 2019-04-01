@@ -31,7 +31,7 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
           if (status === 'available') {
-            this.shoppingListsProvider.createNewShoppingList(data.listName, data.listDescription, data.type).then(addedList => {
+            this.shoppingListsProvider.createNewShoppingList(data.listName, data.listDescription, data.type).subscribe(addedList => {
               let list: ShoppingList =
                 {
                   id: addedList.insertId,

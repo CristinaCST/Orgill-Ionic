@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {App, Events, Platform} from 'ionic-angular';
+import {Component} from '@angular/core';
+import {App, Platform} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {Catalog} from '../pages/catalog/catalog';

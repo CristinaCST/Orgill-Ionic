@@ -21,7 +21,8 @@ export class ScannerPage implements OnInit {
   programNumber: string = '';
   searchString: string;
   foundProduct: Product;
-  shoppingListId: number;
+  shoppingList;
+  shoppingListId;
   public productAlreadyInList: boolean = false;
   public searchTab;
   public products: Array<Product> = [];
@@ -40,7 +41,8 @@ export class ScannerPage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.shoppingListId = this.navParams.get("shoppingListId");
+    this.shoppingList = this.navParams.get("shoppingList");
+    this.shoppingListId = this.shoppingList.id;
     this.searchTab = this.navParams.get('type');
     this.products = this.navParams.get('products');
   }
@@ -58,7 +60,7 @@ export class ScannerPage implements OnInit {
     });
   }
 
-  private isValidScanResult(scanResult: string): boolean {
+  isValidScanResult(scanResult: string): boolean {
     return scanResult.length === 8 || scanResult.length === 10 || scanResult.length >= 12;
   }
 
@@ -96,7 +98,7 @@ export class ScannerPage implements OnInit {
               'programNumber': this.programNumber,
             }).catch(err => console.error(err));
           } else {
-            this.isProductInList().then((data) => {
+            this.isProductInList().subscribe((data) => {
               if (!data) {
                 const newItem = {
                   'product': this.foundProduct,
@@ -104,9 +106,8 @@ export class ScannerPage implements OnInit {
                   'item_price': Number(this.foundProduct.YOURCOST),
                   'quantity': this.getInitialQuantity()
                 };
-                this.shoppingListProvider.addItemToShoppingList(this.shoppingListId, newItem).then(
-                  data => this.productAlreadyInList = false)
-                  .catch(err => console.log(err));
+                this.shoppingListProvider.addItemToShoppingList(this.shoppingList.id, newItem, this.shoppingList.isMarketOnly).subscribe(
+                  () => this.productAlreadyInList = false);
               }
               else {
                 this.productAlreadyInList = true;
@@ -149,7 +150,7 @@ export class ScannerPage implements OnInit {
         this.loading.hideLoading();
         let params = {
           type: this.searchTab,
-          shoppingListId: this.shoppingListId,
+          shoppingList: this.shoppingList,
           products: JSON.parse(data.d)
         };
         this.navCtrl.push(ScannerPage, params).catch(err => console.error(err));
