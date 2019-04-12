@@ -23,7 +23,8 @@ export const GET_FLASHDEALS_PRODUCT = "/get_flashprogram_item";
 //SHOPPING LISTS API
 export const ADD_SHOPPING_NEW_LIST = "/save_shopping_list";
 export const DELETE_SHOPPING_LIST = "/delete_shopping_list";
-export const GET_USER_SHOPPING_LISTS = "/user_shopping_lists";
+export const GET_USER_SHOPPING_LISTS = "/get_shopping_lists";
+export const CREATE_DEFAULT_LISTS = "/create_default_lists";
 
 //SHOPPING LISTS ITEMS API
 export const GET_SHOPPING_LIST_ITEMS = "/shopping_list_items";

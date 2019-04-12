@@ -25,11 +25,12 @@ export class ShoppingListsProvider {
   addItemToShoppingList(listId: number, shoppingListItem: ShoppingListItem, marketOnly) {
     //return this.databaseProvider.addProductToShoppingList(listId, shoppingListItem);
     return this.apiProvider.post(ConstantsUrl.ADD_SHOPPING_LIST_ITEM, {
-      user_token:
-      this.userToken,
-      shopping_list_id: listId,
-      is_market_only: marketOnly,
-      item: shoppingListItem
+      user_token: this.userToken,
+      List_Id: listId,
+      SKU: shoppingListItem.product.SKU,
+      Program_No: shoppingListItem.program_number,
+      Quantity: shoppingListItem.quantity,
+      Price: shoppingListItem.item_price
     });
   }
 
@@ -45,9 +46,15 @@ export class ShoppingListsProvider {
     //return this.databaseProvider.addShoppingList(name, description, type);
     return this.apiProvider.post(ConstantsUrl.ADD_SHOPPING_NEW_LIST, {
       user_token: this.userToken,
-      list_name: name,
-      list_description: description,
-      type: type
+      List_Name: name,
+      List_Description: description,
+      List_Type: type
+    });
+  }
+
+  createDefaultShoppingLists(){
+    return this.apiProvider.post(ConstantsUrl.CREATE_DEFAULT_LISTS, {
+      user_token: this.userToken
     });
   }
 
@@ -55,7 +62,7 @@ export class ShoppingListsProvider {
     //return this.databaseProvider.removeShoppingList(listId);
     return this.apiProvider.post(ConstantsUrl.DELETE_SHOPPING_LIST, {
       user_token: this.userToken,
-      list_name: listId
+      List_Id: listId
     });
   }
 
@@ -73,7 +80,7 @@ export class ShoppingListsProvider {
     return new Promise((resolve, reject) => {
       this.apiProvider.post(ConstantsUrl.GET_SHOPPING_LIST_ITEMS, {
         user_token: this.userToken,
-        shopping_list_id: listId
+        List_Id: listId
       }).subscribe(data => {
         let productList = this.setProducts(data);
         resolve(productList);
@@ -140,7 +147,7 @@ export class ShoppingListsProvider {
     return this.apiProvider.post(ConstantsUrl.REMOVE_SHOPPING_LIST_ITEM,
       {
         user_token: this.userToken,
-        shopping_list_id: listId,
+        List_Id: listId,
         product_SKUs: productIdsArr
       })
   }
