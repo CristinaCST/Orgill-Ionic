@@ -34,9 +34,9 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
             this.shoppingListsProvider.createNewShoppingList(data.listName, data.listDescription, data.type).subscribe(addedList => {
               let list: ShoppingList =
                 {
-                  id: addedList.insertId,
-                  name: data.listName,
-                  description: data.listDescription
+                  ListID: addedList.insertId,
+                  ListName: data.listName,
+                  ListDescription: data.listDescription
                 };
               this.customShoppingLists.push(list);
             });

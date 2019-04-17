@@ -68,7 +68,7 @@ export class AddToShoppingListPage implements OnInit {
 
     Promise.all(
       [this.programProvider.isMarketOnlyProgram(this.selectedProgram.PROGRAM_NO),
-        this.shoppingListsProvider.getShoppingListForProduct(this.product.SKU),
+        this.shoppingListsProvider.getShoppingListsForProduct(this.product.SKU, this.selectedProgram.PROGRAM_NO),
         this.shoppingListsProvider.getLocalShoppingLists()]
     ).then(([programData, productLists, shoppingLists]) => {
       this.setProductList(productLists);
@@ -96,9 +96,10 @@ export class AddToShoppingListPage implements OnInit {
     if (shoppingLists.rows.length) {
       for (let i = 0; i < shoppingLists.rows.length; i++) {
         let list: ShoppingList = {
-          id: shoppingLists.rows.item(i).id,
-          name: shoppingLists.rows.item(i).name,
-          description: shoppingLists.rows.item(i).description
+          ListID: shoppingLists.rows.item(i).id,
+          ListName: shoppingLists.rows.item(i).name,
+          ListDescription: shoppingLists.rows.item(i).description,
+          ListType: shoppingLists.rows.item(i).listType
         };
         this.shoppingLists.push(list);
       }

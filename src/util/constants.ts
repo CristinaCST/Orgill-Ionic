@@ -183,8 +183,11 @@ export const SCAN_ERROR = 'scan_error';
 * =============================================================================================
 */
 
-export const DEFAULT_LIST_ID = 1;
-export const MARKET_ONLY_LIST_ID = 2;
+export const DEFAULT_LIST_ID = 30;
+export const MARKET_ONLY_LIST_ID = 31;
+
+export const DEFAULT_LIST_TYPE = 1;
+export const MARKET_ONLY_LIST_TYPE = 2;
 
 export const SHOPPING_LIST_ADD_ITEM = 'button_add_to_list';
 export const INVALID_QUANTITY_ERROR = 'invalid_quantity_error';

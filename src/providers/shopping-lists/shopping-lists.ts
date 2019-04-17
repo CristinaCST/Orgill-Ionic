@@ -34,11 +34,12 @@ export class ShoppingListsProvider {
     });
   }
 
-  getShoppingListForProduct(productSKU: string) {
+  getShoppingListsForProduct(productSKU: string, programNumber:  string) {
     // return this.databaseProvider.getShoppingListsForProduct(productSKU);
-    return this.apiProvider.post(ConstantsUrl.CHECK_PRODUCT_SHOPPING_LIST, {
+    return this.apiProvider.post(ConstantsUrl.CHECK_PRODUCT_SHOPPING_LISTS, {
       user_token: this.userToken,
-      product_SKU: productSKU
+      SKU: productSKU,
+      Program_No: programNumber
     });
   }
 
@@ -200,10 +201,12 @@ export class ShoppingListsProvider {
   updateShoppingListItem(product, shoppingListId: number, programNumber: string, price: number, quantity: number) {
     //return this.databaseProvider.updateShoppingListItem(id, shoppingListId, programNumber, price, quantity);
     return this.apiProvider.post(ConstantsUrl.UPDATE_SHOPPING_LIST_ITEM, {
-      product: product,
-      program_number: programNumber,
-      quantity: quantity,
-      price: price
+      user_token: this.userToken,
+      List_Id: shoppingListId,
+      SKU: product.SKU,
+      Program_No: programNumber,
+      Quantity: quantity,
+      Price: price
     })
   }
 
@@ -218,8 +221,8 @@ export class ShoppingListsProvider {
     // });
     return this.apiProvider.post(ConstantsUrl.CHECK_PRODUCT_SHOPPING_LIST, {
       user_token: this.userToken,
-      product_SKU: productSKU,
-      shopping_list_id: listId
+      SKU: productSKU,
+      List_Id: listId
     });
   }
 
