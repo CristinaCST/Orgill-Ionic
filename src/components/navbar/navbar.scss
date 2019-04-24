@@ -11,4 +11,9 @@ navbar {
       font-size: 35px;
     }
   }
+  
+  ion-title{
+    width:80%;
+    text-overflow: ellipsis;
+  }
 }
