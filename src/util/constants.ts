@@ -252,6 +252,8 @@ export const NOTIFICATIONS_PERMISIONS_MESSAGE = 'notifications_permissions_messa
 export const NOTIFICATIONS_PERMISIONS_BTN_SUCCESS = 'notifications_permissions_btn_success';
 export const NOTIFICATIONS_PERMISIONS_BTN_DISMISS = 'notifications_permissions_btn_dismiss';
 
+export const EVENT_FLASH_DEAL_NOTIFICATION_RECEIVED = "notifications_flash_deal_received"
+
 
 //Location
 export const LOCATION_PERMISSIONS_MESSAGE = "location_permissions_message";
@@ -261,3 +263,9 @@ export const LOCATION_PERMISSIONS_NOT_GRANTED = "location_permissions_not_grante
 export const DEFAULT_HTTP_ERROR = "default_http_error";
 export const NO_ACCES = "no_acces";
 export const SOMETHING_WENT_WROMG = "something_went_wrong";
+
+
+//ONE SIGNAL SETUP
+export const ONE_SIGNAL_API_KEY = "be33b136-2960-435a-b22f-b12ade07e393"
+export const ONE_SIGNAL_ANDROID_PROJECT_TITLE = "orgill-test"
+export const ONE_SIGNAL_VERBOSE = true; // set this to false if production

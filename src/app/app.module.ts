@@ -8,10 +8,11 @@ import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {SQLite} from "@ionic-native/sqlite";
 import {BarcodeScanner} from '@ionic-native/barcode-scanner';
-import {OneSignal} from '@ionic-native/onesignal/ngx';
+import {OneSignal} from '@ionic-native/onesignal';
 import {SQLitePorter} from "@ionic-native/sqlite-porter";
 import {Network} from '@ionic-native/network';
 import {IonicStorageModule} from "@ionic/storage";
+import {Badge} from '@ionic-native/badge';
 
 //Environments
 import {environment} from '@app/env';
@@ -34,6 +35,9 @@ import {ScannerProvider} from '../providers/scanner/scanner';
 import {UserInfoProvider} from '../providers/user-info/user-info';
 import {PurchasesProvider} from '../providers/purchases/purchases';
 import {NetworkProvider} from '../providers/network/network';
+import { SessionValidator } from '../providers/session/sessionValidator';
+import{OneSignalProvider} from '../providers/onesignal/onesignal';
+import { FlashDealProvider } from '../providers/flashdeal/flashdeal';
 
 //Pages
 import {MyApp} from './app.component';
@@ -73,6 +77,10 @@ let pages = [MyApp,
 
 //Error Handlers
 import {CustomErrorHandler} from "../providers/CustomErrorHandler";
+import { Geolocation } from '@ionic-native/geolocation';
+
+
+
 const errorHandler = environment.production ? CustomErrorHandler : IonicErrorHandler;
 
 @NgModule({
@@ -98,7 +106,6 @@ const errorHandler = environment.production ? CustomErrorHandler : IonicErrorHan
     SQLitePorter,
     SQLite,
     Network,
-    OneSignal,
     AuthServiceProvider,
     ApiProvider,
     LoadingProvider,
@@ -114,6 +121,12 @@ const errorHandler = environment.production ? CustomErrorHandler : IonicErrorHan
     UserInfoProvider,
     PurchasesProvider,
     NetworkProvider,
+    SessionValidator,
+    OneSignalProvider,
+    OneSignal,
+    Badge,
+    FlashDealProvider,
+    Geolocation,
     {provide: ErrorHandler, useClass: CustomErrorHandler}
   ]
 })
