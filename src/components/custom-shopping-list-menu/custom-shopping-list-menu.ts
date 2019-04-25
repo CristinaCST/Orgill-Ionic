@@ -26,17 +26,24 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
   }
 
   addNewList() {
-    let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined, Constants.SAVE, Constants.CANCEL, Constants.POPOVER_NEW_SHOPPING_LIST);
+    let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined, Constants.SAVE, Constants.CANCEL, undefined, Constants.POPOVER_NEW_SHOPPING_LIST);
     let subscription = this.popoversProvider.show(content).subscribe(data => {
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
           if (status === 'available') {
+            if (data.type == 'default'){
+              data.type = "0"
+            }else{
+              //TODO CHANGE TYPE WHEN WE KNOW WHAT CUSTOM MARKET ONLY TYPE IS
+              data.type = "3"
+            }
             this.shoppingListsProvider.createNewShoppingList(data.listName, data.listDescription, data.type).subscribe(addedList => {
               let list: ShoppingList =
                 {
                   ListID: addedList.insertId,
                   ListName: data.listName,
-                  ListDescription: data.listDescription
+                  ListDescription: data.listDescription,
+                  ListType: data.type
                 };
               this.customShoppingLists.push(list);
             });
@@ -63,7 +70,7 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.events.subscribe('DeletedList', (listId: number) => {
-      this.customShoppingLists = this.customShoppingLists.filter(list => list.id != listId);
+      this.customShoppingLists = this.customShoppingLists.filter(list => list.ListID != listId);
     })
   }
 }

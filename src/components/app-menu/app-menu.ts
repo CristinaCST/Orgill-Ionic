@@ -79,14 +79,26 @@ export class AppMenuComponent implements OnInit {
       .subscribe(data => {
         console.log("data", data);
         let shoppingLists = JSON.parse(data.d);
-        shoppingLists.map(shoppingList => {
-          if (shoppingList.ListType == Constants.DEFAULT_LIST_ID || shoppingList.ListType == Constants.MARKET_ONLY_LIST_ID) {
-            this.defaultShoppingLists.push(shoppingList)
-          }
-          else {
-            this.customShoppingLists.push(shoppingList)
-          }
-        });
+        if (shoppingLists.length == 0) {
+          this.shoppingListsProvider.createDefaultShoppingLists().subscribe(data =>{
+            this.getShoppingLists();
+          })
+        }else {
+          shoppingLists.map(shoppingList => {
+            let temp : ShoppingList = {
+              ListID: shoppingList.shopping_list_id,
+              ListDescription: shoppingList.list_description,
+              ListName: shoppingList.list_name,
+              ListType: shoppingList.list_type,
+            }
+            if (shoppingList.list_type == Constants.DEFAULT_LIST_TYPE || shoppingList.list_type == Constants.MARKET_ONLY_LIST_TYPE) {
+              this.defaultShoppingLists.push(temp)
+            }
+            else {
+              this.customShoppingLists.push(temp)
+            }
+          });
+        }
       });
   }
 

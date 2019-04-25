@@ -26,9 +26,9 @@ export class ShoppingListsProvider {
     //return this.databaseProvider.addProductToShoppingList(listId, shoppingListItem);
     return this.apiProvider.post(ConstantsUrl.ADD_SHOPPING_LIST_ITEM, {
       user_token: this.userToken,
-      List_Id: listId,
-      SKU: shoppingListItem.product.SKU,
-      Program_No: shoppingListItem.program_number,
+      shopping_list_id: listId,
+      sku: shoppingListItem.product.SKU,
+      program_no: shoppingListItem.program_number,
       Quantity: shoppingListItem.quantity,
       Price: shoppingListItem.item_price
     });
@@ -38,18 +38,18 @@ export class ShoppingListsProvider {
     // return this.databaseProvider.getShoppingListsForProduct(productSKU);
     return this.apiProvider.post(ConstantsUrl.CHECK_PRODUCT_SHOPPING_LISTS, {
       user_token: this.userToken,
-      SKU: productSKU,
-      Program_No: programNumber
+      sku: productSKU,
+      program_no: programNumber
     });
   }
 
-  createNewShoppingList(name, description = '', type = 'default') {
+  createNewShoppingList(name, description = '', type = '0') {
     //return this.databaseProvider.addShoppingList(name, description, type);
     return this.apiProvider.post(ConstantsUrl.ADD_SHOPPING_NEW_LIST, {
       user_token: this.userToken,
-      List_Name: name,
-      List_Description: description,
-      List_Type: type
+      list_name: name,
+      list_description: description,
+      list_type: type
     });
   }
 
@@ -63,7 +63,7 @@ export class ShoppingListsProvider {
     //return this.databaseProvider.removeShoppingList(listId);
     return this.apiProvider.post(ConstantsUrl.DELETE_SHOPPING_LIST, {
       user_token: this.userToken,
-      List_Id: listId
+      shopping_list_id: listId
     });
   }
 
@@ -81,9 +81,10 @@ export class ShoppingListsProvider {
     return new Promise((resolve, reject) => {
       this.apiProvider.post(ConstantsUrl.GET_SHOPPING_LIST_ITEMS, {
         user_token: this.userToken,
-        List_Id: listId
+        shopping_list_id: listId
       }).subscribe(data => {
-        let productList = this.setProducts(data);
+        let itemsData = JSON.parse(data.d);
+        let productList = this.setProducts(itemsData);
         resolve(productList);
       });
     });
@@ -91,15 +92,26 @@ export class ShoppingListsProvider {
 
   checkNameAvailability(name): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.databaseProvider.getNumOfListsWithName(name).then(data => {
-        if (data.rows.item(0).list_num === 0) {
-          resolve('available');
+      this.getAllShoppingLists()
+        .subscribe(data => {
+        var shoppingListsData = JSON.parse(data.d);
+        var listFound = false;
+        if (shoppingListsData.length > 0) {
+          for (var i = 0; i < shoppingListsData.length; i++) {
+            if (shoppingListsData[i].list_name == name) {
+              listFound = true;
+            }
+          }
         }
-        else {
+        if (listFound) {
           resolve('unavailable');
         }
-      }).catch(error => reject(error));
-    });
+        else {
+          resolve('available');
+        }
+      },
+        error => reject(error))
+      })
   }
 
   private isExpiredProgram(date) {
@@ -110,9 +122,9 @@ export class ShoppingListsProvider {
 
   private setProducts(data) {
     let list = [];
-    if (data.rows.length > 0) {
-      for (let i = 0; i < data.rows.length; i++) {
-        let item = data.rows.item(i);
+    if (data.length > 0) {
+      for (let i = 0; i < data.length; i++) {
+        let item = data[i];
         let shoppingListProduct: ShoppingListItem = {
           id: item.id,
           product: {
@@ -131,8 +143,8 @@ export class ShoppingListsProvider {
             VELOCITY_CODE: item.velocity_code,
             TOTAL_REC_COUNT: item.total_rec_count
           },
-          program_number: item.program_number,
-          item_price: item.item_price,
+          program_number: item.program_no,
+          item_price: item.price,
           quantity: item.quantity,
           isCheckedInShoppingList: false,
           isExpired: this.isExpiredProgram(item.end_date)
@@ -143,13 +155,14 @@ export class ShoppingListsProvider {
     return list;
   }
 
-  deleteProductFromList(listId, productIdsArr) {
+  deleteProductFromList(listId, productSku, programNo) {
     //return this.databaseProvider.removeProductsFromShoppingList(listId, productIdsArr);
     return this.apiProvider.post(ConstantsUrl.REMOVE_SHOPPING_LIST_ITEM,
       {
         user_token: this.userToken,
-        List_Id: listId,
-        product_SKUs: productIdsArr
+        shopping_list_id: listId,
+        sku: productSku,
+        program_no: programNo
       })
   }
 
@@ -202,15 +215,15 @@ export class ShoppingListsProvider {
     //return this.databaseProvider.updateShoppingListItem(id, shoppingListId, programNumber, price, quantity);
     return this.apiProvider.post(ConstantsUrl.UPDATE_SHOPPING_LIST_ITEM, {
       user_token: this.userToken,
-      List_Id: shoppingListId,
-      SKU: product.SKU,
-      Program_No: programNumber,
+      shopping_list_id: shoppingListId,
+      sku: product.SKU,
+      program_no: programNumber,
       Quantity: quantity,
       Price: price
     })
   }
 
-  checkProductInList(productSKU, listId) {
+   checkProductInList(productSKU, listId, programNo) {
     // return new Promise(async (resolve, reject) => {
     //   try {
     //     let data = await this.databaseProvider.checkProductInList(productSKU, listId);
@@ -221,8 +234,9 @@ export class ShoppingListsProvider {
     // });
     return this.apiProvider.post(ConstantsUrl.CHECK_PRODUCT_SHOPPING_LIST, {
       user_token: this.userToken,
-      SKU: productSKU,
-      List_Id: listId
+      sku: productSKU,
+      shopping_list_id: listId,
+      program_no: programNo
     });
   }
 

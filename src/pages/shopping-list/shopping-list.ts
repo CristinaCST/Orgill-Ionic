@@ -52,14 +52,14 @@ export class ShoppingListPage {
       this.content.resize();
     }
     else {
-      this.isCustomList = !(this.shoppingList.id !== Constants.DEFAULT_LIST_ID && this.shoppingList.id !== Constants.MARKET_ONLY_LIST_ID);
+      this.isCustomList = !(this.shoppingList.ListType !== Constants.DEFAULT_LIST_TYPE && this.shoppingList.ListType !== Constants.MARKET_ONLY_LIST_TYPE);
       if (!this.isCustomList) {
         this.menuCustomButtons.push({
           action: 'deleteList',
           icon: 'trash'
         });
       }
-      this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.id).then((data: Array<ShoppingListItem>) => {
+      this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: Array<ShoppingListItem>) => {
         if (data) {
           this.shoppingListItems = data;
           this.checkExpiredItems();
@@ -79,19 +79,29 @@ export class ShoppingListPage {
 
   delete() {
     let array = this.selectedItems.filter((item) => item != null);
+    let bool = true;
     if (array) {
-      let idItem = array.map(item => item.id);
-      this.shoppingListProvider.deleteProductFromList(this.shoppingList.id, idItem).subscribe(
-        () => this.selectedItems.map((item, index) => {
-          if (item !== null) {
-            let price = (item.item_price * item.quantity).toFixed(Constants.DECIMAL_NUMBER);
-            this.setOrderTotal({status: 'uncheckedItem', price: price}, index);
-            this.shoppingListItems.splice(index, 1);
-          }
+      let $this = this;
+      array.forEach((elem) => {
+          $this.shoppingListProvider.deleteProductFromList($this.shoppingList.ListID, elem.product.SKU, elem.program_number).subscribe(
+            data => {},
+            error => {
+              bool = false;
+              console.log(error);
+            }
+          )
         })
-      );
+        if (bool) {
+          $this.selectedItems.map((item, index) => {
+            if (item !== null) {
+              let price = (item.item_price * item.quantity).toFixed(Constants.DECIMAL_NUMBER);
+              $this.setOrderTotal({status: 'uncheckedItem', price: price}, index);
+              $this.shoppingListItems.splice(index, 1);
+            }
+          })
+        }
+      }
     }
-  }
 
   checkout() {
     const params = {
@@ -143,7 +153,7 @@ export class ShoppingListPage {
     } else {
       let array = this.selectedItems.filter((item) => item != null);
       let params = {
-        shoppingListId: this.shoppingList.id,
+        shoppingListId: this.shoppingList.ListID,
         shoppingListItems: array,
         orderTotal: this.orderTotal
       };
@@ -165,7 +175,7 @@ export class ShoppingListPage {
       product: $event.product,
       programNumber: $event.program_number,
       fromShoppingList: true,
-      shoppingListId: this.shoppingList.id,
+      shoppingListId: this.shoppingList.ListID,
       id: $event.id,
       quantity: $event.quantity
     }).catch(err => console.error(err))
@@ -197,7 +207,7 @@ export class ShoppingListPage {
     if (this.isCustomList) {
       message = this.translator.translate(Constants.SHOPPING_LIST_CUSTOM_DESCRIPTION);
     }
-    let content = this.popoversProvider.setContent(this.shoppingList.name, message + this.shoppingList.description);
+    let content = this.popoversProvider.setContent(this.shoppingList.ListName, message + this.shoppingList.ListDescription);
     this.popoversProvider.show(content);
   }
 
@@ -206,9 +216,9 @@ export class ShoppingListPage {
       Constants.OK, Constants.CANCEL, Constants.POPOVER_DELETE_LIST_CONFIRMATION);
     this.popoversProvider.show(content).subscribe(data => {
       if (data.optionSelected === "OK") {
-        this.shoppingListProvider.removeShoppingList(this.shoppingList.id).subscribe(data => {
+        this.shoppingListProvider.removeShoppingList(this.shoppingList.ListID).subscribe(data => {
           console.log(data);
-          this.events.publish('DeletedList', this.shoppingList.id);
+          this.events.publish('DeletedList', this.shoppingList.ListID);
           this.navCtrl.pop().catch(err => console.error(err));
         });
       }

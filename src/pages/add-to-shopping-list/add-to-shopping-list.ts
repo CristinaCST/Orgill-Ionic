@@ -69,18 +69,29 @@ export class AddToShoppingListPage implements OnInit {
     Promise.all(
       [this.programProvider.isMarketOnlyProgram(this.selectedProgram.PROGRAM_NO),
         this.shoppingListsProvider.getShoppingListsForProduct(this.product.SKU, this.selectedProgram.PROGRAM_NO),
-        this.shoppingListsProvider.getLocalShoppingLists()]
+        this.shoppingListsProvider.getAllShoppingLists()
+        //, this.shoppingListsProvider.getLocalShoppingLists()
+       ]
     ).then(([programData, productLists, shoppingLists]) => {
-      this.setProductList(productLists);
+      // this.setProductList(productLists);
+      productLists.subscribe(data => {
+        this.setProductList(data);
+      });
       this.checkMarketOnlyProduct(programData);
-      this.setAllShoppingList(shoppingLists);
+      // this.setAllShoppingList(shoppingLists);
+      shoppingLists.subscribe(data => {
+        this.setAllShoppingList(data)
+      });
       this.loading.hideLoading();
     }).catch(error => console.error(error));
   }
 
   setProductList(productLists) {
-    for (let i = 0; i < productLists.rows.length; i++) {
-      this.productLists[productLists.rows.item(i).id] = productLists.rows.item(i).id;
+    // for (let i = 0; i < productLists.rows.length; i++) {
+    //   this.productLists[productLists.rows.item(i).id] = productLists.rows.item(i).id;
+    // }
+    for (let i = 0; i < productLists.length; i++){
+      this.productLists[productLists[i].id] = productLists[i].id;
     }
   }
 
@@ -92,14 +103,26 @@ export class AddToShoppingListPage implements OnInit {
     this.checkProductInList(this.listForm.value.listOptions);
   }
 
-  setAllShoppingList(shoppingLists) {
-    if (shoppingLists.rows.length) {
-      for (let i = 0; i < shoppingLists.rows.length; i++) {
+  setAllShoppingList(data) {
+    // if (shoppingLists.rows.length) {
+    //   for (let i = 0; i < shoppingLists.rows.length; i++) {
+    //     let list: ShoppingList = {
+    //       ListID: shoppingLists.rows.item(i).id,
+    //       ListName: shoppingLists.rows.item(i).name,
+    //       ListDescription: shoppingLists.rows.item(i).description,
+    //       ListType: shoppingLists.rows.item(i).listType
+    //     };
+    //     this.shoppingLists.push(list);
+    //   }
+    // }
+    var shoppingLists = JSON.parse(data.d);
+    if(shoppingLists.length){
+      for (let i = 0; i < shoppingLists.length; i++) {
         let list: ShoppingList = {
-          ListID: shoppingLists.rows.item(i).id,
-          ListName: shoppingLists.rows.item(i).name,
-          ListDescription: shoppingLists.rows.item(i).description,
-          ListType: shoppingLists.rows.item(i).listType
+          ListID: shoppingLists[i].shopping_list_id,
+          ListName: shoppingLists[i].list_name,
+          ListDescription: shoppingLists[i].list_description,
+          ListType: shoppingLists[i].list_type
         };
         this.shoppingLists.push(list);
       }
@@ -112,16 +135,23 @@ export class AddToShoppingListPage implements OnInit {
     this.subscription = this.popoversProvider.show(content).subscribe(data => {
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
+          if (data.type == 'default'){
+            data.type = "0"
+          } else {
+            //TODO CHANGE WHEN WE KNOW THE TYPE FOR A CUSTOM MARKET ONLY LIST
+            data.type = "3"
+          }
           if (status === 'available') {
             this.shoppingListsProvider.createNewShoppingList(data.listName, data.listDescription, data.type).subscribe(addedList => {
               let list: ShoppingList =
                 {
-                  id: addedList.insertId,
-                  name: data.listName,
-                  description: data.listDescription
+                  ListID: addedList.insertId,
+                  ListName: data.listName,
+                  ListDescription: data.listDescription,
+                  ListType: data.type
                 };
               this.shoppingLists.push(list);
-              this.listForm.value.listOptions = list.id;
+              this.listForm.value.listOptions = list.ListID;
             });
           } else {
             let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);
@@ -137,7 +167,7 @@ export class AddToShoppingListPage implements OnInit {
     this.navCtrl.pop().catch(err => console.error(err));
   }
 
-  add() {
+   add() {
     if (!this.selectedProgram) {
       let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_NO_PROGRAM_TITLE, Constants.SHOPPING_LIST_NO_PROGRAM_MESSAGE, undefined);
       this.popoversProvider.show(content);
@@ -157,19 +187,31 @@ export class AddToShoppingListPage implements OnInit {
 
     this.loading.presentSimpleLoading();
     //TODO UPDATE WHEN APIS ARE READY
-    this.shoppingListsProvider.addItemToShoppingList(this.listForm.value.listOptions.id, listItem, this.listForm.value.listOptions.isMarketOnly).subscribe(() => {
+    this.shoppingListsProvider.addItemToShoppingList(this.listForm.value.listOptions, listItem, this.listForm.value.listOptions.isMarketOnly).subscribe(() => {
       this.loading.hideLoading();
       this.cancel();
     });
   }
 
   checkProductInList(listId: number) {
-    if (this.productLists[listId] === listId) {
-      this.isAddBtnDisabled = true;
-      this.reset(this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_EXISTING_PRODUCT));
-    } else {
-      this.isAddBtnDisabled = false;
-    }
+    // if (this.productLists[listId] === listId) {
+    //   this.isAddBtnDisabled = true;
+    //   this.reset(this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_EXISTING_PRODUCT));
+    // } else {
+    //   this.isAddBtnDisabled = false;
+    // }
+
+    this.shoppingListsProvider.checkProductInList(this.product.SKU, listId, this.selectedProgram.PROGRAM_NO).subscribe(data => {
+      var temp = JSON.parse(data.d).Status;
+      var response = (temp == "True");
+      console.log(response);
+      if (response){
+        this.isAddBtnDisabled = true;
+        this.reset(this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_EXISTING_PRODUCT));
+      } else {
+        this.isAddBtnDisabled = false;
+      }
+    });
   }
 
   reset(content) {
@@ -178,13 +220,13 @@ export class AddToShoppingListPage implements OnInit {
     this.listForm.controls.listOptions.reset();
   }
 
-  selectList(listId: number) {
-    if (this.isMarketOnlyProduct === true && listId !== Constants.MARKET_ONLY_LIST_ID) {
+  selectList(selectedList: ShoppingList) {
+    if (this.isMarketOnlyProduct === true && ((selectedList.ListType.toString() !== Constants.MARKET_ONLY_LIST_TYPE) || (selectedList.ListType.toString() !== Constants.MARKET_ONLY_CUSTOM_TYPE))) {
       this.reset(this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_MARKET_ONLY_PRODUCT));
-    } else if (this.isMarketOnlyProduct === false && listId === Constants.MARKET_ONLY_LIST_ID) {
+    } else if (this.isMarketOnlyProduct === false && ((selectedList.ListType.toString() === Constants.MARKET_ONLY_LIST_TYPE) || (selectedList.ListType.toString() === Constants.MARKET_ONLY_CUSTOM_TYPE))) {
       this.reset(this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_DEFAULT_PRODUCT));
     } else {
-      this.checkProductInList(listId);
+      this.checkProductInList(selectedList.ListID);
     }
   }
 }

@@ -132,7 +132,7 @@ export class ScannerPage implements OnInit {
   }
 
   private isProductInList() {
-    return this.shoppingListProvider.checkProductInList(this.foundProduct.SKU, this.shoppingListId);
+    return this.shoppingListProvider.checkProductInList(this.foundProduct.SKU, this.shoppingListId, this.programNumber);
   }
 
   private isPermissionError(scannerError: string): boolean {
