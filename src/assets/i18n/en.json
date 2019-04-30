@@ -168,5 +168,11 @@
   "button_uninstall": "Uninstall",
   "default_http_error":"Error",
   "no_acces":"You have no access!",
-  "something_went_wrong":"Someting went wrong..."
+  "something_went_wrong":"Someting went wrong...",
+
+  "location_permissions_message": "Grant permissions for your location",
+  "notifications_permissions_message": "Orgill wants to send push notifications",
+  "notifications_permissions_btn_success": "Allow",
+  "notifications_permissions_btn_dismiss": "Deny",
+  "location_never_show":"Don't show again"
 }

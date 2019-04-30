@@ -8,6 +8,7 @@ import * as Constants from "../../util/constants";
 import {AddToShoppingListPage} from "../add-to-shopping-list/add-to-shopping-list";
 import {LoadingProvider} from "../../providers/loading/loading";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
+import { TranslateProvider } from '../../providers/translate/translate';
 
 @Component({
   selector: 'page-product',
@@ -34,7 +35,8 @@ export class ProductPage implements OnInit {
               private loading: LoadingProvider,
               private programProvider: ProgramProvider,
               private popoversProvider: PopoversProvider,
-              private shoppingListProvider: ShoppingListsProvider) {
+              private shoppingListProvider: ShoppingListsProvider,
+              private translateProvider: TranslateProvider) {
   }
 
   ngOnInit(): void {
@@ -56,7 +58,12 @@ export class ProductPage implements OnInit {
       if (programs) {
         this.productPrograms = JSON.parse(programs.d);
         if (this.productPrograms.length === 0) {
-          let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.PRODUCT_NOT_AVAILABLE, undefined, Constants.OK, Constants.POPOVER_ERROR);
+          let content = this.popoversProvider.setContent(
+            this.translateProvider.translate(Constants.O_ZONE),
+            this.translateProvider.translate(Constants.PRODUCT_NOT_AVAILABLE),
+            undefined,
+            this.translateProvider.translate(Constants.OK),
+            this.translateProvider.translate(Constants.POPOVER_ERROR));
           this.popoversProvider.show(content);
           this.navController.pop().catch(err => console.error(err));
           return;
@@ -82,11 +89,18 @@ export class ProductPage implements OnInit {
 
   addToShoppingList() {
     if (this.product.QTY_ROUND_OPTION === 'Y' && this.isMinimum70percentQuantity()) {
-      let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.Y_SHELF_PACK_QUANTITY_WARNING, undefined, Constants.OK, Constants.Y_SHELF_PACK_QUANTITY_WARNING);
+      let content = this.popoversProvider.setContent(
+        this.translateProvider.translate(Constants.O_ZONE),
+        this.translateProvider.translate(Constants.Y_SHELF_PACK_QUANTITY_WARNING), undefined,
+        this.translateProvider.translate(Constants.OK),
+        this.translateProvider.translate(Constants.Y_SHELF_PACK_QUANTITY_WARNING));
       this.popoversProvider.show(content);
       this.programProvider.setPackQuantity(true);
     } else if (this.product.QTY_ROUND_OPTION === 'X' && this.quantity % Number(this.product.SHELF_PACK) !== 0) {
-      let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.X_SHELF_PACK_QUANTITY_WARNING, undefined, Constants.OK, 'X category');
+      let content = this.popoversProvider.setContent(
+        this.translateProvider.translate(Constants.O_ZONE),
+        this.translateProvider.translate(Constants.X_SHELF_PACK_QUANTITY_WARNING), undefined,
+        this.translateProvider.translate(Constants.OK), 'X category');
       this.popoversProvider.show(content);
     } else {
       this.navController.push(AddToShoppingListPage, {

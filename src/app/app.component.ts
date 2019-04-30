@@ -36,7 +36,7 @@ export class MyApp {
     this.isLoading = true;
 
     this.platform.ready().then(() => {
-      this.oneSignalProvider.setOneSignal();
+      this.oneSignalProvider.beginInit();
       this.networkProvider.listenForNetworkEvents();
       this.statusBar.styleDefault();
       this.databaseProvider.getDatabaseState()

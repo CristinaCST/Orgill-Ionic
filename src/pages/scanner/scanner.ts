@@ -121,10 +121,10 @@ export class ScannerPage implements OnInit {
       }, errorResponse => {
         this.loading.hideLoading();
         if (this.isPermissionError(errorResponse)) {
-          let content = {title: Constants.ERROR, message: Constants.POPOVER_CAMERA_PERMISSION_NOT_GRANTED};
+          let content = {title: this.translator.translate(Constants.ERROR), message: this.translator.translate(Constants.POPOVER_CAMERA_PERMISSION_NOT_GRANTED)};
           this.popoversProvider.show(content);
         } else {
-          let content = {title: Constants.ERROR, message: Constants.SCAN_ERROR};
+          let content = {title: this.translator.translate(Constants.ERROR), message: this.translator.translate(Constants.SCAN_ERROR)};
           this.popoversProvider.show(content);
         }
       });

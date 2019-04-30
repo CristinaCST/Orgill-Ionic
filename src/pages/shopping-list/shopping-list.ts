@@ -72,7 +72,7 @@ export class ShoppingListPage {
   checkExpiredItems() {
     let isExpired = this.shoppingListItems.filter(item => item.isExpired).length > 0;
     if (isExpired) {
-      let content = this.popoversProvider.setContent(Constants.POPOVER_EXPIRED_ITEMS_TITLE, Constants.POPOVER_EXPIRED_ITEMS_MESSAGE);
+      let content = this.popoversProvider.setContent(this.translator.translate(Constants.POPOVER_EXPIRED_ITEMS_TITLE), this.translator.translate(Constants.POPOVER_EXPIRED_ITEMS_MESSAGE));
       this.popoversProvider.show(content);
     }
   }
@@ -138,7 +138,7 @@ export class ShoppingListPage {
 
   continue() {
     if (this.nrOfSelectedItems === 0) {
-      let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_NO_ITEMS_TITLE, Constants.SHOPPING_LIST_NO_ITEMS_MESSAGE);
+      let content = this.popoversProvider.setContent(this.translator.translate(Constants.SHOPPING_LIST_NO_ITEMS_TITLE), this.translator.translate(Constants.SHOPPING_LIST_NO_ITEMS_MESSAGE));
       this.popoversProvider.show(content);
     } else {
       let array = this.selectedItems.filter((item) => item != null);
@@ -202,8 +202,12 @@ export class ShoppingListPage {
   }
 
   removeList() {
-    let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_DELETE_CONF_TITLE, Constants.SHOPPING_LIST_DELETE_CONF_MESSAGE,
-      Constants.OK, Constants.CANCEL, Constants.POPOVER_DELETE_LIST_CONFIRMATION);
+    let content = this.popoversProvider.setContent(
+      this.translator.translate(Constants.SHOPPING_LIST_DELETE_CONF_TITLE),
+      this.translator.translate(Constants.SHOPPING_LIST_DELETE_CONF_MESSAGE),
+      this.translator.translate(Constants.OK),
+      this.translator.translate(Constants.CANCEL),
+      this.translator.translate(Constants.POPOVER_DELETE_LIST_CONFIRMATION));
     this.popoversProvider.show(content).subscribe(data => {
       if (data.optionSelected === "OK") {
         this.shoppingListProvider.removeShoppingList(this.shoppingList.id).then(data => {

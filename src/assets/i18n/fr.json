@@ -151,5 +151,9 @@
   "button_uninstall": "Désinstaller",
   "default_http_error": "Error",
   "no_acces": "Vous n'avez aucun accès!",
-  "something_went_wrong": "Quelque chose s'est mal passé ..."
+  "something_went_wrong": "Quelque chose s'est mal passé ...",
+  "notifications_permissions_message": "Orgill veut envoyer des notifications push",
+  "notifications_permissions_btn_success": "Permettre",
+  "notifications_permissions_btn_dismiss": "Nier",
+  "location_never_show": "Ne plus montrer"
 }

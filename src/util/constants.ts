@@ -266,6 +266,15 @@ export const SOMETHING_WENT_WROMG = "something_went_wrong";
 
 
 //ONE SIGNAL SETUP
-export const ONE_SIGNAL_API_KEY = "be33b136-2960-435a-b22f-b12ade07e393"
-export const ONE_SIGNAL_ANDROID_PROJECT_TITLE = "orgill-test"
+export const ONE_SIGNAL_API_KEY = "be33b136-2960-435a-b22f-b12ade07e393";
+export const ONE_SIGNAL_ANDROID_PROJECT_TITLE = "orgill-test";
 export const ONE_SIGNAL_VERBOSE = true; // set this to false if production
+export const ONE_SIGNAL_IOS_NOTIFICATION_AUTO_PROMPT = false;
+export const ONE_SIGNAL_IOS_LAUNCH_IN_WEBVIEW = false;
+export const ONE_SIGNAL_LOCATION_MODAL_PATH = 'locationModalDismiss';
+export const ONE_SIGNAL_LOCATION_PREFERENCE_PATH = 'locationSharing';
+export const ONE_SIGNAL_NOTIFICATION_MODAL_PATH = 'notificationModalDismiss';
+export const ONE_SIGNAL_NOTIFICATION_REFERENCE_PATH = 'pushNotifications';
+
+//DEBUG
+export const DEBUG_TRANSLATIONS = true;

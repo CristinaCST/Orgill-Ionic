@@ -3,6 +3,7 @@ import {PopoverController} from "ionic-angular";
 import {PopoverComponent} from "../../components/popover/popover";
 import * as Constants from "../../util/constants";
 import {Subject} from "rxjs/Subject";
+import {TranslateProvider} from "../../providers/translate/translate";
 
 @Injectable()
 export class PopoversProvider {
@@ -11,7 +12,8 @@ export class PopoversProvider {
   private isOpened = false;
   private popover;
 
-  constructor(private popoverController: PopoverController) {
+  constructor(private popoverController: PopoverController,
+    private translateProvider: TranslateProvider) {
   }
 
   public show(content) {
@@ -40,7 +42,7 @@ export class PopoversProvider {
     }
   }
 
-  public setContent(title, message, positiveButtonText = Constants.OK,
+  public setContent(title, message, positiveButtonText = this.translateProvider.translate(Constants.OK),
                     dismissButtonText = undefined, negativeButtonText = undefined, type = undefined) {
     return {
       type: type,
@@ -51,4 +53,5 @@ export class PopoversProvider {
       dismissButtonText: dismissButtonText
     };
   }
+  
 }
