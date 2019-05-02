@@ -50,11 +50,11 @@ export class AppMenuComponent implements OnInit {
   public logout() {
     let content = {
       type: Constants.POPOVER_LOGOUT,
-      title: this.translateProvider.translate(Constants.LOGOUT_TITLE),
-      message: this.translateProvider.translate(Constants.LOGOUT_MESSAGE),
-      dismissButtonText: this.translateProvider.translate(Constants.CANCEL),
-      negativeButtonText: this.translateProvider.translate(Constants.NO),
-      positiveButtonText: this.translateProvider.translate(Constants.OK)
+      title: Constants.LOGOUT_TITLE,
+      message: Constants.LOGOUT_MESSAGE,
+      dismissButtonText: Constants.CANCEL,
+      negativeButtonText: Constants.NO,
+      positiveButtonText: Constants.OK
     };
 
     this.popoversProvider.show(content).subscribe((data) => {

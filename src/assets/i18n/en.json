@@ -172,7 +172,7 @@
 
   "location_permissions_message": "Grant permissions for your location",
   "notifications_permissions_message": "Orgill wants to send push notifications",
-  "notifications_permissions_btn_success": "Allow",
-  "notifications_permissions_btn_dismiss": "Deny",
-  "location_never_show":"Don't show again"
+  "permission_allow": "Allow",
+  "permission_deny": "Deny",
+  "permission_never_show":"Never"
 }

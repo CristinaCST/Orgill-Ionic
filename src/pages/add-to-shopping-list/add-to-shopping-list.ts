@@ -11,7 +11,6 @@ import {LoadingProvider} from "../../providers/loading/loading";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ProgramProvider} from "../../providers/program/program";
 import {Subscription} from 'rxjs';
-import { TranslateProvider } from '../../providers/translate/translate';
 
 @Component({
   selector: 'page-add-to-shopping-list',
@@ -38,8 +37,7 @@ export class AddToShoppingListPage implements OnInit {
               private popoversProvider: PopoversProvider,
               private formBuilder: FormBuilder,
               private loading: LoadingProvider,
-              private programProvider: ProgramProvider,
-              private translateProvider: TranslateProvider) {
+              private programProvider: ProgramProvider) {
     this.menuCustomButtons.push({action: 'addList', icon: 'add'})
   }
 
@@ -98,11 +96,8 @@ export class AddToShoppingListPage implements OnInit {
   }
 
   newShoppingList() {
-    let content = this.popoversProvider.setContent(
-      this.translateProvider.translate(Constants.SHOPPING_LIST_NEW_DIALOG_TITLE), undefined,
-      this.translateProvider.translate(Constants.SAVE),
-      this.translateProvider.translate(Constants.CANCEL), undefined,
-      this.translateProvider.translate(Constants.POPOVER_NEW_SHOPPING_LIST));
+    let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined,
+      Constants.SAVE, Constants.CANCEL, undefined, Constants.POPOVER_NEW_SHOPPING_LIST);
     this.subscription = this.popoversProvider.show(content).subscribe(data => {
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
@@ -118,7 +113,7 @@ export class AddToShoppingListPage implements OnInit {
               this.listForm.value.listOptions = list.id;
             });
           } else {
-            let content = this.popoversProvider.setContent(this.translateProvider.translate(Constants.O_ZONE), this.translateProvider.translate(Constants.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR));
+            let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);
             this.popoversProvider.show(content);
           }
           this.subscription.unsubscribe();
@@ -133,7 +128,7 @@ export class AddToShoppingListPage implements OnInit {
 
   add() {
     if (!this.selectedProgram) {
-      let content = this.popoversProvider.setContent(this.translateProvider.translate(Constants.SHOPPING_LIST_NO_PROGRAM_TITLE), this.translateProvider.translate(Constants.SHOPPING_LIST_NO_PROGRAM_MESSAGE), undefined);
+      let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_NO_PROGRAM_TITLE, Constants.SHOPPING_LIST_NO_PROGRAM_MESSAGE, undefined);
       this.popoversProvider.show(content);
       return;
     }
@@ -159,7 +154,7 @@ export class AddToShoppingListPage implements OnInit {
   checkProductInList(listId: number) {
     if (this.productLists[listId] === listId) {
       this.isAddBtnDisabled = true;
-      this.reset(this.popoversProvider.setContent(this.translateProvider.translate(Constants.O_ZONE), this.translateProvider.translate(Constants.SHOPPING_LIST_EXISTING_PRODUCT)));
+      this.reset(this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_EXISTING_PRODUCT));
     } else {
       this.isAddBtnDisabled = false;
     }
@@ -173,13 +168,9 @@ export class AddToShoppingListPage implements OnInit {
 
   selectList(listId: number) {
     if (this.isMarketOnlyProduct === true && listId !== Constants.MARKET_ONLY_LIST_ID) {
-      this.reset(this.popoversProvider.setContent(
-        this.translateProvider.translate(Constants.O_ZONE),
-        this.translateProvider.translate(Constants.SHOPPING_LIST_MARKET_ONLY_PRODUCT)));
+      this.reset(this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_MARKET_ONLY_PRODUCT));
     } else if (this.isMarketOnlyProduct === false && listId === Constants.MARKET_ONLY_LIST_ID) {
-      this.reset(this.popoversProvider.setContent(
-        this.translateProvider.translate(Constants.O_ZONE),
-        this.translateProvider.translate(Constants.SHOPPING_LIST_DEFAULT_PRODUCT)));
+      this.reset(this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_DEFAULT_PRODUCT));
     } else {
       this.checkProductInList(listId);
     }

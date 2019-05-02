@@ -1,38 +1,68 @@
-import {Injectable} from '@angular/core';
-import {PopoverController} from "ionic-angular";
-import {PopoverComponent} from "../../components/popover/popover";
+import { Injectable } from '@angular/core';
+import { PopoverController } from "ionic-angular";
+import { PopoverComponent } from "../../components/popover/popover";
 import * as Constants from "../../util/constants";
-import {Subject} from "rxjs/Subject";
-import {TranslateProvider} from "../../providers/translate/translate";
+import { Subject } from "rxjs/Subject";
+import { timestamp } from 'rxjs/operator/timestamp';
 
 @Injectable()
 export class PopoversProvider {
 
-  private close = new Subject<any>();
+  //private close = new Subject<any>();
   private isOpened = false;
   private popover;
+  private queue=[];
 
-  constructor(private popoverController: PopoverController,
-    private translateProvider: TranslateProvider) {
+  constructor(private popoverController: PopoverController) {
   }
 
-  public show(content) {
+  public show(content, subjectReference=null) {
+    if(this.isOpened===true)
+    {
+      let aux = new Subject<any>();
+      aux.next(content); 
+      this.queue.push({content,subject:aux});
+      return aux.asObservable();
+    }
+
+    this.isOpened=true;
+
+    let close; 
+    if(subjectReference==null){
+      close = new Subject<any>();
+    }else
+    {
+      close = subjectReference;
+    }
+    console.log(close);
+
     this.popover = this.popoverController.create(PopoverComponent, content);
-    if (this.isOpened === false) {
-      this.isOpened = true;
-    }
-    else {
-      this.popover.dismiss(null).then(() => {
-        this.popover.present().catch(err => console.error(err));
-        this.isOpened = true;
-      });
-    }
+
     this.popover.onDidDismiss(data => {
       this.isOpened = false;
-      this.close.next(data);
+
+      close.next(data);
+      close.complete();
+
+      this.nextInQueue();
     });
     this.popover.present().catch(err => console.error(err));
-    return this.close.asObservable();
+    if(subjectReference==null)
+    {
+      return close.asObservable();
+    }
+
+  }
+
+  private nextInQueue() {
+    if (this.queue.length <= 0) {
+      return;
+    }
+
+    console.log(this.queue.length);
+
+    let queueItem = this.queue.shift();
+   this.show(queueItem.content,queueItem.subject);
   }
 
   public closeModal() {
@@ -42,8 +72,8 @@ export class PopoversProvider {
     }
   }
 
-  public setContent(title, message, positiveButtonText = this.translateProvider.translate(Constants.OK),
-                    dismissButtonText = undefined, negativeButtonText = undefined, type = undefined) {
+  public setContent(title, message, positiveButtonText = Constants.OK,
+    dismissButtonText = undefined, negativeButtonText = undefined, type = undefined) {
     return {
       type: type,
       title: title,
@@ -53,5 +83,4 @@ export class PopoversProvider {
       dismissButtonText: dismissButtonText
     };
   }
-  
 }

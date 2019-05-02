@@ -5,7 +5,6 @@ import {PopoversProvider} from "../../providers/popovers/popovers";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
 import {ShoppingListPage} from "../../pages/shopping-list/shopping-list";
 import {App, Events} from "ionic-angular";
-import {TranslateProvider} from "../../providers/translate/translate";
 
 @Component({
   selector: 'custom-shopping-list-menu',
@@ -19,8 +18,7 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
   constructor(private shoppingListsProvider: ShoppingListsProvider,
               private popoversProvider: PopoversProvider,
               private app: App,
-              private events: Events,
-              private translateProvider: TranslateProvider) {
+              private events: Events) {
   }
 
   backToMainMenu() {
@@ -28,7 +26,7 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
   }
 
   addNewList() {
-    let content = this.popoversProvider.setContent(this.translateProvider.translate(Constants.SHOPPING_LIST_NEW_DIALOG_TITLE), undefined, this.translateProvider.translate(Constants.SAVE), this.translateProvider.translate(Constants.CANCEL), Constants.POPOVER_NEW_SHOPPING_LIST);
+    let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined, Constants.SAVE, Constants.CANCEL, Constants.POPOVER_NEW_SHOPPING_LIST);
     let subscription = this.popoversProvider.show(content).subscribe(data => {
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
@@ -43,7 +41,7 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
               this.customShoppingLists.push(list);
             });
           } else {
-            let content = this.popoversProvider.setContent(this.translateProvider.translate(Constants.O_ZONE), this.translateProvider.translate(Constants.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR));
+            let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);
             this.popoversProvider.show(content);
           }
           subscription.unsubscribe();

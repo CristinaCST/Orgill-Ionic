@@ -41,8 +41,7 @@ export class Login {
       }, error => {
         console.log(error);
         this.loading.hideLoading();
-        let content = this.popoversProvider.setContent(this.translateProvider.translate(Constants.LOGIN_ERROR_TITLE),
-        this.translateProvider.translate(Constants.LOGIN_ERROR_INVALID));
+        let content = this.popoversProvider.setContent(Constants.LOGIN_ERROR_TITLE, Constants.LOGIN_ERROR_INVALID);
         this.popoversProvider.show(content);
       }
     );
@@ -55,9 +54,7 @@ export class Login {
       return true;
     }
 
-    let content = this.popoversProvider.
-    setContent(this.translateProvider.translate(Constants.LOGIN_ERROR_TITLE), 
-    this.translateProvider.translate(Constants.LOGIN_ERROR_REQUIRED));
+    let content = this.popoversProvider.setContent(Constants.LOGIN_ERROR_TITLE, Constants.LOGIN_ERROR_REQUIRED);
     this.popoversProvider.show(content);
     return false;
   }

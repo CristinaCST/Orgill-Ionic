@@ -255,10 +255,14 @@ export const NOTIFICATIONS_PERMISIONS_BTN_DISMISS = 'notifications_permissions_b
 export const EVENT_FLASH_DEAL_NOTIFICATION_RECEIVED = "notifications_flash_deal_received"
 
 
-//Location
+//Permissions
 export const LOCATION_PERMISSIONS_MESSAGE = "location_permissions_message";
-export const LOCATION_NEVER_SHOW = "location_never_show";
-export const LOCATION_PERMISSIONS_NOT_GRANTED = "location_permissions_not_granted";
+export const NOTIFICATIONS_PERMISSIONS_MESSAGE = "notification_permissions_message";
+export const PERMISSION_NEVER = "permission_never_show";
+export const PERMISSION_ALLOW = "permission_allow";
+export const PERMISSION_DENY = "permission_deny";
+
+
 
 export const DEFAULT_HTTP_ERROR = "default_http_error";
 export const NO_ACCES = "no_acces";
@@ -268,13 +272,16 @@ export const SOMETHING_WENT_WROMG = "something_went_wrong";
 //ONE SIGNAL SETUP
 export const ONE_SIGNAL_API_KEY = "be33b136-2960-435a-b22f-b12ade07e393";
 export const ONE_SIGNAL_ANDROID_PROJECT_TITLE = "orgill-test";
-export const ONE_SIGNAL_VERBOSE = true; // set this to false if production
 export const ONE_SIGNAL_IOS_NOTIFICATION_AUTO_PROMPT = false;
 export const ONE_SIGNAL_IOS_LAUNCH_IN_WEBVIEW = false;
-export const ONE_SIGNAL_LOCATION_MODAL_PATH = 'locationModalDismiss';
 export const ONE_SIGNAL_LOCATION_PREFERENCE_PATH = 'locationSharing';
-export const ONE_SIGNAL_NOTIFICATION_MODAL_PATH = 'notificationModalDismiss';
-export const ONE_SIGNAL_NOTIFICATION_REFERENCE_PATH = 'pushNotifications';
+export const ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH = 'pushNotifications';
+
+
+
+export const PERMISSION_MODAL = "permission_modal";
 
 //DEBUG
+export const ONE_SIGNAL_VERBOSE = false; // set this to false if production
 export const DEBUG_TRANSLATIONS = true;
+export const DEBUG_ONE_SIGNAL = false;
