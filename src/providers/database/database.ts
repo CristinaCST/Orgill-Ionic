@@ -203,15 +203,28 @@ export class DatabaseProvider {
   addPrograms(programs: Program[]) {
     let programData;
 
-    programs.forEach(program => {
+    // programs.forEach(program => {
+    //   programData = [program.PROGRAMNO, program.NAME, program.STARTDATE, program.ENDDATE, program.SHIPDATE, program.MARKETONLY];
+    //   console.log('added program',programData);
+    //   this.database.executeSql(this.queries.addOrReplacePrograms, programData)
+    //     .then(data => {
+    //         console.log("programdattta",programData);
+    //         console.log('added one program to database: ', data);
+    //       },
+    //       error => {
+    //         console.error('add program to database error: ', error);
+    //       });
+    // });
+
+    this.asyncForEach(programs,async (program) => {
       programData = [program.PROGRAMNO, program.NAME, program.STARTDATE, program.ENDDATE, program.SHIPDATE, program.MARKETONLY];
-      this.database.executeSql(this.queries.addOrReplacePrograms, programData)
-        .then(data => {
-            //console.log('added one program to database: ', data);
-          },
-          error => {
-            console.error('add program to database error: ', error);
-          });
+        await this.database.executeSql(this.queries.addOrReplacePrograms, programData)
+          .then(data => {
+              // console.log('added one program to database: ', data);
+            },
+            error => {
+              console.error('add program to database error: ', error);
+            });
     });
 
   }
@@ -266,5 +279,11 @@ export class DatabaseProvider {
       listId
     ];
     return this.database.executeSql(this.queries.checkProductInList, checkData);
+  }
+
+   async asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+      await callback(array[index], index, array);
+    }
   }
 }

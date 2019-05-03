@@ -72,8 +72,23 @@ export class ProductPage implements OnInit {
   }
 
   getInitialProgram() {
-    let programs = this.productPrograms.filter(program => parseInt(program.PROGRAM_NO) === this.programNumber);
-    return programs.length > 0 ? programs[0] : this.productPrograms[0];
+    // let programs = this.productPrograms.filter(program => parseInt(program.PROGRAM_NO) === this.programNumber);
+    // return programs.length > 0 ? programs[0] : this.productPrograms[0];
+    var initialProgram: ItemProgram;
+    let programs = this.productPrograms;
+    if (this.programNumber == null){
+      return programs[0];
+    }
+    programs.forEach(prog => {
+      if(Number(prog.PROGRAM_NO) == this.programNumber){
+        initialProgram = prog;
+      }
+    })
+
+    if (initialProgram == null){
+      return programs[0]
+    }
+    return initialProgram
   }
 
   close() {
@@ -102,9 +117,12 @@ export class ProductPage implements OnInit {
     this.quantity = $event.quantity;
     this.quantityItemPrice = $event.total;
     this.programProvider.setPackQuantity(false);
-
     if (this.fromShoppingList) {
-      this.shoppingListProvider.updateShoppingListItem(this.product, this.shoppingListId, this.programNumber.toString(), $event.productPrice, this.quantity)//.catch(err => console.error(err));
+      this.shoppingListProvider.updateShoppingListItem(this.product, this.shoppingListId, this.programNumber.toString(), $event.productPrice, this.quantity).subscribe(data => {
+      },
+        error => {
+        console.log('error updating',error);
+        })
     }
   }
 

@@ -32,10 +32,9 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
           if (status === 'available') {
             if (data.type == 'default'){
-              data.type = "0"
+              data.type = Constants.CUSTOM_SHOPPING_LIST_TYPE;
             }else{
-              //TODO CHANGE TYPE WHEN WE KNOW WHAT CUSTOM MARKET ONLY TYPE IS
-              data.type = "3"
+              data.type = Constants.MARKET_ONLY_CUSTOM_TYPE;
             }
             this.shoppingListsProvider.createNewShoppingList(data.listName, data.listDescription, data.type).subscribe(addedList => {
               let list: ShoppingList =

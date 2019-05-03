@@ -183,9 +183,10 @@ export const SCAN_ERROR = 'scan_error';
 * =============================================================================================
 */
 
-export const DEFAULT_LIST_ID = 30;
-export const MARKET_ONLY_LIST_ID = 31;
+export const DEFAULT_LIST_ID = "default_list_id";
+export const MARKET_ONLY_LIST_ID = "market_only_list_id";
 
+export const CUSTOM_SHOPPING_LIST_TYPE = "0";
 export const DEFAULT_LIST_TYPE = "1";
 export const MARKET_ONLY_LIST_TYPE = "2";
 export const MARKET_ONLY_CUSTOM_TYPE = "3";

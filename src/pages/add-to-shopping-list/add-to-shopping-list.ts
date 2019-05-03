@@ -11,6 +11,7 @@ import {LoadingProvider} from "../../providers/loading/loading";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ProgramProvider} from "../../providers/program/program";
 import {Subscription} from 'rxjs';
+import {LocalStorageHelper} from "../../helpers/local-storage-helper";
 
 @Component({
   selector: 'page-add-to-shopping-list',
@@ -96,10 +97,16 @@ export class AddToShoppingListPage implements OnInit {
   }
 
   checkMarketOnlyProduct(data) {
+    let programType = data.rows.item(0);
     if (data.rows.length > 0) {
-      this.isMarketOnlyProduct = data.rows.item(0) === Constants.MARKET_ONLY_PROGRAM;
+      this.isMarketOnlyProduct = programType.market_only === Constants.MARKET_ONLY_PROGRAM;
     }
-    this.listForm.value.listOptions = data.rows.item(0) === Constants.MARKET_ONLY_PROGRAM ? Constants.MARKET_ONLY_LIST_ID : Constants.DEFAULT_LIST_ID;
+    // this.listForm.value.listOptions = data.rows.item(0).market_only.toString() === Constants.MARKET_ONLY_PROGRAM ? Constants.MARKET_ONLY_LIST_ID : Constants.DEFAULT_LIST_ID;
+    if (programType.market_only === Constants.MARKET_ONLY_PROGRAM){
+      this.listForm.value.listOptions = LocalStorageHelper.getFromLocalStorage(Constants.MARKET_ONLY_LIST_ID);
+    }else{
+      this.listForm.value.listOptions = LocalStorageHelper.getFromLocalStorage(Constants.DEFAULT_LIST_ID);
+    }
     this.checkProductInList(this.listForm.value.listOptions);
   }
 
@@ -136,10 +143,9 @@ export class AddToShoppingListPage implements OnInit {
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
           if (data.type == 'default'){
-            data.type = "0"
+            data.type = Constants.CUSTOM_SHOPPING_LIST_TYPE;
           } else {
-            //TODO CHANGE WHEN WE KNOW THE TYPE FOR A CUSTOM MARKET ONLY LIST
-            data.type = "3"
+            data.type = Constants.MARKET_ONLY_CUSTOM_TYPE;
           }
           if (status === 'available') {
             this.shoppingListsProvider.createNewShoppingList(data.listName, data.listDescription, data.type).subscribe(addedList => {
@@ -194,13 +200,6 @@ export class AddToShoppingListPage implements OnInit {
   }
 
   checkProductInList(listId: number) {
-    // if (this.productLists[listId] === listId) {
-    //   this.isAddBtnDisabled = true;
-    //   this.reset(this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_EXISTING_PRODUCT));
-    // } else {
-    //   this.isAddBtnDisabled = false;
-    // }
-
     this.shoppingListsProvider.checkProductInList(this.product.SKU, listId, this.selectedProgram.PROGRAM_NO).subscribe(data => {
       var temp = JSON.parse(data.d).Status;
       var response = (temp == "True");
@@ -221,7 +220,7 @@ export class AddToShoppingListPage implements OnInit {
   }
 
   selectList(selectedList: ShoppingList) {
-    if (this.isMarketOnlyProduct === true && ((selectedList.ListType.toString() !== Constants.MARKET_ONLY_LIST_TYPE) || (selectedList.ListType.toString() !== Constants.MARKET_ONLY_CUSTOM_TYPE))) {
+    if (this.isMarketOnlyProduct === true && ((selectedList.ListType.toString() !== Constants.MARKET_ONLY_LIST_TYPE) && (selectedList.ListType.toString() !== Constants.MARKET_ONLY_CUSTOM_TYPE))) {
       this.reset(this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_MARKET_ONLY_PRODUCT));
     } else if (this.isMarketOnlyProduct === false && ((selectedList.ListType.toString() === Constants.MARKET_ONLY_LIST_TYPE) || (selectedList.ListType.toString() === Constants.MARKET_ONLY_CUSTOM_TYPE))) {
       this.reset(this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_DEFAULT_PRODUCT));

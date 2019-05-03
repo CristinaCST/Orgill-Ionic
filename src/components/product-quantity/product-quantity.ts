@@ -25,6 +25,8 @@ export class ProductQuantityComponent implements OnInit {
         this.program = program;
         if (this.product.QTY_ROUND_OPTION === 'X') {
           this.quantity = this.quantityFromList ? this.quantityFromList : Number(this.product.SHELF_PACK);
+        }else{
+          this.quantity = this.quantityFromList ? this.quantityFromList : 1
         }
         this.handleQuantityChange();
         this.productPrice = this.getDecimalPrice();
@@ -82,10 +84,10 @@ export class ProductQuantityComponent implements OnInit {
       if (this.quantity % selfPackQuantity === 0) {
         switch (actionType) {
           case 'ADD':
-            this.quantity = this.quantity + selfPackQuantity;
+            this.quantity = Number(this.quantity) + selfPackQuantity;
             break;
           case 'REMOVE':
-            this.quantity = this.quantity - selfPackQuantity;
+            this.quantity = Number(this.quantity) - selfPackQuantity;
             break;
         }
       } else {

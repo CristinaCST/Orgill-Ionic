@@ -17,6 +17,7 @@ import {ScannerPage} from "../../pages/scanner/scanner";
 import {ShoppingListPage} from "../../pages/shopping-list/shopping-list";
 import {PurchasesPage} from "../../pages/purchases/purchases";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
+import {LocalStorageHelper} from "../../helpers/local-storage-helper";
 
 @Component({
   selector: 'app-menu',
@@ -77,7 +78,6 @@ export class AppMenuComponent implements OnInit {
   getShoppingLists() {
     this.shoppingListsProvider.getAllShoppingLists()
       .subscribe(data => {
-        console.log("data", data);
         let shoppingLists = JSON.parse(data.d);
         if (shoppingLists.length == 0) {
           this.shoppingListsProvider.createDefaultShoppingLists().subscribe(data =>{
@@ -93,6 +93,11 @@ export class AppMenuComponent implements OnInit {
             }
             if (shoppingList.list_type == Constants.DEFAULT_LIST_TYPE || shoppingList.list_type == Constants.MARKET_ONLY_LIST_TYPE) {
               this.defaultShoppingLists.push(temp)
+              if(shoppingList.list_type == Constants.DEFAULT_LIST_TYPE){
+                LocalStorageHelper.saveToLocalStorage(Constants.DEFAULT_LIST_ID,shoppingList.shopping_list_id);
+              }else{
+                LocalStorageHelper.saveToLocalStorage(Constants.MARKET_ONLY_LIST_ID,shoppingList.shopping_list_id);
+              }
             }
             else {
               this.customShoppingLists.push(temp)

@@ -54,10 +54,12 @@ export class ShoppingListPage {
     else {
       this.isCustomList = !(this.shoppingList.ListType !== Constants.DEFAULT_LIST_TYPE && this.shoppingList.ListType !== Constants.MARKET_ONLY_LIST_TYPE);
       if (!this.isCustomList) {
-        this.menuCustomButtons.push({
-          action: 'deleteList',
-          icon: 'trash'
-        });
+        if(this.menuCustomButtons.map(function(d) { return d['action']; }).indexOf('deleteList') == -1) {
+          this.menuCustomButtons.push({
+            action: 'deleteList',
+            icon: 'trash'
+          });
+        }
       }
       this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: Array<ShoppingListItem>) => {
         if (data) {
@@ -96,7 +98,8 @@ export class ShoppingListPage {
             if (item !== null) {
               let price = (item.item_price * item.quantity).toFixed(Constants.DECIMAL_NUMBER);
               $this.setOrderTotal({status: 'uncheckedItem', price: price}, index);
-              $this.shoppingListItems.splice(index, 1);
+              $this.shoppingListItems = $this.shoppingListItems.filter( elem => elem.product.SKU != item.product.SKU);
+              // $this.shoppingListItems.splice(index, 1);
             }
           })
         }

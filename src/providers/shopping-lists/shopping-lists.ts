@@ -6,6 +6,9 @@ import {ApiProvider} from "../api-provider";
 import * as ConstantsUrl from "../../util/constants-url";
 import * as Constants from "../../util/constants";
 import {LocalStorageHelper} from "../../helpers/local-storage-helper";
+import {forkJoin} from "rxjs/observable/forkJoin";
+import {Observable} from "rxjs/Observable";
+import {concatMap} from "rxjs/operator/concatMap";
 
 @Injectable()
 export class ShoppingListsProvider {
@@ -84,9 +87,59 @@ export class ShoppingListsProvider {
         shopping_list_id: listId
       }).subscribe(data => {
         let itemsData = JSON.parse(data.d);
-        let productList = this.setProducts(itemsData);
-        resolve(productList);
+        this.getAllProductData(itemsData).then(data => {
+          resolve(data);
+        })
+
       });
+    });
+  }
+
+  getAllProductData(productList){
+    return new Promise((resolve,reject) =>{
+      let list = [];
+      let reqs = [];
+      productList.forEach( element => {
+        reqs.push(this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH,{
+              "user_token" : this.userToken,
+              "search_string" : element.sku,
+              "category_id": "",
+              "program_number": element.program_no,
+              "p": "1",
+              "rpp": "1"
+            }));
+      });
+      Observable.from(reqs).concatMap(shift => shift).subscribe( resp => {
+        let data: any;
+        data = JSON.parse(resp["d"])[0];
+        let element = productList.filter(elem => elem.sku == data.SKU)[0];
+        let shoppingListProduct: ShoppingListItem = {
+          id: element.id,
+          product: {
+            CatID: data.CatID,
+            SKU: data.SKU,
+            QTY_ROUND_OPTION: data.QTY_ROUND_OPTION,
+            MODEL: data.MODEL,
+            NAME: data.NAME,
+            VENDOR_NAME: data.VENDOR_NAME,
+            SELLING_UNIT: data.SELLING_UNIT,
+            UPC_CODE: data.UPC_CODE,
+            SUGGESTED_RETAIL: data.SUGGESTED_RETAIL,
+            YOURCOST: data.YOURCOST,
+            IMAGE: data.IMAGE,
+            SHELF_PACK: data.SHELF_PACK,
+            VELOCITY_CODE: data.VELOCITY_CODE,
+            TOTAL_REC_COUNT: data.TOTAL_REC_COUNT
+          },
+          program_number: element.program_no,
+          item_price: element.price,
+          quantity: element.quantity,
+          isCheckedInShoppingList: false,
+          isExpired: this.isExpiredProgram(element.end_date)
+        };
+        list.push(shoppingListProduct);
+      });
+      resolve(list);
     });
   }
 
@@ -128,20 +181,20 @@ export class ShoppingListsProvider {
         let shoppingListProduct: ShoppingListItem = {
           id: item.id,
           product: {
-            CatID: item.cat_id,
-            SKU: item.sku,
-            QTY_ROUND_OPTION: item.qty_round_option,
-            MODEL: item.model,
-            NAME: item.name,
-            VENDOR_NAME: item.vendor_name,
-            SELLING_UNIT: item.selling_unit,
-            UPC_CODE: item.upc_code,
-            SUGGESTED_RETAIL: item.suggested_retail,
-            YOURCOST: item.your_cost,
-            IMAGE: item.image,
-            SHELF_PACK: item.shelf_pack,
-            VELOCITY_CODE: item.velocity_code,
-            TOTAL_REC_COUNT: item.total_rec_count
+            CatID: item.CatID,
+            SKU: item.SKU,
+            QTY_ROUND_OPTION: item.QTY_ROUND_OPTION,
+            MODEL: item.MODEL,
+            NAME: item.NAME,
+            VENDOR_NAME: item.VENDOR_NAME,
+            SELLING_UNIT: item.SELLING_UNIT,
+            UPC_CODE: item.UPC_CODE,
+            SUGGESTED_RETAIL: item.SUGGESTED_RETAIL,
+            YOURCOST: item.YOURCOST,
+            IMAGE: item.IMAGE,
+            SHELF_PACK: item.SHELF_PACK,
+            VELOCITY_CODE: item.VELOCITY_CODE,
+            TOTAL_REC_COUNT: item.TOTAL_REC_COUNT
           },
           program_number: item.program_no,
           item_price: item.price,
