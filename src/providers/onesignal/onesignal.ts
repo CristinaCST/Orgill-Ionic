@@ -1,51 +1,67 @@
 import { Injectable } from '@angular/core';
 import { OneSignal } from '@ionic-native/onesignal';
 import * as Constants from '../../util/constants';
+import * as Strings from "../../util/strings";
 import { LocalStorageHelper } from "../../helpers/local-storage-helper";
 import { FlashDealProvider } from '../../providers/flashdeal/flashdeal';
 import { Badge } from "@ionic-native/badge";
 import { Events, Platform } from 'ionic-angular';
 import { PopoversProvider } from '../../providers/popovers/popovers';
-import { Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 
 
 @Injectable()
 export class OneSignalProvider {
-    private pushNotificationPermissionID : string = Constants.ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH;
-    private locationPermissionID : string = Constants.ONE_SIGNAL_LOCATION_PREFERENCE_PATH;
 
-    private pushNotificationPermission : boolean = false;
-    private locationPermission : boolean = false;
+    //Grab the paths for each permission
+    private pushNotificationPermissionID: string = Constants.ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH;
+    private locationPermissionID: string = Constants.ONE_SIGNAL_LOCATION_PREFERENCE_PATH;
 
-    constructor(private oneSignal: OneSignal,    //Onesignal library
+    //Store actual permissions for quick access
+    private pushNotificationPermission: boolean = false;
+    private locationPermission: boolean = false;
+
+    constructor(private oneSignal: OneSignal,
         private badge: Badge,   //Badge for icon notification
-        private flashDealProvider: FlashDealProvider,   //Provider to call for flash deals
-        private events: Events,     //Propagate event
-        private platform: Platform,   //Check platform
-        private popover: PopoversProvider,     //Use popovers to ask for permissions
+        private flashDealProvider: FlashDealProvider,   //Provider to call to navigate to flashdeals provided through a push notification
+        private events: Events,     //Propagate one signal event to be used in other places
+       // private platform: Platform,   //Run platform dependent code 
+        private popover: PopoversProvider,     //Needed for permission modals
     ) { };
 
 
-    public init(){
 
-        if(Constants.DEBUG_ONE_SIGNAL)
-        {
-            this.permissionSaveResult(this.pushNotificationPermissionID,"NO");
-            this.permissionSaveResult(this.locationPermissionID,"NO");
+    /**
+     * Call this to begin oneSignal initialization, call after app is ready!
+     */
+    public init() {
+
+        //If OneSignal is in DEBUG mode we reset the status of permissions so we get modals again.
+        if (Constants.DEBUG_ONE_SIGNAL && Constants.DEBUG_ONE_SIGNAL_CLEAN_PREFS) {
+            this.permissionSaveResult(this.pushNotificationPermissionID, "NO");
+            this.permissionSaveResult(this.locationPermissionID, "NO");
         }
 
         //Begin initialiation with specific API keys
         this.oneSignal.startInit(Constants.ONE_SIGNAL_API_KEY, Constants.ONE_SIGNAL_ANDROID_PROJECT_TITLE);
 
-         //Sort out the permissions needed
+        //Sort out the permissions needed
         this.setPermissions();
     };
 
-    private finishInit(){
 
-        this.updatePermissions();
-       // console.log("LOCATION PERMS:" + this.locationPermission);
+    /**
+     * This only should be called after permissions have been fully assessed.
+     */
+    private finishInit() {
+
+        this.updatePermissions(); //Update the permissions from storage
+
+        //Set if we share location according to permissions
         this.oneSignal.setLocationShared(this.locationPermission);
+
+        //Set if we subscribe to push notifications based on permissions
+        this.oneSignal.setSubscription(this.pushNotificationPermission);
 
         //How will oneSignal notifications will show while using the app.
         this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
@@ -71,17 +87,14 @@ export class OneSignalProvider {
         //What happens when a notification is received
         this.oneSignal.handleNotificationReceived().subscribe((data: any) => {
 
-            //Only log if we set verbose on
-            if (Constants.ONE_SIGNAL_VERBOSE) {
-                console.log(JSON.stringify(data));  //Transform the data into string
-            }
+            this.debugLog("Received package:" + JSON.stringify(data), data);
 
             //Check data for existence, if there is none, then the notification is something else than a flash deal
             if (data) {
                 if (data.payload.additionalData.SKU) {  //Check if there is a SKU in the correct object format
 
                     //Send an event with the passed SKU
-                    this.events.publish(Constants.EVENT_FLASH_DEAL_NOTIFICATION_RECEIVED, data.payload.additionalData.SKU);
+                    this.events.publish(Strings.EVENT_FLASH_DEAL_NOTIFICATION_RECEIVED, data.payload.additionalData.SKU);
                 }
             }
 
@@ -94,7 +107,7 @@ export class OneSignalProvider {
 
             //Log only if we areverbose logging
             if (Constants.ONE_SIGNAL_VERBOSE) {
-                console.log("NOTIFICATION OPENED", data);
+                console.log("NOTIFICATION OPENED with data: ", data);
             }
 
             //Save the fact we begin navigating from a notification
@@ -110,11 +123,12 @@ export class OneSignalProvider {
         //Finalize OneSignal init
         this.oneSignal.endInit();
 
-        this.oneSignal.setSubscription(this.pushNotificationPermission); 
+        //Log only if we are verbose logging
+        this.debugLog("OneSignal fully initiaized");
+        
 
-         //Log only if we are verbose logging
-         if (Constants.ONE_SIGNAL_VERBOSE) {
-            console.log("OneSignal fully initiaized");
+        if(Constants.DEBUG_ONE_SIGNAL){
+            this.testOneSignal();
         }
     };
 
@@ -128,12 +142,12 @@ export class OneSignalProvider {
         */
         this.checkSession(
             {
-            notification: {
-                payload: {
-                    additionalData: { SKU: "7515000" }
+                notification: {
+                    payload: {
+                        additionalData: { SKU: "7515000" }
+                    }
                 }
-            }
-        });
+            });
     };
 
 
@@ -142,7 +156,7 @@ export class OneSignalProvider {
      * 
      * @param data Should be a packet from OneSignal, it can be left null to process a simple push notification without payload
      */
-    private checkSession(data=null) {
+    private checkSession(data = null) {
 
         if (data) {
             if (data.notification.payload.additionalData.SKU) {
@@ -151,27 +165,27 @@ export class OneSignalProvider {
                 try {
                     this.flashDealProvider.navigateToFlashDeal(data.notification.payload.additionalData.SKU);
                 } catch (exception) {
-                    if (Constants.ONE_SIGNAL_VERBOSE) {
-                        console.log("Couldn't navigate to flash deal because " + exception);
-                    }
+                    this.debugLog("Couldn't navigate to flash deal because " + exception, data);
+                    
                 }
 
             } else {    //If there is data but the package does not respect the flash deal structure
-                if (Constants.ONE_SIGNAL_VERBOSE) {
-                    console.log("ONESIGNAL package is not a flash deal but it exists...")
-                }
+                this.debugLog("ONESIGNAL package is not a flash deal but it exists...", data);
+                
             }
         }
         else {  //If the package is empty just open the app?
             //TODO: Implement something here?
-            if (Constants.ONE_SIGNAL_VERBOSE) {
-                console.log("ONESIGNAL NOTIFICATION PACKET IS NULL...")
-            }
+            this.debugLog("ONESIGNAL NOTIFICATION PACKET IS NULL...", data);
+            
         }
     };
 
 
-    private updatePermissions(){
+    /**
+     * This function updates the in-memory permissions to reflect the stored ones
+     */
+    private updatePermissions() {
         this.pushNotificationPermission = LocalStorageHelper.getFromLocalStorage(this.pushNotificationPermissionID) === 'true';
         this.locationPermission = LocalStorageHelper.getFromLocalStorage(this.pushNotificationPermissionID) === 'true';
     }
@@ -180,85 +194,111 @@ export class OneSignalProvider {
      * Check or get all needed permissions.
      */
     private setPermissions() {
+
         //Check badge permission
         if (!this.badge.hasPermission()) {
             this.badge.requestPermission();
         }
 
-        this.updatePermissions();
-
-
+        //forkJoin modal observables such that we continue only when all permission are settled (either granted or rejected)
         Observable.forkJoin(this.askForPermission(
-            Constants.O_ZONE,
-            Constants.NOTIFICATIONS_PERMISIONS_MESSAGE,
-            this.pushNotificationPermission,
+            Strings.GENERIC_MODAL_TITLE,
+            Strings.NOTIFICATIONS_PERMISSIONS_MESSAGE,
             this.pushNotificationPermissionID
-        ),this.askForPermission(
-            Constants.O_ZONE,
-            Constants.LOCATION_PERMISSIONS_MESSAGE,
-            this.locationPermission,
+        ), this.askForPermission(
+            Strings.GENERIC_MODAL_TITLE,
+            Strings.LOCATION_PERMISSIONS_MESSAGE,
             this.locationPermissionID
-        )).subscribe(([notification,location])=>{
+        )).subscribe(([notification, location]) => {
+            //We save their new result if it's the case
+
+            this.debugLog("Notification result from modal:"+ notification, notification);
+            this.debugLog("Location result from modal" + location, location);
+
             this.permissionSaveResult(Constants.ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH, notification["optionSelected"]);
             this.permissionSaveResult(Constants.ONE_SIGNAL_LOCATION_PREFERENCE_PATH, location["optionSelected"]);
+
+            //Since we got all permissions we can continue with 
             this.finishInit();
         });
 
     };
 
-    private askForPermission(title, message, permission, permissionID){
+    /**
+     * This method handles asking for a permission and returns the result from the popover
+     * @param title Title constant of the modal
+     * @param message Message of the modal
+     * @param permissionID Path of permission in storage to use
+     * @param return Observable from a modal, will return only 1 value from {"DISMISS","OK","NO"}
+     */
+    private askForPermission(title, message, permissionID) {
 
-        let permissionModalDismissed = LocalStorageHelper.getFromLocalStorage(permissionID+"Modal") === 'true';
+        //Grab the modal and permission status from storage
+        let permissionModalDismissed = LocalStorageHelper.getFromLocalStorage(permissionID + "Modal") === 'true';
+        let permission = LocalStorageHelper.getFromLocalStorage(permissionID) === 'true';
 
-           if(permissionModalDismissed || permission)
-           {
-               return Observable.of([]); //Return empty observable
-           }
-   
-           let popoverContent = {
-               type: Constants.PERMISSION_MODAL,
-               title,
-               message,
-               negativeButtonText: Constants.PERMISSION_DENY,
-               positiveButtonText: Constants.PERMISSION_ALLOW,
-               dismissButtonText: Constants.PERMISSION_NEVER
-           };
-   
-           return this.popover.show(popoverContent);
+        //If the modal is set to never or permission is already granted, return an empty observable.
+        if (permissionModalDismissed || permission) {
+            return Observable.of([]); //Return empty observable
+        }
+
+        //Setup the popover content
+        let popoverContent = {
+            type: Constants.PERMISSION_MODAL,
+            title,
+            message,
+            negativeButtonText: Strings.MODAL_BUTTON_NOT_NOW,
+            positiveButtonText: Strings.MODAL_BUTTON_ALLOW,
+            dismissButtonText: Strings.MODAL_BUTTON_NEVER,
+        };
+
+        //Return the popover observable
+        return this.popover.show(popoverContent);
     };
 
 
     /**
      * Save the result of asking for a permission using preference constant ID
      * @param preferenceID Constant ID for the permission 
-     * @param result The result of popover service.
+     * @param result The result of popover service, expects one of the values {"DISMISS","OK", "NO"}
      */
-    private permissionSaveResult(preferenceID, result){
+    private permissionSaveResult(preferenceID, result) {
+        if(!result){
+            this.debugLog("Result is empty, proably permission was already set" + result,result);
+            return;
+        }
 
-        console.log(preferenceID.toString()+result);
+        this.debugLog(preferenceID.toString() + result);
 
-        function savePermissionModal(modalStatus, preferenceStatus){
-            LocalStorageHelper.saveToLocalStorage(preferenceID+"Modal", modalStatus.toString());
+        //Inner function to actually save data to storage
+        function savePermissionModal(modalStatus, preferenceStatus) {
+            LocalStorageHelper.saveToLocalStorage(preferenceID + "Modal", modalStatus.toString());
             LocalStorageHelper.saveToLocalStorage(preferenceID, preferenceStatus.toString());
         }
 
         switch (result) {
             case "DISMISS":
-                savePermissionModal(true,false);    //Never show again, implicitely don't give permission
+                savePermissionModal(true, false);    //Never show again, implicitely don't give permission
                 break;
 
             case "OK":
-                savePermissionModal(true,true);    //Don't show again modal since permission was granted
+                savePermissionModal(true, true);    //Don't show again modal since permission was granted
                 break;
 
             case "NO":
-                savePermissionModal(false,false);   //If permission is not granted and modal is not dismissed permanently, show it next time
+                savePermissionModal(false, false);   //If permission is not granted and modal is not dismissed permanently, show it next time
                 break;
 
             default:
-            console.log("No valid modal result for OneSignal permissions, received:" + result) //TODO: Change to be tied to debug strings and be dynamic
-            break;
+                console.log("No valid modal result for OneSignal permissions, received:" + result) //TODO: Change to be tied to debug strings and be dynamic
+                break;
         };
     };
+
+    private debugLog(string, object=null){
+        if(Constants.DEBUG_ONE_SIGNAL){
+            console.log(string, object);
+        }
+    }
 
 }
