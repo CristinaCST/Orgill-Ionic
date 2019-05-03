@@ -148,7 +148,8 @@ export class AddToShoppingListPage implements OnInit {
             data.type = Constants.MARKET_ONLY_CUSTOM_TYPE;
           }
           if (status === 'available') {
-            this.shoppingListsProvider.createNewShoppingList(data.listName, data.listDescription, data.type).subscribe(addedList => {
+            this.shoppingListsProvider.createNewShoppingList(data.listName, data.listDescription, data.type).subscribe(resp => {
+              let addedList = JSON.parse(resp.d)[0];
               let list: ShoppingList =
                 {
                   ListID: addedList.shopping_list_id,

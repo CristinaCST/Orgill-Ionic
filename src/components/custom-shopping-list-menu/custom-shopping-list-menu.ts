@@ -36,7 +36,9 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
             }else{
               data.type = Constants.MARKET_ONLY_CUSTOM_TYPE;
             }
-            this.shoppingListsProvider.createNewShoppingList(data.listName, data.listDescription, data.type).subscribe(addedList => {
+            this.shoppingListsProvider.createNewShoppingList(data.listName, data.listDescription, data.type).subscribe(resp => {
+              let addedList = JSON.parse(resp.d)[0];
+              console.log('addedlistis',addedList);
               let list: ShoppingList =
                 {
                   ListID: addedList.shopping_list_id,
@@ -44,6 +46,7 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
                   ListDescription: addedList.list_description,
                   ListType: addedList.list_type
                 };
+              console.log('pushlist',list);
               this.customShoppingLists.push(list);
             });
           } else {
