@@ -151,10 +151,10 @@ export class AddToShoppingListPage implements OnInit {
             this.shoppingListsProvider.createNewShoppingList(data.listName, data.listDescription, data.type).subscribe(addedList => {
               let list: ShoppingList =
                 {
-                  ListID: addedList.insertId,
-                  ListName: data.listName,
-                  ListDescription: data.listDescription,
-                  ListType: data.type
+                  ListID: addedList.shopping_list_id,
+                  ListName: addedList.list_name,
+                  ListDescription: addedList.list_description,
+                  ListType: addedList.list_type
                 };
               this.shoppingLists.push(list);
               this.listForm.value.listOptions = list.ListID;

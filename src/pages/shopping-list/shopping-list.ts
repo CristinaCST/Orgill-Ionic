@@ -10,6 +10,7 @@ import {CustomerLocationPage} from "../customer-location/customer-location";
 import {ProductPage} from "../product/product";
 import {TranslateProvider} from "../../providers/translate/translate";
 import {ScannerPage} from "../scanner/scanner";
+import {LoadingProvider} from "../../providers/loading/loading";
 
 @Component({
   selector: 'page-shopping-list',
@@ -33,7 +34,8 @@ export class ShoppingListPage {
               private shoppingListProvider: ShoppingListsProvider,
               private popoversProvider: PopoversProvider,
               private translator: TranslateProvider,
-              private events: Events) {
+              private events: Events,
+              private loading: LoadingProvider) {
     this.menuCustomButtons = [{action: 'detailsList', icon: 'information-circle'},
       {action: 'scan', icon: 'barcode'}];
   }
@@ -43,6 +45,7 @@ export class ShoppingListPage {
   }
 
   init(): void {
+    this.loading.presentSimpleLoading();
     this.shoppingList = this.navParams.get('list');
     if (this.navParams.get('isCheckout') !== undefined) {
       this.isCheckout = this.navParams.get('isCheckout');
@@ -66,6 +69,7 @@ export class ShoppingListPage {
           this.shoppingListItems = data;
           this.checkExpiredItems();
           this.content.resize();
+          this.loading.hideLoading();
         }
       }).catch(error => console.error(error));
     }

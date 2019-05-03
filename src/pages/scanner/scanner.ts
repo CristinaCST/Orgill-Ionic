@@ -41,10 +41,13 @@ export class ScannerPage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.shoppingList = this.navParams.get("shoppingList");
-    this.shoppingListId = this.shoppingList.id;
+    if (this.navParams.get("shoppingList")) {
+      console.log("NAV PARAMS",this.navParams.get("shoppingList"));
+      this.shoppingList = this.navParams.get("shoppingList");
+      this.shoppingListId = this.shoppingList.id;
+      this.products = this.navParams.get('products');
+    }
     this.searchTab = this.navParams.get('type');
-    this.products = this.navParams.get('products');
   }
 
   scan() {
