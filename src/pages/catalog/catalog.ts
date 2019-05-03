@@ -3,6 +3,7 @@ import {NavController, NavParams} from 'ionic-angular';
 import {Category} from "../../interfaces/models/category";
 import {CategoriesRequest} from "../../interfaces/request-body/categories-request";
 import * as Constants from '../../util/constants';
+import * as Strings from '../../util/strings';
 import {LocalStorageHelper} from "../../helpers/local-storage-helper";
 import {CatalogsProvider} from "../../providers/catalogs/catalogs";
 import {SubcategoriesRequest} from "../../interfaces/request-body/subcategories-request";
@@ -39,7 +40,7 @@ export class Catalog implements OnInit {
     this.currentSubCategory = this.checkValidParams('subcategory', undefined);
 
     if (!this.programName) {
-      this.programName = this.translateProvider.translate(Constants.REGULAR_CATALOG);
+      this.programName = this.translateProvider.translate(Strings.REGULAR_CATALOG);
     }
     if (!this.programNumber) {
       this.programNumber = '';
@@ -61,7 +62,7 @@ export class Catalog implements OnInit {
   }
 
   private getCategories() {
-    this.loading.presentLoading(this.translateProvider.translate(Constants.LOADING_ALERT_CONTENT_CATEGORIES));
+    this.loading.presentLoading(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_CATEGORIES));
     const params: CategoriesRequest = {
       user_token: this.userToken,
       p: '1',
@@ -84,7 +85,7 @@ export class Catalog implements OnInit {
   }
 
   selectCategory(category: Category) {
-    this.loading.presentLoading(this.translateProvider.translate(Constants.LOADING_ALERT_CONTENT_CATEGORIES));
+    this.loading.presentLoading(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_CATEGORIES));
     const params: SubcategoriesRequest = {
       user_token: this.userToken,
       category_id: category.CatID,

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PopoverController } from "ionic-angular";
 import { PopoverComponent } from "../../components/popover/popover";
-import * as Constants from "../../util/constants";
+import * as Strings from "../../util/strings";
 import { Subject } from "rxjs/Subject";
 import { timestamp } from 'rxjs/operator/timestamp';
 
@@ -72,7 +72,7 @@ export class PopoversProvider {
     }
   }
 
-  public setContent(title, message, positiveButtonText = Constants.OK,
+  public setContent(title, message, positiveButtonText = Strings.MODAL_BUTTON_YES,
     dismissButtonText = undefined, negativeButtonText = undefined, type = undefined) {
     return {
       type: type,

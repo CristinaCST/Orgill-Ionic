@@ -1,6 +1,6 @@
 import {IonicErrorHandler} from "ionic-angular";
 import {PopoversProvider} from "./popovers/popovers";
-import * as Constants from "../util/constants";
+import * as Strings from "../util/strings";
 import {Injectable} from "@angular/core";
 import {LoadingProvider} from "./loading/loading";
 
@@ -12,7 +12,7 @@ export class CustomErrorHandler implements IonicErrorHandler {
 
   async handleError(error: any) {
     console.error('Custom error', error);
-    let content = this.popoversProvider.setContent(Constants.DEFAULT_HTTP_ERROR, Constants.SOMETHING_WENT_WROMG);
+    let content = this.popoversProvider.setContent(Strings.DEFAULT_HTTP_ERROR, Strings.SOMETHING_WENT_WROMG);
     this.showErrorModal(content)
   }
 

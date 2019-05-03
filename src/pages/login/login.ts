@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {NavController,} from 'ionic-angular';
 import {AuthServiceProvider} from "../../providers/authservice/authservice";
 import * as Constants from "../../util/constants";
+import * as Strings from "../../util/strings";
 import {LoadingProvider} from "../../providers/loading/loading";
 import {TranslateProvider} from "../../providers/translate/translate";
 import {PopoversProvider} from "../../providers/popovers/popovers";
@@ -30,7 +31,7 @@ export class Login {
       return;
     }
 
-    this.loading.presentLoading(this.translateProvider.translate(Constants.LOADING_ALERT_CONTENT_LOGIN));
+    this.loading.presentLoading(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_LOGIN));
     let loginRequest = {username: this.username, password: this.password};
     this.authService.login(loginRequest).subscribe(
       () => {
@@ -41,7 +42,7 @@ export class Login {
       }, error => {
         console.log(error);
         this.loading.hideLoading();
-        let content = this.popoversProvider.setContent(Constants.LOGIN_ERROR_TITLE, Constants.LOGIN_ERROR_INVALID);
+        let content = this.popoversProvider.setContent(Strings.LOGIN_ERROR_TITLE, Strings.LOGIN_ERROR_INVALID);
         this.popoversProvider.show(content);
       }
     );
@@ -54,7 +55,7 @@ export class Login {
       return true;
     }
 
-    let content = this.popoversProvider.setContent(Constants.LOGIN_ERROR_TITLE, Constants.LOGIN_ERROR_REQUIRED);
+    let content = this.popoversProvider.setContent(Strings.LOGIN_ERROR_TITLE, Strings.LOGIN_ERROR_REQUIRED);
     this.popoversProvider.show(content);
     return false;
   }

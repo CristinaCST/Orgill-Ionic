@@ -6,6 +6,7 @@ import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lis
 import {ShoppingList} from "../../interfaces/models/shopping-list";
 import {PopoversProvider} from "../../providers/popovers/popovers";
 import * as Constants from "../../util/constants";
+import * as Strings from "../../util/strings";
 import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
 import {LoadingProvider} from "../../providers/loading/loading";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
@@ -96,8 +97,8 @@ export class AddToShoppingListPage implements OnInit {
   }
 
   newShoppingList() {
-    let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined,
-      Constants.SAVE, Constants.CANCEL, undefined, Constants.POPOVER_NEW_SHOPPING_LIST);
+    let content = this.popoversProvider.setContent(Strings.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined,
+      Strings.MODAL_BUTTON_SAVE, Strings.MODAL_BUTTON_CANCEL, undefined, Constants.POPOVER_NEW_SHOPPING_LIST);
     this.subscription = this.popoversProvider.show(content).subscribe(data => {
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
@@ -113,7 +114,7 @@ export class AddToShoppingListPage implements OnInit {
               this.listForm.value.listOptions = list.id;
             });
           } else {
-            let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);
+            let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);
             this.popoversProvider.show(content);
           }
           this.subscription.unsubscribe();
@@ -128,7 +129,7 @@ export class AddToShoppingListPage implements OnInit {
 
   add() {
     if (!this.selectedProgram) {
-      let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_NO_PROGRAM_TITLE, Constants.SHOPPING_LIST_NO_PROGRAM_MESSAGE, undefined);
+      let content = this.popoversProvider.setContent(Strings.SHOPPING_LIST_NO_PROGRAM_TITLE, Strings.SHOPPING_LIST_NO_PROGRAM_MESSAGE, undefined);
       this.popoversProvider.show(content);
       return;
     }
@@ -154,7 +155,7 @@ export class AddToShoppingListPage implements OnInit {
   checkProductInList(listId: number) {
     if (this.productLists[listId] === listId) {
       this.isAddBtnDisabled = true;
-      this.reset(this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_EXISTING_PRODUCT));
+      this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_EXISTING_PRODUCT));
     } else {
       this.isAddBtnDisabled = false;
     }
@@ -168,9 +169,9 @@ export class AddToShoppingListPage implements OnInit {
 
   selectList(listId: number) {
     if (this.isMarketOnlyProduct === true && listId !== Constants.MARKET_ONLY_LIST_ID) {
-      this.reset(this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_MARKET_ONLY_PRODUCT));
+      this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_MARKET_ONLY_PRODUCT));
     } else if (this.isMarketOnlyProduct === false && listId === Constants.MARKET_ONLY_LIST_ID) {
-      this.reset(this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_DEFAULT_PRODUCT));
+      this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_DEFAULT_PRODUCT));
     } else {
       this.checkProductInList(listId);
     }

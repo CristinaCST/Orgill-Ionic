@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Network} from "@ionic-native/network";
 import * as Constants from "../../util/constants";
+import * as Strings from "../../util/strings";
 import {PopoversProvider} from "../popovers/popovers";
 
 @Injectable()
@@ -22,7 +23,7 @@ export class NetworkProvider {
   }
 
   openNetworkModal() {
-    let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.POPOVER_TIMEOUT_ERROR_MESSAGE, "Open Data", "Open WIFI")
+    let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.POPOVER_TIMEOUT_ERROR_MESSAGE, "Open Data", "Open WIFI")
     this.popoversProvider.show(content);
   }
 }

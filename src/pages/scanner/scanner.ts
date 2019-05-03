@@ -4,6 +4,7 @@ import {BarcodeScanner} from "@ionic-native/barcode-scanner";
 import {LoadingProvider} from "../../providers/loading/loading";
 import {TranslateProvider} from "../../providers/translate/translate";
 import * as Constants from '../../util/constants';
+import * as Strings from "../../util/strings";
 import {ScannerProvider} from "../../providers/scanner/scanner";
 import {Product} from "../../interfaces/models/product";
 import {PopoversProvider} from "../../providers/popovers/popovers";
@@ -50,7 +51,7 @@ export class ScannerPage implements OnInit {
     this.barcodeScanner.scan().then((barcodeData) => {
       const scanResult = barcodeData.text;
       if (this.isValidScanResult(scanResult)) {
-        this.loading.presentLoading(this.translator.translate(Constants.SCAN_RESULTS_SEARCHING));
+        this.loading.presentLoading(this.translator.translate(Strings.SCAN_RESULTS_SEARCHING));
         this.setProgramFromScanResult(scanResult);
         this.setSearchStringFromScanResult(scanResult);
         this.searchProduct();
@@ -121,10 +122,10 @@ export class ScannerPage implements OnInit {
       }, errorResponse => {
         this.loading.hideLoading();
         if (this.isPermissionError(errorResponse)) {
-          let content = {title: Constants.ERROR, message: Constants.POPOVER_CAMERA_PERMISSION_NOT_GRANTED};
+          let content = {title: Strings.GENERIC_ERROR, message: Constants.POPOVER_CAMERA_PERMISSION_NOT_GRANTED};
           this.popoversProvider.show(content);
         } else {
-          let content = {title: Constants.ERROR, message: Constants.SCAN_ERROR};
+          let content = {title: Strings.GENERIC_ERROR, message: Strings.SCAN_ERROR};
           this.popoversProvider.show(content);
         }
       });

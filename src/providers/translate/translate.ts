@@ -20,7 +20,12 @@ export class TranslateProvider {
 
     //HACK: Experimental workaround over lazy translator:
     if(result===""){
+
       result = this.translateService.instant(key);
+      if(result==="" && DEBUG_TRANSLATIONS)
+      {
+        console.log("-------TRANSLATION FAILED FOR KEY:" + key);
+      }
     }
 
     return result;
