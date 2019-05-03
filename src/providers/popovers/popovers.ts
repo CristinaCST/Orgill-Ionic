@@ -16,12 +16,18 @@ export class PopoversProvider {
   constructor(private popoverController: PopoverController) {
   }
 
-  public show(content, subjectReference=null) {
+  /**
+   * 
+   * @param content modal content, eg: type, title, message, buttons
+   * @param continuous should the modal complete after 1 input? true if so
+   * @param subjectReference pass a subject if you want a specific observable to be changed
+   */
+  public show(content, continuous = false, subjectReference=null) {
     if(this.isOpened===true)
     {
       let aux = new Subject<any>();
       aux.next(content); 
-      this.queue.push({content,subject:aux});
+      this.queue.push({content,continuous,subject:aux});
       return aux.asObservable();
     }
 
@@ -42,8 +48,10 @@ export class PopoversProvider {
       this.isOpened = false;
 
       close.next(data);
-      close.complete();
-
+      
+      if (!continuous) {
+        close.complete();
+      }
       this.nextInQueue();
     });
     this.popover.present().catch(err => console.error(err));
@@ -62,7 +70,7 @@ export class PopoversProvider {
     console.log(this.queue.length);
 
     let queueItem = this.queue.shift();
-   this.show(queueItem.content,queueItem.subject);
+   this.show(queueItem.content,queueItem.continuous,queueItem.subject);
   }
 
   public closeModal() {
