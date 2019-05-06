@@ -24,7 +24,7 @@ export const TIMEOUT_INTERVAL = 30000; // 30 seconds
 export const TIMEOUT_DEFAULT_INTERVAL = 30000; // 30 seconds
 
 /**
-* Marker : DateTime Formats
+* Marker : dateTimeProvider Formats
 * =============================================================================================
 */
 
@@ -134,7 +134,7 @@ export const ONE_SIGNAL_IOS_LAUNCH_IN_WEBVIEW = false;
 export const ONE_SIGNAL_LOCATION_PREFERENCE_PATH = 'locationSharing';
 export const ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH = 'pushNotifications';
 export const ONE_SIGNAL_VERBOSE = false; // set this to false if production
-export const DEBUG_ONE_SIGNAL = true;
+export const DEBUG_ONE_SIGNAL = false;
 export const DEBUG_ONE_SIGNAL_CLEAN_PREFS = false;
 
 

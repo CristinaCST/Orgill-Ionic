@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
 import { HttpClient } from '@angular/common/http';
-import {LocalStorageHelper} from "../helpers/local-storage-helper";
-import * as ConstantsURL from "../util/constants-url";
-import * as Constants from  "../util/constants";
+import {LocalStorageHelper} from "../../helpers/local-storage";
+import * as ConstantsURL from "../../util/constants-url";
+import * as Constants from  "../../util/constants";
 import {Observable} from "rxjs/Observable";
 
 @Injectable()

@@ -6,7 +6,7 @@ import {ProductPage} from "../product/product";
 import {Category} from "../../interfaces/models/category";
 import {Subscription} from "rxjs/Subscription";
 import {ProductsSearchPage} from "../products-search/products-search";
-import {LoadingProvider} from "../../providers/loading/loading";
+import {LoadingService} from "../../services/loading/loading";
 import * as Constants from "../../util/constants";
 
 @Component({
@@ -25,7 +25,7 @@ export class ProductsPage implements OnInit, OnDestroy {
   public isLoading:boolean = true;
 
   constructor(private navParams: NavParams,
-              public loading: LoadingProvider,
+              public loading: LoadingService,
               private catalogProvider: CatalogsProvider, private navController: NavController) {
   }
 

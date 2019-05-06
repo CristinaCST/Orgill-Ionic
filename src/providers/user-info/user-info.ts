@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {ApiProvider} from "../api-provider";
+import {ApiProvider} from "../api/api";
 import * as ConstantsUrl from "../../util/constants-url";
 import * as Constants from "../../util/constants";
-import {LocalStorageHelper} from "../../helpers/local-storage-helper";
+import {LocalStorageHelper} from "../../helpers/local-storage";
 
 @Injectable()
 export class UserInfoProvider {

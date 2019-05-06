@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { OneSignal } from '@ionic-native/onesignal';
 import * as Constants from '../../util/constants';
 import * as Strings from "../../util/strings";
-import { LocalStorageHelper } from "../../helpers/local-storage-helper";
-import { FlashDealProvider } from '../../providers/flashdeal/flashdeal';
+import { LocalStorageHelper } from "../../helpers/local-storage";
+import { FlashDealService } from '../flashdeal/flashdeal';
 import { Badge } from "@ionic-native/badge";
 import { Events, Platform } from 'ionic-angular';
 import { PopoversProvider } from '../../providers/popovers/popovers';
@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 
 @Injectable()
-export class OneSignalProvider {
+export class OneSignalService {
 
     //Grab the paths for each permission
     private pushNotificationPermissionID: string = Constants.ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH;
@@ -23,7 +23,7 @@ export class OneSignalProvider {
 
     constructor(private oneSignal: OneSignal,
         private badge: Badge,   //Badge for icon notification
-        private flashDealProvider: FlashDealProvider,   //Provider to call to navigate to flashdeals provided through a push notification
+        private flashDealService: FlashDealService,   //Provider to call to navigate to flashdeals provided through a push notification
         private events: Events,     //Propagate one signal event to be used in other places
        // private platform: Platform,   //Run platform dependent code 
         private popover: PopoversProvider,     //Needed for permission modals
@@ -163,7 +163,7 @@ export class OneSignalProvider {
 
                 //If the payload is valid, try to navigate to it, if not, log the error if logging is on
                 try {
-                    this.flashDealProvider.navigateToFlashDeal(data.notification.payload.additionalData.SKU);
+                    this.flashDealService.navigateToFlashDeal(data.notification.payload.additionalData.SKU);
                 } catch (exception) {
                     this.debugLog("Couldn't navigate to flash deal because " + exception, data);
                     

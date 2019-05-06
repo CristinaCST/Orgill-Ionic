@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {DatabaseProvider} from "../database/database";
 import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
-import {DateTime} from "../datetime/DateTime";
-import {ApiProvider} from "../api-provider";
+import {dateTimeProvider} from "../datetime/dateTime";
+import {ApiProvider} from "../api/api";
 import * as ConstantsUrl from "../../util/constants-url";
 import * as Constants from "../../util/constants";
-import {LocalStorageHelper} from "../../helpers/local-storage-helper";
+import {LocalStorageHelper} from "../../helpers/local-storage";
 
 @Injectable()
 export class ShoppingListsProvider {
@@ -48,8 +48,8 @@ export class ShoppingListsProvider {
   }
 
   private isExpiredProgram(date) {
-    const now = DateTime.getCurrentDateTime();
-    const endDate = DateTime.dateInMonthDayYearFormat(date);
+    const now = dateTimeProvider.getCurrentDateTime();
+    const endDate = dateTimeProvider.dateInMonthDayYearFormat(date);
     return now.isAfter(endDate);
   }
 

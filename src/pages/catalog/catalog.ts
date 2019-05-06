@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {Category} from "../../interfaces/models/category";
-import {CategoriesRequest} from "../../interfaces/request-body/categories-request";
+import {CategoriesRequest} from "../../interfaces/request-body/categories";
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
-import {LocalStorageHelper} from "../../helpers/local-storage-helper";
+import {LocalStorageHelper} from "../../helpers/local-storage";
 import {CatalogsProvider} from "../../providers/catalogs/catalogs";
-import {SubcategoriesRequest} from "../../interfaces/request-body/subcategories-request";
+import {SubcategoriesRequest} from "../../interfaces/request-body/subcategories";
 import {ProductsPage} from "../products/products";
-import {LoadingProvider} from "../../providers/loading/loading";
+import {LoadingService} from "../../services/loading/loading";
 import {TranslateProvider} from "../../providers/translate/translate";
 import {ProductsSearchPage} from "../products-search/products-search";
 import {ScannerPage} from "../scanner/scanner";
@@ -29,7 +29,7 @@ export class Catalog implements OnInit {
   menuCustomButtons = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public catalogProvider: CatalogsProvider,
-              public loading: LoadingProvider, public translateProvider: TranslateProvider) {
+              public loading: LoadingService, public translateProvider: TranslateProvider) {
     this.menuCustomButtons.push({action: 'scan', icon: 'barcode'});
   }
 

@@ -3,7 +3,7 @@ import {App} from "ionic-angular";
 import {Login} from "../../pages/login/login";
 import * as Constants from "../../util/constants";
 import * as Strings from '../../util/strings';
-import {AuthServiceProvider} from "../../providers/authservice/authservice";
+import {AuthProvider} from "../../providers/auth/auth";
 import {PopoversProvider} from "../../providers/popovers/popovers";
 import {AboutPage} from "../../pages/about/about";
 import {CatalogsProvider} from "../../providers/catalogs/catalogs";
@@ -37,7 +37,7 @@ export class AppMenuComponent implements OnInit {
 
   constructor(private app: App,
               private popoversProvider: PopoversProvider,
-              private authServiceProvider: AuthServiceProvider,
+              private authServiceProvider: AuthProvider,
               private catalogsProvider: CatalogsProvider,
               private translateProvider: TranslateProvider,
               public databaseProvider: DatabaseProvider) {

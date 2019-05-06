@@ -21,23 +21,23 @@ import {environment} from '@app/env';
 import {ComponentsModule} from "../components/components.module";
 
 //Providers
-import {ApiProvider} from "../providers/api-provider";
-import {CatalogsProvider} from '../providers/catalogs/catalogs';
-import {DatabaseProvider} from '../providers/database/database';
-import {TranslateProvider} from '../providers/translate/translate';
-import {LoadingProvider} from '../providers/loading/loading';
-import {PopoversProvider} from "../providers/popovers/popovers";
-import {ShoppingListsProvider} from '../providers/shopping-lists/shopping-lists';
-import {ProgramProvider} from '../providers/program/program';
-import {AuthServiceProvider} from "../providers/authservice/authservice";
-import {ProductProvider} from "../providers/product/product";
-import {ScannerProvider} from '../providers/scanner/scanner';
-import {UserInfoProvider} from '../providers/user-info/user-info';
-import {PurchasesProvider} from '../providers/purchases/purchases';
-import {NetworkProvider} from '../providers/network/network';
-import { SessionValidator } from '../providers/session/sessionValidator';
-import{OneSignalProvider} from '../providers/onesignal/onesignal';
-import { FlashDealProvider } from '../providers/flashdeal/flashdeal';
+import { ApiProvider } from "../providers/api/api";
+import { CatalogsProvider } from '../providers/catalogs/catalogs';
+import { DatabaseProvider } from '../providers/database/database';
+import { TranslateProvider } from '../providers/translate/translate';
+import { LoadingService } from '../services/loading/loading';
+import { PopoversProvider } from "../providers/popovers/popovers";
+import { ShoppingListsProvider } from '../providers/shopping-lists/shopping-lists';
+import { ProgramProvider } from '../providers/program/program';
+import { AuthProvider } from "../providers/auth/auth";
+import { ProductProvider } from "../providers/product/product";
+import { ScannerProvider } from '../providers/scanner/scanner';
+import { UserInfoProvider } from '../providers/user-info/user-info';
+import { PurchasesProvider } from '../providers/purchases/purchases';
+import { NetworkService } from '../services/network/network';
+import { SessionValidatorProvider } from '../providers/session/sessionValidator';
+import { OneSignalService } from '../services/onesignal/onesignal';
+import { FlashDealService } from '../services/flashdeal/flashdeal';
 
 //Pages
 import {MyApp} from './app.component';
@@ -76,12 +76,12 @@ let pages = [MyApp,
 
 
 //Error Handlers
-import {CustomErrorHandler} from "../providers/CustomErrorHandler";
+import { CustomErrorHandlerService } from "../services/error-handler/CustomErrorHandler";
 import { Geolocation } from '@ionic-native/geolocation';
 
 
 
-const errorHandler = environment.production ? CustomErrorHandler : IonicErrorHandler;
+const errorHandler = environment.production ? CustomErrorHandlerService : IonicErrorHandler;
 
 @NgModule({
   declarations: pages,
@@ -106,9 +106,9 @@ const errorHandler = environment.production ? CustomErrorHandler : IonicErrorHan
     SQLitePorter,
     SQLite,
     Network,
-    AuthServiceProvider,
+    AuthProvider,
     ApiProvider,
-    LoadingProvider,
+    LoadingService,
     TranslateProvider,
     PopoversProvider,
     CatalogsProvider,
@@ -120,14 +120,14 @@ const errorHandler = environment.production ? CustomErrorHandler : IonicErrorHan
     ProductProvider,
     UserInfoProvider,
     PurchasesProvider,
-    NetworkProvider,
-    SessionValidator,
-    OneSignalProvider,
+    NetworkService,
+    SessionValidatorProvider,
+    OneSignalService,
     OneSignal,
     Badge,
-    FlashDealProvider,
+    FlashDealService,
     Geolocation,
-    {provide: ErrorHandler, useClass: CustomErrorHandler}
+    {provide: ErrorHandler, useClass: CustomErrorHandlerService}
   ]
 })
 

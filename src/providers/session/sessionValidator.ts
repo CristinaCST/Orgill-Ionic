@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { LocalStorageHelper } from '../../helpers/local-storage-helper';
-import { DateTime } from '../datetime/DateTime';
+import { LocalStorageHelper } from '../../helpers/local-storage';
+import { dateTimeProvider } from '../datetime/dateTime';
 import { USER } from '../../util/constants';
 
 @Injectable()
-export class SessionValidator{
+export class SessionValidatorProvider{
     constructor(){
     }
 
@@ -13,9 +13,9 @@ export class SessionValidator{
           return false;
         }
      //   console.log("USER:"+ USER);
-        const now = DateTime.getCurrentDateTime();
+        const now = dateTimeProvider.getCurrentDateTime();
         const receivedTimestamp = (JSON.parse(LocalStorageHelper.getFromLocalStorage(USER)).time_stamp);
-        const sessionTimestampWith4Days = DateTime.getTimeAfter4Days(receivedTimestamp);
+        const sessionTimestampWith4Days = dateTimeProvider.getTimeAfter4Days(receivedTimestamp);
        // console.log(sessionTimestampWith4Days.isSameOrAfter(now));
         return sessionTimestampWith4Days.isSameOrAfter(now);
       }

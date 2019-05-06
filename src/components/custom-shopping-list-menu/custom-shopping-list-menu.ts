@@ -1,3 +1,4 @@
+
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {ShoppingList} from "../../interfaces/models/shopping-list";
 import * as Constants from "../../util/constants";

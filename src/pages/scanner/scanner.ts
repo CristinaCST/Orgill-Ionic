@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NavController, NavParams, Platform} from 'ionic-angular';
 import {BarcodeScanner} from "@ionic-native/barcode-scanner";
-import {LoadingProvider} from "../../providers/loading/loading";
+import {LoadingService} from "../../services/loading/loading";
 import {TranslateProvider} from "../../providers/translate/translate";
 import * as Constants from '../../util/constants';
 import * as Strings from "../../util/strings";
@@ -31,7 +31,7 @@ export class ScannerPage implements OnInit {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private barcodeScanner: BarcodeScanner,
-              private loading: LoadingProvider,
+              private loading: LoadingService,
               private translator: TranslateProvider,
               private scannerProvider: ScannerProvider,
               private platform: Platform,

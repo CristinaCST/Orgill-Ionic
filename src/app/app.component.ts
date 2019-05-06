@@ -1,14 +1,14 @@
-import {Component} from '@angular/core';
-import {App, Platform} from 'ionic-angular';
-import {StatusBar} from '@ionic-native/status-bar';
-import {SplashScreen} from '@ionic-native/splash-screen';
-import {Catalog} from '../pages/catalog/catalog';
-import {Login} from "../pages/login/login";
-import {TranslateService} from '@ngx-translate/core';
-import {DatabaseProvider} from "../providers/database/database";
-import {NetworkProvider} from "../providers/network/network";
-import { OneSignalProvider } from '../providers/onesignal/onesignal';
-import { SessionValidator } from '../providers/session/sessionValidator';
+import { Component } from '@angular/core';
+import { App, Platform } from 'ionic-angular';
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { Catalog } from '../pages/catalog/catalog';
+import { Login } from "../pages/login/login";
+import { TranslateService } from '@ngx-translate/core';
+import { DatabaseProvider } from "../providers/database/database";
+import { NetworkService } from "../services/network/network";
+import { OneSignalService } from '../services/onesignal/onesignal';
+import { SessionValidatorProvider } from '../providers/session/sessionValidator';
 
 @Component({
   templateUrl: 'app.html'
@@ -25,9 +25,9 @@ export class MyApp {
               private splashScreen: SplashScreen,
               private translate: TranslateService,
               private databaseProvider: DatabaseProvider,
-              private networkProvider: NetworkProvider,
-              private sessionValidator: SessionValidator,
-              private oneSignalProvider: OneSignalProvider) {
+              private networkService: NetworkService,
+              private sessionValidatorProvider: SessionValidatorProvider,
+              private oneSignalService: OneSignalService) {
     this.setAppLanguage();
     this.initializeApp();
   }
@@ -36,8 +36,8 @@ export class MyApp {
     this.isLoading = true;
 
     this.platform.ready().then(() => {
-      this.oneSignalProvider.init();
-      this.networkProvider.listenForNetworkEvents();
+      this.oneSignalService.init();
+      this.networkService.listenForNetworkEvents();
       this.statusBar.styleDefault();
       this.databaseProvider.getDatabaseState()
         .subscribe(isDatabaseOpen => {
@@ -69,7 +69,7 @@ export class MyApp {
     if (this.openedFromNotification) {
 
     }
-    else if (this.sessionValidator.isValidSession() === true) {
+    else if (this.sessionValidatorProvider.isValidSession() === true) {
       this.rootPage = Catalog;
     } else {
       this.rootPage = Login;

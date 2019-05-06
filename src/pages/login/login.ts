@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
 import {NavController,} from 'ionic-angular';
-import {AuthServiceProvider} from "../../providers/authservice/authservice";
+import {AuthProvider} from "../../providers/auth/auth";
 import * as Constants from "../../util/constants";
 import * as Strings from "../../util/strings";
-import {LoadingProvider} from "../../providers/loading/loading";
+import {LoadingService} from "../../services/loading/loading";
 import {TranslateProvider} from "../../providers/translate/translate";
 import {PopoversProvider} from "../../providers/popovers/popovers";
 import {Catalog} from "../catalog/catalog";
@@ -20,8 +20,8 @@ export class Login {
   password: string;
 
   constructor(private navCtrl: NavController,
-              private authService: AuthServiceProvider,
-              private loading: LoadingProvider,
+              private authProvider: AuthProvider,
+              private loading: LoadingService,
               private translateProvider: TranslateProvider,
               private popoversProvider: PopoversProvider) {
   }
@@ -33,9 +33,9 @@ export class Login {
 
     this.loading.presentLoading(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_LOGIN));
     let loginRequest = {username: this.username, password: this.password};
-    this.authService.login(loginRequest).subscribe(
+    this.authProvider.login(loginRequest).subscribe(
       () => {
-        this.authService.getUserInfo().then(() => {
+        this.authProvider.getUserInfo().then(() => {
           this.navCtrl.setRoot(Catalog).catch(err => console.error(err));
           this.loading.hideLoading();
         });

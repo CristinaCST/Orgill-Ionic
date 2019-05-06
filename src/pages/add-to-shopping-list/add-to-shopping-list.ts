@@ -8,7 +8,7 @@ import {PopoversProvider} from "../../providers/popovers/popovers";
 import * as Constants from "../../util/constants";
 import * as Strings from "../../util/strings";
 import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
-import {LoadingProvider} from "../../providers/loading/loading";
+import {LoadingService} from "../../services/loading/loading";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ProgramProvider} from "../../providers/program/program";
 import {Subscription} from 'rxjs';
@@ -37,7 +37,7 @@ export class AddToShoppingListPage implements OnInit {
               private shoppingListsProvider: ShoppingListsProvider,
               private popoversProvider: PopoversProvider,
               private formBuilder: FormBuilder,
-              private loading: LoadingProvider,
+              private loading: LoadingService,
               private programProvider: ProgramProvider) {
     this.menuCustomButtons.push({action: 'addList', icon: 'add'})
   }

@@ -2,7 +2,7 @@ import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {NavParams} from 'ionic-angular';
 import {Product} from "../../interfaces/models/product";
 import {CatalogsProvider} from "../../providers/catalogs/catalogs";
-import {LoadingProvider} from "../../providers/loading/loading";
+import {LoadingService} from "../../services/loading/loading";
 
 @Component({
   selector: 'page-product-description',
@@ -14,7 +14,7 @@ export class ProductDescriptionPage implements OnInit, AfterViewInit {
   public imageIsLoading: boolean = true;
 
   constructor(private navParams: NavParams, private catalogProvider: CatalogsProvider,
-              public loading: LoadingProvider) {
+              public loading: LoadingService) {
   }
 
   ngOnInit(): void {

@@ -2,10 +2,10 @@ import {Injectable} from "@angular/core";
 import {Network} from "@ionic-native/network";
 import * as Constants from "../../util/constants";
 import * as Strings from "../../util/strings";
-import {PopoversProvider} from "../popovers/popovers";
+import {PopoversProvider} from "../../providers/popovers/popovers";
 
 @Injectable()
-export class NetworkProvider {
+export class NetworkService {
 
   constructor(private network: Network, private popoversProvider: PopoversProvider) {
   }

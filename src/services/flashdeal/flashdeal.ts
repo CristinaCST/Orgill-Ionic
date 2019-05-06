@@ -1,14 +1,13 @@
 import { Injectable } from "@angular/core";
 import * as ConstantsUrl from '../../util/constants-url'
 import { USER } from '../../util/constants'
-import { ApiProvider } from "../../providers/api-provider";
-import { LocalStorageHelper } from "../../helpers/local-storage-helper";
+import { ApiProvider } from "../../providers/api/api";
+import { LocalStorageHelper } from "../../helpers/local-storage";
 import { App } from "ionic-angular";
 import { ProductPage } from "../../pages/product/product";
-import { UserInfoProvider } from "providers/user-info/user-info";
 
 @Injectable()
-export class FlashDealProvider {
+export class FlashDealService {
   private readonly userToken;
 
   constructor(private apiProvider: ApiProvider,

@@ -7,7 +7,7 @@ import { PopoversProvider } from "../../providers/popovers/popovers";
 import * as Constants from "../../util/constants";
 import * as Strings from "../../util/strings";
 import { AddToShoppingListPage } from "../add-to-shopping-list/add-to-shopping-list";
-import { LoadingProvider } from "../../providers/loading/loading";
+import { LoadingService } from "../../services/loading/loading";
 import { ShoppingListsProvider } from "../../providers/shopping-lists/shopping-lists";
 
 @Component({
@@ -24,6 +24,7 @@ export class ProductPage implements OnInit {
   public selectedProgram: ItemProgram;
   public quantityItemPrice: number = 0;
   public programName: string;
+  public isFlashDeal: boolean;
 
   public fromShoppingList;
   private shoppingListId;
@@ -32,7 +33,7 @@ export class ProductPage implements OnInit {
 
   constructor(public navController: NavController,
     public navParams: NavParams,
-    private loading: LoadingProvider,
+    private loading: LoadingService,
     private programProvider: ProgramProvider,
     private popoversProvider: PopoversProvider,
     private shoppingListProvider: ShoppingListsProvider) {
@@ -45,6 +46,7 @@ export class ProductPage implements OnInit {
     this.programNumber = this.navParams.get('programNumber');
     this.programName = this.navParams.get('programName');
     this.subCategoryName = this.navParams.get('subcategoryName');
+    this.isFlashDeal = this.navParams.get('isFlashDeal');
 
     this.fromShoppingList = this.navParams.get('fromShoppingList');
     if (this.fromShoppingList) {
@@ -97,6 +99,10 @@ export class ProductPage implements OnInit {
         'quantityItemPrice': this.quantityItemPrice
       }).catch(err => console.error(err));
     }
+  }
+
+  buyNow(){
+
   }
 
   onQuantityChange($event) {

@@ -3,7 +3,7 @@ import {NavController, NavParams} from 'ionic-angular';
 import {Product} from '../../interfaces/models/product';
 import {ProductPage} from '../product/product';
 import {CatalogsProvider} from '../../providers/catalogs/catalogs';
-import {LoadingProvider} from '../../providers/loading/loading';
+import {LoadingService} from '../../services/loading/loading';
 import {Category} from '../../interfaces/models/category';
 import {Subscription} from 'rxjs/Subscription';
 import * as Constants from '../../util/constants';
@@ -24,7 +24,7 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
   totalNumberOfProducts: number = 0;
 
   constructor(public navParams: NavParams, private navController: NavController,
-              public loading: LoadingProvider, private catalogProvider: CatalogsProvider,) {
+              public loading: LoadingService, private catalogProvider: CatalogsProvider,) {
   }
 
   ngOnInit(): void {
