@@ -1,7 +1,7 @@
 <!-- Scanner Page Header -->
 <ion-header>
   <!-- Scanner Page Navigation Bar -->
-  <navbar [title]="'scanner'" [isMenuEnabled]="true"
+  <navbar [title]="'SCAN BARCODE'" [isMenuEnabled]="true"
           [isBackEnabled]="false"></navbar>
   <!-- Scanner Page Tabs-->
   <ion-segment [(ngModel)]="searchTab">
@@ -19,10 +19,11 @@
 
 <!-- Scanner Page Content -->
 <ion-content padding>
-  <p *ngIf="productAlreadyInList && searchTab==='scan_barcode_tab'"> Product is already in list</p>
-  <p *ngIf="noProductFound">{{"no_products_found" | translate}}</p>
+  <p>{{message}}</p>
+  <!--<p *ngIf="productAlreadyInList && searchTab==='scan_barcode_tab'"> Product is already in list</p>-->
+  <!--<p *ngIf="noProductFound">{{"no_products_found" | translate}}</p-->
   <!-- Scanner Page scan button -->
-  <button *ngIf="searchTab==='scan_barcode_tab'" ion-button color="dark" full round (click)="scan()">Start Scan
+  <button *ngIf="searchTab==='scan_barcode_tab'" ion-button color="OrgillRed" full round (click)="scan()">Start Scan
   </button>
   <ion-list *ngIf="products&& searchTab==='search_code_tab'">
     <div *ngFor="let product of products" (click)="goToProductPage(product)">

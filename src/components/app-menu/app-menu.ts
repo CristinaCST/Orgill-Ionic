@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {App} from "ionic-angular";
+import {App, Events} from "ionic-angular";
 import {Login} from "../../pages/login/login";
 import * as Constants from "../../util/constants";
 import {AuthServiceProvider} from "../../providers/authservice/authservice";
@@ -41,6 +41,7 @@ export class AppMenuComponent implements OnInit {
               private authServiceProvider: AuthServiceProvider,
               private catalogsProvider: CatalogsProvider,
               private translateProvider: TranslateProvider,
+              private events: Events,
               public databaseProvider: DatabaseProvider,
               public shoppingListsProvider: ShoppingListsProvider) {
   }
@@ -104,6 +105,10 @@ export class AppMenuComponent implements OnInit {
             }
           });
         }
+        this.events.subscribe('DeletedList', (listId: number) => {
+          this.customShoppingLists = this.customShoppingLists.filter(list => list.ListID != listId);
+          console.log("this.customshoppinglist after delete",this.customShoppingLists);
+        })
       });
   }
 

@@ -220,7 +220,7 @@ export class ShoppingListPage {
 
   removeList() {
     let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_DELETE_CONF_TITLE, Constants.SHOPPING_LIST_DELETE_CONF_MESSAGE,
-      Constants.OK, Constants.CANCEL, Constants.POPOVER_DELETE_LIST_CONFIRMATION);
+      Constants.OK, Constants.CANCEL);
     this.popoversProvider.show(content).subscribe(data => {
       if (data.optionSelected === "OK") {
         this.shoppingListProvider.removeShoppingList(this.shoppingList.ListID).subscribe(data => {

@@ -10,6 +10,7 @@ import {PopoversProvider} from "../../providers/popovers/popovers";
 import {ProductPage} from "../product/product";
 import {CatalogsProvider} from "../../providers/catalogs/catalogs";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
+import {Program} from "../../interfaces/models/program";
 
 @Component({
   selector: 'page-scanner',
@@ -19,6 +20,9 @@ export class ScannerPage implements OnInit {
 
   selectedProduct: any;
   programNumber: string = '';
+  programs: Array<Program> = [];
+  isMarketOnly: boolean = false;
+  message: string = '';
   searchString: string;
   foundProduct: Product;
   shoppingList;
@@ -44,10 +48,17 @@ export class ScannerPage implements OnInit {
     if (this.navParams.get("shoppingList")) {
       console.log("NAV PARAMS",this.navParams.get("shoppingList"));
       this.shoppingList = this.navParams.get("shoppingList");
-      this.shoppingListId = this.shoppingList.id;
+      this.shoppingListId = this.shoppingList.ListID;
       this.products = this.navParams.get('products');
     }
     this.searchTab = this.navParams.get('type');
+    this.message = "";
+    this.catalogsProvider.getPrograms().subscribe(resp => {
+      var data = JSON.parse(resp.d);
+      if (data.length > 0){
+        data.forEach( elem => this.programs.push(elem));
+      }
+    })
   }
 
   scan() {
@@ -55,10 +66,14 @@ export class ScannerPage implements OnInit {
     this.barcodeScanner.scan().then((barcodeData) => {
       const scanResult = barcodeData.text;
       if (this.isValidScanResult(scanResult)) {
+        console.log("THIS IS THE SCAN RESULT",scanResult);
         this.loading.presentLoading(this.translator.translate(Constants.SCAN_RESULTS_SEARCHING));
         this.setProgramFromScanResult(scanResult);
         this.setSearchStringFromScanResult(scanResult);
         this.searchProduct();
+      }else{
+        //TODO check if string is ok
+        this.message = this.translator.translate(Constants.SCAN_INVALID_BARCODE);
       }
     });
   }
@@ -69,6 +84,12 @@ export class ScannerPage implements OnInit {
 
   private setProgramFromScanResult(scanResult: string) {
     this.programNumber = scanResult.length === 10 ? scanResult.substring(7, 10) : '';
+    var filteredPrograms = this.programs.filter(elem => elem.PROGRAMNO == this.programNumber);
+    if (filteredPrograms.length > 0) {
+      this.isMarketOnly = filteredPrograms[0].MARKETONLY === Constants.MARKET_ONLY_PROGRAM;
+    } else{
+      this.isMarketOnly = false;
+    }
   }
 
   private setSearchStringFromScanResult(scanResult: string) {
@@ -101,26 +122,43 @@ export class ScannerPage implements OnInit {
               'programNumber': this.programNumber,
             }).catch(err => console.error(err));
           } else {
-            this.isProductInList().subscribe((data) => {
-              if (!data) {
-                const newItem = {
-                  'product': this.foundProduct,
-                  'program_number': '',
-                  'item_price': Number(this.foundProduct.YOURCOST),
-                  'quantity': this.getInitialQuantity()
-                };
-                this.shoppingListProvider.addItemToShoppingList(this.shoppingList.id, newItem, this.shoppingList.isMarketOnly).subscribe(
-                  () => this.productAlreadyInList = false);
-              }
-              else {
-                this.productAlreadyInList = true;
-              }
-            });
+
+            if (this.isMarketOnly && ((this.shoppingList.ListType.toString() !== Constants.MARKET_ONLY_LIST_TYPE) && (this.shoppingList.ListType.toString() !== Constants.MARKET_ONLY_CUSTOM_TYPE))) {
+              this.message = this.translator.translate(Constants.SCAN_MARKET_ONLY_PRODUCT);
+            } else if (this.isMarketOnly === false && ((this.shoppingList.ListType.toString() === Constants.MARKET_ONLY_LIST_TYPE) || (this.shoppingList.ListType.toString() === Constants.MARKET_ONLY_CUSTOM_TYPE))) {
+              this.message = this.translator.translate(Constants.SCAN_REGULAR_PRODUCT);
+            } else {
+              this.isProductInList().subscribe((resp) => {
+                var data = JSON.parse(resp.d).Status === "True";
+                if (!data) {
+                  const newItem = {
+                    'product': this.foundProduct,
+                    'program_number': this.programNumber,
+                    'item_price': Number(this.foundProduct.YOURCOST),
+                    'quantity': this.getInitialQuantity()
+                  };
+                  this.shoppingListProvider.addItemToShoppingList(this.shoppingList.ListID, newItem, this.shoppingList.isMarketOnly).subscribe(
+                    () => {
+                      this.productAlreadyInList = false;
+                      //TODO Change to constants_strings
+                      this.message = "Added " + newItem.product.NAME + " to list";
+                    });
+                }
+                else {
+                  //TODO Change to constants strings
+                  this.message = this.translator.translate(Constants.SHOPPING_LIST_EXISTING_PRODUCT);
+                  // this.message = ""
+                  this.productAlreadyInList = true;
+                }
+              });
+            }
           }
         }
         else {
+          //TODO Check string if its fine
+          this.message = this.translator.translate(Constants.SCAN_NOT_FOUND);
           this.noProductFound = true;
-          this.scan();
+          // this.scan();
         }
       }, errorResponse => {
         this.loading.hideLoading();
