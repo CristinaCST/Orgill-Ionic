@@ -49,6 +49,7 @@ export class ProgramProvider {
     return this.databaseProvider.getMarketTypeForProgram(programNumber);
   }
 
+  /*
   getFlashDealsProduct(programNumber = '',sku = ''){
     let params={
       user_token: this.userToken,
@@ -56,6 +57,6 @@ export class ProgramProvider {
       sku:sku
     };
     return this.apiProvider.post(ConstantsUrl.GET_FLASHDEALS_PRODUCT,params)
-  }
+  }*/
 
 }

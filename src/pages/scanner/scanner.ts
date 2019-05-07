@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NavController, NavParams, Platform} from 'ionic-angular';
+import {NavController, NavParams, Platform, Loading} from 'ionic-angular';
 import {BarcodeScanner} from "@ionic-native/barcode-scanner";
 import {LoadingService} from "../../services/loading/loading";
 import {TranslateProvider} from "../../providers/translate/translate";
@@ -27,18 +27,22 @@ export class ScannerPage implements OnInit {
   public searchTab;
   public products: Array<Product> = [];
   public noProductFound: boolean = false;
+  private searchingLoader: LoadingService;
+  private simpleLoader: LoadingService;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private barcodeScanner: BarcodeScanner,
-              private loading: LoadingService,
+              private loadingService: LoadingService,
               private translator: TranslateProvider,
               private scannerProvider: ScannerProvider,
               private platform: Platform,
               private catalogsProvider: CatalogsProvider,
               private popoversProvider: PopoversProvider,
               private shoppingListProvider: ShoppingListsProvider) {
-  }
+                this.searchingLoader = loadingService.createLoader(this.translator.translate(Strings.SCAN_RESULTS_SEARCHING));
+                this.simpleLoader = loadingService.createLoader();
+              }
 
   ngOnInit(): void {
     this.shoppingListId = this.navParams.get("shoppingListId");
@@ -51,7 +55,7 @@ export class ScannerPage implements OnInit {
     this.barcodeScanner.scan().then((barcodeData) => {
       const scanResult = barcodeData.text;
       if (this.isValidScanResult(scanResult)) {
-        this.loading.presentLoading(this.translator.translate(Strings.SCAN_RESULTS_SEARCHING));
+        this.searchingLoader.show();
         this.setProgramFromScanResult(scanResult);
         this.setSearchStringFromScanResult(scanResult);
         this.searchProduct();
@@ -87,7 +91,7 @@ export class ScannerPage implements OnInit {
   searchProduct() {
     this.scannerProvider.searchProduct(this.searchString, this.programNumber)
       .subscribe(response => {
-        this.loading.hideLoading();
+        this.searchingLoader.hide();
         const responseData = JSON.parse(response.d);
         if (responseData.length > 0) {
           this.foundProduct = responseData[0];
@@ -120,7 +124,7 @@ export class ScannerPage implements OnInit {
           this.scan();
         }
       }, errorResponse => {
-        this.loading.hideLoading();
+        this.searchingLoader.hide();
         if (this.isPermissionError(errorResponse)) {
           let content = {title: Strings.GENERIC_ERROR, message: Constants.POPOVER_CAMERA_PERMISSION_NOT_GRANTED};
           this.popoversProvider.show(content);
@@ -144,10 +148,10 @@ export class ScannerPage implements OnInit {
   }
 
   onSearched($event) {
-    this.loading.presentSimpleLoading();
+    this.simpleLoader.show();
     this.catalogsProvider.search($event, '', this.programNumber).subscribe(data => {
       if (data) {
-        this.loading.hideLoading();
+        this.simpleLoader.hide();
         let params = {
           type: this.searchTab,
           shoppingListId: this.shoppingListId,

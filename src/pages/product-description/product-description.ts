@@ -12,17 +12,19 @@ export class ProductDescriptionPage implements OnInit, AfterViewInit {
   description: string = "";
   product: Product;
   public imageIsLoading: boolean = true;
+  loader:LoadingService;
 
   constructor(private navParams: NavParams, private catalogProvider: CatalogsProvider,
-              public loading: LoadingService) {
+              public loadingService: LoadingService) {
+                this.loader = this.loadingService.createLoader();
   }
 
   ngOnInit(): void {
     this.product = this.navParams.get('product');
-    this.loading.presentSimpleLoading();
+    this.loader.show();
     this.catalogProvider.getProductDetails(this.product.SKU).subscribe((description) => {
       this.description = JSON.parse(description.d).description;
-      this.loading.hideLoading();
+      this.loader.hide();
     });
     this.product.IMAGE = this.product.IMAGE === '0000000.jpg' ? '../../assets/imgs/product_placeholder.png' :
       'http://images.orgill.com/200x200/' + this.product.SKU + '.JPG';

@@ -31,16 +31,19 @@ export class ProductPage implements OnInit {
   private id;
   public quantityFromList;
 
+  private loader: LoadingService;
+
   constructor(public navController: NavController,
     public navParams: NavParams,
-    private loading: LoadingService,
+    private loadingService: LoadingService,
     private programProvider: ProgramProvider,
     private popoversProvider: PopoversProvider,
     private shoppingListProvider: ShoppingListsProvider) {
+      this.loader = this.loadingService.createLoader();
   }
 
   ngOnInit(): void {
-    this.loading.presentSimpleLoading();
+    this.loader.show();
 
     this.product = this.navParams.get('product');
     this.programNumber = this.navParams.get('programNumber');
@@ -67,7 +70,7 @@ export class ProductPage implements OnInit {
         let initialProgram: ItemProgram = this.getInitialProgram();
         this.selectedProgram = initialProgram;
         this.programProvider.selectProgram(initialProgram);
-        this.loading.hideLoading();
+        this.loader.hide();
       }
     });
 

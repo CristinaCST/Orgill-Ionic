@@ -23,10 +23,12 @@ export class ProductsPage implements OnInit, OnDestroy {
   public page: number = 1;
   public products: Array<Product> = [];
   public isLoading:boolean = true;
+  private loader: LoadingService;
 
   constructor(private navParams: NavParams,
-              public loading: LoadingService,
+              public loadingService: LoadingService,
               private catalogProvider: CatalogsProvider, private navController: NavController) {
+                this.loader = loadingService.createLoader();
   }
 
   ngOnInit() {
@@ -39,10 +41,10 @@ export class ProductsPage implements OnInit, OnDestroy {
   }
 
   getProducts() {
-    this.loading.presentSimpleLoading();
+    this.loader.show();
     this.getProductSubscription = this.catalogProvider.getProducts(this.category ? this.category.CatID : '', this.programNumber, this.page).subscribe(response => {
       this.products = this.sortProducts(JSON.parse(response.d));
-      this.loading.hideLoading();
+      this.loader.hide();
       this.isLoading = false;
     })
   }
@@ -70,7 +72,7 @@ export class ProductsPage implements OnInit, OnDestroy {
   }
 
   onSearched($event) {
-    this.loading.presentSimpleLoading();
+    this.loader.show();
     this.catalogProvider.search($event, this.category ? this.category.CatID : '', this.programNumber).subscribe(data => {
       const params = {
         searchData: JSON.parse(data.d),
@@ -78,7 +80,7 @@ export class ProductsPage implements OnInit, OnDestroy {
         programName: this.programName,
         category: this.category
       };
-      this.loading.hideLoading();
+      this.loader.hide();
       this.navController.push(ProductsSearchPage, params).then(() => console.log('%cTo product search page', 'color:blue'));
     });
   }
@@ -89,12 +91,12 @@ export class ProductsPage implements OnInit, OnDestroy {
   }
 
   loadNextProducts() {
-    this.loading.presentSimpleLoading();
+    this.loader.show();
     this.getProductSubscription = this.catalogProvider.getProducts(this.category ? this.category.CatID : '', this.programNumber, this.page)
       .subscribe((response) => {
         this.products = this.products.concat(this.sortProducts(JSON.parse(response.d)));
         this.setPaginationInfo();
-        this.loading.hideLoading();
+        this.loader.hide();
       })
   }
 

@@ -31,19 +31,21 @@ export class AddToShoppingListPage implements OnInit {
   public isMarketOnlyProduct: boolean = false;
   public subscription: Subscription;
   public menuCustomButtons = [];
+  private loader: LoadingService;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private shoppingListsProvider: ShoppingListsProvider,
               private popoversProvider: PopoversProvider,
               private formBuilder: FormBuilder,
-              private loading: LoadingService,
+              private loadingService: LoadingService,
               private programProvider: ProgramProvider) {
     this.menuCustomButtons.push({action: 'addList', icon: 'add'})
   }
 
   ngOnInit(): void {
-    this.loading.presentSimpleLoading();
+    this.loader = this.loadingService.createLoader();
+    this.loader.show();
     this.product = this.navParams.get('product');
     this.selectedProgram = this.navParams.get('selectedProgram');
     this.quantity = this.navParams.get('quantity');
@@ -65,7 +67,7 @@ export class AddToShoppingListPage implements OnInit {
       this.setProductList(productLists);
       this.checkMarketOnlyProduct(programData);
       this.setAllShoppingList(shoppingLists);
-      this.loading.hideLoading();
+      this.loader.hide();
     }).catch(error => console.error(error));
   }
 
@@ -145,9 +147,9 @@ export class AddToShoppingListPage implements OnInit {
       quantity: this.quantity
     };
 
-    this.loading.presentSimpleLoading();
+    this.loader.show();
     this.shoppingListsProvider.addItemToShoppingList(this.listForm.value.listOptions, listItem).then(() => {
-      this.loading.hideLoading();
+      this.loader.hide();
       this.cancel();
     }).catch(error => console.error(error));
   }

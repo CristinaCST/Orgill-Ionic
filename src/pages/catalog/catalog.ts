@@ -27,10 +27,15 @@ export class Catalog implements OnInit {
   catalogIndex: number = 0;
   currentSubCategory: Category;
   menuCustomButtons = [];
+  categoriesLoader: LoadingService;
+  simpleLoader: LoadingService;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public catalogProvider: CatalogsProvider,
-              public loading: LoadingService, public translateProvider: TranslateProvider) {
+              public loadingService: LoadingService, public translateProvider: TranslateProvider) {
     this.menuCustomButtons.push({action: 'scan', icon: 'barcode'});
+
+    this.categoriesLoader = loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_CATEGORIES));
+    this.simpleLoader = loadingService.createLoader();
   }
 
   ngOnInit(): void {
@@ -62,7 +67,7 @@ export class Catalog implements OnInit {
   }
 
   private getCategories() {
-    this.loading.presentLoading(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_CATEGORIES));
+    this.categoriesLoader.show();
     const params: CategoriesRequest = {
       user_token: this.userToken,
       p: '1',
@@ -74,7 +79,7 @@ export class Catalog implements OnInit {
     this.catalogProvider.getCategories(params).subscribe(response => {
       const responseData = JSON.parse(response.d);
       this.categories = this.sortCategories(responseData);
-      this.loading.hideLoading();
+      this.categoriesLoader.hide();
     });
   }
 
@@ -85,7 +90,7 @@ export class Catalog implements OnInit {
   }
 
   selectCategory(category: Category) {
-    this.loading.presentLoading(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_CATEGORIES));
+    this.categoriesLoader.show();
     const params: SubcategoriesRequest = {
       user_token: this.userToken,
       category_id: category.CatID,
@@ -94,7 +99,6 @@ export class Catalog implements OnInit {
       program_number: this.programNumber,
       last_modified: '',
     };
-
 
     this.catalogProvider.getSubcategories(params).subscribe(response => {
       const responseData = JSON.parse(response.d);
@@ -108,7 +112,7 @@ export class Catalog implements OnInit {
           currentSubCategory: category,
           catalogIndex: (this.catalogIndex + 1)
         }).catch(err => console.error(err));
-        this.loading.hideLoading();
+        this.categoriesLoader.hide();
       } else {
         const params = {
           programNumber: this.programNumber,
@@ -116,13 +120,13 @@ export class Catalog implements OnInit {
           category: category,
         };
         this.navCtrl.push(ProductsPage, params).catch(err => console.error(err));
-        this.loading.hideLoading();
+        this.categoriesLoader.hide();
       }
     });
   }
 
   onSearched($event) {
-    this.loading.presentSimpleLoading();
+    this.simpleLoader.show();
     this.catalogProvider.search($event, this.currentSubCategory ? this.currentSubCategory.CatID : '', this.programNumber).subscribe(data => {
       if (data) {
         let dataFound = JSON.parse(data.d);
@@ -135,7 +139,7 @@ export class Catalog implements OnInit {
           numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
         };
         this.navCtrl.push(ProductsSearchPage, params).then(() => console.log('%cTo product search page', 'color:green'));
-        this.loading.hideLoading();
+        this.simpleLoader.hide();
       }
     });
   }

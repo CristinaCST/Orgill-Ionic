@@ -18,12 +18,15 @@ export class Login {
 
   username: string;
   password: string;
+  loginLoader: LoadingService;
 
   constructor(private navCtrl: NavController,
               private authProvider: AuthProvider,
-              private loading: LoadingService,
+              private loadingService: LoadingService,
               private translateProvider: TranslateProvider,
               private popoversProvider: PopoversProvider) {
+
+                this.loginLoader = this.loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_LOGIN));
   }
 
   login() {
@@ -31,17 +34,17 @@ export class Login {
       return;
     }
 
-    this.loading.presentLoading(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_LOGIN));
+    this.loginLoader.show();
     let loginRequest = {username: this.username, password: this.password};
     this.authProvider.login(loginRequest).subscribe(
       () => {
         this.authProvider.getUserInfo().then(() => {
           this.navCtrl.setRoot(Catalog).catch(err => console.error(err));
-          this.loading.hideLoading();
+          this.loginLoader.hide();
         });
       }, error => {
         console.log(error);
-        this.loading.hideLoading();
+        this.loginLoader.hide();
         let content = this.popoversProvider.setContent(Strings.LOGIN_ERROR_TITLE, Strings.LOGIN_ERROR_INVALID);
         this.popoversProvider.show(content);
       }

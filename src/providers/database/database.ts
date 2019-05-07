@@ -267,4 +267,9 @@ export class DatabaseProvider {
     ];
     return this.database.executeSql(this.queries.checkProductInList, checkData);
   }
+
+  /**HACK: Remove in prod. */
+  /*getAllPrograms(){
+    return this.database.executeSql("SELECT * FROM program",[]);
+  }*/
 }

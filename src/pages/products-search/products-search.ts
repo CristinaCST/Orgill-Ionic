@@ -22,9 +22,11 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
   isPaginationEnabled: boolean = false;
   page: number = 1;
   totalNumberOfProducts: number = 0;
+  private loader: LoadingService;
 
   constructor(public navParams: NavParams, private navController: NavController,
-              public loading: LoadingService, private catalogProvider: CatalogsProvider,) {
+              public loadingService: LoadingService, private catalogProvider: CatalogsProvider,) {
+                this.loader = loadingService.createLoader();
   }
 
   ngOnInit(): void {
@@ -48,7 +50,7 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
   }
 
   onSearched($event) {
-    this.loading.presentSimpleLoading();
+    this.loader.show();
     this.catalogProvider.search($event, this.category ? this.category.CatID : '', this.programNumber).subscribe(data => {
       let dataFound = JSON.parse(data.d);
       const params = {
@@ -59,7 +61,7 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
         numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
       };
       this.navController.push(ProductsSearchPage, params).then(() => console.log('%cTo product search page', 'color:blue'));
-      this.loading.hideLoading();
+      this.loader.hide();
     });
   }
 
@@ -85,12 +87,12 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
   }
 
   loadNextProducts() {
-    this.loading.presentSimpleLoading();
+    this.loader.show();
     this.getProductSubscription = this.catalogProvider.search(this.searchString, this.category ? this.category.CatID : '', this.programNumber, this.page)
       .subscribe((response) => {
         this.products = this.products.concat(this.sortProducts(JSON.parse(response.d)));
         this.setPaginationInfo();
-        this.loading.hideLoading();
+        this.loader.hide();
       })
   }
 

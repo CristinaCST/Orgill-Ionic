@@ -25,7 +25,7 @@ export class OneSignalService {
         private badge: Badge,   //Badge for icon notification
         private flashDealService: FlashDealService,   //Provider to call to navigate to flashdeals provided through a push notification
         private events: Events,     //Propagate one signal event to be used in other places
-       // private platform: Platform,   //Run platform dependent code 
+        // private platform: Platform,   //Run platform dependent code 
         private popover: PopoversProvider,     //Needed for permission modals
     ) { };
 
@@ -47,6 +47,7 @@ export class OneSignalService {
 
         //Sort out the permissions needed
         this.setPermissions();
+
     };
 
 
@@ -84,53 +85,68 @@ export class OneSignalService {
             visualLevel: 0  //Never pop up error as alerts with the built-in system.
         });
 
-        //What happens when a notification is received
-        this.oneSignal.handleNotificationReceived().subscribe((data: any) => {
 
-            this.debugLog("Received package:" + JSON.stringify(data), data);
+        //If we don't have permission, we don't receive notifications so there is no need to subscribe
+        if (this.pushNotificationPermission) {
+            //What happens when a notification is received
+            this.oneSignal.handleNotificationReceived().subscribe(this.notificationReceived);
 
-            //Check data for existence, if there is none, then the notification is something else than a flash deal
-            if (data) {
-                if (data.payload.additionalData.SKU) {  //Check if there is a SKU in the correct object format
-
-                    //Send an event with the passed SKU
-                    this.events.publish(Strings.EVENT_FLASH_DEAL_NOTIFICATION_RECEIVED, data.payload.additionalData.SKU);
-                }
-            }
-
-            //Manually increase badge notifications for each notification received
-            this.badge.increase(1);
-        });
-
-        //Handle the opening of a notification
-        this.oneSignal.handleNotificationOpened().subscribe((data) => {
-
-            //Log only if we areverbose logging
-            if (Constants.ONE_SIGNAL_VERBOSE) {
-                console.log("NOTIFICATION OPENED with data: ", data);
-            }
-
-            //Save the fact we begin navigating from a notification
-            LocalStorageHelper.saveToLocalStorage('fromNotification', 'true');
-
-            //Process the notification
-            this.checkSession(data);
-
-            //Decrease the badge counter for each notification
-            this.badge.decrease(1);
-        });
+            //Handle the opening of a notification
+            this.oneSignal.handleNotificationOpened().subscribe(this.notificationOpened);
+        } else {
+            this.debugLog("Notification permission not granted, not subscribing to one signal events.", this.pushNotificationPermission);
+        }
 
         //Finalize OneSignal init
         this.oneSignal.endInit();
 
         //Log only if we are verbose logging
         this.debugLog("OneSignal fully initiaized");
-        
 
-        if(Constants.DEBUG_ONE_SIGNAL){
+
+        if (Constants.DEBUG_ONE_SIGNAL) {
             this.testOneSignal();
         }
     };
+
+
+    private notificationReceived(data: any) {
+
+        //Log only if we areverbose logging
+        if (Constants.ONE_SIGNAL_VERBOSE) {
+            this.debugLog("Received package:" + JSON.stringify(data), data);
+        }
+
+        //Check data for existence, if there is none, then the notification is something else than a flash deal
+        if (data) {
+            if (data.notification.payload.additionalData.SKU) {  //Check if there is a SKU in the correct object format
+
+                //Send an event with the passed SKU
+                this.events.publish(Strings.EVENT_FLASH_DEAL_NOTIFICATION_RECEIVED, data.notification.payload.additionalData.SKU);
+            }
+        }
+
+        //Manually increase badge notifications for each notification received
+        this.badge.increase(1);
+
+    }
+
+    private notificationOpened(data: any) {
+
+        //Log only if we areverbose logging
+        if (Constants.ONE_SIGNAL_VERBOSE) {
+            console.log("NOTIFICATION OPENED with data: ", data);
+        }
+
+        //Save the fact we begin navigating from a notification
+        LocalStorageHelper.saveToLocalStorage('fromNotification', 'true');
+
+        //Process the notification
+        this.checkSession(data);
+
+        //Decrease the badge counter for each notification
+        this.badge.decrease(1);
+    }
 
     /**
      * Initializes oneSignal plugin along with checking for permissions
@@ -140,14 +156,19 @@ export class OneSignalService {
         /**
          * HACK: FAKE SKU for testing
         */
-        this.checkSession(
-            {
+
+
+        try {
+            this.notificationOpened({
                 notification: {
                     payload: {
                         additionalData: { SKU: "7515000" }
                     }
                 }
             });
+        } catch (err) {
+            console.log(err, err);
+        }
     };
 
 
@@ -163,21 +184,22 @@ export class OneSignalService {
 
                 //If the payload is valid, try to navigate to it, if not, log the error if logging is on
                 try {
+                    // console.log("DAFUQ");
                     this.flashDealService.navigateToFlashDeal(data.notification.payload.additionalData.SKU);
                 } catch (exception) {
                     this.debugLog("Couldn't navigate to flash deal because " + exception, data);
-                    
+
                 }
 
             } else {    //If there is data but the package does not respect the flash deal structure
                 this.debugLog("ONESIGNAL package is not a flash deal but it exists...", data);
-                
+
             }
         }
         else {  //If the package is empty just open the app?
             //TODO: Implement something here?
             this.debugLog("ONESIGNAL NOTIFICATION PACKET IS NULL...", data);
-            
+
         }
     };
 
@@ -212,7 +234,7 @@ export class OneSignalService {
         )).subscribe(([notification, location]) => {
             //We save their new result if it's the case
 
-            this.debugLog("Notification result from modal:"+ notification, notification);
+            this.debugLog("Notification result from modal:" + notification, notification);
             this.debugLog("Location result from modal" + location, location);
 
             this.permissionSaveResult(Constants.ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH, notification["optionSelected"]);
@@ -263,8 +285,8 @@ export class OneSignalService {
      * @param result The result of popover service, expects one of the values {"DISMISS","OK", "NO"}
      */
     private permissionSaveResult(preferenceID, result) {
-        if(!result){
-            this.debugLog("Result is empty, proably permission was already set" + result,result);
+        if (!result) {
+            this.debugLog("Result is empty, propably permission was already set " + result, result);
             return;
         }
 
@@ -295,8 +317,8 @@ export class OneSignalService {
         };
     };
 
-    private debugLog(string, object=null){
-        if(Constants.DEBUG_ONE_SIGNAL){
+    private debugLog(string, object = null) {
+        if (Constants.DEBUG_ONE_SIGNAL) {
             console.log(string, object);
         }
     }
