@@ -174,6 +174,11 @@ export class AppMenuComponent implements OnInit {
     let params = {
       list: list
     };
-    this.app.getActiveNavs()[0].push(ShoppingListPage, params).catch(err => console.error(err));
+    let views = this.app.getActiveNavs()[0].getViews().filter( (elem) => elem.instance.navParams.data["list"]);
+    let test = views.filter(element =>
+      element.instance.navParams.data.list === list)
+    if (test.length == 0) {
+      this.app.getActiveNavs()[0].push(ShoppingListPage, params).catch(err => console.error(err));
+    }
   }
 }

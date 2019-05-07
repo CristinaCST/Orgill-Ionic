@@ -138,8 +138,8 @@ export class ShoppingListsProvider {
           isExpired: this.isExpiredProgram(element.end_date)
         };
         list.push(shoppingListProduct);
+        resolve(list);
       });
-      resolve(list);
     });
   }
 
