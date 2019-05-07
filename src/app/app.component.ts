@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import {Component} from '@angular/core';
 import {App, Platform} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';

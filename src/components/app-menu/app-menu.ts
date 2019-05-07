@@ -18,7 +18,7 @@ import {ScannerPage} from "../../pages/scanner/scanner";
 import {ShoppingListPage} from "../../pages/shopping-list/shopping-list";
 import {PurchasesPage} from "../../pages/purchases/purchases";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
-import {LocalStorageHelper} from "../../helpers/local-storage-helper";
+import {LocalStorageHelper} from "../../helpers/local-storage";
 
 @Component({
   selector: 'app-menu',
