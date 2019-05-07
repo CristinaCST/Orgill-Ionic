@@ -2,6 +2,7 @@ import {Component, ViewChild} from '@angular/core';
 import {ShoppingList} from "../../interfaces/models/shopping-list";
 import {Content, Events, NavParams} from "ionic-angular";
 import * as Constants from "../../util/constants";
+import * as Strings from "../../util/strings";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
 import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
 import {NavController} from 'ionic-angular';
@@ -78,7 +79,7 @@ export class ShoppingListPage {
   checkExpiredItems() {
     let isExpired = this.shoppingListItems.filter(item => item.isExpired).length > 0;
     if (isExpired) {
-      let content = this.popoversProvider.setContent(Constants.POPOVER_EXPIRED_ITEMS_TITLE, Constants.POPOVER_EXPIRED_ITEMS_MESSAGE);
+      let content = this.popoversProvider.setContent(Strings.POPOVER_EXPIRED_ITEMS_TITLE, Strings.POPOVER_EXPIRED_ITEMS_MESSAGE);
       this.popoversProvider.show(content);
     }
   }
@@ -155,7 +156,7 @@ export class ShoppingListPage {
 
   continue() {
     if (this.nrOfSelectedItems === 0) {
-      let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_NO_ITEMS_TITLE, Constants.SHOPPING_LIST_NO_ITEMS_MESSAGE);
+      let content = this.popoversProvider.setContent(Strings.SHOPPING_LIST_NO_ITEMS_TITLE, Strings.SHOPPING_LIST_NO_ITEMS_MESSAGE);
       this.popoversProvider.show(content);
     } else {
       let array = this.selectedItems.filter((item) => item != null);
@@ -212,15 +213,16 @@ export class ShoppingListPage {
   getListDetails() {
     let message = "";
     if (this.isCustomList) {
-      message = this.translator.translate(Constants.SHOPPING_LIST_CUSTOM_DESCRIPTION);
+      message = this.translator.translate(Strings.SHOPPING_LIST_CUSTOM_DESCRIPTION);
     }
     let content = this.popoversProvider.setContent(this.shoppingList.ListName, message + this.shoppingList.ListDescription);
     this.popoversProvider.show(content);
   }
 
   removeList() {
-    let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_DELETE_CONF_TITLE, Constants.SHOPPING_LIST_DELETE_CONF_MESSAGE,
-      Constants.OK, Constants.CANCEL);
+    let content = this.popoversProvider.setContent(Strings.SHOPPING_LIST_DELETE_CONF_TITLE, Strings.SHOPPING_LIST_DELETE_CONF_MESSAGE,
+      Strings.MODAL_BUTTON_YES, Strings.MODAL_BUTTON_CANCEL, Constants.POPOVER_DELETE_LIST_CONFIRMATION);
+
     this.popoversProvider.show(content).subscribe(data => {
       if (data.optionSelected === "OK") {
         this.shoppingListProvider.removeShoppingList(this.shoppingList.ListID).subscribe(data => {

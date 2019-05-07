@@ -6,12 +6,13 @@ import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lis
 import {ShoppingList} from "../../interfaces/models/shopping-list";
 import {PopoversProvider} from "../../providers/popovers/popovers";
 import * as Constants from "../../util/constants";
+import * as Strings from "../../util/strings";
 import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
-import {LoadingProvider} from "../../providers/loading/loading";
+import {LoadingService} from "../../services/loading/loading";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ProgramProvider} from "../../providers/program/program";
 import {Subscription} from 'rxjs';
-import {LocalStorageHelper} from "../../helpers/local-storage-helper";
+import {LocalStorageHelper} from "../../helpers/local-storage";
 
 @Component({
   selector: 'page-add-to-shopping-list',
@@ -31,19 +32,21 @@ export class AddToShoppingListPage implements OnInit {
   public isMarketOnlyProduct: boolean = false;
   public subscription: Subscription;
   public menuCustomButtons = [];
+  private loader: LoadingService;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private shoppingListsProvider: ShoppingListsProvider,
               private popoversProvider: PopoversProvider,
               private formBuilder: FormBuilder,
-              private loading: LoadingProvider,
+              private loadingService: LoadingService,
               private programProvider: ProgramProvider) {
     this.menuCustomButtons.push({action: 'addList', icon: 'add'})
   }
 
   ngOnInit(): void {
-    this.loading.presentSimpleLoading();
+    this.loader = this.loadingService.createLoader();
+    this.loader.show();
     this.product = this.navParams.get('product');
     this.selectedProgram = this.navParams.get('selectedProgram');
     this.quantity = this.navParams.get('quantity');
@@ -83,7 +86,8 @@ export class AddToShoppingListPage implements OnInit {
       shoppingLists.subscribe(data => {
         this.setAllShoppingList(data)
       });
-      this.loading.hideLoading();
+      this.loader.hide();
+
     }).catch(error => console.error(error));
   }
 
@@ -137,8 +141,8 @@ export class AddToShoppingListPage implements OnInit {
   }
 
   newShoppingList() {
-    let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined,
-      Constants.SAVE, Constants.CANCEL, undefined, Constants.POPOVER_NEW_SHOPPING_LIST);
+    let content = this.popoversProvider.setContent(Strings.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined,
+      Strings.MODAL_BUTTON_SAVE, Strings.MODAL_BUTTON_CANCEL, undefined, Constants.POPOVER_NEW_SHOPPING_LIST);
     this.subscription = this.popoversProvider.show(content).subscribe(data => {
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
@@ -161,7 +165,7 @@ export class AddToShoppingListPage implements OnInit {
               this.listForm.value.listOptions = list.ListID;
             });
           } else {
-            let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);
+            let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);
             this.popoversProvider.show(content);
           }
           this.subscription.unsubscribe();
@@ -176,7 +180,7 @@ export class AddToShoppingListPage implements OnInit {
 
    add() {
     if (!this.selectedProgram) {
-      let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_NO_PROGRAM_TITLE, Constants.SHOPPING_LIST_NO_PROGRAM_MESSAGE, undefined);
+      let content = this.popoversProvider.setContent(Strings.SHOPPING_LIST_NO_PROGRAM_TITLE, Strings.SHOPPING_LIST_NO_PROGRAM_MESSAGE, undefined);
       this.popoversProvider.show(content);
       return;
     }
@@ -192,10 +196,11 @@ export class AddToShoppingListPage implements OnInit {
       quantity: this.quantity
     };
 
-    this.loading.presentSimpleLoading();
+
+  this.loader.show();
     //TODO UPDATE WHEN APIS ARE READY
     this.shoppingListsProvider.addItemToShoppingList(this.listForm.value.listOptions, listItem, this.listForm.value.listOptions.isMarketOnly).subscribe(() => {
-      this.loading.hideLoading();
+      this.loader.hide();
       this.cancel();
     });
   }
@@ -207,11 +212,12 @@ export class AddToShoppingListPage implements OnInit {
       console.log(response);
       if (response){
         this.isAddBtnDisabled = true;
-        this.reset(this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_EXISTING_PRODUCT));
+        this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_EXISTING_PRODUCT));
       } else {
         this.isAddBtnDisabled = false;
       }
     });
+
   }
 
   reset(content) {
@@ -220,11 +226,13 @@ export class AddToShoppingListPage implements OnInit {
     this.listForm.controls.listOptions.reset();
   }
 
+
   selectList(selectedList: ShoppingList) {
     if (this.isMarketOnlyProduct === true && ((selectedList.ListType.toString() !== Constants.MARKET_ONLY_LIST_TYPE) && (selectedList.ListType.toString() !== Constants.MARKET_ONLY_CUSTOM_TYPE))) {
-      this.reset(this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_MARKET_ONLY_PRODUCT));
+      this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_MARKET_ONLY_PRODUCT));
     } else if (this.isMarketOnlyProduct === false && ((selectedList.ListType.toString() === Constants.MARKET_ONLY_LIST_TYPE) || (selectedList.ListType.toString() === Constants.MARKET_ONLY_CUSTOM_TYPE))) {
-      this.reset(this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_DEFAULT_PRODUCT));
+      this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_DEFAULT_PRODUCT));
+
     } else {
       this.checkProductInList(selectedList.ListID);
     }

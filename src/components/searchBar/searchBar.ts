@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {App} from "ionic-angular";
 import {PopoversProvider} from "../../providers/popovers/popovers";
-import * as Constants from "../../util/constants";
+import * as Strings from "../../util/strings";
 
 @Component({
   selector: 'search-bar',
@@ -25,7 +25,7 @@ export class SearchBarComponent {
 
   search() {
     if (!this.searchString || this.searchString.length < 3) {
-      let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.SEARCH_INVALID_INPUT);
+      let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SEARCH_INVALID_INPUT);
       this.popoversProvider.show(content);
       return;
     }

@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
 import {NavController,} from 'ionic-angular';
-import {AuthServiceProvider} from "../../providers/authservice/authservice";
+import {AuthProvider} from "../../providers/auth/auth";
 import * as Constants from "../../util/constants";
-import {LoadingProvider} from "../../providers/loading/loading";
+import * as Strings from "../../util/strings";
+import {LoadingService} from "../../services/loading/loading";
 import {TranslateProvider} from "../../providers/translate/translate";
 import {PopoversProvider} from "../../providers/popovers/popovers";
 import {Catalog} from "../catalog/catalog";
@@ -17,12 +18,15 @@ export class Login {
 
   username: string;
   password: string;
+  loginLoader: LoadingService;
 
   constructor(private navCtrl: NavController,
-              private authService: AuthServiceProvider,
-              private loading: LoadingProvider,
+              private authProvider: AuthProvider,
+              private loadingService: LoadingService,
               private translateProvider: TranslateProvider,
               private popoversProvider: PopoversProvider) {
+
+                this.loginLoader = this.loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_LOGIN));
   }
 
   login() {
@@ -30,18 +34,18 @@ export class Login {
       return;
     }
 
-    this.loading.presentLoading(this.translateProvider.translate(Constants.LOADING_ALERT_CONTENT_LOGIN));
+    this.loginLoader.show();
     let loginRequest = {username: this.username, password: this.password};
-    this.authService.login(loginRequest).subscribe(
+    this.authProvider.login(loginRequest).subscribe(
       () => {
-        this.authService.getUserInfo().then(() => {
+        this.authProvider.getUserInfo().then(() => {
           this.navCtrl.setRoot(Catalog).catch(err => console.error(err));
-          this.loading.hideLoading();
+          this.loginLoader.hide();
         });
       }, error => {
         console.log(error);
-        this.loading.hideLoading();
-        let content = this.popoversProvider.setContent(Constants.LOGIN_ERROR_TITLE, Constants.LOGIN_ERROR_INVALID);
+        this.loginLoader.hide();
+        let content = this.popoversProvider.setContent(Strings.LOGIN_ERROR_TITLE, Strings.LOGIN_ERROR_INVALID);
         this.popoversProvider.show(content);
       }
     );
@@ -54,7 +58,7 @@ export class Login {
       return true;
     }
 
-    let content = this.popoversProvider.setContent(Constants.LOGIN_ERROR_TITLE, Constants.LOGIN_ERROR_REQUIRED);
+    let content = this.popoversProvider.setContent(Strings.LOGIN_ERROR_TITLE, Strings.LOGIN_ERROR_REQUIRED);
     this.popoversProvider.show(content);
     return false;
   }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {Component} from '@angular/core';
 import {App, Platform} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
@@ -5,11 +6,10 @@ import {SplashScreen} from '@ionic-native/splash-screen';
 import {Catalog} from '../pages/catalog/catalog';
 import {Login} from "../pages/login/login";
 import {TranslateService} from '@ngx-translate/core';
-import {LocalStorageHelper} from "../helpers/local-storage-helper";
-import * as Constants from '../util/constants';
-import {DateTime} from "../providers/datetime/DateTime";
 import {DatabaseProvider} from "../providers/database/database";
-import {NetworkProvider} from "../providers/network/network";
+import { NetworkService } from "../services/network/network";
+import { OneSignalService } from '../services/onesignal/onesignal';
+import { SessionValidatorProvider } from '../providers/session/sessionValidator';
 
 @Component({
   templateUrl: 'app.html'
@@ -26,15 +26,19 @@ export class MyApp {
               private splashScreen: SplashScreen,
               private translate: TranslateService,
               private databaseProvider: DatabaseProvider,
-              private networkProvider: NetworkProvider) {
+              private networkService: NetworkService,
+              private sessionValidatorProvider: SessionValidatorProvider,
+              private oneSignalService: OneSignalService) {
     this.setAppLanguage();
     this.initializeApp();
   }
 
   initializeApp() {
     this.isLoading = true;
+
     this.platform.ready().then(() => {
-      this.networkProvider.listenForNetworkEvents();
+      this.oneSignalService.init();
+      this.networkService.listenForNetworkEvents();
       this.statusBar.styleDefault();
       this.databaseProvider.getDatabaseState()
         .subscribe(isDatabaseOpen => {
@@ -44,6 +48,7 @@ export class MyApp {
         });
     });
   }
+
 
   private setAppLanguage() {
     let language = navigator.language;
@@ -65,21 +70,12 @@ export class MyApp {
     if (this.openedFromNotification) {
 
     }
-    else if (this.isValidSession() === true) {
+    else if (this.sessionValidatorProvider.isValidSession() === true) {
       this.rootPage = Catalog;
     } else {
       this.rootPage = Login;
     }
   }
-
-  private isValidSession(): boolean {
-    if (!LocalStorageHelper.hasKey(Constants.USER)) {
-      return false;
-    }
-    const now = DateTime.getCurrentDateTime();
-    const receivedTimestamp = (JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER)).time_stamp);
-    const sessionTimestampWith4Days = DateTime.getTimeAfter4Days(receivedTimestamp);
-    return sessionTimestampWith4Days.isSameOrAfter(now);
-  }
+  
 
 }

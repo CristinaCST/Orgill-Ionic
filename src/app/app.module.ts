@@ -8,10 +8,11 @@ import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {SQLite} from "@ionic-native/sqlite";
 import {BarcodeScanner} from '@ionic-native/barcode-scanner';
-import {OneSignal} from '@ionic-native/onesignal/ngx';
+import {OneSignal} from '@ionic-native/onesignal';
 import {SQLitePorter} from "@ionic-native/sqlite-porter";
 import {Network} from '@ionic-native/network';
 import {IonicStorageModule} from "@ionic/storage";
+import {Badge} from '@ionic-native/badge';
 
 //Environments
 import {environment} from '@app/env';
@@ -20,20 +21,23 @@ import {environment} from '@app/env';
 import {ComponentsModule} from "../components/components.module";
 
 //Providers
-import {ApiProvider} from "../providers/api-provider";
-import {CatalogsProvider} from '../providers/catalogs/catalogs';
-import {DatabaseProvider} from '../providers/database/database';
-import {TranslateProvider} from '../providers/translate/translate';
-import {LoadingProvider} from '../providers/loading/loading';
-import {PopoversProvider} from "../providers/popovers/popovers";
-import {ShoppingListsProvider} from '../providers/shopping-lists/shopping-lists';
-import {ProgramProvider} from '../providers/program/program';
-import {AuthServiceProvider} from "../providers/authservice/authservice";
-import {ProductProvider} from "../providers/product/product";
-import {ScannerProvider} from '../providers/scanner/scanner';
-import {UserInfoProvider} from '../providers/user-info/user-info';
-import {PurchasesProvider} from '../providers/purchases/purchases';
-import {NetworkProvider} from '../providers/network/network';
+import { ApiProvider } from "../providers/api/api";
+import { CatalogsProvider } from '../providers/catalogs/catalogs';
+import { DatabaseProvider } from '../providers/database/database';
+import { TranslateProvider } from '../providers/translate/translate';
+import { LoadingService } from '../services/loading/loading';
+import { PopoversProvider } from "../providers/popovers/popovers";
+import { ShoppingListsProvider } from '../providers/shopping-lists/shopping-lists';
+import { ProgramProvider } from '../providers/program/program';
+import { AuthProvider } from "../providers/auth/auth";
+import { ProductProvider } from "../providers/product/product";
+import { ScannerProvider } from '../providers/scanner/scanner';
+import { UserInfoProvider } from '../providers/user-info/user-info';
+import { PurchasesProvider } from '../providers/purchases/purchases';
+import { NetworkService } from '../services/network/network';
+import { SessionValidatorProvider } from '../providers/session/sessionValidator';
+import { OneSignalService } from '../services/onesignal/onesignal';
+import { FlashDealService } from '../services/flashdeal/flashdeal';
 
 //Pages
 import {MyApp} from './app.component';
@@ -72,8 +76,11 @@ let pages = [MyApp,
 
 
 //Error Handlers
-import {CustomErrorHandler} from "../providers/CustomErrorHandler";
-const errorHandler = environment.production ? CustomErrorHandler : IonicErrorHandler;
+import { CustomErrorHandlerService } from "../services/error-handler/CustomErrorHandler";
+
+
+
+const errorHandler = environment.production ? CustomErrorHandlerService : IonicErrorHandler;
 
 @NgModule({
   declarations: pages,
@@ -98,10 +105,9 @@ const errorHandler = environment.production ? CustomErrorHandler : IonicErrorHan
     SQLitePorter,
     SQLite,
     Network,
-    OneSignal,
-    AuthServiceProvider,
+    AuthProvider,
     ApiProvider,
-    LoadingProvider,
+    LoadingService,
     TranslateProvider,
     PopoversProvider,
     CatalogsProvider,
@@ -113,8 +119,13 @@ const errorHandler = environment.production ? CustomErrorHandler : IonicErrorHan
     ProductProvider,
     UserInfoProvider,
     PurchasesProvider,
-    NetworkProvider,
-    {provide: ErrorHandler, useClass: errorHandler}
+    NetworkService,
+    SessionValidatorProvider,
+    OneSignalService,
+    OneSignal,
+    Badge,
+    FlashDealService,
+    {provide: ErrorHandler, useClass: CustomErrorHandlerService}
   ]
 })
 

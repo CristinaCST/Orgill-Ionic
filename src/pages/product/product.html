@@ -15,10 +15,10 @@
   </ion-toolbar>
 
   <!-- Product Page Tabs-->
-  <ion-segment [(ngModel)]="activeTab">
+  <ion-segment *ngIf="!isFlashDeal" [(ngModel)]="activeTab">
     <ion-segment-button value="summary_tab"> {{"summary_tab" | translate}}
     </ion-segment-button>
-    <ion-segment-button value="pricing_tab"> {{"pricing_tab" | translate}}
+    <ion-segment-button  value="pricing_tab"> {{"pricing_tab" | translate}}
     </ion-segment-button>
   </ion-segment>
 </ion-header>
@@ -36,6 +36,7 @@
   </div>
 </ion-content>
 
-<ion-footer *ngIf="!fromShoppingList">
-  <button id="add-shopping" (click)="addToShoppingList()">{{"button_add_to_list" | translate}}</button>
+<ion-footer *ngIf="!fromShoppingList" [(ngSwitch)]="isFlashDeal">
+  <button id="add-shopping" *ngSwitchCase="false" (click)="addToShoppingList()">{{"button_add_to_list" | translate}}</button>
+  <button id="add-shopping" *ngSwitchCase="true" (click)="addToShoppingList()">FLASH DEAL</button>
 </ion-footer>

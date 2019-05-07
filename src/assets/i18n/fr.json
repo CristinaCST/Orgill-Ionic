@@ -1,11 +1,19 @@
 {
-  "O_ZONE": "The O ZONE",
-  "ok": "OK",
-  "save": "Enregistrer",
-  "no": "Non",
-  "cancel": "Annuler",
-  "delete": "Effacer",
-  "continue": "Continuer",
+  "generic_modal_title": "The O ZONE",
+  "modal_button_yes":"Yes",
+  "modal_button_no":"Non",
+  "modal_button_cancel":"Annuler",
+  "modal_button_continue":"Continuer",
+  "modal_button_save":"Enregistrer",
+  "modal_button_skip":"Skip",
+  "modal_button_never":"Never",
+  "modal_button_always":"Always",
+  "modal_button_allow":"Allow",
+  "modal_button_decline":"Decline",
+  "modal_button_delete":"Effacer",
+  "modal_button_ok":"OK",
+  "modal_button_not_now":"Not now",
+  
   "lost_internet_connection": "Il n'y a pas de connexion internet. Veuillez activer les données mobiles ou WIFI pour utiliser l'application Orgill O Zone.",
   "request_timeout_error": "Une erreur est survenue. Vérifier si vous êtes connecté à internet et réessayez.",
   "loading_content_login": "Connecter...Veuillez patienter",
@@ -151,5 +159,9 @@
   "button_uninstall": "Désinstaller",
   "default_http_error": "Error",
   "no_acces": "Vous n'avez aucun accès!",
-  "something_went_wrong": "Quelque chose s'est mal passé ..."
+  "something_went_wrong": "Quelque chose s'est mal passé ...",
+  "notifications_permissions_message": "Orgill veut envoyer des notifications push",
+  "notifications_permissions_btn_success": "Permettre",
+  "notifications_permissions_btn_dismiss": "Nier",
+  "location_never_show": "Ne plus montrer"
 }

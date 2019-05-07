@@ -1,13 +1,14 @@
-import {Component, OnInit} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
-import {Product} from "../../interfaces/models/product";
-import {ProgramProvider} from "../../providers/program/program";
-import {ItemProgram} from "../../interfaces/models/item-program";
-import {PopoversProvider} from "../../providers/popovers/popovers";
+import { Component, OnInit } from '@angular/core';
+import { NavController, NavParams } from 'ionic-angular';
+import { Product } from "../../interfaces/models/product";
+import { ProgramProvider } from "../../providers/program/program";
+import { ItemProgram } from "../../interfaces/models/item-program";
+import { PopoversProvider } from "../../providers/popovers/popovers";
 import * as Constants from "../../util/constants";
-import {AddToShoppingListPage} from "../add-to-shopping-list/add-to-shopping-list";
-import {LoadingProvider} from "../../providers/loading/loading";
-import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
+import * as Strings from "../../util/strings";
+import { AddToShoppingListPage } from "../add-to-shopping-list/add-to-shopping-list";
+import { LoadingService } from "../../services/loading/loading";
+import { ShoppingListsProvider } from "../../providers/shopping-lists/shopping-lists";
 
 @Component({
   selector: 'page-product',
@@ -23,27 +24,32 @@ export class ProductPage implements OnInit {
   public selectedProgram: ItemProgram;
   public quantityItemPrice: number = 0;
   public programName: string;
+  public isFlashDeal: boolean;
 
   public fromShoppingList;
   private shoppingListId;
   private id;
   public quantityFromList;
 
+  private loader: LoadingService;
+
   constructor(public navController: NavController,
-              public navParams: NavParams,
-              private loading: LoadingProvider,
-              private programProvider: ProgramProvider,
-              private popoversProvider: PopoversProvider,
-              private shoppingListProvider: ShoppingListsProvider) {
+    public navParams: NavParams,
+    private loadingService: LoadingService,
+    private programProvider: ProgramProvider,
+    private popoversProvider: PopoversProvider,
+    private shoppingListProvider: ShoppingListsProvider) {
+      this.loader = this.loadingService.createLoader();
   }
 
   ngOnInit(): void {
-    this.loading.presentSimpleLoading();
+    this.loader.show();
 
     this.product = this.navParams.get('product');
     this.programNumber = this.navParams.get('programNumber');
     this.programName = this.navParams.get('programName');
     this.subCategoryName = this.navParams.get('subcategoryName');
+    this.isFlashDeal = this.navParams.get('isFlashDeal');
 
     this.fromShoppingList = this.navParams.get('fromShoppingList');
     if (this.fromShoppingList) {
@@ -56,7 +62,7 @@ export class ProductPage implements OnInit {
       if (programs) {
         this.productPrograms = JSON.parse(programs.d);
         if (this.productPrograms.length === 0) {
-          let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.PRODUCT_NOT_AVAILABLE, undefined, Constants.OK, Constants.POPOVER_ERROR);
+          let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, undefined, Strings.MODAL_BUTTON_YES, Constants.POPOVER_ERROR);
           this.popoversProvider.show(content);
           this.navController.pop().catch(err => console.error(err));
           return;
@@ -64,7 +70,7 @@ export class ProductPage implements OnInit {
         let initialProgram: ItemProgram = this.getInitialProgram();
         this.selectedProgram = initialProgram;
         this.programProvider.selectProgram(initialProgram);
-        this.loading.hideLoading();
+        this.loader.hide();
       }
     });
 
@@ -97,11 +103,11 @@ export class ProductPage implements OnInit {
 
   addToShoppingList() {
     if (this.product.QTY_ROUND_OPTION === 'Y' && this.isMinimum70percentQuantity()) {
-      let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.Y_SHELF_PACK_QUANTITY_WARNING, undefined, Constants.OK, Constants.Y_SHELF_PACK_QUANTITY_WARNING);
+      let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.Y_SHELF_PACK_QUANTITY_WARNING, undefined, Strings.MODAL_BUTTON_YES, Strings.Y_SHELF_PACK_QUANTITY_WARNING);
       this.popoversProvider.show(content);
       this.programProvider.setPackQuantity(true);
     } else if (this.product.QTY_ROUND_OPTION === 'X' && this.quantity % Number(this.product.SHELF_PACK) !== 0) {
-      let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.X_SHELF_PACK_QUANTITY_WARNING, undefined, Constants.OK, 'X category');
+      let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.X_SHELF_PACK_QUANTITY_WARNING, undefined, Strings.MODAL_BUTTON_YES, 'X category');
       this.popoversProvider.show(content);
     } else {
       this.navController.push(AddToShoppingListPage, {
@@ -111,6 +117,10 @@ export class ProductPage implements OnInit {
         'quantityItemPrice': this.quantityItemPrice
       }).catch(err => console.error(err));
     }
+  }
+
+  buyNow(){
+
   }
 
   onQuantityChange($event) {

@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-import {ApiProvider} from "../api-provider";
+import {ApiProvider} from "../api/api";
 import * as ConstantsUrl from "../../util/constants-url"
 import {User} from "../../interfaces/models/user";
 import * as Constants from "../../util/constants";
-import {LocalStorageHelper} from "../../helpers/local-storage-helper";
-import {SearchProductRequest} from "../../interfaces/request-body/search-product-request";
+import {LocalStorageHelper} from "../../helpers/local-storage";
+import {SearchProductRequest} from "../../interfaces/request-body/search-product";
 
 @Injectable()
 export class ScannerProvider {

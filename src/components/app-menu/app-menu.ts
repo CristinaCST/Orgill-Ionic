@@ -2,7 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {App, Events} from "ionic-angular";
 import {Login} from "../../pages/login/login";
 import * as Constants from "../../util/constants";
-import {AuthServiceProvider} from "../../providers/authservice/authservice";
+import * as Strings from '../../util/strings';
+import {AuthProvider} from "../../providers/auth/auth";
 import {PopoversProvider} from "../../providers/popovers/popovers";
 import {AboutPage} from "../../pages/about/about";
 import {CatalogsProvider} from "../../providers/catalogs/catalogs";
@@ -38,7 +39,7 @@ export class AppMenuComponent implements OnInit {
 
   constructor(private app: App,
               private popoversProvider: PopoversProvider,
-              private authServiceProvider: AuthServiceProvider,
+              private authServiceProvider: AuthProvider,
               private catalogsProvider: CatalogsProvider,
               private translateProvider: TranslateProvider,
               private events: Events,
@@ -54,11 +55,11 @@ export class AppMenuComponent implements OnInit {
   public logout() {
     let content = {
       type: Constants.POPOVER_LOGOUT,
-      title: Constants.LOGOUT_TITLE,
-      message: Constants.LOGOUT_MESSAGE,
-      dismissButtonText: Constants.CANCEL,
-      negativeButtonText: Constants.NO,
-      positiveButtonText: Constants.OK
+      title: Strings.LOGOUT_TITLE,
+      message: Strings.LOGOUT_MESSAGE,
+      dismissButtonText: Strings.MODAL_BUTTON_CANCEL,
+      negativeButtonText: Strings.MODAL_BUTTON_NO,
+      positiveButtonText: Strings.MODAL_BUTTON_CONTINUE
     };
 
     this.popoversProvider.show(content).subscribe((data) => {
@@ -137,7 +138,7 @@ export class AppMenuComponent implements OnInit {
 
   addProgramsToDB(programs) {
     let regularProgram = {
-      NAME: this.translateProvider.translate(Constants.REGULAR_CATALOG).toUpperCase(),
+      NAME: this.translateProvider.translate(Strings.REGULAR_CATALOG).toUpperCase(),
       PROGRAMNO: "",
       MARKETONLY: "N",
       STARTDATE: "01/01/2014",

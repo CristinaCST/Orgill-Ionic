@@ -281,9 +281,11 @@ export class DatabaseProvider {
     return this.database.executeSql(this.queries.checkProductInList, checkData);
   }
 
+
    async asyncForEach(array, callback) {
     for (let index = 0; index < array.length; index++) {
       await callback(array[index], index, array);
     }
   }
+
 }

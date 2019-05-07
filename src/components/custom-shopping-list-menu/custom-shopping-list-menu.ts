@@ -1,6 +1,8 @@
+
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {ShoppingList} from "../../interfaces/models/shopping-list";
 import * as Constants from "../../util/constants";
+import * as Strings from "../../util/strings";
 import {PopoversProvider} from "../../providers/popovers/popovers";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
 import {ShoppingListPage} from "../../pages/shopping-list/shopping-list";
@@ -26,7 +28,8 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
   }
 
   addNewList() {
-    let content = this.popoversProvider.setContent(Constants.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined, Constants.SAVE, Constants.CANCEL, undefined, Constants.POPOVER_NEW_SHOPPING_LIST);
+    let content = this.popoversProvider.setContent(Strings.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined, Strings.MODAL_BUTTON_SAVE, Strings.MODAL_BUTTON_CANCEL, Constants.POPOVER_NEW_SHOPPING_LIST);
+
     let subscription = this.popoversProvider.show(content).subscribe(data => {
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
@@ -50,7 +53,7 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
               this.customShoppingLists.push(list);
             });
           } else {
-            let content = this.popoversProvider.setContent(Constants.O_ZONE, Constants.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);
+            let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);
             this.popoversProvider.show(content);
           }
           subscription.unsubscribe();

@@ -1,8 +1,9 @@
+
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {ItemProgram} from "../../interfaces/models/item-program";
-import {ApiProvider} from "../api-provider";
-import {LocalStorageHelper} from "../../helpers/local-storage-helper";
+import {ApiProvider} from "../api/api";
+import {LocalStorageHelper} from "../../helpers/local-storage";
 import * as ConstantsUrl from "../../util/constants-url";
 import * as Constants from "../../util/constants";
 import {DatabaseProvider} from "../database/database";
@@ -48,6 +49,7 @@ export class ProgramProvider {
     return this.databaseProvider.getMarketTypeForProgram(programNumber);
   }
 
+  /*
   getFlashDealsProduct(programNumber = '',sku = ''){
     let params={
       user_token: this.userToken,
@@ -55,6 +57,6 @@ export class ProgramProvider {
       sku:sku
     };
     return this.apiProvider.post(ConstantsUrl.GET_FLASHDEALS_PRODUCT,params)
-  }
+  }*/
 
 }

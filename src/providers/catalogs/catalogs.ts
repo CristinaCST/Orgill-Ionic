@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
-import {LocalStorageHelper} from "../../helpers/local-storage-helper";
+import {LocalStorageHelper} from "../../helpers/local-storage";
 import * as ConstantsUrl from "../../util/constants-url";
 import * as Constants from "../../util/constants";
-import {ApiProvider} from "../api-provider";
-import {SubcategoriesRequest} from "../../interfaces/request-body/subcategories-request";
-import {CategoriesRequest} from "../../interfaces/request-body/categories-request";
-import {ProductsRequest} from "../../interfaces/request-body/products-request";
+import {ApiProvider} from "../api/api";
+import {SubcategoriesRequest} from "../../interfaces/request-body/subcategories";
+import {CategoriesRequest} from "../../interfaces/request-body/categories";
+import {ProductsRequest} from "../../interfaces/request-body/products";
 import {EmptyObservable} from "rxjs/observable/EmptyObservable";
-import {SearchProductRequest} from "../../interfaces/request-body/search-product-request";
+import {SearchProductRequest} from "../../interfaces/request-body/search-product";
 
 @Injectable()
 export class CatalogsProvider {
