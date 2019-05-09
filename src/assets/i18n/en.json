@@ -81,6 +81,7 @@
   "product_release_date": "Release Date: ",
   "product_not_available": "This product is no longer available.",
   "error" : "Error",
+  "button_buy_now": "Buy Now",
 
   "invalid_quantity_error": "Please enter a valid quantity.",
   "Y_shelf_pack_quantity_warning": "For all Y items, if ordered quantity is more than 70% of shelf pack quantity, shelf pack quantity is automatically ordered!",

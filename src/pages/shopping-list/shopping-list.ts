@@ -29,6 +29,7 @@ export class ShoppingListPage {
   public isSelectAll: boolean = false;
   public nrOfSelectedItems: number = 0;
   public menuCustomButtons = [];
+  private loader: LoadingService;
 
   constructor(public navParams: NavParams,
               private navigatorService: NavigatorService,
@@ -36,7 +37,8 @@ export class ShoppingListPage {
               private popoversProvider: PopoversProvider,
               private translator: TranslateProvider,
               private events: Events,
-              private loading: LoadingProvider) {
+              private loading: LoadingService) {
+                this.loader = loading.createLoader();
     this.menuCustomButtons = [{action: 'detailsList', icon: 'information-circle'},
       {action: 'scan', icon: 'barcode'}];
   }
@@ -46,7 +48,7 @@ export class ShoppingListPage {
   }
 
   init(): void {
-    this.loading.presentSimpleLoading();
+    this.loader.show();
     this.shoppingList = this.navParams.get('list');
     if (this.navParams.get('isCheckout') !== undefined) {
       this.isCheckout = this.navParams.get('isCheckout');
@@ -66,13 +68,18 @@ export class ShoppingListPage {
         }
       }
       this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: Array<ShoppingListItem>) => {
+      //  console.log(data,data);
         if (data) {
           this.shoppingListItems = data;
           this.checkExpiredItems();
           this.content.resize();
-          this.loading.hideLoading();
+          this.loader.hide();
         }
-      }).catch(error => console.error(error));
+        
+      },(err)=>{
+        console.error(err);
+        this.loader.hide();
+      }).catch(error => {console.error(error);this.loader.hide();});
     }
   }
 
@@ -94,7 +101,7 @@ export class ShoppingListPage {
             data => {},
             error => {
               bool = false;
-              console.log(error);
+              console.error(error);
             }
           )
         })
@@ -116,7 +123,7 @@ export class ShoppingListPage {
       isCheckout: false,
       list: this.shoppingList
     };
-    this.navCtrl.push(ShoppingListPage, params).catch(err => console.error(err));
+    this.navigatorService.push(ShoppingListPage, params).catch(err => console.error(err));
   }
 
   setOrderTotal(event, index) {
@@ -165,7 +172,7 @@ export class ShoppingListPage {
         shoppingListItems: array,
         orderTotal: this.orderTotal
       };
-      this.navCtrl.push(CustomerLocationPage, params).catch(err => console.error(err))
+      this.navigatorService.push(CustomerLocationPage, params).catch(err => console.error(err))
     }
   }
 
@@ -175,11 +182,11 @@ export class ShoppingListPage {
       shoppingListItems: this.shoppingListProvider.search(this.shoppingListItems, $event),
       isCheckout: this.isCheckout
     };
-    this.navCtrl.push(ShoppingListPage, params).catch(err => console.error(err));
+    this.navigatorService.push(ShoppingListPage, params).catch(err => console.error(err));
   }
 
   onCheckedToDetails($event) {
-    this.navCtrl.push(ProductPage, {
+    this.navigatorService.push(ProductPage, {
       product: $event.product,
       programNumber: $event.program_number,
       fromShoppingList: true,
@@ -204,7 +211,7 @@ export class ShoppingListPage {
   }
 
   goToScanPage() {
-    this.navCtrl.push(ScannerPage, {
+    this.navigatorService.push(ScannerPage, {
       'type': 'scan_barcode_tab',
       shoppingList: this.shoppingList
     }).catch(err => console.error(err));
@@ -226,9 +233,9 @@ export class ShoppingListPage {
     this.popoversProvider.show(content).subscribe(data => {
       if (data.optionSelected === "OK") {
         this.shoppingListProvider.removeShoppingList(this.shoppingList.ListID).subscribe(data => {
-          console.log(data);
+          //console.log(data);
           this.events.publish('DeletedList', this.shoppingList.ListID);
-          this.navCtrl.pop().catch(err => console.error(err));
+          this.navigatorService.pop().catch(err => console.error(err));
         });
       }
     });

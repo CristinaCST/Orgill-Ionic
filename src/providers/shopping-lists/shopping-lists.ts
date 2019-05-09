@@ -10,6 +10,7 @@ import {forkJoin} from "rxjs/observable/forkJoin";
 import {Observable} from "rxjs/Observable";
 import {concatMap} from "rxjs/operator/concatMap";
 import {LocalStorageHelper} from "../../helpers/local-storage";
+import { Product } from 'interfaces/models/product';
 
 
 @Injectable()
@@ -91,6 +92,8 @@ export class ShoppingListsProvider {
         let itemsData = JSON.parse(data.d);
         this.getAllProductData(itemsData).then(data => {
           resolve(data);
+        },(err)=>{
+          reject(err);
         })
 
       });
@@ -101,7 +104,12 @@ export class ShoppingListsProvider {
     return new Promise((resolve,reject) =>{
       let list = [];
       let reqs = [];
+      if(productList.length==0)
+      {
+        return reject("No products");
+      }
       productList.forEach( element => {
+       
         reqs.push(this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH,{
               "user_token" : this.userToken,
               "search_string" : element.sku,
@@ -266,7 +274,7 @@ export class ShoppingListsProvider {
     return shoppingListItems.filter(item => searchFn(item.product.NAME) || searchFn(item.product.SKU) || searchFn(item.product.UPC_CODE));
   }
 
-  updateShoppingListItem(product, shoppingListId: number, programNumber: string, price: number, quantity: number) {
+  updateShoppingListItem(product: Product, shoppingListId: number, programNumber: string, price: number, quantity: number) {
     //return this.databaseProvider.updateShoppingListItem(id, shoppingListId, programNumber, price, quantity);
     return this.apiProvider.post(ConstantsUrl.UPDATE_SHOPPING_LIST_ITEM, {
       user_token: this.userToken,
