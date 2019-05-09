@@ -24,7 +24,7 @@ export class ScannerPage implements OnInit {
   programNumber: string = '';
   programs: Array<Program> = [];
   isMarketOnly: boolean = false;
-  message: string = '';
+  scanMessage: string = '';
   searchString: string;
   foundProduct: Product;
   shoppingList;
@@ -58,7 +58,7 @@ export class ScannerPage implements OnInit {
       this.products = this.navParams.get('products');
     }
     this.searchTab = this.navParams.get('type');
-    this.message = "";
+    this.scanMessage = "";
     this.catalogsProvider.getPrograms().subscribe(resp => {
       var data = JSON.parse(resp.d);
       if (data.length > 0){
@@ -72,7 +72,7 @@ export class ScannerPage implements OnInit {
     this.barcodeScanner.scan().then((barcodeData) => {
       const scanResult = barcodeData.text;
       if (this.isValidScanResult(scanResult)) {
-        console.log("THIS IS THE SCAN RESULT",scanResult);
+    //    console.log("THIS IS THE SCAN RESULT",scanResult);
 
         this.searchingLoader.show();
 
@@ -80,8 +80,8 @@ export class ScannerPage implements OnInit {
         this.setSearchStringFromScanResult(scanResult);
         this.searchProduct();
       }else{
-        //TODO check if string is ok
-        this.message = this.translator.translate(Constants.SCAN_INVALID_BARCODE);
+        //TODO: check if string is ok
+        this.scanMessage = this.translator.translate(Constants.SCAN_INVALID_BARCODE);
       }
     });
   }
@@ -132,9 +132,9 @@ export class ScannerPage implements OnInit {
           } else {
 
             if (this.isMarketOnly && ((this.shoppingList.ListType.toString() !== Constants.MARKET_ONLY_LIST_TYPE) && (this.shoppingList.ListType.toString() !== Constants.MARKET_ONLY_CUSTOM_TYPE))) {
-              this.message = this.translator.translate(Constants.SCAN_MARKET_ONLY_PRODUCT);
+              this.scanMessage = this.translator.translate(Constants.SCAN_MARKET_ONLY_PRODUCT);
             } else if (this.isMarketOnly === false && ((this.shoppingList.ListType.toString() === Constants.MARKET_ONLY_LIST_TYPE) || (this.shoppingList.ListType.toString() === Constants.MARKET_ONLY_CUSTOM_TYPE))) {
-              this.message = this.translator.translate(Constants.SCAN_REGULAR_PRODUCT);
+              this.scanMessage = this.translator.translate(Constants.SCAN_REGULAR_PRODUCT);
             } else {
               this.isProductInList().subscribe((resp) => {
                 var data = JSON.parse(resp.d).Status === "True";
@@ -148,14 +148,12 @@ export class ScannerPage implements OnInit {
                   this.shoppingListProvider.addItemToShoppingList(this.shoppingList.ListID, newItem, this.shoppingList.isMarketOnly).subscribe(
                     () => {
                       this.productAlreadyInList = false;
-                      //TODO Change to constants_strings
-                      this.message = "Added " + newItem.product.NAME + " to list";
+                      //TODO: Change to constants_strings
+                      this.scanMessage = "Added " + newItem.product.NAME + " to list";
                     });
                 }
                 else {
-                  //TODO Change to constants strings
-                  this.message = this.translator.translate(Strings.SHOPPING_LIST_EXISTING_PRODUCT);
-                  // this.message = ""
+                  this.scanMessage = this.translator.translate(Strings.SHOPPING_LIST_EXISTING_PRODUCT);
                   this.productAlreadyInList = true;
                 }
               });
@@ -163,15 +161,22 @@ export class ScannerPage implements OnInit {
           }
         }
         else {
-          //TODO Check string if its fine
-          this.message = this.translator.translate(Constants.SCAN_NOT_FOUND);
+          //TODO: Check string if its fine
+          this.scanMessage = this.translator.translate(Constants.SCAN_NOT_FOUND);
           this.noProductFound = true;
           // this.scan();
         }
       }, errorResponse => {
         this.searchingLoader.hide();
         if (this.isPermissionError(errorResponse)) {
-          let content = {title: Strings.GENERIC_ERROR, message: Constants.POPOVER_CAMERA_PERMISSION_NOT_GRANTED};
+          let content = {title: Strings.GENERIC_ERROR, _message: Constants.POPOVER_CAMERA_PERMISSION_NOT_GRANTED,
+get message() {
+              return this._message;
+            },
+set message(value) {
+              this._message = value;
+            },
+};
           this.popoversProvider.show(content);
         } else {
           let content = {title: Strings.GENERIC_ERROR, message: Strings.SCAN_ERROR};

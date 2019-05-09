@@ -19,7 +19,7 @@
 
 <!-- Scanner Page Content -->
 <ion-content padding>
-  <p>{{message}}</p>
+  <p *ngIf="searchTab==='scan_barcode_tab'">{{scanMessage}}</p>
   <!--<p *ngIf="productAlreadyInList && searchTab==='scan_barcode_tab'"> Product is already in list</p>-->
   <!--<p *ngIf="noProductFound">{{"no_products_found" | translate}}</p-->
   <!-- Scanner Page scan button -->
