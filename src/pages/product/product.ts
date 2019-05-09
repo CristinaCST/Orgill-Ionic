@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavParams } from 'ionic-angular';
 import { Product } from "../../interfaces/models/product";
 import { ProgramProvider } from "../../providers/program/program";
 import { ItemProgram } from "../../interfaces/models/item-program";
@@ -9,6 +9,7 @@ import * as Strings from "../../util/strings";
 import { AddToShoppingListPage } from "../add-to-shopping-list/add-to-shopping-list";
 import { LoadingService } from "../../services/loading/loading";
 import { ShoppingListsProvider } from "../../providers/shopping-lists/shopping-lists";
+import { NavigatorService } from '../../services/navigator/navigator';
 
 @Component({
   selector: 'page-product',
@@ -24,7 +25,7 @@ export class ProductPage implements OnInit {
   public selectedProgram: ItemProgram;
   public quantityItemPrice: number = 0;
   public programName: string;
-  public isFlashDeal: boolean;
+  public isFlashDeal: boolean = false;
 
   public fromShoppingList;
   private shoppingListId;
@@ -33,7 +34,7 @@ export class ProductPage implements OnInit {
 
   private loader: LoadingService;
 
-  constructor(public navController: NavController,
+  constructor(public navigatorService: NavigatorService,
     public navParams: NavParams,
     private loadingService: LoadingService,
     private programProvider: ProgramProvider,
@@ -49,7 +50,7 @@ export class ProductPage implements OnInit {
     this.programNumber = this.navParams.get('programNumber');
     this.programName = this.navParams.get('programName');
     this.subCategoryName = this.navParams.get('subcategoryName');
-    this.isFlashDeal = this.navParams.get('isFlashDeal');
+    this.isFlashDeal = this.navParams.get('isFlashDeal')?true:false;
 
     this.fromShoppingList = this.navParams.get('fromShoppingList');
     if (this.fromShoppingList) {
@@ -64,7 +65,7 @@ export class ProductPage implements OnInit {
         if (this.productPrograms.length === 0) {
           let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, undefined, Strings.MODAL_BUTTON_YES, Constants.POPOVER_ERROR);
           this.popoversProvider.show(content);
-          this.navController.pop().catch(err => console.error(err));
+          this.navigatorService.pop().catch(err => console.error(err));
           return;
         }
         let initialProgram: ItemProgram = this.getInitialProgram();
@@ -98,7 +99,7 @@ export class ProductPage implements OnInit {
   }
 
   close() {
-    this.navController.pop().catch(err => console.error(err));
+    this.navigatorService.pop().catch(err => console.error(err));
   }
 
   addToShoppingList() {
@@ -110,7 +111,7 @@ export class ProductPage implements OnInit {
       let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.X_SHELF_PACK_QUANTITY_WARNING, undefined, Strings.MODAL_BUTTON_YES, 'X category');
       this.popoversProvider.show(content);
     } else {
-      this.navController.push(AddToShoppingListPage, {
+      this.navigatorService.push(AddToShoppingListPage, {
         'product': this.product,
         'quantity': this.quantity,
         'selectedProgram': this.selectedProgram,

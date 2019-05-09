@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import { NavParams} from 'ionic-angular';
 import {CustomerLocation} from "../../interfaces/models/customer-location";
 import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
 import {UserInfoProvider} from "../../providers/user-info/user-info";
 import {OrderReviewPage} from "../order-review/order-review";
+import { NavigatorService } from '../../services/navigator/navigator';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class CustomerLocationPage implements OnInit {
   private shoppingListItems: Array<ShoppingListItem> = [];
   private orderTotal: number;
 
-  constructor(private navCtrl: NavController,
+  constructor(private navigatorService: NavigatorService,
               private navParams: NavParams,
               private userInfoProvider: UserInfoProvider) {
   }
@@ -73,7 +74,7 @@ export class CustomerLocationPage implements OnInit {
         shoppingListItems: this.shoppingListItems,
         orderTotal: this.orderTotal
       };
-      this.navCtrl.push(OrderReviewPage, params);
+      this.navigatorService.push(OrderReviewPage, params);
     }
   }
 }

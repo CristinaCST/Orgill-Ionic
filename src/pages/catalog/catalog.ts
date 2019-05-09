@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import { NavParams} from 'ionic-angular';
 import {Category} from "../../interfaces/models/category";
 import {CategoriesRequest} from "../../interfaces/request-body/categories";
 import * as Constants from '../../util/constants';
@@ -12,6 +12,7 @@ import {LoadingService} from "../../services/loading/loading";
 import {TranslateProvider} from "../../providers/translate/translate";
 import {ProductsSearchPage} from "../products-search/products-search";
 import {ScannerPage} from "../scanner/scanner";
+import { NavigatorService } from '../../services/navigator/navigator';
 
 
 @Component({
@@ -30,7 +31,7 @@ export class Catalog implements OnInit {
   categoriesLoader: LoadingService;
   simpleLoader: LoadingService;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public catalogProvider: CatalogsProvider,
+  constructor(public navigatorService: NavigatorService, public navParams: NavParams, public catalogProvider: CatalogsProvider,
               public loadingService: LoadingService, public translateProvider: TranslateProvider) {
     this.menuCustomButtons.push({action: 'scan', icon: 'barcode'});
 
@@ -105,7 +106,7 @@ export class Catalog implements OnInit {
       if (responseData.length > 0) {
         let categories = this.sortCategories(responseData);
 
-        this.navCtrl.push(Catalog, {
+        this.navigatorService.push(Catalog, {
           programName: category.CatName,
           programNumber: this.programNumber,
           categories: categories,
@@ -119,7 +120,7 @@ export class Catalog implements OnInit {
           programName: category.CatName,
           category: category,
         };
-        this.navCtrl.push(ProductsPage, params).catch(err => console.error(err));
+        this.navigatorService.push(ProductsPage, params).catch(err => console.error(err));
         this.categoriesLoader.hide();
       }
     });
@@ -138,14 +139,14 @@ export class Catalog implements OnInit {
           category: this.currentSubCategory,
           numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
         };
-        this.navCtrl.push(ProductsSearchPage, params).then(() => console.log('%cTo product search page', 'color:green'));
+        this.navigatorService.push(ProductsSearchPage, params).then(() => console.log('%cTo product search page', 'color:green'));
         this.simpleLoader.hide();
       }
     });
   }
 
   goToScanPage() {
-    this.navCtrl.push(ScannerPage, {
+    this.navigatorService.push(ScannerPage, {
       'type': 'scan_barcode_tab',
     }).catch(err => console.error(err));
   }

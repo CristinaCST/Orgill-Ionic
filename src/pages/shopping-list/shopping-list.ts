@@ -5,13 +5,13 @@ import * as Constants from "../../util/constants";
 import * as Strings from "../../util/strings";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
 import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
-import {NavController} from 'ionic-angular';
 import {PopoversProvider} from "../../providers/popovers/popovers";
 import {CustomerLocationPage} from "../customer-location/customer-location";
 import {ProductPage} from "../product/product";
 import {TranslateProvider} from "../../providers/translate/translate";
 import {ScannerPage} from "../scanner/scanner";
-import {LoadingProvider} from "../../providers/loading/loading";
+import {LoadingService} from "../../services/loading/loading";
+import { NavigatorService } from '../../services/navigator/navigator';
 
 @Component({
   selector: 'page-shopping-list',
@@ -31,7 +31,7 @@ export class ShoppingListPage {
   public menuCustomButtons = [];
 
   constructor(public navParams: NavParams,
-              private navCtrl: NavController,
+              private navigatorService: NavigatorService,
               private shoppingListProvider: ShoppingListsProvider,
               private popoversProvider: PopoversProvider,
               private translator: TranslateProvider,

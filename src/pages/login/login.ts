@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {NavController,} from 'ionic-angular';
 import {AuthProvider} from "../../providers/auth/auth";
 import * as Constants from "../../util/constants";
 import * as Strings from "../../util/strings";
@@ -7,6 +6,7 @@ import {LoadingService} from "../../services/loading/loading";
 import {TranslateProvider} from "../../providers/translate/translate";
 import {PopoversProvider} from "../../providers/popovers/popovers";
 import {Catalog} from "../catalog/catalog";
+import { NavigatorService } from '../../services/navigator/navigator';
 
 
 @Component({
@@ -20,7 +20,7 @@ export class Login {
   password: string;
   loginLoader: LoadingService;
 
-  constructor(private navCtrl: NavController,
+  constructor(private navigatorService: NavigatorService,
               private authProvider: AuthProvider,
               private loadingService: LoadingService,
               private translateProvider: TranslateProvider,
@@ -39,7 +39,7 @@ export class Login {
     this.authProvider.login(loginRequest).subscribe(
       () => {
         this.authProvider.getUserInfo().then(() => {
-          this.navCtrl.setRoot(Catalog).catch(err => console.error(err));
+          this.navigatorService.setRoot(Catalog).catch(err => console.error(err));
           this.loginLoader.hide();
         });
       }, error => {

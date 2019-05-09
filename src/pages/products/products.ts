@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import { NavParams} from 'ionic-angular';
 import {Product} from "../../interfaces/models/product";
 import {CatalogsProvider} from "../../providers/catalogs/catalogs";
 import {ProductPage} from "../product/product";
@@ -8,7 +8,7 @@ import {Subscription} from "rxjs/Subscription";
 import {ProductsSearchPage} from "../products-search/products-search";
 import {LoadingService} from "../../services/loading/loading";
 import * as Constants from "../../util/constants";
-
+import { NavigatorService } from '../../services/navigator/navigator';
 @Component({
   selector: 'page-products',
   templateUrl: 'products.html',
@@ -27,7 +27,7 @@ export class ProductsPage implements OnInit, OnDestroy {
 
   constructor(private navParams: NavParams,
               public loadingService: LoadingService,
-              private catalogProvider: CatalogsProvider, private navController: NavController) {
+              private catalogProvider: CatalogsProvider, private navigatorService: NavigatorService) {
                 this.loader = loadingService.createLoader();
   }
 
@@ -56,7 +56,7 @@ export class ProductsPage implements OnInit, OnDestroy {
   }
 
   goToProductPage(product: Product) {
-    this.navController.push(ProductPage, {
+    this.navigatorService.push(ProductPage, {
       'product': product,
       'programName': this.programName,
       'programNumber': this.programNumber
@@ -81,7 +81,7 @@ export class ProductsPage implements OnInit, OnDestroy {
         category: this.category
       };
       this.loader.hide();
-      this.navController.push(ProductsSearchPage, params).then(() => console.log('%cTo product search page', 'color:blue'));
+      this.navigatorService.push(ProductsSearchPage, params).then(() => console.log('%cTo product search page', 'color:blue'));
     });
   }
 

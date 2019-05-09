@@ -19,6 +19,7 @@ import {ShoppingListPage} from "../../pages/shopping-list/shopping-list";
 import {PurchasesPage} from "../../pages/purchases/purchases";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
 import {LocalStorageHelper} from "../../helpers/local-storage";
+import { NavigatorService } from '../../services/navigator/navigator';
 
 @Component({
   selector: 'app-menu',
@@ -44,7 +45,8 @@ export class AppMenuComponent implements OnInit {
               private translateProvider: TranslateProvider,
               private events: Events,
               public databaseProvider: DatabaseProvider,
-              public shoppingListsProvider: ShoppingListsProvider) {
+              public shoppingListsProvider: ShoppingListsProvider,
+              private navigatorService: NavigatorService) {
   }
 
   ngOnInit(): void {
@@ -175,11 +177,21 @@ export class AppMenuComponent implements OnInit {
     let params = {
       list: list
     };
-    let views = this.app.getActiveNavs()[0].getViews().filter( (elem) => elem.instance.navParams.data["list"]);
-    let test = views.filter(element =>
-      element.instance.navParams.data.list === list)
+
+   /* //TODO: replace this with better alternative
+    let views = this.app.getActiveNavs()[0].getViews().filter( (elem) => {
+      if(elem.instance.navParams){
+     return elem.instance.navParams.data["list"];
+      };
+    });
+    let test = views.filter(element =>element.instance.navParams.data.list === list);
     if (test.length == 0) {
       this.app.getActiveNavs()[0].push(ShoppingListPage, params).catch(err => console.error(err));
-    }
+    }*/
+    this.navigatorService.push(ShoppingListPage,params).then(()=>{
+      console.log("ALL OK");
+    },(err)=>{
+      console.error(err);
+    });
   }
 }

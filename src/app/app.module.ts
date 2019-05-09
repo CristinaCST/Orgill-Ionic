@@ -25,7 +25,6 @@ import { ApiProvider } from "../providers/api/api";
 import { CatalogsProvider } from '../providers/catalogs/catalogs';
 import { DatabaseProvider } from '../providers/database/database';
 import { TranslateProvider } from '../providers/translate/translate';
-import { LoadingService } from '../services/loading/loading';
 import { PopoversProvider } from "../providers/popovers/popovers";
 import { ShoppingListsProvider } from '../providers/shopping-lists/shopping-lists';
 import { ProgramProvider } from '../providers/program/program';
@@ -34,10 +33,15 @@ import { ProductProvider } from "../providers/product/product";
 import { ScannerProvider } from '../providers/scanner/scanner';
 import { UserInfoProvider } from '../providers/user-info/user-info';
 import { PurchasesProvider } from '../providers/purchases/purchases';
-import { NetworkService } from '../services/network/network';
 import { SessionValidatorProvider } from '../providers/session/sessionValidator';
+
+
+//Services
+import { NetworkService } from '../services/network/network';
 import { OneSignalService } from '../services/onesignal/onesignal';
 import { FlashDealService } from '../services/flashdeal/flashdeal';
+import { NavigatorService } from '../services/navigator/navigator';
+import { LoadingService } from '../services/loading/loading';
 
 //Pages
 import {MyApp} from './app.component';
@@ -80,6 +84,7 @@ import { CustomErrorHandlerService } from "../services/error-handler/CustomError
 
 
 
+
 const errorHandler = environment.production ? CustomErrorHandlerService : IonicErrorHandler;
 
 @NgModule({
@@ -90,6 +95,7 @@ const errorHandler = environment.production ? CustomErrorHandlerService : IonicE
     IonicStorageModule.forRoot(),
     HttpClientModule,
     ComponentsModule,
+
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -125,6 +131,7 @@ const errorHandler = environment.production ? CustomErrorHandlerService : IonicE
     OneSignal,
     Badge,
     FlashDealService,
+    NavigatorService,
     {provide: ErrorHandler, useClass: CustomErrorHandlerService}
   ]
 })

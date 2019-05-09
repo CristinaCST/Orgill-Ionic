@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {PurchasesProvider} from "../../providers/purchases/purchases";
-import {Purchase} from "../../interfaces/models/purchase";
-import {NavController, NavParams} from "ionic-angular";
-import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
-import {ProductPage} from "../product/product";
+import { Component, OnInit } from '@angular/core';
+import { PurchasesProvider } from "../../providers/purchases/purchases";
+import { Purchase } from "../../interfaces/models/purchase";
+import { NavParams } from "ionic-angular";
+import { ShoppingListItem } from "../../interfaces/models/shopping-list-item";
+import { ProductPage } from "../product/product";
+import { NavigatorService } from '../../services/navigator/navigator';
 
 
 @Component({
@@ -13,7 +14,8 @@ import {ProductPage} from "../product/product";
 export class PurchaseDetailsPage implements OnInit {
   purchase: Purchase;
 
-  constructor(public purchasesProvider: PurchasesProvider, public navParams: NavParams, public navCtrl: NavController) {
+  constructor(public purchasesProvider: PurchasesProvider,
+    public navParams: NavParams, public navigatorService: NavigatorService) {
   }
 
   ngOnInit() {
@@ -28,7 +30,7 @@ export class PurchaseDetailsPage implements OnInit {
   }
 
   onCheckedToDetails($event) {
-    this.navCtrl.push(ProductPage, {
+    this.navigatorService.push(ProductPage, {
       product: $event.product,
       programNumber: $event.program_number,
       id: $event.id,

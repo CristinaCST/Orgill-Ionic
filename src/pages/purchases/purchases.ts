@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import { NavParams} from 'ionic-angular';
 import {PurchasesProvider} from "../../providers/purchases/purchases";
 import {Purchase} from "../../interfaces/models/purchase";
 import {PurchaseDetailsPage} from "../purchase-details/purchase-details";
+import { NavigatorService } from '../../services/navigator/navigator';
 
 @Component({
   selector: 'page-purchases',
@@ -13,7 +14,7 @@ export class PurchasesPage {
   userToken: string;
   purchases: Array<Purchase> = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public purchasesProvider: PurchasesProvider) {
+  constructor(public navigatorService: NavigatorService, public navParams: NavParams, public purchasesProvider: PurchasesProvider) {
   }
 
   ngOnInit() {
@@ -25,7 +26,7 @@ export class PurchasesPage {
   }
 
   openOrderDetails(purchase: Purchase) {
-    this.navCtrl.push(PurchaseDetailsPage, {'purchase': purchase}).catch(err => console.error(err));
+    this.navigatorService.push(PurchaseDetailsPage, {'purchase': purchase}).catch(err => console.error(err));
   }
 
 }

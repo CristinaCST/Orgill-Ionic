@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NavController, NavParams, Platform, Loading} from 'ionic-angular';
+import {NavParams, Platform, Loading} from 'ionic-angular';
 import {BarcodeScanner} from "@ionic-native/barcode-scanner";
 import {LoadingService} from "../../services/loading/loading";
 import {TranslateProvider} from "../../providers/translate/translate";
@@ -12,6 +12,7 @@ import {ProductPage} from "../product/product";
 import {CatalogsProvider} from "../../providers/catalogs/catalogs";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
 import {Program} from "../../interfaces/models/program";
+import { NavigatorService } from '../../services/navigator/navigator';
 
 @Component({
   selector: 'page-scanner',
@@ -35,7 +36,7 @@ export class ScannerPage implements OnInit {
   private searchingLoader: LoadingService;
   private simpleLoader: LoadingService;
 
-  constructor(public navCtrl: NavController,
+  constructor(public navigatorService: NavigatorService,
               public navParams: NavParams,
               private barcodeScanner: BarcodeScanner,
               private loadingService: LoadingService,
@@ -124,7 +125,7 @@ export class ScannerPage implements OnInit {
         if (responseData.length > 0) {
           this.foundProduct = responseData[0];
           if (!this.shoppingListId) {
-            this.navCtrl.push(ProductPage, {
+            this.navigatorService.push(ProductPage, {
               'product': this.foundProduct,
               'programNumber': this.programNumber,
             }).catch(err => console.error(err));
@@ -201,13 +202,13 @@ export class ScannerPage implements OnInit {
           shoppingList: this.shoppingList,
           products: JSON.parse(data.d)
         };
-        this.navCtrl.push(ScannerPage, params).catch(err => console.error(err));
+        this.navigatorService.push(ScannerPage, params).catch(err => console.error(err));
       }
     });
   }
 
   goToProductPage(product: Product) {
-    this.navCtrl.push(ProductPage, {
+    this.navigatorService.push(ProductPage, {
       'product': product,
       'programNumber': this.programNumber
     }).catch(err => console.error(err));

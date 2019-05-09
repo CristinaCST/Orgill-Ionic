@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {NavController, NavParams} from "ionic-angular";
+import { NavParams} from "ionic-angular";
 import {CustomerLocation} from "../../interfaces/models/customer-location";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
 import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
 import moment from 'moment';
 import {OrderConfirmationPage} from "../order-confirmation/order-confirmation";
+import { NavigatorService } from '../../services/navigator/navigator';
 
 @Component({
   selector: 'page-order-review',
@@ -21,7 +22,7 @@ export class OrderReviewPage implements OnInit {
   private shoppingListProgramNumbers: Array<string> = [];
   private confirmationNumbers: Array<string> = [];
 
-  constructor(private navController: NavController, private navParams: NavParams,
+  constructor(private navigatorService: NavigatorService, private navParams: NavParams,
               private shoppingListsProvider: ShoppingListsProvider) {
   }
 
@@ -77,7 +78,7 @@ export class OrderReviewPage implements OnInit {
               orderTotal: this.orderTotal,
               orderMethod: this.orderMethod
             };
-            this.navController.push(OrderConfirmationPage, navigationParams).catch(err => console.error(err));
+            this.navigatorService.push(OrderConfirmationPage, navigationParams).catch(err => console.error(err));
           }
         }
       }).catch(err => console.error(err));
@@ -85,7 +86,7 @@ export class OrderReviewPage implements OnInit {
   }
 
   cancel() {
-    this.navController.pop().catch(err => console.error(err));
+    this.navigatorService.pop().catch(err => console.error(err));
   }
 
 }

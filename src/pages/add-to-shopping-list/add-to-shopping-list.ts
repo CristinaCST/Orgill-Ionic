@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import { NavParams} from 'ionic-angular';
 import {Product} from "../../interfaces/models/product";
 import {ItemProgram} from "../../interfaces/models/item-program";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
@@ -13,6 +13,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ProgramProvider} from "../../providers/program/program";
 import {Subscription} from 'rxjs';
 import {LocalStorageHelper} from "../../helpers/local-storage";
+import { NavigatorService } from '../../services/navigator/navigator';
 
 @Component({
   selector: 'page-add-to-shopping-list',
@@ -34,7 +35,7 @@ export class AddToShoppingListPage implements OnInit {
   public menuCustomButtons = [];
   private loader: LoadingService;
 
-  constructor(public navCtrl: NavController,
+  constructor(public navigatorService: NavigatorService,
               public navParams: NavParams,
               private shoppingListsProvider: ShoppingListsProvider,
               private popoversProvider: PopoversProvider,
@@ -175,7 +176,7 @@ export class AddToShoppingListPage implements OnInit {
   }
 
   cancel() {
-    this.navCtrl.pop().catch(err => console.error(err));
+    this.navigatorService.pop().catch(err => console.error(err));
   }
 
    add() {
@@ -198,7 +199,7 @@ export class AddToShoppingListPage implements OnInit {
 
 
   this.loader.show();
-    //TODO UPDATE WHEN APIS ARE READY
+    //TODO: UPDATE WHEN APIS ARE READY
     this.shoppingListsProvider.addItemToShoppingList(this.listForm.value.listOptions, listItem, this.listForm.value.listOptions.isMarketOnly).subscribe(() => {
       this.loader.hide();
       this.cancel();

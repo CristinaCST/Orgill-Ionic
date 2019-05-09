@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import {Product} from "../../interfaces/models/product";
-import {NavController} from "ionic-angular";
 import {ProductDescriptionPage} from "../../pages/product-description/product-description";
+import { NavController } from 'ionic-angular';
 
 @Component({
   selector: 'product-details',
@@ -19,6 +19,7 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit {
     this.navController.push(ProductDescriptionPage, {'product': this.product}).catch(err => console.error(err))
   }
 
+  //TODO: CHANEG FROM CONSTANTS
   ngOnInit(): void {
     this.product.IMAGE = this.product.IMAGE === '0000000.jpg' ? '../../assets/imgs/product_placeholder.png' :
       'http://images.orgill.com/200x200/' + this.product.SKU + '.JPG';
