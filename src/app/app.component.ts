@@ -10,6 +10,7 @@ import {DatabaseProvider} from "../providers/database/database";
 import { NetworkService } from "../services/network/network";
 import { OneSignalService } from '../services/onesignal/onesignal';
 import { SessionValidatorProvider } from '../providers/session/sessionValidator';
+import { NavigatorService } from '../services/navigator/navigator';
 
 @Component({
   templateUrl: 'app.html'
@@ -21,14 +22,16 @@ export class MyApp {
   private openedFromNotification = false;
 
   constructor(public platform: Platform,
-              public app: App,
-              public statusBar: StatusBar,
-              private splashScreen: SplashScreen,
-              private translate: TranslateService,
-              private databaseProvider: DatabaseProvider,
-              private networkService: NetworkService,
-              private sessionValidatorProvider: SessionValidatorProvider,
-              private oneSignalService: OneSignalService) {
+    public app: App,
+    public statusBar: StatusBar,
+    private splashScreen: SplashScreen,
+    private translate: TranslateService,
+    private databaseProvider: DatabaseProvider,
+    private networkService: NetworkService,
+    private sessionValidatorProvider: SessionValidatorProvider,
+    private oneSignalService: OneSignalService,
+    private navigatorService: NavigatorService,
+    private popoverProvider: PopoversProvider) {
     this.setAppLanguage();
     this.initializeApp();
   }

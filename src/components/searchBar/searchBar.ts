@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {App} from "ionic-angular";
 import {PopoversProvider} from "../../providers/popovers/popovers";
 import * as Strings from "../../util/strings";
+import { NavigatorService } from '../../services/navigator/navigator';
 
 @Component({
   selector: 'search-bar',
@@ -16,11 +17,11 @@ export class SearchBarComponent {
   public searchString: string;
 
   constructor(private app: App,
-              private popoversProvider: PopoversProvider) {
+              private popoversProvider: PopoversProvider, private navigatorService: NavigatorService) {
   }
 
   back() {
-    this.app.getActiveNav().pop().then(() => console.log('%cBack from search bar', 'color:red'));
+    this.navigatorService.pop().then(() => console.log('%cBack from search bar', 'color:red'));
   }
 
   search() {

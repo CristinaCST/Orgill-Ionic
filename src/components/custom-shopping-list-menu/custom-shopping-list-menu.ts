@@ -7,6 +7,7 @@ import {PopoversProvider} from "../../providers/popovers/popovers";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
 import {ShoppingListPage} from "../../pages/shopping-list/shopping-list";
 import {App, Events} from "ionic-angular";
+import { NavigatorService } from '../../services/navigator/navigator';
 
 @Component({
   selector: 'custom-shopping-list-menu',
@@ -20,7 +21,8 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
   constructor(private shoppingListsProvider: ShoppingListsProvider,
               private popoversProvider: PopoversProvider,
               private app: App,
-              private events: Events) {
+              private events: Events,
+              private navigatorService: NavigatorService) {
   }
 
   backToMainMenu() {
@@ -66,7 +68,7 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
     let params = {
       list: list
     };
-    this.app.getActiveNavs()[0].push(ShoppingListPage, params).catch(err => console.error(err));
+    this.navigatorService.push(ShoppingListPage, params).catch(err => console.error(err));
   }
 
   ngOnDestroy(): void {

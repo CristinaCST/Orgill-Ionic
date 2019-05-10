@@ -26,7 +26,7 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
   private loader: LoadingService;
 
   constructor(public navParams: NavParams, private navigatorService: NavigatorService,
-              public loadingService: LoadingService, private catalogProvider: CatalogsProvider,) {
+              public loadingService: LoadingService, private catalogProvider: CatalogsProvider) {
                 this.loader = loadingService.createLoader();
   }
 

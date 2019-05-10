@@ -70,13 +70,13 @@ export class AppMenuComponent implements OnInit {
           this.authServiceProvider.logoutDeleteData();
         }
         this.authServiceProvider.logout();
-        this.app.getActiveNav().setRoot(Login).catch(err => console.error(err));
+        this.navigatorService.getNav().setRoot(Login).catch(err => console.error(err));
       }
     });
   }
 
   public goToPage(page) {
-    this.app.getActiveNavs()[0].push(page).catch(err => console.error(err));
+    this.navigatorService.push(page).catch(err => console.error(err));
   }
 
   getShoppingLists() {
@@ -166,11 +166,13 @@ export class AppMenuComponent implements OnInit {
       'programName': program.NAME,
       'programNumber': program.PROGRAMNO
     };
-    this.app.getRootNav().setRoot(Catalog, params).catch(err => console.error(err));
+
+
+    this.navigatorService.getNav().setRoot(Catalog, params).catch(err => console.error(err));
   }
 
   openBarcode(type) {
-    this.app.getActiveNavs()[0].push(ScannerPage, {'type': type}).catch(err => console.error(err));
+    this.navigatorService.push(ScannerPage, {'type': type}).catch(err => console.error(err));
   }
 
   goToListPage(list: ShoppingList) {
@@ -178,18 +180,9 @@ export class AppMenuComponent implements OnInit {
       list: list
     };
 
-   /* //TODO: replace this with better alternative
-    let views = this.app.getActiveNavs()[0].getViews().filter( (elem) => {
-      if(elem.instance.navParams){
-     return elem.instance.navParams.data["list"];
-      };
-    });
-    let test = views.filter(element =>element.instance.navParams.data.list === list);
-    if (test.length == 0) {
-      this.app.getActiveNavs()[0].push(ShoppingListPage, params).catch(err => console.error(err));
-    }*/
+
     this.navigatorService.push(ShoppingListPage,params).then(()=>{
-      console.log("ALL OK");
+  //    console.log("ALL OK");
     },(err)=>{
       console.error(err);
     });

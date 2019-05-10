@@ -48,7 +48,8 @@ export class FlashDealService {
         SKU: sku,
         product: foundProducts[0]
     };
-    this.app.getRootNavs()[0].push(ProductPage, flashDeal).catch(err => console.error(err));
+   // TODO: Fix this
+   // this.app.getRootNavs()[0].push(ProductPage, flashDeal).catch(err => console.error(err));
    });
       
    

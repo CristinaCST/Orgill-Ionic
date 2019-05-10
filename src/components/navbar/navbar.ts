@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {App} from "ionic-angular";
+import { NavigatorService } from '../../services/navigator/navigator';
 
 @Component({
   selector: 'navbar',
@@ -12,11 +13,11 @@ export class NavbarComponent {
   @Input('customButtons') customButtons = [];
   @Output() buttonClicked = new EventEmitter<any>();
 
-  constructor(private app: App) {
+  constructor(private app: App, private navigatorService: NavigatorService) {
   }
 
   back() {
-    this.app.getActiveNav().pop().catch(err => console.error(err));
+    this.navigatorService.pop().catch(err => console.error(err));
   }
 
   buttonActions(type) {
