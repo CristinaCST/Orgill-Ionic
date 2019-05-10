@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {NavParams, Platform, Loading} from 'ionic-angular';
 import {BarcodeScanner} from "@ionic-native/barcode-scanner";
+import {NavParams, Platform} from 'ionic-angular';
 import {LoadingService} from "../../services/loading/loading";
 import {TranslateProvider} from "../../providers/translate/translate";
 import * as Constants from '../../util/constants';
@@ -46,8 +46,8 @@ export class ScannerPage implements OnInit {
               private catalogsProvider: CatalogsProvider,
               private popoversProvider: PopoversProvider,
               private shoppingListProvider: ShoppingListsProvider) {
-                this.searchingLoader = loadingService.createLoader(this.translator.translate(Strings.SCAN_RESULTS_SEARCHING));
-                this.simpleLoader = loadingService.createLoader();
+                this.searchingLoader = this.loadingService.createLoader(this.translator.translate(Strings.SCAN_RESULTS_SEARCHING));
+                this.simpleLoader = this.loadingService.createLoader();
               }
 
   ngOnInit(): void {
@@ -56,6 +56,7 @@ export class ScannerPage implements OnInit {
       this.shoppingList = this.navParams.get("shoppingList");
       this.shoppingListId = this.shoppingList.ListID;
       this.products = this.navParams.get('products');
+      this.scan();
     }
     this.searchTab = this.navParams.get('type');
     this.scanMessage = "";
@@ -66,6 +67,7 @@ export class ScannerPage implements OnInit {
       }
     })
   }
+
 
   scan() {
     this.selectedProduct = {};
@@ -83,6 +85,8 @@ export class ScannerPage implements OnInit {
         //TODO: check if string is ok
         this.scanMessage = this.translator.translate(Constants.SCAN_INVALID_BARCODE);
       }
+    },(err)=>{
+      console.error(err);
     });
   }
 

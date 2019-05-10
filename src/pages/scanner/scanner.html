@@ -4,7 +4,7 @@
   <navbar [title]="'SCAN BARCODE'" [isMenuEnabled]="true"
           [isBackEnabled]="false"></navbar>
   <!-- Scanner Page Tabs-->
-  <ion-segment [(ngModel)]="searchTab">
+  <ion-segment *ngIf="!shoppingList"  [(ngModel)]="searchTab">
     <ion-segment-button value="scan_barcode_tab">
       {{"scan_barcode_tab" | translate}}
     </ion-segment-button>
