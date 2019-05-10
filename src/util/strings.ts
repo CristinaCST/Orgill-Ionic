@@ -10,6 +10,7 @@ Marker : Generics
 * =============================================================================================
  */
 export const GENERIC_ERROR = 'generic_error';
+export const APPLICATION_QUIT_MESSAGE = 'application_quit_message';
 
 /**
 Marker : ModalButtons

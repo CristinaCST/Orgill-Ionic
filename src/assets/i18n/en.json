@@ -182,5 +182,7 @@
   "notifications_permissions_message": "Orgill wants to send push notifications",
   "permission_allow": "Allow",
   "permission_deny": "Deny",
-  "permission_never_show":"Never"
+  "permission_never_show":"Never",
+
+  "application_quit_message":"Are you sure you want to quit?"
 }
