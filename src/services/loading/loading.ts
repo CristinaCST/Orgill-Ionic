@@ -1,5 +1,5 @@
-import { Injectable, destroyPlatform } from '@angular/core';
-import { Loading, LoadingController } from "ionic-angular";
+import { Injectable} from '@angular/core';
+import { Loading, LoadingController, Events } from "ionic-angular";
 
 @Injectable()
 export class LoadingService {
@@ -112,6 +112,12 @@ export class LoadingService {
       //console.log("created: " + this.content);
       this.isLoadingPresent = true; //Mark it if it is going to show here so 
 
+      //We subscribe to the event that get's called when a loader leaves, this allows a safe check in hide() method relying on valid data
+      this.loading.willLeave.subscribe(()=>{  
+        this.isLoadingPresent=false;  //Mark it as not present so it's not being removed twice.
+      });
+
+
       //Check if it didn't expire during creations
       if (this.alreadyExpired) {
         console.log("Loader expired during creation");
@@ -144,7 +150,9 @@ export class LoadingService {
    */
   public hide() {
     if (this.isLoadingPresent) {    //if the loader is showing
-      if (this.loading) { //Check if loading object is valid
+      if (this.loading) { //Check if loading object is valid, this is more of a sanity check, this.LoadingPresent should be the main driver here
+
+
         this.loading.dismiss().then(() => {
           this.cleanup(); //If we succesfully dismiss the loader we then destroy it
           this.isLoadingPresent = false;

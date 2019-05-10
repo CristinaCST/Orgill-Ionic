@@ -78,7 +78,7 @@ export class ShoppingListPage {
         
       },(err)=>{
         console.error(err);
-        this.loader.hide();
+        LoadingService.hideAll();
       }).catch(error => {console.error(error);this.loader.hide();});
     }
   }
