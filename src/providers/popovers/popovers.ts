@@ -11,7 +11,7 @@ export class PopoversProvider {
   //private close = new Subject<any>();
   private isOpened = false;
   private popover;
-  private queue=[];
+  private queue = [];
 
   constructor(private popoverController: PopoverController) {
   }
@@ -22,25 +22,22 @@ export class PopoversProvider {
    * @param continuous should the modal complete after 1 input? true if so
    * @param subjectReference pass a subject if you want a specific observable to be changed
    */
-  public show(content, continuous = false, subjectReference=null) {
-    if(this.isOpened===true)
-    {
+  public show(content, continuous = false, subjectReference = null) {
+    if (this.isOpened === true) {
       let aux = new Subject<any>();
-      aux.next(content); 
-      this.queue.push({content,continuous,subject:aux});
+      aux.next(content);
+      this.queue.push({ content, continuous, subject: aux});
       return aux.asObservable();
     }
 
-    this.isOpened=true;
+    this.isOpened = true;
 
-    let close; 
-    if(subjectReference==null){
+    let close;
+    if (subjectReference == null) {
       close = new Subject<any>();
-    }else
-    {
+    } else {
       close = subjectReference;
     }
-    console.log(close);
 
     this.popover = this.popoverController.create(PopoverComponent, content);
 
@@ -48,15 +45,14 @@ export class PopoversProvider {
       this.isOpened = false;
 
       close.next(data);
-      
+
       if (!continuous) {
         close.complete();
       }
       this.nextInQueue();
     });
     this.popover.present().catch(err => console.error(err));
-    if(subjectReference==null)
-    {
+    if (subjectReference == null) {
       return close.asObservable();
     }
 
@@ -70,7 +66,7 @@ export class PopoversProvider {
     console.log(this.queue.length);
 
     let queueItem = this.queue.shift();
-   this.show(queueItem.content,queueItem.continuous,queueItem.subject);
+    this.show(queueItem.content, queueItem.continuous, queueItem.subject);
   }
 
   public closeModal() {
@@ -83,12 +79,12 @@ export class PopoversProvider {
   public setContent(title, message, positiveButtonText = Strings.MODAL_BUTTON_YES,
     dismissButtonText = undefined, negativeButtonText = undefined, type = undefined) {
     return {
-      type: type,
-      title: title,
-      message: message,
-      positiveButtonText: positiveButtonText,
-      negativeButtonText: negativeButtonText,
-      dismissButtonText: dismissButtonText
+      type,
+      title,
+      message,
+      positiveButtonText,
+      negativeButtonText,
+      dismissButtonText,
     };
   }
 }

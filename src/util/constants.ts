@@ -43,6 +43,7 @@ export const POPOVER_ORDER_CONFIRMATION = 'orderConfirmation';
 export const POPOVER_DELETE_LIST_CONFIRMATION = 'deleteListConfirmation';
 export const POPOVER_LOGOUT = 'popoverLogout';
 export const POPOVER_ERROR = 'popoverError';
+export const POPOVER_QUIT = 'popoverQuit';
 
 //TODO: Move this?
 export const POPOVER_CAMERA_PERMISSION_NOT_GRANTED = 'popoverNoCameraPerm';
