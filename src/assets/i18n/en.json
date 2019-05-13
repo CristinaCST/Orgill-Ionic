@@ -56,7 +56,7 @@
   "deprecated_database_canceled_text": "The option for Offline Browsing is available under the Account tab if you need to download limited catalog data.",
 
   "logout_title": "Confirm Logout",
-  "logout_message": "You are logging out of The O Zone app. \n\n Press OK if you want to delete all past purchase history and shopping lists. \n\n Press NO if you want to save your data.",
+  "logout_message": "Are you sure you want to logout?",
 
   "regular_catalog": "Regular Catalog",
   "load_more_results": "Show more results",

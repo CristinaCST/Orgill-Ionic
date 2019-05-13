@@ -60,19 +60,17 @@ export class AppMenuComponent implements OnInit {
       title: Strings.LOGOUT_TITLE,
       message: Strings.LOGOUT_MESSAGE,
       dismissButtonText: Strings.MODAL_BUTTON_CANCEL,
-      negativeButtonText: Strings.MODAL_BUTTON_NO,
-      positiveButtonText: Strings.MODAL_BUTTON_CONTINUE
+      positiveButtonText: Strings.MODAL_BUTTON_YES
     };
 
     this.popoversProvider.show(content).subscribe((data) => {
-      if (data.type === Constants.POPOVER_LOGOUT) {
-        if (data.optionSelected === "DISMISS") {
-          this.authServiceProvider.logoutDeleteData();
-        }
+      if (data.optionSelected === "OK") {
+        // this.authServiceProvider.logoutDeleteData();
         this.authServiceProvider.logout();
         this.navigatorService.getNav().setRoot(Login).catch(err => console.error(err));
       }
-    });
+    }
+    );
   }
 
   public goToPage(page) {
