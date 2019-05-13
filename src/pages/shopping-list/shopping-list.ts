@@ -12,6 +12,7 @@ import {TranslateProvider} from "../../providers/translate/translate";
 import {ScannerPage} from "../scanner/scanner";
 import {LoadingService} from "../../services/loading/loading";
 import { NavigatorService } from '../../services/navigator/navigator';
+import { ScannerService } from '../../services/scanner/scanner';
 
 @Component({
   selector: 'page-shopping-list',
@@ -37,7 +38,8 @@ export class ShoppingListPage {
               private popoversProvider: PopoversProvider,
               private translator: TranslateProvider,
               private events: Events,
-              private loading: LoadingService) {
+              private loading: LoadingService,
+              private scannerService: ScannerService) {
                 this.loader = loading.createLoader();
     this.menuCustomButtons = [{action: 'detailsList', icon: 'information-circle'},
       {action: 'scan', icon: 'barcode'}];
@@ -205,7 +207,7 @@ export class ShoppingListPage {
         this.removeList();
         break;
       case 'scan':
-        this.goToScanPage();
+        this.scan();
         break;
     }
   }
@@ -215,6 +217,10 @@ export class ShoppingListPage {
       'type': 'scan_barcode_tab',
       shoppingList: this.shoppingList
     }).catch(err => console.error(err));
+  }
+
+  private scan(){
+    this.scannerService.scan();
   }
 
   getListDetails() {

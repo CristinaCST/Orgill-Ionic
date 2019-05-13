@@ -42,6 +42,7 @@ import { OneSignalService } from '../services/onesignal/onesignal';
 import { FlashDealService } from '../services/flashdeal/flashdeal';
 import { NavigatorService } from '../services/navigator/navigator';
 import { LoadingService } from '../services/loading/loading';
+import { ScannerService } from '../services/scanner/scanner';
 
 //Pages
 import {MyApp} from './app.component';
@@ -81,6 +82,7 @@ let pages = [MyApp,
 
 //Error Handlers
 import { CustomErrorHandlerService } from "../services/error-handler/CustomErrorHandler";
+
 
 
 
@@ -132,6 +134,7 @@ const errorHandler = environment.production ? CustomErrorHandlerService : IonicE
     Badge,
     FlashDealService,
     NavigatorService,
+    ScannerService,
     {provide: ErrorHandler, useClass: CustomErrorHandlerService}
   ]
 })

@@ -30,26 +30,32 @@ export class NavigatorService {
      * @param params Parameters for push
      * @param opts NavOptions
      * @param done TransitionDoneFn
+     * @param paramEquality Default value true. Should we check for param equality when we check pages?
      */
-    public push(page: string | Page, params: any = null, opts: NavOptions = null, done: TransitionDoneFn = null) {
+    public push(page: string | Page, params: any = null, opts: NavOptions = null, done: TransitionDoneFn = null, paramEquality: boolean = true) {
 
 
         let pageName = typeof page == "string" ? page : page.name;    //Grab the page name wheter it's directly passed or the entire Page object is passed
         let equals = false;     //We will store if the current view is the same as the last one 
 
+
         if (pageName === this.navController.last().name) //If the name equals to the last we mark it 
         {
          
-            if (Equals.deepIsEqual(params, this.navController.last().data)) {
-             //   console.log("Parms are equal");
+            if (paramEquality) {
+                if (Equals.deepIsEqual(params, this.navController.last().data)) {
+                    //   console.log("Parms are equal");
+                    equals = true;
+                }
+            } else {
                 equals = true;
             }
         }
-          //  console.log("LASTPAGENAME: " + this.navController.last().name);
-       //     console.log('CURRENTPAGENAME: '+ pageName);
+          console.log("LASTPAGENAME: " + this.navController.last().name);
+         console.log('CURRENTPAGENAME: '+ pageName);
 
-         //   console.log("Params:" + JSON.stringify(params));
-         //   console.log("Data:" + JSON.stringify(this.navController.last().data));
+           console.log("-----New params: " + JSON.stringify(params));
+            console.log("-----Last params: " + JSON.stringify(this.navController.last().data));
         
 
         //If indeed the last view is the current one
