@@ -156,8 +156,6 @@ export class OneSignalService {
         /**
          * HACK: FAKE SKU for testing
         */
-
-
         try {
             this.notificationOpened({
                 notification: {
@@ -312,6 +310,7 @@ export class OneSignalService {
                 break;
 
             default:
+                savePermissionModal(false, false);
                 console.log("No valid modal result for OneSignal permissions, received:" + result) //TODO: Change to be tied to debug strings and be dynamic
                 break;
         };
