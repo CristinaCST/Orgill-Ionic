@@ -11,7 +11,8 @@ export class PopoversProvider {
   //private close = new Subject<any>();
   private isOpened = false;
   private popover;
-  private queue = [];
+  static activeItem;
+  static queue = [];
 
   constructor(private popoverController: PopoverController) {
   }
@@ -26,11 +27,15 @@ export class PopoversProvider {
     if (this.isOpened === true) {
       let aux = new Subject<any>();
       aux.next(content);
-      this.queue.push({ content, continuous, subject: aux});
+      PopoversProvider.queue.push({ content, continuous, subject: aux});
       return aux.asObservable();
     }
 
     this.isOpened = true;
+
+    
+    PopoversProvider.activeItem=this;
+    console.log("SETTING THIS POPOVER", PopoversProvider.activeItem);
 
     let close;
     if (subjectReference == null) {
@@ -43,6 +48,10 @@ export class PopoversProvider {
 
     this.popover.onDidDismiss(data => {
       this.isOpened = false;
+
+      if(!data){
+        data = {optionSelected:"NO"}
+      }
 
       close.next(data);
 
@@ -59,18 +68,20 @@ export class PopoversProvider {
   }
 
   private nextInQueue() {
-    if (this.queue.length <= 0) {
+    if (PopoversProvider.queue.length <= 0) {
       return;
     }
 
-    console.log(this.queue.length);
+    PopoversProvider.queue.length;
 
-    let queueItem = this.queue.shift();
+    let queueItem = PopoversProvider.queue.shift();
     this.show(queueItem.content, queueItem.continuous, queueItem.subject);
   }
 
   public closeModal() {
     if (this.isOpened === true) {
+      console.log("Unsetting popover");
+      PopoversProvider.activeItem=null;
       this.popover.dismiss();
       this.isOpened = false;
     }
@@ -86,5 +97,9 @@ export class PopoversProvider {
       negativeButtonText,
       dismissButtonText,
     };
+  }
+
+  static dismissCurrent(){
+    this.activeItem.closeModal();
   }
 }

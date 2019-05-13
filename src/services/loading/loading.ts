@@ -142,6 +142,8 @@ export class LoadingService {
           LoadingService.activeLoading.show();
         }
       }
+    }else{
+      LoadingService.activeLoading=null;
     }
   }
 

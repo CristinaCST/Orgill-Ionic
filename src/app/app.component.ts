@@ -14,6 +14,7 @@ import { NavigatorService } from '../services/navigator/navigator';
 import * as Constants from "../util/constants";
 import * as Strings from "../util/strings";
 import { PopoversProvider } from '../providers/popovers/popovers';
+import { LoadingService } from '../services/loading/loading';
 
 @Component({
   templateUrl: 'app.html'
@@ -44,6 +45,16 @@ export class MyApp {
 
     this.platform.ready().then(() => {
       this.platform.registerBackButtonAction(() => {
+
+        if(LoadingService.activeLoading){
+          return;
+        }
+    
+        if(PopoversProvider.activeItem){
+          PopoversProvider.dismissCurrent();
+          return;
+        }
+
         if (!this.navigatorService.getNav().canGoBack()) {
           let content = {
             type: Constants.POPOVER_QUIT,
