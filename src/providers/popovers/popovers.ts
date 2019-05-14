@@ -46,9 +46,11 @@ export class PopoversProvider {
 
     this.popover = this.popoverController.create(PopoverComponent, content);
 
+
+    //TODO: STandardize this
     this.popover.onDidDismiss(data => {
       this.isOpened = false;
-
+      PopoversProvider.activeItem=undefined;
       if(!data){
         data = {optionSelected:"NO"}
       }
@@ -80,8 +82,7 @@ export class PopoversProvider {
 
   public closeModal() {
     if (this.isOpened === true) {
-      console.log("Unsetting popover");
-      PopoversProvider.activeItem=null;
+      PopoversProvider.activeItem=undefined;
       this.popover.dismiss();
       this.isOpened = false;
     }

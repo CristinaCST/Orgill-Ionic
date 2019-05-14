@@ -37,6 +37,7 @@ export class LoadingService {
    * Removes a loader from the queue if it's the case and calls the next one if this one was active
    */
   private cleanup() {
+    LoadingService.activeLoading = undefined;
     let index = LoadingService.activeQueue.indexOf(this); //Get the position in queue of this loader
 
     //Check if the object is actually in queue
