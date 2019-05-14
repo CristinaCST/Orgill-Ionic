@@ -7,11 +7,11 @@ import { Product } from "../../interfaces/models/product";
 import { Program } from "../../interfaces/models/program";
 import * as Constants from "../../util/constants";
 import * as Strings from "../../util/strings";
-import { ScannerProvider } from "../../providers/scanner/scanner";
+import { ProductProvider } from "../../providers/product/product"
 import { ProductPage } from "../../pages/product/product";
 import { ShoppingListsProvider } from "../../providers/shopping-lists/shopping-lists";
 import { PopoversProvider } from "../../providers/popovers/popovers";
-import { Platform } from "ionic-angular";
+import { Platform} from "ionic-angular";
 
 @Injectable()
 export class ScannerService{
@@ -35,7 +35,7 @@ export class ScannerService{
                 private barcodeScanner: BarcodeScanner,
                 private loadingService: LoadingService,
                 private translateProvider: TranslateProvider,
-                private scannerProvider: ScannerProvider,
+                private productProvider: ProductProvider,
                 private shoppingListProvider: ShoppingListsProvider,
                 private popoversProvider: PopoversProvider,
                 private platform: Platform
@@ -43,18 +43,28 @@ export class ScannerService{
 
     }
 
-    public scan() {
+    public scan(shoppingList, products) {
+
+
+      if(shoppingList){
+        this.shoppingList = shoppingList;
+        this.shoppingListId = this.shoppingList.ListID;
+      }else{
+        this.shoppingList = undefined;
+        this.shoppingListId = undefined;
+      }
+        this.products = products;
+      
         this.selectedProduct = {};
         this.barcodeScanner.scan({disableAnimations:true,resultDisplayDuration:0}).then((barcodeData) => {
 
-            if(barcodeData==undefined)
+          if (barcodeData == undefined) {
             return;
+          }
 
             const scanResult = barcodeData.text;
             if (this.isValidScanResult(scanResult)) {
-
               //  this.searchingLoader.show();
-
                 this.setProgramFromScanResult(scanResult);
                 this.setSearchStringFromScanResult(scanResult);
                 this.searchProduct();
@@ -92,9 +102,20 @@ export class ScannerService{
       }
 
       searchProduct() {
-        this.scannerProvider.searchProduct(this.searchString, this.programNumber)
+        this.productProvider.searchProduct(this.searchString, this.programNumber)
           .subscribe(response => {
-            this.searchingLoader.hide();
+            let content = {
+    
+              type: Constants.POPOVER_INFO,
+              title: Strings.GENERIC_MODAL_TITLE,
+              message: Strings.POPOVER_PLACEHOLDER_MESSAGE,
+              positiveButtonText: Strings.MODAL_BUTTON_OK,
+          }
+
+            //HACK:Temp
+            if(this.searchingLoader)
+             { this.searchingLoader.hide();}
+
             const responseData = JSON.parse(response.d);
             if (responseData.length > 0) {
               this.foundProduct = responseData[0];
@@ -105,10 +126,14 @@ export class ScannerService{
                 }).catch(err => console.error(err));
               } else {
     
+               
+
                 if (this.isMarketOnly && ((this.shoppingList.ListType.toString() !== Constants.MARKET_ONLY_LIST_TYPE) && (this.shoppingList.ListType.toString() !== Constants.MARKET_ONLY_CUSTOM_TYPE))) {
-                  this.scanMessage = this.translateProvider.translate(Constants.SCAN_MARKET_ONLY_PRODUCT);
+                  content.message = this.translateProvider.translate(Constants.SCAN_MARKET_ONLY_PRODUCT);
+                  this.popoversProvider.show(content);
                 } else if (this.isMarketOnly === false && ((this.shoppingList.ListType.toString() === Constants.MARKET_ONLY_LIST_TYPE) || (this.shoppingList.ListType.toString() === Constants.MARKET_ONLY_CUSTOM_TYPE))) {
-                  this.scanMessage = this.translateProvider.translate(Constants.SCAN_REGULAR_PRODUCT);
+                  content.message = this.translateProvider.translate(Constants.SCAN_REGULAR_PRODUCT);
+                  this.popoversProvider.show(content);
                 } else {
                   this.isProductInList().subscribe((resp) => {
                     var data = JSON.parse(resp.d).Status === "True";
@@ -122,12 +147,15 @@ export class ScannerService{
                       this.shoppingListProvider.addItemToShoppingList(this.shoppingList.ListID, newItem, this.shoppingList.isMarketOnly).subscribe(
                         () => {
                           this.productAlreadyInList = false;
+
                           //TODO: Change to constants_strings
-                          this.scanMessage = "Added " + newItem.product.NAME + " to list";
+                          content.message = "Added " + newItem.product.NAME + " to list";
+                          this.popoversProvider.show(content);
                         });
                     }
                     else {
-                      this.scanMessage = this.translateProvider.translate(Strings.SHOPPING_LIST_EXISTING_PRODUCT);
+                      content.message = this.translateProvider.translate(Strings.SHOPPING_LIST_EXISTING_PRODUCT);
+                      this.popoversProvider.show(content);
                       this.productAlreadyInList = true;
                     }
                   });
@@ -136,7 +164,8 @@ export class ScannerService{
             }
             else {
               //TODO: Check string if its fine
-              this.scanMessage = this.translateProvider.translate(Constants.SCAN_NOT_FOUND);
+              content.message = this.translateProvider.translate(Constants.SCAN_NOT_FOUND);
+              this.popoversProvider.show(content);
               this.noProductFound = true;
               // this.scan();
             }

@@ -30,7 +30,6 @@ import { ShoppingListsProvider } from '../providers/shopping-lists/shopping-list
 import { ProgramProvider } from '../providers/program/program';
 import { AuthProvider } from "../providers/auth/auth";
 import { ProductProvider } from "../providers/product/product";
-import { ScannerProvider } from '../providers/scanner/scanner';
 import { UserInfoProvider } from '../providers/user-info/user-info';
 import { PurchasesProvider } from '../providers/purchases/purchases';
 import { SessionValidatorProvider } from '../providers/session/sessionValidator';
@@ -123,7 +122,6 @@ const errorHandler = environment.production ? CustomErrorHandlerService : IonicE
     ProgramProvider,
     ShoppingListsProvider,
     BarcodeScanner,
-    ScannerProvider,
     ProductProvider,
     UserInfoProvider,
     PurchasesProvider,

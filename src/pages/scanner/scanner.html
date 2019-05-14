@@ -23,7 +23,7 @@
   <!--<p *ngIf="productAlreadyInList && searchTab==='scan_barcode_tab'"> Product is already in list</p>-->
   <!--<p *ngIf="noProductFound">{{"no_products_found" | translate}}</p-->
   <!-- Scanner Page scan button -->
-  <button *ngIf="searchTab==='scan_barcode_tab'" ion-button color="OrgillRed" full round (click)="scan()">Start Scan
+  <button *ngIf="searchTab==='scan_barcode_tab'" ion-button color="OrgillRed" full round (click)="scannerService.scan(null,null)">Start Scan
   </button>
   <ion-list *ngIf="products&& searchTab==='search_code_tab'">
     <div *ngFor="let product of products" (click)="goToProductPage(product)">

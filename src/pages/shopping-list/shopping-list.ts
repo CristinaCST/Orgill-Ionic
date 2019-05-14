@@ -220,7 +220,7 @@ export class ShoppingListPage {
   }
 
   private scan(){
-    this.scannerService.scan();
+    this.scannerService.scan(this.shoppingList,this.shoppingListItems);
   }
 
   getListDetails() {
