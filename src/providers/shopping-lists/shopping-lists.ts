@@ -116,13 +116,31 @@ export class ShoppingListsProvider {
               "category_id": "",
               "program_number": element.program_no,
               "p": "1",
-              "rpp": "1"
+              "rpp": "10"
             }));
       });
       Observable.from(reqs).concatMap(shift => shift).subscribe( resp => {
+        
         let data: any;
-        data = JSON.parse(resp["d"])[0];
-        let element = productList.filter(elem => elem.sku == data.SKU)[0];
+        data = JSON.parse(resp["d"]);    
+
+         //HACK: Big hack for missing API + fix
+        let element;
+        let dataIndex;
+        data.forEach((elem,index)=>{
+          productList.forEach((prod)=>{
+            if(elem.SKU==prod.sku)
+            {
+              element = prod;
+              dataIndex = index;
+            //  console.log("FOUND ELEMENT",prod);
+            }
+          })
+        })
+        data = data[dataIndex];
+
+      //  let element = productList.filter(elem => elem.sku == data.SKU)[0];
+
         let shoppingListProduct: ShoppingListItem = {
           id: element.id,
           product: {
