@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import { NavParams} from 'ionic-angular';
+import { NavParams, NavOptions} from 'ionic-angular';
 import {Product} from '../../interfaces/models/product';
 import {ProductPage} from '../product/product';
 import {CatalogsProvider} from '../../providers/catalogs/catalogs';
@@ -54,15 +54,19 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
     this.loader.show();
     this.catalogProvider.search($event, this.category ? this.category.CatID : '', this.programNumber).subscribe(data => {
       let dataFound = JSON.parse(data.d);
+
       //console.log("SEARCHER SEARCH STRING FOR CALL:" + this.searchString);
       const params = {
+        searchString: this.searchString,
         searchData: dataFound,
         programNumber: this.programNumber,
         programName: this.programName,
         category: this.category,
         numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
       };
-      this.navigatorService.push(ProductsSearchPage, params).then(() => console.log('%cTo product search page', 'color:blue'));
+      this.navigatorService.push(ProductsSearchPage, params, {paramsEquality:false} as NavOptions).then(
+        //() => console.log('%cTo product search page', 'color:blue')
+        );
       this.loader.hide();
     });
   }

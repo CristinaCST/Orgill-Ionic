@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { NavParams} from 'ionic-angular';
+import { NavParams, NavOptions} from 'ionic-angular';
 import {Category} from "../../interfaces/models/category";
 import {CategoriesRequest} from "../../interfaces/request-body/categories";
 import * as Constants from '../../util/constants';
@@ -120,7 +120,7 @@ export class Catalog implements OnInit {
           programName: category.CatName,
           category: category,
         };
-        this.navigatorService.push(ProductsPage, params).catch(err => console.error(err));
+        this.navigatorService.push(ProductsPage, params, {paramEquality:false} as NavOptions ).catch(err => console.error(err));
         this.categoriesLoader.hide();
       }
     });

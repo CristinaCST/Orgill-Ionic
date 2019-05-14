@@ -184,5 +184,6 @@
   "permission_deny": "Deny",
   "permission_never_show":"Never",
 
-  "application_quit_message":"Are you sure you want to quit?"
+  "application_quit_message":"Are you sure you want to quit?",
+  "placeholder_mesage":"There should've been something here..."
 }

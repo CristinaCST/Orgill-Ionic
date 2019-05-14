@@ -32,11 +32,13 @@ export class NavigatorService {
      * @param done TransitionDoneFn
      * @param paramEquality Default value true. Should we check for param equality when we check pages?
      */
-    public push(page: string | Page, params: any = null, opts: NavOptions = null, done: TransitionDoneFn = null, paramEquality: boolean = true) {
+    public push(page: string | Page, params: any = null, opts: NavOptions = null, done: TransitionDoneFn = null) {
+
 
 
       //  console.log("navigator params:", params);
      //   console.log("navOptions:",opts);
+
         let pageName = typeof page == "string" ? page : page.name;    //Grab the page name wheter it's directly passed or the entire Page object is passed
         let equals = false;     //We will store if the current view is the same as the last one 
 
@@ -44,7 +46,7 @@ export class NavigatorService {
         if (pageName === this.navController.last().name) //If the name equals to the last we mark it 
         {
          
-            if (paramEquality) {
+            if (!opts || opts['paramsEquality'] === true || !opts['paramsEquality']) {
                 if (Equals.deepIsEqual(params, this.navController.last().data)) {
                     //   console.log("Parms are equal");
                     equals = true;

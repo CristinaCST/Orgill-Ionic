@@ -52,6 +52,7 @@ export const POPOVER_EXPIRED_ITEMS_MESSAGE = 'shopping_list_expired_items_messag
 
 export const POPOVER_NETWORK_OFFLINE_MESSAGE = 'lost_internet_connection';
 export const POPOVER_TIMEOUT_ERROR_MESSAGE = 'request_timeout_error';
+export const POPOVER_PLACEHOLDER_MESSAGE = 'placeholder_message';
 
 /**
 * Marker : Login/Logout strings

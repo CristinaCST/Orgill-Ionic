@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import { NavParams} from 'ionic-angular';
+import { NavParams, NavOptions} from 'ionic-angular';
 import {Product} from "../../interfaces/models/product";
 import {CatalogsProvider} from "../../providers/catalogs/catalogs";
 import {ProductPage} from "../product/product";
@@ -81,7 +81,9 @@ export class ProductsPage implements OnInit, OnDestroy {
         category: this.category
       };
       this.loader.hide();
-      this.navigatorService.push(ProductsSearchPage, params).then(() => console.log('%cTo product search page', 'color:blue'));
+      this.navigatorService.push(ProductsSearchPage, params, {paramsEquality:false} as NavOptions).then(
+       // () => console.log('%cTo product search page', 'color:blue')
+        );
     });
   }
 
