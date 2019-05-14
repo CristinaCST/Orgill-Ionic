@@ -125,10 +125,10 @@ export class DatabaseProvider {
       product.YOURCOST];
     this.database.executeSql(this.queries.insertOrReplaceProduct, productData)
       .then(data => {
-        console.log('Added Product Data: ', data);
+       // console.log('Added Product Data: ', data);
         return data;
       }, err => {
-        console.log('Add Product Error: ', err);
+        console.error('Add Product Error: ', err);
         return err;
       });
 
@@ -177,14 +177,14 @@ export class DatabaseProvider {
   clearStorageData(): Promise<any> {
     this.database.executeSql(this.queries.deleteAllFromProduct, [])
       .then(data => {
-          console.log('dropped table product: ', data);
+         // console.log('dropped table product: ', data);
         },
         error => {
           console.error('drop table product error; ', error);
         });
     this.database.executeSql(this.queries.deleteAllFromShoppingListItem, [])
       .then(data => {
-          console.log('dropped table shopping_list_item: ', data);
+         // console.log('dropped table shopping_list_item: ', data);
         },
         error => {
           console.error('drop table shopping_list_item error; ', error);
@@ -192,7 +192,7 @@ export class DatabaseProvider {
 
     this.database.executeSql(this.queries.deleteAllFromShoppingLists, [1, 2])
       .then(data => {
-        console.log('dropped table shopping_list: ', data);
+       // console.log('dropped table shopping_list: ', data);
       }, error => {
         console.error('drop table shopping_list error; ', error);
       });
@@ -246,7 +246,7 @@ export class DatabaseProvider {
       }
     }
     const finalizePurchaseQuery = 'UPDATE shopping_list_item SET purchase_order_id = ' + purchase_order_id + ', shopping_list_id = NULL WHERE shopping_list_id = ' + shopping_list_id + ' AND id IN (' + placeholders + ')';
-    console.log('query: ', finalizePurchaseQuery);
+    //console.log('query: ', finalizePurchaseQuery);
     return this.database.executeSql(finalizePurchaseQuery, shopping_list_item_ids);
   }
 
@@ -269,7 +269,7 @@ export class DatabaseProvider {
       purchase.program_number,
     ];
 
-    console.log('in db: ', purchaseData);
+    //console.log('in db: ', purchaseData);
     return this.database.executeSql(this.queries.insertPurchase, purchaseData);
   }
 

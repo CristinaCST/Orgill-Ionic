@@ -99,7 +99,6 @@ export class ScannerService{
             if (responseData.length > 0) {
               this.foundProduct = responseData[0];
               if (!this.shoppingListId) {
-                  console.log("SE FACE PUSH DIN SEARCH PRODUCT");
                 this.navigatorService.push(ProductPage, {
                   'product': this.foundProduct,
                   'programNumber': this.programNumber,

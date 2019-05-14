@@ -21,7 +21,9 @@ export class SearchBarComponent {
   }
 
   back() {
-    this.navigatorService.pop().then(() => console.log('%cBack from search bar', 'color:red'));
+    this.navigatorService.pop().then(
+     // () => console.log('%cBack from search bar', 'color:red')
+      );
   }
 
   search() {

@@ -28,7 +28,7 @@ module.exports = function(context) {
       var val = obj[key];
       var srcfile = path.join(rootdir, key);
       var destfile = path.join(rootdir, val);
-      console.log("copying "+srcfile+" to "+destfile);
+     // console.log("copying "+srcfile+" to "+destfile);
       var destdir = path.dirname(destfile);
       if (fs.existsSync(srcfile) && fs.existsSync(destdir)) {
         fs.createReadStream(srcfile).pipe(

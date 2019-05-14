@@ -35,7 +35,7 @@ export class PopoversProvider {
 
     
     PopoversProvider.activeItem=this;
-    console.log("SETTING THIS POPOVER", PopoversProvider.activeItem);
+    //console.log("SETTING THIS POPOVER", PopoversProvider.activeItem);
 
     let close;
     if (subjectReference == null) {

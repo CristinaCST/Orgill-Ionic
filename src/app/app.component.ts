@@ -47,10 +47,12 @@ export class MyApp {
       this.platform.registerBackButtonAction(() => {
 
         if(LoadingService.activeLoading){
+         // console.log("ACTIVE LOADING");
           return;
         }
     
         if(PopoversProvider.activeItem){
+         // console.log("ACTIVE POPOVER");
           PopoversProvider.dismissCurrent();
           return;
         }

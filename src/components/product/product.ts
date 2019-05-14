@@ -32,7 +32,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
     this.loadImage().then((data) => {
       this.imageIsLoading = false;
     }).catch(error => {
-      console.log(error);
+      console.error(error);
       this.imageIsLoading = false;
       this.product.IMAGE = '../../assets/imgs/product_placeholder.png';
     });

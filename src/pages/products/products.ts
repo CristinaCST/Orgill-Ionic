@@ -61,7 +61,7 @@ export class ProductsPage implements OnInit, OnDestroy {
       'programName': this.programName,
       'programNumber': this.programNumber
     }).then(() => {
-      console.log('%cTo product details page', 'color:pink');
+      //console.log('%cTo product details page', 'color:pink');
     });
   }
 

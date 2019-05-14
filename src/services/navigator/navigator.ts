@@ -35,6 +35,8 @@ export class NavigatorService {
     public push(page: string | Page, params: any = null, opts: NavOptions = null, done: TransitionDoneFn = null, paramEquality: boolean = true) {
 
 
+      //  console.log("navigator params:", params);
+     //   console.log("navOptions:",opts);
         let pageName = typeof page == "string" ? page : page.name;    //Grab the page name wheter it's directly passed or the entire Page object is passed
         let equals = false;     //We will store if the current view is the same as the last one 
 
@@ -51,11 +53,11 @@ export class NavigatorService {
                 equals = true;
             }
         }
-          console.log("LASTPAGENAME: " + this.navController.last().name);
-         console.log('CURRENTPAGENAME: '+ pageName);
+      //    console.log("LASTPAGENAME: " + this.navController.last().name);
+      //   console.log('CURRENTPAGENAME: '+ pageName);
 
-           console.log("-----New params: " + JSON.stringify(params));
-            console.log("-----Last params: " + JSON.stringify(this.navController.last().data));
+       //    console.log("-----New params: " + JSON.stringify(params));
+      //      console.log("-----Last params: " + JSON.stringify(this.navController.last().data));
         
 
         //If indeed the last view is the current one
@@ -75,7 +77,7 @@ export class NavigatorService {
                 return this.navController.pop({ animate: false });
             })
         } else {
-            console.log("Not equals so=>");
+         //   console.log("Not equals so=>");
             //If the view is different just proceed to push
             return this.navController.push(page, params ? params : null, opts ? opts : null, done ? done : null);
         }

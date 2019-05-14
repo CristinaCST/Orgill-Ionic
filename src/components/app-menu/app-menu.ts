@@ -108,7 +108,7 @@ export class AppMenuComponent implements OnInit {
         }
         this.events.subscribe('DeletedList', (listId: number) => {
           this.customShoppingLists = this.customShoppingLists.filter(list => list.ListID != listId);
-          console.log("this.customshoppinglist after delete",this.customShoppingLists);
+         // console.log("this.customshoppinglist after delete",this.customShoppingLists);
         })
       });
   }

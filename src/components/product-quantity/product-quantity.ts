@@ -117,6 +117,7 @@ export class ProductQuantityComponent implements OnInit {
   private validateQuantity(suggestedValue: number){
 
 
+   // console.log("SUGGESTEDVALUE:" + suggestedValue);
    // console.warn("MINQTY: "+this.program.MINQTY);
     
 

@@ -139,7 +139,9 @@ export class Catalog implements OnInit {
           category: this.currentSubCategory,
           numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
         };
-        this.navigatorService.push(ProductsSearchPage, params).then(() => console.log('%cTo product search page', 'color:green'));
+        this.navigatorService.push(ProductsSearchPage, params, {paramsEquality:false} as NavOptions).then(
+          //() => console.log('%cTo product search page', 'color:green')
+          );
         this.simpleLoader.hide();
       }
     });

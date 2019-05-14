@@ -43,7 +43,7 @@ export class Login {
           this.loginLoader.hide();
         });
       }, error => {
-        console.log(error);
+        console.error(error);
         this.loginLoader.hide();
         let content = this.popoversProvider.setContent(Strings.LOGIN_ERROR_TITLE, Strings.LOGIN_ERROR_INVALID);
         this.popoversProvider.show(content);

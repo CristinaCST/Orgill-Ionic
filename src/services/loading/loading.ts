@@ -77,13 +77,13 @@ export class LoadingService {
 
     //If the loader is already active/activated/queued, just return
     if (this.activated || this.isLoadingPresent || qIndex > 0) {
-      console.log("Loader already queued/active");
+    //  console.log("Loader already queued/active");
       return;
     }
 
     //If the loader is expired at the time ofshowing
     if (this.alreadyExpired) {
-      console.log("Loader is already expired, ignoring show call " + this.content);
+    //  console.log("Loader is already expired, ignoring show call " + this.content);
       this.cleanup(); //We try to clean it up
       return;
     }
@@ -120,7 +120,7 @@ export class LoadingService {
 
       //Check if it didn't expire during creations
       if (this.alreadyExpired) {
-        console.log("Loader expired during creation");
+       // console.log("Loader expired during creation");
         this.hide();  //if it did, immediately remove it
       };
     }, (err) => {

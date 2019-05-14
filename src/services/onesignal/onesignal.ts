@@ -165,7 +165,7 @@ export class OneSignalService {
                 }
             });
         } catch (err) {
-            console.log(err, err);
+            console.log(err);
         }
     };
 
@@ -311,7 +311,7 @@ export class OneSignalService {
 
             default:
                 savePermissionModal(false, false);
-                console.log("No valid modal result for OneSignal permissions, received:" + result) //TODO: Change to be tied to debug strings and be dynamic
+               // console.log("No valid modal result for OneSignal permissions, received:" + result) //TODO: Change to be tied to debug strings and be dynamic
                 break;
         };
     };

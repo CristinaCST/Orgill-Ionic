@@ -54,6 +54,7 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
     this.loader.show();
     this.catalogProvider.search($event, this.category ? this.category.CatID : '', this.programNumber).subscribe(data => {
       let dataFound = JSON.parse(data.d);
+      //console.log("SEARCHER SEARCH STRING FOR CALL:" + this.searchString);
       const params = {
         searchData: dataFound,
         programNumber: this.programNumber,

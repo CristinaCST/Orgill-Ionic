@@ -132,7 +132,7 @@ export class ProductPage implements OnInit {
       this.shoppingListProvider.updateShoppingListItem(this.product, this.shoppingListId, this.programNumber.toString(), $event.productPrice, this.quantity).subscribe(data => {
       },
         error => {
-        console.log('error updating',error);
+        console.error('error updating',error);
         })
     }
   }
