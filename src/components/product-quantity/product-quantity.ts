@@ -25,7 +25,7 @@ export class ProductQuantityComponent implements OnInit {
     this.programProvider.getSelectedProgram().subscribe(program => {
       if (program) {
         this.program = program;
-   //    this.quantity = this.validateQuantity(this.quantityFromList);
+       this.quantity = this.validateQuantity(this.quantityFromList);
 
 
         this.handleQuantityChange();
@@ -72,7 +72,11 @@ export class ProductQuantityComponent implements OnInit {
 
   setTotal() {
     if (this.program) {
-      this.total = this.quantity * this.getDecimalPrice();
+      if (this.product.QTY_ROUND_OPTION === 'Y' && this.quantity < Number(this.product.SHELF_PACK)) {
+        this.total = this.quantity * this.getDecimalPrice() + 0.04 * this.getDecimalPrice() * this.quantity;
+      } else {
+        this.total = this.quantity * this.getDecimalPrice();
+      }
     }
   }
 
@@ -122,7 +126,7 @@ export class ProductQuantityComponent implements OnInit {
     
 
     let minQty = this.getMinimumQuantity();
-    if(suggestedValue < minQty){
+    if(!suggestedValue || suggestedValue < minQty){
       suggestedValue = minQty;
     }
 
