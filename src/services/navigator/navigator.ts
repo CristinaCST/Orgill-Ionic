@@ -10,7 +10,7 @@ import * as Equals from "../../util/equality";
 @Injectable()
 export class NavigatorService {
     private _navController: NavController;  //Store the nav controller reference
-
+    private pageReference: string | Page;
 
     private get navController() {
         return this._navController ? this._navController : this.app.getActiveNavs()[0];
@@ -34,8 +34,6 @@ export class NavigatorService {
      */
     public push(page: string | Page, params: any = null, opts: NavOptions = null, done: TransitionDoneFn = null) {
 
-
-
       //  console.log("navigator params:", params);
      //   console.log("navOptions:",opts);
 
@@ -46,7 +44,7 @@ export class NavigatorService {
         if (pageName === this.navController.last().name) //If the name equals to the last we mark it 
         {
          
-            if (!opts || opts['paramsEquality'] === true || !opts['paramsEquality']) {
+            if (!opts || opts['paramsEquality'] === true) {
                 if (Equals.deepIsEqual(params, this.navController.last().data)) {
                     //   console.log("Parms are equal");
                     equals = true;
@@ -73,14 +71,15 @@ export class NavigatorService {
             opts.animate = false; //Set animate to false so we don't get animations on our "refresh"
 
             //Insert this page without animations in the stack before this one with the exact same properties
-            return this.navController.insert(this.navController.getViews().length - 1, page, params ? params : null, opts ? opts : null, done ? done : null).then(() => {
-
-                //Afterwards, pop this one without animations and return the promise as normal
-                return this.navController.pop({ animate: false });
-            })
+            //console.log("NEW PAGE:",page);
+            this.navController.insert(this.navController.getViews().length - 1, page, params ? params : null, opts ? opts : null, done ? done : null);
+            
+            //Afterwards, pop this one without animations and return the promise as normal
+            return this.navController.pop({ animate: false });
         } else {
          //   console.log("Not equals so=>");
             //If the view is different just proceed to push
+            this.pageReference = page;
             return this.navController.push(page, params ? params : null, opts ? opts : null, done ? done : null);
         }
 
@@ -92,10 +91,24 @@ export class NavigatorService {
     }
 
     public setRoot(pageOrViewCtrl: string | ViewController | Page, params: any = null, opts: NavOptions = null, done: TransitionDoneFn = null) {
+       /* if( pageOrViewCtrl !instanceof ViewController){
+            this.pageReference = pageOrViewCtrl
+        }*/
         return this.navController.setRoot(pageOrViewCtrl, params ? params : null, opts ? opts : null, done ? done : null);
     }
 
     public getNav() {
         return this.navController;
+    }
+
+    public performRefresh(){
+        let params = this.navController.getActive().getNavParams();
+        let opts = {animate:false};
+           //Insert this page without animations in the stack before this one with the exact same properties
+          this.navController.insert(this.navController.getViews().length - 1, this.pageReference, params ? params : null, opts ? opts : null, null).then(() => {
+
+            //Afterwards, pop this one without animations and return the promise as normal
+            this.navController.pop({ animate: false });
+        })
     }
 }

@@ -3,9 +3,16 @@
  */
 
 export function deepIsEqual(first, second) {
+
+    //Check if any is undefined and bring them to object standard for consistency
+    if(!first)  first = {};
+    if(!second) second = {};
+
     // If first and second are the same type and have the same value
     // Useful if strings or other primitive types are compared
     if( first === second ) return true;
+
+   // if( !first || !second ) return true;
 
     // Try a quick compare by seeing if the length of properties are the same
     let firstProps = Object.getOwnPropertyNames(first);
