@@ -11,7 +11,7 @@ import { ProductProvider } from "../../providers/product/product"
 import { ProductPage } from "../../pages/product/product";
 import { ShoppingListsProvider } from "../../providers/shopping-lists/shopping-lists";
 import { PopoversProvider } from "../../providers/popovers/popovers";
-import { Platform} from "ionic-angular";
+import { Platform, Events} from "ionic-angular";
 
 @Injectable()
 export class ScannerService{
@@ -38,7 +38,8 @@ export class ScannerService{
                 private productProvider: ProductProvider,
                 private shoppingListProvider: ShoppingListsProvider,
                 private popoversProvider: PopoversProvider,
-                private platform: Platform
+                private platform: Platform,
+                private events: Events
         ){
 
     }
@@ -150,7 +151,11 @@ export class ScannerService{
 
                           //TODO: Change to constants_strings
                           content.message = "Added " + newItem.product.NAME + " to list";
-                          this.popoversProvider.show(content);
+                          this.events.publish('scannedProductAdded');
+                          this.popoversProvider.show(content).subscribe(()=>{
+                            
+                          });
+                          
                         });
                     }
                     else {
