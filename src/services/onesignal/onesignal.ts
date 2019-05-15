@@ -160,7 +160,7 @@ export class OneSignalService {
             this.notificationOpened({
                 notification: {
                     payload: {
-                        additionalData: { SKU: "7515000" }
+                        additionalData: { SKU: "4444444" }
                     }
                 }
             });

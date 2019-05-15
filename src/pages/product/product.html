@@ -38,5 +38,5 @@
 
 <ion-footer *ngIf="!fromShoppingList" [(ngSwitch)]="isFlashDeal">
   <button id="add-shopping" *ngSwitchCase="false" (click)="addToShoppingList()">{{"button_add_to_list" | translate}}</button>
-  <button id="add-shopping" *ngSwitchCase="true" (click)="addToShoppingList()">{{"button_buy_now" | translate}}</button>
+  <button id="add-shopping" *ngSwitchCase="true" (click)="goToCheckout()">{{"button_buy_now" | translate}}</button>
 </ion-footer>

@@ -140,4 +140,8 @@ export class ProductPage implements OnInit {
   public isMinimum70percentQuantity(): boolean {
     return this.quantity >= (Number(this.product.SHELF_PACK) * 70 / 100) && this.quantity < Number(this.product.SHELF_PACK);
   }
+
+  goToCheckout(){
+    
+  }
 }
