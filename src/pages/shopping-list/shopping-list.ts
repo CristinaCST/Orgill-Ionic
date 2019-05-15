@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {ShoppingList} from "../../interfaces/models/shopping-list";
-import {Content, Events, NavParams} from "ionic-angular";
+import {Content, Events, NavParams, NavOptions} from "ionic-angular";
 import * as Constants from "../../util/constants";
 import * as Strings from "../../util/strings";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
@@ -30,6 +30,7 @@ export class ShoppingListPage {
   public isSelectAll: boolean = false;
   public nrOfSelectedItems: number = 0;
   public menuCustomButtons = [];
+  private alreadyLoading: boolean = false;
   private loader: LoadingService;
 
   constructor(public navParams: NavParams,
@@ -40,22 +41,45 @@ export class ShoppingListPage {
               private events: Events,
               private loading: LoadingService,
               private scannerService: ScannerService) {
-                this.loader = loading.createLoader();
-    this.menuCustomButtons = [{action: 'detailsList', icon: 'information-circle'},
-      {action: 'scan', icon: 'barcode'}];
+    this.events.subscribe("scannedProductAdded",()=>{
+      this.fillList();
+    })
+    this.loader = loading.createLoader();
+    this.menuCustomButtons = [{ action: 'detailsList', icon: 'information-circle' },
+    { action: 'scan', icon: 'barcode' }];
   }
 
   ionViewWillEnter() {
-    this.init();
+    if(!this.navParams.get('fromSearch'))
+    {this.init();}
+    else{
+      this.fillList();
+    }
   }
 
   init(): void {
+    this.alreadyLoading = true
     this.loader.show();
+    
+    this.fillList().then(()=>{
+      this.loader.hide();
+      this.alreadyLoading = false;
+    },()=>{
+      this.loader.hide();
+      this.alreadyLoading = false;
+    }).catch(()=>{
+      this.loader.hide();
+      this.alreadyLoading = false;
+    });
+  }
+
+  fillList(){
     this.shoppingList = this.navParams.get('list');
     if (this.navParams.get('isCheckout') !== undefined) {
       this.isCheckout = this.navParams.get('isCheckout');
     }
     if (this.navParams.get('shoppingListItems')) {
+      //console.log("INTRANGOL");
       this.shoppingListItems = this.navParams.get('shoppingListItems');
       this.content.resize();
     }
@@ -69,15 +93,18 @@ export class ShoppingListPage {
           });
         }
       }
-      this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: Array<ShoppingListItem>) => {
-      //  console.log(data,data);
+      return this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: Array<ShoppingListItem>) => {
+       // console.log(data,data);
         if (data) {
+       //   console.log("DATA IS OK");
           this.shoppingListItems = data;
           this.checkExpiredItems();
           this.content.resize();
-          this.loader.hide();
+          return Promise.resolve();
         }
-        
+        else{
+          return Promise.reject("Empty");
+        }
       },(err)=>{
         console.error(err);
         LoadingService.hideAll();
@@ -179,12 +206,17 @@ export class ShoppingListPage {
   }
 
   onSearched($event) {
-    let params = {
+
+    this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: Array<ShoppingListItem>) => {
+     let params = {
       list: this.shoppingList,
-      shoppingListItems: this.shoppingListProvider.search(this.shoppingListItems, $event),
-      isCheckout: this.isCheckout
+      shoppingListItems: this.shoppingListProvider.search(data, $event),
+      isCheckout: this.isCheckout,
+      fromSearch: true
     };
-    this.navigatorService.push(ShoppingListPage, params).catch(err => console.error(err));
+
+    this.navigatorService.push(ShoppingListPage, params,{paramsEquality: this.navParams.get('fromSearch')? false:true} as NavOptions).catch(err => console.error(err));
+  });
   }
 
   onCheckedToDetails($event) {
@@ -220,6 +252,7 @@ export class ShoppingListPage {
   }
 
   private scan(){
+  
     this.scannerService.scan(this.shoppingList,this.shoppingListItems);
   }
 
@@ -244,6 +277,14 @@ export class ShoppingListPage {
           this.navigatorService.pop().catch(err => console.error(err));
         });
       }
+    });
+  }
+
+  doRefresh($event){
+    this.fillList().then(()=>{
+      $event.complete();
+    }).catch(()=>{
+      $event.complete();
     });
   }
 }

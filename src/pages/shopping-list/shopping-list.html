@@ -1,30 +1,32 @@
 <!-- Shopping Lists Page Header -->
 <ion-header>
   <!-- Shopping Lists Navigation Bar -->
-  <navbar [customButtons]='menuCustomButtons'
-          [title]="shoppingList ? shoppingList.ListName: ''"
-          [isMenuEnabled]="true"
-          [isBackEnabled]="false"
-          (buttonClicked)="buttonClicked($event)"></navbar>
+  <navbar [customButtons]='menuCustomButtons' [title]="shoppingList ? shoppingList.ListName: ''" [isMenuEnabled]="true"
+    [isBackEnabled]="false" (buttonClicked)="buttonClicked($event)"></navbar>
   <!-- Shopping Lists Search Bar -->
-  <search-bar [showBackButton]="true"
-              (searched)="onSearched($event)"></search-bar>
+  <search-bar [showBackButton]="true" (searched)="onSearched($event)"></search-bar>
 </ion-header>
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content>
+    </ion-refresher-content>
+  </ion-refresher>
+
+
   <ion-item-group *ngIf="shoppingListItems.length">
-    <ion-item-divider no-lines>
-      <span> {{"shopping_list_items_label" | translate}}: </span>
-      <span> {{"product_quantity" | translate}}: </span>
-    </ion-item-divider>
-    <shopping-list-product *ngFor="let shoppingListItem of shoppingListItems; index as i"
-                           [isDisabled]="isCheckout"
-                           (checked)="onChecked($event,i)"
-                           (goToDetails)="onCheckedToDetails($event)"
-                           [shoppingListItem]="shoppingListItem">
-    </shopping-list-product>
-  </ion-item-group>
-  <p *ngIf="!shoppingListItems.length">{{"shopping_list_no_items_added" | translate}}</p>
+      <ion-item-divider no-lines>
+        <span> {{"shopping_list_items_label" | translate}}: </span>
+        <span> {{"product_quantity" | translate}}: </span>
+      </ion-item-divider>
+      <shopping-list-product *ngFor="let shoppingListItem of shoppingListItems; index as i" [isDisabled]="isCheckout"
+        (checked)="onChecked($event,i)" (goToDetails)="onCheckedToDetails($event)"
+        [shoppingListItem]="shoppingListItem">
+      </shopping-list-product>
+    </ion-item-group>
+
+    <p *ngIf="!shoppingListItems.length">{{"shopping_list_no_items_added" | translate}}</p>
+
 </ion-content>
 
 <ion-footer class="footer" padding *ngIf="shoppingListItems.length">

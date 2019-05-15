@@ -78,12 +78,6 @@ export class ShoppingListsProvider {
   }
 
   getAllProductsInShoppingList(listId) {
-    // return new Promise((resolve, reject) => {
-    //   this.databaseProvider.getAllProductsFromShoppingList(listId).then(data => {
-    //     let productList = this.setProducts(data);
-    //     resolve(productList);
-    //   }).catch(error => reject(error));
-    // });
     return new Promise((resolve, reject) => {
       this.apiProvider.post(ConstantsUrl.GET_SHOPPING_LIST_ITEMS, {
         user_token: this.userToken,
@@ -166,8 +160,9 @@ export class ShoppingListsProvider {
           isExpired: this.isExpiredProgram(element.end_date)
         };
         list.push(shoppingListProduct);
-        resolve(list);
-      });
+        
+      }).add(()=>{resolve(list);});
+      
     });
   }
 
@@ -287,7 +282,7 @@ export class ShoppingListsProvider {
     return this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_CONFIRMATION, params);
   }
 
-  search(shoppingListItems, searchString) {
+  search(shoppingListItems: Array<ShoppingListItem>, searchString) {
     let searchFn = (value) => value.toLocaleLowerCase().search(searchString.toLowerCase()) !== -1;
     return shoppingListItems.filter(item => searchFn(item.product.NAME) || searchFn(item.product.SKU) || searchFn(item.product.UPC_CODE));
   }
