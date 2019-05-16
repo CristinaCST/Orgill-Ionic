@@ -19,7 +19,7 @@
         <span> {{"shopping_list_items_label" | translate}}: </span>
         <span> {{"product_quantity" | translate}}: </span>
       </ion-item-divider>
-      <shopping-list-product *ngFor="let shoppingListItem of shoppingListItems; index as i" [isDisabled]="isCheckout"
+      <shopping-list-product *ngFor="let shoppingListItem of shoppingListItems; index as i" [isDisabled]="!isCheckout"
         (checked)="onChecked($event,i)" (goToDetails)="onCheckedToDetails($event)"
         [shoppingListItem]="shoppingListItem">
       </shopping-list-product>
@@ -30,7 +30,7 @@
 </ion-content>
 
 <ion-footer class="footer" padding *ngIf="shoppingListItems.length">
-  <div *ngIf="!isCheckout">
+  <div *ngIf="isCheckout">
     <button ion-button outline block color="OrgillRed" (click)="delete()">
       {{"delete" | translate}}
     </button>
@@ -39,7 +39,7 @@
       ("shopping_list_select_all" | translate) }}
     </button>
   </div>
-  <div *ngIf="!isCheckout">
+  <div *ngIf="isCheckout">
     <div>
       {{"order_review_total" | translate}}:
     </div>
@@ -47,10 +47,10 @@
       {{"product_currency" | translate}} {{orderTotal| number: '1.2-2'}}
     </div>
   </div>
-  <button *ngIf="!isCheckout" ion-button block (click)="continue()" color="OrgillRed">
+  <button *ngIf="isCheckout" ion-button block (click)="continue()" color="OrgillRed">
     {{"continue"| translate}}
   </button>
-  <button *ngIf="isCheckout" ion-button block (click)="checkout()" color="OrgillRed">
+  <button *ngIf="!isCheckout" ion-button block (click)="checkout()" color="OrgillRed">
     {{"shopping_list_checkout" | translate}}
   </button>
 

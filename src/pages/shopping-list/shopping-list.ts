@@ -26,7 +26,7 @@ export class ShoppingListPage {
   public shoppingListItems: Array<ShoppingListItem> = [];
   public isCustomList: boolean = false;
   public orderTotal: number = 0;
-  public isCheckout: boolean = true;
+  public isCheckout: boolean = false;
   public isSelectAll: boolean = false;
   public nrOfSelectedItems: number = 0;
   public menuCustomButtons = [];
@@ -156,7 +156,7 @@ export class ShoppingListPage {
 
   checkout() {
     const params = {
-      isCheckout: false,
+      isCheckout: true,
       list: this.shoppingList
     };
     this.navigatorService.push(ShoppingListPage, params).catch(err => console.error(err));
@@ -252,10 +252,10 @@ export class ShoppingListPage {
   }
 
   goToScanPage() {
-    this.navigatorService.push(ScannerPage, {
+    /*this.navigatorService.push(ScannerPage, {
       'type': 'scan_barcode_tab',
       shoppingList: this.shoppingList
-    }).catch(err => console.error(err));
+    }).catch(err => console.error(err));*/
   }
 
   private scan(){
