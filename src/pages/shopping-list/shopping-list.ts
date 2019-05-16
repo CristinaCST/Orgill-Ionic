@@ -41,18 +41,26 @@ export class ShoppingListPage {
               private events: Events,
               private loading: LoadingService,
               private scannerService: ScannerService) {
-    this.events.subscribe("scannedProductAdded",()=>{
-      this.fillList();
-    })
+    
+  
+
     this.loader = loading.createLoader();
     this.menuCustomButtons = [{ action: 'detailsList', icon: 'information-circle' },
     { action: 'scan', icon: 'barcode' }];
   }
 
+
+  ionViewWillLeave() {
+    this.events.unsubscribe("scannedProductAdded");
+  }
+
   ionViewWillEnter() {
-    if(!this.navParams.get('fromSearch'))
-    {this.init();}
-    else{
+    this.events.subscribe("scannedProductAdded", () => {
+      this.fillList();
+    })
+
+    if (!this.navParams.get('fromSearch')) { this.init(); }
+    else {
       this.fillList();
     }
   }
@@ -140,7 +148,6 @@ export class ShoppingListPage {
               let price = (item.item_price * item.quantity).toFixed(Constants.DECIMAL_NUMBER);
               $this.setOrderTotal({status: 'uncheckedItem', price: price}, index);
               $this.shoppingListItems = $this.shoppingListItems.filter( elem => elem.product.SKU != item.product.SKU);
-              // $this.shoppingListItems.splice(index, 1);
             }
           })
         }

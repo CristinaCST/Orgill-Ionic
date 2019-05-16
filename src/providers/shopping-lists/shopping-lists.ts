@@ -94,7 +94,7 @@ export class ShoppingListsProvider {
     });
   }
 
-  getAllProductData(productList){
+  getAllProductData(productList, resultsPerPage = 1){
     return new Promise((resolve,reject) =>{
       let list = [];
       let reqs = [];
@@ -110,7 +110,7 @@ export class ShoppingListsProvider {
               "category_id": "",
               "program_number": element.program_no,
               "p": "1",
-              "rpp": "10"
+              "rpp": resultsPerPage
             }));
       });
       Observable.from(reqs).concatMap(shift => shift).subscribe( resp => {
@@ -133,6 +133,8 @@ export class ShoppingListsProvider {
         })
         data = data[dataIndex];
 
+        if(!element)
+          return;
       //  let element = productList.filter(elem => elem.sku == data.SKU)[0];
 
         let shoppingListProduct: ShoppingListItem = {
