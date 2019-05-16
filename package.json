@@ -54,6 +54,7 @@
     "rxjs": "5.5.11",
     "sw-toolbox": "3.6.0",
     "ts-md5": "^1.2.4",
+    "tslint-ionic-rules": "0.0.21",
     "uk.co.workingedge.cordova.plugin.sqliteporter": "^1.1.0",
     "zone.js": "0.8.26"
   },
