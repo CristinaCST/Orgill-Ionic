@@ -13,9 +13,9 @@ page-customer-location {
       width: 100%;
       font-style: italic;
     }
-    ion-input {
+   /* ion-input {
       border-bottom: 1px solid #a9a6a6;
-    }
+    }*/
     input::placeholder {
       color: color($colors, OrgillRed);
       opacity: 1;
@@ -43,6 +43,7 @@ page-customer-location {
       }
     }
   }
+
   ion-footer {
     background-color: white;
     button {
@@ -53,4 +54,23 @@ page-customer-location {
       margin-bottom: 10px;
     }
   }
+
+  .checkbox-item{
+    padding:5px;
+  }
+
+  .po-input{
+    border: 2px;
+    border-radius: 35px;
+    border-style: solid;
+    float:left!important;
+    display:flex;
+  }
+
+
+  .item-inner{
+    border:none!important;
+  }
+
+
 }

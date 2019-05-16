@@ -10,6 +10,7 @@ import { AddToShoppingListPage } from "../add-to-shopping-list/add-to-shopping-l
 import { LoadingService } from "../../services/loading/loading";
 import { ShoppingListsProvider } from "../../providers/shopping-lists/shopping-lists";
 import { NavigatorService } from '../../services/navigator/navigator';
+import { CustomerLocationPage } from '../../pages/customer-location/customer-location';
 
 @Component({
   selector: 'page-product',
@@ -121,7 +122,12 @@ export class ProductPage implements OnInit {
   }
 
   buyNow(){
-
+    let params = {
+      isFlashDeal: true,
+      item: this.product,
+      orderTotal: this.quantityItemPrice
+    };
+    this.navigatorService.push(CustomerLocationPage, params).catch(err => console.error(err))
   }
 
   onQuantityChange($event) {
@@ -141,7 +147,4 @@ export class ProductPage implements OnInit {
     return this.quantity >= (Number(this.product.SHELF_PACK) * 70 / 100) && this.quantity < Number(this.product.SHELF_PACK);
   }
 
-  goToCheckout(){
-    
-  }
 }

@@ -3,7 +3,7 @@ export const URL_BASE_FR = "http://dmwebservice-cafr.orgill.com/service.asmx/";
 
 export const URL_LOGIN: string = "Authenticate";
 export const URL_USER_INFO = "get_user";
-export const URL_CUSTOMER_LOCATIONS = "/service.asmx/customer_locations";
+export const URL_CUSTOMER_LOCATIONS = "customer_locations";
 
 export const URL_PROGRAMS = "programs";
 export const URL_CATEGORIES = "categories";

@@ -37,7 +37,6 @@ export class FlashDealService {
   }
 
   navigateToFlashDeal(sku = '') {
-   // ;
    this.getFlashDealsProduct(sku).subscribe((receivedResponse)=>{
     let responseData = JSON.parse(receivedResponse.d);
     let foundProducts = responseData;
@@ -52,8 +51,24 @@ export class FlashDealService {
    });
     
   }
+/*
+  orderFlashDeal(itemsIdsArr, shoppingListId) {
 
-  orderFlashDeal(productInfoList, insertToDBInfo, itemsIdsArr, shoppingListId) {
+    let productListInfo = {
+      order_method: ???
+      order_query: this.getOrderQuery(programNumber, orderItems)
+    };
+
+    let insertToDBInfo = {
+      PO: this.postOffice,
+      date: moment().format('MM/DD/YYYY'),
+      location: this.location.SHIPTONO,
+      type: this.orderMethod,
+      total: this.orderTotal,
+      program_number: programNumber
+    };
+
+
     return new Promise((resolve, reject) => {
         productInfoList.user_token = this.userToken;
         try {
@@ -84,6 +99,6 @@ export class FlashDealService {
   deleteItemsFromList(insertId, itemsIdsArr, shoppingListId) {
     return this.databaseProvider.finalizePurchase(insertId, itemsIdsArr, shoppingListId);
   }
-
+*/
 
 }

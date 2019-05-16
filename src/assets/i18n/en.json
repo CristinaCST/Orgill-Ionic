@@ -135,6 +135,8 @@
 
   "customer_locations": "PO & Location",
   "customer_locations_po": "PO Number",
+  "customer_locations_qty": "Quantity",
+  "customer_locations_qty_hint": "Qty",
   "customer_locations_po_hint": "Enter PO #",
   "customer_locations_list_header": "Ship to location",
   "customer_locations_send_to_orgill": "Send to Orgill.com",
