@@ -1,7 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Page, NavOptions, TransitionDoneFn } from "ionic-angular/umd/navigation/nav-util";
-import { NavController, ViewController } from "ionic-angular";
-import { App } from "ionic-angular";
+import { NavController, ViewController,NavOptions, App} from "ionic-angular";
 import * as Equals from "../../util/equality";
 
 
@@ -10,7 +8,7 @@ import * as Equals from "../../util/equality";
 @Injectable()
 export class NavigatorService {
     private _navController: NavController;  //Store the nav controller reference
-    private pageReference: string | Page;
+    private pageReference: any;
 
     private get navController() {
         return this._navController ? this._navController : this.app.getActiveNavs()[0];
@@ -32,7 +30,7 @@ export class NavigatorService {
      * @param done TransitionDoneFn
      * @param paramEquality Default value true. Should we check for param equality when we check pages?
      */
-    public push(page: string | Page, params: any = null, opts: NavOptions = null, done: TransitionDoneFn = null) {
+    public push(page: any, params: any = null, opts: NavOptions = null, done: any = null) {
 
       //  console.log("navigator params:", params);
      //   console.log("navOptions:",opts);
@@ -86,11 +84,12 @@ export class NavigatorService {
 
     };
 
-    public pop(opts: NavOptions = null, done: TransitionDoneFn = null) {
+    public pop(opts: NavOptions = null, done: any = null) {
         return this.navController.pop(opts ? opts : null, done ? done : null);
     }
 
-    public setRoot(pageOrViewCtrl: string | ViewController | Page, params: any = null, opts: NavOptions = null, done: TransitionDoneFn = null) {
+    public setRoot(pageOrViewCtrl: any, params: any = null, opts: NavOptions = null, done:  any = null) {
+        //TODO: Check what's happening to reference after setroot!
        /* if( pageOrViewCtrl !instanceof ViewController){
             this.pageReference = pageOrViewCtrl
         }*/
