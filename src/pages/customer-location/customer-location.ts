@@ -5,7 +5,8 @@ import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
 import {UserInfoProvider} from "../../providers/user-info/user-info";
 import {OrderReviewPage} from "../order-review/order-review";
 import { NavigatorService } from '../../services/navigator/navigator';
-import { pointerCoord } from 'ionic-angular/umd/util/dom';
+import * as Constants from '../../util/constants';
+import { LocationElement } from '../../interfaces/models/location-element';
 
 
 @Component({
@@ -19,13 +20,14 @@ export class CustomerLocationPage implements OnInit {
   public postOffice: string;
   public userLocations: Array<CustomerLocation> = [];
   public selectedLocation: CustomerLocation;
-  public hotDealLocations: Object[] = [];
+  public hotDealLocations: LocationElement[] = [];
   public postOffices: Array<number>;
 
   private shoppingListId: number;
   private shoppingListItems: Array<ShoppingListItem> = [];
   private orderTotal: number;
   private isFlashDeal: boolean = false;
+  private noLocation: boolean = false;
 
 
   constructor(private navigatorService: NavigatorService,
@@ -46,13 +48,18 @@ export class CustomerLocationPage implements OnInit {
 
     if(this.navParams.get('isFlashDeal')){
       this.isFlashDeal = this.navParams.get('isFlashDeal');
-
     }
 
-   
 
     this.userInfoProvider.getUserLocations().subscribe((locations) => {
+     
+
+      if (Constants.DEBUG_NO_LOCATIONS) {
+        locations = null; //HACK: TESTING
+      }
+
       if (!locations) {
+        this.noLocation = true;
         return;
       }
 
@@ -60,19 +67,24 @@ export class CustomerLocationPage implements OnInit {
       this.userLocations = this.sortLocations(JSON.parse(locations.d));
       if (this.userLocations.length > 0) {
         this.selectedLocation = this.userLocations[0];
-
-  
       }
 
       this.userLocations.forEach((element) => {
-        console.log(element);
-        this.hotDealLocations.push({
+        //console.log(element);
+
+        let locElement:LocationElement = {
           location: element,
-          postOffices: 0,
-          qty: 0,
-        });
+          quantity: undefined,
+          postOff: undefined
+        };
+
+        this.hotDealLocations.push(locElement);
       });
-      this.hotDealLocations[1]["qty"]= 100;
+
+
+     // console.log(this.hotDealLocations,this.hotDealLocations);
+     // this.hotDealLocations[1]["qty"]= 100;
+     //this.hotDealLocations[0].quantity = this.orderTotal;
      // console.log("HOTDEALS:", this.hotDealLocations);
 
     })
@@ -105,5 +117,44 @@ export class CustomerLocationPage implements OnInit {
       };
       this.navigatorService.push(OrderReviewPage, params);
     }
+
+    if(this.isFlashDeal){
+      let selectedLocations: Array<LocationElement> = [];
+
+      this.hotDealLocations.forEach((element)=>{
+        if(element["checked"])
+        {
+
+          if(!element.postOff || !element.quantity){
+            let content = {
+              
+            }
+
+          }
+          selectedLocations.push({
+            location: element.location,
+            postOff: element.postOff,
+            quantity: element.quantity
+          });
+        }
+      });
+      
+     let params = {
+        isFlashDeal: this.isFlashDeal,
+        orderMethod: orderMethod,
+        locations: selectedLocations,
+        orderTotal: this.orderTotal
+      };
+      this.navigatorService.push(OrderReviewPage, params);
+    }
   }
+  
+  add(location){
+    location.quantity+=1;
+  }
+
+  remove(location){
+    location.quantity-=1;
+  }
+
 }

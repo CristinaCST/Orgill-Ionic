@@ -125,7 +125,8 @@ export class ProductPage implements OnInit {
     let params = {
       isFlashDeal: true,
       item: this.product,
-      orderTotal: this.quantityItemPrice
+      orderTotal: this.quantityItemPrice,
+      itemQuantity: this.quantity
     };
     this.navigatorService.push(CustomerLocationPage, params).catch(err => console.error(err))
   }

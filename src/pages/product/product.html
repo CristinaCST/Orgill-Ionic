@@ -30,7 +30,8 @@
       <product-pricing *ngSwitchCase="'pricing_tab'" [product]="product"
                        [productPrograms]="productPrograms"></product-pricing>
     </div>
-    <product-quantity (quantityChange)="onQuantityChange($event)"
+    <product-quantity [hotDeal] = "isFlashDeal"
+                      (quantityChange)="onQuantityChange($event)"
                       [quantityFromList]="quantityFromList"
                       [product]="product"></product-quantity>
   </div>

@@ -10,8 +10,8 @@
   </ion-toolbar>
 </ion-header>
 
-<!-- Order review main content -->
-<ion-content>
+<!-- Order review main content when no hot deal-->
+<ion-content *ngIf="!isFlashDeal">
   <ion-item-group>
     <div *ngIf="location" class="location-container">
       <ion-item-divider no-lines class="location-headers">
@@ -47,6 +47,35 @@
     </shopping-list-product>
   </ion-item-group>
 </ion-content>
+
+<ion-content *ngIf="isFlashDeal">
+    <ion-item-group>
+      <div *ngIf="location" class="location-container">
+        <ion-item-divider no-lines class="location-headers">
+          <p>{{"customer_locations" | translate}}:</p>
+          <p>{{"order_review_total" | translate}}:</p>
+        </ion-item-divider>
+       
+  
+        <ion-item-divider
+          class="ship-header" no-lines>{{"order_review_ship_to" | translate}}:
+        </ion-item-divider>
+      </div>
+
+      <ion-item *ngFor="let flashLocation of flashLocations;" class="info-container">
+
+          <ion-item class="ship-container">
+              <p> {{flashLocation.location.CUSTOMERNAME}} </p>
+              <p> {{flashLocation.location.ADDRESS}} </p>
+              <p> PO#: {{flashLocation.postOff}} </p>
+              <p> QUANTITY: {{flashLocation.quantity}} </p>
+            </ion-item>
+          
+          
+        </ion-item>
+
+    </ion-item-group>
+  </ion-content>
 
 <!-- Shopping footer-->
 <ion-footer padding>

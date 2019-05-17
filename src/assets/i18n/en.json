@@ -140,6 +140,7 @@
   "customer_locations_po_hint": "Enter PO #",
   "customer_locations_list_header": "Ship to location",
   "customer_locations_send_to_orgill": "Send to Orgill.com",
+  "customer_locations_no_location": "There are no locations attached to this account",
 
   "order_review": "Review Order",
   "order_review_type_orgill": "Orgill.com",

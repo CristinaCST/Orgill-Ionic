@@ -9,10 +9,14 @@
 
 <ion-content [(ngSwitch)]="isFlashDeal">
 
+  <ion-item *ngIf="noLocation">
+    {{"customer_locations_no_location" | translate}}
+  </ion-item>
+
   <!-- Locations if not hot deal -->
   <ion-item-group *ngSwitchCase="false">
   <ion-item-group padding class="post-container">
-    <ion-item-divider no-lines>{{"customer_locations_po" | translate}}:</ion-item-divider>
+    <ion-item-divider *ngIf="!noLocation" no-lines>{{"customer_locations_po" | translate}}:</ion-item-divider>
     <ion-item>
       <ion-input [(ngModel)]="postOffice" type="text"
                  placeholder="{{'customer_locations_po_hint' | translate}}"></ion-input>
@@ -41,15 +45,15 @@
   <ion-item-group [(ngModel)]="selectedLocation" padding radio-group class="locations-container">
 
 
-    <ion-item-divider no-lines>{{"customer_locations_list_header" | translate}}:</ion-item-divider>
+    <ion-item-divider *ngIf="!noLocation" no-lines>{{"customer_locations_list_header" | translate}}:</ion-item-divider>
     <ion-list *ngFor="let hotDealLocation of hotDealLocations;">
 
       <ion-item>
-        <ion-checkbox class="checkbox-item" item-end></ion-checkbox>
+        <ion-checkbox [(ngModel)]="hotDealLocation.checked" class="checkbox-item" item-end></ion-checkbox>
 
         <ion-label>
           <p [class]="selectedLocation===hotDealLocation?'active':''"> {{hotDealLocation.location.CUSTOMERNAME}} </p>
-          <p> {{hotDealLocation.ADDRESS}}</p>
+          <p> {{hotDealLocation.location.ADDRESS}}</p>
         </ion-label>
       </ion-item>
 
@@ -59,20 +63,32 @@
           <ion-item class="po-label"> {{"customer_locations_po" | translate}}: </ion-item>
         </ion-col>
         <ion-col >
-          <ion-input #POinput class="po-input" [(ngModel)]="hotDealLocation.postOffices" type="number"
+          <ion-input #POinput class="po-input" [(ngModel)]="hotDealLocation.postOff" type="number"
             placeholder="{{'customer_locations_po_hint' | translate}}">
           </ion-input>
         </ion-col>
       </ion-row>
 
       <ion-row>
-          <ion-col>
+          <ion-col col-4>
             <ion-item class="qt-label"> {{"customer_locations_qty" | translate}}: </ion-item>
           </ion-col>
-          <ion-col>
-            <ion-input #QTYinput class="po-input" [(ngModel)]="hotDealLocation.qty" type="number"
+          <ion-col col-2>
+              <button ion-button icon-only small clear (click)="remove(hotDealLocation)">
+                  <ion-icon name="remove" color="OrgillRed"></ion-icon>
+                </button>
+          </ion-col>
+
+          <ion-col col-4>
+            <ion-input #QTYinput class="po-input" [(ngModel)]="hotDealLocation.quantity" type="number"
               placeholder="{{'customer_locations_qty_hint' | translate}}">
             </ion-input>
+
+          </ion-col>
+          <ion-col col-2>
+            <button ion-button icon-only small clear (click)="add(hotDealLocation)">
+                <ion-icon name="add" color="OrgillRed"></ion-icon>
+              </button>
           </ion-col>
         </ion-row>
 
@@ -85,12 +101,12 @@
 </ion-content>
 
 <ion-footer padding>
-  <button ion-button block outline color="OrgillLightGray" (click)="sendToOrgill()">
+  <button *ngIf="!isFlashDeal" ion-button block outline color="OrgillLightGray" (click)="sendToOrgill()">
     {{"customer_locations_send_to_orgill" | translate}}
   </button>
-  <!--<button ion-button block color="OrgillRed" (click)="checkout()">
+  <button  ion-button block color="OrgillRed" (click)="checkout()">
     {{"shopping_list_checkout" | translate}}
   </button>
-  -->
+  
 </ion-footer>
 

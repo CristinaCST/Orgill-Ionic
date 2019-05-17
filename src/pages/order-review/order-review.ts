@@ -6,6 +6,7 @@ import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
 import moment from 'moment';
 import {OrderConfirmationPage} from "../order-confirmation/order-confirmation";
 import { NavigatorService } from '../../services/navigator/navigator';
+import { LocationElement } from '../../interfaces/models/location-element';
 
 @Component({
   selector: 'page-order-review',
@@ -21,6 +22,8 @@ export class OrderReviewPage implements OnInit {
   public orderTotal;
   private shoppingListProgramNumbers: Array<string> = [];
   private confirmationNumbers: Array<string> = [];
+  private isFlashDeal: boolean = false;
+  private flashLocations: Array<LocationElement> = [];
 
   constructor(private navigatorService: NavigatorService, private navParams: NavParams,
               private shoppingListsProvider: ShoppingListsProvider) {
@@ -28,15 +31,25 @@ export class OrderReviewPage implements OnInit {
 
   ngOnInit(): void {
     this.orderMethod = this.checkValidParams('orderMethod');
-     this.postOffice = this.checkValidParams('postOffice');
+    this.postOffice = this.checkValidParams('postOffice');
     this.location = this.checkValidParams('location');
     this.shoppingListId = this.checkValidParams('shoppingListId');
     this.shoppingListItems = this.checkValidParams('shoppingListItems');
     this.orderTotal = this.checkValidParams('orderTotal');
+    this.isFlashDeal = this.checkValidParams('isFlashDeal');
 
+    if(this.shoppingListItems){
     this.shoppingListItems.forEach(listItem => {
       this.shoppingListProgramNumbers [listItem.program_number] = listItem.program_number;
     });
+  }
+ 
+  }
+
+  ionViewDidLoad(){
+    if(this.isFlashDeal){
+      this.flashLocations = this.checkValidParams('locations');
+    }
   }
 
   checkValidParams(type) {

@@ -10,6 +10,7 @@ import {ItemProgram} from "../../interfaces/models/item-program";
 export class ProductQuantityComponent implements OnInit {
   @Input() product: Product;
   @Input() quantityFromList;
+  @Input() hotDeal: boolean;
   @Output() quantityChange = new EventEmitter<any>();
   @ViewChild('quantityInput') quantityInput:ElementRef;
   public quantity: number = 1;

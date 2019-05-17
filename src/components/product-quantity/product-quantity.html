@@ -10,7 +10,7 @@
     </div>
   </ion-item>
 
-  <ion-item no-lines id="quantity-content">
+  <ion-item *ngIf="!hotDeal" no-lines id="quantity-content">
     <div id="title">
       <p>{{"product_quantity" | translate}}:</p>
     </div>
@@ -30,7 +30,7 @@
     </div>
   </ion-item>
 
-  <ion-item class="total-price">
+  <ion-item *ngIf="!hotDeal" class="total-price">
     <span>{{"product_total_price" | translate}}:</span>
     <span>{{"product_currency" | translate}}{{total | number: '1.2-2'}}</span>
   </ion-item>
