@@ -5,11 +5,11 @@ import { ApiProvider } from "../../providers/api/api";
 import { LocalStorageHelper } from "../../helpers/local-storage";
 import { App } from "ionic-angular";
 import { ProductPage } from "../../pages/product/product";
-import { NavigatorService } from "../../services/navigator/navigator";
+import { NavigatorService } from "../navigator/navigator";
 import { DatabaseProvider } from "../../providers/database/database";
 
 @Injectable()
-export class FlashDealService {
+export class HotDealService {
   private readonly userToken;
 
   constructor(private apiProvider: ApiProvider,
@@ -22,7 +22,7 @@ export class FlashDealService {
     }
   }
 
-  private getFlashDealsProduct(sku = '') {
+  private getHotDealsProduct(sku = '') {
 
     let params = {
         user_token: this.userToken,
@@ -36,23 +36,23 @@ export class FlashDealService {
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params);
   }
 
-  navigateToFlashDeal(sku = '') {
-   this.getFlashDealsProduct(sku).subscribe((receivedResponse)=>{
+  navigateToHotDeal(sku = '') {
+   this.getHotDealsProduct(sku).subscribe((receivedResponse)=>{
     let responseData = JSON.parse(receivedResponse.d);
     let foundProducts = responseData;
     foundProducts.filter(item => item.SKU === sku);
-    let flashDeal = {
-        isFlashDeal: true,
+    let hotDeal = {
+        isHotDeal: true,
         SKU: sku,
         product: foundProducts[0]
     };
 
-    this.navigatorService.push(ProductPage, flashDeal).catch(err => console.error(err));
+    this.navigatorService.push(ProductPage, hotDeal).catch(err => console.error(err));
    });
     
   }
 /*
-  orderFlashDeal(itemsIdsArr, shoppingListId) {
+  orderHotDeal(itemsIdsArr, shoppingListId) {
 
     let productListInfo = {
       order_method: ???

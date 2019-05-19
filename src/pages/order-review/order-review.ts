@@ -22,8 +22,9 @@ export class OrderReviewPage implements OnInit {
   public orderTotal;
   private shoppingListProgramNumbers: Array<string> = [];
   private confirmationNumbers: Array<string> = [];
-  private isFlashDeal: boolean = false;
-  private flashLocations: Array<LocationElement> = [];
+  private isHotDeal: boolean = false;
+  private hotLocations: Array<LocationElement> = [];
+  private hotDealItem;
 
   constructor(private navigatorService: NavigatorService, private navParams: NavParams,
               private shoppingListsProvider: ShoppingListsProvider) {
@@ -36,7 +37,15 @@ export class OrderReviewPage implements OnInit {
     this.shoppingListId = this.checkValidParams('shoppingListId');
     this.shoppingListItems = this.checkValidParams('shoppingListItems');
     this.orderTotal = this.checkValidParams('orderTotal');
-    this.isFlashDeal = this.checkValidParams('isFlashDeal');
+    this.isHotDeal = this.checkValidParams('isHotDeal');
+    this.hotDealItem = this.checkValidParams('hotDealItem');
+
+    if(this.hotDealItem){
+      this.isHotDeal=true;
+
+      this.orderMethod = 2; //HACK: ???
+      this.hotLocations = this.hotDealItem.LOCATIONS;
+    }
 
     if(this.shoppingListItems){
     this.shoppingListItems.forEach(listItem => {
@@ -47,8 +56,8 @@ export class OrderReviewPage implements OnInit {
   }
 
   ionViewDidLoad(){
-    if(this.isFlashDeal){
-      this.flashLocations = this.checkValidParams('locations');
+    if(this.isHotDeal){
+      this.hotLocations = this.checkValidParams('locations');
     }
   }
 

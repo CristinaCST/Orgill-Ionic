@@ -50,13 +50,13 @@ export class ProgramProvider {
   }
 
   /*
-  getFlashDealsProduct(programNumber = '',sku = ''){
+  getHotDealsProduct(programNumber = '',sku = ''){
     let params={
       user_token: this.userToken,
       program_number:programNumber,
       sku:sku
     };
-    return this.apiProvider.post(ConstantsUrl.GET_FLASHDEALS_PRODUCT,params)
+    return this.apiProvider.post(ConstantsUrl.GET_HOTDEALS_PRODUCT,params)
   }*/
 
 }

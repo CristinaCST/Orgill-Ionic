@@ -6,7 +6,9 @@ import {UserInfoProvider} from "../../providers/user-info/user-info";
 import {OrderReviewPage} from "../order-review/order-review";
 import { NavigatorService } from '../../services/navigator/navigator';
 import * as Constants from '../../util/constants';
+import * as Strings from '../../util/strings';
 import { LocationElement } from '../../interfaces/models/location-element';
+import { PopoversProvider } from '../../providers/popovers/popovers';
 
 
 @Component({
@@ -22,17 +24,19 @@ export class CustomerLocationPage implements OnInit {
   public selectedLocation: CustomerLocation;
   public hotDealLocations: LocationElement[] = [];
   public postOffices: Array<number>;
+  
 
   private shoppingListId: number;
   private shoppingListItems: Array<ShoppingListItem> = [];
   private orderTotal: number;
-  private isFlashDeal: boolean = false;
+  private isHotDeal: boolean = false;
   private noLocation: boolean = false;
-
+  private hotDealItem: any;
 
   constructor(private navigatorService: NavigatorService,
               private navParams: NavParams,
-              private userInfoProvider: UserInfoProvider) {
+              private userInfoProvider: UserInfoProvider,
+              private popoverProvider: PopoversProvider) {
   }
 
   ngOnInit(): void {
@@ -46,8 +50,9 @@ export class CustomerLocationPage implements OnInit {
       this.orderTotal = this.navParams.get('orderTotal');
     }
 
-    if(this.navParams.get('isFlashDeal')){
-      this.isFlashDeal = this.navParams.get('isFlashDeal');
+    if(this.navParams.get('hotDeal')){
+      this.isHotDeal = true;
+      this.hotDealItem = this.navParams.get('hotDeal');
     }
 
 
@@ -70,22 +75,16 @@ export class CustomerLocationPage implements OnInit {
       }
 
       this.userLocations.forEach((element) => {
-        //console.log(element);
 
-        let locElement:LocationElement = {
-          location: element,
-          quantity: undefined,
-          postOff: undefined
+        let locElement : LocationElement = {
+          LOCATION: element,
+          POSTOFFICE: undefined,
+          QUANTITY: undefined,
+          WANTED:false
         };
 
         this.hotDealLocations.push(locElement);
       });
-
-
-     // console.log(this.hotDealLocations,this.hotDealLocations);
-     // this.hotDealLocations[1]["qty"]= 100;
-     //this.hotDealLocations[0].quantity = this.orderTotal;
-     // console.log("HOTDEALS:", this.hotDealLocations);
 
     })
   }
@@ -118,34 +117,51 @@ export class CustomerLocationPage implements OnInit {
       this.navigatorService.push(OrderReviewPage, params);
     }
 
-    if(this.isFlashDeal){
+    if(this.isHotDeal){
       let selectedLocations: Array<LocationElement> = [];
 
+      let valid = true;
+
       this.hotDealLocations.forEach((element)=>{
-        if(element["checked"])
+        if(element.WANTED)
         {
 
-          if(!element.postOff || !element.quantity){
-            let content = {
-              
-            }
-
+          if(!element.POSTOFFICE|| !element.QUANTITY){
+            valid=false;
           }
-          selectedLocations.push({
-            location: element.location,
-            postOff: element.postOff,
-            quantity: element.quantity
-          });
+
+          selectedLocations.push(element);
         }
       });
+
+      if(!valid)
+      {
+        let content = {
+          type: Constants.POPOVER_INFO,
+          title: Strings.GENERIC_MODAL_TITLE,
+          message: Strings.HOT_DEAL_LOCATION_INVALID,
+          positiveButtonText: Strings.MODAL_BUTTON_OK,
+        }
+
+        this.popoverProvider.show(content);
+        return;
+      }
+
+      if(selectedLocations.length==0){
+        let content = {
+          type: Constants.POPOVER_INFO,
+          title: Strings.GENERIC_MODAL_TITLE,
+          message: Strings.HOT_DEAL_NO_LOCATION,
+          positiveButtonText: Strings.MODAL_BUTTON_OK,
+        }
+
+        this.popoverProvider.show(content);
+        return;
+      }
       
-     let params = {
-        isFlashDeal: this.isFlashDeal,
-        orderMethod: orderMethod,
-        locations: selectedLocations,
-        orderTotal: this.orderTotal
-      };
-      this.navigatorService.push(OrderReviewPage, params);
+      
+      this.hotDealItem.LOCATIONS = selectedLocations;
+      this.navigatorService.push(OrderReviewPage, {hotDeal:this.hotDealItem});
     }
   }
   

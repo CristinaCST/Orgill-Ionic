@@ -38,10 +38,11 @@ import { SessionValidatorProvider } from '../providers/session/sessionValidator'
 //Services
 import { NetworkService } from '../services/network/network';
 import { OneSignalService } from '../services/onesignal/onesignal';
-import { FlashDealService } from '../services/flashdeal/flashdeal';
+import { HotDealService } from '../services/hotdeal/hotdeal';
 import { NavigatorService } from '../services/navigator/navigator';
 import { LoadingService } from '../services/loading/loading';
 import { ScannerService } from '../services/scanner/scanner';
+import { PricingService } from '../services/pricing/pricing';
 
 //Pages
 import {MyApp} from './app.component';
@@ -81,6 +82,7 @@ let pages = [MyApp,
 
 //Error Handlers
 import { CustomErrorHandlerService } from "../services/error-handler/CustomErrorHandler";
+
 
 
 
@@ -130,9 +132,10 @@ const errorHandler = environment.production ? CustomErrorHandlerService : IonicE
     OneSignalService,
     OneSignal,
     Badge,
-    FlashDealService,
+    HotDealService,
     NavigatorService,
     ScannerService,
+    PricingService,
     {provide: ErrorHandler, useClass: CustomErrorHandlerService}
   ]
 })

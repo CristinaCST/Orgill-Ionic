@@ -15,7 +15,7 @@
   </ion-toolbar>
 
   <!-- Product Page Tabs-->
-  <ion-segment *ngIf="!isFlashDeal" [(ngModel)]="activeTab">
+  <ion-segment *ngIf="!isHotDeal" [(ngModel)]="activeTab">
     <ion-segment-button value="summary_tab"> {{"summary_tab" | translate}}
     </ion-segment-button>
     <ion-segment-button  value="pricing_tab"> {{"pricing_tab" | translate}}
@@ -30,14 +30,14 @@
       <product-pricing *ngSwitchCase="'pricing_tab'" [product]="product"
                        [productPrograms]="productPrograms"></product-pricing>
     </div>
-    <product-quantity [hotDeal] = "isFlashDeal"
+    <product-quantity [hotDeal] = "isHotDeal"
                       (quantityChange)="onQuantityChange($event)"
                       [quantityFromList]="quantityFromList"
                       [product]="product"></product-quantity>
   </div>
 </ion-content>
 
-<ion-footer *ngIf="!fromShoppingList" [(ngSwitch)]="isFlashDeal">
+<ion-footer *ngIf="!fromShoppingList" [(ngSwitch)]="isHotDeal">
   <button id="add-shopping" *ngSwitchCase="false" (click)="addToShoppingList()">{{"button_add_to_list" | translate}}</button>
   <button id="add-shopping" *ngSwitchCase="true" (click)="buyNow()">{{"button_buy_now" | translate}}</button>
 </ion-footer>

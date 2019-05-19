@@ -2,12 +2,10 @@
 <ion-header>
   <!-- Customer Location Page Navigation Bar -->
   <navbar [title]="'customer_locations'" [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
-  <!-- Customer Location Page Search Bar -->
-  <search-bar [showBackButton]="true"
-              (searched)="onSearched($event)"></search-bar>
+  
 </ion-header>
 
-<ion-content [(ngSwitch)]="isFlashDeal">
+<ion-content [(ngSwitch)]="isHotDeal">
 
   <ion-item *ngIf="noLocation">
     {{"customer_locations_no_location" | translate}}
@@ -49,11 +47,11 @@
     <ion-list *ngFor="let hotDealLocation of hotDealLocations;">
 
       <ion-item>
-        <ion-checkbox [(ngModel)]="hotDealLocation.checked" class="checkbox-item" item-end></ion-checkbox>
+        <ion-checkbox [(ngModel)]="hotDealLocation.WANTED" class="checkbox-item" item-end></ion-checkbox>
 
         <ion-label>
-          <p [class]="selectedLocation===hotDealLocation?'active':''"> {{hotDealLocation.location.CUSTOMERNAME}} </p>
-          <p> {{hotDealLocation.location.ADDRESS}}</p>
+          <p [class]="selectedLocation===hotDealLocation?'active':''"> {{hotDealLocation.LOCATION.CUSTOMERNAME}} </p>
+          <p> {{hotDealLocation.LOCATION.ADDRESS}}</p>
         </ion-label>
       </ion-item>
 
@@ -63,7 +61,7 @@
           <ion-item class="po-label"> {{"customer_locations_po" | translate}}: </ion-item>
         </ion-col>
         <ion-col >
-          <ion-input #POinput class="po-input" [(ngModel)]="hotDealLocation.postOff" type="number"
+          <ion-input #POinput class="po-input" [(ngModel)]="hotDealLocation.POSTOFFICE" type="number"
             placeholder="{{'customer_locations_po_hint' | translate}}">
           </ion-input>
         </ion-col>
@@ -80,7 +78,7 @@
           </ion-col>
 
           <ion-col col-4>
-            <ion-input #QTYinput class="po-input" [(ngModel)]="hotDealLocation.quantity" type="number"
+            <ion-input #QTYinput class="po-input" [(ngModel)]="hotDealLocation.QUANTITY" type="number"
               placeholder="{{'customer_locations_qty_hint' | translate}}">
             </ion-input>
 
@@ -101,7 +99,7 @@
 </ion-content>
 
 <ion-footer padding>
-  <button *ngIf="!isFlashDeal" ion-button block outline color="OrgillLightGray" (click)="sendToOrgill()">
+  <button *ngIf="!isHotDeal" ion-button block outline color="OrgillLightGray" (click)="sendToOrgill()">
     {{"customer_locations_send_to_orgill" | translate}}
   </button>
   <button  ion-button block color="OrgillRed" (click)="checkout()">

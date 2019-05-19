@@ -188,5 +188,8 @@
   "permission_never_show":"Never",
 
   "application_quit_message":"Are you sure you want to quit?",
-  "placeholder_mesage":"There should've been something here..."
+  "placeholder_mesage":"There should've been something here...",
+  "hot_deal_no_location":"You must choose at least one location.",
+  "hot_deal_location_invalid":"At least one of the locations chosen is missing data"
+
 }

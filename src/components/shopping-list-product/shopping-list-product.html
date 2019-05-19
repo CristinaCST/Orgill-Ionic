@@ -31,7 +31,7 @@
               number:'1.2-2'}}</span>
           </div>
         </div>
-        <div class="quantity">
+        <div *ngIf="showQuantity" class="quantity">
           <p> {{shoppingListItem.quantity}} </p>
         </div>
       </div>

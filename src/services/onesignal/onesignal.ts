@@ -3,7 +3,7 @@ import { OneSignal } from '@ionic-native/onesignal';
 import * as Constants from '../../util/constants';
 import * as Strings from "../../util/strings";
 import { LocalStorageHelper } from "../../helpers/local-storage";
-import { FlashDealService } from '../flashdeal/flashdeal';
+import { HotDealService } from '../hotdeal/hotdeal';
 import { Badge } from "@ionic-native/badge";
 import { Events, Platform } from 'ionic-angular';
 import { PopoversProvider } from '../../providers/popovers/popovers';
@@ -23,7 +23,7 @@ export class OneSignalService {
 
     constructor(private oneSignal: OneSignal,
         private badge: Badge,   //Badge for icon notification
-        private flashDealService: FlashDealService,   //Provider to call to navigate to flashdeals provided through a push notification
+        private hotDealService: HotDealService,   //Provider to call to navigate to hotdeals provided through a push notification
         private events: Events,     //Propagate one signal event to be used in other places
         // private platform: Platform,   //Run platform dependent code 
         private popover: PopoversProvider,     //Needed for permission modals
@@ -117,12 +117,12 @@ export class OneSignalService {
             this.debugLog("Received package:" + JSON.stringify(data), data);
         }
 
-        //Check data for existence, if there is none, then the notification is something else than a flash deal
+        //Check data for existence, if there is none, then the notification is something else than a hot deal
         if (data) {
             if (data.notification.payload.additionalData.SKU) {  //Check if there is a SKU in the correct object format
 
                 //Send an event with the passed SKU
-                this.events.publish(Strings.EVENT_FLASH_DEAL_NOTIFICATION_RECEIVED, data.notification.payload.additionalData.SKU);
+                this.events.publish(Strings.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED, data.notification.payload.additionalData.SKU);
             }
         }
 
@@ -183,14 +183,14 @@ export class OneSignalService {
                 //If the payload is valid, try to navigate to it, if not, log the error if logging is on
                 try {
                     // console.log("DAFUQ");
-                    this.flashDealService.navigateToFlashDeal(data.notification.payload.additionalData.SKU);
+                    this.hotDealService.navigateToHotDeal(data.notification.payload.additionalData.SKU);
                 } catch (exception) {
-                    this.debugLog("Couldn't navigate to flash deal because " + exception, data);
+                    this.debugLog("Couldn't navigate to hot deal because " + exception, data);
 
                 }
 
-            } else {    //If there is data but the package does not respect the flash deal structure
-                this.debugLog("ONESIGNAL package is not a flash deal but it exists...", data);
+            } else {    //If there is data but the package does not respect the hot deal structure
+                this.debugLog("ONESIGNAL package is not a hot deal but it exists...", data);
 
             }
         }

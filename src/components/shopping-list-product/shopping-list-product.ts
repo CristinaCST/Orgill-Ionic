@@ -8,6 +8,7 @@ import * as Constants from '../../util/constants';
 export class ShoppingListProductComponent {
   @Input('shoppingListItem') shoppingListItem;
   @Input('isDisabled') isDisabled;
+  @Input('showQuantity') showQuantity=true;
   @Output() checked = new EventEmitter<any>();
   @Output() goToDetails = new EventEmitter<any>();
 

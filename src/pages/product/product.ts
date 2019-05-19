@@ -11,6 +11,8 @@ import { LoadingService } from "../../services/loading/loading";
 import { ShoppingListsProvider } from "../../providers/shopping-lists/shopping-lists";
 import { NavigatorService } from '../../services/navigator/navigator';
 import { CustomerLocationPage } from '../../pages/customer-location/customer-location';
+import { HotDealItem } from '../../interfaces/models/hot-deal-item';
+import { HotDealService } from 'services/hotdeal/hotdeal';
 
 @Component({
   selector: 'page-product',
@@ -26,7 +28,8 @@ export class ProductPage implements OnInit {
   public selectedProgram: ItemProgram;
   public quantityItemPrice: number = 0;
   public programName: string;
-  public isFlashDeal: boolean = false;
+  public isHotDeal: boolean = false;
+  public hotDeal: HotDealItem;
 
   public fromShoppingList;
   private shoppingListId;
@@ -51,7 +54,8 @@ export class ProductPage implements OnInit {
     this.programNumber = this.navParams.get('programNumber');
     this.programName = this.navParams.get('programName');
     this.subCategoryName = this.navParams.get('subcategoryName');
-    this.isFlashDeal = this.navParams.get('isFlashDeal')?true:false;
+    this.hotDeal = this.navParams.get('hotDeal');
+    this.isHotDeal = this.navParams.get('isHotDeal')?true:false;
 
     this.fromShoppingList = this.navParams.get('fromShoppingList');
     if (this.fromShoppingList) {
@@ -122,13 +126,14 @@ export class ProductPage implements OnInit {
   }
 
   buyNow(){
-    let params = {
-      isFlashDeal: true,
-      item: this.product,
-      orderTotal: this.quantityItemPrice,
-      itemQuantity: this.quantity
-    };
-    this.navigatorService.push(CustomerLocationPage, params).catch(err => console.error(err))
+  
+    let hotDeal: HotDealItem = {
+      ITEM: this.product,
+      LOCATIONS: undefined,
+      TOTAL_QUANTITY: this.quantity
+    }
+
+    this.navigatorService.push(CustomerLocationPage, {hotDeal}).catch(err => console.error(err))
   }
 
   onQuantityChange($event) {

@@ -151,11 +151,12 @@ export const ORDER_ORGILL_MESSAGE = 'order_review_orgill_message';
 export const ORDER_CHECKOUT_MESSAGE = 'order_review_checkout_message';
 
 /**
- * Marker : FlashDeals
+ * Marker : HotDeals
  * =============================================================================================
  */
-export const EVENT_FLASH_DEAL_NOTIFICATION_RECEIVED = "notifications_flash_deal_received";
-
+export const EVENT_HOT_DEAL_NOTIFICATION_RECEIVED = "notifications_hot_deal_received";
+export const HOT_DEAL_NO_LOCATION ="hot_deal_no_location";
+export const HOT_DEAL_LOCATION_INVALID = "hot_deal_location_invalid";
 
 /**
  * Marker : Permissions strings
@@ -191,3 +192,16 @@ export const DATABASE_DEPRECATED_CANCELED_TEXT = 'deprecated_database_canceled_t
 export const DEFAULT_HTTP_ERROR = "default_http_error";
 export const NO_ACCES = "no_acces";
 export const SOMETHING_WENT_WROMG = "something_went_wrong";
+
+
+/**
+* Marker : Quantiy And Price validation
+* =============================================================================================
+*/
+
+export const QUANTITY_UNDER_70_PERCENT = 'quantity_under_70_percent';
+export const QUANTITY_ROUNDED_X = 'quantity_rounded_x';
+export const QUANTITY_ROUNDED_MIN = 'quantity_rounded_min';
+export const QUANTITY_ROUNDED_MAX = 'quantity_rounded_max';
+
+export const PRICE_HAS_PENALTY = 'price_has_penalty';
