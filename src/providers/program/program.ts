@@ -45,18 +45,10 @@ export class ProgramProvider {
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_PROGRAMS, params)
   }
 
+
+
   isMarketOnlyProgram(programNumber: string) {
     return this.databaseProvider.getMarketTypeForProgram(programNumber);
   }
-
-  /*
-  getHotDealsProduct(programNumber = '',sku = ''){
-    let params={
-      user_token: this.userToken,
-      program_number:programNumber,
-      sku:sku
-    };
-    return this.apiProvider.post(ConstantsUrl.GET_HOTDEALS_PRODUCT,params)
-  }*/
 
 }

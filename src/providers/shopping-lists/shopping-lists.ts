@@ -94,7 +94,7 @@ export class ShoppingListsProvider {
     });
   }
 
-  getAllProductData(productList, resultsPerPage = 1){
+  getAllProductData(productList, resultsPerPage = 10){
     return new Promise((resolve,reject) =>{
       let list = [];
       let reqs = [];

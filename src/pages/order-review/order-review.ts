@@ -7,6 +7,7 @@ import moment from 'moment';
 import {OrderConfirmationPage} from "../order-confirmation/order-confirmation";
 import { NavigatorService } from '../../services/navigator/navigator';
 import { LocationElement } from '../../interfaces/models/location-element';
+import { PricingService } from '../../services/pricing/pricing';
 
 @Component({
   selector: 'page-order-review',
@@ -23,11 +24,11 @@ export class OrderReviewPage implements OnInit {
   private shoppingListProgramNumbers: Array<string> = [];
   private confirmationNumbers: Array<string> = [];
   private isHotDeal: boolean = false;
-  private hotLocations: Array<LocationElement> = [];
+  private hotLocations: LocationElement[];
   private hotDealItem;
 
   constructor(private navigatorService: NavigatorService, private navParams: NavParams,
-              private shoppingListsProvider: ShoppingListsProvider) {
+              private shoppingListsProvider: ShoppingListsProvider, private pricingService: PricingService) {
   }
 
   ngOnInit(): void {
@@ -39,6 +40,9 @@ export class OrderReviewPage implements OnInit {
     this.orderTotal = this.checkValidParams('orderTotal');
     this.isHotDeal = this.checkValidParams('isHotDeal');
     this.hotDealItem = this.checkValidParams('hotDealItem');
+
+  
+   
 
     if(this.hotDealItem){
       this.isHotDeal=true;
@@ -55,11 +59,6 @@ export class OrderReviewPage implements OnInit {
  
   }
 
-  ionViewDidLoad(){
-    if(this.isHotDeal){
-      this.hotLocations = this.checkValidParams('locations');
-    }
-  }
 
   checkValidParams(type) {
     if (this.navParams.get(type)) {
@@ -83,6 +82,7 @@ export class OrderReviewPage implements OnInit {
         order_method: this.orderMethod,
         order_query: this.getOrderQuery(programNumber, orderItems)
       };
+      console.log("QUERY:"+ this.getOrderQuery(programNumber, orderItems));
       let insertToDBInfo = {
         PO: this.postOffice,
         date: moment().format('MM/DD/YYYY'),
@@ -107,8 +107,20 @@ export class OrderReviewPage implements OnInit {
     });
   }
 
+  purchaseHotDeal(){
+
+  }
+
   cancel() {
     this.navigatorService.pop().catch(err => console.error(err));
+  }
+
+  getTotalPrice(){
+    let price = 0;
+    this.hotLocations.forEach((location)=>{
+      price += this.pricingService.getPrice(location.QUANTITY,this.hotDealItem.ITEM);
+    });
+    return price;
   }
 
 }

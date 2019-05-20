@@ -12,7 +12,6 @@ export class ProductQuantityComponent implements OnInit {
   @Input() quantityFromList;
   @Input() hotDeal: boolean;
   @Output() quantityChange = new EventEmitter<any>();
-  @ViewChild('quantityInput') quantityInput:ElementRef;
   public quantity: number = 1;
   public productPrice = 0;
   public total = 0;
@@ -110,9 +109,6 @@ export class ProductQuantityComponent implements OnInit {
     this.quantityChange.emit(data);
   }
 
-  blurInput(){
-    this.quantityInput.nativeElement.blur();
-  }
 
 
   private getMinimumQuantity(){

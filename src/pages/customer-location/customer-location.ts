@@ -9,6 +9,7 @@ import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { LocationElement } from '../../interfaces/models/location-element';
 import { PopoversProvider } from '../../providers/popovers/popovers';
+import { PricingService } from '../../services/pricing/pricing';
 
 
 @Component({
@@ -16,6 +17,10 @@ import { PopoversProvider } from '../../providers/popovers/popovers';
   templateUrl: 'customer-location.html',
 })
 export class CustomerLocationPage implements OnInit {
+
+
+  @ViewChildren('QTYinput') QuantityInput;
+
   public readonly sendToOrgillMethod: number = 1;
   public readonly checkoutMethod: number = 2;
 
@@ -36,7 +41,8 @@ export class CustomerLocationPage implements OnInit {
   constructor(private navigatorService: NavigatorService,
               private navParams: NavParams,
               private userInfoProvider: UserInfoProvider,
-              private popoverProvider: PopoversProvider) {
+              private popoverProvider: PopoversProvider,
+              private pricingService: PricingService) {
   }
 
   ngOnInit(): void {
@@ -160,17 +166,33 @@ export class CustomerLocationPage implements OnInit {
       }
       
       
+      console.log("LOCS:",selectedLocations);
       this.hotDealItem.LOCATIONS = selectedLocations;
-      this.navigatorService.push(OrderReviewPage, {hotDeal:this.hotDealItem});
+      console.log("HOT DEAL LOCS:",this.hotDealItem.LOCATIONS);
+      this.navigatorService.push(OrderReviewPage, {hotDealItem:this.hotDealItem});
     }
   }
   
   add(location){
-    location.quantity+=1;
+    location.QUANTITY = Number(location.QUANTITY) + 1;
+    location.QUANTITY =  this.pricingService.validateQuantity(location.QUANTITY,this.hotDealItem.PROGRAM,this.hotDealItem.ITEM) as number;
   }
 
   remove(location){
-    location.quantity-=1;
+    location.QUANTITY = Number(location.QUANTITY) - 1;
+    location.QUANTITY= this.pricingService.validateQuantity(location.QUANTITY,this.hotDealItem.PROGRAM,this.hotDealItem.ITEM) as number;
+  }
+
+  handleQuantityChange(location){
+    location.QUANTITY = this.pricingService.validateQuantity(location.QUANTITY,this.hotDealItem.PROGRAM,this.hotDealItem.ITEM) as number;
+  }
+
+  private clearQuantityInput(location){
+    location.QUANTITY = "";
+  }
+
+  private clearPOInput(location){
+    location.POSTOFFICE = "";
   }
 
 }

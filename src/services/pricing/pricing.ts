@@ -13,7 +13,9 @@ export class PricingService {
   }
 
   /**
+   * Shows a generic prompt with an OK button and custom message.
    * TODO: Should make a public method out of this... Streamline the entire popover process
+   * @param message Message string key or the actuall message
    */
   private showPrompt(message: String){
     let content = {
@@ -27,10 +29,11 @@ export class PricingService {
   }
 
   /**
-   * 
-   * @param suggestedValue 
-   * @param program 
-   * @param product 
+   * Returns the validated quantity and shows popovers depending on the action taken, if it's the case
+   * @param suggestedValue - Value that needs validation
+   * @param program - The product program, needed for program rules
+   * @param product - The product
+   * @returns Number - a validated quantity or the same if it's ok.
    */
   public validateQuantity(suggestedValue: number, program: ItemProgram, product: Product) {
 
@@ -47,10 +50,7 @@ export class PricingService {
       return minQty;
     }
     
-    if (suggestedValue < Number(product.SHELF_PACK) && suggestedValue >= (Number(product.SHELF_PACK) * 0.7)){
-      this.showPrompt(Strings.QUANTITY_UNDER_70_PERCENT)
-      return Number(product.SHELF_PACK);
-    }
+   
 
     if (product.QTY_ROUND_OPTION === 'X') {
       let shelfPack = Number(product.SHELF_PACK);
@@ -58,24 +58,34 @@ export class PricingService {
         if (shelfPack % suggestedValue === 0) {
           return suggestedValue;
         } else {
-          this.showPrompt(Strings.QUANTITY_ROUNDED_X);
+          this.showPrompt(Strings.QUANTITY_X_WARNING);
           return shelfPack * Math.ceil(suggestedValue / shelfPack)
         }
       } else {
-        this.showPrompt(Strings.QUANTITY_ROUNDED_X);
+        this.showPrompt(Strings.QUANTITY_X_WARNING);
         return shelfPack;
       }
+    }else if(product.QTY_ROUND_OPTION === 'Y'){
+      if (suggestedValue < Number(product.SHELF_PACK) && suggestedValue >= (Number(product.SHELF_PACK) * 0.7)){
+       // this.showPrompt(Strings.QUANTITY_Y_UNDER_70_PERCENT)
+        return Number(product.SHELF_PACK);
+      }
+      return suggestedValue;
     }else{
       return suggestedValue;
     }
   }
 
   /**
-   * WARNING: Perform quantity validation before callin this method. 
-   * @param quantity 
-   * @param product 
+   * WARNING: Perform quantity validation before call-in this method. 
+   * @param quantity - Quantity wanted but it needs to be pre-validated 
+   * @param product - Product
    */
   public getPrice(quantity: number, product: Product){
-
+    if(quantity < Number(product.SHELF_PACK) && product.QTY_ROUND_OPTION === 'Y'){
+      return Number(product.YOURCOST) * quantity + Number(product.YOURCOST) * 0.4 * quantity;
+    }else{
+      return Number(product.YOURCOST) * quantity;
+    }
   }
 }

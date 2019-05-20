@@ -199,8 +199,8 @@ export const SOMETHING_WENT_WROMG = "something_went_wrong";
 * =============================================================================================
 */
 
-export const QUANTITY_UNDER_70_PERCENT = 'quantity_under_70_percent';
-export const QUANTITY_ROUNDED_X = 'quantity_rounded_x';
+export const QUANTITY_Y_UNDER_70_PERCENT = 'Y_shelf_pack_quantity_warning';
+export const QUANTITY_X_WARNING = 'X_shelf_pack_quantity_warning';
 export const QUANTITY_ROUNDED_MIN = 'quantity_rounded_min';
 export const QUANTITY_ROUNDED_MAX = 'quantity_rounded_max';
 

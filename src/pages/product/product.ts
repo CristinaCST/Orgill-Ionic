@@ -12,7 +12,7 @@ import { ShoppingListsProvider } from "../../providers/shopping-lists/shopping-l
 import { NavigatorService } from '../../services/navigator/navigator';
 import { CustomerLocationPage } from '../../pages/customer-location/customer-location';
 import { HotDealItem } from '../../interfaces/models/hot-deal-item';
-import { HotDealService } from 'services/hotdeal/hotdeal';
+import { PricingService } from '../../services/pricing/pricing';
 
 @Component({
   selector: 'page-product',
@@ -43,7 +43,8 @@ export class ProductPage implements OnInit {
     private loadingService: LoadingService,
     private programProvider: ProgramProvider,
     private popoversProvider: PopoversProvider,
-    private shoppingListProvider: ShoppingListsProvider) {
+    private shoppingListProvider: ShoppingListsProvider,
+    private pricingService: PricingService) {
       this.loader = this.loadingService.createLoader();
   }
 
@@ -130,7 +131,8 @@ export class ProductPage implements OnInit {
     let hotDeal: HotDealItem = {
       ITEM: this.product,
       LOCATIONS: undefined,
-      TOTAL_QUANTITY: this.quantity
+      PROGRAM: this.selectedProgram,
+      TOTAL_QUANTITY: this.pricingService.validateQuantity(this.quantity,this.selectedProgram,this.product)
     }
 
     this.navigatorService.push(CustomerLocationPage, {hotDeal}).catch(err => console.error(err))

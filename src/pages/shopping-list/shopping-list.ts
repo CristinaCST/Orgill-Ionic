@@ -102,7 +102,7 @@ export class ShoppingListPage {
         }
       }
       return this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: Array<ShoppingListItem>) => {
-       // console.log(data,data);
+
         if (data) {
        //   console.log("DATA IS OK");
           this.shoppingListItems = data;

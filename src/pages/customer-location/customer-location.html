@@ -44,7 +44,7 @@
 
 
     <ion-item-divider *ngIf="!noLocation" no-lines>{{"customer_locations_list_header" | translate}}:</ion-item-divider>
-    <ion-list *ngFor="let hotDealLocation of hotDealLocations;">
+    <ion-list *ngFor="let hotDealLocation of hotDealLocations;let i of index">
 
       <ion-item>
         <ion-checkbox [(ngModel)]="hotDealLocation.WANTED" class="checkbox-item" item-end></ion-checkbox>
@@ -61,7 +61,7 @@
           <ion-item class="po-label"> {{"customer_locations_po" | translate}}: </ion-item>
         </ion-col>
         <ion-col >
-          <ion-input #POinput class="po-input" [(ngModel)]="hotDealLocation.POSTOFFICE" type="number"
+          <ion-input class="po-input" [(ngModel)]="hotDealLocation.POSTOFFICE" (ionFocus)="clearPOInput(hotDealLocation)" type="number"
             placeholder="{{'customer_locations_po_hint' | translate}}">
           </ion-input>
         </ion-col>
@@ -78,7 +78,7 @@
           </ion-col>
 
           <ion-col col-4>
-            <ion-input #QTYinput class="po-input" [(ngModel)]="hotDealLocation.QUANTITY" type="number"
+            <ion-input (focusout)="handleQuantityChange(hotDealLocation)" (keyup.enter)="handleQuantityChange(hotDealLocation)" (ionFocus)="clearQuantityInput(hotDealLocation)" class="po-input" [(ngModel)]="hotDealLocation.QUANTITY" type="number"
               placeholder="{{'customer_locations_qty_hint' | translate}}">
             </ion-input>
 
