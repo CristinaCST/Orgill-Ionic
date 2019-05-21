@@ -191,7 +191,7 @@ export const DATABASE_DEPRECATED_CANCELED_TEXT = 'deprecated_database_canceled_t
 
 export const DEFAULT_HTTP_ERROR = "default_http_error";
 export const NO_ACCES = "no_acces";
-export const SOMETHING_WENT_WROMG = "something_went_wrong";
+export const SOMETHING_WENT_WRONG = "something_went_wrong";
 
 
 /**
@@ -205,3 +205,6 @@ export const QUANTITY_ROUNDED_MIN = 'quantity_rounded_min';
 export const QUANTITY_ROUNDED_MAX = 'quantity_rounded_max';
 
 export const PRICE_HAS_PENALTY = 'price_has_penalty';
+
+
+export const QUANTITY_TOO_HIGH_OVERFLOW = 'quantity_too_high_overflow';

@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output, ViewChild, ElementRef} f
 import {Product} from "../../interfaces/models/product";
 import {ProgramProvider} from "../../providers/program/program";
 import {ItemProgram} from "../../interfaces/models/item-program";
+import { PricingService } from '../../services/pricing/pricing';
 
 @Component({
   selector: 'product-quantity',
@@ -18,7 +19,7 @@ export class ProductQuantityComponent implements OnInit {
   public program: ItemProgram;
   
 
-  constructor(private programProvider: ProgramProvider) {
+  constructor(private programProvider: ProgramProvider, private pricingService: PricingService) {
   }
 
   ngOnInit(): void {
@@ -72,11 +73,7 @@ export class ProductQuantityComponent implements OnInit {
 
   setTotal() {
     if (this.program) {
-      if (this.product.QTY_ROUND_OPTION === 'Y' && this.quantity < Number(this.product.SHELF_PACK)) {
-        this.total = this.quantity * this.getDecimalPrice() + 0.04 * this.getDecimalPrice() * this.quantity;
-      } else {
-        this.total = this.quantity * this.getDecimalPrice();
-      }
+      this.total = this.pricingService.getPrice(this.quantity,this.product);
     }
   }
 
@@ -106,7 +103,7 @@ export class ProductQuantityComponent implements OnInit {
       total: this.total,
       productPrice: this.getDecimalPrice()
     };
-    this.quantityChange.emit(data);
+   // this.quantityChange.emit(data);
   }
 
 
@@ -116,34 +113,12 @@ export class ProductQuantityComponent implements OnInit {
   }
 
   private validateQuantity(suggestedValue: number){
-
-
-   // console.log("SUGGESTEDVALUE:" + suggestedValue);
-   // console.warn("MINQTY: "+this.program.MINQTY);
-    
-
-    let minQty = this.getMinimumQuantity();
-    if(!suggestedValue || suggestedValue < minQty){
-      suggestedValue = minQty;
+    if(!suggestedValue){
+      return 1;
     }
-
-    if (this.product.QTY_ROUND_OPTION === 'X') {
-      let shelfPack = Number(this.product.SHELF_PACK);
-        if(suggestedValue > shelfPack)
-        {
-          if(shelfPack % suggestedValue === 0){
-            return suggestedValue;
-          }else{
-            return shelfPack * Math.ceil(suggestedValue/shelfPack)
-          }
-        }else
-        {
-          return shelfPack;
-        }
-    }else if(this.product.QTY_ROUND_OPTION === 'Y'){
-      return (suggestedValue)? suggestedValue : minQty;
-    }else{
-      return Math.max(1,suggestedValue);
-    }
+    console.log(this.program);
+    console.log(this.product);
+    console.log(suggestedValue);
+    return this.pricingService.validateQuantity(suggestedValue,this.program,this.product);
   }
 }

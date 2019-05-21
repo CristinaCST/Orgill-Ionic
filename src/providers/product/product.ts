@@ -10,9 +10,12 @@ import { ApiProvider } from '../../providers/api/api';
 
 @Injectable()
 export class ProductProvider {
-
+private readonly userToken;
   constructor(private apiProvider: ApiProvider){
-
+    let userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
+    if (userInfo) {
+      this.userToken = userInfo.userToken;
+    }
   }
 
   isYCategoryProduct(product: Product): boolean {
@@ -59,6 +62,24 @@ export class ProductProvider {
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params);
   }
 
+  orderHotDeal(productInfoList) {
+    return new Promise((resolve, reject) => {
+      productInfoList.user_token = this.userToken;
+      try {
+        this.apiProvider.post(ConstantsUrl.URL_ORDER_FLASH_PRODUCTS, productInfoList).subscribe((response) => {
+          if (response) {
+              resolve(response);
+            
+          } else {
+            reject();
+          }
+        })
+      } catch (e) {
+        reject(e);
+      }
+    }
+    );
+  }
 
 
 

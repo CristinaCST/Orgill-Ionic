@@ -1,7 +1,6 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>{{"order_confirmation" | translate}}</ion-title>
-  </ion-navbar>
+  <navbar [isBackEnabled]="true" [title]="'order_confirmation'"> 
+  </navbar>
   <div class="sub-header">
     <p>{{"order_confirmation_message_status" | translate}} </p>
     <p> {{"order_confirmation_message_method" | translate}} {{orderMethod}}</p>

@@ -8,6 +8,8 @@ import {OrderConfirmationPage} from "../order-confirmation/order-confirmation";
 import { NavigatorService } from '../../services/navigator/navigator';
 import { LocationElement } from '../../interfaces/models/location-element';
 import { PricingService } from '../../services/pricing/pricing';
+import { Product } from '../../interfaces/models/product';
+import { ProductProvider } from '../../providers/product/product';
 
 @Component({
   selector: 'page-order-review',
@@ -28,7 +30,8 @@ export class OrderReviewPage implements OnInit {
   private hotDealItem;
 
   constructor(private navigatorService: NavigatorService, private navParams: NavParams,
-              private shoppingListsProvider: ShoppingListsProvider, private pricingService: PricingService) {
+              private shoppingListsProvider: ShoppingListsProvider, private pricingService: PricingService,
+              private productProvider: ProductProvider) {
   }
 
   ngOnInit(): void {
@@ -47,7 +50,6 @@ export class OrderReviewPage implements OnInit {
     if(this.hotDealItem){
       this.isHotDeal=true;
 
-      this.orderMethod = 2; //HACK: ???
       this.hotLocations = this.hotDealItem.LOCATIONS;
     }
 
@@ -70,6 +72,14 @@ export class OrderReviewPage implements OnInit {
     let query = this.location.SHIPTONO + ":" + (this.postOffice ? this.postOffice : "") + ":" + programNumber + ":";
     items.forEach((item, index) => {
       query += item.product.SKU + "|" + item.quantity + (index < items.length - 1 ? ":" : "");
+    });
+    return query;
+  }
+
+  private getHotDealQuery(programNumber: string, item: Product, locations: LocationElement[]){
+    let query = [];
+    locations.forEach((location)=>{
+      query.push({order: location.LOCATION.SHIPTONO + ":" + (location.POSTOFFICE ? location.POSTOFFICE : "") + ":" + (programNumber?programNumber:"") + ":" + item.SKU +"|" + location.QUANTITY});
     });
     return query;
   }
@@ -107,9 +117,36 @@ export class OrderReviewPage implements OnInit {
     });
   }
 
-  purchaseHotDeal(){
+  purchaseHotDeal() {
 
+    let programNumber = this.hotDealItem.PROGRAM.PROGRAMNO;
+    let orderItem = this.hotDealItem.ITEM;
+
+    let productListInfo = {
+      order_method: 2,
+      order_query: this.getHotDealQuery(programNumber, orderItem,this.hotDealItem.LOCATIONS)
+    };
+
+    this.productProvider.orderHotDeal(productListInfo).then((data: any) => {
+
+      data = JSON.parse(data.d).forEach((result)=>{
+        this.confirmationNumbers.push(result.confirmation);
+      });
+      
+      let navigationParams = {
+        orderTotal: this.orderTotal,
+        orderMethod: this.orderMethod,
+        confirmationNumbers: this.confirmationNumbers
+      };
+
+      this.navigatorService.push(OrderConfirmationPage, navigationParams).catch(err => console.error(err));
+    },(rej)=>{
+      if(rej==='overflow'){
+       
+      }
+    }).catch(err => console.error(err));
   }
+  
 
   cancel() {
     this.navigatorService.pop().catch(err => console.error(err));
