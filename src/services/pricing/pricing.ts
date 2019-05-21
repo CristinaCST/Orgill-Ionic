@@ -8,7 +8,7 @@ import * as Constants from "../../util/constants";
 @Injectable()
 export class PricingService {
 
-  constructor(private popoversProvider: PopoversProvider){
+  constructor(private popoversProvider: PopoversProvider) {
 
   }
 
@@ -17,7 +17,7 @@ export class PricingService {
    * TODO: Should make a public method out of this... Streamline the entire popover process
    * @param message Message string key or the actuall message
    */
-  private showPrompt(message: String){
+  private showPrompt(message: String) {
     let content = {
       type: Constants.PERMISSION_MODAL,
       title: Strings.GENERIC_MODAL_TITLE,
@@ -40,38 +40,37 @@ export class PricingService {
     let minQty = Math.max(1, Number(program.MINQTY));
 
     if (suggestedValue > Number(program.MAXQTY) && Number(program.MAXQTY) > 0) {
-     
-    this.showPrompt(Strings.QUANTITY_ROUNDED_MAX);
-     return Number(program.MAXQTY);
+
+      this.showPrompt(Strings.QUANTITY_ROUNDED_MAX);
+      return Number(program.MAXQTY);
     }
 
     if (!suggestedValue || suggestedValue < minQty) {
       this.showPrompt(Strings.QUANTITY_ROUNDED_MIN);
       return minQty;
     }
-    
-   
+
+
 
     if (product.QTY_ROUND_OPTION === 'X') {
       let shelfPack = Number(product.SHELF_PACK);
       if (suggestedValue > shelfPack) {
-        if (shelfPack % suggestedValue === 0) {
+        if (suggestedValue % shelfPack === 0) {
           return suggestedValue;
         } else {
           this.showPrompt(Strings.QUANTITY_X_WARNING);
           return shelfPack * Math.ceil(suggestedValue / shelfPack)
         }
       } else {
-        this.showPrompt(Strings.QUANTITY_X_WARNING);
         return shelfPack;
       }
-    }else if(product.QTY_ROUND_OPTION === 'Y'){
-      if (suggestedValue < Number(product.SHELF_PACK) && suggestedValue >= (Number(product.SHELF_PACK) * 0.7)){
-       // this.showPrompt(Strings.QUANTITY_Y_UNDER_70_PERCENT)
+    } else if (product.QTY_ROUND_OPTION === 'Y') {
+      if (suggestedValue < Number(product.SHELF_PACK) && suggestedValue >= (Number(product.SHELF_PACK) * 0.7)) {
+        // this.showPrompt(Strings.QUANTITY_Y_UNDER_70_PERCENT)
         return Number(product.SHELF_PACK);
       }
       return suggestedValue;
-    }else{
+    } else {
       return suggestedValue;
     }
   }
@@ -81,10 +80,10 @@ export class PricingService {
    * @param quantity - Quantity wanted but it needs to be pre-validated 
    * @param product - Product
    */
-  public getPrice(quantity: number, product: Product){
-    if(quantity < Number(product.SHELF_PACK) && product.QTY_ROUND_OPTION === 'Y'){
-      return Number(product.YOURCOST) * quantity + Number(product.YOURCOST) * 0.4 * quantity;
-    }else{
+  public getPrice(quantity: number, product: Product) {
+    if (quantity < Number(product.SHELF_PACK) && product.QTY_ROUND_OPTION === 'Y') {
+      return Number(product.YOURCOST) * quantity + Number(product.YOURCOST) * 0.04 * quantity;
+    } else {
       return Number(product.YOURCOST) * quantity;
     }
   }
