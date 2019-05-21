@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { NavController, ViewController,NavOptions, App} from "ionic-angular";
+import { NavController, NavOptions, App, Platform} from "ionic-angular";
 import * as Equals from "../../util/equality";
 
 
@@ -9,6 +9,8 @@ import * as Equals from "../../util/equality";
 export class NavigatorService {
     private _navController: NavController;  //Store the nav controller reference
     private pageReference: any;
+    private backButtonMainMethod: any;
+    private overrideMethod: any;
 
     private get navController() {
         return this._navController ? this._navController : this.app.getActiveNavs()[0];
@@ -18,7 +20,7 @@ export class NavigatorService {
         this._navController = value;
     }
 
-    constructor(private app: App) {
+    constructor(private app: App, private platform:Platform) {
         this.navController = this.app.getActiveNavs()[0];  //Grab it at construction
     };
 
@@ -109,5 +111,29 @@ export class NavigatorService {
             //Afterwards, pop this one without animations and return the promise as normal
             this.navController.pop({ animate: false });
         })
+    }
+
+    public initializeBackButton(method){
+        this.backButtonMainMethod = method;
+        this.platform.registerBackButtonAction(method);
+    }
+
+    public oneTimeBackButtonOverride(method){
+        this.overrideMethod = method;
+        this.platform.registerBackButtonAction(()=>{
+            method();
+            this.platform.registerBackButtonAction(this.backButtonMainMethod);
+            this.overrideMethod = undefined;
+        });
+    }
+
+    public backButtonAction(){
+        console.log("BACKBUTTONACTION");
+        if(!this.overrideMethod)
+        {this.backButtonMainMethod();}
+        else{
+            this.overrideMethod();
+            this.overrideMethod = undefined;
+        }
     }
 }

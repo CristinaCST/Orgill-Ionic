@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {NavParams} from 'ionic-angular';
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
+import { NavigatorService } from '../../services/navigator/navigator';
+import { Catalog } from '../../pages/catalog/catalog';
 
 
 @Component({
@@ -14,7 +16,7 @@ export class OrderConfirmationPage implements OnInit {
   public orderMethod;
   public confirmation;
 
-  constructor(private navParams: NavParams, private shoppingListsProvider: ShoppingListsProvider) {
+  constructor(private navParams: NavParams, private shoppingListsProvider: ShoppingListsProvider, private navigatorService: NavigatorService) {
   }
 
   ngOnInit(): void {
@@ -22,6 +24,7 @@ export class OrderConfirmationPage implements OnInit {
     this.orderTotal = this.checkValidParams('orderTotal');
     this.orderMethod = this.checkValidParams('orderMethod');
     this.getOrderConfirmation();
+    this.navigatorService.oneTimeBackButtonOverride(()=>{this.navigatorService.setRoot(Catalog)});
   }
 
   checkValidParams(type) {

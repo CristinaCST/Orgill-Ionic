@@ -17,7 +17,7 @@ export class NavbarComponent {
   }
 
   back() {
-    this.navigatorService.pop().catch(err => console.error(err));
+    this.navigatorService.backButtonAction();
   }
 
   buttonActions(type) {

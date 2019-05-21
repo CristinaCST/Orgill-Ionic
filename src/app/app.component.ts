@@ -44,7 +44,8 @@ export class MyApp {
     this.isLoading = true;
 
     this.platform.ready().then(() => {
-      this.platform.registerBackButtonAction(() => {
+
+      this.navigatorService.initializeBackButton(() => {
 
         if(LoadingService.activeLoading){
          // console.log("ACTIVE LOADING");
@@ -78,7 +79,6 @@ export class MyApp {
           this.navigatorService.pop();
         }
       });
-
       this.oneSignalService.init();
       this.networkService.listenForNetworkEvents();
       this.statusBar.styleDefault();

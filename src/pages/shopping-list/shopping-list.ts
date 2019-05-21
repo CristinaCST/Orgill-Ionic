@@ -279,7 +279,6 @@ export class ShoppingListPage {
     this.popoversProvider.show(content).subscribe(data => {
       if (data.optionSelected === "OK") {
         this.shoppingListProvider.removeShoppingList(this.shoppingList.ListID).subscribe(data => {
-          //console.log(data);
           this.events.publish('DeletedList', this.shoppingList.ListID);
           this.navigatorService.pop().catch(err => console.error(err));
         });
