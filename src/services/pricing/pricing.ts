@@ -35,7 +35,11 @@ export class PricingService {
    * @param product - The product
    * @returns Number - a validated quantity or the same if it's ok.
    */
-  public validateQuantity(suggestedValue: number, program: ItemProgram, product: Product) {
+  public validateQuantity(suggestedValue: number | string, program: ItemProgram, product: Product) {
+
+    if(typeof suggestedValue == 'string'){
+      suggestedValue = Number(suggestedValue.replace(/[^0-9]/g, ''));
+    }
 
     let minQty = Math.max(1, Number(program.MINQTY));
 

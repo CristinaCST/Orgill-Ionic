@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import * as Constants from '../../util/constants';
+import { PricingService } from '../../services/pricing/pricing';
 
 @Component({
   selector: 'shopping-list-product',
@@ -11,13 +12,13 @@ export class ShoppingListProductComponent {
   @Output() checked = new EventEmitter<any>();
   @Output() goToDetails = new EventEmitter<any>();
 
-  constructor() {
+  constructor(private pricingService: PricingService) {
   }
 
   updateCheckedItems() {
     let data = {
       status: this.shoppingListItem.isCheckedInShoppingList ? 'checkedItem' : 'uncheckedItem',
-      price: (this.shoppingListItem.item_price * this.shoppingListItem.quantity).toFixed(Constants.DECIMAL_NUMBER)
+      price: this.getRealPrice().toFixed(Constants.DECIMAL_NUMBER)
     };
     this.checked.emit(data);
   }
@@ -27,5 +28,9 @@ export class ShoppingListProductComponent {
       return;
     }
     this.goToDetails.emit(this.shoppingListItem);
+  }
+
+  getRealPrice(){
+    return this.pricingService.getPrice(this.shoppingListItem.quantity,this.shoppingListItem.product);
   }
 }

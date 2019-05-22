@@ -6,12 +6,13 @@ import {User} from "../../interfaces/models/user";
 import {LocalStorageHelper} from "../../helpers/local-storage";
 import {SearchProductRequest} from "../../interfaces/request-body/search-product";
 import { ApiProvider } from '../../providers/api/api';
+import { PricingService } from '../../services/pricing/pricing';
 
 
 @Injectable()
 export class ProductProvider {
 private readonly userToken;
-  constructor(private apiProvider: ApiProvider){
+  constructor(private apiProvider: ApiProvider, private pricingService: PricingService){
     let userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     if (userInfo) {
       this.userToken = userInfo.userToken;
@@ -27,16 +28,9 @@ private readonly userToken;
 
   }
 
+
   getItemPrice(product: Product, initialPrice: number, quantity: number): number {
-    let newPrice = 0;
-
-    if (this.isYCategoryProduct(product) && quantity < Number(product.SHELF_PACK)) {
-      newPrice = Number(initialPrice + (initialPrice * 4 / 100));
-    } else {
-      newPrice = Number(initialPrice);
-    }
-
-    return Number(newPrice.toFixed(Constants.DECIMAL_NUMBER));
+    return this.pricingService.getPrice(quantity, product);   
   }
 
 

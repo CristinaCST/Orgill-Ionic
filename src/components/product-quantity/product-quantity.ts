@@ -3,6 +3,7 @@ import {Product} from "../../interfaces/models/product";
 import {ProgramProvider} from "../../providers/program/program";
 import {ItemProgram} from "../../interfaces/models/item-program";
 import { PricingService } from '../../services/pricing/pricing';
+import { max } from 'rxjs/operators';
 
 @Component({
   selector: 'product-quantity',
@@ -25,21 +26,22 @@ export class ProductQuantityComponent implements OnInit {
   ngOnInit(): void {
     this.programProvider.getSelectedProgram().subscribe(program => {
       if (program) {
-        this.program = program;
-       this.quantity = this.validateQuantity(this.quantityFromList);
-
-
-        this.handleQuantityChange();
+        this.program = program;        
         this.productPrice = this.getDecimalPrice();
       }
     });
-
-    this.programProvider.isPackQuantity().subscribe(value => {
+    if (this.quantityFromList) {
+      this.quantity = this.validateQuantity(this.quantityFromList);
+    }
+    this.handleQuantityChange();
+    //this.quantity = this.validateQuantity(this.quantityFromList);
+    
+   /* this.programProvider.isPackQuantity().subscribe(value => {
       if (value === true && this.product) {
         this.quantity = this.quantityFromList ? this.quantityFromList : Number(this.product.SHELF_PACK);
         this.handleQuantityChange();
       }
-    });
+    });*/
   }
 
   getDecimalPrice() {
@@ -62,6 +64,8 @@ export class ProductQuantityComponent implements OnInit {
       if (this.quantity > Number(this.product.SHELF_PACK)) {
         this.setPackQuantity('REMOVE');
       }
+    } else if (this.product.QTY_ROUND_OPTION === 'Y' && this.quantity <= Number(this.product.SHELF_PACK) && this.quantity >= 0.7 * Number(this.product.SHELF_PACK)){
+      this.quantity = Math.floor(0.7 * Number(this.product.SHELF_PACK));
     }
     else {
       if (this.quantity > 1) {
@@ -96,14 +100,13 @@ export class ProductQuantityComponent implements OnInit {
 
   handleQuantityChange() {
     this.setPackQuantity("CUSTOM");
-
     this.setTotal();
     let data = {
       quantity: this.quantity,
       total: this.total,
       productPrice: this.getDecimalPrice()
     };
-   // this.quantityChange.emit(data);
+    this.quantityChange.emit(data);
   }
 
 
@@ -113,12 +116,6 @@ export class ProductQuantityComponent implements OnInit {
   }
 
   private validateQuantity(suggestedValue: number){
-    if(!suggestedValue){
-      return 1;
-    }
-    console.log(this.program);
-    console.log(this.product);
-    console.log(suggestedValue);
     return this.pricingService.validateQuantity(suggestedValue,this.program,this.product);
   }
 }
