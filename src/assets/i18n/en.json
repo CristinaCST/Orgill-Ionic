@@ -17,14 +17,14 @@
   "lost_internet_connection": "There is no internet connection. Please turn on Mobile Data or WIFI in order to use the Orgill O Zone App.",
   "request_timeout_error":"An error has occurred. Please make sure you are connected to the internet and try again.",
 
-  "loading_content_login": "Logging in...Please wait.",
-  "loading_content_programs": "Searching for programs...Please wait.",
-  "loading_content_categories": "Searching for categories...Please wait.",
-  "loading_content_products": "Searching for products...Please  wait.",
-  "loading_content_add_to_list": "Adding product to shopping list...Please  wait",
-  "loading_content_order_products": "Order in progress...Please wait",
-  "loading_content_delete_products_from_list": "Deleting products...Please wait",
-  "loading_content_customer_locations": "Retrieving shipping locations...Please wait",
+  "loading_content_login": "Logging in... \nPlease wait.",
+  "loading_content_programs": "Searching for programs... \nPlease wait.",
+  "loading_content_categories": "Searching for categories... \nPlease wait.",
+  "loading_content_products": "Searching for products... \nPlease wait.",
+  "loading_content_add_to_list": "Adding product to shopping list... \nPlease wait",
+  "loading_content_order_products": "Order in progress... \nPlease wait",
+  "loading_content_delete_products_from_list": "Deleting products... \nPlease wait",
+  "loading_content_customer_locations": "Retrieving shipping locations... \nPlease wait",
 
   "menu": "Menu",
   "menu_error_loading_programs":"Error loading programs",
@@ -86,6 +86,8 @@
   "invalid_quantity_error": "Please enter a valid quantity.",
   "Y_shelf_pack_quantity_warning": "For all Y items, if ordered quantity is more than 70% of shelf pack quantity, shelf pack quantity is automatically ordered!",
   "X_shelf_pack_quantity_warning": "X items are sold in shelf pack quantities only!",
+  "quantity_rounded_min": "Wanted quantity is under minimum required for this product.",
+  "quantity_rounded_max": "Wanted quantity exceeds maximum for this product program.",
 
   "search_hint": "Name, SKU, Orgill Item#",
   "search_invalid_input": "Please enter at least 3 characters to search",
@@ -190,6 +192,8 @@
   "application_quit_message":"Are you sure you want to quit?",
   "placeholder_mesage":"There should've been something here...",
   "hot_deal_no_location":"You must choose at least one location.",
-  "hot_deal_location_invalid":"At least one of the locations chosen is missing data"
+  "hot_deal_location_invalid":"At least one of the locations chosen is missing data",
+
+  "quantity_too_high_overflow":"The quantity introduced is too high, try a lower number"
 
 }
