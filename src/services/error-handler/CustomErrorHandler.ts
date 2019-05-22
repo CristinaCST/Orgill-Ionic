@@ -16,15 +16,19 @@ export class CustomErrorHandlerService implements IonicErrorHandler {
     let errorString = Strings.SOMETHING_WENT_WRONG;
 
     //HACK: Experimental auth error handling
+    //TODO: Connect this with constants
     if (error.error && error.error.Message) {
-      if (error.error.Message.indexOf("Authentication") > -1) {
-        console.warn("We should prompty re-authentication right now")
-        errorString = Strings.LOGIN_ERROR_REQUIRED;
-      }
       if (error.error.Message.indexOf("overflow") > -1) {
         errorString = Strings.QUANTITY_TOO_HIGH_OVERFLOW;
       }
     }
+
+    if (error.statusText) {
+      if (error.statusText.indexOf("Unauthorized") > -1) {
+        errorString = Strings.LOGIN_ERROR_REQUIRED;
+      }
+    }
+    
     let content = this.popoversProvider.setContent(Strings.DEFAULT_HTTP_ERROR, errorString);
     this.showErrorModal(content)
   }
