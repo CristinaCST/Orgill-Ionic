@@ -92,6 +92,9 @@ export class ShoppingListPage {
       this.content.resize();
     }
     else {
+      this.shoppingListItems = [];
+      this.content.resize();
+      
       this.isCustomList = !(this.shoppingList.ListType !== Constants.DEFAULT_LIST_TYPE && this.shoppingList.ListType !== Constants.MARKET_ONLY_LIST_TYPE);
       if (!this.isCustomList) {
         if(this.menuCustomButtons.map(function(d) { return d['action']; }).indexOf('deleteList') == -1) {
@@ -157,7 +160,8 @@ export class ShoppingListPage {
   checkout() {
     const params = {
       isCheckout: true,
-      list: this.shoppingList
+      list: this.shoppingList,
+      paramsEquality: false
     };
     this.navigatorService.push(ShoppingListPage, params).catch(err => console.error(err));
   }

@@ -128,7 +128,6 @@ export class NavigatorService {
     }
 
     public backButtonAction(){
-        console.log("BACKBUTTONACTION");
         if(!this.overrideMethod)
         {this.backButtonMainMethod();}
         else{
