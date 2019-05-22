@@ -46,6 +46,9 @@ export class ScannerService{
 
     public scan(shoppingList, products) {
 
+      this.navigatorService.oneTimeBackButtonOverride(() => {
+        console.log("EXITING SCANNER");
+      });
 
       if(shoppingList){
         this.shoppingList = shoppingList;
@@ -205,6 +208,8 @@ export class ScannerService{
         }
       }
 
+
+      //HACK: This method does not account for MINQTY in a program, 
       getInitialQuantity() {
         if (this.foundProduct.QTY_ROUND_OPTION === 'X')
           return Number(this.foundProduct.SHELF_PACK);
