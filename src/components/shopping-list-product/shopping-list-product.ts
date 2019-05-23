@@ -30,7 +30,10 @@ export class ShoppingListProductComponent {
     this.goToDetails.emit(this.shoppingListItem);
   }
 
+  /**
+   * Safe not to validate since there are no inputs here.
+   */
   getRealPrice(){
-    return this.pricingService.getPrice(this.shoppingListItem.quantity,this.shoppingListItem.product);
+    return Number(this.shoppingListItem.item_price*this.shoppingListItem.quantity);
   }
 }

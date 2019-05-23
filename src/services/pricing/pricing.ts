@@ -84,11 +84,11 @@ export class PricingService {
    * @param quantity - Quantity wanted but it needs to be pre-validated 
    * @param product - Product
    */
-  public getPrice(quantity: number, product: Product) {
+  public getPrice(quantity: number, product: Product, program: ItemProgram) {
     if (quantity < Number(product.SHELF_PACK) && product.QTY_ROUND_OPTION === 'Y') {
-      return Number(product.YOURCOST) * quantity + Number(product.YOURCOST) * 0.04 * quantity;
+      return Number(program.PRICE) * quantity + Number(program.PRICE) * 0.04 * quantity;
     } else {
-      return Number(product.YOURCOST) * quantity;
+      return Number(program.PRICE) * quantity;
     }
   }
 }

@@ -153,11 +153,11 @@ export class OrderReviewPage implements OnInit {
   }
 
   getTotalPrice(){
-    let price = 0;
+    /*let price = 0;
     this.hotLocations.forEach((location)=>{
       price += this.pricingService.getPrice(location.QUANTITY,this.hotDealItem.ITEM);
-    });
-    return price;
+    });*/
+    return this.orderTotal;
   }
 
 }

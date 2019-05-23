@@ -29,11 +29,11 @@ export class ProductQuantityComponent implements OnInit {
         this.program = program;        
         this.productPrice = this.getDecimalPrice();
       }
+      this.handleQuantityChange();
     });
     if (this.quantityFromList) {
       this.quantity = this.validateQuantity(this.quantityFromList);
     }
-    this.handleQuantityChange();
     //this.quantity = this.validateQuantity(this.quantityFromList);
     
    /* this.programProvider.isPackQuantity().subscribe(value => {
@@ -77,7 +77,7 @@ export class ProductQuantityComponent implements OnInit {
 
   setTotal() {
     if (this.program) {
-      this.total = this.pricingService.getPrice(this.quantity,this.product);
+      this.total = this.pricingService.getPrice(this.quantity,this.product, this.program);
     }
   }
 

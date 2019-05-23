@@ -29,9 +29,10 @@ private readonly userToken;
   }
 
 
+  /*
   getItemPrice(product: Product, initialPrice: number, quantity: number): number {
     return this.pricingService.getPrice(quantity, product);   
-  }
+  }*/
 
 
   protected isProductInList(listId: number, listsThatContainProduct: number[] ): boolean {
