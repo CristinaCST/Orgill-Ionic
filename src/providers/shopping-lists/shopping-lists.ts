@@ -94,7 +94,7 @@ export class ShoppingListsProvider {
     });
   }
 
-  getAllProductData(productList, resultsPerPage = 1){
+  getAllProductData(productList, resultsPerPage = 10){
     return new Promise((resolve,reject) =>{
       let list = [];
       let reqs = [];
@@ -106,7 +106,8 @@ export class ShoppingListsProvider {
        
         reqs.push(this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH,{
               "user_token" : this.userToken,
-              "search_string" : "'" + element.sku + "'",
+            //  "search_string" : "'" + element.sku + "'", //HACK: Somica a stricat jucaria
+              "search_string" :element.sku,
               "category_id": "",
               "program_number": element.program_no,
               "p": "1",
@@ -116,11 +117,13 @@ export class ShoppingListsProvider {
       Observable.from(reqs).concatMap(shift => shift).subscribe( resp => {
         
         let data: any;
-        data = JSON.parse(resp["d"])[0];    
-
+       // data = JSON.parse(resp["d"])[0]; HACK: Somica a stricat jukaria
+       data = JSON.parse(resp["d"]);
+       
          //HACK: Big hack for missing API + fix
-       let element = productList.filter(elem=> elem.sku == data.SKU)[0];
-       /*let element;
+     //  let element = productList.filter(elem=> elem.sku == data.SKU)[0]; //HACK: SOmica a stricat jukaria
+       
+     let element;
         let dataIndex;
         data.forEach((elem,index)=>{
           productList.forEach((prod)=>{
@@ -132,12 +135,11 @@ export class ShoppingListsProvider {
             }
           })
         })
-*/
-        //data = data[dataIndex];
+
+        data = data[dataIndex];
 
         if(!element)
           return;
-      //  let element = productList.filter(elem => elem.sku == data.SKU)[0];
 
         let shoppingListProduct: ShoppingListItem = {
           id: element.id,
