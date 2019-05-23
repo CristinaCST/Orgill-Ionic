@@ -44,8 +44,10 @@ export class ProductsPage implements OnInit, OnDestroy {
     this.loader.show();
     this.getProductSubscription = this.catalogProvider.getProducts(this.category ? this.category.CatID : '', this.programNumber, this.page).subscribe(response => {
       this.products = this.sortProducts(JSON.parse(response.d));
+      console.log("PRODUCTS NUMBER:"+this.products,this.products);
       this.loader.hide();
       this.isLoading = false;
+      this.setPaginationInfo();
     })
   }
 
@@ -74,11 +76,13 @@ export class ProductsPage implements OnInit, OnDestroy {
   onSearched($event) {
     this.loader.show();
     this.catalogProvider.search($event, this.category ? this.category.CatID : '', this.programNumber).subscribe(data => {
+      let dataFound = JSON.parse(data.d);
       const params = {
-        searchData: JSON.parse(data.d),
+        searchData: dataFound,
         programNumber: this.programNumber,
         programName: this.programName,
-        category: this.category
+        category: this.category,
+        numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
       };
       this.loader.hide();
       this.navigatorService.push(ProductsSearchPage, params, {paramsEquality:false} as NavOptions).then(
@@ -106,6 +110,6 @@ export class ProductsPage implements OnInit, OnDestroy {
     if (this.products.length) {
       this.totalNumberOfProducts = parseInt(this.products[0].TOTAL_REC_COUNT);
     }
-    this.isPaginationEnabled = this.page * Constants.SEARCH_RESULTS_PER_PAGE < this.totalNumberOfProducts;
+    this.isPaginationEnabled = this.page * Constants.PRODUCTS_PER_PAGE < this.totalNumberOfProducts;
   }
 }
