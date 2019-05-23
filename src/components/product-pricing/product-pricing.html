@@ -21,7 +21,7 @@
           </p>
         </div>
       </ion-label>
-      <ion-radio class="radio" value="{{program.PROGRAM_NO}}"
+      <ion-radio [disabled]="isInShoppingList" class="radio" value="{{program.PROGRAM_NO}}"
                  (ionSelect)="selectProgram(program)"></ion-radio>
     </ion-item>
   </ion-item-group>

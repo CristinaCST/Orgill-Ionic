@@ -8,6 +8,7 @@ import {ProgramProvider} from "../../providers/program/program";
   templateUrl: 'product-pricing.html'
 })
 export class ProductPricingComponent implements OnInit {
+  @Input() isInShoppingList: boolean = false;
   @Input() product: Product;
   @Input() productPrograms: Array<ItemProgram>;
   public selectedProgramNumber;
