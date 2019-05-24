@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { NavController, NavOptions, App, Platform} from "ionic-angular";
 import * as Equals from "../../util/equality";
+import { SessionValidatorProvider } from "../../providers/session/sessionValidator";
 
 
 
@@ -11,6 +12,7 @@ export class NavigatorService {
     private pageReference: any;
     private backButtonMainMethod: any;
     private overrideMethod: any;
+    private actionQueue = [];
 
     private get navController() {
         return this._navController ? this._navController : this.app.getActiveNavs()[0];
@@ -20,7 +22,7 @@ export class NavigatorService {
         this._navController = value;
     }
 
-    constructor(private app: App, private platform:Platform) {
+    constructor(private app: App, private platform:Platform, private sessionValidatorProvider:SessionValidatorProvider) {
         this.navController = this.app.getActiveNavs()[0];  //Grab it at construction
     };
 
@@ -34,8 +36,8 @@ export class NavigatorService {
      */
     public push(page: any, params: any = null, opts: NavOptions = null, done: any = null) {
 
-      //  console.log("navigator params:", params);
-     //   console.log("navOptions:",opts);
+        //  console.log("navigator params:", params);
+        //   console.log("navOptions:",opts);
 
         let pageName = typeof page == "string" ? page : page.name;    //Grab the page name wheter it's directly passed or the entire Page object is passed
         let equals = false;     //We will store if the current view is the same as the last one 
@@ -43,7 +45,7 @@ export class NavigatorService {
 
         if (pageName === this.navController.last().name) //If the name equals to the last we mark it 
         {
-         
+
             if (!opts || opts['paramsEquality'] === true) {
                 if (Equals.deepIsEqual(params, this.navController.last().data)) {
                     //   console.log("Parms are equal");
@@ -53,38 +55,71 @@ export class NavigatorService {
                 equals = true;
             }
         }
-      //    console.log("LASTPAGENAME: " + this.navController.last().name);
-      //   console.log('CURRENTPAGENAME: '+ pageName);
 
-       //    console.log("-----New params: " + JSON.stringify(params));
-      //      console.log("-----Last params: " + JSON.stringify(this.navController.last().data));
-        
+        console.log("MANAGED PUSH");
 
-        //If indeed the last view is the current one
-        if (equals) {
+        return new Promise((resolve, reject)=>{
 
-            //Check if navOptions are set, if not create an empty object
-            if (!opts) {
-                opts = {};
+            //If indeed the last view is the current one
+            if (equals) {
+
+                //Check if navOptions are set, if not create an empty object
+                if (!opts) {
+                    opts = {};
+                }
+
+                opts.animate = false; //Set animate to false so we don't get animations on our "refresh"
+
+
+
+                const processNav = () => {
+                    console.log("PROCESSINGNAV")
+                    //Insert this page without animations in the stack before this one with the exact same properties
+                    //console.log("NEW PAGE:",page);
+                    this.navController.insert(this.navController.getViews().length - 1, page, params ? params : null, opts ? opts : null, done ? done : null);
+
+                    //Afterwards, pop this one without animations and return the promise as normal
+                    resolve(this.navController.pop({ animate: false }));
+                }
+
+                if (this.sessionValidatorProvider.isValidSession()) {
+                    console.log("VALID SESSION");
+                    processNav();
+                } else {
+                    console.log("INVALID SESION");
+                    resolve(this.actionQueue.push(processNav));
+                }
+
+            } else {
+                //   console.log("Not equals so=>");
+                //If the view is different just proceed to push
+
+                this.pageReference = page;
+                const processNav = () => {
+                    console.log("PROCESS")
+                    resolve(this.navController.push(page, params ? params : null, opts ? opts : null, done ? done : null));
+                }
+
+                if (this.sessionValidatorProvider.isValidSession()) {
+                    console.log("VALID SESSION");
+                    processNav();
+                } else {
+                    console.log("INVALID SESION");
+                    resolve(this.actionQueue.push(processNav));
+                }
             }
-
-            opts.animate = false; //Set animate to false so we don't get animations on our "refresh"
-
-            //Insert this page without animations in the stack before this one with the exact same properties
-            //console.log("NEW PAGE:",page);
-            this.navController.insert(this.navController.getViews().length - 1, page, params ? params : null, opts ? opts : null, done ? done : null);
-            
-            //Afterwards, pop this one without animations and return the promise as normal
-            return this.navController.pop({ animate: false });
-        } else {
-         //   console.log("Not equals so=>");
-            //If the view is different just proceed to push
-            this.pageReference = page;
-            return this.navController.push(page, params ? params : null, opts ? opts : null, done ? done : null);
-        }
+        });
 
 
     };
+
+
+    public executeQueue(){
+        console.log("EXECUTE QUEUE")
+        this.actionQueue.forEach((action)=>{
+            action();
+        });
+    }
 
     public pop(opts: NavOptions = null, done: any = null) {
         return this.navController.pop(opts ? opts : null, done ? done : null);
@@ -95,6 +130,7 @@ export class NavigatorService {
        /* if( pageOrViewCtrl !instanceof ViewController){
             this.pageReference = pageOrViewCtrl
         }*/
+        console.log("SETRUT",pageOrViewCtrl);
         return this.navController.setRoot(pageOrViewCtrl, params ? params : null, opts ? opts : null, done ? done : null);
     }
 

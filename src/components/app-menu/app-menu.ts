@@ -20,6 +20,7 @@ import {PurchasesPage} from "../../pages/purchases/purchases";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
 import {LocalStorageHelper} from "../../helpers/local-storage";
 import { NavigatorService } from '../../services/navigator/navigator';
+import { HotDealService } from '../../services/hotdeal/hotdeal';
 
 @Component({
   selector: 'app-menu',
@@ -34,6 +35,7 @@ export class AppMenuComponent implements OnInit {
   public defaultShoppingLists: Array<ShoppingList> = [];
   public customShoppingLists: Array<ShoppingList> = [];
   public showShoppingListsMenu: boolean = false;
+  private flashDealNotification: boolean = false;
 
   @Input('rootPage') rootPage;
   @Input('menuContent') menuContent;
@@ -46,12 +48,15 @@ export class AppMenuComponent implements OnInit {
               private events: Events,
               public databaseProvider: DatabaseProvider,
               public shoppingListsProvider: ShoppingListsProvider,
-              private navigatorService: NavigatorService) {
+              private navigatorService: NavigatorService,
+              private hotDealService: HotDealService) {
   }
 
   ngOnInit(): void {
     this.getPrograms();
     this.getShoppingLists();
+    let hotDealSku = LocalStorageHelper.getFromLocalStorage('hotDealSku');
+    this.flashDealNotification = hotDealSku?true:false;
   }
 
   public logout() {
@@ -71,6 +76,12 @@ export class AppMenuComponent implements OnInit {
       }
     }
     );
+  }
+
+
+  public hotDealPage() {
+    let hotDealSku = LocalStorageHelper.getFromLocalStorage('hotDealSku');
+    if (hotDealSku) { this.hotDealService.navigateToHotDeal(hotDealSku); }
   }
 
   public goToPage(page) {

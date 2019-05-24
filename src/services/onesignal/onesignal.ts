@@ -8,6 +8,7 @@ import { Badge } from "@ionic-native/badge";
 import { Events, Platform } from 'ionic-angular';
 import { PopoversProvider } from '../../providers/popovers/popovers';
 import { Observable } from 'rxjs';
+import { SessionValidatorProvider } from '../../providers/session/sessionValidator';
 
 
 @Injectable()
@@ -26,7 +27,8 @@ export class OneSignalService {
         private hotDealService: HotDealService,   //Provider to call to navigate to hotdeals provided through a push notification
         private events: Events,     //Propagate one signal event to be used in other places
         // private platform: Platform,   //Run platform dependent code 
-        private popover: PopoversProvider,     //Needed for permission modals
+        private popover: PopoversProvider,     //Needed for permission modals,
+        private sessionValidatorService: SessionValidatorProvider
     ) { };
 
 
@@ -117,13 +119,15 @@ export class OneSignalService {
             this.debugLog("Received package:" + JSON.stringify(data), data);
         }
 
-        //Check data for existence, if there is none, then the notification is something else than a hot deal
-        if (data) {
-            if (data.notification.payload.additionalData.SKU) {  //Check if there is a SKU in the correct object format
 
+        const sku = this.extractPackageSKU(data);
+
+        //Check data for existence, if there is none, then the notification is something else than a hot deal
+        if (sku) {
                 //Send an event with the passed SKU
                 this.events.publish(Strings.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED, data.notification.payload.additionalData.SKU);
-            }
+                LocalStorageHelper.saveToLocalStorage("hotDealSku",sku);
+
         }
 
         //Manually increase badge notifications for each notification received
@@ -138,14 +142,19 @@ export class OneSignalService {
             console.log("NOTIFICATION OPENED with data: ", data);
         }
 
-        //Save the fact we begin navigating from a notification
-        LocalStorageHelper.saveToLocalStorage('fromNotification', 'true');
-
         //Process the notification
         this.checkSession(data);
 
         //Decrease the badge counter for each notification
         this.badge.decrease(1);
+    }
+
+
+    private extractPackageSKU(pckg){
+        if (pckg && pckg.notification && pckg.notification.payload && pckg.notification.payload.additionalData){
+            return pckg.notification.payload.additionalData.SKU;
+        }
+
     }
 
     /**
@@ -176,6 +185,11 @@ export class OneSignalService {
      * @param data Should be a packet from OneSignal, it can be left null to process a simple push notification without payload
      */
     private checkSession(data = null) {
+
+   /*     if(!this.sessionValidatorService.isValidSession()){
+            return;
+        }*/
+
 
         if (data) {
             if (data.notification.payload.additionalData.SKU) {

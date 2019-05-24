@@ -39,7 +39,7 @@ export class Login {
     this.authProvider.login(loginRequest).subscribe(
       () => {
         this.authProvider.getUserInfo().then(() => {
-          this.navigatorService.setRoot(Catalog).catch(err => console.error(err));
+          this.navigatorService.setRoot(Catalog).then(()=>{this.navigatorService.executeQueue();}).catch(err => console.error(err));
           this.loginLoader.hide();
         });
       }, error => {

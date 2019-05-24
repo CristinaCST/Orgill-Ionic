@@ -61,7 +61,7 @@ private readonly userToken;
     return new Promise((resolve, reject) => {
       productInfoList.user_token = this.userToken;
       try {
-        this.apiProvider.post(ConstantsUrl.URL_ORDER_FLASH_PRODUCTS, productInfoList).subscribe((response) => {
+        this.apiProvider.post(ConstantsUrl.URL_ORDER_HOT_DEAL_PRODUCTS, productInfoList).subscribe((response) => {
           if (response) {
               resolve(response);
             

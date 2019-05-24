@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import { dateTimeProvider } from '../datetime/dateTime';
 import { USER } from '../../util/constants';
-import { NavigatorService } from '../../services/navigator/navigator';
 import { Login } from '../../pages/login/login';
+import { Events } from 'ionic-angular';
+import * as Constants from '../../util/constants';
 
 @Injectable()
 export class SessionValidatorProvider{
-    constructor(private navigatorService:NavigatorService){
+    constructor( private events:Events){
     }
 
     isValidSession(): boolean {
@@ -23,8 +24,7 @@ export class SessionValidatorProvider{
        let status = sessionTimestampWith4Days.isSameOrAfter(now);
        if(!status){
          LocalStorageHelper.saveToLocalStorage(USER, "");
-         this.navigatorService.setRoot(Login);
-
+         // this.events.publish(Constants.EVENT_LOGIN_EXPIRED);
        }
         return status;
       }

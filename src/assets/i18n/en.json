@@ -194,6 +194,7 @@
   "hot_deal_no_location":"You must choose at least one location.",
   "hot_deal_location_invalid":"At least one of the locations chosen is missing data",
 
-  "quantity_too_high_overflow":"The quantity introduced is too high, try a lower number"
+  "quantity_too_high_overflow":"The quantity introduced is too high, try a lower number",
+  "menu_hot_deal_button":"Hot Deal"
 
 }
