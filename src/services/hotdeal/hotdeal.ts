@@ -10,45 +10,79 @@ import { DatabaseProvider } from "../../providers/database/database";
 
 @Injectable()
 export class HotDealService {
-  private readonly userToken;
+  private userToken;
 
   constructor(private apiProvider: ApiProvider,
     private app: App,
     private navigatorService: NavigatorService,
     private databaseProvider: DatabaseProvider) {
-    let userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(USER));
-    if (userInfo) {
-      this.userToken = userInfo.userToken;
+
+      this.getUserInfo();
+   
+  }
+
+
+  private getUserInfo(){
+    let userToken = LocalStorageHelper.getFromLocalStorage(USER);
+    if (userToken) {
+      console.log("USER TOKEN:" , userToken);
+      let userInfo = JSON.parse(userToken);
+      if (userInfo) {
+        console.log("USER INFO:" + userInfo);
+        this.userToken = userInfo.userToken;
+      }
     }
   }
 
   private getHotDealsProduct(sku = '') {
 
+    /*
     let params = {
-        user_token: this.userToken,
-        search_string: sku,
-        category_id: '',
-        program_number: '',
-        p: '',
-        rpp: ''
+      'user_token': this.userToken,
+      'sku': sku
     };
 
+    return this.apiProvider.post(ConstantsUrl.GET_HOTDEALS_PRODUCT, params);*/
+    //HACK: Replacement for not working backend
+
+    if (!this.userToken) {
+      this.getUserInfo();
+    }
+    const params = {
+      'user_token': this.userToken,
+      'division': "",
+      'price_type': "",
+      'search_string': "'"+ sku + "'",
+      'category_id': '-1',
+      'program_number': "",
+      'p': '1',
+      'rpp': '1',
+      'last_modified': ''
+    };
+
+    //console.log("SEARCH PROD params object",params);
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params);
   }
 
   navigateToHotDeal(sku = '') {
-   this.getHotDealsProduct(sku).subscribe((receivedResponse)=>{
-    let responseData = JSON.parse(receivedResponse.d);
-    let foundProducts = responseData;
-    foundProducts.filter(item => item.SKU === sku);
-    let hotDeal = {
-        isHotDeal: true,
-        SKU: sku,
-        product: foundProducts[0]
-    };
+    console.log("NAVIGATE CALLED");
+    this.getHotDealsProduct(sku).subscribe((receivedResponse) => {
+      let responseData = JSON.parse(receivedResponse.d);
+      console.log("RECEIVED RESP:",receivedResponse);
+      let foundProducts = responseData;
+      console.log("FOUNJDPRODUCTS:",foundProducts);
+      if (foundProducts.length>0) {
+        console.log("PRODUCT IS OK");
+        foundProducts.filter(item => item.SKU === sku);
+        let hotDeal = {
+          isHotDeal: true,
+          SKU: sku,
+          product: foundProducts[0]
+        };
 
-    this.navigatorService.push(ProductPage, hotDeal).catch(err => console.error(err));
-   });
+        this.navigatorService.push(ProductPage, hotDeal).catch(err => console.error(err));
+      }
+    });
     
   }
 /*

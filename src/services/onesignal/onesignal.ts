@@ -8,7 +8,7 @@ import { Badge } from "@ionic-native/badge";
 import { Events, Platform } from 'ionic-angular';
 import { PopoversProvider } from '../../providers/popovers/popovers';
 import { Observable } from 'rxjs';
-import { SessionValidatorProvider } from '../../providers/session/sessionValidator';
+import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 
 
 @Injectable()
@@ -28,7 +28,7 @@ export class OneSignalService {
         private events: Events,     //Propagate one signal event to be used in other places
         // private platform: Platform,   //Run platform dependent code 
         private popover: PopoversProvider,     //Needed for permission modals,
-        private sessionValidatorService: SessionValidatorProvider
+        private secureActions:SecureActionsService
     ) { };
 
 
@@ -166,7 +166,7 @@ export class OneSignalService {
          * HACK: FAKE SKU for testing
         */
         try {
-            this.notificationOpened({
+            this.notificationReceived({
                 notification: {
                     payload: {
                         additionalData: { SKU: "4444444" }
@@ -197,7 +197,12 @@ export class OneSignalService {
                 //If the payload is valid, try to navigate to it, if not, log the error if logging is on
                 try {
                     // console.log("DAFUQ");
+                    console.log("SETTING UP ONESIGNAL ACTION");
+                   // console.log("SESSION VALIDITY:")
+                    this.secureActions.do(() => {
+                        console.log("ONESIGNAL ACTION");
                     this.hotDealService.navigateToHotDeal(data.notification.payload.additionalData.SKU);
+                    });
                 } catch (exception) {
                     this.debugLog("Couldn't navigate to hot deal because " + exception, data);
 

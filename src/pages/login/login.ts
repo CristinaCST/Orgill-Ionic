@@ -7,6 +7,7 @@ import {TranslateProvider} from "../../providers/translate/translate";
 import {PopoversProvider} from "../../providers/popovers/popovers";
 import {Catalog} from "../catalog/catalog";
 import { NavigatorService } from '../../services/navigator/navigator';
+import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 
 
 @Component({
@@ -24,7 +25,8 @@ export class Login {
               private authProvider: AuthProvider,
               private loadingService: LoadingService,
               private translateProvider: TranslateProvider,
-              private popoversProvider: PopoversProvider) {
+              private popoversProvider: PopoversProvider,
+              private secureActions: SecureActionsService) {
 
                 this.loginLoader = this.loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_LOGIN));
   }
@@ -39,7 +41,7 @@ export class Login {
     this.authProvider.login(loginRequest).subscribe(
       () => {
         this.authProvider.getUserInfo().then(() => {
-          this.navigatorService.setRoot(Catalog).then(()=>{this.navigatorService.executeQueue();}).catch(err => console.error(err));
+          this.navigatorService.setRoot(Catalog).then(()=>{this.secureActions.executeQueue();}).catch(err => console.error(err));
           this.loginLoader.hide();
         });
       }, error => {

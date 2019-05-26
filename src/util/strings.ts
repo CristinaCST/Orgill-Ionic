@@ -208,3 +208,5 @@ export const PRICE_HAS_PENALTY = 'price_has_penalty';
 
 
 export const QUANTITY_TOO_HIGH_OVERFLOW = 'quantity_too_high_overflow';
+
+export const FOUR_PERCENT_NOTE = 'four_percent_note';

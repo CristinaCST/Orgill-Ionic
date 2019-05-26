@@ -7,7 +7,6 @@ import 'rxjs/add/operator/map';
 import {LocalStorageHelper} from "../../helpers/local-storage";
 import * as Constants from "../../util/constants";
 import {User} from "../../interfaces/models/user";
-import { NavigatorService } from '../../services/navigator/navigator';
 
 @Injectable()
 export class AuthProvider {

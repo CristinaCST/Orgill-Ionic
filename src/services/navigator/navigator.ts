@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { NavController, NavOptions, App, Platform} from "ionic-angular";
 import * as Equals from "../../util/equality";
-import { SessionValidatorProvider } from "../../providers/session/sessionValidator";
+import { SecureActionsService } from "../../services/secure-actions/secure-actions";
 
 
 
@@ -12,7 +12,6 @@ export class NavigatorService {
     private pageReference: any;
     private backButtonMainMethod: any;
     private overrideMethod: any;
-    private actionQueue = [];
 
     private get navController() {
         return this._navController ? this._navController : this.app.getActiveNavs()[0];
@@ -22,7 +21,7 @@ export class NavigatorService {
         this._navController = value;
     }
 
-    constructor(private app: App, private platform:Platform, private sessionValidatorProvider:SessionValidatorProvider) {
+    constructor(private app: App, private platform:Platform, private secureActions: SecureActionsService) {
         this.navController = this.app.getActiveNavs()[0];  //Grab it at construction
     };
 
@@ -34,7 +33,7 @@ export class NavigatorService {
      * @param done TransitionDoneFn
      * @param paramEquality Default value true. Should we check for param equality when we check pages?
      */
-    public push(page: any, params: any = null, opts: NavOptions = null, done: any = null) {
+    public push(page: any, params: any = undefined, opts: NavOptions = undefined, done: any = undefined) {
 
         //  console.log("navigator params:", params);
         //   console.log("navOptions:",opts);
@@ -56,9 +55,6 @@ export class NavigatorService {
             }
         }
 
-        console.log("MANAGED PUSH");
-
-        return new Promise((resolve, reject)=>{
 
             //If indeed the last view is the current one
             if (equals) {
@@ -72,66 +68,42 @@ export class NavigatorService {
 
 
 
-                const processNav = () => {
-                    console.log("PROCESSINGNAV")
+                return this.secureActions.do(() => {
+                    console.log("NAV POP SECURE");
                     //Insert this page without animations in the stack before this one with the exact same properties
                     //console.log("NEW PAGE:",page);
-                    this.navController.insert(this.navController.getViews().length - 1, page, params ? params : null, opts ? opts : null, done ? done : null);
+                    this.navController.insert(this.navController.getViews().length - 1, page, params, opts, done);
 
                     //Afterwards, pop this one without animations and return the promise as normal
-                    resolve(this.navController.pop({ animate: false }));
-                }
-
-                if (this.sessionValidatorProvider.isValidSession()) {
-                    console.log("VALID SESSION");
-                    processNav();
-                } else {
-                    console.log("INVALID SESION");
-                    resolve(this.actionQueue.push(processNav));
-                }
+                    return this.navController.pop({ animate: false });
+                });
 
             } else {
                 //   console.log("Not equals so=>");
                 //If the view is different just proceed to push
 
                 this.pageReference = page;
-                const processNav = () => {
-                    console.log("PROCESS")
-                    resolve(this.navController.push(page, params ? params : null, opts ? opts : null, done ? done : null));
-                }
-
-                if (this.sessionValidatorProvider.isValidSession()) {
-                    console.log("VALID SESSION");
-                    processNav();
-                } else {
-                    console.log("INVALID SESION");
-                    resolve(this.actionQueue.push(processNav));
-                }
+                return this.secureActions.do(() => {
+                    console.log("NAV PUSH SECURE");
+                    return this.navController.push(page, params, opts, done);
+                });
             }
-        });
+        
 
 
     };
 
-
-    public executeQueue(){
-        console.log("EXECUTE QUEUE")
-        this.actionQueue.forEach((action)=>{
-            action();
-        });
+    public pop(opts: NavOptions = undefined, done: any = undefined) {
+        return this.navController.pop(opts, done);
     }
 
-    public pop(opts: NavOptions = null, done: any = null) {
-        return this.navController.pop(opts ? opts : null, done ? done : null);
-    }
-
-    public setRoot(pageOrViewCtrl: any, params: any = null, opts: NavOptions = null, done:  any = null) {
+    public setRoot(pageOrViewCtrl: any, params: any = undefined, opts: NavOptions = undefined, done:  any = undefined) {
         //TODO: Check what's happening to reference after setroot!
        /* if( pageOrViewCtrl !instanceof ViewController){
             this.pageReference = pageOrViewCtrl
         }*/
-        console.log("SETRUT",pageOrViewCtrl);
-        return this.navController.setRoot(pageOrViewCtrl, params ? params : null, opts ? opts : null, done ? done : null);
+        console.log("ROOT CALLED:");
+        return this.navController.setRoot(pageOrViewCtrl, params, opts, done);
     }
 
     public getNav() {
@@ -142,7 +114,7 @@ export class NavigatorService {
         let params = this.navController.getActive().getNavParams();
         let opts = {animate:false};
            //Insert this page without animations in the stack before this one with the exact same properties
-          this.navController.insert(this.navController.getViews().length - 1, this.pageReference, params ? params : null, opts ? opts : null, null).then(() => {
+          this.navController.insert(this.navController.getViews().length - 1, this.pageReference, params, opts, undefined).then(() => {
 
             //Afterwards, pop this one without animations and return the promise as normal
             this.navController.pop({ animate: false });

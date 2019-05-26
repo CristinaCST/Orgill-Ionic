@@ -43,6 +43,7 @@ import { NavigatorService } from '../services/navigator/navigator';
 import { LoadingService } from '../services/loading/loading';
 import { ScannerService } from '../services/scanner/scanner';
 import { PricingService } from '../services/pricing/pricing';
+import {SecureActionsService } from '../services/secure-actions/secure-actions';
 
 //Pages
 import {MyApp} from './app.component';
@@ -136,6 +137,7 @@ const errorHandler = environment.production ? CustomErrorHandlerService : IonicE
     NavigatorService,
     ScannerService,
     PricingService,
+    SecureActionsService,
     {provide: ErrorHandler, useClass: CustomErrorHandlerService}
   ]
 })

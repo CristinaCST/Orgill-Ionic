@@ -155,7 +155,7 @@
   "order_review_location": "Location",
   "order_review_ship_to": "Ship To",
   "order_review_details": "Shipment Details",
-  "order_review_note": "Note: All Y items carry a 4% up charge when purchased in less than Shelf Pack Quantities.",
+  "four_percent_note": "Note: All Y items carry a 4% up charge when purchased in less than Shelf Pack Quantities.",
   "order_review_purchase": "Purchase",
   "order_confirmation": "Order Confirmation",
   "order_confirmation_message_status": "Success!",
