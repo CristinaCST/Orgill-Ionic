@@ -3,7 +3,7 @@ import moment from 'moment';
 
 
 @Injectable()
-export class dateTimeProvider {
+export class dateTimeService {
 
   static formatWithTime = 'MM/DD/YYYY hh:mm:ss';
   static formatWithMonthYearDay = 'MM/DD/YYYY';
@@ -25,7 +25,7 @@ export class dateTimeProvider {
   }
 
   static getTimeAfter4Days(date: string) {
-    return moment(date, dateTimeProvider.formatWithTime).add(4, 'days');
+    return moment(date, dateTimeService.formatWithTime).add(4, 'days');
   }
 
 }

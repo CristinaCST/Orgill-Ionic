@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
-import { SessionValidatorProvider } from "../../providers/session/sessionValidator";
+import { SessionValidatorService } from "../session/sessionValidator";
 
 
 @Injectable()
 export class SecureActionsService {
   private actionQueue = [];
 
-  constructor(private sessionValidatorProvider: SessionValidatorProvider) { }
+  constructor(private sessionValidatorProvider: SessionValidatorService) { }
 
   public do(action) {
     if (this.sessionValidatorProvider.isValidSession()) {

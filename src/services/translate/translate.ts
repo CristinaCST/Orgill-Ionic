@@ -3,7 +3,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {DEBUG_TRANSLATIONS} from "../../util/constants";
 
 @Injectable()
-export class TranslateProvider {
+export class TranslateWrapperService {
 
   constructor(private translateService: TranslateService) {
   }

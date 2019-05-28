@@ -21,18 +21,18 @@ import {environment} from '@app/env';
 import {ComponentsModule} from "../components/components.module";
 
 //Providers
-import { ApiProvider } from "../providers/api/api";
+import { ApiService } from "../services/api/api";
 import { CatalogsProvider } from '../providers/catalogs/catalogs';
 import { DatabaseProvider } from '../providers/database/database';
-import { TranslateProvider } from '../providers/translate/translate';
-import { PopoversProvider } from "../providers/popovers/popovers";
+import { TranslateWrapperService } from '../services/translate/translate';
+import { PopoversService } from "../services/popovers/popovers";
 import { ShoppingListsProvider } from '../providers/shopping-lists/shopping-lists';
 import { ProgramProvider } from '../providers/program/program';
-import { AuthProvider } from "../providers/auth/auth";
+import { AuthService } from "../services/auth/auth";
 import { ProductProvider } from "../providers/product/product";
-import { UserInfoProvider } from '../providers/user-info/user-info';
+import { UserInfoService } from '../services/user-info/user-info';
 import { PurchasesProvider } from '../providers/purchases/purchases';
-import { SessionValidatorProvider } from '../providers/session/sessionValidator';
+import { SessionValidatorService } from '../services/session/sessionValidator';
 
 
 //Services
@@ -115,21 +115,21 @@ const errorHandler = environment.production ? CustomErrorHandlerService : IonicE
     SQLitePorter,
     SQLite,
     Network,
-    AuthProvider,
-    ApiProvider,
+    AuthService,
+    ApiService,
     LoadingService,
-    TranslateProvider,
-    PopoversProvider,
+    TranslateWrapperService,
+    PopoversService,
     CatalogsProvider,
     DatabaseProvider,
     ProgramProvider,
     ShoppingListsProvider,
     BarcodeScanner,
     ProductProvider,
-    UserInfoProvider,
+    UserInfoService,
     PurchasesProvider,
     NetworkService,
-    SessionValidatorProvider,
+    SessionValidatorService,
     OneSignalService,
     OneSignal,
     Badge,

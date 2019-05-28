@@ -3,7 +3,7 @@ import { NavParams } from 'ionic-angular';
 import { Product } from "../../interfaces/models/product";
 import { ProgramProvider } from "../../providers/program/program";
 import { ItemProgram } from "../../interfaces/models/item-program";
-import { PopoversProvider } from "../../providers/popovers/popovers";
+import { PopoversService } from "../../services/popovers/popovers";
 import * as Constants from "../../util/constants";
 import * as Strings from "../../util/strings";
 import { AddToShoppingListPage } from "../add-to-shopping-list/add-to-shopping-list";
@@ -42,7 +42,7 @@ export class ProductPage implements OnInit {
     public navParams: NavParams,
     private loadingService: LoadingService,
     private programProvider: ProgramProvider,
-    private popoversProvider: PopoversProvider,
+    private popoversProvider: PopoversService,
     private shoppingListProvider: ShoppingListsProvider,
     private pricingService: PricingService) {
       this.loader = this.loadingService.createLoader();

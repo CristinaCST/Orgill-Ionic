@@ -3,7 +3,7 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angula
 import {ShoppingList} from "../../interfaces/models/shopping-list";
 import * as Constants from "../../util/constants";
 import * as Strings from "../../util/strings";
-import {PopoversProvider} from "../../providers/popovers/popovers";
+import {PopoversService} from "../../services/popovers/popovers";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
 import {ShoppingListPage} from "../../pages/shopping-list/shopping-list";
 import {App, Events} from "ionic-angular";
@@ -19,7 +19,7 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
   @Output() back = new EventEmitter<any>();
 
   constructor(private shoppingListsProvider: ShoppingListsProvider,
-              private popoversProvider: PopoversProvider,
+              private popoversProvider: PopoversService,
               private app: App,
               private events: Events,
               private navigatorService: NavigatorService) {

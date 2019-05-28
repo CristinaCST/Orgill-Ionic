@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
 import { ItemProgram } from "../../interfaces/models/item-program";
 import { Product } from "../../interfaces/models/product";
-import { PopoversProvider } from "../../providers/popovers/popovers";
+import { PopoversService } from "../popovers/popovers";
 import * as Strings from "../../util/strings";
 import * as Constants from "../../util/constants";
 
 @Injectable()
 export class PricingService {
 
-  constructor(private popoversProvider: PopoversProvider) {
+  constructor(private popoversProvider: PopoversService) {
 
   }
 

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Md5} from "ts-md5";
 import {LoginRequest} from "../../interfaces/request-body/login";
-import {ApiProvider} from "../api/api";
+import {ApiService} from "../api/api";
 import * as ConstantsURL from "../../util/constants-url";
 import 'rxjs/add/operator/map';
 import {LocalStorageHelper} from "../../helpers/local-storage";
@@ -9,11 +9,11 @@ import * as Constants from "../../util/constants";
 import {User} from "../../interfaces/models/user";
 
 @Injectable()
-export class AuthProvider {
+export class AuthService {
 
   private user: User = new User();
 
-  constructor(private apiProvider: ApiProvider) {
+  constructor(private apiProvider: ApiService) {
   }
 
   private static encryption(password) {
@@ -23,7 +23,7 @@ export class AuthProvider {
   login(credentials: LoginRequest) {
 
     credentials.username = credentials.username.toLowerCase();
-    credentials.password = AuthProvider.encryption(credentials.password);
+    credentials.password = AuthService.encryption(credentials.password);
 
     return this.apiProvider.post(ConstantsURL.URL_LOGIN, credentials).map(response => {
       this.user = {'userToken': JSON.parse(response.d)['User_Token']};

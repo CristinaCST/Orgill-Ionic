@@ -5,10 +5,10 @@ import * as Constants from "../../util/constants";
 import * as Strings from "../../util/strings";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
 import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
-import {PopoversProvider} from "../../providers/popovers/popovers";
+import {PopoversService} from "../../services/popovers/popovers";
 import {CustomerLocationPage} from "../customer-location/customer-location";
 import {ProductPage} from "../product/product";
-import {TranslateProvider} from "../../providers/translate/translate";
+import {TranslateWrapperService} from "../../services/translate/translate";
 import {ScannerPage} from "../scanner/scanner";
 import {LoadingService} from "../../services/loading/loading";
 import { NavigatorService } from '../../services/navigator/navigator';
@@ -38,8 +38,8 @@ export class ShoppingListPage {
   constructor(public navParams: NavParams,
               private navigatorService: NavigatorService,
               private shoppingListProvider: ShoppingListsProvider,
-              private popoversProvider: PopoversProvider,
-              private translator: TranslateProvider,
+              private popoversProvider: PopoversService,
+              private translator: TranslateWrapperService,
               private events: Events,
               private loading: LoadingService,
               private scannerService: ScannerService) {

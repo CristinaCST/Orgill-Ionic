@@ -2,13 +2,13 @@ import {Component, OnInit, ViewChildren, QueryList, ElementRef} from '@angular/c
 import { NavParams, IonicFormInput} from 'ionic-angular';
 import {CustomerLocation} from "../../interfaces/models/customer-location";
 import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
-import {UserInfoProvider} from "../../providers/user-info/user-info";
+import {UserInfoService} from "../../services/user-info/user-info";
 import {OrderReviewPage} from "../order-review/order-review";
 import { NavigatorService } from '../../services/navigator/navigator';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { LocationElement } from '../../interfaces/models/location-element';
-import { PopoversProvider } from '../../providers/popovers/popovers';
+import { PopoversService } from '../../services/popovers/popovers';
 import { PricingService } from '../../services/pricing/pricing';
 
 
@@ -40,8 +40,8 @@ export class CustomerLocationPage implements OnInit {
 
   constructor(private navigatorService: NavigatorService,
               private navParams: NavParams,
-              private userInfoProvider: UserInfoProvider,
-              private popoverProvider: PopoversProvider,
+              private userInfoProvider: UserInfoService,
+              private popoverProvider: PopoversService,
               private pricingService: PricingService) {
   }
 

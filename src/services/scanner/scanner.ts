@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { NavigatorService } from "../../services/navigator/navigator";
 import { BarcodeScanner } from "@ionic-native/barcode-scanner";
 import { LoadingService } from "../../services/loading/loading";
-import { TranslateProvider } from "../../providers/translate/translate";
+import { TranslateWrapperService } from "../translate/translate";
 import { Product } from "../../interfaces/models/product";
 import { Program } from "../../interfaces/models/program";
 import * as Constants from "../../util/constants";
@@ -10,7 +10,7 @@ import * as Strings from "../../util/strings";
 import { ProductProvider } from "../../providers/product/product"
 import { ProductPage } from "../../pages/product/product";
 import { ShoppingListsProvider } from "../../providers/shopping-lists/shopping-lists";
-import { PopoversProvider } from "../../providers/popovers/popovers";
+import { PopoversService } from "../popovers/popovers";
 import { Platform, Events} from "ionic-angular";
 
 @Injectable()
@@ -34,10 +34,10 @@ export class ScannerService{
     constructor(private navigatorService: NavigatorService,
                 private barcodeScanner: BarcodeScanner,
                 private loadingService: LoadingService,
-                private translateProvider: TranslateProvider,
+                private translateProvider: TranslateWrapperService,
                 private productProvider: ProductProvider,
                 private shoppingListProvider: ShoppingListsProvider,
-                private popoversProvider: PopoversProvider,
+                private popoversProvider: PopoversService,
                 private platform: Platform,
                 private events: Events
         ){

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {App} from "ionic-angular";
-import {PopoversProvider} from "../../providers/popovers/popovers";
+import {PopoversService} from "../../services/popovers/popovers";
 import * as Strings from "../../util/strings";
 import { NavigatorService } from '../../services/navigator/navigator';
 
@@ -17,7 +17,7 @@ export class SearchBarComponent {
   public searchString: string;
 
   constructor(private app: App,
-              private popoversProvider: PopoversProvider, private navigatorService: NavigatorService) {
+              private popoversProvider: PopoversService, private navigatorService: NavigatorService) {
   }
 
   back() {

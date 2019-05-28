@@ -6,7 +6,7 @@ import { LocalStorageHelper } from "../../helpers/local-storage";
 import { HotDealService } from '../hotdeal/hotdeal';
 import { Badge } from "@ionic-native/badge";
 import { Events, Platform } from 'ionic-angular';
-import { PopoversProvider } from '../../providers/popovers/popovers';
+import { PopoversService } from '../popovers/popovers';
 import { Observable } from 'rxjs';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 
@@ -27,7 +27,7 @@ export class OneSignalService {
         private hotDealService: HotDealService,   //Provider to call to navigate to hotdeals provided through a push notification
         private events: Events,     //Propagate one signal event to be used in other places
         // private platform: Platform,   //Run platform dependent code 
-        private popover: PopoversProvider,     //Needed for permission modals,
+        private popover: PopoversService,     //Needed for permission modals,
         private secureActions:SecureActionsService
     ) { };
 

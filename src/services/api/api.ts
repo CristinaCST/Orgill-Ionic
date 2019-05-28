@@ -6,7 +6,7 @@ import * as Constants from  "../../util/constants";
 import {Observable} from "rxjs/Observable";
 
 @Injectable()
-export class ApiProvider {
+export class ApiService {
 
   baseUrl : String;
 

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as ConstantsUrl from '../../util/constants-url'
 import { USER } from '../../util/constants'
-import { ApiProvider } from "../../providers/api/api";
+import { ApiService } from "../api/api";
 import { LocalStorageHelper } from "../../helpers/local-storage";
 import { App, NavOptions } from "ionic-angular";
 import { ProductPage } from "../../pages/product/product";
@@ -12,7 +12,7 @@ import { DatabaseProvider } from "../../providers/database/database";
 export class HotDealService {
   private userToken;
 
-  constructor(private apiProvider: ApiProvider,
+  constructor(private apiProvider: ApiService,
     private app: App,
     private navigatorService: NavigatorService,
     private databaseProvider: DatabaseProvider) {

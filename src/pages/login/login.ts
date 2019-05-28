@@ -1,10 +1,10 @@
 import {Component} from '@angular/core';
-import {AuthProvider} from "../../providers/auth/auth";
+import {AuthService} from "../../services/auth/auth";
 import * as Constants from "../../util/constants";
 import * as Strings from "../../util/strings";
 import {LoadingService} from "../../services/loading/loading";
-import {TranslateProvider} from "../../providers/translate/translate";
-import {PopoversProvider} from "../../providers/popovers/popovers";
+import {TranslateWrapperService} from "../../services/translate/translate";
+import {PopoversService} from "../../services/popovers/popovers";
 import {Catalog} from "../catalog/catalog";
 import { NavigatorService } from '../../services/navigator/navigator';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
@@ -22,10 +22,10 @@ export class Login {
   loginLoader: LoadingService;
 
   constructor(private navigatorService: NavigatorService,
-              private authProvider: AuthProvider,
+              private authProvider: AuthService,
               private loadingService: LoadingService,
-              private translateProvider: TranslateProvider,
-              private popoversProvider: PopoversProvider,
+              private translateProvider: TranslateWrapperService,
+              private popoversProvider: PopoversService,
               private secureActions: SecureActionsService) {
 
                 this.loginLoader = this.loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_LOGIN));

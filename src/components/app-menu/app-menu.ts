@@ -3,11 +3,11 @@ import {App, Events, MenuController} from "ionic-angular";
 import {Login} from "../../pages/login/login";
 import * as Constants from "../../util/constants";
 import * as Strings from '../../util/strings';
-import {AuthProvider} from "../../providers/auth/auth";
-import {PopoversProvider} from "../../providers/popovers/popovers";
+import {AuthService} from "../../services/auth/auth";
+import {PopoversService} from "../../services/popovers/popovers";
 import {AboutPage} from "../../pages/about/about";
 import {CatalogsProvider} from "../../providers/catalogs/catalogs";
-import {TranslateProvider} from "../../providers/translate/translate";
+import {TranslateWrapperService} from "../../services/translate/translate";
 import {DatabaseProvider} from "../../providers/database/database";
 import {ShoppingList} from "../../interfaces/models/shopping-list";
 
@@ -41,10 +41,10 @@ export class AppMenuComponent implements OnInit {
   @Input('menuContent') menuContent;
 
   constructor(private app: App,
-              private popoversProvider: PopoversProvider,
-              private authServiceProvider: AuthProvider,
+              private popoversProvider: PopoversService,
+              private authServiceProvider: AuthService,
               private catalogsProvider: CatalogsProvider,
-              private translateProvider: TranslateProvider,
+              private translateProvider: TranslateWrapperService,
               private events: Events,
               public databaseProvider: DatabaseProvider,
               public shoppingListsProvider: ShoppingListsProvider,

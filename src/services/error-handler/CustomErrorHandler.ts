@@ -1,5 +1,5 @@
 import {IonicErrorHandler} from "ionic-angular";
-import {PopoversProvider} from "../../providers/popovers/popovers";
+import {PopoversService} from "../popovers/popovers";
 import * as Strings from "../../util/strings";
 import {Injectable} from "@angular/core";
 import {LoadingService} from "../loading/loading";
@@ -7,7 +7,7 @@ import {LoadingService} from "../loading/loading";
 @Injectable()
 export class CustomErrorHandlerService implements IonicErrorHandler {
 
-  constructor(private popoversProvider: PopoversProvider, public loadingService: LoadingService) {
+  constructor(private popoversProvider: PopoversService, public loadingService: LoadingService) {
   }
 
   async handleError(error: any) {

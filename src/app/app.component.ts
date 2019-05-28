@@ -9,11 +9,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { DatabaseProvider } from "../providers/database/database";
 import { NetworkService } from "../services/network/network";
 import { OneSignalService } from '../services/onesignal/onesignal';
-import { SessionValidatorProvider } from '../providers/session/sessionValidator';
+import { SessionValidatorService } from '../services/session/sessionValidator';
 import { NavigatorService } from '../services/navigator/navigator';
 import * as Constants from "../util/constants";
 import * as Strings from "../util/strings";
-import { PopoversProvider } from '../providers/popovers/popovers';
+import { PopoversService } from '../services/popovers/popovers';
 import { LoadingService } from '../services/loading/loading';
 
 @Component({
@@ -32,10 +32,10 @@ export class MyApp {
     private translate: TranslateService,
     private databaseProvider: DatabaseProvider,
     private networkService: NetworkService,
-    private sessionValidatorProvider: SessionValidatorProvider,
+    private sessionValidatorProvider: SessionValidatorService,
     private oneSignalService: OneSignalService,
     private navigatorService: NavigatorService,
-    private popoverProvider: PopoversProvider) {
+    private popoverProvider: PopoversService) {
     this.setAppLanguage();
     this.initializeApp();
   }
@@ -52,9 +52,9 @@ export class MyApp {
           return;
         }
     
-        if(PopoversProvider.activeItem){
+        if(PopoversService.activeItem){
          // console.log("ACTIVE POPOVER");
-          PopoversProvider.dismissCurrent();
+          PopoversService.dismissCurrent();
           return;
         }
 

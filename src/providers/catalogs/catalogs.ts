@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {LocalStorageHelper} from "../../helpers/local-storage";
 import * as ConstantsUrl from "../../util/constants-url";
 import * as Constants from "../../util/constants";
-import {ApiProvider} from "../api/api";
+import {ApiService} from "../../services/api/api";
 import {SubcategoriesRequest} from "../../interfaces/request-body/subcategories";
 import {CategoriesRequest} from "../../interfaces/request-body/categories";
 import {ProductsRequest} from "../../interfaces/request-body/products";
@@ -14,7 +14,7 @@ export class CatalogsProvider {
 
   private readonly user;
 
-  constructor(private apiProvider: ApiProvider) {
+  constructor(private apiProvider: ApiService) {
     let userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     if (userInfo) {
       this.user = userInfo;

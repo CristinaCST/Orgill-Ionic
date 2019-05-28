@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {DatabaseProvider} from "../database/database";
 import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
-import {dateTimeProvider} from "../datetime/dateTime";
-import {ApiProvider} from "../api/api";
+import {dateTimeService} from "../../services/datetime/dateTime";
+import {ApiService} from "../../services/api/api";
 import * as ConstantsUrl from "../../util/constants-url";
 import * as Constants from "../../util/constants";
 
@@ -17,7 +17,7 @@ import { Product } from 'interfaces/models/product';
 export class ShoppingListsProvider {
   private readonly userToken;
 
-  constructor(private databaseProvider: DatabaseProvider, private apiProvider: ApiProvider) {
+  constructor(private databaseProvider: DatabaseProvider, private apiProvider: ApiService) {
     let userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     if (userInfo) {
       this.userToken = userInfo.userToken;
@@ -197,8 +197,8 @@ export class ShoppingListsProvider {
   }
 
   private isExpiredProgram(date) {
-    const now = dateTimeProvider.getCurrentDateTime();
-    const endDate = dateTimeProvider.dateInMonthDayYearFormat(date);
+    const now = dateTimeService.getCurrentDateTime();
+    const endDate = dateTimeService.dateInMonthDayYearFormat(date);
     return now.isAfter(endDate);
   }
 

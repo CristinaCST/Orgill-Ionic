@@ -6,7 +6,7 @@ import { Subject } from "rxjs/Subject";
 import { timestamp } from 'rxjs/operator/timestamp';
 
 @Injectable()
-export class PopoversProvider {
+export class PopoversService {
 
   //private close = new Subject<any>();
   private isOpened = false;
@@ -27,14 +27,14 @@ export class PopoversProvider {
     if (this.isOpened === true) {
       let aux = new Subject<any>();
       aux.next(content);
-      PopoversProvider.queue.push({ content, continuous, subject: aux});
+      PopoversService.queue.push({ content, continuous, subject: aux});
       return aux.asObservable();
     }
 
     this.isOpened = true;
 
     
-    PopoversProvider.activeItem=this;
+    PopoversService.activeItem=this;
     //console.log("SETTING THIS POPOVER", PopoversProvider.activeItem);
 
     let close;
@@ -50,7 +50,7 @@ export class PopoversProvider {
     //TODO: STandardize this
     this.popover.onDidDismiss(data => {
       this.isOpened = false;
-      PopoversProvider.activeItem=undefined;
+      PopoversService.activeItem=undefined;
       if(!data){
         data = {optionSelected:"NO"}
       }
@@ -70,19 +70,19 @@ export class PopoversProvider {
   }
 
   private nextInQueue() {
-    if (PopoversProvider.queue.length <= 0) {
+    if (PopoversService.queue.length <= 0) {
       return;
     }
 
-    PopoversProvider.queue.length;
+    PopoversService.queue.length;
 
-    let queueItem = PopoversProvider.queue.shift();
+    let queueItem = PopoversService.queue.shift();
     this.show(queueItem.content, queueItem.continuous, queueItem.subject);
   }
 
   public closeModal() {
     if (this.isOpened === true) {
-      PopoversProvider.activeItem=undefined;
+      PopoversService.activeItem=undefined;
       this.popover.dismiss();
       this.isOpened = false;
     }

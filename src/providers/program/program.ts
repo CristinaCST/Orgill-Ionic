@@ -2,7 +2,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {ItemProgram} from "../../interfaces/models/item-program";
-import {ApiProvider} from "../api/api";
+import {ApiService} from "../../services/api/api";
 import {LocalStorageHelper} from "../../helpers/local-storage";
 import * as ConstantsUrl from "../../util/constants-url";
 import * as Constants from "../../util/constants";
@@ -14,7 +14,7 @@ export class ProgramProvider {
   private selectedProgramSubject = new BehaviorSubject<any>({});
   private packQuantity = new BehaviorSubject<any>(false);
 
-  constructor(private apiProvider: ApiProvider, private databaseProvider: DatabaseProvider) {
+  constructor(private apiProvider: ApiService, private databaseProvider: DatabaseProvider) {
     let userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     if (userInfo) {
       this.userToken = userInfo.userToken;

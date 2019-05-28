@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
-import {ApiProvider} from "../api/api";
+import {ApiService} from "../api/api";
 import * as ConstantsUrl from "../../util/constants-url";
 import * as Constants from "../../util/constants";
 import {LocalStorageHelper} from "../../helpers/local-storage";
 
 @Injectable()
-export class UserInfoProvider {
+export class UserInfoService {
   private readonly userToken;
 
-  constructor(private apiProvider: ApiProvider) {
+  constructor(private apiProvider: ApiService) {
     let userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     if (userInfo) {
       this.userToken = userInfo.userToken;

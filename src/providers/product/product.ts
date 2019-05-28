@@ -5,14 +5,14 @@ import * as ConstantsUrl from "../../util/constants-url"
 import {User} from "../../interfaces/models/user";
 import {LocalStorageHelper} from "../../helpers/local-storage";
 import {SearchProductRequest} from "../../interfaces/request-body/search-product";
-import { ApiProvider } from '../../providers/api/api';
+import { ApiService } from '../../services/api/api';
 import { PricingService } from '../../services/pricing/pricing';
 
 
 @Injectable()
 export class ProductProvider {
 private readonly userToken;
-  constructor(private apiProvider: ApiProvider, private pricingService: PricingService){
+  constructor(private apiProvider: ApiService, private pricingService: PricingService){
     let userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     if (userInfo) {
       this.userToken = userInfo.userToken;

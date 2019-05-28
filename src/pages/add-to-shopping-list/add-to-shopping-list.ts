@@ -4,7 +4,7 @@ import {Product} from "../../interfaces/models/product";
 import {ItemProgram} from "../../interfaces/models/item-program";
 import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
 import {ShoppingList} from "../../interfaces/models/shopping-list";
-import {PopoversProvider} from "../../providers/popovers/popovers";
+import {PopoversService} from "../../services/popovers/popovers";
 import * as Constants from "../../util/constants";
 import * as Strings from "../../util/strings";
 import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
@@ -38,7 +38,7 @@ export class AddToShoppingListPage implements OnInit {
   constructor(public navigatorService: NavigatorService,
               public navParams: NavParams,
               private shoppingListsProvider: ShoppingListsProvider,
-              private popoversProvider: PopoversProvider,
+              private popoversProvider: PopoversService,
               private formBuilder: FormBuilder,
               private loadingService: LoadingService,
               private programProvider: ProgramProvider) {

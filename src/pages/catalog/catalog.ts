@@ -9,7 +9,7 @@ import {CatalogsProvider} from "../../providers/catalogs/catalogs";
 import {SubcategoriesRequest} from "../../interfaces/request-body/subcategories";
 import {ProductsPage} from "../products/products";
 import {LoadingService} from "../../services/loading/loading";
-import {TranslateProvider} from "../../providers/translate/translate";
+import {TranslateWrapperService} from "../../services/translate/translate";
 import {ProductsSearchPage} from "../products-search/products-search";
 import {ScannerPage} from "../scanner/scanner";
 import { NavigatorService } from '../../services/navigator/navigator';
@@ -32,7 +32,7 @@ export class Catalog implements OnInit {
   simpleLoader: LoadingService;
 
   constructor(public navigatorService: NavigatorService, public navParams: NavParams, public catalogProvider: CatalogsProvider,
-              public loadingService: LoadingService, public translateProvider: TranslateProvider) {
+              public loadingService: LoadingService, public translateProvider: TranslateWrapperService) {
     this.menuCustomButtons.push({action: 'scan', icon: 'barcode'});
 
     this.categoriesLoader = loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_CATEGORIES));
