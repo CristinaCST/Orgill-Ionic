@@ -35,6 +35,6 @@ export const CHECK_PRODUCT_SHOPPING_LISTS ="check_product_in_shopping_lists";
 export const CHECK_PRODUCT_SHOPPING_LIST ="check_product_in_shopping_list";
 
 export const URL_ORDER_HOT_DEAL_PRODUCTS = "order_flashproducts";
-
+export const PRODUCT_IMAGE_BASE_URL = 'http://images.orgill.com/200x200/';
 
 

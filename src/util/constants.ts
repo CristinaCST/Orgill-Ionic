@@ -47,8 +47,6 @@ export const POPOVER_LOGOUT = 'popoverLogout';
 export const POPOVER_ERROR = 'popoverError';
 export const POPOVER_QUIT = 'popoverQuit';
 export const POPOVER_INFO = 'popoverInfo';
-
-//TODO: Move this?
 export const POPOVER_CAMERA_PERMISSION_NOT_GRANTED = 'popoverNoCameraPerm';
 
 /**
@@ -164,6 +162,9 @@ export const DEBUG_NO_LOCATIONS = false;
 
 
 export const PERMISSION_MODAL = "permissionModal";
+
+//TODO: Move this
+export const LOCAL_PRODUCT_IMAGE_PLACEHOLDER = '../../assets/imgs/product_placeholder.png';
 
 //DEBUG
 

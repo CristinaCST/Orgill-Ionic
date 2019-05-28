@@ -2,6 +2,8 @@ import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import {Product} from "../../interfaces/models/product";
 import {ProductDescriptionPage} from "../../pages/product-description/product-description";
 import { NavController } from 'ionic-angular';
+import * as Constants from '../../util/constants';
+import * as ConstantsUrl from '../../util/constants-url';
 
 @Component({
   selector: 'product-details',
@@ -21,8 +23,10 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit {
 
   //TODO: CHANEG FROM CONSTANTS
   ngOnInit(): void {
-    this.product.IMAGE = this.product.IMAGE === '0000000.jpg' ? '../../assets/imgs/product_placeholder.png' :
-      'http://images.orgill.com/200x200/' + this.product.SKU + '.JPG';
+   
+    
+    this.product.IMAGE = this.product.IMAGE === '0000000.jpg' ? Constants.LOCAL_PRODUCT_IMAGE_PLACEHOLDER :
+      ConstantsUrl.PRODUCT_IMAGE_BASE_URL + this.product.SKU + '.JPG';
   }
 
   loadImage() {
