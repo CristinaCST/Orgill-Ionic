@@ -4,15 +4,15 @@ import { App, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Catalog } from '../pages/catalog/catalog';
-import { Login } from "../pages/login/login";
+import { Login } from '../pages/login/login';
 import { TranslateService } from '@ngx-translate/core';
-import { DatabaseProvider } from "../providers/database/database";
-import { NetworkService } from "../services/network/network";
+import { DatabaseProvider } from '../providers/database/database';
+import { NetworkService } from '../services/network/network';
 import { OneSignalService } from '../services/onesignal/onesignal';
 import { SessionValidatorService } from '../services/session/sessionValidator';
 import { NavigatorService } from '../services/navigator/navigator';
-import * as Constants from "../util/constants";
-import * as Strings from "../util/strings";
+import * as Constants from '../util/constants';
+import * as Strings from '../util/strings';
 import { PopoversService } from '../services/popovers/popovers';
 import { LoadingService } from '../services/loading/loading';
 
@@ -67,10 +67,8 @@ export class MyApp {
             positiveButtonText: Strings.MODAL_BUTTON_YES
           }
 
-
-          //TODO: Popover returns? Try to make the logic better? Instant return option
           this.popoverProvider.show(content).subscribe((result) => {
-            if (result["optionSelected"] == "OK") {
+            if (result['optionSelected'] == "OK") {
               this.platform.exitApp();
             }
           });
@@ -94,11 +92,11 @@ export class MyApp {
 
   private setAppLanguage() {
     let language = navigator.language;
-    if (language.includes("fr")) {
-      this.translate.setDefaultLang("fr");
+    if (language.includes('fr')) {
+      this.translate.setDefaultLang('fr');
     }
     else {
-      this.translate.setDefaultLang("en");
+      this.translate.setDefaultLang('en');
     }
   }
 

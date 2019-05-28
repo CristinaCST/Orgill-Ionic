@@ -4,8 +4,6 @@ import * as Equals from "../../util/equality";
 import { SecureActionsService } from "../../services/secure-actions/secure-actions";
 
 
-
-//TODO: Implement timer because API has limits!!
 @Injectable()
 export class NavigatorService {
     private _navController: NavController;  //Store the nav controller reference

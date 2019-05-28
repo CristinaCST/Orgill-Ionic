@@ -1,24 +1,24 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {App, Events, MenuController} from "ionic-angular";
-import {Login} from "../../pages/login/login";
-import * as Constants from "../../util/constants";
+import {App, Events, MenuController} from 'ionic-angular';
+import {Login} from '../../pages/login/login';
+import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
-import {AuthService} from "../../services/auth/auth";
-import {PopoversService} from "../../services/popovers/popovers";
-import {AboutPage} from "../../pages/about/about";
-import {CatalogsProvider} from "../../providers/catalogs/catalogs";
-import {TranslateWrapperService} from "../../services/translate/translate";
-import {DatabaseProvider} from "../../providers/database/database";
-import {ShoppingList} from "../../interfaces/models/shopping-list";
+import {AuthService} from '../../services/auth/auth';
+import {PopoversService} from '../../services/popovers/popovers';
+import {AboutPage} from '../../pages/about/about';
+import {CatalogsProvider} from '../../providers/catalogs/catalogs';
+import {TranslateWrapperService} from '../../services/translate/translate';
+import {DatabaseProvider} from '../../providers/database/database';
+import {ShoppingList} from '../../interfaces/models/shopping-list';
 
 //Pages
-import {Program} from "../../interfaces/models/program";
-import {Catalog} from "../../pages/catalog/catalog";
-import {ScannerPage} from "../../pages/scanner/scanner";
-import {ShoppingListPage} from "../../pages/shopping-list/shopping-list";
-import {PurchasesPage} from "../../pages/purchases/purchases";
-import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
-import {LocalStorageHelper} from "../../helpers/local-storage";
+import {Program} from '../../interfaces/models/program';
+import {Catalog} from '../../pages/catalog/catalog';
+import {ScannerPage} from '../../pages/scanner/scanner';
+import {ShoppingListPage} from '../../pages/shopping-list/shopping-list';
+import {PurchasesPage} from '../../pages/purchases/purchases';
+import {ShoppingListsProvider} from '../../providers/shopping-lists/shopping-lists';
+import {LocalStorageHelper} from '../../helpers/local-storage';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { HotDealService } from '../../services/hotdeal/hotdeal';
 
@@ -88,7 +88,7 @@ export class AppMenuComponent implements OnInit {
     };
 
     this.popoversProvider.show(content).subscribe((data) => {
-        if (data.optionSelected === "OK") {
+        if (data.optionSelected === 'OK') {
           // this.authServiceProvider.logoutDeleteData();
           this.authServiceProvider.logout();
           this.navigatorService.getNav().setRoot(Login).catch(err => console.error(err));
@@ -170,11 +170,11 @@ export class AppMenuComponent implements OnInit {
   addProgramsToDB(programs) {
     let regularProgram = {
       NAME: this.translateProvider.translate(Strings.REGULAR_CATALOG).toUpperCase(),
-      PROGRAMNO: "",
-      MARKETONLY: "N",
-      STARTDATE: "01/01/2014",
-      ENDDATE: "01/01/2024",
-      SHIPDATE: "01/01/2014",
+      PROGRAMNO: '',
+      MARKETONLY: 'N',
+      STARTDATE: '01/01/2014',
+      ENDDATE: '01/01/2024',
+      SHIPDATE: '01/01/2014',
     };
     programs.unshift(regularProgram);
     this.databaseProvider.addPrograms(programs);

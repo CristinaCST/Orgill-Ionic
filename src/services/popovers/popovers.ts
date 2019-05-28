@@ -46,8 +46,6 @@ export class PopoversService {
 
     this.popover = this.popoverController.create(PopoverComponent, content);
 
-
-    //TODO: STandardize this
     this.popover.onDidDismiss(data => {
       this.isOpened = false;
       PopoversService.activeItem=undefined;
