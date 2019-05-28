@@ -27,11 +27,13 @@ export class ShoppingListPage {
   public isCustomList: boolean = false;
   public orderTotal: number = 0;
   public isCheckout: boolean = false;
+  private isDeleteMode: boolean = false;
   public isSelectAll: boolean = false;
   public nrOfSelectedItems: number = 0;
   public menuCustomButtons = [];
   private alreadyLoading: boolean = false;
   private loader: LoadingService;
+  private holdTimeoutReference;
 
   constructor(public navParams: NavParams,
               private navigatorService: NavigatorService,
@@ -296,5 +298,27 @@ export class ShoppingListPage {
     }).catch(()=>{
       $event.complete();
     });
+  }
+
+  touchstart(){
+    this.holdTimeoutReference = setTimeout(()=>{
+      this.isDeleteMode = true;
+      this.navigatorService.oneTimeBackButtonOverride(()=>{
+        this.isDeleteMode = false;
+      });
+    },600)
+
+  }
+
+  touchend(){
+    clearTimeout(this.holdTimeoutReference);
+  }
+
+  scrollStart(){
+    this.touchend();
+  }
+
+  scrollEnd(){
+   // this.isScrolling = false;
   }
 }
