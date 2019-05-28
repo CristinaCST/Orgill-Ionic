@@ -10,8 +10,8 @@ import { SecureActionsService } from "../../services/secure-actions/secure-actio
 export class NavigatorService {
     private _navController: NavController;  //Store the nav controller reference
     private pageReference: any;
-    private backButtonMainMethod: any;
-    private overrideMethod: any;
+    private backButtonMainFunc: any;
+    private overrideFunc: any;
 
     private get navController() {
         return this._navController ? this._navController : this.app.getActiveNavs()[0];
@@ -121,26 +121,42 @@ export class NavigatorService {
         })
     }
 
-    public initializeBackButton(method){
-        this.backButtonMainMethod = method;
-        this.platform.registerBackButtonAction(method);
+    public initializeBackButton(func){
+        this.backButtonMainFunc = func;
+        this.platform.registerBackButtonAction(func);
     }
 
-    public oneTimeBackButtonOverride(method){
-        this.overrideMethod = method;
+    /**
+     * One time override for the backbutton
+     * @param func Pass a function to be executed once instead of the standard backbutton function
+     */
+    public oneTimeBackButtonOverride(func){
+        this.overrideFunc = func;
         this.platform.registerBackButtonAction(()=>{
-            method();
-            this.platform.registerBackButtonAction(this.backButtonMainMethod);
-            this.overrideMethod = undefined;
+            func();
+            this.platform.registerBackButtonAction(this.backButtonMainFunc);
+            this.overrideFunc = undefined;
         });
     }
 
-    public backButtonAction(){
-        if(!this.overrideMethod)
-        {this.backButtonMainMethod();}
-        else{
-            this.overrideMethod();
-            this.overrideMethod = undefined;
+
+    /**
+     * Remove the current override of the backbutton
+     */
+    public removeOverride(){
+        this.platform.registerBackButtonAction(this.backButtonMainFunc);
+        this.overrideFunc = undefined;
+    }
+
+    /**
+     * Call this to execute the current backbutton action manually, this will consume the override!
+     */
+    public backButtonAction() {
+        if (!this.overrideFunc) { this.backButtonMainFunc(); }
+        else {
+            this.overrideFunc();
+            this.platform.registerBackButtonAction(this.backButtonMainFunc);
+            this.overrideFunc = undefined;
         }
     }
 }

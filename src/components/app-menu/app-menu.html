@@ -1,4 +1,4 @@
-<ion-menu id="main_menu" [content]="menuContent" persistent='true'>
+<ion-menu id="main_menu" (ionOpen)="menuOpen()" (ionClose)="menuClose()"[content]="menuContent" persistent='true'>
   <!-- Menu Header-->
   <ion-header *ngIf="showShoppingListsMenu===false">
     <ion-toolbar>

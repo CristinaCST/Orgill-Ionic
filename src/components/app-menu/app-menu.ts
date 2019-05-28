@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {App, Events} from "ionic-angular";
+import {App, Events, MenuController} from "ionic-angular";
 import {Login} from "../../pages/login/login";
 import * as Constants from "../../util/constants";
 import * as Strings from '../../util/strings';
@@ -49,15 +49,34 @@ export class AppMenuComponent implements OnInit {
               public databaseProvider: DatabaseProvider,
               public shoppingListsProvider: ShoppingListsProvider,
               private navigatorService: NavigatorService,
-              private hotDealService: HotDealService) {
+              private hotDealService: HotDealService,
+              private menuCtrl: MenuController) {
   }
 
   ngOnInit(): void {
     this.getPrograms();
     this.getShoppingLists();
-    let hotDealSku = LocalStorageHelper.getFromLocalStorage('hotDealSku');
-    this.flashDealNotification = hotDealSku?true:false;
+    this.checkHotDealState();
   }
+
+  private menuOpen(){
+    this.events.subscribe(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED,this.checkHotDealState);
+    this.navigatorService.oneTimeBackButtonOverride(()=>{
+      console.log("Correct override");
+      this.menuCtrl.close('main_menu');
+    });
+  }
+
+  private menuClose(){
+    this.events.unsubscribe(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED,this.checkHotDealState);
+    this.navigatorService.removeOverride();
+  }
+
+  private checkHotDealState() {
+    let hotDealSku = LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
+    this.flashDealNotification = hotDealSku ? true : false;
+  }
+
 
   public logout() {
     let content = {
@@ -69,12 +88,12 @@ export class AppMenuComponent implements OnInit {
     };
 
     this.popoversProvider.show(content).subscribe((data) => {
-      if (data.optionSelected === "OK") {
-        // this.authServiceProvider.logoutDeleteData();
-        this.authServiceProvider.logout();
-        this.navigatorService.getNav().setRoot(Login).catch(err => console.error(err));
+        if (data.optionSelected === "OK") {
+          // this.authServiceProvider.logoutDeleteData();
+          this.authServiceProvider.logout();
+          this.navigatorService.getNav().setRoot(Login).catch(err => console.error(err));
+        }
       }
-    }
     );
   }
 
