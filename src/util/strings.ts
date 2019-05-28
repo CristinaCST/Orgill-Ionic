@@ -154,7 +154,6 @@ export const ORDER_CHECKOUT_MESSAGE = 'order_review_checkout_message';
  * Marker : HotDeals
  * =============================================================================================
  */
-export const EVENT_HOT_DEAL_NOTIFICATION_RECEIVED = "notifications_hot_deal_received";
 export const HOT_DEAL_NO_LOCATION ="hot_deal_no_location";
 export const HOT_DEAL_LOCATION_INVALID = "hot_deal_location_invalid";
 

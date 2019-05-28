@@ -23,7 +23,7 @@ export class SessionValidatorProvider{
 
        let status = sessionTimestampWith4Days.isSameOrAfter(now);
        if(!status){
-         LocalStorageHelper.saveToLocalStorage(USER, "");
+         LocalStorageHelper.removeFromLocalStorage(Constants.USER);
          // this.events.publish(Constants.EVENT_LOGIN_EXPIRED);
        }
         return status;

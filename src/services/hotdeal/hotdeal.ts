@@ -3,7 +3,7 @@ import * as ConstantsUrl from '../../util/constants-url'
 import { USER } from '../../util/constants'
 import { ApiProvider } from "../../providers/api/api";
 import { LocalStorageHelper } from "../../helpers/local-storage";
-import { App } from "ionic-angular";
+import { App, NavOptions } from "ionic-angular";
 import { ProductPage } from "../../pages/product/product";
 import { NavigatorService } from "../navigator/navigator";
 import { DatabaseProvider } from "../../providers/database/database";
@@ -65,14 +65,10 @@ export class HotDealService {
   }
 
   navigateToHotDeal(sku = '') {
-    console.log("NAVIGATE CALLED");
     this.getHotDealsProduct(sku).subscribe((receivedResponse) => {
       let responseData = JSON.parse(receivedResponse.d);
-      console.log("RECEIVED RESP:",receivedResponse);
       let foundProducts = responseData;
-      console.log("FOUNJDPRODUCTS:",foundProducts);
       if (foundProducts.length>0) {
-        console.log("PRODUCT IS OK");
         foundProducts.filter(item => item.SKU === sku);
         let hotDeal = {
           isHotDeal: true,
@@ -80,7 +76,8 @@ export class HotDealService {
           product: foundProducts[0]
         };
 
-        this.navigatorService.push(ProductPage, hotDeal).catch(err => console.error(err));
+        //HACK: To fix this error 
+        this.navigatorService.push(ProductPage, hotDeal, {paramsEquality:false} as NavOptions).catch(err => console.error(err));
       }
     });
     

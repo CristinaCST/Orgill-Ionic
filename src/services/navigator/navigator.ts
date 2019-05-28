@@ -42,11 +42,13 @@ export class NavigatorService {
         let equals = false;     //We will store if the current view is the same as the last one 
 
 
-        if (pageName === this.navController.last().name) //If the name equals to the last we mark it 
+       
+        let lastPage = this.navController.last();
+        if (lastPage && lastPage.name && pageName === lastPage.name) //If the name equals to the last we mark it 
         {
 
             if (!opts || opts['paramsEquality'] === true) {
-                if (Equals.deepIsEqual(params, this.navController.last().data)) {
+                if (Equals.deepIsEqual(params, lastPage.data)) {
                     //   console.log("Parms are equal");
                     equals = true;
                 }
@@ -68,15 +70,14 @@ export class NavigatorService {
 
 
 
-                return this.secureActions.do(() => {
-                    console.log("NAV POP SECURE");
+              //  return this.secureActions.do(() => {
                     //Insert this page without animations in the stack before this one with the exact same properties
                     //console.log("NEW PAGE:",page);
                     this.navController.insert(this.navController.getViews().length - 1, page, params, opts, done);
 
                     //Afterwards, pop this one without animations and return the promise as normal
                     return this.navController.pop({ animate: false });
-                });
+              //  });
 
             } else {
                 //   console.log("Not equals so=>");
@@ -102,7 +103,6 @@ export class NavigatorService {
        /* if( pageOrViewCtrl !instanceof ViewController){
             this.pageReference = pageOrViewCtrl
         }*/
-        console.log("ROOT CALLED:");
         return this.navController.setRoot(pageOrViewCtrl, params, opts, done);
     }
 

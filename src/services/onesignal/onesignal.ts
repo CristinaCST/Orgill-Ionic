@@ -91,10 +91,14 @@ export class OneSignalService {
         //If we don't have permission, we don't receive notifications so there is no need to subscribe
         if (this.pushNotificationPermission) {
             //What happens when a notification is received
-            this.oneSignal.handleNotificationReceived().subscribe(this.notificationReceived);
+            this.oneSignal.handleNotificationReceived().subscribe((data) => {
+                if (data && data['notification']) { this.notificationReceived(data['notification']); }
+            });
 
             //Handle the opening of a notification
-            this.oneSignal.handleNotificationOpened().subscribe(this.notificationOpened);
+            this.oneSignal.handleNotificationOpened().subscribe((data) => {
+                if (data && data['notification']) { this.notificationOpened(data['notification']);  }
+            });
         } else {
             this.debugLog("Notification permission not granted, not subscribing to one signal events.", this.pushNotificationPermission);
         }
@@ -119,19 +123,23 @@ export class OneSignalService {
             this.debugLog("Received package:" + JSON.stringify(data), data);
         }
 
+        this.registerHotDealInMenu(data);
+       
+        //Manually increase badge notifications for each notification received
+        this.badge.increase(1);
 
+    }
+
+    private registerHotDealInMenu(data){
         const sku = this.extractPackageSKU(data);
-
+        this.debugLog("Registering sku:" + sku);
         //Check data for existence, if there is none, then the notification is something else than a hot deal
         if (sku) {
                 //Send an event with the passed SKU
-                this.events.publish(Strings.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED, data.notification.payload.additionalData.SKU);
-                LocalStorageHelper.saveToLocalStorage("hotDealSku",sku);
+                this.events.publish(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED, sku);
+                LocalStorageHelper.saveToLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH,sku);
 
         }
-
-        //Manually increase badge notifications for each notification received
-        this.badge.increase(1);
 
     }
 
@@ -142,8 +150,10 @@ export class OneSignalService {
             console.log("NOTIFICATION OPENED with data: ", data);
         }
 
+        this.registerHotDealInMenu(data);
+
         //Process the notification
-        this.checkSession(data);
+        this.goToHotDeal(data);
 
         //Decrease the badge counter for each notification
         this.badge.decrease(1);
@@ -151,8 +161,8 @@ export class OneSignalService {
 
 
     private extractPackageSKU(pckg){
-        if (pckg && pckg.notification && pckg.notification.payload && pckg.notification.payload.additionalData){
-            return pckg.notification.payload.additionalData.SKU;
+        if (pckg &&  pckg.payload && pckg.payload.additionalData){
+            return pckg.payload.additionalData.SKU;
         }
 
     }
@@ -166,12 +176,10 @@ export class OneSignalService {
          * HACK: FAKE SKU for testing
         */
         try {
-            this.notificationReceived({
-                notification: {
+            this.notificationOpened({
                     payload: {
                         additionalData: { SKU: "4444444" }
                     }
-                }
             });
         } catch (err) {
             console.log(err);
@@ -184,29 +192,25 @@ export class OneSignalService {
      * 
      * @param data Should be a packet from OneSignal, it can be left null to process a simple push notification without payload
      */
-    private checkSession(data = null) {
+    private goToHotDeal(data = null) {
 
    /*     if(!this.sessionValidatorService.isValidSession()){
             return;
         }*/
 
-
+        const sku = this.extractPackageSKU(data);
+        this.debugLog("Sku in go to hotdeal:" + sku);
         if (data) {
-            if (data.notification.payload.additionalData.SKU) {
+            if (sku) {
 
-                //If the payload is valid, try to navigate to it, if not, log the error if logging is on
-                try {
-                    // console.log("DAFUQ");
-                    console.log("SETTING UP ONESIGNAL ACTION");
-                   // console.log("SESSION VALIDITY:")
-                    this.secureActions.do(() => {
-                        console.log("ONESIGNAL ACTION");
-                    this.hotDealService.navigateToHotDeal(data.notification.payload.additionalData.SKU);
-                    });
-                } catch (exception) {
-                    this.debugLog("Couldn't navigate to hot deal because " + exception, data);
+                console.log("REGISTERING SECURE ACTION")
+                // console.log("DAFUQ");
+                // console.log("SESSION VALIDITY:")
+                this.secureActions.do(() => {
+                    console.log("SECURE ACTION NAVIGATE TO HOT DEAL")
+                    this.hotDealService.navigateToHotDeal(sku);
+                });
 
-                }
 
             } else {    //If there is data but the package does not respect the hot deal structure
                 this.debugLog("ONESIGNAL package is not a hot deal but it exists...", data);

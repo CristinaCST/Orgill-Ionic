@@ -82,6 +82,8 @@ export const EVENT_NEW_SEARCH = 'newSearch';
 
 export const EVENT_GO_TO_SHOPPING_LISTS_PAGE = 'goToListsPage';
 
+export const EVENT_HOT_DEAL_NOTIFICATION_RECEIVED = "notifications_hot_deal_received";
+
 /**
 * Marker : User
 * =============================================================================================
@@ -154,6 +156,7 @@ export const ONE_SIGNAL_IOS_LAUNCH_IN_WEBVIEW = false;
 export const ONE_SIGNAL_LOCATION_PREFERENCE_PATH = 'locationSharing';
 export const ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH = 'pushNotifications';
 export const ONE_SIGNAL_VERBOSE = false; // set this to false if production
+export const ONE_SIGNAL_HOT_DEAL_SKU_PATH = 'hotDealSku';
 export const DEBUG_ONE_SIGNAL = true;
 export const DEBUG_ONE_SIGNAL_CLEAN_PREFS = false;
 export const DEBUG_NO_LOCATIONS = false;
