@@ -187,12 +187,32 @@ export class CustomerLocationPage implements OnInit {
     location.QUANTITY = this.pricingService.validateQuantity(location.QUANTITY,this.hotDealItem.PROGRAM,this.hotDealItem.ITEM) as number;
   }
 
-  private clearQuantityInput(location){
-    location.QUANTITY = "";
-  }
+  private PONumberValidation(location){
+    if(location.POSTOFFICE.length>15){
+      let content = {
+        type: Constants.POPOVER_INFO,
+        title: Strings.GENERIC_MODAL_TITLE,
+        message: Strings.PO_NUMBER_TOO_LONG,
+        positiveButtonText: Strings.MODAL_BUTTON_OK,
+      }
 
-  private clearPOInput(location){
-    location.POSTOFFICE = "";
+      this.popoverProvider.show(content);
+      location.POSTOFFICE = location.POSTOFFICE.substr(0,15);
+    }
+
+    let initialLength = location.POSTOFFICE.length;
+    location.POSTOFFICE = location.POSTOFFICE.replace(/[\W_]+/g,"");
+    if(initialLength!=location.POSTOFFICE.length){
+      let content = {
+        type: Constants.POPOVER_INFO,
+        title: Strings.GENERIC_MODAL_TITLE,
+        message: Strings.PO_ALPHANUMERIC_WARNING,
+        positiveButtonText: Strings.MODAL_BUTTON_OK,
+      }
+
+      this.popoverProvider.show(content);
+    }
+   
   }
 
 }

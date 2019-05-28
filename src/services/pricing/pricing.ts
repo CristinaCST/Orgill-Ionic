@@ -54,16 +54,14 @@ export class PricingService {
       return minQty;
     }
 
-
-
     if (product.QTY_ROUND_OPTION === 'X') {
       let shelfPack = Number(product.SHELF_PACK);
       if (suggestedValue > shelfPack) {
         if (suggestedValue % shelfPack === 0) {
-          return suggestedValue;
+          return this.maxCheck(suggestedValue);
         } else {
           this.showPrompt(Strings.QUANTITY_X_WARNING);
-          return shelfPack * Math.ceil(suggestedValue / shelfPack)
+          return this.maxCheck(shelfPack * Math.ceil(suggestedValue / shelfPack));
         }
       } else {
         return shelfPack;
@@ -73,10 +71,14 @@ export class PricingService {
         // this.showPrompt(Strings.QUANTITY_Y_UNDER_70_PERCENT)
         return Number(product.SHELF_PACK);
       }
-      return suggestedValue;
+      return this.maxCheck(suggestedValue);
     } else {
-      return suggestedValue;
+      return this.maxCheck(suggestedValue);
     }
+  }
+
+  public maxCheck(value){
+    return Math.min(value,Constants.MAX_QUANTITY_HARDCAP);
   }
 
   /**

@@ -48,6 +48,8 @@ export class ProductQuantityComponent implements OnInit {
     return parseFloat(parseFloat(this.program.PRICE).toFixed(2));
   }
 
+
+  //TODO: Make this a bit cleaner...
   add() {
     if (this.product.QTY_ROUND_OPTION === 'X') {
       this.setPackQuantity('ADD');
@@ -95,6 +97,8 @@ export class ProductQuantityComponent implements OnInit {
         this.quantity = newQuantity;
         break;
     }
+
+    this.quantity = this.pricingService.maxCheck(this.quantity);
   }
 
 

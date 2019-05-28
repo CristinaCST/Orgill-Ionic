@@ -61,7 +61,7 @@
           <ion-item class="po-label"> {{"customer_locations_po" | translate}}: </ion-item>
         </ion-col>
         <ion-col >
-          <ion-input class="po-input" [(ngModel)]="hotDealLocation.POSTOFFICE" (ionFocus)="clearPOInput(hotDealLocation)" type="number"
+          <ion-input class="po-input" [(ngModel)]="hotDealLocation.POSTOFFICE" (focusout)="PONumberValidation(hotDealLocation)" (keyup.enter)="PONumberValidation(hotDealLocation)" clearInput type="text"
             placeholder="{{'customer_locations_po_hint' | translate}}">
           </ion-input>
         </ion-col>
@@ -78,7 +78,7 @@
           </ion-col>
 
           <ion-col col-4>
-            <ion-input (focusout)="handleQuantityChange(hotDealLocation)" (keyup.enter)="handleQuantityChange(hotDealLocation)" (ionFocus)="clearQuantityInput(hotDealLocation)" class="po-input" [(ngModel)]="hotDealLocation.QUANTITY" type="number"
+            <ion-input (focusout)="handleQuantityChange(hotDealLocation)" (keyup.enter)="handleQuantityChange(hotDealLocation)" clearInput class="po-input" [(ngModel)]="hotDealLocation.QUANTITY" min="1" maxlength="5" type="tel" inputmode="numeric" pattern="^[0-9]"
               placeholder="{{'customer_locations_qty_hint' | translate}}">
             </ion-input>
 

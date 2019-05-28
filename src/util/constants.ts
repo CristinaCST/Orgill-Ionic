@@ -2,6 +2,8 @@ export const APP_CONFIGURATION_INFO = 'appConfigurationInfo';
 
 export const DECIMAL_NUMBER = 2;
 
+export const MAX_QUANTITY_HARDCAP = 99999;
+
 /**
 * Marker : App Language
 * =============================================================================================
