@@ -26,10 +26,14 @@ export class ProductQuantityComponent implements OnInit {
   ngOnInit(): void {
     this.programProvider.getSelectedProgram().subscribe(program => {
       if (program) {
-        this.program = program;        
+        console.log("PROGRAM:" +JSON.stringify(program),program);
+        this.program = program;      
         this.productPrice = this.getDecimalPrice();
+        console.log(this.productPrice);
+        console.log(this.program.PRICE);
+        this.handleQuantityChange();
       }
-      this.handleQuantityChange();
+      
     });
     if (this.quantityFromList) {
       this.quantity = this.validateQuantity(this.quantityFromList);

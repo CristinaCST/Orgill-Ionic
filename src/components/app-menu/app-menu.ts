@@ -99,7 +99,7 @@ export class AppMenuComponent implements OnInit {
 
 
   public hotDealPage() {
-    let hotDealSku = LocalStorageHelper.getFromLocalStorage('hotDealSku');
+    let hotDealSku = LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
     if (hotDealSku) { this.hotDealService.navigateToHotDeal(hotDealSku); }
   }
 

@@ -13,6 +13,9 @@ import { NavigatorService } from '../../services/navigator/navigator';
 import { CustomerLocationPage } from '../../pages/customer-location/customer-location';
 import { HotDealItem } from '../../interfaces/models/hot-deal-item';
 import { PricingService } from '../../services/pricing/pricing';
+import * as ConstantsUrl from '../../util/constants-url';
+import { ApiService } from '../../services/api/api';
+import { LocalStorageHelper } from '../../helpers/local-storage';
 
 @Component({
   selector: 'page-product',
@@ -44,7 +47,8 @@ export class ProductPage implements OnInit {
     private programProvider: ProgramProvider,
     private popoversProvider: PopoversService,
     private shoppingListProvider: ShoppingListsProvider,
-    private pricingService: PricingService) {
+    private pricingService: PricingService,
+    private apiService: ApiService) {
       this.loader = this.loadingService.createLoader();
   }
 
@@ -65,21 +69,43 @@ export class ProductPage implements OnInit {
       this.quantityFromList = this.navParams.get('quantity');
     }
 
-    this.programProvider.getProductPrograms(this.product.SKU).subscribe(programs => {
-      if (programs) {
-        this.productPrograms = JSON.parse(programs.d);
+    if (this.isHotDeal) {
+      let params = {
+        'user_token': JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER))['userToken'],
+        'sku': this.product.SKU
+      };
+
+      this.apiService.post(ConstantsUrl.GET_HOTDEALS_PROGRAM, params).subscribe((program) => {
+        let hotDealProgram :ItemProgram = JSON.parse(program.d);
+        this.productPrograms = [hotDealProgram];
         if (this.productPrograms.length === 0) {
           let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, undefined, Strings.MODAL_BUTTON_YES, Constants.POPOVER_ERROR);
           this.popoversProvider.show(content);
           this.navigatorService.pop().catch(err => console.error(err));
           return;
         }
-        let initialProgram: ItemProgram = this.getInitialProgram();
+        let initialProgram: ItemProgram = hotDealProgram;
         this.selectedProgram = initialProgram;
         this.programProvider.selectProgram(initialProgram);
         this.loader.hide();
-      }
-    });
+      });
+    } else {
+      this.programProvider.getProductPrograms(this.product.SKU).subscribe(programs => {
+        if (programs) {
+          this.productPrograms = JSON.parse(programs.d);
+          if (this.productPrograms.length === 0) {
+            let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, undefined, Strings.MODAL_BUTTON_YES, Constants.POPOVER_ERROR);
+            this.popoversProvider.show(content);
+            this.navigatorService.pop().catch(err => console.error(err));
+            return;
+          }
+          let initialProgram: ItemProgram = this.getInitialProgram();
+          this.selectedProgram = initialProgram;
+          this.programProvider.selectProgram(initialProgram);
+          this.loader.hide();
+        }
+      });
+    }
 
     this.programProvider.getSelectedProgram().subscribe(selectedProgram => this.selectedProgram = selectedProgram);
   }

@@ -6,7 +6,6 @@ import { LocalStorageHelper } from "../../helpers/local-storage";
 import { App, NavOptions } from "ionic-angular";
 import { ProductPage } from "../../pages/product/product";
 import { NavigatorService } from "../navigator/navigator";
-import { DatabaseProvider } from "../../providers/database/database";
 
 @Injectable()
 export class HotDealService {
@@ -14,8 +13,7 @@ export class HotDealService {
 
   constructor(private apiProvider: ApiService,
     private app: App,
-    private navigatorService: NavigatorService,
-    private databaseProvider: DatabaseProvider) {
+    private navigatorService: NavigatorService) {
 
       this.getUserInfo();
    
@@ -35,9 +33,11 @@ export class HotDealService {
   }
 
   private getHotDealsProduct(sku = '') {
-
-    /*
-    let params = {
+    if (!this.userToken) {
+      this.getUserInfo();
+    }
+ 
+  /*  let params = {
       'user_token': this.userToken,
       'sku': sku
     };
@@ -45,9 +45,7 @@ export class HotDealService {
     return this.apiProvider.post(ConstantsUrl.GET_HOTDEALS_PRODUCT, params);*/
     //HACK: Replacement for not working backend
 
-    if (!this.userToken) {
-      this.getUserInfo();
-    }
+  
     const params = {
       'user_token': this.userToken,
       'division': "",

@@ -18,7 +18,7 @@ export const URL_PRODUCT_PRICE = "item_price";
 export const URL_SHOPPING_LISTS_ORDER_PRODUCTS = "order_products";
 export const URL_SHOPPING_LISTS_ORDER_CONFIRMATION = "order_confirmation";
 
-export const GET_HOTDEALS_PRODUCT = "get_flashprogram_item";
+export const GET_HOTDEALS_PROGRAM = "get_flashprogram_item";
 
 //SHOPPING LISTS API
 export const ADD_SHOPPING_NEW_LIST = "save_shopping_list";
