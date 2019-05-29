@@ -80,6 +80,8 @@ export class MyApp {
       this.oneSignalService.init();
       this.networkService.listenForNetworkEvents();
       this.statusBar.styleDefault();
+      this.statusBar.overlaysWebView(false);
+      this.statusBar.hide();
       this.databaseProvider.getDatabaseState()
         .subscribe(isDatabaseOpen => {
           if (isDatabaseOpen) {
