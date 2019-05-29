@@ -14,6 +14,7 @@ import {ProgramProvider} from "../../providers/program/program";
 import {Subscription} from 'rxjs';
 import {LocalStorageHelper} from "../../helpers/local-storage";
 import { NavigatorService } from '../../services/navigator/navigator';
+import { first } from 'rxjs/operator/first';
 
 @Component({
   selector: 'page-add-to-shopping-list',
@@ -127,7 +128,10 @@ export class AddToShoppingListPage implements OnInit {
     //     this.shoppingLists.push(list);
     //   }
     // }
-    var shoppingLists = JSON.parse(data.d);
+
+    let shoppingLists = JSON.parse(data.d);
+    let specialLists = [];  //Can't use sort because 1 should be first, then 2 then 0. 
+
     if(shoppingLists.length){
       for (let i = 0; i < shoppingLists.length; i++) {
         let list: ShoppingList = {
@@ -136,8 +140,15 @@ export class AddToShoppingListPage implements OnInit {
           ListDescription: shoppingLists[i].list_description,
           ListType: shoppingLists[i].list_type
         };
-        this.shoppingLists.push(list);
+        if (list.ListType != '0') { specialLists.push(list); }else{
+          this.shoppingLists.push(list);
+        }
       }
+    }
+
+    if(specialLists.length){
+      specialLists.push(...this.shoppingLists);
+      this.shoppingLists = specialLists;
     }
   }
 
