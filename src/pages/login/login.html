@@ -15,7 +15,7 @@
       <ion-list>
         <ion-item class="input-item">
           <ion-icon class="gray-icon" name="lock" item-start></ion-icon>
-          <ion-input type="password" class="input-element" placeholder="{{'password' | translate }}" name="password"
+          <ion-input (keyup.enter)="login()" type="password" class="input-element" placeholder="{{'password' | translate }}" name="password"
                      [(ngModel)]="password" required></ion-input>
         </ion-item>
       </ion-list>

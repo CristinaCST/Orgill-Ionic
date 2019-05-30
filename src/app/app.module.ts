@@ -13,6 +13,7 @@ import {SQLitePorter} from '@ionic-native/sqlite-porter';
 import {Network} from '@ionic-native/network';
 import {IonicStorageModule} from '@ionic/storage';
 import {Badge} from '@ionic-native/badge';
+import { Geolocation } from '@ionic-native/geolocation';
 
 //Environments
 import {environment} from '@app/env';
@@ -138,6 +139,7 @@ const errorHandler = environment.production ? CustomErrorHandlerService : IonicE
     ScannerService,
     PricingService,
     SecureActionsService,
+    Geolocation,
     {provide: ErrorHandler, useClass: CustomErrorHandlerService}
   ]
 })

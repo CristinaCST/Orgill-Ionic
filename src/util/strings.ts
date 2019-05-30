@@ -29,6 +29,7 @@ Marker : ModalButtons
  export const MODAL_BUTTON_DELETE = 'modal_button_delete';
  export const MODAL_BUTTON_OK = 'modal_button_ok';
  export const MODAL_BUTTON_NOT_NOW = 'modal_button_not_now';
+ export const MODAL_BUTTON_SETTINGS = 'modal_buton_settings';
 
  /**
 Marker : Loading Dialog
@@ -210,5 +211,8 @@ export const QUANTITY_TOO_HIGH_OVERFLOW = 'quantity_too_high_overflow';
 
 export const FOUR_PERCENT_NOTE = 'four_percent_note';
 
-export const PO_NUMBER_TOO_LONG = 'po_number_too_long'
-export const PO_ALPHANUMERIC_WARNING = 'po_alphanumeric_warning'
+export const PO_NUMBER_TOO_LONG = 'po_number_too_long';
+export const PO_ALPHANUMERIC_WARNING = 'po_alphanumeric_warning';
+
+export const ONE_SIGNAL_IOS_PERMISSION_REFUSED = 'one_signal_ios_permission_refused';
+

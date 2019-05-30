@@ -13,6 +13,7 @@
   "modal_button_delete":"Delete",
   "modal_button_ok":"OK",
   "modal_button_not_now":"Not now",
+  "modal_buton_settings":"Settings",
 
   "lost_internet_connection": "There is no internet connection. Please turn on Mobile Data or WIFI in order to use the Orgill O Zone App.",
   "request_timeout_error":"An error has occurred. Please make sure you are connected to the internet and try again.",
@@ -183,8 +184,8 @@
   "no_acces":"You have no access!",
   "something_went_wrong":"Someting went wrong...",
 
-  "location_permissions_message": "Grant permissions for your location",
-  "notifications_permissions_message": "Orgill wants to send push notifications",
+  "location_permissions_message": "We need location permissions to send you local area deals",
+  "notifications_permissions_message": "We need push notification permissions to send you hot deals",
   "permission_allow": "Allow",
   "permission_deny": "Deny",
   "permission_never_show":"Never",
@@ -197,6 +198,7 @@
   "quantity_too_high_overflow":"The quantity introduced is too high, try a lower number",
   "menu_hot_deal_button":"Hot Deal",
   "po_number_too_long":"PO number can't be longer than 15 characters",
-  "po_alphanumeric_warning":"PO number must be alphanumeric, additional characters have been removed"
+  "po_alphanumeric_warning":"PO number must be alphanumeric, additional characters have been removed",
+  "one_signal_ios_permission_refused":"We require push notification permissions to send you hot deals."
 
 }

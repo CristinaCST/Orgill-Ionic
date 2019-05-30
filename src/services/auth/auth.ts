@@ -7,13 +7,15 @@ import 'rxjs/add/operator/map';
 import {LocalStorageHelper} from "../../helpers/local-storage";
 import * as Constants from "../../util/constants";
 import {User} from "../../interfaces/models/user";
+import { NavigatorService } from '../../services/navigator/navigator';
+import { Login } from '../../pages/login/login';
 
 @Injectable()
 export class AuthService {
 
   private user: User = new User();
 
-  constructor(private apiProvider: ApiService) {
+  constructor(private apiProvider: ApiService, private navigatorService: NavigatorService) {
   }
 
   private static encryption(password) {
@@ -37,19 +39,33 @@ export class AuthService {
   logoutDeleteData() {
   }
 
+  /**
+   * Gets user info from the server
+   */
   getUserInfo() {
-    return new Promise((resolve, reject) => {
-      const params = {'user_token': this.user.userToken};
-      this.apiProvider.post(ConstantsURL.URL_USER_INFO, params).subscribe(response => {
-        this.user = JSON.parse(response.d);
-        this.user.userToken = params.user_token;
-        LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
-        resolve();
-      }, (error) => {
-        console.error(error);
-        reject(error);
+    if (this.user && this.user.userToken) {
+      return new Promise((resolve, reject) => {
+        const params = { 'user_token': this.user.userToken };
+        this.apiProvider.post(ConstantsURL.URL_USER_INFO, params).subscribe(response => {
+          this.user = JSON.parse(response.d);
+          this.user.userToken = params.user_token;
+          LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
+          resolve();
+        }, (error) => {
+          console.error(error);
+          reject(error);
+        });
       });
-    });
+    }
+    else {
+      this.navigatorService.setRoot(Login);
+    }
+  }
+
+  getUserToken(){
+    if(this.user){
+      return this.user.userToken;
+    }
   }
 
 }

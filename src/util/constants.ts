@@ -147,17 +147,18 @@ export const MARKET_ONLY_LIST_TYPE = "2";
 export const MARKET_ONLY_CUSTOM_TYPE = "3";
 
 //ONE SIGNAL SETUP
-export const ONE_SIGNAL_API_KEY = "be33b136-2960-435a-b22f-b12ade07e393";
-export const ONE_SIGNAL_ANDROID_PROJECT_TITLE = "orgill-test";
+export const ONE_SIGNAL_API_KEY = "a11b3e10-bce2-41e9-a6d0-746042798d7e";
+export const ONE_SIGNAL_ANDROID_PROJECT_TITLE = "orgill-5a5ba";
 export const ONE_SIGNAL_IOS_NOTIFICATION_AUTO_PROMPT = false;
 export const ONE_SIGNAL_IOS_LAUNCH_IN_WEBVIEW = false;
 export const ONE_SIGNAL_LOCATION_PREFERENCE_PATH = 'locationSharing';
 export const ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH = 'pushNotifications';
 export const ONE_SIGNAL_VERBOSE = false; // set this to false if production
 export const ONE_SIGNAL_HOT_DEAL_SKU_PATH = 'hotDealSku';
-export const DEBUG_ONE_SIGNAL = true;
+export const DEBUG_ONE_SIGNAL = false;
 export const DEBUG_ONE_SIGNAL_CLEAN_PREFS = false;
 export const DEBUG_NO_LOCATIONS = false;
+export const ONE_SIGNAL_IOS_PERMISSION_DECLINED = 'iosDeclined';
 
 
 
