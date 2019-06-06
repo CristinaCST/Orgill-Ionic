@@ -139,7 +139,7 @@ export class AddToShoppingListPage implements OnInit {
           ListDescription: shoppingLists[i].list_description,
           ListType: shoppingLists[i].list_type
         };
-        if (list.ListType != '0') { specialLists.push(list); }else{
+        if (list.ListType == '1' || list.ListType == '2') { specialLists.push(list); }else{
           this.shoppingLists.push(list);
         }
       }
