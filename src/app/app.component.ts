@@ -44,6 +44,14 @@ export class MyApp {
     this.isLoading = true;
 
     this.platform.ready().then(() => {
+      window.addEventListener('keyboardDidShow', () => {
+        document.body.classList.add('keyboard-is-open');
+        document.activeElement.scrollIntoView(true);
+      });
+
+      window.addEventListener('keyboardDidHide', () => {
+        document.body.classList.remove('keyboard-is-open');
+      });
 
       this.navigatorService.initializeBackButton(() => {
 

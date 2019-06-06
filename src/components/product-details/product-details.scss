@@ -57,3 +57,7 @@ product-details {
     }
   }
 }
+
+body.keyboard-is-open .scroll-content {
+  margin-top: 0!important;
+}
