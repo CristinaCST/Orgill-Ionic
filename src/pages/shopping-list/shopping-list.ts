@@ -298,6 +298,10 @@ export class ShoppingListPage {
     });
   }
 
+  refreshPulling($event){
+    this.touchend();
+  }
+
   touchstart(){
     this.holdTimeoutReference = setTimeout(()=>{
       this.isDeleteMode = true;

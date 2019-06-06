@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content (ionScrollStart)="scrollStart()" (ionScrollEnd)="scrollEnd()">
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" (ionStart)="refreshPulling($event)">
     <ion-refresher-content>
     </ion-refresher-content>
   </ion-refresher>
