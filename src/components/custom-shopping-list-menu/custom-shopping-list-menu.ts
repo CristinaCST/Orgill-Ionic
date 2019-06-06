@@ -30,7 +30,7 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
   }
 
   addNewList() {
-    let content = this.popoversProvider.setContent(Strings.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined, Strings.MODAL_BUTTON_SAVE, Strings.MODAL_BUTTON_CANCEL, Constants.POPOVER_NEW_SHOPPING_LIST);
+    let content = this.popoversProvider.setContent(Strings.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined, Strings.MODAL_BUTTON_SAVE, undefined ,Strings.MODAL_BUTTON_CANCEL, Constants.POPOVER_NEW_SHOPPING_LIST);
 
     let subscription = this.popoversProvider.show(content).subscribe(data => {
       if (data && data.listName) {
