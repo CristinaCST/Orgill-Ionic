@@ -10,6 +10,7 @@ import { LocationElement } from '../../interfaces/models/location-element';
 import { PricingService } from '../../services/pricing/pricing';
 import { Product } from '../../interfaces/models/product';
 import { ProductProvider } from '../../providers/product/product';
+import { HotDealService } from '../../services/hotdeal/hotdeal';
 
 @Component({
   selector: 'page-order-review',
@@ -31,7 +32,8 @@ export class OrderReviewPage implements OnInit {
 
   constructor(private navigatorService: NavigatorService, private navParams: NavParams,
               private shoppingListsProvider: ShoppingListsProvider, private pricingService: PricingService,
-              private productProvider: ProductProvider) {
+              private productProvider: ProductProvider,
+              private hotDealService: HotDealService) {
   }
 
   ngOnInit(): void {
@@ -123,18 +125,22 @@ export class OrderReviewPage implements OnInit {
     };
 
     this.productProvider.orderHotDeal(productListInfo).then((data: any) => {
-
-      data = JSON.parse(data.d).forEach((result)=>{
-        this.confirmationNumbers.push(result.confirmation);
+      let confirmations = [];
+      data = JSON.parse(data.d).forEach((result) => {
+        confirmations.push(result);
       });
-      
+
       let navigationParams = {
         orderTotal: this.orderTotal,
         orderMethod: this.orderMethod,
-        confirmationNumbers: this.confirmationNumbers
+        hotDealConfirmations: confirmations,
+        hotDealLocations: this.hotDealItem.LOCATIONS,
+        hotDealPurchase: true
       };
-
+ 
       this.navigatorService.push(OrderConfirmationPage, navigationParams).catch(err => console.error(err));
+    
+      
     },(rej)=>{
       if(rej==='overflow'){
        
@@ -147,12 +153,6 @@ export class OrderReviewPage implements OnInit {
     this.navigatorService.pop().catch(err => console.error(err));
   }
 
-  getTotalPrice(){
-    /*let price = 0;
-    this.hotLocations.forEach((location)=>{
-      price += this.pricingService.getPrice(location.QUANTITY,this.hotDealItem.ITEM);
-    });*/
-    return this.orderTotal;
-  }
+  
 
 }

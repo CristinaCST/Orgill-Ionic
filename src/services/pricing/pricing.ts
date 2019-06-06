@@ -33,34 +33,49 @@ export class PricingService {
    * @param suggestedValue - Value that needs validation
    * @param program - The product program, needed for program rules
    * @param product - The product
-   * @returns Number - a validated quantity or the same if it's ok.
+   * @returns number - a validated quantity or the same if it's ok.
    */
-  public validateQuantity(suggestedValue: number | string, program: ItemProgram, product: Product) {
+  public validateQuantity(suggestedValue: number | string, program: ItemProgram, product: Product, getDefaultMode:boolean = false): number {
+    if(!suggestedValue)
+    {
+      return undefined;
+    }
 
     if(typeof suggestedValue == 'string'){
       suggestedValue = Number(suggestedValue.replace(/[^0-9]/g, ''));
     }
 
     let minQty = Math.max(1, Number(program.MINQTY));
+    let shelfPack = Number(product.SHELF_PACK);
+    if (product.QTY_ROUND_OPTION === 'X' && shelfPack > 1 && minQty < shelfPack) {
+      minQty = shelfPack;
+    }
 
     if (suggestedValue > Number(program.MAXQTY) && Number(program.MAXQTY) > 0) {
 
-      this.showPrompt(Strings.QUANTITY_ROUNDED_MAX);
+      if (!getDefaultMode) {
+        this.showPrompt(Strings.QUANTITY_ROUNDED_MAX);
+      }
+
       return Number(program.MAXQTY);
     }
 
-    if (!suggestedValue || suggestedValue < minQty) {
-      this.showPrompt(Strings.QUANTITY_ROUNDED_MIN);
+    if (suggestedValue && suggestedValue < minQty) {
+      if (!getDefaultMode) {
+        this.showPrompt(Strings.QUANTITY_ROUNDED_MIN);
+      }
       return minQty;
     }
 
     if (product.QTY_ROUND_OPTION === 'X') {
-      let shelfPack = Number(product.SHELF_PACK);
+      
       if (suggestedValue > shelfPack) {
         if (suggestedValue % shelfPack === 0) {
           return this.maxCheck(suggestedValue);
         } else {
-          this.showPrompt(Strings.QUANTITY_X_WARNING);
+          if (!getDefaultMode) {
+            this.showPrompt(Strings.QUANTITY_X_WARNING);
+          }
           return this.maxCheck(shelfPack * Math.ceil(suggestedValue / shelfPack));
         }
       } else {

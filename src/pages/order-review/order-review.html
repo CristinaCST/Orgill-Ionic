@@ -50,7 +50,7 @@
 <!-- Order review main content when it's hot deal-->
 <ion-content *ngIf="isHotDeal">
 
-  <hot-deal-product [totalPrice] = "getTotalPrice()" [hotDealItem]="{product:hotDealItem.ITEM}" [program]="hotDealItem.PROGRAM">
+  <hot-deal-product [hotDealItem]="hotDealItem.ITEM" [orderTotal]="orderTotal">
   </hot-deal-product>
 
   <ion-item-group>
