@@ -23,6 +23,15 @@ product-quantity {
         color: color($colors, OrgillLightGray);
       }
 
+      &.green span:nth-child(1){
+        color: green!important;
+      }
+
+      &.green {
+        font-weight: 400;
+        color: green!important;
+      }
+
       span:nth-child(2) {
         width: 50%;
         text-align: right;
@@ -82,6 +91,10 @@ product-quantity {
         }
       }
     }
+  }
+
+  .percent-Note{
+    color:gray
   }
 
   .total-price {

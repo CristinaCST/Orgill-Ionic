@@ -216,4 +216,5 @@ export const PO_ALPHANUMERIC_WARNING = 'po_alphanumeric_warning';
 
 export const ONE_SIGNAL_IOS_PERMISSION = 'one_signal_ios_permission';
 
+export const SAVINGS_TEXT = "savings_text";
 

@@ -14,10 +14,12 @@ export class ProductQuantityComponent implements OnInit {
   @Input() quantityFromList;
   @Input() hotDeal: boolean;
   @Output() quantityChange = new EventEmitter<any>();
-  public quantity: number = 1;
-  public productPrice = 0;
-  public total = 0;
-  public program: ItemProgram;
+  private quantity: number = 1;
+  private productPrice = 0;
+  private total = 0;
+  private program: ItemProgram = {} as ItemProgram;
+  private programSubscription;
+  private savings: string = "";
   
 
   constructor(private programProvider: ProgramProvider, private pricingService: PricingService) {
@@ -36,13 +38,16 @@ export class ProductQuantityComponent implements OnInit {
       this.quantity = this.validateQuantity(this.quantityFromList);
     }
     //this.quantity = this.validateQuantity(this.quantityFromList);
-    
-   /* this.programProvider.isPackQuantity().subscribe(value => {
-      if (value === true && this.product) {
-        this.quantity = this.quantityFromList ? this.quantityFromList : Number(this.product.SHELF_PACK);
-        this.handleQuantityChange();
-      }
-    });*/
+
+    /* this.programProvider.isPackQuantity().subscribe(value => {
+       if (value === true && this.product) {
+         this.quantity = this.quantityFromList ? this.quantityFromList : Number(this.product.SHELF_PACK);
+         this.handleQuantityChange();
+       }
+     });*/
+     this.setSavings();
+  }
+
   ngOnDestroy(){
     if (this.programSubscription) {
       this.programSubscription.unsubscribe();
@@ -118,13 +123,21 @@ export class ProductQuantityComponent implements OnInit {
     this.quantityChange.emit(data);
   }
 
-
+  private setSavings(){
+    this.savings = (Math.round(100*(Number(this.product.SUGGESTED_RETAIL) - this.productPrice)/Number(this.product.SUGGESTED_RETAIL))).toString() + "%";
+  }
 
   private getMinimumQuantity(){
     return Math.max(1,Number(this.program.MINQTY));
   }
 
+  ngOnChanges(){
+    this.handleQuantityChange();
+    this.setSavings();
+  }
+
   private validateQuantity(suggestedValue: number){
+    this.setSavings();
     return this.pricingService.validateQuantity(suggestedValue,this.program,this.product);
   }
 }

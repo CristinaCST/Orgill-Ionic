@@ -200,5 +200,8 @@
   "po_number_too_long":"PO number can't be longer than 15 characters",
   "po_alphanumeric_warning":"PO number must be alphanumeric, additional characters have been removed",
   "one_signal_ios_permission":"Orgill requires push notification permissions to send you hot deals.",
+  
+
+  "savings_text":"Savings"
 
 }
