@@ -80,7 +80,8 @@ export const EVENT_NEW_SEARCH = 'newSearch';
 
 export const EVENT_GO_TO_SHOPPING_LISTS_PAGE = 'goToListsPage';
 
-export const EVENT_HOT_DEAL_NOTIFICATION_RECEIVED = "notifications_hot_deal_received";
+export const EVENT_HOT_DEAL_NOTIFICATION_RECEIVED = "notificationsHotDealReceived";
+
 
 /**
 * Marker : User
@@ -159,7 +160,8 @@ export const DEBUG_ONE_SIGNAL = false;
 export const DEBUG_ONE_SIGNAL_CLEAN_PREFS = false;
 export const DEBUG_NO_LOCATIONS = false;
 export const ONE_SIGNAL_IOS_PERMISSION_DECLINED = 'iosDeclined';
-
+export const ONE_SIGNAL_PAYLOAD_TIMESTAMP = 'oneSignalPayloadTimestamp';
+export const HOT_DEAL_EXPIRED_EVENT = 'hotDealExpired';
 
 
 export const PERMISSION_MODAL = "permissionModal";

@@ -57,14 +57,6 @@ export class OneSignalService {
      */
     private finishInit() {
 
-        this.updatePermissions(); //Update the permissions from storage
-
-        if(this.platform.is('android')){
-            this.androidPermissionsSetup();
-        }else if (this.platform.is('ios')){
-            this.iOSPermissionsSetup();
-        }
-
         //How will oneSignal notifications will show while using the app.
         this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
 
@@ -75,16 +67,21 @@ export class OneSignalService {
         });
 
 
-        //If we don't have permission, we don't receive notifications so there is no need to subscribe
+        //On android, if we don't have permission, we don't receive notifications so there is no need to subscribe
+        //On iOS we handle permissions differently so subscribe just in case.
         if (this.pushNotificationPermission || this.platform.is('ios')) {
             //What happens when a notification is received
             this.oneSignal.handleNotificationReceived().subscribe((data) => {
-                if (data && data['notification']) { this.notificationReceived(data['notification']); }
+                if (data && data['payload'] && this.validateDate(data['payload'])) {
+                    this.notificationReceived(data['payload']);
+                }
             });
 
             //Handle the opening of a notification
             this.oneSignal.handleNotificationOpened().subscribe((data) => {
-                if (data && data['notification']) { this.notificationOpened(data['notification']);  }
+                if (data && data['notification'] && this.validateDate(data['notification']['payload'])) {
+                    this.notificationOpened(data['notification']['payload']); 
+                }
             });
         } else {
            this.debugLog("Notification permission not granted, not subscribing to one signal events.", this.pushNotificationPermission);
@@ -140,26 +137,25 @@ export class OneSignalService {
 
         let askedAndDeclined = LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_IOS_PERMISSION_DECLINED);
            
-        console.log("ASKEDANDDECLINED STATUS:" + askedAndDeclined + typeof askedAndDeclined);
          if (askedAndDeclined !== "true") {
             // this.oneSignal.registerForPushNotifications();
-             this.oneSignal.promptForPushNotificationsWithUserResponse().then((result)=>{
-                 console.log("THE USER:"+result,result);
+             return this.oneSignal.promptForPushNotificationsWithUserResponse().then((result)=>{
                  this.iosNativePermissionStatusUpdate(result);
+                 return Promise.resolve();
              })
          } else {
              //Setup the popover content
              let content = {
                  type: Constants.PERMISSION_MODAL,
                  title: Strings.GENERIC_MODAL_TITLE,
-                 message: Strings.ONE_SIGNAL_IOS_PERMISSION_REFUSED,
+                 message: Strings.ONE_SIGNAL_IOS_PERMISSION,
                  negativeButtonText: Strings.MODAL_BUTTON_DECLINE,
                  positiveButtonText: Strings.MODAL_BUTTON_SETTINGS
              };
 
-             this.popoverService.show(content).subscribe((result)=>{
+             return this.popoverService.show(content).subscribe((result)=>{
                  if(result == 'OK'){
-                     console.log("THERE SHOULD BE SOMETHING HAPPENING");
+                    return Promise.resolve();
                  }
              })
          }
@@ -192,6 +188,7 @@ export class OneSignalService {
                 resolve(res);
             }).catch((err) => {
                 this.oneSignal.promptLocation();
+                console.error(err);
                 reject(err);
             });
         });
@@ -202,10 +199,14 @@ export class OneSignalService {
         //Log only if we areverbose logging
         this.debugLog("Received package:" + JSON.stringify(data), data);
 
+        this.savePackageDate(data);
+
         this.registerHotDealInMenu(data);
-       
+
         //Manually increase badge notifications for each notification received
-        this.badge.increase(1);
+      /*  if (this.platform.is('ios')) {
+            this.badge.increase(1);
+        }*/
 
     }
 
@@ -215,33 +216,60 @@ export class OneSignalService {
         //Check data for existence, if there is none, then the notification is something else than a hot deal
         if (sku) {
                 //Send an event with the passed SKU
-                this.events.publish(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED, sku);
+
                 LocalStorageHelper.saveToLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH,sku);
+                this.events.publish(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED, sku);
+               
 
         }
 
+    }
+
+    private validateDate(data){
+
+        let date = JSON.parse(data.rawPayload)['google.sent_time'];
+        /** DEBUG ONLY */
+       // let dbgDate = new Date();
+        //date = dbgDate.setDate(dbgDate.getDate() - 2);
+       //=====
+
+        if (this.hotDealService.isHotDealExpired(date)) {
+            this.hotDealService.markHotDealExpired();
+            return false;
+        }
+        return true;
     }
 
     private notificationOpened(data: any) {
 
-        //Log only if we areverbose logging
-        if (Constants.ONE_SIGNAL_VERBOSE) {
-            console.log("NOTIFICATION OPENED with data: ", data);
-        }
+        this.debugLog("NOTIFICATION OPENED with data: ", data);
+
+        this.savePackageDate(data);
 
         this.registerHotDealInMenu(data);
-
+      
         //Process the notification
         this.goToHotDeal(data);
 
         //Decrease the badge counter for each notification
-        this.badge.decrease(1);
+        if (this.platform.is('ios')) {
+
+            this.badge.decrease(1);
+        }
     }
 
 
+    private savePackageDate(pckg){
+        if(pckg && pckg['rawPayload']){
+            let OBJTRY = JSON.parse(pckg.rawPayload);
+            LocalStorageHelper.saveToLocalStorage(Constants.ONE_SIGNAL_PAYLOAD_TIMESTAMP, OBJTRY['google.sent_time']);
+
+        }
+    }
+
     private extractPackageSKU(pckg){
-        if (pckg &&  pckg.payload && pckg.payload.additionalData){
-            return pckg.payload.additionalData.SKU;
+        if (pckg && pckg.additionalData){
+            return pckg.additionalData.SKU;
         }
 
     }
@@ -256,9 +284,9 @@ export class OneSignalService {
         */
         try {
             this.notificationOpened({
-                    payload: {
+                    
                         additionalData: { SKU: "0011049" }
-                    }
+                   
             });
         } catch (err) {
             console.log(err);
@@ -315,7 +343,7 @@ export class OneSignalService {
     private setPermissions() {
 
         //Check badge permission
-        if (!this.badge.hasPermission()) {
+        if (this.platform.is('ios') && !this.badge.hasPermission()) {
             this.badge.requestPermission();
         }
 
@@ -339,10 +367,20 @@ export class OneSignalService {
             this.permissionSaveResult(Constants.ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH, notification["optionSelected"]);
          //   this.permissionSaveResult(Constants.ONE_SIGNAL_LOCATION_PREFERENCE_PATH, location["optionSelected"]);
 
-            //Since we got all permissions we can continue with 
-            this.finishInit();
-        });
 
+            this.updatePermissions(); //Update the permissions from storage
+
+    
+
+            if(this.platform.is('android')){
+                this.androidPermissionsSetup();
+                this.finishInit();
+            }else if (this.platform.is('ios')){
+                this.iOSPermissionsSetup().then(()=>{
+                    this.finishInit();
+                });
+            }
+        });
     };
 
     /**
@@ -424,9 +462,14 @@ export class OneSignalService {
         };
     };
 
-    private debugLog(string, object = null) {
+    private debugLog(string, object = undefined) {
         if (Constants.ONE_SIGNAL_VERBOSE) {
-            console.log(string, object);
+
+            if (typeof object != "undefined")
+                console.log(string, object);
+            else {
+                console.log(string);
+            }
         }
     }
 

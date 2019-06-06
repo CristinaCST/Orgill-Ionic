@@ -1,6 +1,6 @@
 <div class="product-title-container" [ngClass]="hotDealItem.isCheckedInShoppingList&&!isDisabled?'checked':''">
-  <p>{{hotDealItem.product.NAME}}</p>
-  <p>{{hotDealItem.product.VENDOR_NAME}}</p>
+  <p>{{hotDealItem.NAME}}</p>
+  <p>{{hotDealItem.VENDOR_NAME}}</p>
 </div>
 
 <ion-item class='ion-item-border' [ngClass]="hotDealItem.isExpired?'expired':'active'">
@@ -9,23 +9,23 @@
     <button ion-item no-lines detail-none>
       <div class="shopping-list-container">
         <div class="img-container">
-          <img *ngIf="hotDealItem.product.IMAGE !== '0000000.jpg'"
-               src="http://images.orgill.com/200x200/{{hotDealItem.product.SKU}}.JPG">
-          <img *ngIf="hotDealItem.product.IMAGE === '0000000.jpg'" src="assets/imgs/product_placeholder.png">
+          <img *ngIf="hotDealItem.IMAGE !== '0000000.jpg'"
+               src="http://images.orgill.com/200x200/{{hotDealItem.SKU}}.JPG">
+          <img *ngIf="hotDealItem.IMAGE === '0000000.jpg'" src="assets/imgs/product_placeholder.png">
         </div>
         <div class="info">
           <div>
             <span>{{"product_SKU" | translate}}:</span>
-            <span>{{hotDealItem.product.SKU}} {{hotDealItem.product.QTY_ROUND_OPTION}}</span>
+            <span>{{hotDealItem.SKU}} {{hotDealItem.QTY_ROUND_OPTION}}</span>
           </div>
           <div>
             <span>{{"product_item_price" | translate}}:</span>
-            <span>{{"product_currency" | translate}}{{hotDealItem.product.YOURCOST |
-              number:'1.2-2'}}/{{hotDealItem.product.SELLING_UNIT}}</span>
+            <span>{{"product_currency" | translate}}{{hotDealItem.YOURCOST |
+              number:'1.2-2'}}/{{hotDealItem.SELLING_UNIT}}</span>
           </div>
           <div>
             <span>{{"product_total_price" | translate}}:</span>
-            <span>{{"product_currency" | translate}}{{ totalPrice |
+            <span>{{"product_currency" | translate}}{{ orderTotal |
               number:'1.2-2'}}</span>
           </div>
         </div>

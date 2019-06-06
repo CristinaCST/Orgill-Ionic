@@ -1,5 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import * as Constants from '../../util/constants';
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'hot-deal-product',
@@ -7,9 +6,10 @@ import * as Constants from '../../util/constants';
 })
 export class HotDealProductComponent {
   @Input('hotDealItem') hotDealItem;
-  @Input('program') program;
-  @Input('totalPrice') totalPrice;
+  @Input('orderTotal') orderTotal;
 
   constructor() {
+  
   }
+
 }

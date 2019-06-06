@@ -35,13 +35,12 @@ export class AppMenuComponent implements OnInit {
   public defaultShoppingLists: Array<ShoppingList> = [];
   public customShoppingLists: Array<ShoppingList> = [];
   public showShoppingListsMenu: boolean = false;
-  private flashDealNotification: boolean = false;
+  private hotDealNotification: boolean = false;
 
   @Input('rootPage') rootPage;
   @Input('menuContent') menuContent;
 
-  constructor(private app: App,
-              private popoversProvider: PopoversService,
+  constructor(private popoversProvider: PopoversService,
               private authServiceProvider: AuthService,
               private catalogsProvider: CatalogsProvider,
               private translateProvider: TranslateWrapperService,
@@ -56,25 +55,30 @@ export class AppMenuComponent implements OnInit {
   ngOnInit(): void {
     this.getPrograms();
     this.getShoppingLists();
-    this.checkHotDealState();
+    this.updateHotDealButtonToState();
+    this.events.subscribe(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED,(sku)=>{
+      this.updateHotDealButtonToState(sku);
+    });
+
+    this.events.subscribe(Constants.HOT_DEAL_EXPIRED_EVENT,()=>{
+      this.updateHotDealButtonToState();
+    });
   }
 
   private menuOpen(){
-    this.events.subscribe(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED,this.checkHotDealState);
+    
     this.navigatorService.oneTimeBackButtonOverride(()=>{
-      console.log("Correct override");
       this.menuCtrl.close('main_menu');
     });
   }
 
   private menuClose(){
-    this.events.unsubscribe(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED,this.checkHotDealState);
+  //  this.events.unsubscribe(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED,this.checkHotDealState);
     this.navigatorService.removeOverride();
   }
 
-  private checkHotDealState() {
-    let hotDealSku = LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
-    this.flashDealNotification = hotDealSku ? true : false;
+  private updateHotDealButtonToState(sku = undefined){
+    this.hotDealNotification = this.hotDealService.checkHotDealState(sku);
   }
 
 
@@ -99,8 +103,16 @@ export class AppMenuComponent implements OnInit {
 
 
   public hotDealPage() {
+    if(this.hotDealService.isHotDealExpired())
+    {
+      this.hotDealNotification = false;
+      return;
+    }
+
     let hotDealSku = LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
-    if (hotDealSku) { this.hotDealService.navigateToHotDeal(hotDealSku); }
+    if (hotDealSku) {
+      this.hotDealService.navigateToHotDeal(hotDealSku);
+    }
   }
 
   public goToPage(page) {

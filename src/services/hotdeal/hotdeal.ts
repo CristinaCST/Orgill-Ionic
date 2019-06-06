@@ -1,11 +1,13 @@
 import { Injectable } from "@angular/core";
 import * as ConstantsUrl from '../../util/constants-url'
+import * as Constants from '../../util/constants'
 import { USER } from '../../util/constants'
 import { ApiService } from "../api/api";
 import { LocalStorageHelper } from "../../helpers/local-storage";
-import { App, NavOptions } from "ionic-angular";
+import { App, NavOptions, Events } from "ionic-angular";
 import { ProductPage } from "../../pages/product/product";
 import { NavigatorService } from "../navigator/navigator";
+import { Observable } from "rxjs";
 
 @Injectable()
 export class HotDealService {
@@ -13,7 +15,9 @@ export class HotDealService {
 
   constructor(private apiProvider: ApiService,
     private app: App,
-    private navigatorService: NavigatorService) {
+    private navigatorService: NavigatorService,
+    private events: Events,
+    private apiService: ApiService) {
 
       this.getUserInfo();
    
@@ -49,7 +53,7 @@ export class HotDealService {
       'division': "",
       'price_type': "",
       'search_string': "'"+ sku + "'",
-      'category_id': '-1',
+      'category_id': '',
       'program_number': "",
       'p': '1',
       'rpp': '1',
@@ -76,6 +80,41 @@ export class HotDealService {
     });
     
   }
+
+
+  public isHotDealExpired(timestamp = undefined) {
+    const dateString = timestamp?timestamp: LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_PAYLOAD_TIMESTAMP);
+    const hotDealTimestamp =  new Date(parseInt(dateString));
+
+    if ((new Date()).getDay() != hotDealTimestamp.getDay()) {
+      this.markHotDealExpired();
+      return true;
+    }
+    return false;
+  }
+
+  public markHotDealExpired() {
+    LocalStorageHelper.removeFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
+    this.events.publish(Constants.HOT_DEAL_EXPIRED_EVENT);
+  }
+
+  public checkHotDealState(sku = undefined) {
+    let hotDealSku = sku ? sku : LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
+    return hotDealSku && !this.isHotDealExpired() ? true : false;
+  }
+
+  public getHotDealProgram(sku){
+  let params = {
+    'user_token': JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER))['userToken'],
+    'sku': sku
+  };
+
+    if (params.user_token) {
+      return this.apiService.post(ConstantsUrl.GET_HOTDEALS_PROGRAM, params);
+    }
+    return Observable.of([]);
+  }
+
 /*
   orderHotDeal(itemsIdsArr, shoppingListId) {
 

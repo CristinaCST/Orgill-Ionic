@@ -214,5 +214,6 @@ export const FOUR_PERCENT_NOTE = 'four_percent_note';
 export const PO_NUMBER_TOO_LONG = 'po_number_too_long';
 export const PO_ALPHANUMERIC_WARNING = 'po_alphanumeric_warning';
 
-export const ONE_SIGNAL_IOS_PERMISSION_REFUSED = 'one_signal_ios_permission_refused';
+export const ONE_SIGNAL_IOS_PERMISSION = 'one_signal_ios_permission';
+
 
