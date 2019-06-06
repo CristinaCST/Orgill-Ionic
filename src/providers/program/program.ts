@@ -7,11 +7,12 @@ import {LocalStorageHelper} from "../../helpers/local-storage";
 import * as ConstantsUrl from "../../util/constants-url";
 import * as Constants from "../../util/constants";
 import {DatabaseProvider} from "../database/database";
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class ProgramProvider {
   private readonly userToken;
-  private selectedProgramSubject = new BehaviorSubject<any>({});
+  private selectedProgramSubject = new Subject<any>();
   private packQuantity = new BehaviorSubject<any>(false);
 
   constructor(private apiProvider: ApiService, private databaseProvider: DatabaseProvider) {

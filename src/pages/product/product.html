@@ -28,7 +28,7 @@
     <div class="tabs" [(ngSwitch)]="activeTab">
       <product-details *ngSwitchCase="'summary_tab'" [product]="product"></product-details>
       <product-pricing [isInShoppingList]="fromShoppingList" *ngSwitchCase="'pricing_tab'" [product]="product"
-                       [productPrograms]="productPrograms"></product-pricing>
+                       [productPrograms]="productPrograms" [selectedProgram]="selectedProgram"></product-pricing>
     </div>
     <product-quantity [hotDeal] = "isHotDeal"
                       (quantityChange)="onQuantityChange($event)"

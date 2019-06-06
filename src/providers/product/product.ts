@@ -7,6 +7,7 @@ import {LocalStorageHelper} from "../../helpers/local-storage";
 import {SearchProductRequest} from "../../interfaces/request-body/search-product";
 import { ApiService } from '../../services/api/api';
 import { PricingService } from '../../services/pricing/pricing';
+import { Observable } from 'rxjs';
 
 
 @Injectable()
@@ -46,15 +47,35 @@ private readonly userToken;
       'division': user.division,
       'price_type': user.price_type,
       'search_string': searchString,
-      'category_id': '-1',
+      'category_id': '',
       'program_number': programNumber,
       'p': '1',
       'rpp': String(Constants.SEARCH_RESULTS_PER_PAGE),
       'last_modified': ''
     };
 
-    //console.log("SEARCH PROD params object",params);
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params);
+  }
+
+  public getProduct(sku, programNumber){
+    const user: User = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
+    const params = {
+      'user_token': user.userToken,
+      'division': user.division,
+      'price_type': user.price_type,
+      'search_string': "'"+sku+"'",
+      'category_id': '',
+      'program_number': programNumber,
+      'rpp':'1',
+      'p':'1'
+    };
+
+    return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params).map((result) => {
+      if (result) {
+        return JSON.parse(result['d'])[0];
+      }
+      return Observable.of([]);
+    });
   }
 
   orderHotDeal(productInfoList) {

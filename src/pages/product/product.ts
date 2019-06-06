@@ -14,8 +14,9 @@ import { CustomerLocationPage } from '../../pages/customer-location/customer-loc
 import { HotDealItem } from '../../interfaces/models/hot-deal-item';
 import { PricingService } from '../../services/pricing/pricing';
 import * as ConstantsUrl from '../../util/constants-url';
-import { ApiService } from '../../services/api/api';
 import { LocalStorageHelper } from '../../helpers/local-storage';
+import { HotDealService } from '../../services/hotdeal/hotdeal';
+import { ProductProvider } from '../../providers/product/product';
 
 @Component({
   selector: 'page-product',
@@ -48,7 +49,8 @@ export class ProductPage implements OnInit {
     private popoversProvider: PopoversService,
     private shoppingListProvider: ShoppingListsProvider,
     private pricingService: PricingService,
-    private apiService: ApiService) {
+    private hotDealService: HotDealService,
+    private productProvider: ProductProvider) {
       this.loader = this.loadingService.createLoader();
   }
 
@@ -70,16 +72,11 @@ export class ProductPage implements OnInit {
     }
 
     if (this.isHotDeal) {
-      let params = {
-        'user_token': JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER))['userToken'],
-        'sku': this.product.SKU
-      };
-
-      this.apiService.post(ConstantsUrl.GET_HOTDEALS_PROGRAM, params).subscribe((program) => {
+      this.hotDealService.getHotDealProgram(this.product.SKU).subscribe((program) => {
         let hotDealProgram :ItemProgram = JSON.parse(program.d);
         this.productPrograms = [hotDealProgram];
         if (this.productPrograms.length === 0) {
-          let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, undefined, Strings.MODAL_BUTTON_YES, Constants.POPOVER_ERROR);
+          let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, Strings.MODAL_BUTTON_OK,undefined,undefined, Constants.POPOVER_ERROR);
           this.popoversProvider.show(content);
           this.navigatorService.pop().catch(err => console.error(err));
           return;
@@ -87,14 +84,17 @@ export class ProductPage implements OnInit {
         let initialProgram: ItemProgram = hotDealProgram;
         this.selectedProgram = initialProgram;
         this.programProvider.selectProgram(initialProgram);
-        this.loader.hide();
+        this.getProduct().then(()=>{
+          this.loader.hide();
+        });
+       
       });
     } else {
       this.programProvider.getProductPrograms(this.product.SKU).subscribe(programs => {
         if (programs) {
           this.productPrograms = JSON.parse(programs.d);
           if (this.productPrograms.length === 0) {
-            let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, undefined, Strings.MODAL_BUTTON_YES, Constants.POPOVER_ERROR);
+            let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, Strings.MODAL_BUTTON_OK, undefined, undefined, Constants.POPOVER_ERROR);
             this.popoversProvider.show(content);
             this.navigatorService.pop().catch(err => console.error(err));
             return;
@@ -102,7 +102,9 @@ export class ProductPage implements OnInit {
           let initialProgram: ItemProgram = this.getInitialProgram();
           this.selectedProgram = initialProgram;
           this.programProvider.selectProgram(initialProgram);
-          this.loader.hide();
+          this.getProduct().then(()=>{
+            this.loader.hide();
+          });
         }
       });
     }
@@ -134,13 +136,28 @@ export class ProductPage implements OnInit {
     this.navigatorService.pop().catch(err => console.error(err));
   }
 
+
+  getProduct(){
+    return new Promise((resolve, reject)=>{
+      this.productProvider.getProduct(this.product.SKU, this.selectedProgram.PROGRAM_NO).subscribe((result) => {
+        const img = this.product.IMAGE;  //Save already processed image by the product component
+        this.product = result;  //Get the new product
+        this.product.IMAGE = img; //Re-assign already processed image.
+        //this.quantity = this.pricingService.validateQuantity(this.quantity,this.selectedProgram,this.product);
+        this.loader.hide();
+        resolve();
+      });
+    });
+  }
+
+
   addToShoppingList() {
     if (this.product.QTY_ROUND_OPTION === 'Y' && this.isMinimum70percentQuantity()) {
-      let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.Y_SHELF_PACK_QUANTITY_WARNING, undefined, Strings.MODAL_BUTTON_YES, Strings.Y_SHELF_PACK_QUANTITY_WARNING);
+      let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.Y_SHELF_PACK_QUANTITY_WARNING, Strings.MODAL_BUTTON_OK, undefined, undefined);
       this.popoversProvider.show(content);
       this.programProvider.setPackQuantity(true);
     } else if (this.product.QTY_ROUND_OPTION === 'X' && this.quantity % Number(this.product.SHELF_PACK) !== 0) {
-      let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.X_SHELF_PACK_QUANTITY_WARNING, undefined, Strings.MODAL_BUTTON_YES, 'X category');
+      let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.X_SHELF_PACK_QUANTITY_WARNING, Strings.MODAL_BUTTON_OK, undefined, undefined);
       this.popoversProvider.show(content);
     } else {
       this.navigatorService.push(AddToShoppingListPage, {
@@ -164,9 +181,12 @@ export class ProductPage implements OnInit {
     this.navigatorService.push(CustomerLocationPage, {hotDeal}).catch(err => console.error(err))
   }
 
-  onQuantityChange($event) {
+  onQuantityChange($event = undefined) {
+    if ($event) {
     this.quantity = $event.quantity;
-    this.quantityItemPrice = $event.total;
+      this.quantityItemPrice = $event.total;
+    }
+
     this.programProvider.setPackQuantity(false);
     if (this.fromShoppingList) {
       this.shoppingListProvider.updateShoppingListItem(this.product, this.shoppingListId, this.programNumber.toString(), $event.productPrice, this.quantity).subscribe(data => {
