@@ -5,10 +5,6 @@ import {dateTimeService} from "../../services/datetime/dateTime";
 import {ApiService} from "../../services/api/api";
 import * as ConstantsUrl from "../../util/constants-url";
 import * as Constants from "../../util/constants";
-
-import {forkJoin} from "rxjs/observable/forkJoin";
-import {Observable} from "rxjs/Observable";
-import {concatMap} from "rxjs/operator/concatMap";
 import {LocalStorageHelper} from "../../helpers/local-storage";
 import { Product } from 'interfaces/models/product';
 
@@ -95,37 +91,35 @@ export class ShoppingListsProvider {
     });
   }
 
-  getAllProductData(productList, resultsPerPage = 10){
+  getAllProductData(productList){
     return new Promise((resolve,reject) =>{
       let list = [];
-      let reqs = [];
       if(productList.length==0)
       {
         return reject("No products");
       }
-      productList.forEach( element => {
+     /* productList.forEach( element => {
        
         reqs.push(this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH,{
               "user_token" : this.userToken,
-            //  "search_string" : "'" + element.sku + "'", //HACK: Somica a stricat jucaria
+            //  "search_string" : "'" + element.sku + "'", 
               "search_string" :element.sku,
               "category_id": "",
               "program_number": element.program_no,
               "p": "1",
               "rpp": resultsPerPage
             }));
-      });
-      Observable.from(reqs).concatMap(shift => shift).subscribe( resp => {
+      });*/
+     // Observable.from(reqs).concatMap(shift => shift).subscribe( resp => {
         
-        let data: any;
-       // data = JSON.parse(resp["d"])[0]; HACK: Somica a stricat jukaria
-       data = JSON.parse(resp["d"]);
+       // let data: any;
+       // data = JSON.parse(resp["d"])[0]; 
+     //  data = JSON.parse(resp["d"]);
        
          //HACK: Big hack for missing API + fix
-     //  let element = productList.filter(elem=> elem.sku == data.SKU)[0]; //HACK: SOmica a stricat jukaria
-       
-     let element;
-        let dataIndex;
+     //  let element = productList.filter(elem=> elem.sku == data.SKU)[0]; 
+      
+     /*   let dataIndex;
         data.forEach((elem,index)=>{
           productList.forEach((prod)=>{
             if(elem.SKU==prod.sku)
@@ -137,28 +131,20 @@ export class ShoppingListsProvider {
         })
 
         data = data[dataIndex];
-
+*/
+        productList.forEach((element)=>{
         if(!element)
           return;
 
         let shoppingListProduct: ShoppingListItem = {
           id: element.id,
           product: {
-            CatID: data.CatID,
-            SKU: data.SKU,
-            QTY_ROUND_OPTION: data.QTY_ROUND_OPTION,
-            MODEL: data.MODEL,
-            NAME: data.NAME,
-            VENDOR_NAME: data.VENDOR_NAME,
-            SELLING_UNIT: data.SELLING_UNIT,
-            UPC_CODE: data.UPC_CODE,
-            SUGGESTED_RETAIL: data.SUGGESTED_RETAIL,
-            YOURCOST: data.YOURCOST,
-            IMAGE: data.IMAGE,
-            SHELF_PACK: data.SHELF_PACK,
-            VELOCITY_CODE: data.VELOCITY_CODE,
-            TOTAL_REC_COUNT: data.TOTAL_REC_COUNT
-          },
+            SKU: element.sku,
+            NAME: element.name,
+            VENDOR_NAME: element.vendor_name,
+            SELLING_UNIT: element.selling_unit,
+            YOURCOST: element.price
+          } as Product,
           program_number: element.program_no,
           item_price: element.price,
           quantity: element.quantity,
@@ -167,7 +153,8 @@ export class ShoppingListsProvider {
         };
         list.push(shoppingListProduct);
         
-      }).add(()=>{resolve(list);});
+      });
+      resolve(list);
       
     });
   }

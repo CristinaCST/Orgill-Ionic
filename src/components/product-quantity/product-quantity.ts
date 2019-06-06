@@ -24,7 +24,7 @@ export class ProductQuantityComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.programProvider.getSelectedProgram().subscribe(program => {
+    this.programSubscription = this.programProvider.getSelectedProgram().subscribe(program => {
       if (program) {
         this.program = program;
         this.productPrice = this.getDecimalPrice();
@@ -43,6 +43,10 @@ export class ProductQuantityComponent implements OnInit {
         this.handleQuantityChange();
       }
     });*/
+  ngOnDestroy(){
+    if (this.programSubscription) {
+      this.programSubscription.unsubscribe();
+    }
   }
 
   getDecimalPrice() {
@@ -89,7 +93,7 @@ export class ProductQuantityComponent implements OnInit {
     let newQuantity = this.validateQuantity(this.quantity);
     switch (actionType) {
       case 'ADD':
-        this.quantity = newQuantity + ((this.product.QTY_ROUND_OPTION === 'X') ? selfPackQuantity : 1);
+        this.quantity = newQuantity  + ((this.product.QTY_ROUND_OPTION === 'X') ? selfPackQuantity : 1);
         break;
       case 'REMOVE':
         this.quantity = newQuantity - ((this.product.QTY_ROUND_OPTION === 'X') ? selfPackQuantity : 1);
