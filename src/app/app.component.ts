@@ -56,12 +56,10 @@ export class MyApp {
       this.navigatorService.initializeBackButton(() => {
 
         if(LoadingService.activeLoading){
-         // console.log("ACTIVE LOADING");
           return;
         }
     
         if(PopoversService.activeItem){
-         // console.log("ACTIVE POPOVER");
           PopoversService.dismissCurrent();
           return;
         }

@@ -125,7 +125,7 @@ export class DatabaseProvider {
       product.YOURCOST];
     this.database.executeSql(this.queries.insertOrReplaceProduct, productData)
       .then(data => {
-       // console.log('Added Product Data: ', data);
+       // Added Product Data.
         return data;
       }, err => {
         console.error('Add Product Error: ', err);
@@ -205,11 +205,9 @@ export class DatabaseProvider {
 
     // programs.forEach(program => {
     //   programData = [program.PROGRAMNO, program.NAME, program.STARTDATE, program.ENDDATE, program.SHIPDATE, program.MARKETONLY];
-    //   console.log('added program',programData);
     //   this.database.executeSql(this.queries.addOrReplacePrograms, programData)
     //     .then(data => {
-    //         console.log("programdattta",programData);
-    //         console.log('added one program to database: ', data);
+    //         Added one program to database.
     //       },
     //       error => {
     //         console.error('add program to database error: ', error);
@@ -220,7 +218,7 @@ export class DatabaseProvider {
       programData = [program.PROGRAMNO, program.NAME, program.STARTDATE, program.ENDDATE, program.SHIPDATE, program.MARKETONLY];
         await this.database.executeSql(this.queries.addOrReplacePrograms, programData)
           .then(data => {
-              // console.log('added one program to database: ', data);
+              // Added one program to database.
             },
             error => {
               console.error('add program to database error: ', error);
@@ -246,7 +244,6 @@ export class DatabaseProvider {
       }
     }
     const finalizePurchaseQuery = 'UPDATE shopping_list_item SET purchase_order_id = ' + purchase_order_id + ', shopping_list_id = NULL WHERE shopping_list_id = ' + shopping_list_id + ' AND id IN (' + placeholders + ')';
-    //console.log('query: ', finalizePurchaseQuery);
     return this.database.executeSql(finalizePurchaseQuery, shopping_list_item_ids);
   }
 
@@ -269,7 +266,6 @@ export class DatabaseProvider {
       purchase.program_number,
     ];
 
-    //console.log('in db: ', purchaseData);
     return this.database.executeSql(this.queries.insertPurchase, purchaseData);
   }
 

@@ -139,7 +139,6 @@ export class AppMenuComponent implements OnInit {
         }
         this.events.subscribe('DeletedList', (listId: number) => {
           this.customShoppingLists = this.customShoppingLists.filter(list => list.ListID != listId);
-         // console.log("this.customshoppinglist after delete",this.customShoppingLists);
         })
       });
   }
@@ -211,12 +210,10 @@ export class AppMenuComponent implements OnInit {
     };
 
     this.navigatorService.setRoot(ShoppingListPage,params).then(()=>{
-      //    console.log("ALL OK");
         },(err)=>{
           console.error(err);
         });
     /*this.navigatorService.push(ShoppingListPage,params).then(()=>{
-  //    console.log("ALL OK");
     },(err)=>{
       console.error(err);
     });*/

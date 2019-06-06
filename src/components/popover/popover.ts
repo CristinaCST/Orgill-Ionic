@@ -51,7 +51,6 @@ export class PopoverComponent {
     }
 
       this.viewCtrl.dismiss(data, undefined ,navOptions?navOptions:undefined ).then(() => {
-        //console.log('modal closed'); 
     });
   }
 

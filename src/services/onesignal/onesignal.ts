@@ -116,14 +116,12 @@ export class OneSignalService {
             if (Constants.DEBUG_ONE_SIGNAL) {
                 this.testOneSignal();
             }
-            console.log("REJECTED");
         });
 
     };
 
 
     private androidPermissionsSetup(){
-        console.log("ANDROID MODAL PERMISSION STATUS:" + this.pushNotificationPermission);
         this.oneSignal.setSubscription(this.pushNotificationPermission);
     }
 
@@ -173,7 +171,6 @@ export class OneSignalService {
         if (this.platform.is('ios')) {
             if (typeof status == undefined) {
                 this.oneSignal.getPermissionSubscriptionState().then((result) => {
-                    console.log("SUBSCRIPTION RESULT:",result);
                     if (result.permissionStatus.hasPrompted && result.permissionStatus.status === 0) {
                         LocalStorageHelper.saveToLocalStorage(Constants.ONE_SIGNAL_IOS_PERMISSION_DECLINED, 'true');
                     } else if (result.permissionStatus.hasPrompted && result.permissionStatus.status != 0) {
@@ -191,10 +188,9 @@ export class OneSignalService {
     private askForLocation() {
         return new Promise((resolve, reject) => {
             this.geolocation.getCurrentPosition().then((res) => {
-                console.log("WE HAVE LOCATION", res)
+                //this.oneSignal.setLocationShared(true);
                 resolve(res);
             }).catch((err) => {
-                console.log("PROMPTING FOR LOCATION");
                 this.oneSignal.promptLocation();
                 reject(err);
             });
@@ -204,9 +200,7 @@ export class OneSignalService {
     private notificationReceived(data: any) {
 
         //Log only if we areverbose logging
-        if (Constants.ONE_SIGNAL_VERBOSE) {
-            this.debugLog("Received package:" + JSON.stringify(data), data);
-        }
+        this.debugLog("Received package:" + JSON.stringify(data), data);
 
         this.registerHotDealInMenu(data);
        
@@ -230,7 +224,6 @@ export class OneSignalService {
 
     private notificationOpened(data: any) {
 
-        console.log("one signal package:",data);
         //Log only if we areverbose logging
         if (Constants.ONE_SIGNAL_VERBOSE) {
             console.log("NOTIFICATION OPENED with data: ", data);
@@ -280,20 +273,17 @@ export class OneSignalService {
      */
     private goToHotDeal(data = null) {
 
-   /*     if(!this.sessionValidatorService.isValidSession()){
-            return;
-        }*/
+        /*     if(!this.sessionValidatorService.isValidSession()){
+                 return;
+             }*/
+
+             
 
         const sku = this.extractPackageSKU(data);
         this.debugLog("Sku in go to hotdeal:" + sku);
         if (data) {
             if (sku) {
-
-                console.log("REGISTERING SECURE ACTION")
-                // console.log("DAFUQ");
-                // console.log("SESSION VALIDITY:")
                 this.secureActions.do(() => {
-                    console.log("SECURE ACTION NAVIGATE TO HOT DEAL")
                     this.hotDealService.navigateToHotDeal(sku);
                 });
 
@@ -430,7 +420,6 @@ export class OneSignalService {
 
             default:
                 savePermissionModal(false, false);
-               // console.log("No valid modal result for OneSignal permissions, received:" + result) //TODO: Change to be tied to debug strings and be dynamic
                 break;
         };
     };

@@ -78,13 +78,11 @@ export class LoadingService {
 
     //If the loader is already active/activated/queued, just return
     if (this.activated || this.isLoadingPresent || qIndex > 0) {
-    //  console.log("Loader already queued/active");
       return;
     }
 
     //If the loader is expired at the time ofshowing
     if (this.alreadyExpired) {
-    //  console.log("Loader is already expired, ignoring show call " + this.content);
       this.cleanup(); //We try to clean it up
       return;
     }
@@ -110,7 +108,6 @@ export class LoadingService {
     this.loading = this.loadingCtrl.create(options);  //Actually create the loader from the ctrl only when we need to show it
 
     this.loading.present().then(() => {   //Try to show it
-      //console.log("created: " + this.content);
       this.isLoadingPresent = true; //Mark it if it is going to show here so 
 
       //We subscribe to the event that get's called when a loader leaves, this allows a safe check in hide() method relying on valid data
@@ -121,7 +118,6 @@ export class LoadingService {
 
       //Check if it didn't expire during creations
       if (this.alreadyExpired) {
-       // console.log("Loader expired during creation");
         this.hide();  //if it did, immediately remove it
       };
     }, (err) => {

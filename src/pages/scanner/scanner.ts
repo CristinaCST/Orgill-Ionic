@@ -38,11 +38,9 @@ export class ScannerPage implements OnInit {
 
   ngOnInit(): void {
     if (this.navParams.get("shoppingList")) {
-      //console.log("NAV PARAMS",this.navParams.get("shoppingList"));
       this.shoppingList = this.navParams.get("shoppingList");
       this.shoppingListId = this.shoppingList.ListID;
       this.products = this.navParams.get('products')
-     // console.log("IS scanner service inited?",this.scannerService);
       this.scannerService.scan(this.shoppingList,this.products);
     }
     this.searchTab = this.navParams.get('type');

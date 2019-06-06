@@ -42,11 +42,8 @@ export class OrderReviewPage implements OnInit {
     this.shoppingListItems = this.checkValidParams('shoppingListItems');
     this.orderTotal = this.checkValidParams('orderTotal');
     this.isHotDeal = this.checkValidParams('isHotDeal');
-    this.hotDealItem = this.checkValidParams('hotDealItem');
-
-  
+    this.hotDealItem = this.checkValidParams('hotDealItem');  
    
-
     if(this.hotDealItem){
       this.isHotDeal=true;
 
@@ -60,7 +57,6 @@ export class OrderReviewPage implements OnInit {
   }
  
   }
-
 
   checkValidParams(type) {
     if (this.navParams.get(type)) {
@@ -92,7 +88,6 @@ export class OrderReviewPage implements OnInit {
         order_method: this.orderMethod,
         order_query: this.getOrderQuery(programNumber, orderItems)
       };
-      console.log("QUERY:"+ this.getOrderQuery(programNumber, orderItems));
       let insertToDBInfo = {
         PO: this.postOffice,
         date: moment().format('MM/DD/YYYY'),

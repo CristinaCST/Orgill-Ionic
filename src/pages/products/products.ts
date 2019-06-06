@@ -44,7 +44,6 @@ export class ProductsPage implements OnInit, OnDestroy {
     this.loader.show();
     this.getProductSubscription = this.catalogProvider.getProducts(this.category ? this.category.CatID : '', this.programNumber, this.page).subscribe(response => {
       this.products = this.sortProducts(JSON.parse(response.d));
-      console.log("PRODUCTS NUMBER:"+this.products,this.products);
       this.loader.hide();
       this.isLoading = false;
       this.setPaginationInfo();

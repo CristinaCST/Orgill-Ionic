@@ -47,7 +47,7 @@ export class ScannerService{
     public scan(shoppingList, products) {
 
       this.navigatorService.oneTimeBackButtonOverride(() => {
-        console.log("EXITING SCANNER");
+        //Exiting scanner
       });
 
       if(shoppingList){

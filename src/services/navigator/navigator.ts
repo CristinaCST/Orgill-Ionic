@@ -33,8 +33,6 @@ export class NavigatorService {
      */
     public push(page: any, params: any = undefined, opts: NavOptions = undefined, done: any = undefined) {
 
-        //  console.log("navigator params:", params);
-        //   console.log("navOptions:",opts);
 
         let pageName = typeof page == "string" ? page : page.name;    //Grab the page name wheter it's directly passed or the entire Page object is passed
         let equals = false;     //We will store if the current view is the same as the last one 
@@ -47,7 +45,6 @@ export class NavigatorService {
 
             if (!opts || opts['paramsEquality'] === true) {
                 if (Equals.deepIsEqual(params, lastPage.data)) {
-                    //   console.log("Parms are equal");
                     equals = true;
                 }
             } else {
@@ -70,7 +67,6 @@ export class NavigatorService {
 
               //  return this.secureActions.do(() => {
                     //Insert this page without animations in the stack before this one with the exact same properties
-                    //console.log("NEW PAGE:",page);
                     this.navController.insert(this.navController.getViews().length - 1, page, params, opts, done);
 
                     //Afterwards, pop this one without animations and return the promise as normal
@@ -78,12 +74,10 @@ export class NavigatorService {
               //  });
 
             } else {
-                //   console.log("Not equals so=>");
                 //If the view is different just proceed to push
 
                 this.pageReference = page;
                 return this.secureActions.do(() => {
-                    console.log("NAV PUSH SECURE");
                     return this.navController.push(page, params, opts, done);
                 });
             }

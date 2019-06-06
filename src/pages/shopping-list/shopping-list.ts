@@ -89,7 +89,6 @@ export class ShoppingListPage {
       this.isCheckout = this.navParams.get('isCheckout');
     }
     if (this.navParams.get('shoppingListItems')) {
-      //console.log("INTRANGOL");
       this.shoppingListItems = this.navParams.get('shoppingListItems');
       this.content.resize();
     }
@@ -109,7 +108,6 @@ export class ShoppingListPage {
       return this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: Array<ShoppingListItem>) => {
 
         if (data) {
-       //   console.log("DATA IS OK");
           this.shoppingListItems = data;
           this.checkExpiredItems();
           this.content.resize();

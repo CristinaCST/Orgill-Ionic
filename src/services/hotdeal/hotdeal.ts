@@ -23,10 +23,8 @@ export class HotDealService {
   private getUserInfo(){
     let userToken = LocalStorageHelper.getFromLocalStorage(USER);
     if (userToken) {
-      console.log("USER TOKEN:" , userToken);
       let userInfo = JSON.parse(userToken);
       if (userInfo) {
-        console.log("USER INFO:" + userInfo);
         this.userToken = userInfo.userToken;
       }
     }
@@ -57,8 +55,6 @@ export class HotDealService {
       'rpp': '1',
       'last_modified': ''
     };
-
-    //console.log("SEARCH PROD params object",params);
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params);
   }
 

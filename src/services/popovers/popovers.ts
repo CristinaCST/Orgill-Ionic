@@ -33,9 +33,7 @@ export class PopoversService {
 
     this.isOpened = true;
 
-    
     PopoversService.activeItem=this;
-    //console.log("SETTING THIS POPOVER", PopoversProvider.activeItem);
 
     let close;
     if (subjectReference == null) {

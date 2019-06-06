@@ -14,7 +14,6 @@ import {ProgramProvider} from "../../providers/program/program";
 import {Subscription} from 'rxjs';
 import {LocalStorageHelper} from "../../helpers/local-storage";
 import { NavigatorService } from '../../services/navigator/navigator';
-import { first } from 'rxjs/operator/first';
 
 @Component({
   selector: 'page-add-to-shopping-list',
@@ -221,7 +220,6 @@ export class AddToShoppingListPage implements OnInit {
     this.shoppingListsProvider.checkProductInList(this.product.SKU, listId, this.selectedProgram.PROGRAM_NO).subscribe(data => {
       var temp = JSON.parse(data.d).Status;
       var response = (temp == "True");
-     // console.log(response);
       if (response){
         this.isAddBtnDisabled = true;
         this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_EXISTING_PRODUCT));

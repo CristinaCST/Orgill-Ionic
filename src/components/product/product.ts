@@ -1,4 +1,6 @@
 import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import * as Constants from '../../util/constants';
+import * as ConstantsUrl from '../../util/constants-url';
 
 @Component({
   selector: 'product',
@@ -13,8 +15,8 @@ export class ProductComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.product.IMAGE = this.product.IMAGE === '0000000.jpg' ? '../../assets/imgs/product_placeholder.png' :
-      'http://images.orgill.com/200x200/' + this.product.SKU + '.JPG';
+    this.product.IMAGE = this.product.IMAGE === '0000000.jpg' ? Constants.LOCAL_PRODUCT_IMAGE_PLACEHOLDER :
+    ConstantsUrl.PRODUCT_IMAGE_BASE_URL + this.product.SKU + '.JPG';
   }
 
   loadImage() {

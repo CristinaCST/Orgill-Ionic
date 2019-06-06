@@ -83,10 +83,11 @@ export class ShoppingListsProvider {
         user_token: this.userToken,
         shopping_list_id: listId
       }).subscribe(data => {
+        
         let itemsData = JSON.parse(data.d);
         this.getAllProductData(itemsData).then(data => {
           resolve(data);
-        },(err)=>{
+        }, (err) => {
           reject(err);
         })
 
@@ -131,7 +132,6 @@ export class ShoppingListsProvider {
             {
               element = prod;
               dataIndex = index;
-            //  console.log("FOUND ELEMENT",prod);
             }
           })
         })

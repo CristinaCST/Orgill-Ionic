@@ -15,11 +15,9 @@ export class SessionValidatorService{
         if (!LocalStorageHelper.hasKey(USER)) {
           return false;
         }
-     //   console.log("USER:"+ USER);
         const now = dateTimeService.getCurrentDateTime();
         const receivedTimestamp = (JSON.parse(LocalStorageHelper.getFromLocalStorage(USER)).time_stamp);
         const sessionTimestampWith4Days = dateTimeService.getTimeAfter4Days(receivedTimestamp);
-       // console.log(sessionTimestampWith4Days.isSameOrAfter(now));
 
        let status = sessionTimestampWith4Days.isSameOrAfter(now);
        if(!status){

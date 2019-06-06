@@ -63,7 +63,6 @@ export class CustomerLocationPage implements OnInit {
 
 
     this.userInfoProvider.getUserLocations().subscribe((locations) => {
-     
 
       if (Constants.DEBUG_NO_LOCATIONS) {
         locations = null; //HACK: TESTING
@@ -166,25 +165,23 @@ export class CustomerLocationPage implements OnInit {
       }
       
       
-      console.log("LOCS:",selectedLocations);
       this.hotDealItem.LOCATIONS = selectedLocations;
-      console.log("HOT DEAL LOCS:",this.hotDealItem.LOCATIONS);
       this.navigatorService.push(OrderReviewPage, {hotDealItem:this.hotDealItem});
     }
   }
   
   add(location){
     location.QUANTITY = Number(location.QUANTITY) + 1;
-    location.QUANTITY =  this.pricingService.validateQuantity(location.QUANTITY,this.hotDealItem.PROGRAM,this.hotDealItem.ITEM) as number;
+    location.QUANTITY =  this.pricingService.validateQuantity(location.QUANTITY,this.hotDealItem.PROGRAM,this.hotDealItem.ITEM);
   }
 
   remove(location){
     location.QUANTITY = Number(location.QUANTITY) - 1;
-    location.QUANTITY= this.pricingService.validateQuantity(location.QUANTITY,this.hotDealItem.PROGRAM,this.hotDealItem.ITEM) as number;
+    location.QUANTITY= this.pricingService.validateQuantity(location.QUANTITY,this.hotDealItem.PROGRAM,this.hotDealItem.ITEM);
   }
 
   handleQuantityChange(location){
-    location.QUANTITY = this.pricingService.validateQuantity(location.QUANTITY,this.hotDealItem.PROGRAM,this.hotDealItem.ITEM) as number;
+    location.QUANTITY = this.pricingService.validateQuantity(location.QUANTITY,this.hotDealItem.PROGRAM,this.hotDealItem.ITEM);
   }
 
   private PONumberValidation(location){
