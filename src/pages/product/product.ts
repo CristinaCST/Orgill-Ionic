@@ -34,6 +34,8 @@ export class ProductPage implements OnInit {
   public programName: string;
   public isHotDeal: boolean = false;
   public hotDeal: HotDealItem;
+  private canLeave: boolean = false;
+  private lastEvent;
 
   public fromShoppingList;
   private shoppingListId;
@@ -183,22 +185,46 @@ export class ProductPage implements OnInit {
 
   onQuantityChange($event = undefined) {
     if ($event) {
-    this.quantity = $event.quantity;
+      this.quantity = $event.quantity;
       this.quantityItemPrice = $event.total;
+      this.lastEvent = $event;
     }
 
     this.programProvider.setPackQuantity(false);
-    if (this.fromShoppingList) {
-      this.shoppingListProvider.updateShoppingListItem(this.product, this.shoppingListId, this.programNumber.toString(), $event.productPrice, this.quantity).subscribe(data => {
+  }
+
+  updateList() {
+    if (this.fromShoppingList && this.lastEvent) {
+      this.loader.show();
+      console.log("UPDATING SHOPPING LIST ITEM");
+      console.log("ID:" + this.shoppingListId);
+      this.shoppingListProvider.updateShoppingListItem(this.product, this.shoppingListId, this.programNumber.toString(), this.lastEvent.productPrice, this.quantity).subscribe(data => {
+        this.canLeave = true;
+        console.warn("POP");
+        this.loader.hide();
+         this.navigatorService.pop();
       },
         error => {
-        console.error('error updating',error);
+          console.error('error updating', error);
         })
     }
   }
 
+  ionViewCanLeave():boolean{
+    
+    console.log("CONTINUUU");
+    if (this.fromShoppingList) {
+      if (!this.canLeave) {
+        this.updateList();
+        return false;
+      }
+      return true;
+    }
+    return true;
+  }
+
   public isMinimum70percentQuantity(): boolean {
-    return this.quantity >= (Number(this.product.SHELF_PACK) * 70 / 100) && this.quantity < Number(this.product.SHELF_PACK);
+    return this.quantity >= (Number(this.product.SHELF_PACK) * 0.7) && this.quantity < Number(this.product.SHELF_PACK);
   }
 
 }

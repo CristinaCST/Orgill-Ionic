@@ -57,11 +57,13 @@ export class ShoppingListPage {
   }
 
   ionViewWillEnter() {
+   // this.fillList();
     this.events.subscribe("scannedProductAdded", () => {
       this.fillList();
     })
 
-    if (!this.navParams.get('fromSearch')) { this.init(); }
+    if (!this.navParams.get('fromSearch')) {
+      this.init(); }
     else {
       this.fillList();
     }
@@ -84,6 +86,7 @@ export class ShoppingListPage {
   }
 
   fillList(){
+    console.warn("FILLIST CALL");
     this.shoppingList = this.navParams.get('list');
     if (this.navParams.get('isCheckout') !== undefined) {
       this.isCheckout = this.navParams.get('isCheckout');
@@ -93,6 +96,7 @@ export class ShoppingListPage {
       this.content.resize();
     }
     else {
+      console.log("EXISTENT ITEMS:" + this.shoppingListItems.length);
       this.shoppingListItems = [];
       this.content.resize();
       
