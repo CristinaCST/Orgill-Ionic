@@ -82,6 +82,7 @@ export const EVENT_GO_TO_SHOPPING_LISTS_PAGE = 'goToListsPage';
 
 export const EVENT_HOT_DEAL_NOTIFICATION_RECEIVED = "notificationsHotDealReceived";
 
+export const EVENT_HIDE_MENU_FROM_NAVIGATION = "hideMenuFromNavigation";
 
 /**
 * Marker : User

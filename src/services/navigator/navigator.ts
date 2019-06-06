@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
-import { NavController, NavOptions, App, Platform} from "ionic-angular";
+import { NavController, NavOptions, App, Platform, Events} from "ionic-angular";
 import * as Equals from "../../util/equality";
 import { SecureActionsService } from "../../services/secure-actions/secure-actions";
+import * as Constants from "../../util/constants";
 
 
 @Injectable()
@@ -19,7 +20,7 @@ export class NavigatorService {
         this._navController = value;
     }
 
-    constructor(private app: App, private platform:Platform, private secureActions: SecureActionsService) {
+    constructor(private app: App, private platform:Platform, private secureActions: SecureActionsService, private events: Events) {
         this.navController = this.app.getActiveNavs()[0];  //Grab it at construction
     };
 
@@ -33,6 +34,7 @@ export class NavigatorService {
      */
     public push(page: any, params: any = undefined, opts: NavOptions = undefined, done: any = undefined) {
 
+        this.events.publish(Constants.EVENT_HIDE_MENU_FROM_NAVIGATION);
 
         let pageName = typeof page == "string" ? page : page.name;    //Grab the page name wheter it's directly passed or the entire Page object is passed
         let equals = false;     //We will store if the current view is the same as the last one 
