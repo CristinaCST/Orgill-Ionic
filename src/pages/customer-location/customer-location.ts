@@ -10,6 +10,7 @@ import * as Strings from '../../util/strings';
 import { LocationElement } from '../../interfaces/models/location-element';
 import { PopoversService } from '../../services/popovers/popovers';
 import { PricingService } from '../../services/pricing/pricing';
+import { HotDealService } from '../../services/hotdeal/hotdeal';
 
 
 @Component({
@@ -42,7 +43,8 @@ export class CustomerLocationPage implements OnInit {
               private navParams: NavParams,
               private userInfoProvider: UserInfoService,
               private popoverProvider: PopoversService,
-              private pricingService: PricingService) {
+              private pricingService: PricingService,
+              private hotDealService: HotDealService) {
   }
 
   ngOnInit(): void {
@@ -79,19 +81,23 @@ export class CustomerLocationPage implements OnInit {
         this.selectedLocation = this.userLocations[0];
       }
 
+      let min_value = this.isHotDeal ? this.pricingService.validateQuantity(1, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM, true) : 1;
+
       this.userLocations.forEach((element) => {
 
-        let locElement : LocationElement = {
+        let locElement: LocationElement = {
           LOCATION: element,
           POSTOFFICE: undefined,
-          QUANTITY: undefined,
-          WANTED:false
+          QUANTITY: min_value,
+          WANTED: false
         };
 
         this.hotDealLocations.push(locElement);
       });
 
-    })
+    });
+
+    
   }
 
 
@@ -131,7 +137,7 @@ export class CustomerLocationPage implements OnInit {
         if(element.WANTED)
         {
 
-          if(!element.POSTOFFICE|| !element.QUANTITY){
+          if(!element.QUANTITY){
             valid=false;
           }
 
@@ -166,10 +172,20 @@ export class CustomerLocationPage implements OnInit {
       
       
       this.hotDealItem.LOCATIONS = selectedLocations;
-      this.navigatorService.push(OrderReviewPage, {hotDealItem:this.hotDealItem});
+      this.setHotDealTotalPrice();
+      this.navigatorService.push(OrderReviewPage, {hotDealItem:this.hotDealItem,orderTotal:this.orderTotal});
+     
     }
   }
   
+  setHotDealTotalPrice(){
+    let qty = 0;
+    this.hotDealItem.LOCATIONS.forEach((location)=>{
+      qty += location.QUANTITY;
+    });
+   this.orderTotal =  this.pricingService.getPrice(qty, this.hotDealItem, this.hotDealItem.PROGRAM);
+  }
+
   add(location){
     location.QUANTITY = Number(location.QUANTITY) + 1;
     location.QUANTITY =  this.pricingService.validateQuantity(location.QUANTITY,this.hotDealItem.PROGRAM,this.hotDealItem.ITEM);
@@ -185,6 +201,10 @@ export class CustomerLocationPage implements OnInit {
   }
 
   private PONumberValidation(location){
+    if(!location.POSTOFFICE){
+      return;
+    }
+
     if(location.POSTOFFICE.length>15){
       let content = {
         type: Constants.POPOVER_INFO,
