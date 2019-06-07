@@ -86,7 +86,6 @@ export class ShoppingListPage {
   }
 
   fillList(){
-    console.warn("FILLIST CALL");
     this.shoppingList = this.navParams.get('list');
     if (this.navParams.get('isCheckout') !== undefined) {
       this.isCheckout = this.navParams.get('isCheckout');
@@ -96,7 +95,6 @@ export class ShoppingListPage {
       this.content.resize();
     }
     else {
-      console.log("EXISTENT ITEMS:" + this.shoppingListItems.length);
       this.shoppingListItems = [];
       this.content.resize();
       
@@ -306,8 +304,9 @@ export class ShoppingListPage {
     this.touchend();
   }
 
-  touchstart(){
+  touchstart(item){
     this.holdTimeoutReference = setTimeout(()=>{
+      item.isCheckedInShoppingList=true;
       this.isDeleteMode = true;
       this.navigatorService.oneTimeBackButtonOverride(()=>{
         this.isDeleteMode = false;

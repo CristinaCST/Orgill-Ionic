@@ -196,11 +196,8 @@ export class ProductPage implements OnInit {
   updateList() {
     if (this.fromShoppingList && this.lastEvent) {
       this.loader.show();
-      console.log("UPDATING SHOPPING LIST ITEM");
-      console.log("ID:" + this.shoppingListId);
       this.shoppingListProvider.updateShoppingListItem(this.product, this.shoppingListId, this.programNumber.toString(), this.lastEvent.productPrice, this.quantity).subscribe(data => {
         this.canLeave = true;
-        console.warn("POP");
         this.loader.hide();
          this.navigatorService.pop();
       },
@@ -211,8 +208,6 @@ export class ProductPage implements OnInit {
   }
 
   ionViewCanLeave():boolean{
-    
-    console.log("CONTINUUU");
     if (this.fromShoppingList) {
       if (!this.canLeave) {
         this.updateList();
