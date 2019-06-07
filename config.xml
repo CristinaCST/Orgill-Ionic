@@ -21,6 +21,8 @@
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="FadeSplashScreenDuration" value="300" />
+    <preference name="KeyboardResize" value="true" />
+    <preference name="KeyboardResizeMode" value="native" />
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="mdpi" src="resources/android/icon/icon_mdpi.png" />
