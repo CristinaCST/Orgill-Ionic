@@ -97,7 +97,11 @@ const errorHandler = environment.production ? CustomErrorHandlerService : IonicE
   declarations: pages,
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp,{mode:"md"}),
+    IonicModule.forRoot(MyApp, {
+      mode: "md", scrollPadding: false,
+      scrollAssist: true,
+      autoFocusAssist: true
+    }),
     IonicStorageModule.forRoot(),
     HttpClientModule,
     ComponentsModule,

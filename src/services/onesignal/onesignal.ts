@@ -341,9 +341,10 @@ export class OneSignalService {
         )*/
         ).subscribe(([notification]) => {
             //We save their new result if it's the case
-            if (this.platform.is('android')) {
+            if (notification) {
                 this.permissionSaveResult(Constants.ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH, notification["optionSelected"]);
             }
+            
             //   this.permissionSaveResult(Constants.ONE_SIGNAL_LOCATION_PREFERENCE_PATH, location["optionSelected"]);
 
 
