@@ -15,6 +15,8 @@ import * as Constants from '../util/constants';
 import * as Strings from '../util/strings';
 import { PopoversService } from '../services/popovers/popovers';
 import { LoadingService } from '../services/loading/loading';
+import { Broadcaster } from '@ionic-native/broadcaster';
+
 
 @Component({
   templateUrl: 'app.html'
@@ -35,7 +37,8 @@ export class MyApp {
     private sessionValidatorProvider: SessionValidatorService,
     private oneSignalService: OneSignalService,
     private navigatorService: NavigatorService,
-    private popoverProvider: PopoversService) {
+    private popoverProvider: PopoversService,
+    private broadcaster : Broadcaster) {
     this.setAppLanguage();
     this.initializeApp();
   }
@@ -52,6 +55,10 @@ export class MyApp {
       window.addEventListener('keyboardDidHide', () => {
         document.body.classList.remove('keyboard-is-open');
       });
+
+      this.oneSignalService.init();
+
+      this.broadcaster.addEventListener("data").subscribe( event => console.log("event listener from native", event));
 
       this.navigatorService.initializeBackButton(() => {
 
@@ -83,7 +90,6 @@ export class MyApp {
           this.navigatorService.pop();
         }
       });
-      this.oneSignalService.init();
       this.networkService.listenForNetworkEvents();
       this.statusBar.styleDefault();
       this.statusBar.overlaysWebView(false);

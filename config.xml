@@ -115,6 +115,7 @@
     <plugin name="onesignal-cordova-plugin" spec="2.4.5" />
     <allow-navigation href="http://192.168.100.102:8100" sessionid="d7307190" />
     <allow-navigation href="http://192.168.1.88:8100" sessionid="3d1b2f55" />
+    <plugin name="cordova-plugin-broadcaster" spec="3.1.1" />
     <engine name="android" spec="^7.0.0" />
     <engine name="ios" spec="4.5.5" />
 </widget>

@@ -84,6 +84,7 @@ let pages = [MyApp,
 
 //Error Handlers
 import { CustomErrorHandlerService } from '../services/error-handler/CustomErrorHandler';
+import {Broadcaster} from "@ionic-native/broadcaster";
 
 
 
@@ -140,6 +141,7 @@ const errorHandler = environment.production ? CustomErrorHandlerService : IonicE
     PricingService,
     SecureActionsService,
     Geolocation,
+    Broadcaster,
     {provide: ErrorHandler, useClass: CustomErrorHandlerService}
   ]
 })
