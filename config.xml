@@ -97,6 +97,12 @@
         <config-file parent="NSLocationWhenInUseUsageDescription" target="*-Info.plist">
             <string>O-Zone needs to use location to send geolocation notifications</string>
         </config-file>
+        <config-file parent="NSCameraUsageDescription" target="*-Info.plist">
+            <string>O-Zone needs to use device camera for barcode scanning</string>
+        </config-file>
+        <config-file parent="NSPhotoLibraryUsageDescription" target="*-Info.plist">
+            <string>O-Zone needs to use device camera for barcode scanning</string>
+        </config-file>
         <config-file parent="OneSignal_disable_badge_clearing" target="*-Info.plist">
             <true />
         </config-file>
@@ -118,7 +124,8 @@
     <plugin name="onesignal-cordova-plugin" spec="2.4.5" />
     <allow-navigation href="http://192.168.100.102:8100" sessionid="d7307190" />
     <allow-navigation href="http://192.168.1.88:8100" sessionid="3d1b2f55" />
-    <plugin name="cordova-plugin-broadcaster" spec="3.1.1" />
-    <engine name="android" spec="^7.0.0" />
+    <plugin name="cordova-plugin-app-preferences" spec="https://bitbucket.org/packt-internal/cordova-plugin-app-preferences.git" />
+    <plugin name="cordova-plugin-nativestorage" spec="2.3.2" />
     <engine name="ios" spec="4.5.5" />
+    <engine name="android" spec="7.1.4" />
 </widget>
