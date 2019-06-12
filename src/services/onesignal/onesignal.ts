@@ -10,6 +10,8 @@ import { PopoversService } from '../popovers/popovers';
 import { Observable } from 'rxjs';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import { Geolocation} from "@ionic-native/geolocation";
+import { NavigatorService } from '../../services/navigator/navigator';
+import {NativeStorage} from '@ionic-native/native-storage';
 
 
 @Injectable()
@@ -22,6 +24,7 @@ export class OneSignalService {
     //Store actual permissions for quick access
     private pushNotificationPermission: boolean = false;
     //private locationPermission: boolean = false;
+    private mainModalShown: boolean = false;
 
     constructor(private oneSignal: OneSignal,
         private badge: Badge,   //Badge for icon notification
@@ -30,7 +33,8 @@ export class OneSignalService {
         private popoverService: PopoversService,     //Needed for permission modals,
         private secureActions:SecureActionsService,
         private platform: Platform,
-        private geolocation: Geolocation
+        private geolocation: Geolocation,
+        private navigatorService: NavigatorService
     ) { };
 
     /**
@@ -57,125 +61,254 @@ export class OneSignalService {
         //How will oneSignal notifications will show while using the app.
         this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
 
+        //Handle the receiving of a notification, this currently only works if application is not closed :(
         this.oneSignal.handleNotificationReceived().subscribe((data) => {
-            if (data && data['payload'] && this.validateDate(data['payload'])) {
+            if (data && data['payload'] && this.validateDate(data['payload'])) {    //Validate the structure of the notification
                 this.notificationReceived(data['payload']);
             }
         });
 
         //Handle the opening of a notification
         this.oneSignal.handleNotificationOpened().subscribe((data) => {
-            if (data && data['notification'] && this.validateDate(data['notification']['payload'])) {
+            if (data && data['notification'] && this.validateDate(data['notification']['payload'])) {   //Validate the structure of the notification
                 this.notificationOpened(data['notification']['payload']); 
             }
         });
 
         //Set the logging level of OneSignal
         this.oneSignal.setLogLevel({
-            logLevel: Constants.ONE_SIGNAL_VERBOSE ? 6 : 1, //Are we verbose logging? If not, log only fatal errors
+            logLevel: Constants.ONE_SIGNAL_VERBOSE ? 6 : 1, //Are we verbose logging by choice? If not, log only fatal errors
             visualLevel: 0  //Never pop up error as alerts with the built-in system.
         });
         
+        //End the settings phase of oneSignal
         this.oneSignal.endInit();
+
+        //Proceed to handle permissions
+        this.setPermissions();
+
+    };
+
+        /**
+     * Check or get all needed permissions.
+     */
+    private setPermissions() {
 
         //If OneSignal is in DEBUG mode we reset the status of permissions so we get modals again.
         if (Constants.DEBUG_ONE_SIGNAL && Constants.DEBUG_ONE_SIGNAL_CLEAN_PREFS) {
-            this.permissionSaveResult(this.pushNotificationPermissionID, "NO");
-         //   this.permissionSaveResult(this.locationPermissionID, "NO");
-        }
+           this.permissionSaveResult(this.pushNotificationPermissionID, "NO");
+        //   this.permissionSaveResult(this.locationPermissionID, "NO");
+       }
 
-        this.setPermissions();
-    };
+       //forkJoin modal observables such that we continue only when all permission are settled (either granted or rejected)
+       //This setup is made to handle multiple custom permissions modals.
+       Observable.forkJoin(this.askForPermission(
+           Strings.GENERIC_MODAL_TITLE,
+           Strings.NOTIFICATIONS_PERMISSIONS_MESSAGE,
+           this.pushNotificationPermissionID,
+           ['android','ios']    //We want this permission request modal on these platforms
+       )/*, this.askForPermission(
+           Strings.GENERIC_MODAL_TITLE,
+           Strings.LOCATION_PERMISSIONS_MESSAGE,
+           this.locationPermissionID
+       )*/
+       ).subscribe(([notification]) => {    //For each modal we need a matching parameter
+
+           //We save their new result if it's the case
+           if (notification) {
+               this.mainModalShown=true;
+               this.permissionSaveResult(Constants.ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH, notification["optionSelected"]);
+           }
+           
+           //   this.permissionSaveResult(Constants.ONE_SIGNAL_LOCATION_PREFERENCE_PATH, location["optionSelected"]);
+
+           this.updatePermissions(); //Update the saved permissions state to be consistent with what's in memory
+
+           if (this.platform.is('android')) {
+               this.androidPermissionsSetup();
+
+               if (Constants.DEBUG_ONE_SIGNAL) {
+                   this.testOneSignal();
+               }
+
+           } else if (this.platform.is('ios')) {
+
+               this.iOSPermissionsSetup().then((notificationPermission) => {
+                   //this.iosNativePermissionStatusUpdate();
+                   if (Constants.DEBUG_ONE_SIGNAL) {
+                       this.testOneSignal();
+                   }
+               });
+           };
+       });
+   };
 
 
     /**
-     * This only should be called after permissions have been fully assessed.
+     * Handles android-side of permissions
      */
-    private finishInit() {
+    private androidPermissionsSetup() {
 
-        this.askForLocation().then((res) => {
-            if (this.platform.is('ios')) {
-                //  this.iosNativePermissionStatusUpdate();
-            }
-
-            if (Constants.DEBUG_ONE_SIGNAL) {
-                this.testOneSignal();
-            }
-        }, (rej) => {
-
-            if (this.platform.is('ios')) {
-                //  this.iosNativePermissionStatusUpdate();
-            }
-
-            if (Constants.DEBUG_ONE_SIGNAL) {
-                this.testOneSignal();
-            }
-        });
-
-    };
-
-
-    private androidPermissionsSetup(){
+        console.log("ANDROID NOTIFICATION PERM " + this.pushNotificationPermission);
         this.oneSignal.setSubscription(this.pushNotificationPermission);
-    }
-
-    private iOSPermissionsSetup() {
-        return new Promise((resolve,reject)=>{
-        let askedAndDeclined = LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_IOS_PERMISSION_DECLINED);
-           
-         if (askedAndDeclined !== "true") {
-            // this.oneSignal.registerForPushNotifications();
-            this.oneSignal.promptForPushNotificationsWithUserResponse().then((result)=>{
-                 this.iosNativePermissionStatusUpdate(result);
-                 resolve(result);
-             })
-         } else {
-             //Setup the popover content
-             let content = {
-                 type: Constants.PERMISSION_MODAL,
-                 title: Strings.GENERIC_MODAL_TITLE,
-                 message: Strings.ONE_SIGNAL_IOS_PERMISSION,
-                 negativeButtonText: Strings.MODAL_BUTTON_DECLINE,
-                 positiveButtonText: Strings.MODAL_BUTTON_SETTINGS
-             };
-
-             this.popoverService.show(content).subscribe((result)=>{
-                 if(result == 'OK'){
-                    resolve(result);
-                 }
-             })
-         }
-        });
-    }
+        console.log("GET PERMISSION DISMISS STATUS: " + this.getPermissionDismissStatus(Constants.ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH));
 
 
-    private iosNativePermissionStatusUpdate(status = undefined) {
-        if (this.platform.is('ios')) {
-            if (typeof status == undefined) {
-                this.oneSignal.getPermissionSubscriptionState().then((result) => {
-                    if (result.permissionStatus.hasPrompted && result.permissionStatus.status === 0) {
-                        LocalStorageHelper.saveToLocalStorage(Constants.ONE_SIGNAL_IOS_PERMISSION_DECLINED, 'true');
-                    } else if (result.permissionStatus.hasPrompted && result.permissionStatus.status != 0) {
-                        LocalStorageHelper.saveToLocalStorage(Constants.ONE_SIGNAL_IOS_PERMISSION_DECLINED, 'false');
+        if (this.pushNotificationPermission) {
+            LocalStorageHelper.removeFromLocalStorage(Constants.NOTIFICATION_SUBSCRIPTION_ANDROID_PATH);
+            this.handleLocationPermission();
+        } else if (this.getPermissionDismissStatus(Constants.ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH)) {
+            LocalStorageHelper.saveToLocalStorage(Constants.NOTIFICATION_SUBSCRIPTION_ANDROID_PATH, true);
+        }
+
+        this.navigatorService.lastPage.subscribe((pageName) => {
+            if (pageName == "Login") {
+
+                //Check if permission is granted, if not, we show a modal
+                this.oneSignal.getPermissionSubscriptionState().then((state) => {
+                    if (state.permissionStatus.state == 2) {    //state == 2 means it's declined, 1 is Authorized.
+                        this.showPermissionsReminder();
                     }
                 });
+
+                if (pageName == "Login") {
+                    console.log("SUBSCRIPTION MODAL STATE: " + LocalStorageHelper.getFromLocalStorage(Constants.NOTIFICATION_SUBSCRIPTION_ANDROID_PATH));
+                    if (((LocalStorageHelper.getFromLocalStorage(Constants.NOTIFICATION_SUBSCRIPTION_ANDROID_PATH) == "true" ? true : false) || (!this.pushNotificationPermission && !this.getPermissionDismissStatus(Constants.ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH))) && !this.mainModalShown) {
+                        //We handle the case we should show it or the edge case where we choose "Not now" then logged in and out. 
+                        //If we need to show the subscription modal we do it here, the check is to not show it on the first launch.
+                        this.showSubscriptionSetting();
+                    }else if(this.mainModalShown){
+                        this.mainModalShown = false; //Allow next appearences to occur unless exiting the app.
+                    }
+                }
             }
-            else {
-                LocalStorageHelper.saveToLocalStorage(Constants.ONE_SIGNAL_IOS_PERMISSION_DECLINED, (!status).toString());
+        });
+    }
+
+    /**
+     * Handles iOS side of perissions setup
+     */
+    private iOSPermissionsSetup() {
+
+        return this.badge.isSupported().then((isSupported) => {
+            if (isSupported && this.pushNotificationPermission) {    //.hasPermission() check prompts notification permission so we don't want to do it always
+                return this.badge.hasPermission();
             }
+            return Promise.resolve(isSupported);
+
+        }).then((hasPermission) => {
+            if (!hasPermission && this.pushNotificationPermission) {
+                return this.badge.requestPermission();
+            }
+            return Promise.resolve(hasPermission);
+        }).then((requestResult) => {
+            return new Promise((resolve, reject) => {
+
+                let askedAndDeclined = LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_IOS_PERMISSION_DECLINED);
+                if (askedAndDeclined !== "true" && this.pushNotificationPermission) {
+                    LocalStorageHelper.removeFromLocalStorage(Constants.NOTIFICATION_SETTINGS_WARNING_PATH);
+                    this.oneSignal.promptForPushNotificationsWithUserResponse().then((result) => {
+                        this.iosNativePermissionStatusUpdate(result);
+
+                        if (result) {
+                            this.handleLocationPermission();
+                        }
+
+                        resolve(result);
+                    })
+                } else if ((this.iosNativePermissionDeclined() == "true" || this.getPermissionDismissStatus(Constants.ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH))) {
+                    LocalStorageHelper.saveToLocalStorage(Constants.NOTIFICATION_SETTINGS_WARNING_PATH, true);
+                }
+            });
+        });
+    }
+
+    /**
+     * 
+     * @param status 
+     * 
+     */
+    private showPermissionsReminder() {
+        return new Promise((resolve, reject) => {
+            let content = {
+                type: Constants.PERMISSION_MODAL,
+                title: Strings.GENERIC_MODAL_TITLE,
+                message: Strings.ONE_SIGNAL_PERMISSION_REMINDER,
+                positiveButtonText: Strings.MODAL_BUTTON_OK
+            };
+
+            this.popoverService.show(content).subscribe((result) => {
+                    resolve(result);
+            });
+        });
+    }
+
+    private showSubscriptionSetting(){
+        let content = {
+            type: Constants.PERMISSION_MODAL,
+            title: Strings.GENERIC_MODAL_TITLE,
+            message: Strings.ONE_SIGNAL_SUBSCRIPTION_REMINDER,
+            positiveButtonText: Strings.MODAL_BUTTON_YES,
+            negativeButtonText: Strings.MODAL_BUTTON_NO
+        };
+
+        this.popoverService.show(content).subscribe((result) => {
+            console.log("POPOVER RESULT",result);
+            if(result['optionSelected']=='OK'){
+                console.log("YES,SUBSCRIBING");
+                this.oneSignal.setSubscription(true);
+
+                //Cleanup modals
+                this.permissionSaveResult(Constants.ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH,result['optionSelected']);
+                this.handleLocationPermission();
+                LocalStorageHelper.removeFromLocalStorage(Constants.NOTIFICATION_SUBSCRIPTION_ANDROID_PATH);
+            }else{
+                this.oneSignal.setSubscription(false);
+            }
+        });
+    }
+
+    /**
+     * Special function for iOS to know whether the notification permission was granted or declined
+     * @param status Save a specific status
+     */
+    private iosNativePermissionStatusUpdate(status:boolean = undefined) {
+        if (typeof status == undefined) {
+            this.oneSignal.getPermissionSubscriptionState().then((result) => {
+                if (result.permissionStatus.hasPrompted && result.permissionStatus.state === 0) {
+                    LocalStorageHelper.saveToLocalStorage(Constants.ONE_SIGNAL_IOS_PERMISSION_DECLINED, 'true');
+                } else if (result.permissionStatus.hasPrompted && result.permissionStatus.state != 0) {
+                    LocalStorageHelper.saveToLocalStorage(Constants.ONE_SIGNAL_IOS_PERMISSION_DECLINED, 'false');
+                }
+            });
+        }
+        else {
+            LocalStorageHelper.saveToLocalStorage(Constants.ONE_SIGNAL_IOS_PERMISSION_DECLINED, (!status).toString());
         }
     }
 
+    private iosNativePermissionDeclined(){
+        const status = LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_IOS_PERMISSION_DECLINED);
+        return status;
+    }
 
-    private askForLocation() {
+
+    /**
+     * Function that checks wether we have location permission.
+     * @returns Nothing, there is no promise for promptLocation() so in the end it does not matter if we wait or not
+     */
+    private handleLocationPermission() {
+        console.log("HANDLE LOCATION PERM");
         return new Promise((resolve, reject) => {
+            this.oneSignal.setLocationShared(true);
+            //GetCurrent position calls for location permission by itself
             this.geolocation.getCurrentPosition().then((res) => {
-                //this.oneSignal.setLocationShared(true);
-                resolve(res);
+                //Everything is alright
+            },(rej)=>{
+                //console.log("REJ");
             }).catch((err) => {
-                this.oneSignal.promptLocation();
+               // this.oneSignal.promptLocation();
                 console.error(err);
-                reject(err);
             });
         });
     }
@@ -189,6 +322,8 @@ export class OneSignalService {
 
         this.registerHotDealInMenu(data);
 
+        LocalStorageHelper.saveToLocalStorage("modalRosu", true);
+
         //Manually increase badge notifications for each notification received
       /*  if (this.platform.is('ios')) {
             this.badge.increase(1);
@@ -196,29 +331,32 @@ export class OneSignalService {
 
     }
 
+    /**
+     * Tries to register a hotDeal in menu
+     * @param data the notification package
+     */
     private registerHotDealInMenu(data){
         const sku = this.extractPackageSKU(data);
         this.debugLog("Registering sku:" + sku);
         //Check data for existence, if there is none, then the notification is something else than a hot deal
         if (sku) {
                 //Send an event with the passed SKU
-
                 LocalStorageHelper.saveToLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH,sku);
                 this.events.publish(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED, sku);
-               
-
         }
 
     }
 
-    private validateDate(data){
-
-        let date = JSON.parse(data.rawPayload)['google.sent_time'];
+    /**
+     * Handles date validation
+     * @param package notification package
+     */
+    private validateDate(pckg){
+        let date = JSON.parse(pckg.rawPayload)['google.sent_time'];
         /** DEBUG ONLY */
        // let dbgDate = new Date();
         //date = dbgDate.setDate(dbgDate.getDate() - 2);
        //=====
-
         if (this.hotDealService.isHotDealExpired(date)) {
             this.hotDealService.markHotDealExpired();
             return false;
@@ -245,6 +383,10 @@ export class OneSignalService {
     }
 
 
+    /**
+     * Saves the date a package was sent in local storage.
+     * @param pckg The package
+     */
     private savePackageDate(pckg){
         if(pckg && pckg['rawPayload']){
             let OBJTRY = JSON.parse(pckg.rawPayload);
@@ -253,6 +395,11 @@ export class OneSignalService {
         }
     }
 
+    /**
+     * Returns the SKU from a notification package
+     * @param pckg The notification package.
+     * @returns SKU as string.
+     */
     private extractPackageSKU(pckg){
         if (pckg && pckg.additionalData){
             return pckg.additionalData.SKU;
@@ -261,7 +408,7 @@ export class OneSignalService {
     }
 
     /**
-     * Initializes oneSignal plugin along with checking for permissions
+     * Test method for some logic.
     */
     private testOneSignal() {
 
@@ -270,9 +417,7 @@ export class OneSignalService {
         */
         try {
             this.notificationOpened({
-                    
-                        additionalData: { SKU: "0011049" }
-                   
+                        additionalData: { SKU: "0011049" }                
             });
         } catch (err) {
             console.log(err);
@@ -323,55 +468,6 @@ export class OneSignalService {
        // this.locationPermission = LocalStorageHelper.getFromLocalStorage(this.pushNotificationPermissionID) === 'true';
     }
 
-    /**
-     * Check or get all needed permissions.
-     */
-    private setPermissions() {
-
-        //forkJoin modal observables such that we continue only when all permission are settled (either granted or rejected)
-        Observable.forkJoin(this.askForPermission(
-            Strings.GENERIC_MODAL_TITLE,
-            Strings.NOTIFICATIONS_PERMISSIONS_MESSAGE,
-            this.pushNotificationPermissionID,
-            ['android','ios']
-        )/*, this.askForPermission(
-            Strings.GENERIC_MODAL_TITLE,
-            Strings.LOCATION_PERMISSIONS_MESSAGE,
-            this.locationPermissionID
-        )*/
-        ).subscribe(([notification]) => {
-            //We save their new result if it's the case
-            if (notification) {
-                this.permissionSaveResult(Constants.ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH, notification["optionSelected"]);
-            }
-            
-            //   this.permissionSaveResult(Constants.ONE_SIGNAL_LOCATION_PREFERENCE_PATH, location["optionSelected"]);
-
-
-            this.updatePermissions(); //Update the permissions from storage
-
-
-
-            if (this.platform.is('android')) {
-                this.androidPermissionsSetup();
-                this.finishInit();
-            } else if (this.platform.is('ios')) {
-                this.badge.isSupported().then((isSupported) => {
-                    if (isSupported) {
-                        return this.badge.hasPermission();
-                    }
-                }).then((hasPermission) => {
-                    if (!hasPermission) {
-                        return this.badge.requestPermission();
-                    }
-                }).then((requestResult) => {
-                    return this.iOSPermissionsSetup();
-                }).then(() => {
-                    this.finishInit();
-                });
-            };
-        });
-    };
 
     /**
      * This method handles asking for a permission and returns the result from the popover
@@ -453,6 +549,22 @@ export class OneSignalService {
         };
     };
 
+    /**
+     * @returns true if the option "NEVER" was chooosen or false if the permission is either given or it was delayed.
+     */
+    private getPermissionDismissStatus(preferenceID):boolean {
+        return LocalStorageHelper.getFromLocalStorage(preferenceID + "Modal")==="true"?true:false;
+    }
+
+    private resetPermissionDismissStatus(preferenceID){
+        LocalStorageHelper.removeFromLocalStorage(preferenceID + "Modal");
+    }
+
+    /**
+     * Debug method that only works if One signal is marked as in verbose mode from constants
+     * @param string - Message
+     * @param object - optional object to pass
+    */
     private debugLog(string, object = undefined) {
         if (Constants.ONE_SIGNAL_VERBOSE) {
 

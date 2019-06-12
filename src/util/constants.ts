@@ -84,6 +84,11 @@ export const EVENT_HOT_DEAL_NOTIFICATION_RECEIVED = "notificationsHotDealReceive
 
 export const EVENT_HIDE_MENU_FROM_NAVIGATION = "hideMenuFromNavigation";
 
+export const EVENT_NAVIGATION_NEW_PAGE = "newPageEvent";
+
+export const NOTIFICATION_SETTINGS_WARNING_PATH = "notificationSettingsWarningPath"
+
+export const NOTIFICATION_SUBSCRIPTION_ANDROID_PATH = "notficationSubscriptionAndroidPath"
 /**
 * Marker : User
 * =============================================================================================

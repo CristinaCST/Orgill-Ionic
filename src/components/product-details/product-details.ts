@@ -1,9 +1,9 @@
 import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import {Product} from "../../interfaces/models/product";
 import {ProductDescriptionPage} from "../../pages/product-description/product-description";
-import { NavController } from 'ionic-angular';
 import * as Constants from '../../util/constants';
 import * as ConstantsUrl from '../../util/constants-url';
+import { NavigatorService } from '../../services/navigator/navigator';
 
 @Component({
   selector: 'product-details',
@@ -14,11 +14,11 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit {
   @Input() product: Product;
   public imageIsLoading: boolean = true;
 
-  constructor(private navController: NavController) {
+  constructor(private navigatorService: NavigatorService) {
   }
 
   public showProductDescription() {
-    this.navController.push(ProductDescriptionPage, {'product': this.product}).catch(err => console.error(err))
+    this.navigatorService.push(ProductDescriptionPage, {'product': this.product}).catch(err => console.error(err))
   }
 
   //TODO: CHANEG FROM CONSTANTS

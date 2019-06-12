@@ -15,6 +15,7 @@ import * as Constants from '../util/constants';
 import * as Strings from '../util/strings';
 import { PopoversService } from '../services/popovers/popovers';
 import { LoadingService } from '../services/loading/loading';
+import { LocalStorageHelper } from '../helpers/local-storage';
 
 @Component({
   templateUrl: 'app.html'
@@ -42,8 +43,10 @@ export class MyApp {
 
   initializeApp() {
     this.isLoading = true;
-
+ 
     this.platform.ready().then(() => {
+      this.oneSignalService.init();
+
       window.addEventListener('keyboardDidShow', () => {
         document.body.classList.add('keyboard-is-open');
         document.activeElement.scrollIntoView(true);
@@ -83,7 +86,7 @@ export class MyApp {
           this.navigatorService.pop();
         }
       });
-      this.oneSignalService.init();
+
       this.networkService.listenForNetworkEvents();
       this.statusBar.styleDefault();
       this.statusBar.overlaysWebView(false);
@@ -120,9 +123,12 @@ export class MyApp {
     }
     else if (this.sessionValidatorProvider.isValidSession() === true) {
       this.rootPage = Catalog;
+      this.navigatorService.initialRootPage(this.rootPage);
     } else {
       this.rootPage = Login;
+      this.navigatorService.initialRootPage(this.rootPage);
     }
+    
   }
   
 
