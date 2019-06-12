@@ -99,7 +99,7 @@ export class AppMenuComponent implements OnInit {
         if (data.optionSelected === 'OK') {
           // this.authServiceProvider.logoutDeleteData();
           this.authServiceProvider.logout();
-          this.navigatorService.getNav().setRoot(Login).catch(err => console.error(err));
+          this.navigatorService.setRoot(Login).catch(err => console.error(err));
         }
       }
     );

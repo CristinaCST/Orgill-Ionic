@@ -3,6 +3,7 @@ import { NavController, NavOptions, App, Platform, Events} from "ionic-angular";
 import * as Equals from "../../util/equality";
 import { SecureActionsService } from "../../services/secure-actions/secure-actions";
 import * as Constants from "../../util/constants";
+import { BehaviorSubject } from "rxjs";
 
 
 @Injectable()
@@ -11,6 +12,7 @@ export class NavigatorService {
     private pageReference: any;
     private backButtonMainFunc: any;
     private overrideFunc: any;
+    public lastPage: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
     private get navController() {
         return this._navController ? this._navController : this.app.getActiveNavs()[0];
@@ -65,8 +67,6 @@ export class NavigatorService {
 
                 opts.animate = false; //Set animate to false so we don't get animations on our "refresh"
 
-
-
               //  return this.secureActions.do(() => {
                     //Insert this page without animations in the stack before this one with the exact same properties
                     this.navController.insert(this.navController.getViews().length - 1, page, params, opts, done);
@@ -79,7 +79,9 @@ export class NavigatorService {
                 //If the view is different just proceed to push
 
                 this.pageReference = page;
+
                 return this.secureActions.do(() => {
+                    this.announceTransition(page);
                     return this.navController.push(page, params, opts, done);
                 });
             }
@@ -97,6 +99,7 @@ export class NavigatorService {
        /* if( pageOrViewCtrl !instanceof ViewController){
             this.pageReference = pageOrViewCtrl
         }*/
+        this.announceTransition(pageOrViewCtrl);
         return this.navController.setRoot(pageOrViewCtrl, params, opts, done);
     }
 
@@ -152,5 +155,15 @@ export class NavigatorService {
             this.platform.registerBackButtonAction(this.backButtonMainFunc);
             this.overrideFunc = undefined;
         }
+    }
+    public initialRootPage(page){
+        this.announceTransition(page);
+      }
+
+    private announceTransition(newPage){
+        let name = typeof newPage == "string"?newPage:newPage.name;
+
+        this.events.publish(Constants.EVENT_NAVIGATE_TO_PAGE, name);
+        this.lastPage.next(name);
     }
 }

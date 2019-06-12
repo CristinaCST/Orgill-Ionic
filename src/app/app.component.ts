@@ -15,8 +15,7 @@ import * as Constants from '../util/constants';
 import * as Strings from '../util/strings';
 import { PopoversService } from '../services/popovers/popovers';
 import { LoadingService } from '../services/loading/loading';
-import { Broadcaster } from '@ionic-native/broadcaster';
-
+import { LocalStorageHelper } from '../helpers/local-storage';
 
 @Component({
   templateUrl: 'app.html'
@@ -37,16 +36,17 @@ export class MyApp {
     private sessionValidatorProvider: SessionValidatorService,
     private oneSignalService: OneSignalService,
     private navigatorService: NavigatorService,
-    private popoverProvider: PopoversService,
-    private broadcaster : Broadcaster) {
+    private popoverProvider: PopoversService) {
     this.setAppLanguage();
     this.initializeApp();
   }
 
   initializeApp() {
     this.isLoading = true;
-
+ 
     this.platform.ready().then(() => {
+      this.oneSignalService.init();
+
       window.addEventListener('keyboardDidShow', () => {
         document.body.classList.add('keyboard-is-open');
         document.activeElement.scrollIntoView(true);
@@ -55,10 +55,6 @@ export class MyApp {
       window.addEventListener('keyboardDidHide', () => {
         document.body.classList.remove('keyboard-is-open');
       });
-
-      this.oneSignalService.init();
-
-      this.broadcaster.addEventListener("data").subscribe( event => console.log("event listener from native", event));
 
       this.navigatorService.initializeBackButton(() => {
 
@@ -90,6 +86,7 @@ export class MyApp {
           this.navigatorService.pop();
         }
       });
+
       this.networkService.listenForNetworkEvents();
       this.statusBar.styleDefault();
       this.statusBar.overlaysWebView(false);
@@ -126,9 +123,12 @@ export class MyApp {
     }
     else if (this.sessionValidatorProvider.isValidSession() === true) {
       this.rootPage = Catalog;
+      this.navigatorService.initialRootPage(this.rootPage);
     } else {
       this.rootPage = Login;
+      this.navigatorService.initialRootPage(this.rootPage);
     }
+    
   }
   
 

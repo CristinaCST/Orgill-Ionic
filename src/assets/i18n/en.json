@@ -199,8 +199,8 @@
   "menu_hot_deal_button":"Hot Deal",
   "po_number_too_long":"PO number can't be longer than 15 characters",
   "po_alphanumeric_warning":"PO number must be alphanumeric, additional characters have been removed",
-  "one_signal_ios_permission":"Orgill requires push notification permissions to send you hot deals.",
-  
+  "one_signal_permission_reminder":"Orgill requires push notification permissions to send you hot deals which were declined before. Please go to your settings and give those permissions if you want push notifications.",
+  "one_signal_subscription_reminder":"Would you like to receive push notifications with hot deals?",
 
   "savings_text":"Savings"
 

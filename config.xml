@@ -124,8 +124,6 @@
     <plugin name="onesignal-cordova-plugin" spec="2.4.5" />
     <allow-navigation href="http://192.168.100.102:8100" sessionid="d7307190" />
     <allow-navigation href="http://192.168.1.88:8100" sessionid="3d1b2f55" />
-    <plugin name="cordova-plugin-app-preferences" spec="https://bitbucket.org/packt-internal/cordova-plugin-app-preferences.git" />
-    <plugin name="cordova-plugin-nativestorage" spec="2.3.2" />
+    <engine name="android" spec="^7.0.0" />
     <engine name="ios" spec="4.5.5" />
-    <engine name="android" spec="7.1.4" />
 </widget>
