@@ -157,7 +157,9 @@ export class NavigatorService {
         }
     }
     public initialRootPage(page){
-        this.announceTransition(page);
+        //this.announceTransition(page);
+        let name = typeof page == "string"?page:page.name;
+        this.lastPage.next(name);
       }
 
     private announceTransition(newPage){
