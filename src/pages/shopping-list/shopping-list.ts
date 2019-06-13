@@ -286,9 +286,11 @@ export class ShoppingListPage {
     this.touchend();
   }
 
-  public touchstart(item) {
+  public touchstart(index) {
     this.holdTimeoutReference = setTimeout(() => {
-      item.isCheckedInShoppingList = true;
+      this.shoppingListItems[index].isCheckedInShoppingList = true;
+      this.selectedItems[index] = this.shoppingListItems[index];
+      this.nrOfSelectedItems += 1;
       this.isDeleteMode = true;
       this.navigatorService.oneTimeBackButtonOverride(() => {
         this.isDeleteMode = false;
