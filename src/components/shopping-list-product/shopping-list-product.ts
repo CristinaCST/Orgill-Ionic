@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import * as Constants from '../../util/constants';
-import { ShoppingListItem } from 'interfaces/models/shopping-list-item';
+import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
+import { PricingService } from '../../services/pricing/pricing';
 
 @Component({
   selector: 'shopping-list-product',
@@ -12,6 +13,7 @@ export class ShoppingListProductComponent {
   @Output() public checked: EventEmitter<any> = new EventEmitter<any>();
   @Output() public goToDetails: EventEmitter<any> = new EventEmitter<any>();
 
+  constructor(private pricingService: PricingService) {}
   
   public updateCheckedItems() {
     const data = {
@@ -28,10 +30,7 @@ export class ShoppingListProductComponent {
     this.goToDetails.emit(this.shoppingListItem);
   }
 
-  /**
-   * Safe not to validate since there are no inputs here.
-   */
   public getRealPrice() {
-    return Number(this.shoppingListItem.item_price * this.shoppingListItem.quantity);
+    return this.pricingService.getShoppingListPrice(this.shoppingListItem.quantity, this.shoppingListItem.product, this.shoppingListItem.item_price);
   }
 }

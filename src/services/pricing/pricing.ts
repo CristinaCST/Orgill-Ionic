@@ -97,14 +97,40 @@ export class PricingService {
 
   /**
    * WARNING: Perform quantity validation before call-in this method.
+   * This method returns the price for a known quantity, product and item program.
    * @param quantity - Quantity wanted but it needs to be pre-validated
    * @param product - Product
    */
-  public getPrice(quantity: number, product: Product, program: ItemProgram) {
-    if (quantity < Number(product.SHELF_PACK) && product.QTY_ROUND_OPTION === 'Y') {
-      return Number(program.PRICE) * quantity + Number(program.PRICE) * 0.04 * quantity;
+  public getPrice(quantity: number, product: Product, program: ItemProgram): number {
+    const shelfPack = Number(product.SHELF_PACK);
+    const price = Number(program.PRICE);
+    return this.getCorrectedPrice(shelfPack, quantity, price, product.QTY_ROUND_OPTION);
+  }
+
+  /**
+   * WARNING: This method does not check the validity of the unitary item price, please ensure the item price is right.
+   * This method is useful when you don't have program data and you know the unitary price.
+   * @param quantity - Quantity wanted, it needs to be pre-validated
+   * @param product - The product, a Product object
+   * @param price - Unitary price.
+   */
+  public getShoppingListPrice(quantity: number, product: Product, price: number): number {
+    const shelfPack = Number(product.SHELF_PACK);
+    return this.getCorrectedPrice(shelfPack, quantity, price, product.QTY_ROUND_OPTION);
+  }
+
+  /**
+   * Universal Inner function that calculates the rounded (if needed) price with plain dependencies.
+   * @param shelfPack - Thelf pack for the item as a number
+   * @param quantity - The quantity wanted
+   * @param price - The unitary price for the calculation
+   * @param roundOption - The rounding option
+   */
+  private getCorrectedPrice(shelfPack: number, quantity: number, price: number, roundOption: string = ''): number {
+    if (quantity < shelfPack && roundOption === 'Y') {
+      return price * quantity + price * 0.04 * quantity;
     } else {
-      return Number(program.PRICE) * quantity;
+      return price * quantity;
     }
   }
 }

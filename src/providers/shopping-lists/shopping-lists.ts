@@ -143,7 +143,9 @@ export class ShoppingListsProvider {
             NAME: element.name,
             VENDOR_NAME: element.vendor_name,
             SELLING_UNIT: element.selling_unit,
-            YOURCOST: element.price
+            YOURCOST: element.price,
+            QTY_ROUND_OPTION: element.qty_round_option,
+            SHELF_PACK: element.shelf_pack
           } as Product,
           program_number: element.program_no,
           item_price: element.price,
