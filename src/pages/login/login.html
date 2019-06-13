@@ -8,14 +8,14 @@
       <ion-list>
         <ion-item class="input-item">
           <ion-icon class="gray-icon" name="contact" item-start></ion-icon>
-          <ion-input type="text" class="input-element" placeholder="{{'username' | translate }}" name="username"
+          <ion-input (keyup.enter)="focusPass()" type="text" class="input-element" placeholder="{{'username' | translate }}" name="username"
                      [(ngModel)]="username" required></ion-input>
         </ion-item>
       </ion-list>
       <ion-list>
         <ion-item class="input-item">
           <ion-icon class="gray-icon" name="lock" item-start></ion-icon>
-          <ion-input (keyup.enter)="login()" type="password" class="input-element" placeholder="{{'password' | translate }}" name="password"
+          <ion-input #passInput (keyup.enter)="login()" type="password" class="input-element" placeholder="{{'password' | translate }}" name="password"
                      [(ngModel)]="password" required></ion-input>
         </ion-item>
       </ion-list>

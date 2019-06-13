@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { AuthService } from '../../services/auth/auth';
 import * as Strings from '../../util/strings';
 import { LoadingService } from '../../services/loading/loading';
@@ -7,7 +7,7 @@ import { PopoversService } from '../../services/popovers/popovers';
 import { Catalog } from '../catalog/catalog';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
-
+import { TextInput } from 'ionic-angular';
 
 @Component({
   selector: 'page-login',
@@ -19,6 +19,7 @@ export class Login {
   public username: string;
   public password: string;
   public loginLoader: LoadingService;
+  @ViewChild('passInput') private passInput: TextInput;
 
   constructor(private navigatorService: NavigatorService,
               private authProvider: AuthService,
@@ -62,6 +63,10 @@ export class Login {
     const content = this.popoversProvider.setContent(Strings.LOGIN_ERROR_TITLE, Strings.LOGIN_ERROR_REQUIRED);
     this.popoversProvider.show(content);
     return false;
+  }
+
+  public focusPass() {
+    this.passInput._jsSetFocus();
   }
 
 }
