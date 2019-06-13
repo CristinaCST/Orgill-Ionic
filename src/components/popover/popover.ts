@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { NavParams } from 'ionic-angular';
+import { NavParams, ViewController } from 'ionic-angular';
 import * as Constants from '../../util/constants';
-import { ViewController } from 'ionic-angular';
 
 @Component({
   selector: 'popover',

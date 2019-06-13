@@ -7,18 +7,18 @@ export const MAX_QUANTITY_HARDCAP = 99999;
 export const HOLD_TIME_IN_MS_TO_DELETE_MODE = 600;
 
 /**
-* Marker : App Language
-* =============================================================================================
-*/
+ * Marker : App Language
+ * =============================================================================================
+ */
 
 export const LANG_EN = 'en';
 export const LANG_FR = 'fr';
 export const DEVICE_LANGUAGE = 'deviceLanguage';
 
 /**
-* Marker : Server Requests
-* =============================================================================================
-*/
+ * Marker : Server Requests
+ * =============================================================================================
+ */
 
 export const REQUEST_UNAUTHORIZED_ERROR = 401;
 export const REQUEST_STATUS_OK = 200;
@@ -28,17 +28,17 @@ export const TIMEOUT_INTERVAL = 30000; // 30 seconds
 export const TIMEOUT_DEFAULT_INTERVAL = 30000; // 30 seconds
 
 /**
-* Marker : dateTimeProvider Formats
-* =============================================================================================
-*/
+ * Marker : dateTimeProvider Formats
+ * =============================================================================================
+ */
 
 export const DATETIME_FORMAT_MONTH_DAY_YEAR = 'MM/DD/YYYY';
 
 
 /**
-* Marker : Popover Types
-* =============================================================================================
-*/
+ * Marker : Popover Types
+ * =============================================================================================
+ */
 
 export const POPOVER_NETWORK_OFFLINE = 'popoverOfflineNetwork';
 export const POPOVER_NEW_SHOPPING_LIST = 'popoverNewList';
@@ -52,9 +52,9 @@ export const POPOVER_INFO = 'popoverInfo';
 export const POPOVER_CAMERA_PERMISSION_NOT_GRANTED = 'popoverNoCameraPerm';
 
 /**
-* Marker : EVENT TOPICS
-* =============================================================================================
-*/
+ * Marker : EVENT TOPICS
+ * =============================================================================================
+ */
 
 export const EVENT_NETWORK_ONLINE = 'networkOnline';
 export const EVENT_NETWORK_OFFLINE = 'networkOffline';
@@ -92,9 +92,9 @@ export const NOTIFICATION_SETTINGS_WARNING_PATH = 'notificationSettingsWarningPa
 
 export const NOTIFICATION_SUBSCRIPTION_ANDROID_PATH = 'notficationSubscriptionAndroidPath';
 /**
-* Marker : User
-* =============================================================================================
-*/
+ * Marker : User
+ * =============================================================================================
+ */
 
 export const USER = 'user';
 export const USER_TOKEN = 'UserToken';
@@ -107,9 +107,9 @@ export const LOGOUT_DELETE_DATA = 'logoutDeleteData';*/
 
 
 /**
-* Marker : Programs
-* =============================================================================================
-*/
+ * Marker : Programs
+ * =============================================================================================
+ */
 
 export const PROGRAM_NUMBER = 'progNumber';
 
@@ -117,17 +117,17 @@ export const MARKET_ONLY_PROGRAM = 'Y';
 export const REGULAR_PROGRAM = 'N';
 
 /**
-* Marker : Catalog
-* =============================================================================================
-*/
+ * Marker : Catalog
+ * =============================================================================================
+ */
 
 export const CATEGORIES_PER_PAGE = 100;
 export const PRODUCTS_PER_PAGE = 20;
 
 /**
-* Marker : Search
-* =============================================================================================
-*/
+ * Marker : Search
+ * =============================================================================================
+ */
 
 
 export const SCAN_MARKET_ONLY_PRODUCT = 'scan_market_only_product';
@@ -143,9 +143,9 @@ export const SCAN_ERROR = 'scan_error';
 export const SEARCH_RESULTS_PER_PAGE = 20;
 
 /**
-* Marker : Shopping Lists
-* =============================================================================================
-*/
+ * Marker : Shopping Lists
+ * =============================================================================================
+ */
 
 export const DEFAULT_LIST_ID = 'default_list_id';
 export const MARKET_ONLY_LIST_ID = 'market_only_list_id';

@@ -106,7 +106,7 @@ export class ProductsPage implements OnInit, OnDestroy {
   }
 
   public setPaginationInfo() {
-    if (this.products.length>0) {
+    if (this.products.length > 0) {
       this.totalNumberOfProducts = parseInt(this.products[0].TOTAL_REC_COUNT);
     }
     this.isPaginationEnabled = this.page * Constants.PRODUCTS_PER_PAGE < this.totalNumberOfProducts;

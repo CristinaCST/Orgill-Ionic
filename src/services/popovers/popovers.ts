@@ -34,12 +34,7 @@ export class PopoversService {
 
     PopoversService.activeItem = this;
 
-    let close;
-    if (subjectReference == undefined) {
-      close = new Subject<any>();
-    } else {
-      close = subjectReference;
-    }
+    const close = subjectReference == undefined ? new Subject<any>() : subjectReference;
 
     this.popover = this.popoverController.create(PopoverComponent, content);
 

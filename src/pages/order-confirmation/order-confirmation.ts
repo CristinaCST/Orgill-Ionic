@@ -48,8 +48,8 @@ export class OrderConfirmationPage implements OnInit {
 
   private getConfirmationNumbersQuery(): string {
     let query: string = '';
-    this.confirmationNumbers.map((number, index) => {
-      query += number + (index < this.confirmationNumbers.length - 1 ? ',' : '');
+    this.confirmationNumbers.map((confirmationNumber, index) => {
+      query += confirmationNumber + (index < this.confirmationNumbers.length - 1 ? ',' : '');
     });
     return query;
   }

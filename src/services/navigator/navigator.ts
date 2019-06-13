@@ -26,7 +26,7 @@ export class NavigatorService {
         this.navController = this.app.getActiveNavs()[0];  // Grab it at construction
     }
 
-    /**TODO: Implemnt refresh boolean?
+    /**
      * Wrapper for the nav controller Push, this one check if the wanted page is the same and "refreshes" it if not
      * @param page Page as string or Page
      * @param params Parameters for push

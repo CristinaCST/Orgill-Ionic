@@ -11,7 +11,7 @@ import { Product } from 'interfaces/models/product';
 
 @Injectable()
 export class ShoppingListsProvider {
-  private readonly userToken:string ;
+  private readonly userToken: string ;
 
   constructor(private databaseProvider: DatabaseProvider, private apiProvider: ApiService) {
     const userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));

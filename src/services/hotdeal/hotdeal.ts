@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as ConstantsUrl from '../../util/constants-url';
 import * as Constants from '../../util/constants';
-import { USER } from '../../util/constants';
 import { ApiService } from '../api/api';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import { NavOptions, Events } from 'ionic-angular';
@@ -24,7 +23,7 @@ export class HotDealService {
 
 
   private getUserInfo() {
-    const userToken = LocalStorageHelper.getFromLocalStorage(USER);
+    const userToken = LocalStorageHelper.getFromLocalStorage(Constants.USER);
     if (userToken) {
       const userInfo = JSON.parse(userToken);
       if (userInfo) {
@@ -83,7 +82,7 @@ export class HotDealService {
 
   public isHotDealExpired(timestamp = undefined) {
     const dateString = timestamp ? timestamp : LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_PAYLOAD_TIMESTAMP);
-    const hotDealTimestamp =  new Date(parseInt(dateString));
+    const hotDealTimestamp = new Date(parseInt(dateString));
 
     if ((new Date()).getDay() !== hotDealTimestamp.getDay()) {
       this.markHotDealExpired();

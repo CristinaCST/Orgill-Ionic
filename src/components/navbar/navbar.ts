@@ -10,7 +10,7 @@ export class NavbarComponent {
   @Input('isMenuEnabled') public isMenuEnabled: boolean;
   @Input('isBackEnabled') public isBackEnabled: boolean;
   @Input('customButtons') public customButtons: any[] = [];
-  @Output() public buttonClicked:EventEmitter<any> = new EventEmitter<any>();
+  @Output() public buttonClicked: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private navigatorService: NavigatorService) {
   }

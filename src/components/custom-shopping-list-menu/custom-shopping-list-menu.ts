@@ -16,7 +16,7 @@ import { NavigatorService } from '../../services/navigator/navigator';
 export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
 
   @Input('customShoppingLists') public customShoppingLists: ShoppingList[] = [];
-  @Output() public back:EventEmitter<any> = new EventEmitter<any>();
+  @Output() public back: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private shoppingListsProvider: ShoppingListsProvider,
               private popoversProvider: PopoversService,
@@ -35,19 +35,15 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
           if (status === 'available') {
-            if (data.type === 'default') {
-              data.type = Constants.CUSTOM_SHOPPING_LIST_TYPE;
-            } else {
-              data.type = Constants.MARKET_ONLY_CUSTOM_TYPE;
-            }
+            data.type = data.type === 'default' ? Constants.CUSTOM_SHOPPING_LIST_TYPE : Constants.MARKET_ONLY_CUSTOM_TYPE;
             this.shoppingListsProvider.createNewShoppingList(data.listName, data.listDescription, data.type).subscribe(resp => {
               const addedList = JSON.parse(resp.d)[0];
               const list: ShoppingList = {
-                  ListID: addedList.shopping_list_id,
-                  ListName: addedList.list_name,
-                  ListDescription: addedList.list_description,
-                  ListType: addedList.list_type
-                };
+                ListID: addedList.shopping_list_id,
+                ListName: addedList.list_name,
+                ListDescription: addedList.list_description,
+                ListType: addedList.list_type
+              };
               this.customShoppingLists.push(list);
             });
           } else {

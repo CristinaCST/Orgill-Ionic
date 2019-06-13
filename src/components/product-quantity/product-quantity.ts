@@ -34,7 +34,7 @@ export class ProductQuantityComponent implements OnInit {
       }
 
     });
-    if (this.quantityFromList>0) {
+    if (this.quantityFromList > 0) {
       this.quantity = this.validateQuantity(this.quantityFromList);
     }
     // this.quantity = this.validateQuantity(this.quantityFromList);
@@ -96,7 +96,7 @@ export class ProductQuantityComponent implements OnInit {
     const newQuantity = this.validateQuantity(this.quantity);
     switch (actionType) {
       case 'ADD':
-        this.quantity = newQuantity  + ((this.product.QTY_ROUND_OPTION === 'X') ? selfPackQuantity : 1);
+        this.quantity = newQuantity + ((this.product.QTY_ROUND_OPTION === 'X') ? selfPackQuantity : 1);
         break;
       case 'REMOVE':
         this.quantity = newQuantity - ((this.product.QTY_ROUND_OPTION === 'X') ? selfPackQuantity : 1);

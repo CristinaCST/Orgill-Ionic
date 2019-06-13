@@ -13,7 +13,7 @@ import { Subject } from 'rxjs/Subject';
 export class ProgramProvider {
   private readonly userToken: string;
   private selectedProgramSubject: Subject<any> = new Subject<any>();
-  private packQuantity:BehaviorSubject<any> = new BehaviorSubject<any>(false);
+  private packQuantity: BehaviorSubject<any> = new BehaviorSubject<any>(false);
 
   constructor(private apiProvider: ApiService, private databaseProvider: DatabaseProvider) {
     const userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));

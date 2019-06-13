@@ -22,8 +22,8 @@ import { LoadingService } from '../services/loading/loading';
 export class MyApp {
 
   public rootPage: any;
-  public isLoading:boolean = true;
-  private openedFromNotification:boolean = false;
+  public isLoading: boolean = true;
+  private openedFromNotification: boolean = false;
 
   constructor(public platform: Platform,
               public app: App,

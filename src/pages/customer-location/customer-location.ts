@@ -179,12 +179,12 @@ export class CustomerLocationPage implements OnInit {
     this.hotDealItem.LOCATIONS.forEach(location => {
       qty += location.QUANTITY;
     });
-    this.orderTotal =  this.pricingService.getPrice(qty, this.hotDealItem, this.hotDealItem.PROGRAM);
+    this.orderTotal = this.pricingService.getPrice(qty, this.hotDealItem, this.hotDealItem.PROGRAM);
   }
 
   public add(location) {
     location.QUANTITY = Number(location.QUANTITY) + 1;
-    location.QUANTITY =  this.pricingService.validateQuantity(location.QUANTITY, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM);
+    location.QUANTITY = this.pricingService.validateQuantity(location.QUANTITY, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM);
   }
 
   public remove(location) {
