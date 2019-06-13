@@ -4,6 +4,8 @@ export const DECIMAL_NUMBER = 2;
 
 export const MAX_QUANTITY_HARDCAP = 99999;
 
+export const HOLD_TIME_IN_MS_TO_DELETE_MODE = 600;
+
 /**
 * Marker : App Language
 * =============================================================================================
@@ -80,15 +82,15 @@ export const EVENT_NEW_SEARCH = 'newSearch';
 
 export const EVENT_GO_TO_SHOPPING_LISTS_PAGE = 'goToListsPage';
 
-export const EVENT_HOT_DEAL_NOTIFICATION_RECEIVED = "notificationsHotDealReceived";
+export const EVENT_HOT_DEAL_NOTIFICATION_RECEIVED = 'notificationsHotDealReceived';
 
-export const EVENT_HIDE_MENU_FROM_NAVIGATION = "hideMenuFromNavigation";
+export const EVENT_HIDE_MENU_FROM_NAVIGATION = 'hideMenuFromNavigation';
 
-export const EVENT_NAVIGATION_NEW_PAGE = "newPageEvent";
+export const EVENT_NAVIGATION_NEW_PAGE = 'newPageEvent';
 
-export const NOTIFICATION_SETTINGS_WARNING_PATH = "notificationSettingsWarningPath"
+export const NOTIFICATION_SETTINGS_WARNING_PATH = 'notificationSettingsWarningPath';
 
-export const NOTIFICATION_SUBSCRIPTION_ANDROID_PATH = "notficationSubscriptionAndroidPath"
+export const NOTIFICATION_SUBSCRIPTION_ANDROID_PATH = 'notficationSubscriptionAndroidPath';
 /**
 * Marker : User
 * =============================================================================================
@@ -145,17 +147,17 @@ export const SEARCH_RESULTS_PER_PAGE = 20;
 * =============================================================================================
 */
 
-export const DEFAULT_LIST_ID = "default_list_id";
-export const MARKET_ONLY_LIST_ID = "market_only_list_id";
+export const DEFAULT_LIST_ID = 'default_list_id';
+export const MARKET_ONLY_LIST_ID = 'market_only_list_id';
 
-export const CUSTOM_SHOPPING_LIST_TYPE = "0";
-export const DEFAULT_LIST_TYPE = "1";
-export const MARKET_ONLY_LIST_TYPE = "2";
-export const MARKET_ONLY_CUSTOM_TYPE = "3";
+export const CUSTOM_SHOPPING_LIST_TYPE = '0';
+export const DEFAULT_LIST_TYPE = '1';
+export const MARKET_ONLY_LIST_TYPE = '2';
+export const MARKET_ONLY_CUSTOM_TYPE = '3';
 
-//ONE SIGNAL SETUP
-export const ONE_SIGNAL_API_KEY = "a11b3e10-bce2-41e9-a6d0-746042798d7e";
-export const ONE_SIGNAL_ANDROID_PROJECT_TITLE = "orgill-5a5ba";
+// ONE SIGNAL SETUP
+export const ONE_SIGNAL_API_KEY = 'a11b3e10-bce2-41e9-a6d0-746042798d7e';
+export const ONE_SIGNAL_ANDROID_PROJECT_TITLE = 'orgill-5a5ba';
 export const ONE_SIGNAL_IOS_NOTIFICATION_AUTO_PROMPT = false;
 export const ONE_SIGNAL_IOS_LAUNCH_IN_WEBVIEW = false;
 export const ONE_SIGNAL_LOCATION_PREFERENCE_PATH = 'locationSharing';
@@ -170,11 +172,11 @@ export const ONE_SIGNAL_PAYLOAD_TIMESTAMP = 'oneSignalPayloadTimestamp';
 export const HOT_DEAL_EXPIRED_EVENT = 'hotDealExpired';
 
 
-export const PERMISSION_MODAL = "permissionModal";
+export const PERMISSION_MODAL = 'permissionModal';
 
-//TODO: Move this
+// TODO: Move this
 export const LOCAL_PRODUCT_IMAGE_PLACEHOLDER = '../../assets/imgs/product_placeholder.png';
 
-//DEBUG
+// DEBUG
 
 export const DEBUG_TRANSLATIONS = false;

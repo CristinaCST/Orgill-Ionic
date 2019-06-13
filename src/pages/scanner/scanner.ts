@@ -1,30 +1,31 @@
-import {Component, OnInit} from '@angular/core';
-import {NavParams} from 'ionic-angular';
-import {LoadingService} from "../../services/loading/loading";
-import {Product} from "../../interfaces/models/product";
-import {CatalogsProvider} from "../../providers/catalogs/catalogs";
-import {Program} from "../../interfaces/models/program";
+import { Component, OnInit } from '@angular/core';
+import { NavParams } from 'ionic-angular';
+import { LoadingService } from '../../services/loading/loading';
+import { Product } from '../../interfaces/models/product';
+import { CatalogsProvider } from '../../providers/catalogs/catalogs';
+import { Program } from '../../interfaces/models/program';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { ScannerService } from '../../services/scanner/scanner';
+import { ShoppingList } from 'interfaces/models/shopping-list';
 
 @Component({
   selector: 'page-scanner',
-  templateUrl: 'scanner.html',
+  templateUrl: 'scanner.html'
 })
 export class ScannerPage implements OnInit {
 
-  selectedProduct: any;
-  programNumber: string = '';
-  programs: Array<Program> = [];
-  isMarketOnly: boolean = false;
-  scanMessage: string = '';
-  searchString: string;
-  foundProduct: Product;
-  shoppingList;
-  shoppingListId;
+  public selectedProduct: any;
+  public programNumber: string = '';
+  public programs: Program[] = [];
+  public isMarketOnly: boolean = false;
+  public scanMessage: string = '';
+  public searchString: string;
+  public foundProduct: Product;
+  public shoppingList: ShoppingList;
+  public shoppingListId: number;
   public productAlreadyInList: boolean = false;
-  public searchTab;
-  public products: Array<Product> = [];
+  public searchTab: any;
+  public products: Product[] = [];
   public noProductFound: boolean = false;
   private simpleLoader: LoadingService;
 
@@ -36,29 +37,29 @@ export class ScannerPage implements OnInit {
                 this.simpleLoader = this.loadingService.createLoader();
               }
 
-  ngOnInit(): void {
-    if (this.navParams.get("shoppingList")) {
-      this.shoppingList = this.navParams.get("shoppingList");
+  public ngOnInit(): void {
+    if (this.navParams.get('shoppingList')) {
+      this.shoppingList = this.navParams.get('shoppingList');
       this.shoppingListId = this.shoppingList.ListID;
-      this.products = this.navParams.get('products')
-      this.scannerService.scan(this.shoppingList,this.products);
+      this.products = this.navParams.get('products');
+      this.scannerService.scan(this.shoppingList, this.products);
     }
     this.searchTab = this.navParams.get('type');
-    this.scanMessage = "";
+    this.scanMessage = '';
     this.catalogsProvider.getPrograms().subscribe(resp => {
-      var data = JSON.parse(resp.d);
-      if (data.length > 0){
-        data.forEach( elem => this.programs.push(elem));
+      const data = JSON.parse(resp.d);
+      if (data.length > 0) {
+        data.forEach(elem => this.programs.push(elem));
       }
-    })
+    });
   }
 
-  onSearched($event) {
+  public onSearched($event) {
     this.simpleLoader.show();
     this.catalogsProvider.search($event, '', this.programNumber).subscribe(data => {
       if (data) {
         this.simpleLoader.hide();
-        let params = {
+        const params = {
           type: this.searchTab,
           shoppingList: this.shoppingList,
           products: JSON.parse(data.d)

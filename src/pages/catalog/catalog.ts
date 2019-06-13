@@ -1,17 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import { NavParams, NavOptions} from 'ionic-angular';
-import {Category} from "../../interfaces/models/category";
-import {CategoriesRequest} from "../../interfaces/request-body/categories";
+import { Component, OnInit } from '@angular/core';
+import { NavParams, NavOptions } from 'ionic-angular';
+import { Category } from '../../interfaces/models/category';
+import { CategoriesRequest } from '../../interfaces/request-body/categories';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
-import {LocalStorageHelper} from "../../helpers/local-storage";
-import {CatalogsProvider} from "../../providers/catalogs/catalogs";
-import {SubcategoriesRequest} from "../../interfaces/request-body/subcategories";
-import {ProductsPage} from "../products/products";
-import {LoadingService} from "../../services/loading/loading";
-import {TranslateWrapperService} from "../../services/translate/translate";
-import {ProductsSearchPage} from "../products-search/products-search";
-import {ScannerPage} from "../scanner/scanner";
+import { LocalStorageHelper } from '../../helpers/local-storage';
+import { CatalogsProvider } from '../../providers/catalogs/catalogs';
+import { SubcategoriesRequest } from '../../interfaces/request-body/subcategories';
+import { ProductsPage } from '../products/products';
+import { LoadingService } from '../../services/loading/loading';
+import { TranslateWrapperService } from '../../services/translate/translate';
+import { ProductsSearchPage } from '../products-search/products-search';
+import { ScannerPage } from '../scanner/scanner';
 import { NavigatorService } from '../../services/navigator/navigator';
 
 
@@ -21,25 +21,25 @@ import { NavigatorService } from '../../services/navigator/navigator';
 })
 export class Catalog implements OnInit {
 
-  programNumber: string;
-  programName: string;
-  categories: Category[];
-  userToken: string;
-  catalogIndex: number = 0;
-  currentSubCategory: Category;
-  menuCustomButtons = [];
-  categoriesLoader: LoadingService;
-  simpleLoader: LoadingService;
+  public programNumber: string;
+  public programName: string;
+  public categories: Category[];
+  public userToken: string;
+  public catalogIndex: number = 0;
+  public currentSubCategory: Category;
+  public menuCustomButtons: any[] = [];
+  public categoriesLoader: LoadingService;
+  public simpleLoader: LoadingService;
 
   constructor(public navigatorService: NavigatorService, public navParams: NavParams, public catalogProvider: CatalogsProvider,
               public loadingService: LoadingService, public translateProvider: TranslateWrapperService) {
-    this.menuCustomButtons.push({action: 'scan', icon: 'barcode'});
+    this.menuCustomButtons.push({ action: 'scan', icon: 'barcode' });
 
     this.categoriesLoader = loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_CATEGORIES));
     this.simpleLoader = loadingService.createLoader();
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.programName = this.checkValidParams('programName', '');
     this.programNumber = this.checkValidParams('programNumber', '');
     this.catalogIndex = this.checkValidParams('catalogIndex', 0);
@@ -54,13 +54,12 @@ export class Catalog implements OnInit {
     this.userToken = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER)).userToken;
     if (this.navParams.get('categories')) {
       this.categories = this.navParams.get('categories');
-    }
-    else {
+    } else {
       this.getCategories();
     }
   }
 
-  checkValidParams(type, value) {
+  public checkValidParams(type, value) {
     if (this.navParams.get(type)) {
       return this.navParams.get(type);
     }
@@ -74,7 +73,7 @@ export class Catalog implements OnInit {
       p: '1',
       rpp: String(Constants.CATEGORIES_PER_PAGE),
       program_number: this.programNumber,
-      last_modified: '',
+      last_modified: ''
     };
 
     this.catalogProvider.getCategories(params).subscribe(response => {
@@ -84,13 +83,13 @@ export class Catalog implements OnInit {
     });
   }
 
-  sortCategories(responseData) {
+  public sortCategories(responseData) {
     return responseData.sort((category1, category2): number => {
       return category1.CatName.localeCompare(category2.CatName);
     });
   }
 
-  selectCategory(category: Category) {
+  public selectCategory(category: Category) {
     this.categoriesLoader.show();
     const params: SubcategoriesRequest = {
       user_token: this.userToken,
@@ -98,39 +97,39 @@ export class Catalog implements OnInit {
       p: '1',
       rpp: String(Constants.CATEGORIES_PER_PAGE),
       program_number: this.programNumber,
-      last_modified: '',
+      last_modified: ''
     };
 
     this.catalogProvider.getSubcategories(params).subscribe(response => {
       const responseData = JSON.parse(response.d);
       if (responseData.length > 0) {
-        let categories = this.sortCategories(responseData);
+        const categories = this.sortCategories(responseData);
 
         this.navigatorService.push(Catalog, {
           programName: category.CatName,
           programNumber: this.programNumber,
-          categories: categories,
+          categories,
           currentSubCategory: category,
           catalogIndex: (this.catalogIndex + 1)
         }).catch(err => console.error(err));
         this.categoriesLoader.hide();
       } else {
-        const params = {
+        const productsPageParams = {
           programNumber: this.programNumber,
           programName: category.CatName,
-          category: category,
+          category
         };
-        this.navigatorService.push(ProductsPage, params, {paramEquality:false} as NavOptions ).catch(err => console.error(err));
+        this.navigatorService.push(ProductsPage, productsPageParams, { paramEquality: false } as NavOptions).catch(err => console.error(err));
         this.categoriesLoader.hide();
       }
     });
   }
 
-  onSearched($event) {
+  public onSearched($event) {
     this.simpleLoader.show();
     this.catalogProvider.search($event, this.currentSubCategory ? this.currentSubCategory.CatID : '', this.programNumber).subscribe(data => {
       if (data) {
-        let dataFound = JSON.parse(data.d);
+        const dataFound = JSON.parse(data.d);
         const params = {
           searchString: $event,
           searchData: dataFound,
@@ -139,17 +138,17 @@ export class Catalog implements OnInit {
           category: this.currentSubCategory,
           numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
         };
-        this.navigatorService.push(ProductsSearchPage, params, {paramsEquality:false} as NavOptions).then(
-          //() => console.log('%cTo product search page', 'color:green')
+        this.navigatorService.push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions).then(
+          // () => console.log('%cTo product search page', 'color:green')
           );
         this.simpleLoader.hide();
       }
     });
   }
 
-  goToScanPage() {
+  public goToScanPage() {
     this.navigatorService.push(ScannerPage, {
-      'type': 'scan_barcode_tab',
+      'type': 'scan_barcode_tab'
     }).catch(err => console.error(err));
   }
 }

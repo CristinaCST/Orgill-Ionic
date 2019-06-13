@@ -1,27 +1,27 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {ErrorHandler, NgModule} from '@angular/core';
-import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
-import {StatusBar} from '@ionic-native/status-bar';
-import {SplashScreen} from '@ionic-native/splash-screen';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {SQLite} from '@ionic-native/sqlite';
-import {BarcodeScanner} from '@ionic-native/barcode-scanner';
-import {OneSignal} from '@ionic-native/onesignal';
-import {SQLitePorter} from '@ionic-native/sqlite-porter';
-import {Network} from '@ionic-native/network';
-import {IonicStorageModule} from '@ionic/storage';
-import {Badge} from '@ionic-native/badge';
+import { BrowserModule } from '@angular/platform-browser';
+import { ErrorHandler, NgModule } from '@angular/core';
+import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { SQLite } from '@ionic-native/sqlite';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+import { OneSignal } from '@ionic-native/onesignal';
+import { SQLitePorter } from '@ionic-native/sqlite-porter';
+import { Network } from '@ionic-native/network';
+import { IonicStorageModule } from '@ionic/storage';
+import { Badge } from '@ionic-native/badge';
 import { Geolocation } from '@ionic-native/geolocation';
 
-//Environments
-import {environment} from '@app/env';
+// Environments
+import { environment } from '@app/env';
 
-//Modules
-import {ComponentsModule} from '../components/components.module';
+// Modules
+import { ComponentsModule } from '../components/components.module';
 
-//Providers
+// Providers
 import { ApiService } from '../services/api/api';
 import { CatalogsProvider } from '../providers/catalogs/catalogs';
 import { DatabaseProvider } from '../providers/database/database';
@@ -36,7 +36,7 @@ import { PurchasesProvider } from '../providers/purchases/purchases';
 import { SessionValidatorService } from '../services/session/sessionValidator';
 
 
-//Services
+// Services
 import { NetworkService } from '../services/network/network';
 import { OneSignalService } from '../services/onesignal/onesignal';
 import { HotDealService } from '../services/hotdeal/hotdeal';
@@ -44,60 +44,56 @@ import { NavigatorService } from '../services/navigator/navigator';
 import { LoadingService } from '../services/loading/loading';
 import { ScannerService } from '../services/scanner/scanner';
 import { PricingService } from '../services/pricing/pricing';
-import {SecureActionsService } from '../services/secure-actions/secure-actions';
+import { SecureActionsService } from '../services/secure-actions/secure-actions';
 
-//Pages
-import {MyApp} from './app.component';
-import {Catalog} from '../pages/catalog/catalog';
-import {Login} from '../pages/login/login';
-import {AboutPage} from '../pages/about/about';
-import {ProductsPage} from '../pages/products/products';
-import {ProductPage} from '../pages/product/product';
-import {ProductDescriptionPage} from '../pages/product-description/product-description';
-import {AddToShoppingListPage} from '../pages/add-to-shopping-list/add-to-shopping-list';
-import {ScannerPage} from '../pages/scanner/scanner';
-import {ShoppingListPage} from '../pages/shopping-list/shopping-list';
-import {CustomerLocationPage} from '../pages/customer-location/customer-location';
-import {OrderReviewPage} from '../pages/order-review/order-review';
-import {OrderConfirmationPage} from '../pages/order-confirmation/order-confirmation';
-import {ProductsSearchPage} from '../pages/products-search/products-search';
-import {PurchaseDetailsPage} from '../pages/purchase-details/purchase-details';
-import {PurchasesPage} from '../pages/purchases/purchases';
+// Pages
+import { MyApp } from './app.component';
+import { Catalog } from '../pages/catalog/catalog';
+import { Login } from '../pages/login/login';
+import { AboutPage } from '../pages/about/about';
+import { ProductsPage } from '../pages/products/products';
+import { ProductPage } from '../pages/product/product';
+import { ProductDescriptionPage } from '../pages/product-description/product-description';
+import { AddToShoppingListPage } from '../pages/add-to-shopping-list/add-to-shopping-list';
+import { ScannerPage } from '../pages/scanner/scanner';
+import { ShoppingListPage } from '../pages/shopping-list/shopping-list';
+import { CustomerLocationPage } from '../pages/customer-location/customer-location';
+import { OrderReviewPage } from '../pages/order-review/order-review';
+import { OrderConfirmationPage } from '../pages/order-confirmation/order-confirmation';
+import { ProductsSearchPage } from '../pages/products-search/products-search';
+import { PurchaseDetailsPage } from '../pages/purchase-details/purchase-details';
+import { PurchasesPage } from '../pages/purchases/purchases';
 
-let pages = [MyApp,
-  Catalog,
-  Login,
-  AboutPage,
-  ProductsPage,
-  ProductPage,
-  ProductDescriptionPage,
-  AddToShoppingListPage,
-  ShoppingListPage,
-  CustomerLocationPage,
-  OrderReviewPage,
-  OrderConfirmationPage,
-  ProductsSearchPage,
-  ScannerPage,
-  PurchasesPage,
-  PurchaseDetailsPage];
+const pages = [MyApp,
+               Catalog,
+               Login,
+               AboutPage,
+               ProductsPage,
+               ProductPage,
+               ProductDescriptionPage,
+               AddToShoppingListPage,
+               ShoppingListPage,
+               CustomerLocationPage,
+               OrderReviewPage,
+               OrderConfirmationPage,
+               ProductsSearchPage,
+               ScannerPage,
+               PurchasesPage,
+               PurchaseDetailsPage];
 
 
-//Error Handlers
+// Error Handlers
 import { CustomErrorHandlerService } from '../services/error-handler/CustomErrorHandler';
 
 
-
-
-
-
-const errorHandler = environment.production ? CustomErrorHandlerService : IonicErrorHandler;
+const errorHandler = environment.production ? CustomErrorHandlerService : IonicErrorHandler; //tslint:disable-line
 
 @NgModule({
   declarations: pages,
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp, {
-      mode: "md", scrollPadding: false,
+      mode: 'md', scrollPadding: false,
       scrollAssist: true,
       autoFocusAssist: true
     }),
@@ -144,7 +140,7 @@ const errorHandler = environment.production ? CustomErrorHandlerService : IonicE
     PricingService,
     SecureActionsService,
     Geolocation,
-    {provide: ErrorHandler, useClass: CustomErrorHandlerService}
+    { provide: ErrorHandler, useClass: CustomErrorHandlerService }
   ]
 })
 

@@ -1,33 +1,32 @@
-import { Injectable } from "@angular/core";
-import * as ConstantsUrl from '../../util/constants-url'
-import * as Constants from '../../util/constants'
-import { USER } from '../../util/constants'
-import { ApiService } from "../api/api";
-import { LocalStorageHelper } from "../../helpers/local-storage";
-import { App, NavOptions, Events } from "ionic-angular";
-import { ProductPage } from "../../pages/product/product";
-import { NavigatorService } from "../navigator/navigator";
-import { Observable } from "rxjs";
+import { Injectable } from '@angular/core';
+import * as ConstantsUrl from '../../util/constants-url';
+import * as Constants from '../../util/constants';
+import { USER } from '../../util/constants';
+import { ApiService } from '../api/api';
+import { LocalStorageHelper } from '../../helpers/local-storage';
+import { NavOptions, Events } from 'ionic-angular';
+import { ProductPage } from '../../pages/product/product';
+import { NavigatorService } from '../navigator/navigator';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class HotDealService {
-  private userToken;
+  private userToken: string;
 
   constructor(private apiProvider: ApiService,
-    private app: App,
-    private navigatorService: NavigatorService,
-    private events: Events,
-    private apiService: ApiService) {
+              private navigatorService: NavigatorService,
+              private events: Events,
+              private apiService: ApiService) {
 
       this.getUserInfo();
-   
+
   }
 
 
-  private getUserInfo(){
-    let userToken = LocalStorageHelper.getFromLocalStorage(USER);
+  private getUserInfo() {
+    const userToken = LocalStorageHelper.getFromLocalStorage(USER);
     if (userToken) {
-      let userInfo = JSON.parse(userToken);
+      const userInfo = JSON.parse(userToken);
       if (userInfo) {
         this.userToken = userInfo.userToken;
       }
@@ -38,23 +37,23 @@ export class HotDealService {
     if (!this.userToken) {
       this.getUserInfo();
     }
- 
+
   /*  let params = {
       'user_token': this.userToken,
       'sku': sku
     };
 
     return this.apiProvider.post(ConstantsUrl.GET_HOTDEALS_PRODUCT, params);*/
-    //HACK: Replacement for not working backend
+    // HACK: Replacement for not working backend
 
-  
+
     const params = {
       'user_token': this.userToken,
-      'division': "",
-      'price_type': "",
-      'search_string': "'"+ sku + "'",
+      'division': '',
+      'price_type': '',
+      'search_string': '\'' + sku + '\'',
       'category_id': '',
-      'program_number': "",
+      'program_number': '',
       'p': '1',
       'rpp': '1',
       'last_modified': ''
@@ -62,31 +61,31 @@ export class HotDealService {
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params);
   }
 
-  navigateToHotDeal(sku = '') {
-    this.getHotDealsProduct(sku).subscribe((receivedResponse) => {
-      let responseData = JSON.parse(receivedResponse.d);
-      let foundProducts = responseData;
-      if (foundProducts.length>0) {
+  public navigateToHotDeal(sku = '') {
+    this.getHotDealsProduct(sku).subscribe(receivedResponse => {
+      const responseData = JSON.parse(receivedResponse.d);
+      const foundProducts = responseData;
+      if (foundProducts.length > 0) {
         foundProducts.filter(item => item.SKU === sku);
-        let hotDeal = {
+        const hotDeal = {
           isHotDeal: true,
           SKU: sku,
           product: foundProducts[0]
         };
 
-        //HACK: To fix this error 
-        this.navigatorService.push(ProductPage, hotDeal, {paramsEquality:false} as NavOptions).catch(err => console.error(err));
+        // HACK: To fix this error
+        this.navigatorService.push(ProductPage, hotDeal, { paramsEquality: false } as NavOptions).catch(err => console.error(err));
       }
     });
-    
+
   }
 
 
   public isHotDealExpired(timestamp = undefined) {
-    const dateString = timestamp?timestamp: LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_PAYLOAD_TIMESTAMP);
+    const dateString = timestamp ? timestamp : LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_PAYLOAD_TIMESTAMP);
     const hotDealTimestamp =  new Date(parseInt(dateString));
 
-    if ((new Date()).getDay() != hotDealTimestamp.getDay()) {
+    if ((new Date()).getDay() !== hotDealTimestamp.getDay()) {
       this.markHotDealExpired();
       return true;
     }
@@ -99,20 +98,20 @@ export class HotDealService {
   }
 
   public checkHotDealState(sku = undefined) {
-    let hotDealSku = sku ? sku : LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
+    const hotDealSku = sku ? sku : LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
     return hotDealSku && !this.isHotDealExpired() ? true : false;
   }
 
-  public getHotDealProgram(sku){
-  let params = {
+  public getHotDealProgram(sku) {
+  const params = {
     'user_token': JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER))['userToken'],
     'sku': sku
   };
 
-    if (params.user_token) {
+  if (params.user_token) {
       return this.apiService.post(ConstantsUrl.GET_HOTDEALS_PROGRAM, params);
     }
-    return Observable.of([]);
+  return Observable.of([]);
   }
 
 /*

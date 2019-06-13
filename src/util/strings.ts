@@ -1,39 +1,40 @@
 /**
-Marker : GenericModal
-* =============================================================================================
+ * Marker : GenericModal
+ * =============================================================================================
  */
 
- export const GENERIC_MODAL_TITLE = 'generic_modal_title';
+export const GENERIC_MODAL_TITLE = 'generic_modal_title';
 
 /**
-Marker : Generics
-* =============================================================================================
+ * Marker : Generics
+ *  =============================================================================================
  */
+
 export const GENERIC_ERROR = 'generic_error';
 export const APPLICATION_QUIT_MESSAGE = 'application_quit_message';
 
 /**
-Marker : ModalButtons
-* =============================================================================================
+ * Marker : ModalButtons
+ * =============================================================================================
  */
- export const MODAL_BUTTON_YES = 'modal_button_yes';
- export const MODAL_BUTTON_NO = 'modal_button_no';
- export const MODAL_BUTTON_CANCEL = 'modal_button_cancel';
- export const MODAL_BUTTON_CONTINUE = 'modal_button_continue';
- export const MODAL_BUTTON_SAVE = 'modal_button_save';
- export const MODAL_BUTTON_SKIP = 'modal_button_skip';
- export const MODAL_BUTTON_NEVER = 'modal_button_never';
- export const MODAL_BUTTON_ALWAYS = 'modal_button_always';
- export const MODAL_BUTTON_ALLOW = 'modal_button_allow';
- export const MODAL_BUTTON_DECLINE = 'modal_button_decline';
- export const MODAL_BUTTON_DELETE = 'modal_button_delete';
- export const MODAL_BUTTON_OK = 'modal_button_ok';
- export const MODAL_BUTTON_NOT_NOW = 'modal_button_not_now';
- export const MODAL_BUTTON_SETTINGS = 'modal_buton_settings';
+export const MODAL_BUTTON_YES = 'modal_button_yes';
+export const MODAL_BUTTON_NO = 'modal_button_no';
+export const MODAL_BUTTON_CANCEL = 'modal_button_cancel';
+export const MODAL_BUTTON_CONTINUE = 'modal_button_continue';
+export const MODAL_BUTTON_SAVE = 'modal_button_save';
+export const MODAL_BUTTON_SKIP = 'modal_button_skip';
+export const MODAL_BUTTON_NEVER = 'modal_button_never';
+export const MODAL_BUTTON_ALWAYS = 'modal_button_always';
+export const MODAL_BUTTON_ALLOW = 'modal_button_allow';
+export const MODAL_BUTTON_DECLINE = 'modal_button_decline';
+export const MODAL_BUTTON_DELETE = 'modal_button_delete';
+export const MODAL_BUTTON_OK = 'modal_button_ok';
+export const MODAL_BUTTON_NOT_NOW = 'modal_button_not_now';
+export const MODAL_BUTTON_SETTINGS = 'modal_buton_settings';
 
- /**
-Marker : Loading Dialog
-* =============================================================================================
+/**
+ * Marker : Loading Dialog
+ * =============================================================================================
  */
 export const LOADING_ALERT_CONTENT_LOGIN = 'loading_content_login';
 export const LOADING_ALERT_CONTENT_PROGRAMS = 'loading_content_programs';
@@ -45,9 +46,9 @@ export const LOADING_ALERT_CONTENT_DELETE_FROM_LIST = 'loading_content_delete_pr
 export const LOADING_ALERT_CONTENT_CUSTOMER_LOCATIONS = 'loading_content_customer_locations';
 
 /**
-* Marker : (lost) Popover strings
-* =============================================================================================
-*/
+ * Marker : (lost) Popover strings
+ * =============================================================================================
+ */
 export const POPOVER_EXPIRED_ITEMS_TITLE = 'shopping_list_expired_items_title';
 export const POPOVER_EXPIRED_ITEMS_MESSAGE = 'shopping_list_expired_items_message';
 
@@ -56,9 +57,9 @@ export const POPOVER_TIMEOUT_ERROR_MESSAGE = 'request_timeout_error';
 export const POPOVER_PLACEHOLDER_MESSAGE = 'placeholder_message';
 
 /**
-* Marker : Login/Logout strings
-* =============================================================================================
-*/
+ * Marker : Login/Logout strings
+ * =============================================================================================
+ */
 export const LOGIN_ERROR_TITLE = 'login_error_title';
 export const LOGIN_ERROR_INVALID = 'login_error_invalid';
 export const LOGIN_ERROR_REQUIRED = 'login_error_required';
@@ -67,9 +68,9 @@ export const LOGOUT_TITLE = 'logout_title';
 export const LOGOUT_MESSAGE = 'logout_message';
 
 /**
-* Marker : Menu strings
-* =============================================================================================
-*/
+ * Marker : Menu strings
+ * =============================================================================================
+ */
 export const MENU_SEARCH_CODE = 'menu_search_code';
 export const MENU_SEARCH_SCAN = 'menu_search_scan';
 export const MENU_ORDERING_HISTORY = 'menu_ordering_history';
@@ -78,23 +79,23 @@ export const MENU_ABOUT = 'menu_about';
 export const MENU_ACCOUNT_LOGOUT = 'menu_account_logout';
 
 /**
-* Marker : Programs strings
-* =============================================================================================
-*/
+ * Marker : Programs strings
+ * =============================================================================================
+ */
 export const REGULAR_CATALOG = 'regular_catalog';
 
 /**
-* Marker : Catalog strings
-* =============================================================================================
-*/
+ * Marker : Catalog strings
+ * =============================================================================================
+ */
 export const PRODUCT_SUMMARY_TAB = 'summary_tab';
 export const PRODUCT_PRICING_TAB = 'pricing_tab';
 
 
 /**
-* Marker : Search strings
-* =============================================================================================
-*/
+ * Marker : Search strings
+ * =============================================================================================
+ */
 export const SEARCH_INVALID_INPUT = 'search_invalid_input';
 export const NO_PRODUCTS_FOUND = 'no_products_found';
 export const SCAN_RESULT_SCANNED = 'scan_result_scanned';
@@ -109,9 +110,9 @@ export const SCAN_NO_PERMISSION_ALERT_RESULT = 'scan_no_permission_alert_result'
 export const SCAN_ERROR = 'scan_error';
 
 /**
-* Marker : Shopping Lists strings
-* =============================================================================================
-*/
+ * Marker : Shopping Lists strings
+ * =============================================================================================
+ */
 
 export const SHOPPING_LIST_ADD_ITEM = 'button_add_to_list';
 export const INVALID_QUANTITY_ERROR = 'invalid_quantity_error';
@@ -139,7 +140,7 @@ export const SHOPPING_LIST_MARKET_ONLY_PRODUCT = 'shopping_list_market_only_prod
 export const SHOPPING_LIST_DEFAULT_PRODUCT = 'shopping_list_default_product';
 
 export const SHOPPING_LIST_DELETE_CONF_TITLE = 'shopping_list_delete_conf_title';
-export const SHOPPING_LIST_DELETE_CONF_MESSAGE =  'shopping_list_delete_conf_message';
+export const SHOPPING_LIST_DELETE_CONF_MESSAGE = 'shopping_list_delete_conf_message';
 
 export const ORDER_CONFIRMATION = 'order_confirmation';
 export const ORDER_CONFIRMATION_METHOD = 'order_confirmation_message_method';
@@ -155,49 +156,49 @@ export const ORDER_CHECKOUT_MESSAGE = 'order_review_checkout_message';
  * Marker : HotDeals
  * =============================================================================================
  */
-export const HOT_DEAL_NO_LOCATION ="hot_deal_no_location";
-export const HOT_DEAL_LOCATION_INVALID = "hot_deal_location_invalid";
+export const HOT_DEAL_NO_LOCATION = 'hot_deal_no_location';
+export const HOT_DEAL_LOCATION_INVALID = 'hot_deal_location_invalid';
 
 /**
  * Marker : Permissions strings
  * =============================================================================================
  */
-export const LOCATION_PERMISSIONS_MESSAGE = "location_permissions_message";
-export const NOTIFICATIONS_PERMISSIONS_MESSAGE = "notifications_permissions_message";
-export const PERMISSION_NEVER_BUTTON = "permission_never_show_button";
-export const PERMISSION_ALLOW_BUTTON = "permission_allow_button";
-export const PERMISSION_DENY_BUTTON = "permission_deny_button";
-export const PERMISSION_MODAL_TITLE = "permission_modal_title";
+export const LOCATION_PERMISSIONS_MESSAGE = 'location_permissions_message';
+export const NOTIFICATIONS_PERMISSIONS_MESSAGE = 'notifications_permissions_message';
+export const PERMISSION_NEVER_BUTTON = 'permission_never_show_button';
+export const PERMISSION_ALLOW_BUTTON = 'permission_allow_button';
+export const PERMISSION_DENY_BUTTON = 'permission_deny_button';
+export const PERMISSION_MODAL_TITLE = 'permission_modal_title';
 
 
 /**
-* Marker : Past Purchases
-* =============================================================================================
-*/
+ * Marker : Past Purchases
+ * =======================================================================================
+ */
 export const ORDER_HISTORY_PAGE = 'history';
 export const ORDER_DETAILS_PAGE = 'details';
 export const PRODUCT_NOT_AVAILABLE = 'product_not_available';
 
 
 /**
-* Marker : Offline browsing
-* =============================================================================================
-*/
+ * Marker : Offline browsing
+ * =============================================================================================
+ */
 
 export const DATABASE_DEPRECATED_TITLE = 'deprecated_database_title';
 export const DATABASE_DEPRECATED_MESSAGE = 'deprecated_database_message';
 export const DATABASE_DEPRECATED_CANCELED_TEXT = 'deprecated_database_canceled_text';
 
 
-export const DEFAULT_HTTP_ERROR = "default_http_error";
-export const NO_ACCES = "no_acces";
-export const SOMETHING_WENT_WRONG = "something_went_wrong";
+export const DEFAULT_HTTP_ERROR = 'default_http_error';
+export const NO_ACCES = 'no_acces';
+export const SOMETHING_WENT_WRONG = 'something_went_wrong';
 
 
 /**
-* Marker : Quantiy And Price validation
-* =============================================================================================
-*/
+ *  Marker : Quantiy And Price validation
+ * =============================================================================================
+ */
 
 export const QUANTITY_Y_UNDER_70_PERCENT = 'Y_shelf_pack_quantity_warning';
 export const QUANTITY_X_WARNING = 'X_shelf_pack_quantity_warning';
@@ -216,6 +217,6 @@ export const PO_ALPHANUMERIC_WARNING = 'po_alphanumeric_warning';
 
 export const ONE_SIGNAL_PERMISSION_REMINDER = 'one_signal_permission_reminder';
 
-export const SAVINGS_TEXT = "savings_text";
+export const SAVINGS_TEXT = 'savings_text';
 
 export const ONE_SIGNAL_SUBSCRIPTION_REMINDER = 'one_signal_subscription_reminder';

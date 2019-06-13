@@ -15,7 +15,6 @@ import * as Constants from '../util/constants';
 import * as Strings from '../util/strings';
 import { PopoversService } from '../services/popovers/popovers';
 import { LoadingService } from '../services/loading/loading';
-import { LocalStorageHelper } from '../helpers/local-storage';
 
 @Component({
   templateUrl: 'app.html'
@@ -23,27 +22,27 @@ import { LocalStorageHelper } from '../helpers/local-storage';
 export class MyApp {
 
   public rootPage: any;
-  public isLoading = true;
-  private openedFromNotification = false;
+  public isLoading:boolean = true;
+  private openedFromNotification:boolean = false;
 
   constructor(public platform: Platform,
-    public app: App,
-    public statusBar: StatusBar,
-    private splashScreen: SplashScreen,
-    private translate: TranslateService,
-    private databaseProvider: DatabaseProvider,
-    private networkService: NetworkService,
-    private sessionValidatorProvider: SessionValidatorService,
-    private oneSignalService: OneSignalService,
-    private navigatorService: NavigatorService,
-    private popoverProvider: PopoversService) {
+              public app: App,
+              public statusBar: StatusBar,
+              private splashScreen: SplashScreen,
+              private translate: TranslateService,
+              private databaseProvider: DatabaseProvider,
+              private networkService: NetworkService,
+              private sessionValidatorProvider: SessionValidatorService,
+              private oneSignalService: OneSignalService,
+              private navigatorService: NavigatorService,
+              private popoverProvider: PopoversService) {
     this.setAppLanguage();
     this.initializeApp();
   }
 
-  initializeApp() {
+  public initializeApp() {
     this.isLoading = true;
- 
+
     this.platform.ready().then(() => {
       this.oneSignalService.init();
 
@@ -58,26 +57,26 @@ export class MyApp {
 
       this.navigatorService.initializeBackButton(() => {
 
-        if(LoadingService.activeLoading){
+        if (LoadingService.activeLoading) {
           return;
         }
-    
-        if(PopoversService.activeItem){
+
+        if (PopoversService.activeItem) {
           PopoversService.dismissCurrent();
           return;
         }
 
         if (!this.navigatorService.getNav().canGoBack()) {
-          let content = {
+          const content = {
             type: Constants.POPOVER_QUIT,
             title: Strings.GENERIC_MODAL_TITLE,
             message: Strings.APPLICATION_QUIT_MESSAGE,
             negativeButtonText: Strings.MODAL_BUTTON_NO,
             positiveButtonText: Strings.MODAL_BUTTON_YES
-          }
+          };
 
-          this.popoverProvider.show(content).subscribe((result) => {
-            if (result['optionSelected'] == "OK") {
+          this.popoverProvider.show(content).subscribe(result => {
+            if (result['optionSelected'] === 'OK') {
               this.platform.exitApp();
             }
           });
@@ -102,34 +101,30 @@ export class MyApp {
 
 
   private setAppLanguage() {
-    let language = navigator.language;
+    const language = navigator.language;
     if (language.includes('fr')) {
       this.translate.setDefaultLang('fr');
-    }
-    else {
+    } else {
       this.translate.setDefaultLang('en');
     }
   }
 
-  stopLoading() {
+  public stopLoading() {
     this.splashScreen.hide();
     this.isLoading = false;
   }
 
   private checkSession() {
     this.stopLoading();
-    if (this.openedFromNotification) {
-
-    }
-    else if (this.sessionValidatorProvider.isValidSession() === true) {
+    if (!this.openedFromNotification && this.sessionValidatorProvider.isValidSession() === true) {
       this.rootPage = Catalog;
       this.navigatorService.initialRootPage(this.rootPage);
     } else {
       this.rootPage = Login;
       this.navigatorService.initialRootPage(this.rootPage);
     }
-    
+
   }
-  
+
 
 }

@@ -1,6 +1,6 @@
-export interface LocationElement{
+export interface LocationElement {
     LOCATION: any;
-    POSTOFFICE: number;
+    POSTOFFICE: string;
     QUANTITY: number;
     WANTED: boolean;
-  };
+  }

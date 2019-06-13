@@ -1,6 +1,7 @@
-import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import * as Constants from '../../util/constants';
 import * as ConstantsUrl from '../../util/constants-url';
+import { Product } from 'interfaces/models/product';
 
 @Component({
   selector: 'product',
@@ -8,20 +9,17 @@ import * as ConstantsUrl from '../../util/constants-url';
 })
 export class ProductComponent implements OnInit, AfterViewInit {
 
-  @Input('product') product;
+  @Input('product') public product: Product;
   public imageIsLoading: boolean = true;
 
-  constructor() {
-  }
-
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.product.IMAGE = this.product.IMAGE === '0000000.jpg' ? Constants.LOCAL_PRODUCT_IMAGE_PLACEHOLDER :
     ConstantsUrl.PRODUCT_IMAGE_BASE_URL + this.product.SKU + '.JPG';
   }
 
-  loadImage() {
+  public loadImage() {
     return new Promise((resolve, reject) => {
-      let img = new Image();
+      const img = new Image();
       img.addEventListener('load', e => resolve(img));
       img.onerror = () => {
         reject(new Error('Failed to load URL'));
@@ -30,8 +28,8 @@ export class ProductComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    this.loadImage().then((data) => {
+  public ngAfterViewInit(): void {
+    this.loadImage().then(data => {
       this.imageIsLoading = false;
     }).catch(error => {
       console.error(error);

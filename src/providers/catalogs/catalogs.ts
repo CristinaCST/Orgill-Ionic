@@ -1,45 +1,45 @@
-import {Injectable} from '@angular/core';
-import {LocalStorageHelper} from "../../helpers/local-storage";
-import * as ConstantsUrl from "../../util/constants-url";
-import * as Constants from "../../util/constants";
-import {ApiService} from "../../services/api/api";
-import {SubcategoriesRequest} from "../../interfaces/request-body/subcategories";
-import {CategoriesRequest} from "../../interfaces/request-body/categories";
-import {ProductsRequest} from "../../interfaces/request-body/products";
-import {EmptyObservable} from "rxjs/observable/EmptyObservable";
-import {SearchProductRequest} from "../../interfaces/request-body/search-product";
+import { Injectable } from '@angular/core';
+import { LocalStorageHelper } from '../../helpers/local-storage';
+import * as ConstantsUrl from '../../util/constants-url';
+import * as Constants from '../../util/constants';
+import { ApiService } from '../../services/api/api';
+import { SubcategoriesRequest } from '../../interfaces/request-body/subcategories';
+import { CategoriesRequest } from '../../interfaces/request-body/categories';
+import { ProductsRequest } from '../../interfaces/request-body/products';
+import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
+import { SearchProductRequest } from '../../interfaces/request-body/search-product';
 
 @Injectable()
 export class CatalogsProvider {
 
-  private readonly user;
+  private readonly user: any;
 
   constructor(private apiProvider: ApiService) {
-    let userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
+    const userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     if (userInfo) {
       this.user = userInfo;
     }
   }
 
-  getPrograms() {
+  public getPrograms() {
     if (this.user) {
-      let params = {"user_token": this.user.userToken};
+      const params = { 'user_token': this.user.userToken };
       return this.apiProvider.post(ConstantsUrl.URL_PROGRAMS, params);
     } else {
       return new EmptyObservable;
     }
   }
 
-  getCategories(params: CategoriesRequest) {
+  public getCategories(params: CategoriesRequest) {
     return this.apiProvider.post(ConstantsUrl.URL_CATEGORIES, params);
   }
 
-  getSubcategories(params: SubcategoriesRequest) {
+  public getSubcategories(params: SubcategoriesRequest) {
     return this.apiProvider.post(ConstantsUrl.URL_SUBCATEGORIES, params);
   }
 
-  getProducts(categoryId, programNumber, page = 0, rpp = Constants.PRODUCTS_PER_PAGE, lastModified = '') {
-    let params: ProductsRequest = {
+  public getProducts(categoryId, programNumber, page = 0, rpp = Constants.PRODUCTS_PER_PAGE, lastModified = '') {
+    const params: ProductsRequest = {
       user_token: this.user.userToken,
 
       subcategory_id: categoryId,
@@ -51,16 +51,16 @@ export class CatalogsProvider {
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCTS, params);
   }
 
-  getProductDetails(productSku) {
-    let params = {
-      "user_token": this.user.userToken,
-      "sku": productSku
+  public getProductDetails(productSku) {
+    const params = {
+      'user_token': this.user.userToken,
+      'sku': productSku
     };
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_DETAIL, params);
   }
 
-  search(searchString, categoryId, programNumber, page = 1) {
-    let params: SearchProductRequest = {
+  public search(searchString, categoryId, programNumber, page = 1) {
+    const params: SearchProductRequest = {
       user_token: this.user.userToken,
       division: this.user.division,
       price_type: this.user.price_type,

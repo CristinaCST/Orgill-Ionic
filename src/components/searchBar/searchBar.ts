@@ -1,7 +1,6 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {App} from "ionic-angular";
-import {PopoversService} from "../../services/popovers/popovers";
-import * as Strings from "../../util/strings";
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { PopoversService } from '../../services/popovers/popovers';
+import * as Strings from '../../util/strings';
 import { NavigatorService } from '../../services/navigator/navigator';
 
 @Component({
@@ -9,24 +8,22 @@ import { NavigatorService } from '../../services/navigator/navigator';
   templateUrl: 'searchBar.html'
 })
 export class SearchBarComponent {
-  @Input('showBackButton') showBackButton;
-  @Input('numberOfProducts') numberOfProducts;
-  @Input('initialSearchString') initialSearchString;
-  @Output() searched = new EventEmitter<any>();
+  @Input('showBackButton') public showBackButton: boolean;
+  @Input('numberOfProducts') public numberOfProducts: number;
+  @Input('initialSearchString') public initialSearchString: string;
+  @Output() public searched: EventEmitter<any> = new EventEmitter<any>();
 
   public searchString: string;
 
-  constructor(private app: App,
-              private popoversProvider: PopoversService, private navigatorService: NavigatorService) {
-  }
+  constructor(private popoversProvider: PopoversService, private navigatorService: NavigatorService) {}
 
-  back() {
+  public back() {
     this.navigatorService.backButtonAction();
   }
 
-  search() {
+  public search() {
     if (!this.searchString || this.searchString.length < 3) {
-      let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SEARCH_INVALID_INPUT);
+      const content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SEARCH_INVALID_INPUT);
       this.popoversProvider.show(content);
       return;
     }

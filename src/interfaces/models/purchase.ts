@@ -1,5 +1,5 @@
-import {Program} from "./program";
-import {ShoppingListItem} from "./shopping-list-item";
+import { Program } from './program';
+import { ShoppingListItem } from './shopping-list-item';
 
 export interface Purchase {
   purchase_id: number;
@@ -10,5 +10,5 @@ export interface Purchase {
   total: number;
   confirmation_number: string;
   item_program: Program;
-  purchase_items: Array<ShoppingListItem>
+  purchase_items: ShoppingListItem[];
 }

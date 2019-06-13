@@ -1,30 +1,29 @@
 import { Injectable } from '@angular/core';
-import {Product} from "../../interfaces/models/product";
+import { Product } from '../../interfaces/models/product';
 import * as Constants from '../../util/constants';
-import * as ConstantsUrl from "../../util/constants-url"
-import {User} from "../../interfaces/models/user";
-import {LocalStorageHelper} from "../../helpers/local-storage";
-import {SearchProductRequest} from "../../interfaces/request-body/search-product";
+import * as ConstantsUrl from '../../util/constants-url';
+import { User } from '../../interfaces/models/user';
+import { LocalStorageHelper } from '../../helpers/local-storage';
+import { SearchProductRequest } from '../../interfaces/request-body/search-product';
 import { ApiService } from '../../services/api/api';
-import { PricingService } from '../../services/pricing/pricing';
 import { Observable } from 'rxjs';
 
 
 @Injectable()
 export class ProductProvider {
-private readonly userToken;
-  constructor(private apiProvider: ApiService, private pricingService: PricingService){
-    let userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
+private readonly userToken: string;
+constructor(private apiProvider: ApiService) {
+    const userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     if (userInfo) {
       this.userToken = userInfo.userToken;
     }
   }
 
-  isYCategoryProduct(product: Product): boolean {
+public isYCategoryProduct(product: Product): boolean {
     return product.QTY_ROUND_OPTION === 'Y';
   }
 
-  isXCategoryProduct(product: Product): boolean {
+public isXCategoryProduct(product: Product): boolean {
     return product.QTY_ROUND_OPTION === 'X';
 
   }
@@ -32,15 +31,15 @@ private readonly userToken;
 
   /*
   getItemPrice(product: Product, initialPrice: number, quantity: number): number {
-    return this.pricingService.getPrice(quantity, product);   
+    return this.pricingService.getPrice(quantity, product);
   }*/
 
 
-  protected isProductInList(listId: number, listsThatContainProduct: number[] ): boolean {
+protected isProductInList(listId: number, listsThatContainProduct: number[]): boolean {
     return listsThatContainProduct.indexOf(listId) > -1;
   }
 
-  public searchProduct(searchString, programNumber) {
+public searchProduct(searchString, programNumber) {
     const user: User = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     const params: SearchProductRequest = {
       'user_token': user.userToken,
@@ -57,20 +56,20 @@ private readonly userToken;
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params);
   }
 
-  public getProduct(sku, programNumber){
+public getProduct(sku, programNumber) {
     const user: User = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     const params = {
       'user_token': user.userToken,
       'division': user.division,
       'price_type': user.price_type,
-      'search_string': "'"+sku+"'",
+      'search_string': '\'' + sku + '\'',
       'category_id': '',
       'program_number': programNumber,
-      'rpp':'1',
-      'p':'1'
+      'rpp': '1',
+      'p': '1'
     };
 
-    return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params).map((result) => {
+    return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params).map(result => {
       if (result) {
         return JSON.parse(result['d'])[0];
       }
@@ -78,25 +77,24 @@ private readonly userToken;
     });
   }
 
-  orderHotDeal(productInfoList) {
+public orderHotDeal(productInfoList) {
     return new Promise((resolve, reject) => {
       productInfoList.user_token = this.userToken;
       try {
-        this.apiProvider.post(ConstantsUrl.URL_ORDER_HOT_DEAL_PRODUCTS, productInfoList).subscribe((response) => {
+        this.apiProvider.post(ConstantsUrl.URL_ORDER_HOT_DEAL_PRODUCTS, productInfoList).subscribe(response => {
           if (response) {
               resolve(response);
-            
+
           } else {
             reject();
           }
-        })
+        });
       } catch (e) {
         reject(e);
       }
     }
     );
   }
-
 
 
 }

@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import { Injectable } from '@angular/core';
 
 @Injectable()
 export class LocalStorageHelper {
@@ -22,6 +22,6 @@ export class LocalStorageHelper {
   }
 
   public static clearLocalStorage() {
-    localStorage.clear()
+    localStorage.clear();
   }
 }

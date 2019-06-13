@@ -1,27 +1,27 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {SQLite, SQLiteObject} from '@ionic-native/sqlite';
-import {Storage} from '@ionic/storage';
-import {Platform} from 'ionic-angular';
-import {Observable} from 'rxjs/Observable';
-import {BehaviorSubject} from 'rxjs/Rx';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { Storage } from '@ionic/storage';
+import { Platform } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/Rx';
 
-import {Program} from '../../interfaces/models/program';
-import {ShoppingListItem} from '../../interfaces/models/shopping-list-item';
-import {SQLitePorter} from "@ionic-native/sqlite-porter";
+import { Program } from '../../interfaces/models/program';
+import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
+import { SQLitePorter } from '@ionic-native/sqlite-porter';
 
 @Injectable()
 export class DatabaseProvider {
-  database: SQLiteObject;
+  public database: SQLiteObject;
   private databaseReady: BehaviorSubject<boolean>;
-  private queries;
+  private queries: any;
 
-  constructor(public SQLitePorter: SQLitePorter, private storage: Storage, private sqlite: SQLite, private platform: Platform, private http: HttpClient) {
+  constructor(public SQLiteporter: SQLitePorter, private storage: Storage, private sqlite: SQLite, private platform: Platform, private http: HttpClient) {
     this.databaseReady = new BehaviorSubject(false);
     this.platform.ready().then(() => {
       this.sqlite.create({
         name: 'orgill_market.db',
-        location: 'default',
+        location: 'default'
       })
         .then((db: SQLiteObject) => {
           this.database = db;
@@ -79,14 +79,14 @@ export class DatabaseProvider {
 
   /* DATABASE */
 
-  getDatabaseState(): Observable<any> {
+  public getDatabaseState(): Observable<any> {
     return this.databaseReady.asObservable();
   }
 
-  fillDatabase() {
-    this.http.get('assets/db.sql', {responseType: 'text'})
+  public fillDatabase() {
+    this.http.get('assets/db.sql', { responseType: 'text' })
       .subscribe(sql => {
-          this.SQLitePorter.importSqlToDb(this.database, sql)
+          this.SQLiteporter.importSqlToDb(this.database, sql)
             .then(() => {
               this.databaseReady.next(true);
               this.storage.set('database_filled', true).catch(err => console.error(err));
@@ -97,16 +97,16 @@ export class DatabaseProvider {
   }
 
   /* PRODUCTS  & SHOPPING LISTS */
-  addShoppingList(name, description, type): Promise<any> {
+  public addShoppingList(name, description, type): Promise<any> {
     const data = [name, description, type];
     return this.database.executeSql(this.queries.addShoppingList, data);
   }
 
-  getNumOfListsWithName(name: string): Promise<any> {
+  public getNumOfListsWithName(name: string): Promise<any> {
     return this.database.executeSql(this.queries.getNumOfListsWithName, [name]);
   }
 
-  addProductToShoppingList(shopping_list_id: Number, shopping_list_item: ShoppingListItem): Promise<any> {
+  public addProductToShoppingList(shopping_list_id: number, shopping_list_item: ShoppingListItem): Promise<any> {
     const product = shopping_list_item.product;
     const productData = [
       product.SKU,
@@ -136,11 +136,11 @@ export class DatabaseProvider {
     return this.database.executeSql(this.queries.insertShoppingListItem, item_data);
   }
 
-  getShoppingListsForProduct(product_sku: string) {
+  public getShoppingListsForProduct(product_sku: string) {
     return this.database.executeSql(this.queries.getShoppingListsForProduct, [product_sku]);
   }
 
-  removeProductsFromShoppingList(shopping_list_id: number, shopping_item_ids: number[]): Promise<any> {
+  public removeProductsFromShoppingList(shopping_list_id: number, shopping_item_ids: number[]): Promise<any> {
     let placeholders = '';
     for (let i = 0; i < shopping_item_ids.length; i++) {
       if (i === shopping_item_ids.length - 1) {
@@ -153,28 +153,28 @@ export class DatabaseProvider {
     return this.database.executeSql(deleteQuery, shopping_item_ids);
   }
 
-  async removeShoppingList(shopping_list_id: number): Promise<any> {
-    const [err, data] = await this.database.executeSql(this.queries.deleteAllFromShoppingListWithId, [shopping_list_id]);
+  public async removeShoppingList(shopping_list_id: number): Promise<any> {
+    const [err] = await this.database.executeSql(this.queries.deleteAllFromShoppingListWithId, [shopping_list_id]);
     if (err) {
       return err;
     }
     return this.database.executeSql(this.queries.deleteShoppingList, [shopping_list_id]);
   }
 
-  getAllProductsFromShoppingList(id: number): Promise<any> {
+  public getAllProductsFromShoppingList(id: number): Promise<any> {
     return this.database.executeSql(this.queries.getAllProductsFromShoppingList, [id]);
   }
 
-  getAllShoppingLists(): Promise<any> {
+  public getAllShoppingLists(): Promise<any> {
     return this.database.executeSql(this.queries.getAllShoppingLists, []);
   }
 
-  updateShoppingListItem(id: number, shopping_list_id: number, programNumber: string, price: number, quantity: number): Promise<any> {
+  public updateShoppingListItem(id: number, shopping_list_id: number, programNumber: string, price: number, quantity: number): Promise<any> {
     const params = [programNumber, price, quantity, shopping_list_id, id];
     return this.database.executeSql(this.queries.updateShoppingListItem, params);
   }
 
-  clearStorageData(): Promise<any> {
+  public clearStorageData(): Promise<any> {
     this.database.executeSql(this.queries.deleteAllFromProduct, [])
       .then(data => {
          // console.log('dropped table product: ', data);
@@ -200,7 +200,7 @@ export class DatabaseProvider {
     return this.database.executeSql(this.queries.deleteAllFromPurchase, []);
   }
 
-  addPrograms(programs: Program[]) {
+  public addPrograms(programs: Program[]) {
     let programData;
 
     // programs.forEach(program => {
@@ -214,9 +214,9 @@ export class DatabaseProvider {
     //       });
     // });
 
-    this.asyncForEach(programs,async (program) => {
+    this.asyncForEach(programs, async program => {
       programData = [program.PROGRAMNO, program.NAME, program.STARTDATE, program.ENDDATE, program.SHIPDATE, program.MARKETONLY];
-        await this.database.executeSql(this.queries.addOrReplacePrograms, programData)
+      await this.database.executeSql(this.queries.addOrReplacePrograms, programData)
           .then(data => {
               // Added one program to database.
             },
@@ -228,12 +228,12 @@ export class DatabaseProvider {
   }
 
 
-  getMarketTypeForProgram(programNo: string): Promise<any> {
+  public getMarketTypeForProgram(programNo: string): Promise<any> {
     return this.database.executeSql(this.queries.getMarketTypeForProgram, [programNo]);
   }
 
 
-  finalizePurchase(purchase_order_id: number, shopping_list_item_ids: number[], shopping_list_id: number): Promise<any> {
+  public finalizePurchase(purchase_order_id: number, shopping_list_item_ids: number[], shopping_list_id: number): Promise<any> {
 
     let placeholders = '';
     for (let i = 0; i < shopping_list_item_ids.length; i++) {
@@ -247,15 +247,15 @@ export class DatabaseProvider {
     return this.database.executeSql(finalizePurchaseQuery, shopping_list_item_ids);
   }
 
-  getAllPurchases(): Promise<any> {
+  public getAllPurchases(): Promise<any> {
     return this.database.executeSql(this.queries.getAllPurchases, []);
   }
 
-  getAllProductsFromPurchase(purchase_order_id: number): Promise<any> {
+  public getAllProductsFromPurchase(purchase_order_id: number): Promise<any> {
     return this.database.executeSql(this.queries.getAllProductsFromPurchase, [purchase_order_id]);
   }
 
-  insertPurchase(purchase: any): Promise<any> {
+  public insertPurchase(purchase: any): Promise<any> {
     const purchaseData = [
       purchase.PO,
       purchase.date,
@@ -263,13 +263,13 @@ export class DatabaseProvider {
       purchase.type,
       purchase.total,
       purchase.confirmation_number,
-      purchase.program_number,
+      purchase.program_number
     ];
 
     return this.database.executeSql(this.queries.insertPurchase, purchaseData);
   }
 
-  checkProductInList(productSKU, listId) {
+  public checkProductInList(productSKU, listId) {
     const checkData = [
       productSKU,
       listId
@@ -278,7 +278,7 @@ export class DatabaseProvider {
   }
 
 
-   async asyncForEach(array, callback) {
+  public async asyncForEach(array, callback) {
     for (let index = 0; index < array.length; index++) {
       await callback(array[index], index, array);
     }

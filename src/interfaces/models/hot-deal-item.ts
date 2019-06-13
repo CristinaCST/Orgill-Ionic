@@ -1,5 +1,5 @@
-import { LocationElement } from "./location-element";
-import { ItemProgram } from "./item-program";
+import { LocationElement } from './location-element';
+import { ItemProgram } from './item-program';
 
 export interface HotDealItem {
   ITEM: any;

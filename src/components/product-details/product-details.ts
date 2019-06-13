@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
-import {Product} from "../../interfaces/models/product";
-import {ProductDescriptionPage} from "../../pages/product-description/product-description";
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { Product } from '../../interfaces/models/product';
+import { ProductDescriptionPage } from '../../pages/product-description/product-description';
 import * as Constants from '../../util/constants';
 import * as ConstantsUrl from '../../util/constants-url';
 import { NavigatorService } from '../../services/navigator/navigator';
@@ -11,27 +11,27 @@ import { NavigatorService } from '../../services/navigator/navigator';
 })
 export class ProductDetailsComponent implements OnInit, AfterViewInit {
 
-  @Input() product: Product;
+  @Input() public product: Product;
   public imageIsLoading: boolean = true;
 
   constructor(private navigatorService: NavigatorService) {
   }
 
   public showProductDescription() {
-    this.navigatorService.push(ProductDescriptionPage, {'product': this.product}).catch(err => console.error(err))
+    this.navigatorService.push(ProductDescriptionPage, { 'product': this.product }).catch(err => console.error(err));
   }
 
-  //TODO: CHANEG FROM CONSTANTS
-  ngOnInit(): void {
-   
-    
+  // TODO: CHANEG FROM CONSTANTS
+  public ngOnInit(): void {
+
+
     this.product.IMAGE = this.product.IMAGE === '0000000.jpg' ? Constants.LOCAL_PRODUCT_IMAGE_PLACEHOLDER :
       ConstantsUrl.PRODUCT_IMAGE_BASE_URL + this.product.SKU + '.JPG';
   }
 
-  loadImage() {
+  public loadImage() {
     return new Promise((resolve, reject) => {
-      let img = new Image();
+      const img = new Image();
       img.addEventListener('load', () => resolve(img));
       img.onerror = () => {
         reject(new Error('Failed to load URL'));
@@ -40,7 +40,7 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
+  public ngAfterViewInit(): void {
     this.loadImage().then(() => {
       this.imageIsLoading = false;
     }).catch(error => {

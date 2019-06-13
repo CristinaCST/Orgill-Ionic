@@ -1,14 +1,9 @@
 export class User {
-  userToken: string;
-  customer_number?: string;
-  division?: string;
-  price_type?: string;
-  user_name?: string;
-  time_stamp?: string;
-  password?: string;
-
-  constructor(){
-
-}
-
+  public userToken: string;
+  public customer_number?: string;
+  public division?: string;
+  public price_type?: string;
+  public user_name?: string;
+  public time_stamp?: string;
+  public password?: string;
 }

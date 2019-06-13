@@ -1,41 +1,41 @@
 import { Component, OnInit } from '@angular/core';
-import { PurchasesProvider } from "../../providers/purchases/purchases";
-import { Purchase } from "../../interfaces/models/purchase";
-import { NavParams } from "ionic-angular";
-import { ShoppingListItem } from "../../interfaces/models/shopping-list-item";
-import { ProductPage } from "../product/product";
+import { PurchasesProvider } from '../../providers/purchases/purchases';
+import { Purchase } from '../../interfaces/models/purchase';
+import { NavParams } from 'ionic-angular';
+import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
+import { ProductPage } from '../product/product';
 import { NavigatorService } from '../../services/navigator/navigator';
 
 
 @Component({
   selector: 'page-purchase-details',
-  templateUrl: 'purchase-details.html',
+  templateUrl: 'purchase-details.html'
 })
 export class PurchaseDetailsPage implements OnInit {
-  purchase: Purchase;
+  public purchase: Purchase;
 
   constructor(public purchasesProvider: PurchasesProvider,
-    public navParams: NavParams, public navigatorService: NavigatorService) {
+              public navParams: NavParams, public navigatorService: NavigatorService) {
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.purchase = this.navParams.get('purchase');
     this.getLocalPurchaseItems();
   }
 
-  getLocalPurchaseItems() {
+  public getLocalPurchaseItems() {
     this.purchasesProvider.getAllProductsFromPurchase(this.purchase.purchase_id).then(
-      (data: Array<ShoppingListItem>) =>
+      (data: ShoppingListItem[]) =>
         this.purchase.purchase_items = data);
   }
 
-  onCheckedToDetails($event) {
+  public onCheckedToDetails($event) {
     this.navigatorService.push(ProductPage, {
       product: $event.product,
       programNumber: $event.program_number,
       id: $event.id,
       quantity: $event.quantity
-    }).catch(err => console.error(err))
+    }).catch(err => console.error(err));
   }
 
 }

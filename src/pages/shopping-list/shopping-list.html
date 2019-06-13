@@ -7,7 +7,7 @@
   <search-bar [showBackButton]="true" (searched)="onSearched($event)"></search-bar>
 </ion-header>
 
-<ion-content (ionScrollStart)="scrollStart()" (ionScrollEnd)="scrollEnd()">
+<ion-content (ionScrollStart)="scrollStart()">
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" (ionStart)="refreshPulling($event)">
     <ion-refresher-content>
     </ion-refresher-content>

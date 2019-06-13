@@ -1,8 +1,7 @@
-import {Injectable} from "@angular/core";
-import {Network} from "@ionic-native/network";
-import * as Constants from "../../util/constants";
-import * as Strings from "../../util/strings";
-import {PopoversService} from "../popovers/popovers";
+import { Injectable } from '@angular/core';
+import { Network } from '@ionic-native/network';
+import * as Strings from '../../util/strings';
+import { PopoversService } from '../popovers/popovers';
 
 @Injectable()
 export class NetworkService {
@@ -13,7 +12,7 @@ export class NetworkService {
   public listenForNetworkEvents() {
     this.network.onDisconnect()
       .subscribe(() => {
-        this.openNetworkModal()
+        this.openNetworkModal();
       });
 
     this.network.onConnect()
@@ -22,8 +21,8 @@ export class NetworkService {
       });
   }
 
-  openNetworkModal() {
-    let content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.POPOVER_TIMEOUT_ERROR_MESSAGE, "Open Data", "Open WIFI")
+  public openNetworkModal() {
+    const content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.POPOVER_TIMEOUT_ERROR_MESSAGE, 'Open Data', 'Open WIFI');
     this.popoversProvider.show(content);
   }
 }

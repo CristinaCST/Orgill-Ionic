@@ -1,12 +1,12 @@
-import {Injectable} from '@angular/core';
-import {Md5} from "ts-md5";
-import {LoginRequest} from "../../interfaces/request-body/login";
-import {ApiService} from "../api/api";
-import * as ConstantsURL from "../../util/constants-url";
+import { Injectable } from '@angular/core';
+import { Md5 } from 'ts-md5';
+import { LoginRequest } from '../../interfaces/request-body/login';
+import { ApiService } from '../api/api';
+import * as ConstantsURL from '../../util/constants-url';
 import 'rxjs/add/operator/map';
-import {LocalStorageHelper} from "../../helpers/local-storage";
-import * as Constants from "../../util/constants";
-import {User} from "../../interfaces/models/user";
+import { LocalStorageHelper } from '../../helpers/local-storage';
+import * as Constants from '../../util/constants';
+import { User } from '../../interfaces/models/user';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { Login } from '../../pages/login/login';
 
@@ -22,27 +22,27 @@ export class AuthService {
     return Md5.hashStr(password.toLowerCase()).toString();
   }
 
-  login(credentials: LoginRequest) {
+  public login(credentials: LoginRequest) {
 
     credentials.username = credentials.username.toLowerCase();
     credentials.password = AuthService.encryption(credentials.password);
 
     return this.apiProvider.post(ConstantsURL.URL_LOGIN, credentials).map(response => {
-      this.user = {'userToken': JSON.parse(response.d)['User_Token']};
+      this.user = { 'userToken': JSON.parse(response.d)['User_Token'] };
     });
   }
 
-  logout() {
+  public logout() {
     LocalStorageHelper.removeFromLocalStorage(Constants.USER);
   }
 
-  logoutDeleteData() {
+  public logoutDeleteData() {
   }
 
   /**
    * Gets user info from the server
    */
-  getUserInfo() {
+  public getUserInfo() {
     if (this.user && this.user.userToken) {
       return new Promise((resolve, reject) => {
         const params = { 'user_token': this.user.userToken };
@@ -51,19 +51,18 @@ export class AuthService {
           this.user.userToken = params.user_token;
           LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
           resolve();
-        }, (error) => {
+        }, error => {
           console.error(error);
           reject(error);
         });
       });
-    }
-    else {
+    } else {
       this.navigatorService.setRoot(Login);
     }
   }
 
-  getUserToken(){
-    if(this.user){
+  public getUserToken() {
+    if (this.user) {
       return this.user.userToken;
     }
   }

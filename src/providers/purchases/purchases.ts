@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {DatabaseProvider} from "../database/database";
-import {Purchase} from "../../interfaces/models/purchase";
-import {Program} from "../../interfaces/models/program";
-import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
+import { Injectable } from '@angular/core';
+import { DatabaseProvider } from '../database/database';
+import { Purchase } from '../../interfaces/models/purchase';
+import { Program } from '../../interfaces/models/program';
+import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
 
 @Injectable()
 export class PurchasesProvider {
@@ -10,14 +10,14 @@ export class PurchasesProvider {
   constructor(private databaseProvider: DatabaseProvider) {
   }
 
-  getLocalPurchaseHistory() {
+  public getLocalPurchaseHistory() {
     return new Promise((resolve, reject) =>
-      this.databaseProvider.getAllPurchases().then((data) => {
+      this.databaseProvider.getAllPurchases().then(data => {
         if (!data.rows) {
-          resolve(null);
+          resolve();
           return;
         }
-        let purchases: Array<Purchase> = [];
+        const purchases: Purchase[] = [];
         if (data.rows.length > 0) {
           for (let i = 0; i < data.rows.length; i++) {
             const receivedPurchase = data.rows.item(i);
@@ -28,7 +28,7 @@ export class PurchasesProvider {
               STARTDATE: data.start_date,
               ENDDATE: data.end_date,
               SHIPDATE: data.ship_date,
-              MARKETONLY: data.market_only,
+              MARKETONLY: data.market_only
             };
 
             const purchase: Purchase = {
@@ -40,7 +40,7 @@ export class PurchasesProvider {
               total: receivedPurchase.total,
               confirmation_number: receivedPurchase.confirmation_number,
               item_program: itemProgram,
-              purchase_items: [],
+              purchase_items: []
             };
 
             purchases.push(purchase);
@@ -51,20 +51,20 @@ export class PurchasesProvider {
 
       })
         .catch(error => reject(error))
-    )
+    );
   }
 
 
-  getAllProductsFromPurchase(purchaseId) {
+  public getAllProductsFromPurchase(purchaseId) {
     return new Promise(async (resolve, reject) => {
         try {
-          let data = await this.databaseProvider.getAllProductsFromPurchase(purchaseId);
-          let purchaseItems = [];
+          const data = await this.databaseProvider.getAllProductsFromPurchase(purchaseId);
+          const purchaseItems = [];
           if (data) {
             if (data.rows.length > 0) {
               for (let i = 0; i < data.rows.length; i++) {
-                let receivedItem = data.rows.item(i);
-                let listItem: ShoppingListItem = {
+                const receivedItem = data.rows.item(i);
+                const listItem: ShoppingListItem = {
                   id: receivedItem.id,
                   product: {
                     CatID: receivedItem.cat_id,
@@ -86,7 +86,7 @@ export class PurchasesProvider {
                   quantity: receivedItem.quantity,
                   item_price: receivedItem.item_price
                 };
-                purchaseItems.push(listItem)
+                purchaseItems.push(listItem);
               }
             }
           }

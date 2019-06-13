@@ -1,43 +1,43 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild, ElementRef} from '@angular/core';
-import {Product} from "../../interfaces/models/product";
-import {ProgramProvider} from "../../providers/program/program";
-import {ItemProgram} from "../../interfaces/models/item-program";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Product } from '../../interfaces/models/product';
+import { ProgramProvider } from '../../providers/program/program';
+import { ItemProgram } from '../../interfaces/models/item-program';
 import { PricingService } from '../../services/pricing/pricing';
-import { max } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'product-quantity',
   templateUrl: 'product-quantity.html'
 })
 export class ProductQuantityComponent implements OnInit {
-  @Input() product: Product;
-  @Input() quantityFromList;
-  @Input() hotDeal: boolean;
-  @Output() quantityChange = new EventEmitter<any>();
+  @Input() public product: Product;
+  @Input() public quantityFromList: number;
+  @Input() public hotDeal: boolean;
+  @Output() public quantityChange: EventEmitter<any> = new EventEmitter<any>();
   private quantity: number = 1;
-  private productPrice = 0;
-  private total = 0;
+  private productPrice: number = 0;
+  private total: number = 0;
   private program: ItemProgram = {} as ItemProgram;
-  private programSubscription;
-  private savings: string = "";
-  
+  private programSubscription: Subscription;
+  public savings: string = '';
+
 
   constructor(private programProvider: ProgramProvider, private pricingService: PricingService) {
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.programSubscription = this.programProvider.getSelectedProgram().subscribe(program => {
       if (program) {
         this.program = program;
         this.productPrice = this.getDecimalPrice();
         this.handleQuantityChange();
       }
-      
+
     });
-    if (this.quantityFromList) {
+    if (this.quantityFromList>0) {
       this.quantity = this.validateQuantity(this.quantityFromList);
     }
-    //this.quantity = this.validateQuantity(this.quantityFromList);
+    // this.quantity = this.validateQuantity(this.quantityFromList);
 
     /* this.programProvider.isPackQuantity().subscribe(value => {
        if (value === true && this.product) {
@@ -45,41 +45,39 @@ export class ProductQuantityComponent implements OnInit {
          this.handleQuantityChange();
        }
      });*/
-     this.setSavings();
+    this.setSavings();
   }
 
-  ngOnDestroy(){
+  public ngOnDestroy() {
     if (this.programSubscription) {
       this.programSubscription.unsubscribe();
     }
   }
 
-  getDecimalPrice() {
+  public getDecimalPrice() {
     return parseFloat(parseFloat(this.program.PRICE).toFixed(2));
   }
 
 
-  //TODO: Make this a bit cleaner...
-  add() {
+  // TODO: Make this a bit cleaner...
+  public add() {
     if (this.product.QTY_ROUND_OPTION === 'X') {
       this.setPackQuantity('ADD');
-    }
-    else {
+    } else {
       this.quantity++;
     }
     this.handleQuantityChange();
 
   }
 
-  remove() {
+  public remove() {
     if (this.product.QTY_ROUND_OPTION === 'X') {
       if (this.quantity > Number(this.product.SHELF_PACK)) {
         this.setPackQuantity('REMOVE');
       }
-    } else if (this.product.QTY_ROUND_OPTION === 'Y' && this.quantity <= Number(this.product.SHELF_PACK) && this.quantity >= 0.7 * Number(this.product.SHELF_PACK)){
+    } else if (this.product.QTY_ROUND_OPTION === 'Y' && this.quantity <= Number(this.product.SHELF_PACK) && this.quantity >= 0.7 * Number(this.product.SHELF_PACK)) {
       this.quantity = Math.floor(0.7 * Number(this.product.SHELF_PACK));
-    }
-    else {
+    } else {
       if (this.quantity > 1) {
         this.quantity--;
       }
@@ -87,15 +85,15 @@ export class ProductQuantityComponent implements OnInit {
     this.handleQuantityChange();
   }
 
-  setTotal() {
+  public setTotal() {
     if (this.program) {
-      this.total = this.pricingService.getPrice(this.quantity,this.product, this.program);
+      this.total = this.pricingService.getPrice(this.quantity, this.product, this.program);
     }
   }
 
-  setPackQuantity(actionType) {
-    let selfPackQuantity = Number(this.product.SHELF_PACK);
-    let newQuantity = this.validateQuantity(this.quantity);
+  public setPackQuantity(actionType) {
+    const selfPackQuantity = Number(this.product.SHELF_PACK);
+    const newQuantity = this.validateQuantity(this.quantity);
     switch (actionType) {
       case 'ADD':
         this.quantity = newQuantity  + ((this.product.QTY_ROUND_OPTION === 'X') ? selfPackQuantity : 1);
@@ -112,10 +110,10 @@ export class ProductQuantityComponent implements OnInit {
   }
 
 
-  handleQuantityChange() {
-    this.setPackQuantity("CUSTOM");
+  public handleQuantityChange() {
+    this.setPackQuantity('CUSTOM');
     this.setTotal();
-    let data = {
+    const data = {
       quantity: this.quantity,
       total: this.total,
       productPrice: this.getDecimalPrice()
@@ -123,21 +121,17 @@ export class ProductQuantityComponent implements OnInit {
     this.quantityChange.emit(data);
   }
 
-  private setSavings(){
-    this.savings = (Math.round(100*(Number(this.product.SUGGESTED_RETAIL) - this.productPrice)/Number(this.product.SUGGESTED_RETAIL))).toString() + "%";
+  private setSavings() {
+    this.savings = (Math.round(100 * (Number(this.product.SUGGESTED_RETAIL) - this.productPrice) / Number(this.product.SUGGESTED_RETAIL))).toString() + '%';
   }
 
-  private getMinimumQuantity(){
-    return Math.max(1,Number(this.program.MINQTY));
-  }
-
-  ngOnChanges(){
+  public ngOnChanges() {
     this.handleQuantityChange();
     this.setSavings();
   }
 
-  private validateQuantity(suggestedValue: number){
+  private validateQuantity(suggestedValue: number) {
     this.setSavings();
-    return this.pricingService.validateQuantity(suggestedValue,this.program,this.product);
+    return this.pricingService.validateQuantity(suggestedValue, this.program, this.product);
   }
 }

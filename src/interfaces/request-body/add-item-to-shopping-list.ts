@@ -1,4 +1,4 @@
-import {ShoppingListItem} from "../models/shopping-list-item";
+import { ShoppingListItem } from '../models/shopping-list-item';
 
 export interface AddItemToShoppingListRequest {
   user_token: string;

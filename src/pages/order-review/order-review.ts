@@ -1,42 +1,39 @@
-import {Component, OnInit} from '@angular/core';
-import { NavParams} from "ionic-angular";
-import {CustomerLocation} from "../../interfaces/models/customer-location";
-import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
-import {ShoppingListItem} from "../../interfaces/models/shopping-list-item";
+import { Component, OnInit } from '@angular/core';
+import { NavParams } from 'ionic-angular';
+import { CustomerLocation } from '../../interfaces/models/customer-location';
+import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
+import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
 import moment from 'moment';
-import {OrderConfirmationPage} from "../order-confirmation/order-confirmation";
+import { OrderConfirmationPage } from '../order-confirmation/order-confirmation';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { LocationElement } from '../../interfaces/models/location-element';
-import { PricingService } from '../../services/pricing/pricing';
 import { Product } from '../../interfaces/models/product';
 import { ProductProvider } from '../../providers/product/product';
-import { HotDealService } from '../../services/hotdeal/hotdeal';
 
 @Component({
   selector: 'page-order-review',
-  templateUrl: 'order-review.html',
+  templateUrl: 'order-review.html'
 })
 export class OrderReviewPage implements OnInit {
 
-  public orderMethod;
-  public postOffice = '-';
+  public orderMethod: number;
+  public postOffice: string = '-';
   public location: CustomerLocation;
-  public shoppingListId;
-  public shoppingListItems;
-  public orderTotal;
-  private shoppingListProgramNumbers: Array<string> = [];
-  private confirmationNumbers: Array<string> = [];
-  private isHotDeal: boolean = false;
-  private hotLocations: LocationElement[];
-  private hotDealItem;
+  public shoppingListId: number;
+  public shoppingListItems: ShoppingListItem[];
+  public orderTotal: number;
+  private shoppingListProgramNumbers: string[] = [];
+  private confirmationNumbers: string[] = [];
+  public isHotDeal: boolean = false;
+  public hotLocations: LocationElement[];
+  private hotDealItem: any;
 
-  constructor(private navigatorService: NavigatorService, private navParams: NavParams,
-              private shoppingListsProvider: ShoppingListsProvider, private pricingService: PricingService,
-              private productProvider: ProductProvider,
-              private hotDealService: HotDealService) {
-  }
+  constructor(private navigatorService: NavigatorService,
+              private navParams: NavParams,
+              private shoppingListsProvider: ShoppingListsProvider,
+              private productProvider: ProductProvider) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.orderMethod = this.checkValidParams('orderMethod');
     this.postOffice = this.checkValidParams('postOffice');
     this.location = this.checkValidParams('location');
@@ -44,53 +41,53 @@ export class OrderReviewPage implements OnInit {
     this.shoppingListItems = this.checkValidParams('shoppingListItems');
     this.orderTotal = this.checkValidParams('orderTotal');
     this.isHotDeal = this.checkValidParams('isHotDeal');
-    this.hotDealItem = this.checkValidParams('hotDealItem');  
-   
-    if(this.hotDealItem){
-      this.isHotDeal=true;
+    this.hotDealItem = this.checkValidParams('hotDealItem');
+
+    if (this.hotDealItem) {
+      this.isHotDeal = true;
 
       this.hotLocations = this.hotDealItem.LOCATIONS;
     }
 
-    if(this.shoppingListItems){
+    if (this.shoppingListItems) {
     this.shoppingListItems.forEach(listItem => {
       this.shoppingListProgramNumbers [listItem.program_number] = listItem.program_number;
     });
   }
- 
+
   }
 
-  checkValidParams(type) {
+  public checkValidParams(type) {
     if (this.navParams.get(type)) {
       return this.navParams.get(type);
     }
   }
 
-  private getOrderQuery(programNumber: string, items: Array<ShoppingListItem>): string {
-    let query = this.location.SHIPTONO + ":" + (this.postOffice ? this.postOffice : "") + ":" + programNumber + ":";
+  private getOrderQuery(programNumber: string, items: ShoppingListItem[]): string {
+    let query = this.location.SHIPTONO + ':' + (this.postOffice ? this.postOffice : '') + ':' + programNumber + ':';
     items.forEach((item, index) => {
-      query += item.product.SKU + "|" + item.quantity + (index < items.length - 1 ? ":" : "");
+      query += item.product.SKU + '|' + item.quantity + (index < items.length - 1 ? ':' : '');
     });
     return query;
   }
 
-  private getHotDealQuery(programNumber: string, item: Product, locations: LocationElement[]){
-    let query = [];
-    locations.forEach((location)=>{
-      query.push({order: location.LOCATION.SHIPTONO + ":" + (location.POSTOFFICE ? location.POSTOFFICE : "") + ":" + (programNumber?programNumber:"") + ":" + item.SKU +"|" + location.QUANTITY});
+  private getHotDealQuery(programNumber: string, item: Product, locations: LocationElement[]) {
+    const query = [];
+    locations.forEach(location => {
+      query.push({ order: location.LOCATION.SHIPTONO + ':' + (location.POSTOFFICE ? location.POSTOFFICE : '') + ':' + (programNumber ? programNumber : '') + ':' + item.SKU + '|' + location.QUANTITY });
     });
     return query;
   }
 
-  purchase() {
+  public purchase() {
     Object.keys(this.shoppingListProgramNumbers).map((programNumber, index) => {
-      let orderItems = this.shoppingListItems.filter(item => item.program_number == programNumber);
-      let itemsIds = orderItems.reduce((arr, item) => arr.concat(item.id), []);
-      let productListInfo = {
+      const orderItems = this.shoppingListItems.filter(item => item.program_number === programNumber);
+      const itemsIds = orderItems.reduce((arr, item) => arr.concat(item.id), []);
+      const productListInfo = {
         order_method: this.orderMethod,
         order_query: this.getOrderQuery(programNumber, orderItems)
       };
-      let insertToDBInfo = {
+      const insertToDBInfo = {
         PO: this.postOffice,
         date: moment().format('MM/DD/YYYY'),
         location: this.location.SHIPTONO,
@@ -102,7 +99,7 @@ export class OrderReviewPage implements OnInit {
         if (data.insertedPurchaseToDBInfo.insertId) {
           this.confirmationNumbers.push(data.confirmationNumber);
           if (index === Object.keys(this.shoppingListProgramNumbers).length - 1) {
-            let navigationParams = {
+            const navigationParams = {
               confirmationNumbers: this.confirmationNumbers,
               orderTotal: this.orderTotal,
               orderMethod: this.orderMethod
@@ -114,45 +111,40 @@ export class OrderReviewPage implements OnInit {
     });
   }
 
-  purchaseHotDeal() {
+  public purchaseHotDeal() {
 
-    let programNumber = this.hotDealItem.PROGRAM.PROGRAMNO;
-    let orderItem = this.hotDealItem.ITEM;
+    const programNumber = this.hotDealItem.PROGRAM.PROGRAMNO;
+    const orderItem = this.hotDealItem.ITEM;
 
-    let productListInfo = {
+    const productListInfo = {
       order_method: 2,
-      order_query: this.getHotDealQuery(programNumber, orderItem,this.hotDealItem.LOCATIONS)
+      order_query: this.getHotDealQuery(programNumber, orderItem, this.hotDealItem.LOCATIONS)
     };
 
     this.productProvider.orderHotDeal(productListInfo).then((data: any) => {
-      let confirmations = [];
-      data = JSON.parse(data.d).forEach((result) => {
+      const confirmations = [];
+      data = JSON.parse(data.d).forEach(result => {
         confirmations.push(result);
       });
 
-      let navigationParams = {
+      const navigationParams = {
         orderTotal: this.orderTotal,
         orderMethod: this.orderMethod,
         hotDealConfirmations: confirmations,
         hotDealLocations: this.hotDealItem.LOCATIONS,
         hotDealPurchase: true
       };
- 
+
       this.navigatorService.push(OrderConfirmationPage, navigationParams).catch(err => console.error(err));
-    
-      
-    },(rej)=>{
-      if(rej==='overflow'){
-       
-      }
+
+
     }).catch(err => console.error(err));
   }
-  
 
-  cancel() {
+
+  public cancel() {
     this.navigatorService.pop().catch(err => console.error(err));
   }
 
-  
 
 }

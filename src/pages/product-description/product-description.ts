@@ -1,28 +1,28 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {NavParams} from 'ionic-angular';
-import {Product} from "../../interfaces/models/product";
-import {CatalogsProvider} from "../../providers/catalogs/catalogs";
-import {LoadingService} from "../../services/loading/loading";
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { NavParams } from 'ionic-angular';
+import { Product } from '../../interfaces/models/product';
+import { CatalogsProvider } from '../../providers/catalogs/catalogs';
+import { LoadingService } from '../../services/loading/loading';
 
 @Component({
   selector: 'page-product-description',
-  templateUrl: 'product-description.html',
+  templateUrl: 'product-description.html'
 })
 export class ProductDescriptionPage implements OnInit, AfterViewInit {
-  description: string = "";
-  product: Product;
+  public description: string = '';
+  public product: Product;
   public imageIsLoading: boolean = true;
-  loader:LoadingService;
+  public loader: LoadingService;
 
   constructor(private navParams: NavParams, private catalogProvider: CatalogsProvider,
               public loadingService: LoadingService) {
                 this.loader = this.loadingService.createLoader();
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.product = this.navParams.get('product');
     this.loader.show();
-    this.catalogProvider.getProductDetails(this.product.SKU).subscribe((description) => {
+    this.catalogProvider.getProductDetails(this.product.SKU).subscribe(description => {
       this.description = JSON.parse(description.d).description;
       this.loader.hide();
     });
@@ -30,9 +30,9 @@ export class ProductDescriptionPage implements OnInit, AfterViewInit {
       'http://images.orgill.com/200x200/' + this.product.SKU + '.JPG';
   }
 
-  loadImage() {
+  public loadImage() {
     return new Promise((resolve, reject) => {
-      let img = new Image();
+      const img = new Image();
       img.addEventListener('load', () => resolve(img));
       img.onerror = () => {
         reject(new Error('Failed to load URL'));
@@ -41,7 +41,7 @@ export class ProductDescriptionPage implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
+  public ngAfterViewInit(): void {
     this.loadImage().then(() => {
       this.imageIsLoading = false;
     }).catch(error => {

@@ -1,5 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {App} from "ionic-angular";
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NavigatorService } from '../../services/navigator/navigator';
 
 @Component({
@@ -7,20 +6,20 @@ import { NavigatorService } from '../../services/navigator/navigator';
   templateUrl: 'navbar.html'
 })
 export class NavbarComponent {
-  @Input('title') title;
-  @Input('isMenuEnabled') isMenuEnabled;
-  @Input('isBackEnabled') isBackEnabled;
-  @Input('customButtons') customButtons = [];
-  @Output() buttonClicked = new EventEmitter<any>();
+  @Input('title') public title: string;
+  @Input('isMenuEnabled') public isMenuEnabled: boolean;
+  @Input('isBackEnabled') public isBackEnabled: boolean;
+  @Input('customButtons') public customButtons: any[] = [];
+  @Output() public buttonClicked:EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private app: App, private navigatorService: NavigatorService) {
+  constructor(private navigatorService: NavigatorService) {
   }
 
-  back() {
+  public back() {
     this.navigatorService.backButtonAction();
   }
 
-  buttonActions(type) {
-    this.buttonClicked.emit({type});
+  public buttonActions(type) {
+    this.buttonClicked.emit({ type });
   }
 }

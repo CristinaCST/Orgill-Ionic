@@ -1,29 +1,27 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import * as Constants from '../../util/constants';
-import { PricingService } from '../../services/pricing/pricing';
+import { ShoppingListItem } from 'interfaces/models/shopping-list-item';
 
 @Component({
   selector: 'shopping-list-product',
   templateUrl: 'shopping-list-product.html'
 })
 export class ShoppingListProductComponent {
-  @Input('shoppingListItem') shoppingListItem;
-  @Input('isDisabled') isDisabled;
-  @Output() checked = new EventEmitter<any>();
-  @Output() goToDetails = new EventEmitter<any>();
+  @Input('shoppingListItem') public shoppingListItem: ShoppingListItem;
+  @Input('isDisabled') public isDisabled: boolean;
+  @Output() public checked: EventEmitter<any> = new EventEmitter<any>();
+  @Output() public goToDetails: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private pricingService: PricingService) {
-  }
-
-  updateCheckedItems() {
-    let data = {
+  
+  public updateCheckedItems() {
+    const data = {
       status: this.shoppingListItem.isCheckedInShoppingList ? 'checkedItem' : 'uncheckedItem',
       price: this.getRealPrice().toFixed(Constants.DECIMAL_NUMBER)
     };
     this.checked.emit(data);
   }
 
-  goToProductDetails() {
+  public goToProductDetails() {
     if (!this.isDisabled) {
       return;
     }
@@ -33,7 +31,7 @@ export class ShoppingListProductComponent {
   /**
    * Safe not to validate since there are no inputs here.
    */
-  getRealPrice(){
-    return Number(this.shoppingListItem.item_price*this.shoppingListItem.quantity);
+  public getRealPrice() {
+    return Number(this.shoppingListItem.item_price * this.shoppingListItem.quantity);
   }
 }

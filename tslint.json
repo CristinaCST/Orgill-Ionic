@@ -1,14 +1,62 @@
 {
-  "extends": "tslint-ionic-rules/strict",
-  
   "rules": {
+    "arrow-parens": [true, "ban-single-arg-parens"],
+    "one-variable-per-declaration": true,
+    "forin": true,
+    "no-conditional-assignment": true,
+    "no-empty-interface": true,
+    "no-redundant-jsdoc": true,
+    "no-unnecessary-type-assertion": true,
+    "prefer-object-spread": true,
+    "strict-type-predicates": true,
+    "await-promise": true,
+    "strict-boolean-expressions": [true, "allow-string", "allow-null-union", "allow-undefined-union", "allow-boolean-or-undefined"],
+    "typedef": [true, "property-declaration", "member-variable-declaration"],
+    "prefer-for-of": false,
+    "no-empty": [true, "allow-empty-functions","allow-empty-catch"],
+    "eofline":false,
+    "no-consecutive-blank-lines": [true, 2],
+    "no-unnecessary-initializer":false, 
+    "ordered-imports": [
+      true,
+      {
+        "named-imports-order": "any",
+        "import-sources-order": "any",
+        "grouped-imports-order": "true"
+      }
+    ],
+    "trailing-comma": [
+      true,
+      {
+        "singleline": "never",
+        "multiline": {
+          "objects": "never",
+          "arrays": "never",
+          "functions": "never",
+          "typeLiterals": "ignore"
+        }
+      }
+    ],
+    "no-inferrable-types":false,
+    "no-floating-promises":false,
+    "unnecessary-constructor":true,
+    "static-this":true,
+    "no-unused-expression": [true, "allow-fast-null-checks"],
+    "no-this-assignment": true,
+    "no-return-await": true,
+    "no-shadowed-variable":true,
+    "no-null-keyword": true,
+    "no-null-undefined-union": true,
+    "curly": true,
+    "no-eval": true,
+    "member-access": true,
     "no-duplicate-variable": true,
     "no-unused-variable": [
       true
     ],
     "semicolon": [true, "always"],
     "no-console": false,
-    "triple-equals": [true,"always"]
+    "triple-equals": [true,"allow-null-check","allow-undefined-check"]
   },
   "rulesDirectory": [
     "node_modules/tslint-eslint-rules/dist/rules"

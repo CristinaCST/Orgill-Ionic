@@ -1,34 +1,33 @@
-import {Component, OnInit} from '@angular/core';
-import {NavParams} from 'ionic-angular';
-import {ShoppingListsProvider} from "../../providers/shopping-lists/shopping-lists";
+import { Component, OnInit } from '@angular/core';
+import { NavParams } from 'ionic-angular';
+import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { Catalog } from '../../pages/catalog/catalog';
-import * as Constants from '../../util/constants';
 import { HotDealService } from '../../services/hotdeal/hotdeal';
 
 
 @Component({
   selector: 'page-order-confirmation',
-  templateUrl: 'order-confirmation.html',
+  templateUrl: 'order-confirmation.html'
 })
 export class OrderConfirmationPage implements OnInit {
 
-  public confirmationNumbers;
-  public orderTotal;
-  public orderMethod;
-  public confirmation;
-  private hotDealPurchase:boolean = false;
-  private hotDealLocations;
-  private hotDealConfirmations;
+  public confirmationNumbers: string[];
+  public orderTotal: number;
+  public orderMethod: number;
+  public confirmation: string;
+  private hotDealPurchase: boolean = false;
+  private hotDealLocations: any[];
+  private hotDealConfirmations: any[];
 
   constructor(
     private navParams: NavParams,
     private shoppingListsProvider: ShoppingListsProvider,
-    private navigatorService: NavigatorService, 
+    private navigatorService: NavigatorService,
     private hotDealService: HotDealService) {
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.confirmationNumbers = this.checkValidParams('confirmationNumbers');
     this.orderTotal = this.checkValidParams('orderTotal');
     this.orderMethod = this.checkValidParams('orderMethod');
@@ -38,10 +37,10 @@ export class OrderConfirmationPage implements OnInit {
       this.hotDealConfirmations = this.checkValidParams('hotDealConfirmations');
     }
     this.getOrderConfirmation();
-    this.navigatorService.oneTimeBackButtonOverride(()=>{this.navigatorService.setRoot(Catalog)});
+    this.navigatorService.oneTimeBackButtonOverride(() => {this.navigatorService.setRoot(Catalog); });
   }
 
-  checkValidParams(type) {
+  public checkValidParams(type) {
     if (this.navParams.get(type)) {
       return this.navParams.get(type);
     }
@@ -55,36 +54,35 @@ export class OrderConfirmationPage implements OnInit {
     return query;
   }
 
-  getOrderConfirmation() {
+  public getOrderConfirmation() {
     if (!this.hotDealPurchase) {
-      this.shoppingListsProvider.getOrderConfirmation(this.getConfirmationNumbersQuery()).subscribe((data) => {
+      this.shoppingListsProvider.getOrderConfirmation(this.getConfirmationNumbersQuery()).subscribe(data => {
         if (data) {
           if (JSON.parse(data.d).order_confirmation.match(/\d+/g) !== null) {
             this.confirmation = JSON.parse(data.d).order_confirmation;
           }
         }
       });
-    }
-    else{
-      if(this.hotDealConfirmations){
+    } else {
+      if (this.hotDealConfirmations) {
         let expired = false;
      //   this.hotDealConfirmations[1].quantity -= 1;
         this.hotDealConfirmations.forEach((confirmation, index) => {
-          let pairingLocation = this.hotDealLocations.find(location => location.LOCATION.SHIPTONO == confirmation.customer_number);
+          const pairingLocation = this.hotDealLocations.find(location => location.LOCATION.SHIPTONO === confirmation.customer_number);
           this.hotDealConfirmations[index].fullLocation = pairingLocation;
-          if(pairingLocation.QUANTITY > confirmation.quantity){
+          if (pairingLocation.QUANTITY > confirmation.quantity) {
             expired = true;
           }
         });
 
-        if(expired){
+        if (expired) {
           this.hotDealService.markHotDealExpired();
         }
 
-        this.confirmation = "";
-        this.hotDealConfirmations.forEach((confirmation)=>{
-          
-          this.confirmation += "Confirmation for location " + confirmation.fullLocation.LOCATION.ADDRESS + " with confirmation number (" + confirmation.confirmation + ") and quantity ("+ confirmation.quantity+") " + "<br>";
+        this.confirmation = '';
+        this.hotDealConfirmations.forEach(confirmation => {
+
+          this.confirmation += 'Confirmation for location ' + confirmation.fullLocation.LOCATION.ADDRESS + ' with confirmation number (' + confirmation.confirmation + ') and quantity (' + confirmation.quantity + ') ' + '<br>';
         });
       }
     }

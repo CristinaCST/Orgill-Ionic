@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { SessionValidatorService } from "../session/sessionValidator";
+import { Injectable } from '@angular/core';
+import { SessionValidatorService } from '../session/sessionValidator';
 
 
 @Injectable()
 export class SecureActionsService {
-  private actionQueue = [];
+  private actionQueue: any[] = [];
 
   constructor(private sessionValidatorProvider: SessionValidatorService) { }
 
@@ -20,7 +20,7 @@ export class SecureActionsService {
 
   public executeQueue() {
     if (this.sessionValidatorProvider.isValidSession()) {
-      this.actionQueue.forEach((action) => {
+      this.actionQueue.forEach(action => {
         action();
       });
       this.actionQueue = [];
