@@ -59,7 +59,7 @@ export class ProductPage implements OnInit {
     this.loader.show();
 
     this.product = this.navParams.get('product');
-    this.programNumber = this.navParams.get('programNumber');
+    this.programNumber = Number(this.navParams.get('programNumber'));
     this.programName = this.navParams.get('programName');
     this.subCategoryName = this.navParams.get('subcategoryName');
     this.hotDeal = this.navParams.get('hotDeal');
