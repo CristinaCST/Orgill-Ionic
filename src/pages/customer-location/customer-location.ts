@@ -38,11 +38,11 @@ export class CustomerLocationPage implements OnInit {
   public noLocation: boolean = false;
   private hotDealItem: any;
 
-  constructor(private navigatorService: NavigatorService,
-              private navParams: NavParams,
-              private userInfoProvider: UserInfoService,
-              private popoverProvider: PopoversService,
-              private pricingService: PricingService) {
+  constructor(private readonly navigatorService: NavigatorService,
+              private readonly navParams: NavParams,
+              private readonly userInfoProvider: UserInfoService,
+              private readonly popoverProvider: PopoversService,
+              private readonly pricingService: PricingService) {
   }
 
   public ngOnInit(): void {

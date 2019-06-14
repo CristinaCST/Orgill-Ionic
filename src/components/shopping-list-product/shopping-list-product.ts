@@ -13,7 +13,7 @@ export class ShoppingListProductComponent {
   @Output() public checked: EventEmitter<any> = new EventEmitter<any>();
   @Output() public goToDetails: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private pricingService: PricingService) {}
+  constructor(private readonly pricingService: PricingService) {}
   
   public updateCheckedItems() {
     const data = {

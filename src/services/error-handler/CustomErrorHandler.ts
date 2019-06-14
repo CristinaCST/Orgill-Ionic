@@ -7,7 +7,7 @@ import { LoadingService } from '../loading/loading';
 @Injectable()
 export class CustomErrorHandlerService implements IonicErrorHandler {
 
-  constructor(private popoversProvider: PopoversService, public loadingService: LoadingService) {
+  constructor(private readonly popoversProvider: PopoversService, public loadingService: LoadingService) {
   }
 
   public async handleError(error: any) {

@@ -12,10 +12,10 @@ import { Observable } from 'rxjs';
 export class HotDealService {
   private userToken: string;
 
-  constructor(private apiProvider: ApiService,
-              private navigatorService: NavigatorService,
-              private events: Events,
-              private apiService: ApiService) {
+  constructor(private readonly apiProvider: ApiService,
+              private readonly navigatorService: NavigatorService,
+              private readonly events: Events,
+              private readonly apiService: ApiService) {
 
       this.getUserInfo();
 
@@ -103,7 +103,7 @@ export class HotDealService {
 
   public getHotDealProgram(sku) {
   const params = {
-    'user_token': JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER))['userToken'],
+    'user_token': JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER)).userToken,
     'sku': sku
   };
 

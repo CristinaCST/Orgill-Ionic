@@ -22,16 +22,16 @@ export class OrderReviewPage implements OnInit {
   public shoppingListId: number;
   public shoppingListItems: ShoppingListItem[];
   public orderTotal: number;
-  private shoppingListProgramNumbers: string[] = [];
-  private confirmationNumbers: string[] = [];
+  private readonly shoppingListProgramNumbers: string[] = [];
+  private readonly confirmationNumbers: string[] = [];
   public isHotDeal: boolean = false;
   public hotLocations: LocationElement[];
   private hotDealItem: any;
 
-  constructor(private navigatorService: NavigatorService,
-              private navParams: NavParams,
-              private shoppingListsProvider: ShoppingListsProvider,
-              private productProvider: ProductProvider) {}
+  constructor(private readonly navigatorService: NavigatorService,
+              private readonly navParams: NavParams,
+              private readonly shoppingListsProvider: ShoppingListsProvider,
+              private readonly productProvider: ProductProvider) {}
 
   public ngOnInit(): void {
     this.orderMethod = this.checkValidParams('orderMethod');

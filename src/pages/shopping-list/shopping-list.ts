@@ -19,7 +19,7 @@ import { ScannerService } from '../../services/scanner/scanner';
   templateUrl: 'shopping-list.html'
 })
 export class ShoppingListPage {
-  @ViewChild(Content) private content: Content;
+  @ViewChild(Content) private readonly content: Content;
 
   public isDeleteMode: boolean = false;
   private shoppingList: ShoppingList;
@@ -30,19 +30,19 @@ export class ShoppingListPage {
   private isCheckout: boolean = false;
   private isSelectAll: boolean = false;
   private nrOfSelectedItems: number = 0;
-  private menuCustomButtons: any[] = [];
-  private loader: LoadingService;
+  private readonly menuCustomButtons: any[] = [];
+  private readonly loader: LoadingService;
   private holdTimeoutReference: number;
 
   constructor(
-    private navParams: NavParams,
-    private navigatorService: NavigatorService,
-    private shoppingListProvider: ShoppingListsProvider,
-    private popoversProvider: PopoversService,
-    private translator: TranslateWrapperService,
-    private events: Events,
-    private loading: LoadingService,
-    private scannerService: ScannerService) {
+    private readonly navParams: NavParams,
+    private readonly navigatorService: NavigatorService,
+    private readonly shoppingListProvider: ShoppingListsProvider,
+    private readonly popoversProvider: PopoversService,
+    private readonly translator: TranslateWrapperService,
+    private readonly events: Events,
+    private readonly loading: LoadingService,
+    private readonly scannerService: ScannerService) {
 
     this.loader = this.loading.createLoader();
     this.menuCustomButtons = [{ action: 'detailsList', icon: 'information-circle' }, { action: 'scan', icon: 'barcode' }];
@@ -92,7 +92,7 @@ export class ShoppingListPage {
 
       this.isCustomList = !(this.shoppingList.ListType !== Constants.DEFAULT_LIST_TYPE && this.shoppingList.ListType !== Constants.MARKET_ONLY_LIST_TYPE);
       if (!this.isCustomList) {
-        if (this.menuCustomButtons.map(d => d['action']).indexOf('deleteList') === -1) {
+        if (this.menuCustomButtons.map(d => d.action).indexOf('deleteList') === -1) {
           this.menuCustomButtons.push({
             action: 'deleteList',
             icon: 'trash'
@@ -169,7 +169,6 @@ export class ShoppingListPage {
         this.selectedItems[index] = undefined;
         this.nrOfSelectedItems -= 1;
         this.orderTotal -= parseFloat(event.price);
-        break;
     }
   }
 
@@ -183,7 +182,7 @@ export class ShoppingListPage {
     this.orderTotal = 0;
     this.nrOfSelectedItems = 0;
     this.shoppingListItems.map((item, index) => {
-      if (this.isSelectAll === true) {
+      if (this.isSelectAll) {
         item.isCheckedInShoppingList = true;
         this.setOrderTotal({ status: 'checkedItem', price: item.quantity * item.item_price }, index);
       } else {
@@ -243,7 +242,6 @@ export class ShoppingListPage {
         break;
       case 'scan':
         this.scan();
-        break;
     }
   }
   private scan() {

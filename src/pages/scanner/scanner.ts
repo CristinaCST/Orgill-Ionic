@@ -27,13 +27,13 @@ export class ScannerPage implements OnInit {
   public searchTab: any;
   public products: Product[] = [];
   public noProductFound: boolean = false;
-  private simpleLoader: LoadingService;
+  private readonly simpleLoader: LoadingService;
 
   constructor(public navigatorService: NavigatorService,
               public navParams: NavParams,
-              private loadingService: LoadingService,
-              private catalogsProvider: CatalogsProvider,
-              private scannerService: ScannerService) {
+              private readonly loadingService: LoadingService,
+              private readonly catalogsProvider: CatalogsProvider,
+              private readonly scannerService: ScannerService) {
                 this.simpleLoader = this.loadingService.createLoader();
               }
 

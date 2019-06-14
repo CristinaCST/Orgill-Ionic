@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class ProductProvider {
 private readonly userToken: string;
-constructor(private apiProvider: ApiService) {
+constructor(private readonly apiProvider: ApiService) {
     const userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     if (userInfo) {
       this.userToken = userInfo.userToken;
@@ -71,7 +71,7 @@ public getProduct(sku, programNumber) {
 
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params).map(result => {
       if (result) {
-        return JSON.parse(result['d'])[0];
+        return JSON.parse(result.d)[0];
       }
       return Observable.of([]);
     });

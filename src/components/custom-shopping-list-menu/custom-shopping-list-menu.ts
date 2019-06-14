@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { ShoppingList } from '../../interfaces/models/shopping-list';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
-import { PopoversService } from '../../services/popovers/popovers';
+import { PopoversService, CustomListPopoverResult } from '../../services/popovers/popovers';
 import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
 import { ShoppingListPage } from '../../pages/shopping-list/shopping-list';
 import { Events } from 'ionic-angular';
@@ -18,10 +18,10 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
   @Input('customShoppingLists') public customShoppingLists: ShoppingList[] = [];
   @Output() public back: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private shoppingListsProvider: ShoppingListsProvider,
-              private popoversProvider: PopoversService,
-              private events: Events,
-              private navigatorService: NavigatorService) {
+  constructor(private readonly shoppingListsProvider: ShoppingListsProvider,
+              private readonly popoversProvider: PopoversService,
+              private readonly events: Events,
+              private readonly navigatorService: NavigatorService) {
   }
 
   public backToMainMenu() {
@@ -31,7 +31,7 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
   public addNewList() {
     const content = this.popoversProvider.setContent(Strings.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined, Strings.MODAL_BUTTON_SAVE, undefined , Strings.MODAL_BUTTON_CANCEL, Constants.POPOVER_NEW_SHOPPING_LIST);
 
-    const subscription = this.popoversProvider.show(content).subscribe(data => {
+    const subscription = this.popoversProvider.show(content).subscribe((data: CustomListPopoverResult) => {
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
           if (status === 'available') {

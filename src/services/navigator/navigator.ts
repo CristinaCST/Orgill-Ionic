@@ -22,7 +22,7 @@ export class NavigatorService {
         this._navController = value;
     }
 
-    constructor(private app: App, private platform: Platform, private secureActions: SecureActionsService, private events: Events) {
+    constructor(private readonly app: App, private readonly platform: Platform, private readonly secureActions: SecureActionsService, private readonly events: Events) {
         this.navController = this.app.getActiveNavs()[0];  // Grab it at construction
     }
 
@@ -45,7 +45,7 @@ export class NavigatorService {
         const lastPage = this.navController.last();
         if (lastPage && lastPage.name && pageName === lastPage.name) {
 
-            if (!opts || opts['paramsEquality'] === true) {
+            if (!opts || opts.paramsEquality === true) {
                 if (Equals.deepIsEqual(params, lastPage.data)) {
                     equals = true;
                 }

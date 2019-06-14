@@ -6,7 +6,7 @@ import { PopoversService } from '../popovers/popovers';
 @Injectable()
 export class NetworkService {
 
-  constructor(private network: Network, private popoversProvider: PopoversService) {
+  constructor(private readonly network: Network, private readonly popoversProvider: PopoversService) {
   }
 
   public listenForNetworkEvents() {

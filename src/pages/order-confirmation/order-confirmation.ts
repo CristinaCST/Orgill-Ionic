@@ -21,10 +21,10 @@ export class OrderConfirmationPage implements OnInit {
   private hotDealConfirmations: any[];
 
   constructor(
-    private navParams: NavParams,
-    private shoppingListsProvider: ShoppingListsProvider,
-    private navigatorService: NavigatorService,
-    private hotDealService: HotDealService) {
+    private readonly navParams: NavParams,
+    private readonly shoppingListsProvider: ShoppingListsProvider,
+    private readonly navigatorService: NavigatorService,
+    private readonly hotDealService: HotDealService) {
   }
 
   public ngOnInit(): void {

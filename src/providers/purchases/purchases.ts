@@ -7,7 +7,7 @@ import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
 @Injectable()
 export class PurchasesProvider {
 
-  constructor(private databaseProvider: DatabaseProvider) {
+  constructor(private readonly databaseProvider: DatabaseProvider) {
   }
 
   public getLocalPurchaseHistory() {
@@ -50,7 +50,7 @@ export class PurchasesProvider {
         }
 
       })
-        .catch(error => reject(error))
+        .catch(reject)
     );
   }
 

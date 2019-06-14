@@ -23,11 +23,11 @@ export class ProductsPage implements OnInit, OnDestroy {
   public page: number = 1;
   public products: Product[] = [];
   public isLoading: boolean = true;
-  private loader: LoadingService;
+  private readonly loader: LoadingService;
 
-  constructor(private navParams: NavParams,
+  constructor(private readonly navParams: NavParams,
               public loadingService: LoadingService,
-              private catalogProvider: CatalogsProvider, private navigatorService: NavigatorService) {
+              private readonly catalogProvider: CatalogsProvider, private readonly navigatorService: NavigatorService) {
                 this.loader = loadingService.createLoader();
   }
 

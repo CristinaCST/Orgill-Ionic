@@ -39,18 +39,18 @@ export class ProductPage implements OnInit {
   private shoppingListId: number;
   public quantityFromList: string;
 
-  private loader: LoadingService;
+  private readonly loader: LoadingService;
 
   constructor(
     public navigatorService: NavigatorService,
     public navParams: NavParams,
-    private loadingService: LoadingService,
-    private programProvider: ProgramProvider,
-    private popoversProvider: PopoversService,
-    private shoppingListProvider: ShoppingListsProvider,
-    private pricingService: PricingService,
-    private hotDealService: HotDealService,
-    private productProvider: ProductProvider) {
+    private readonly loadingService: LoadingService,
+    private readonly programProvider: ProgramProvider,
+    private readonly popoversProvider: PopoversService,
+    private readonly shoppingListProvider: ShoppingListsProvider,
+    private readonly pricingService: PricingService,
+    private readonly hotDealService: HotDealService,
+    private readonly productProvider: ProductProvider) {
 
     this.loader = this.loadingService.createLoader();
   }

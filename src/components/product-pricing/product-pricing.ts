@@ -14,7 +14,7 @@ export class ProductPricingComponent implements OnInit {
   @Input() public selectedProgram: ItemProgram;
   public selectedProgramNumber: string;
 
-  constructor(private programProvider: ProgramProvider) {}
+  constructor(private readonly programProvider: ProgramProvider) {}
 
   public ngOnInit(): void {
     this.selectedProgramNumber = this.selectedProgram.PROGRAM_NO;

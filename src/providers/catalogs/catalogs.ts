@@ -14,7 +14,7 @@ export class CatalogsProvider {
 
   private readonly user: any;
 
-  constructor(private apiProvider: ApiService) {
+  constructor(private readonly apiProvider: ApiService) {
     const userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     if (userInfo) {
       this.user = userInfo;

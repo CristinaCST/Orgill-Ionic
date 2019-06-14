@@ -13,10 +13,10 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter';
 @Injectable()
 export class DatabaseProvider {
   public database: SQLiteObject;
-  private databaseReady: BehaviorSubject<boolean>;
-  private queries: any;
+  private readonly databaseReady: BehaviorSubject<boolean>;
+  private readonly queries: any;
 
-  constructor(public SQLiteporter: SQLitePorter, private storage: Storage, private sqlite: SQLite, private platform: Platform, private http: HttpClient) {
+  constructor(public SQLiteporter: SQLitePorter, private readonly storage: Storage, private readonly sqlite: SQLite, private readonly platform: Platform, private readonly http: HttpClient) {
     this.databaseReady = new BehaviorSubject(false);
     this.platform.ready().then(() => {
       this.sqlite.create({

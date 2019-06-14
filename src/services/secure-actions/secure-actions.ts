@@ -6,7 +6,7 @@ import { SessionValidatorService } from '../session/sessionValidator';
 export class SecureActionsService {
   private actionQueue: any[] = [];
 
-  constructor(private sessionValidatorProvider: SessionValidatorService) { }
+  constructor(private readonly sessionValidatorProvider: SessionValidatorService) { }
 
   public do(action) {
     if (this.sessionValidatorProvider.isValidSession()) {

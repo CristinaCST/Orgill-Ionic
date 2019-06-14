@@ -28,16 +28,16 @@ export class ScannerService {
   public searchTab: any;
   public products: Product[] = [];
   public noProductFound: boolean = false;
-  private searchingLoader: LoadingService;
+  private readonly searchingLoader: LoadingService;
 
-  constructor(private navigatorService: NavigatorService,
-              private barcodeScanner: BarcodeScanner,
-              private translateProvider: TranslateWrapperService,
-              private productProvider: ProductProvider,
-              private shoppingListProvider: ShoppingListsProvider,
-              private popoversProvider: PopoversService,
-              private platform: Platform,
-              private events: Events
+  constructor(private readonly navigatorService: NavigatorService,
+              private readonly barcodeScanner: BarcodeScanner,
+              private readonly translateProvider: TranslateWrapperService,
+              private readonly productProvider: ProductProvider,
+              private readonly shoppingListProvider: ShoppingListsProvider,
+              private readonly popoversProvider: PopoversService,
+              private readonly platform: Platform,
+              private readonly events: Events
   ) { }
 
   public scan(shoppingList, products) {
@@ -126,7 +126,7 @@ export class ScannerService {
             if (this.isMarketOnly && ((this.shoppingList.ListType.toString() !== Constants.MARKET_ONLY_LIST_TYPE) && (this.shoppingList.ListType.toString() !== Constants.MARKET_ONLY_CUSTOM_TYPE))) {
               content.message = this.translateProvider.translate(Constants.SCAN_MARKET_ONLY_PRODUCT);
               this.popoversProvider.show(content);
-            } else if (this.isMarketOnly === false && ((this.shoppingList.ListType.toString() === Constants.MARKET_ONLY_LIST_TYPE) || (this.shoppingList.ListType.toString() === Constants.MARKET_ONLY_CUSTOM_TYPE))) {
+            } else if (!this.isMarketOnly && ((this.shoppingList.ListType.toString() === Constants.MARKET_ONLY_LIST_TYPE) || (this.shoppingList.ListType.toString() === Constants.MARKET_ONLY_CUSTOM_TYPE))) {
               content.message = this.translateProvider.translate(Constants.SCAN_REGULAR_PRODUCT);
               this.popoversProvider.show(content);
             } else {

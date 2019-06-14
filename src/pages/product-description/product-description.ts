@@ -14,7 +14,7 @@ export class ProductDescriptionPage implements OnInit, AfterViewInit {
   public imageIsLoading: boolean = true;
   public loader: LoadingService;
 
-  constructor(private navParams: NavParams, private catalogProvider: CatalogsProvider,
+  constructor(private readonly navParams: NavParams, private readonly catalogProvider: CatalogsProvider,
               public loadingService: LoadingService) {
                 this.loader = this.loadingService.createLoader();
   }

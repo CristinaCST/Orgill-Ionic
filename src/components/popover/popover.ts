@@ -13,7 +13,7 @@ export class PopoverComponent {
   public isMarketOnlyList: boolean = false;
   private instantCloseOnNo: boolean = false;
 
-  constructor(private navParams: NavParams,
+  constructor(private readonly navParams: NavParams,
               public viewCtrl: ViewController) {
 
     this.data = this.navParams.data;
@@ -40,7 +40,7 @@ export class PopoverComponent {
     if (this.data.isNewListAlert === true) {
       data.listName = this.listName;
       data.listDescription = this.listDescription;
-      data.type = this.isMarketOnlyList === true ? 'market_only' : 'default';
+      data.type = this.isMarketOnlyList ? 'market_only' : 'default';
     }
 
 

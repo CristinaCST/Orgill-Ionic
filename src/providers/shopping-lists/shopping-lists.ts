@@ -13,7 +13,7 @@ import { Product } from 'interfaces/models/product';
 export class ShoppingListsProvider {
   private readonly userToken: string ;
 
-  constructor(private databaseProvider: DatabaseProvider, private apiProvider: ApiService) {
+  constructor(private readonly databaseProvider: DatabaseProvider, private readonly apiProvider: ApiService) {
     const userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     if (userInfo) {
       this.userToken = userInfo.userToken;
@@ -180,7 +180,7 @@ export class ShoppingListsProvider {
           resolve('available');
         }
       },
-        error => reject(error));
+        reject);
       });
   }
 

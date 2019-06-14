@@ -12,7 +12,7 @@ export class NavbarComponent {
   @Input('customButtons') public customButtons: any[] = [];
   @Output() public buttonClicked: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private navigatorService: NavigatorService) {
+  constructor(private readonly navigatorService: NavigatorService) {
   }
 
   public back() {

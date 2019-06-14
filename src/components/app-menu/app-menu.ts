@@ -40,16 +40,16 @@ export class AppMenuComponent implements OnInit {
   @Input('rootPage') public rootPage: any;
   @Input('menuContent') public menuContent: any;
 
-  constructor(private popoversProvider: PopoversService,
-              private authServiceProvider: AuthService,
-              private catalogsProvider: CatalogsProvider,
-              private translateProvider: TranslateWrapperService,
-              private events: Events,
+  constructor(private readonly popoversProvider: PopoversService,
+              private readonly authServiceProvider: AuthService,
+              private readonly catalogsProvider: CatalogsProvider,
+              private readonly translateProvider: TranslateWrapperService,
+              private readonly events: Events,
               public databaseProvider: DatabaseProvider,
               public shoppingListsProvider: ShoppingListsProvider,
-              private navigatorService: NavigatorService,
-              private hotDealService: HotDealService,
-              private menuCtrl: MenuController) {
+              private readonly navigatorService: NavigatorService,
+              private readonly hotDealService: HotDealService,
+              private readonly menuCtrl: MenuController) {
   }
 
   public ngOnInit(): void {

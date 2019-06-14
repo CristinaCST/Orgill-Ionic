@@ -13,7 +13,7 @@ import { SessionValidatorService } from '../services/session/sessionValidator';
 import { NavigatorService } from '../services/navigator/navigator';
 import * as Constants from '../util/constants';
 import * as Strings from '../util/strings';
-import { PopoversService } from '../services/popovers/popovers';
+import { PopoversService, DefaultPopoverResult } from '../services/popovers/popovers';
 import { LoadingService } from '../services/loading/loading';
 
 @Component({
@@ -23,19 +23,19 @@ export class MyApp {
 
   public rootPage: any;
   public isLoading: boolean = true;
-  private openedFromNotification: boolean = false;
+  private readonly openedFromNotification: boolean = false;
 
   constructor(public platform: Platform,
               public app: App,
               public statusBar: StatusBar,
-              private splashScreen: SplashScreen,
-              private translate: TranslateService,
-              private databaseProvider: DatabaseProvider,
-              private networkService: NetworkService,
-              private sessionValidatorProvider: SessionValidatorService,
-              private oneSignalService: OneSignalService,
-              private navigatorService: NavigatorService,
-              private popoverProvider: PopoversService) {
+              private readonly splashScreen: SplashScreen,
+              private readonly translate: TranslateService,
+              private readonly databaseProvider: DatabaseProvider,
+              private readonly networkService: NetworkService,
+              private readonly sessionValidatorProvider: SessionValidatorService,
+              private readonly oneSignalService: OneSignalService,
+              private readonly navigatorService: NavigatorService,
+              private readonly popoverProvider: PopoversService) {
     this.setAppLanguage();
     this.initializeApp();
   }
@@ -75,8 +75,8 @@ export class MyApp {
             positiveButtonText: Strings.MODAL_BUTTON_YES
           };
 
-          this.popoverProvider.show(content).subscribe(result => {
-            if (result['optionSelected'] === 'OK') {
+          this.popoverProvider.show(content).subscribe((result: DefaultPopoverResult) => {
+            if (result.optionSelected === 'OK') {
               this.platform.exitApp();
             }
           });
@@ -116,7 +116,7 @@ export class MyApp {
 
   private checkSession() {
     this.stopLoading();
-    if (!this.openedFromNotification && this.sessionValidatorProvider.isValidSession() === true) {
+    if (!this.openedFromNotification && this.sessionValidatorProvider.isValidSession()) {
       this.rootPage = Catalog;
       this.navigatorService.initialRootPage(this.rootPage);
     } else {

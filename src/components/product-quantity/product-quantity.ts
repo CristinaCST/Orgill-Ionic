@@ -22,7 +22,7 @@ export class ProductQuantityComponent implements OnInit {
   public savings: string = '';
 
 
-  constructor(private programProvider: ProgramProvider, private pricingService: PricingService) {
+  constructor(private readonly programProvider: ProgramProvider, private readonly pricingService: PricingService) {
   }
 
   public ngOnInit(): void {
@@ -103,7 +103,6 @@ export class ProductQuantityComponent implements OnInit {
         break;
       default:
         this.quantity = newQuantity;
-        break;
     }
 
     this.quantity = this.pricingService.maxCheck(this.quantity);

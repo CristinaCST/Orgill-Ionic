@@ -13,7 +13,7 @@ export class LoadingService {
   private instance: boolean = false;  // Is this an instance or the actual service?
   private content: string;  // Content of instanace if it's given
 
-  constructor(private loadingCtrl: LoadingController) { }
+  constructor(private readonly loadingCtrl: LoadingController) { }
 
   /**
    * Creates and returns a instance of this service

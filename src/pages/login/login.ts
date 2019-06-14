@@ -19,14 +19,14 @@ export class Login {
   public username: string;
   public password: string;
   public loginLoader: LoadingService;
-  @ViewChild('passInput') private passInput: TextInput;
+  @ViewChild('passInput') private readonly passInput: TextInput;
 
-  constructor(private navigatorService: NavigatorService,
-              private authProvider: AuthService,
-              private loadingService: LoadingService,
-              private translateProvider: TranslateWrapperService,
-              private popoversProvider: PopoversService,
-              private secureActions: SecureActionsService) {
+  constructor(private readonly navigatorService: NavigatorService,
+              private readonly authProvider: AuthService,
+              private readonly loadingService: LoadingService,
+              private readonly translateProvider: TranslateWrapperService,
+              private readonly popoversProvider: PopoversService,
+              private readonly secureActions: SecureActionsService) {
 
                 this.loginLoader = this.loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_LOGIN));
   }

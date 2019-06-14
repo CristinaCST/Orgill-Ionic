@@ -14,7 +14,7 @@ export class AuthService {
 
   private user: User = new User();
 
-  constructor(private apiProvider: ApiService, private navigatorService: NavigatorService) {
+  constructor(private readonly apiProvider: ApiService, private readonly navigatorService: NavigatorService) {
   }
 
   private static encryption(password) {
@@ -27,7 +27,7 @@ export class AuthService {
     credentials.password = AuthService.encryption(credentials.password);
 
     return this.apiProvider.post(ConstantsURL.URL_LOGIN, credentials).map(response => {
-      this.user = { 'userToken': JSON.parse(response.d)['User_Token'] };
+      this.user = { 'userToken': JSON.parse(response.d).User_Token };
     });
   }
 

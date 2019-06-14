@@ -8,7 +8,7 @@ import * as Constants from '../../util/constants';
 @Injectable()
 export class PricingService {
 
-  constructor(private popoversProvider: PopoversService) {
+  constructor(private readonly popoversProvider: PopoversService) {
 
   }
 

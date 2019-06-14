@@ -5,7 +5,7 @@ import { DEBUG_TRANSLATIONS } from '../../util/constants';
 @Injectable()
 export class TranslateWrapperService {
 
-  constructor(private translateService: TranslateService) {
+  constructor(private readonly translateService: TranslateService) {
   }
 
   public translate(key: string): string {

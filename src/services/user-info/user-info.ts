@@ -8,7 +8,7 @@ import { LocalStorageHelper } from '../../helpers/local-storage';
 export class UserInfoService {
   private readonly userToken: string;
 
-  constructor(private apiProvider: ApiService) {
+  constructor(private readonly apiProvider: ApiService) {
     const userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     if (userInfo) {
       this.userToken = userInfo.userToken;

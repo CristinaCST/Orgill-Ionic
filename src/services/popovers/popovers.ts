@@ -1,8 +1,29 @@
 import { Injectable } from '@angular/core';
-import { PopoverController, Popover } from 'ionic-angular';
+import { PopoverController, Popover, ListHeader } from 'ionic-angular';
 import { PopoverComponent } from '../../components/popover/popover';
 import * as Strings from '../../util/strings';
 import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs';
+
+
+export interface PopoverContent{
+  type?: string,
+  title?: string,
+  message?: string,
+  positiveButtonText?: string,
+  negativeButtonText?: string,
+  dismissButtonText?: string
+}
+
+export interface DefaultPopoverResult{
+  optionSelected?: string,
+}
+
+export interface CustomListPopoverResult{
+  listName?: string,
+  type?: string,
+  listDescription?: string,
+}
 
 @Injectable()
 export class PopoversService {
@@ -13,8 +34,10 @@ export class PopoversService {
   public static activeItem: PopoversService;
   public static queue: any[] = [];
 
-  constructor(private popoverController: PopoverController) {
+  constructor(private readonly popoverController: PopoverController) {
   }
+
+  
 
   /**
    *
@@ -22,8 +45,8 @@ export class PopoversService {
    * @param continuous should the modal complete after 1 input? true if so
    * @param subjectReference pass a subject if you want a specific observable to be changed
    */
-  public show(content, continuous = false, subjectReference = undefined) {
-    if (this.isOpened === true) {
+  public show(content: PopoverContent, continuous: boolean = false, subjectReference: Subject<any> = undefined): Observable<DefaultPopoverResult | CustomListPopoverResult> {
+    if (this.isOpened) {
       const aux = new Subject<any>();
       aux.next(content);
       PopoversService.queue.push({ content, continuous, subject: aux });
@@ -69,7 +92,7 @@ export class PopoversService {
   }
 
   public closeModal() {
-    if (this.isOpened === true) {
+    if (this.isOpened) {
       PopoversService.activeItem = undefined;
       this.popover.dismiss();
       this.isOpened = false;
@@ -77,7 +100,7 @@ export class PopoversService {
   }
 
   public setContent(title, message, positiveButtonText = Strings.MODAL_BUTTON_YES,
-                    dismissButtonText = undefined, negativeButtonText = undefined, type = undefined) {
+                    dismissButtonText = undefined, negativeButtonText = undefined, type = undefined): PopoverContent {
     return {
       type,
       title,

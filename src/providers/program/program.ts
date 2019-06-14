@@ -12,10 +12,10 @@ import { Subject } from 'rxjs/Subject';
 @Injectable()
 export class ProgramProvider {
   private readonly userToken: string;
-  private selectedProgramSubject: Subject<any> = new Subject<any>();
-  private packQuantity: BehaviorSubject<any> = new BehaviorSubject<any>(false);
+  private readonly selectedProgramSubject: Subject<any> = new Subject<any>();
+  private readonly packQuantity: BehaviorSubject<any> = new BehaviorSubject<any>(false);
 
-  constructor(private apiProvider: ApiService, private databaseProvider: DatabaseProvider) {
+  constructor(private readonly apiProvider: ApiService, private readonly databaseProvider: DatabaseProvider) {
     const userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     if (userInfo) {
       this.userToken = userInfo.userToken;

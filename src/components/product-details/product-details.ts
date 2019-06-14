@@ -14,7 +14,7 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit {
   @Input() public product: Product;
   public imageIsLoading: boolean = true;
 
-  constructor(private navigatorService: NavigatorService) {
+  constructor(private readonly navigatorService: NavigatorService) {
   }
 
   public showProductDescription() {

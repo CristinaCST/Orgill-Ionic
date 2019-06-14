@@ -23,10 +23,10 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
   public isPaginationEnabled: boolean = false;
   public page: number = 1;
   public totalNumberOfProducts: number = 0;
-  private loader: LoadingService;
+  private readonly loader: LoadingService;
 
-  constructor(public navParams: NavParams, private navigatorService: NavigatorService,
-              public loadingService: LoadingService, private catalogProvider: CatalogsProvider) {
+  constructor(public navParams: NavParams, private readonly navigatorService: NavigatorService,
+              public loadingService: LoadingService, private readonly catalogProvider: CatalogsProvider) {
                 this.loader = loadingService.createLoader();
   }
 

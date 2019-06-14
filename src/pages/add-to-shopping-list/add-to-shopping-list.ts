@@ -24,7 +24,7 @@ export class AddToShoppingListPage implements OnInit {
   private product: Product;
   private selectedProgram: ItemProgram;
   private quantity: number = 0;
-  private productLists: ShoppingList[] = [];
+  private readonly productLists: ShoppingList[] = [];
   private quantityItemPrice: number = 0;
   public isAddBtnDisabled: boolean = false;
   public shoppingLists: ShoppingList[] = [];
@@ -37,11 +37,11 @@ export class AddToShoppingListPage implements OnInit {
 
   constructor(public navigatorService: NavigatorService,
               public navParams: NavParams,
-              private shoppingListsProvider: ShoppingListsProvider,
-              private popoversProvider: PopoversService,
-              private formBuilder: FormBuilder,
-              private loadingService: LoadingService,
-              private programProvider: ProgramProvider) {
+              private readonly shoppingListsProvider: ShoppingListsProvider,
+              private readonly popoversProvider: PopoversService,
+              private readonly formBuilder: FormBuilder,
+              private readonly loadingService: LoadingService,
+              private readonly programProvider: ProgramProvider) {
     this.menuCustomButtons.push({ action: 'addList', icon: 'add' });
   }
 
@@ -230,9 +230,9 @@ export class AddToShoppingListPage implements OnInit {
 
 
   public selectList(selectedList: ShoppingList) {
-    if (this.isMarketOnlyProduct === true && ((selectedList.ListType.toString() !== Constants.MARKET_ONLY_LIST_TYPE) && (selectedList.ListType.toString() !== Constants.MARKET_ONLY_CUSTOM_TYPE))) {
+    if (this.isMarketOnlyProduct && ((selectedList.ListType.toString() !== Constants.MARKET_ONLY_LIST_TYPE) && (selectedList.ListType.toString() !== Constants.MARKET_ONLY_CUSTOM_TYPE))) {
       this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_MARKET_ONLY_PRODUCT));
-    } else if (this.isMarketOnlyProduct === false && ((selectedList.ListType.toString() === Constants.MARKET_ONLY_LIST_TYPE) || (selectedList.ListType.toString() === Constants.MARKET_ONLY_CUSTOM_TYPE))) {
+    } else if (!this.isMarketOnlyProduct && ((selectedList.ListType.toString() === Constants.MARKET_ONLY_LIST_TYPE) || (selectedList.ListType.toString() === Constants.MARKET_ONLY_CUSTOM_TYPE))) {
       this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_DEFAULT_PRODUCT));
 
     } else {

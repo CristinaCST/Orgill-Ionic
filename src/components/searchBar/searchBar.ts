@@ -15,7 +15,7 @@ export class SearchBarComponent {
 
   public searchString: string;
 
-  constructor(private popoversProvider: PopoversService, private navigatorService: NavigatorService) {}
+  constructor(private readonly popoversProvider: PopoversService, private readonly navigatorService: NavigatorService) {}
 
   public back() {
     this.navigatorService.backButtonAction();
