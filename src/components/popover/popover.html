@@ -9,7 +9,8 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content *ngIf="data">
+
+<ion-content #immuneElement *ngIf="data">
   <p *ngIf="data.message">
     {{data.message | translate }}
   </p>

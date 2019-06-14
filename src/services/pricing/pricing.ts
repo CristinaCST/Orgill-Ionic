@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ItemProgram } from '../../interfaces/models/item-program';
 import { Product } from '../../interfaces/models/product';
-import { PopoversService } from '../popovers/popovers';
+import { PopoversService, PopoverContent } from '../popovers/popovers';
 import * as Strings from '../../util/strings';
 import * as Constants from '../../util/constants';
 
@@ -17,8 +17,8 @@ export class PricingService {
    * TODO: Should make a public method out of this... Streamline the entire popover process
    * @param message Message string key or the actuall message
    */
-  private showPrompt(message: String) {
-    const content = {
+  private showPrompt(message: string) {
+    const content: PopoverContent = {
       type: Constants.PERMISSION_MODAL,
       title: Strings.GENERIC_MODAL_TITLE,
       message,

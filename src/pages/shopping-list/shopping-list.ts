@@ -6,7 +6,7 @@ import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
-import { PopoversService } from '../../services/popovers/popovers';
+import { PopoversService, DefaultPopoverResult } from '../../services/popovers/popovers';
 import { CustomerLocationPage } from '../customer-location/customer-location';
 import { ProductPage } from '../product/product';
 import { TranslateWrapperService } from '../../services/translate/translate';
@@ -262,7 +262,7 @@ export class ShoppingListPage {
     const content = this.popoversProvider.setContent(Strings.SHOPPING_LIST_DELETE_CONF_TITLE, Strings.SHOPPING_LIST_DELETE_CONF_MESSAGE,
       Strings.MODAL_BUTTON_YES, Strings.MODAL_BUTTON_CANCEL, undefined, Constants.POPOVER_DELETE_LIST_CONFIRMATION);
 
-    this.popoversProvider.show(content).subscribe(data => {
+    this.popoversProvider.show(content).subscribe((data: DefaultPopoverResult) => {
       if (data.optionSelected === 'OK') {
         this.shoppingListProvider.removeShoppingList(this.shoppingList.ListID).subscribe(removedData => {
           this.events.publish('DeletedList', this.shoppingList.ListID);

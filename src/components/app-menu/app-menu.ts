@@ -4,7 +4,7 @@ import { Login } from '../../pages/login/login';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { AuthService } from '../../services/auth/auth';
-import { PopoversService } from '../../services/popovers/popovers';
+import { PopoversService, DefaultPopoverResult } from '../../services/popovers/popovers';
 import { AboutPage } from '../../pages/about/about';
 import { CatalogsProvider } from '../../providers/catalogs/catalogs';
 import { TranslateWrapperService } from '../../services/translate/translate';
@@ -95,7 +95,7 @@ export class AppMenuComponent implements OnInit {
       positiveButtonText: Strings.MODAL_BUTTON_YES
     };
 
-    this.popoversProvider.show(content).subscribe(data => {
+    this.popoversProvider.show(content).subscribe((data: DefaultPopoverResult) => {
         if (data.optionSelected === 'OK') {
           // this.authServiceProvider.logoutDeleteData();
           this.authServiceProvider.logout();

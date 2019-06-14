@@ -45,7 +45,7 @@ export class NavigatorService {
         const lastPage = this.navController.last();
         if (lastPage && lastPage.name && pageName === lastPage.name) {
 
-            if (!opts || opts.paramsEquality === true) {
+            if (!opts || opts['paramsEquality'] === true) {
                 if (Equals.deepIsEqual(params, lastPage.data)) {
                     equals = true;
                 }

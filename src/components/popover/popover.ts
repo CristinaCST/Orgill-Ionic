@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NavParams, ViewController } from 'ionic-angular';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { NavParams, ViewController, Content } from 'ionic-angular';
 import * as Constants from '../../util/constants';
 
 @Component({
@@ -12,14 +12,21 @@ export class PopoverComponent {
   public listDescription: string = '';
   public isMarketOnlyList: boolean = false;
   private instantCloseOnNo: boolean = false;
+  @ViewChild('immuneElement') private immuneElement: Content;
 
   constructor(private readonly navParams: NavParams,
               public viewCtrl: ViewController) {
 
+
+    
     this.data = this.navParams.data;
     if (this.data) {
       this.checkPopoverType();
     }
+  }
+
+  ionViewDidLoad(){
+    this.immuneElement._elementRef.nativeElement.children[1].classList.add('keyboard-immune');
   }
 
   public checkPopoverType() {

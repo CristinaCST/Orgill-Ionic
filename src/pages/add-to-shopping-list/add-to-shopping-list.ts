@@ -4,7 +4,7 @@ import { Product } from '../../interfaces/models/product';
 import { ItemProgram } from '../../interfaces/models/item-program';
 import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
 import { ShoppingList } from '../../interfaces/models/shopping-list';
-import { PopoversService } from '../../services/popovers/popovers';
+import { PopoversService, CustomListPopoverResult } from '../../services/popovers/popovers';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
@@ -151,7 +151,7 @@ export class AddToShoppingListPage implements OnInit {
   public newShoppingList() {
     const content = this.popoversProvider.setContent(Strings.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined,
       Strings.MODAL_BUTTON_SAVE, Strings.MODAL_BUTTON_CANCEL, undefined, Constants.POPOVER_NEW_SHOPPING_LIST);
-    this.subscription = this.popoversProvider.show(content).subscribe(data => {
+    this.subscription = this.popoversProvider.show(content).subscribe((data: CustomListPopoverResult) => {
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
           data.type = data.type === 'default' ? Constants.CUSTOM_SHOPPING_LIST_TYPE : Constants.MARKET_ONLY_CUSTOM_TYPE;
