@@ -64,7 +64,7 @@ export class AppMenuComponent implements OnInit {
       this.updateHotDealButtonToState();
     });
 
-    this.events.subscribe(Constants.EVENT_HIDE_MENU_FROM_NAVIGATION, () => {
+    this.events.subscribe(Constants.EVENT_NAVIGATE_TO_PAGE, () => {
       this.menuCtrl.close('main_menu');
     });
   }

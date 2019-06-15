@@ -9,7 +9,7 @@ import * as Strings from '../../util/strings';
 import { AddToShoppingListPage } from '../add-to-shopping-list/add-to-shopping-list';
 import { LoadingService } from '../../services/loading/loading';
 import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
-import { NavigatorService } from '../../services/navigator/navigator';
+import { NavigatorService, NavigationEventType } from '../../services/navigator/navigator';
 import { CustomerLocationPage } from '../../pages/customer-location/customer-location';
 import { HotDealItem } from '../../interfaces/models/hot-deal-item';
 import { PricingService } from '../../services/pricing/pricing';
@@ -26,7 +26,7 @@ export class ProductPage implements OnInit {
   public subCategoryName: string;
   public activeTab: string = 'summary_tab';
   public productPrograms: ItemProgram[] = [];
-  public programNumber: number;
+  public programNumber: string;
   public selectedProgram: ItemProgram;
   public quantityItemPrice: number = 0;
   public programName: string;
@@ -59,7 +59,7 @@ export class ProductPage implements OnInit {
     this.loader.show();
 
     this.product = this.navParams.get('product');
-    this.programNumber = Number(this.navParams.get('programNumber'));
+    this.programNumber = this.navParams.get('programNumber');
     this.programName = this.navParams.get('programName');
     this.subCategoryName = this.navParams.get('subcategoryName');
     this.hotDeal = this.navParams.get('hotDeal');
@@ -122,7 +122,7 @@ export class ProductPage implements OnInit {
       return programs[0];
     }
     programs.forEach(prog => {
-      if (Number(prog.PROGRAM_NO) === this.programNumber) {
+      if (prog.PROGRAM_NO === this.programNumber) {
         initialProgram = prog;
       }
     });
@@ -192,29 +192,37 @@ export class ProductPage implements OnInit {
     this.programProvider.setPackQuantity(false);
   }
 
-  private updateList() {
+  private updateList(silent: boolean = false) {
+    return new Promise((resolve,reject)=>{
     if (this.fromShoppingList && this.lastEvent) {
-      this.loader.show();
+
+      if (!silent) {
+        this.loader.show();
+      }
+
       this.shoppingListProvider.updateShoppingListItem(this.product, this.shoppingListId, this.programNumber.toString(), this.lastEvent.productPrice, this.quantity).subscribe(data => {
-        this.canLeave = true;
-        this.loader.hide();
-        this.navigatorService.pop();
+        resolve();
       },
         error => {
           console.error('error updating', error);
         });
     }
+    });
   }
 
   public ionViewCanLeave(): boolean {
-    if (this.fromShoppingList) {
-      if (!this.canLeave) {
-        this.updateList();
+    if ((this.navigatorService.lastEvent === NavigationEventType.POP) && this.fromShoppingList && !this.canLeave) {
+          this.updateList().then(() => {
+            this.canLeave = true;
+            this.loader.hide();
+            this.navigatorService.pop();
+        });
         return false;
-      }
+    } else {
+      this.updateList(true);
       return true;
     }
-    return true;
+   
   }
 
   public isMinimum70percentQuantity(): boolean {

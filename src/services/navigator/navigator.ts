@@ -5,6 +5,11 @@ import { SecureActionsService } from '../../services/secure-actions/secure-actio
 import * as Constants from '../../util/constants';
 import { BehaviorSubject } from 'rxjs';
 
+export enum NavigationEventType{
+    POP,
+    PUSH,
+    SETROOT
+}
 
 @Injectable()
 export class NavigatorService {
@@ -13,6 +18,7 @@ export class NavigatorService {
     private backButtonMainFunc: any;
     private overrideFunc: any;
     public lastPage: BehaviorSubject<string> = new BehaviorSubject<string>('');
+    public lastEvent: NavigationEventType;
 
     private get navController() {
         return this._navController ? this._navController : this.app.getActiveNavs()[0];
@@ -35,8 +41,6 @@ export class NavigatorService {
      * @param paramEquality Default value true. Should we check for param equality when we check pages?
      */
     public push(page: any, params: any = undefined, opts: NavOptions = undefined, done: any = undefined) {
-
-        this.events.publish(Constants.EVENT_HIDE_MENU_FROM_NAVIGATION);
 
         const pageName = typeof page === 'string' ? page : page.name;    // Grab the page name wheter it's directly passed or the entire Page object is passed
         let equals = false;     // We will store if the current view is the same as the last one
@@ -79,7 +83,7 @@ export class NavigatorService {
                 this.pageReference = page;
 
                 return this.secureActions.do(() => {
-                    this.announceTransition(page);
+                    this.announceTransition(NavigationEventType.PUSH, page);
                     return this.navController.push(page, params, opts, done);
                 });
             }
@@ -88,6 +92,7 @@ export class NavigatorService {
     }
 
     public pop(opts: NavOptions = undefined, done: any = undefined) {
+        this.announceTransition(NavigationEventType.POP);
         return this.navController.pop(opts, done);
     }
 
@@ -96,7 +101,7 @@ export class NavigatorService {
        /* if( pageOrViewCtrl !instanceof ViewController){
             this.pageReference = pageOrViewCtrl
         }*/
-        this.announceTransition(pageOrViewCtrl);
+        this.announceTransition(NavigationEventType.SETROOT, pageOrViewCtrl);
         return this.navController.setRoot(pageOrViewCtrl, params, opts, done);
     }
 
@@ -158,9 +163,10 @@ export class NavigatorService {
         this.lastPage.next(name);
       }
 
-    private announceTransition(newPage) {
-        const name = typeof newPage === 'string' ? newPage : newPage.name;
-        this.events.publish(Constants.EVENT_NAVIGATE_TO_PAGE, name);
+    private announceTransition(navType: NavigationEventType, newPage?) {
+        const name = newPage? (typeof newPage === 'string' ? newPage : newPage.name): this.lastPage.getValue();
+        this.events.publish(Constants.EVENT_NAVIGATE_TO_PAGE, name, navType);
+        this.lastEvent = navType;
         this.lastPage.next(name);
     }
 }
