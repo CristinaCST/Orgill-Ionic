@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import * as Constants from '../../util/constants';
 import * as ConstantsUrl from '../../util/constants-url';
-import { Product } from 'interfaces/models/product';
+import { Product } from '../../interfaces/models/product';
 
 @Component({
   selector: 'product',

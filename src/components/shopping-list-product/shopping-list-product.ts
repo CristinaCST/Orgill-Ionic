@@ -12,13 +12,18 @@ export class ShoppingListProductComponent {
   @Input('isDisabled') public isDisabled: boolean;
   @Output() public checked: EventEmitter<any> = new EventEmitter<any>();
   @Output() public goToDetails: EventEmitter<any> = new EventEmitter<any>();
+  private realPrice: string;
 
   constructor(private readonly pricingService: PricingService) {}
   
+  public ngOnInit(){
+    this.realPrice = this.realPrice ? this.realPrice : this.getRealPrice().toFixed(Constants.DECIMAL_NUMBER);
+  }
+
   public updateCheckedItems() {
     const data = {
       status: this.shoppingListItem.isCheckedInShoppingList ? 'checkedItem' : 'uncheckedItem',
-      price: this.getRealPrice().toFixed(Constants.DECIMAL_NUMBER)
+      price: this.realPrice
     };
     this.checked.emit(data);
   }
