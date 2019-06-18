@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Events, MenuController } from 'ionic-angular';
 import { Login } from '../../pages/login/login';
 import * as Constants from '../../util/constants';
@@ -49,7 +49,8 @@ export class AppMenuComponent implements OnInit {
               public shoppingListsProvider: ShoppingListsProvider,
               private readonly navigatorService: NavigatorService,
               private readonly hotDealService: HotDealService,
-              private readonly menuCtrl: MenuController) {
+              private readonly menuCtrl: MenuController,
+              private readonly changeDetector: ChangeDetectorRef) {
   }
 
   public ngOnInit(): void {
@@ -82,7 +83,8 @@ export class AppMenuComponent implements OnInit {
   }
 
   private updateHotDealButtonToState(sku = undefined) {
-    this.hotDealNotification = this.hotDealService.checkHotDealState(sku);
+      this.hotDealNotification = this.hotDealService.checkHotDealState(sku);
+      this.changeDetector.detectChanges();    
   }
 
 
