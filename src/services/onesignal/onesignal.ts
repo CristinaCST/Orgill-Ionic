@@ -335,8 +335,6 @@ export class OneSignalService {
 
         this.registerHotDealInMenu(data);
 
-        LocalStorageHelper.saveToLocalStorage('modalRosu', true);
-
         // anually increase badge notifications for each notification received
         /*  if (this.platform.is('ios')) {
               this.badge.increase(1);
@@ -364,8 +362,9 @@ export class OneSignalService {
      * Handles date validation
      * @param package notification package
      */
-    private validateDate(pckg: OSNotificationPayload) {
-        const date: string = JSON.parse(pckg.rawPayload) as { 'google.sent_time': string }['google.sent_time'];
+    private validateDate(pckg: OSNotificationPayload): boolean {
+        const date: string = JSON.parse(pckg.rawPayload)['google.sent_time'] as string;
+
         /** DEBUG ONLY */
         // let dbgDate = new Date();
         // date = dbgDate.setDate(dbgDate.getDate() - 2);
@@ -442,14 +441,14 @@ export class OneSignalService {
     /**
      * @param data Should be a packet from OneSignal, it can be left null to process a simple push notification without payload
      */
-    private goToHotDeal(data?: OSNotificationPayload) {
+    private goToHotDeal(data: OSNotificationPayload): void {
 
         /*     if(!this.sessionValidatorService.isValidSession()){
                  return;
              }*/
         const sku: string = this.extractPackageSKU(data);
         this.debugLog('Sku in go to hotdeal:' + sku);
-        if (!data) {
+        if (data) {
             if (sku) {
                 this.secureActions.do(() => {
                     this.hotDealService.navigateToHotDeal(sku);
