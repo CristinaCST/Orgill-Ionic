@@ -99,7 +99,7 @@ export class PopoversService {
     }
   }
 
-  public setContent(title, message, positiveButtonText = Strings.MODAL_BUTTON_YES,
+  public setContent(title, message, positiveButtonText = Strings.MODAL_BUTTON_OK,
                     dismissButtonText = undefined, negativeButtonText = undefined, type = undefined): PopoverContent {
     return {
       type,
