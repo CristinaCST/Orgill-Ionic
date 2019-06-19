@@ -4,7 +4,7 @@ import { Login } from '../../pages/login/login';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { AuthService } from '../../services/auth/auth';
-import { PopoversService, DefaultPopoverResult } from '../../services/popovers/popovers';
+import { PopoversService, DefaultPopoverResult, PopoverContent } from '../../services/popovers/popovers';
 import { AboutPage } from '../../pages/about/about';
 import { CatalogsProvider } from '../../providers/catalogs/catalogs';
 import { TranslateWrapperService } from '../../services/translate/translate';
@@ -21,6 +21,8 @@ import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-l
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { HotDealService } from '../../services/hotdeal/hotdeal';
+import { Page } from 'ionic-angular/navigation/nav-util';
+import { ShoppingListResponse } from '../../interfaces/response-body/shopping-list';
 
 @Component({
   selector: 'app-menu',
@@ -70,26 +72,24 @@ export class AppMenuComponent implements OnInit {
     });
   }
 
-  public menuOpen() {
-
+  public menuOpen(): void {
     this.navigatorService.oneTimeBackButtonOverride(() => {
       this.menuCtrl.close('main_menu');
     });
   }
 
-  public menuClose() {
+  public menuClose(): void {
   //  this.events.unsubscribe(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED,this.checkHotDealState);
     this.navigatorService.removeOverride();
   }
 
-  private updateHotDealButtonToState(sku = undefined) {
+  private updateHotDealButtonToState(sku: string = ''): void {
       this.hotDealNotification = this.hotDealService.checkHotDealState(sku);
       this.changeDetector.detectChanges();    
   }
 
-
-  public logout() {
-    const content = {
+  public logout(): void {
+    const content: PopoverContent = {
       type: Constants.POPOVER_LOGOUT,
       title: Strings.LOGOUT_TITLE,
       message: Strings.LOGOUT_MESSAGE,
@@ -108,27 +108,27 @@ export class AppMenuComponent implements OnInit {
   }
 
 
-  public hotDealPage() {
+  public hotDealPage(): void {
     if (this.hotDealService.isHotDealExpired()) {
       this.hotDealNotification = false;
       return;
     }
 
-    const hotDealSku = LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
+    const hotDealSku: string = LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
     if (hotDealSku) {
       this.hotDealService.navigateToHotDeal(hotDealSku);
     }
   }
 
-  public goToPage(page) {
+  public goToPage(page: string | Page): void {
     // this.navigatorService.push(page).catch(err => console.error(err));
     this.navigatorService.setRoot(page).catch(err => console.error(err));
   }
 
-  public getShoppingLists() {
+  public getShoppingLists(): void {
     this.shoppingListsProvider.getAllShoppingLists()
       .subscribe(shoppingListsResponse => {
-        const shoppingLists = JSON.parse(shoppingListsResponse.d);
+        const shoppingLists: ShoppingListResponse[] = JSON.parse(shoppingListsResponse.d);
         if (shoppingLists.length === 0) {
           this.shoppingListsProvider.createDefaultShoppingLists().subscribe(defaultShoppingListsResponse => {
             this.getShoppingLists();
@@ -159,10 +159,10 @@ export class AppMenuComponent implements OnInit {
       });
   }
 
-  public getPrograms() {
+  public getPrograms(): void {
     this.catalogsProvider.getPrograms().subscribe(response => {
       if (response) {
-        const programs = JSON.parse(response.d);
+        const programs: Program[] = JSON.parse(response.d) as Program[];
         this.addProgramsToDB(programs);
         programs.map(program => {
           if (program.MARKETONLY.toUpperCase().includes('Y')) {
@@ -180,8 +180,8 @@ export class AppMenuComponent implements OnInit {
     });
   }
 
-  public addProgramsToDB(programs) {
-    const regularProgram = {
+  public addProgramsToDB(programs: Program[]): void {
+    const regularProgram: Program = {
       NAME: this.translateProvider.translate(Strings.REGULAR_CATALOG).toUpperCase(),
       PROGRAMNO: '',
       MARKETONLY: 'N',
@@ -193,33 +193,33 @@ export class AppMenuComponent implements OnInit {
     this.databaseProvider.addPrograms(programs);
   }
 
-  public showCustomShoppingListsMenu() {
+  public showCustomShoppingListsMenu(): void {
     this.showShoppingListsMenu = true;
   }
 
-  public onBack($event) {
+  public onBack($event: string): void {
     if ($event === 'backToMainMenu') {
       this.showShoppingListsMenu = false;
     }
   }
 
-  public showCategories(program) {
-    const params = {
-      'programName': program.NAME,
-      'programNumber': program.PROGRAMNO
+  public showCategories(program: Program): void {
+    const params: any = {
+      programName: program.NAME,
+      programNumber: program.PROGRAMNO
     };
 
 
     this.navigatorService.getNav().setRoot(Catalog, params).catch(err => console.error(err));
   }
 
-  public openBarcode(type) {
+  public openBarcode(type: string): void {
     // this.navigatorService.push(ScannerPage, {'type': type}).catch(err => console.error(err));
-    this.navigatorService.setRoot(ScannerPage, { 'type': type }).catch(err => console.error(err));
+    this.navigatorService.setRoot(ScannerPage, { type }).catch(err => console.error(err));
   }
 
-  public goToListPage(list: ShoppingList) {
-    const params = {
+  public goToListPage(list: ShoppingList): void {
+    const params: any = {
       list
     };
 

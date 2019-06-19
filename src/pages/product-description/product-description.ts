@@ -3,6 +3,7 @@ import { NavParams } from 'ionic-angular';
 import { Product } from '../../interfaces/models/product';
 import { CatalogsProvider } from '../../providers/catalogs/catalogs';
 import { LoadingService } from '../../services/loading/loading';
+import { getNavParam } from '../../util/validatedNavParams';
 
 @Component({
   selector: 'page-product-description',
@@ -20,7 +21,7 @@ export class ProductDescriptionPage implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
-    this.product = this.navParams.get('product');
+    this.product = getNavParam(this.navParams, 'product', 'object');
     this.loader.show();
     this.catalogProvider.getProductDetails(this.product.SKU).subscribe(description => {
       this.description = JSON.parse(description.d).description;
@@ -30,9 +31,9 @@ export class ProductDescriptionPage implements OnInit, AfterViewInit {
       'http://images.orgill.com/200x200/' + this.product.SKU + '.JPG';
   }
 
-  public loadImage() {
+  public loadImage(): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
-      const img = new Image();
+      const img: HTMLImageElement = new Image();
       img.addEventListener('load', () => resolve(img));
       img.onerror = () => {
         reject(new Error('Failed to load URL'));

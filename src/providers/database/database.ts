@@ -9,6 +9,8 @@ import { BehaviorSubject } from 'rxjs/Rx';
 import { Program } from '../../interfaces/models/program';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
 import { SQLitePorter } from '@ionic-native/sqlite-porter';
+import { DatabaseActionResponse } from '../../interfaces/response-body/database-action-response';
+import { Product } from '../../interfaces/models/product';
 
 @Injectable()
 export class DatabaseProvider {
@@ -79,11 +81,11 @@ export class DatabaseProvider {
 
   /* DATABASE */
 
-  public getDatabaseState(): Observable<any> {
+  public getDatabaseState(): Observable<boolean> {
     return this.databaseReady.asObservable();
   }
 
-  public fillDatabase() {
+  public fillDatabase(): void {
     this.http.get('assets/db.sql', { responseType: 'text' })
       .subscribe(sql => {
           this.SQLiteporter.importSqlToDb(this.database, sql)
@@ -97,18 +99,18 @@ export class DatabaseProvider {
   }
 
   /* PRODUCTS  & SHOPPING LISTS */
-  public addShoppingList(name, description, type): Promise<any> {
-    const data = [name, description, type];
+  public addShoppingList(name: string, description: string, type: string): Promise<DatabaseActionResponse> {
+    const data: string[] = [name, description, type];
     return this.database.executeSql(this.queries.addShoppingList, data);
   }
 
-  public getNumOfListsWithName(name: string): Promise<any> {
+  public getNumOfListsWithName(name: string): Promise<DatabaseActionResponse> {
     return this.database.executeSql(this.queries.getNumOfListsWithName, [name]);
   }
 
-  public addProductToShoppingList(shopping_list_id: number, shopping_list_item: ShoppingListItem): Promise<any> {
-    const product = shopping_list_item.product;
-    const productData = [
+  public addProductToShoppingList(shopping_list_id: number, shopping_list_item: ShoppingListItem): Promise<DatabaseActionResponse> {
+    const product: Product = shopping_list_item.product;
+    const productData: string[] = [
       product.SKU,
       product.CatID,
       product.IMAGE,
@@ -132,28 +134,24 @@ export class DatabaseProvider {
         return err;
       });
 
-    const item_data = [shopping_list_id, product.SKU, shopping_list_item.program_number, shopping_list_item.quantity, shopping_list_item.item_price];
+    const item_data: string[] = [shopping_list_id.toString(), product.SKU, shopping_list_item.program_number, shopping_list_item.quantity.toString(), shopping_list_item.item_price.toString()];
     return this.database.executeSql(this.queries.insertShoppingListItem, item_data);
   }
 
-  public getShoppingListsForProduct(product_sku: string) {
+  public getShoppingListsForProduct(product_sku: string): Promise<DatabaseActionResponse> {
     return this.database.executeSql(this.queries.getShoppingListsForProduct, [product_sku]);
   }
 
-  public removeProductsFromShoppingList(shopping_list_id: number, shopping_item_ids: number[]): Promise<any> {
-    let placeholders = '';
-    for (let i = 0; i < shopping_item_ids.length; i++) {
-      if (i === shopping_item_ids.length - 1) {
-        placeholders += '?';
-      } else {
-        placeholders += '?,';
-      }
+  public removeProductsFromShoppingList(shopping_list_id: number, shopping_item_ids: number[]): Promise<DatabaseActionResponse> {
+    let placeholders: string = '';
+    for (let i: number = 0; i < shopping_item_ids.length; i++) {
+      placeholders += (i === shopping_item_ids.length - 1) ? '?' : '?,';
     }
-    const deleteQuery = 'DELETE FROM shopping_list_item WHERE shopping_list_id = ' + shopping_list_id + ' AND id IN (' + placeholders + ')';
+    const deleteQuery: string = 'DELETE FROM shopping_list_item WHERE shopping_list_id = ' + shopping_list_id.toString() + ' AND id IN (' + placeholders + ')';
     return this.database.executeSql(deleteQuery, shopping_item_ids);
   }
 
-  public async removeShoppingList(shopping_list_id: number): Promise<any> {
+  public async removeShoppingList(shopping_list_id: number): Promise<DatabaseActionResponse> {
     const [err] = await this.database.executeSql(this.queries.deleteAllFromShoppingListWithId, [shopping_list_id]);
     if (err) {
       return err;
@@ -161,20 +159,20 @@ export class DatabaseProvider {
     return this.database.executeSql(this.queries.deleteShoppingList, [shopping_list_id]);
   }
 
-  public getAllProductsFromShoppingList(id: number): Promise<any> {
+  public getAllProductsFromShoppingList(id: number): Promise<DatabaseActionResponse> {
     return this.database.executeSql(this.queries.getAllProductsFromShoppingList, [id]);
   }
 
-  public getAllShoppingLists(): Promise<any> {
+  public getAllShoppingLists(): Promise<DatabaseActionResponse> {
     return this.database.executeSql(this.queries.getAllShoppingLists, []);
   }
 
-  public updateShoppingListItem(id: number, shopping_list_id: number, programNumber: string, price: number, quantity: number): Promise<any> {
-    const params = [programNumber, price, quantity, shopping_list_id, id];
+  public updateShoppingListItem(id: number, shopping_list_id: number, programNumber: string, price: number, quantity: number): Promise<DatabaseActionResponse> {
+    const params: string[] = [programNumber, price.toString(), quantity.toString(), shopping_list_id.toString(), id.toString()];
     return this.database.executeSql(this.queries.updateShoppingListItem, params);
   }
 
-  public clearStorageData(): Promise<any> {
+  public clearStorageData(): Promise<DatabaseActionResponse> {
     this.database.executeSql(this.queries.deleteAllFromProduct, [])
       .then(data => {
          // console.log('dropped table product: ', data);
@@ -200,8 +198,8 @@ export class DatabaseProvider {
     return this.database.executeSql(this.queries.deleteAllFromPurchase, []);
   }
 
-  public addPrograms(programs: Program[]) {
-    let programData;
+  public addPrograms(programs: Program[]): void {
+    let programData: string[];
 
     // programs.forEach(program => {
     //   programData = [program.PROGRAMNO, program.NAME, program.STARTDATE, program.ENDDATE, program.SHIPDATE, program.MARKETONLY];
@@ -228,35 +226,31 @@ export class DatabaseProvider {
   }
 
 
-  public getMarketTypeForProgram(programNo: string): Promise<any> {
+  public getMarketTypeForProgram(programNo: string): Promise<DatabaseActionResponse> {
     return this.database.executeSql(this.queries.getMarketTypeForProgram, [programNo]);
   }
 
 
-  public finalizePurchase(purchase_order_id: number, shopping_list_item_ids: number[], shopping_list_id: number): Promise<any> {
+  public finalizePurchase(purchase_order_id: number, shopping_list_item_ids: number[], shopping_list_id: number): Promise<DatabaseActionResponse> {
 
-    let placeholders = '';
-    for (let i = 0; i < shopping_list_item_ids.length; i++) {
-      if (i === shopping_list_item_ids.length - 1) {
-        placeholders += '?';
-      } else {
-        placeholders += '?,';
-      }
+    let placeholders: string = '';
+    for (let i: number = 0; i < shopping_list_item_ids.length; i++) {
+      placeholders += (i === shopping_list_item_ids.length - 1) ? '?' : '?,';
     }
-    const finalizePurchaseQuery = 'UPDATE shopping_list_item SET purchase_order_id = ' + purchase_order_id + ', shopping_list_id = NULL WHERE shopping_list_id = ' + shopping_list_id + ' AND id IN (' + placeholders + ')';
+    const finalizePurchaseQuery: string = 'UPDATE shopping_list_item SET purchase_order_id = ' + purchase_order_id.toString() + ', shopping_list_id = NULL WHERE shopping_list_id = ' + shopping_list_id.toString() + ' AND id IN (' + placeholders + ')';
     return this.database.executeSql(finalizePurchaseQuery, shopping_list_item_ids);
   }
 
-  public getAllPurchases(): Promise<any> {
+  public getAllPurchases(): Promise<DatabaseActionResponse> {
     return this.database.executeSql(this.queries.getAllPurchases, []);
   }
 
-  public getAllProductsFromPurchase(purchase_order_id: number): Promise<any> {
+  public getAllProductsFromPurchase(purchase_order_id: number): Promise<DatabaseActionResponse> {
     return this.database.executeSql(this.queries.getAllProductsFromPurchase, [purchase_order_id]);
   }
 
-  public insertPurchase(purchase: any): Promise<any> {
-    const purchaseData = [
+  public insertPurchase(purchase: any): Promise<DatabaseActionResponse> {
+    const purchaseData: string[] = [
       purchase.PO,
       purchase.date,
       purchase.location,
@@ -269,18 +263,18 @@ export class DatabaseProvider {
     return this.database.executeSql(this.queries.insertPurchase, purchaseData);
   }
 
-  public checkProductInList(productSKU, listId) {
-    const checkData = [
+  public checkProductInList(productSKU: string, listId: number): Promise<DatabaseActionResponse> {
+    const checkData: string[] = [
       productSKU,
-      listId
+      listId.toString()
     ];
     return this.database.executeSql(this.queries.checkProductInList, checkData);
   }
 
 
-  public async asyncForEach(array, callback) {
-    for (let index = 0; index < array.length; index++) {
-      await callback(array[index], index, array);
+  public async asyncForEach<T>(targetArray: T[], callback: (item: T, index: number, arr: T[]) => any): Promise<void> {
+    for (let index: number = 0; index < targetArray.length; index++) {
+      await callback(targetArray[index], index, targetArray);
     }
   }
 

@@ -17,7 +17,7 @@
   </ion-list>
   <!-- Products Page error message -->
   <div *ngIf="!products.length && !isLoading" class="no-products">
-    No Products Found!
+    {{"no_products_found" | translate}}
   </div>
   <!--Products Pagination -->
   <div class="show-more">

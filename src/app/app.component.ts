@@ -13,7 +13,7 @@ import { SessionValidatorService } from '../services/session/sessionValidator';
 import { NavigatorService } from '../services/navigator/navigator';
 import * as Constants from '../util/constants';
 import * as Strings from '../util/strings';
-import { PopoversService, DefaultPopoverResult } from '../services/popovers/popovers';
+import { PopoversService, DefaultPopoverResult, PopoverContent } from '../services/popovers/popovers';
 import { LoadingService } from '../services/loading/loading';
 
 @Component({
@@ -40,7 +40,7 @@ export class MyApp {
     this.initializeApp();
   }
 
-  public initializeApp() {
+  public initializeApp(): void {
     this.isLoading = true;
 
     this.platform.ready().then(() => {
@@ -67,7 +67,7 @@ export class MyApp {
         }
 
         if (!this.navigatorService.getNav().canGoBack()) {
-          const content = {
+          const content: PopoverContent = {
             type: Constants.POPOVER_QUIT,
             title: Strings.GENERIC_MODAL_TITLE,
             message: Strings.APPLICATION_QUIT_MESSAGE,
@@ -100,8 +100,8 @@ export class MyApp {
   }
 
 
-  private setAppLanguage() {
-    const language = navigator.language;
+  private setAppLanguage(): void {
+    const language: string = navigator.language;
     if (language.includes('fr')) {
       this.translate.setDefaultLang('fr');
     } else {
@@ -109,12 +109,12 @@ export class MyApp {
     }
   }
 
-  public stopLoading() {
+  public stopLoading(): void {
     this.splashScreen.hide();
     this.isLoading = false;
   }
 
-  private checkSession() {
+  private checkSession(): void {
     this.stopLoading();
     if (!this.openedFromNotification && this.sessionValidatorProvider.isValidSession()) {
       this.rootPage = Catalog;

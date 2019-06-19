@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { HotDealItem } from 'interfaces/models/hot-deal-item';
+import { HotDealItem } from '../../interfaces/models/hot-deal-item';
 
 @Component({
   selector: 'hot-deal-product',

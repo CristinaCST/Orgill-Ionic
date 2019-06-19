@@ -22,8 +22,7 @@ export class ProductQuantityComponent implements OnInit {
   public savings: string = '';
 
 
-  constructor(private readonly programProvider: ProgramProvider, private readonly pricingService: PricingService) {
-  }
+  constructor(private readonly programProvider: ProgramProvider, private readonly pricingService: PricingService) {}
 
   public ngOnInit(): void {
     this.programSubscription = this.programProvider.getSelectedProgram().subscribe(program => {
@@ -48,19 +47,19 @@ export class ProductQuantityComponent implements OnInit {
     this.setSavings();
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     if (this.programSubscription) {
       this.programSubscription.unsubscribe();
     }
   }
 
-  public getDecimalPrice() {
+  public getDecimalPrice(): number {
     return parseFloat(parseFloat(this.program.PRICE).toFixed(2));
   }
 
 
   // TODO: Make this a bit cleaner...
-  public add() {
+  public add(): void {
     if (this.product.QTY_ROUND_OPTION === 'X') {
       this.setPackQuantity('ADD');
     } else {
@@ -70,13 +69,13 @@ export class ProductQuantityComponent implements OnInit {
 
   }
 
-  public remove() {
+  public remove(): void {
     if (this.product.QTY_ROUND_OPTION === 'X') {
       if (this.quantity > Number(this.product.SHELF_PACK)) {
         this.setPackQuantity('REMOVE');
       }
-    } else if (this.product.QTY_ROUND_OPTION === 'Y' && this.quantity <= Number(this.product.SHELF_PACK) && this.quantity >= 0.7 * Number(this.product.SHELF_PACK)) {
-      this.quantity = Math.floor(0.7 * Number(this.product.SHELF_PACK));
+    } else if (this.product.QTY_ROUND_OPTION === 'Y' && this.quantity <= Number(this.product.SHELF_PACK) && this.quantity >= Number(this.product.SHELF_PACK) * 0.7) {
+      this.quantity = Math.floor(Number(this.product.SHELF_PACK) * 0.7);
     } else {
       if (this.quantity > 1) {
         this.quantity--;
@@ -85,15 +84,15 @@ export class ProductQuantityComponent implements OnInit {
     this.handleQuantityChange();
   }
 
-  public setTotal() {
+  public setTotal(): void {
     if (this.program) {
       this.total = this.pricingService.getPrice(this.quantity, this.product, this.program);
     }
   }
 
-  public setPackQuantity(actionType) {
-    const selfPackQuantity = Number(this.product.SHELF_PACK);
-    const newQuantity = this.validateQuantity(this.quantity);
+  public setPackQuantity(actionType: string): void {
+    const selfPackQuantity: number = Number(this.product.SHELF_PACK);
+    const newQuantity: number = this.validateQuantity(this.quantity);
     switch (actionType) {
       case 'ADD':
         this.quantity = newQuantity + ((this.product.QTY_ROUND_OPTION === 'X') ? selfPackQuantity : 1);
@@ -109,10 +108,10 @@ export class ProductQuantityComponent implements OnInit {
   }
 
 
-  public handleQuantityChange() {
+  public handleQuantityChange(): void {
     this.setPackQuantity('CUSTOM');
     this.setTotal();
-    const data = {
+    const data: { quantity: number, total: number, productPrice: number } = {
       quantity: this.quantity,
       total: this.total,
       productPrice: this.getDecimalPrice()
@@ -120,16 +119,16 @@ export class ProductQuantityComponent implements OnInit {
     this.quantityChange.emit(data);
   }
 
-  private setSavings() {
-    this.savings = (Math.round(100 * (Number(this.product.SUGGESTED_RETAIL) - this.productPrice) / Number(this.product.SUGGESTED_RETAIL))).toString() + '%';
+  private setSavings(): void {
+    this.savings = (Math.round((Number(this.product.SUGGESTED_RETAIL) - this.productPrice) * 100 / Number(this.product.SUGGESTED_RETAIL))).toString() + '%';
   }
 
-  public ngOnChanges() {
+  public ngOnChanges(): void {
     this.handleQuantityChange();
     this.setSavings();
   }
 
-  private validateQuantity(suggestedValue: number) {
+  private validateQuantity(suggestedValue: number): number {
     this.setSavings();
     return this.pricingService.validateQuantity(suggestedValue, this.program, this.product);
   }

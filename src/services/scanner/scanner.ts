@@ -10,8 +10,11 @@ import * as Strings from '../../util/strings';
 import { ProductProvider } from '../../providers/product/product';
 import { ProductPage } from '../../pages/product/product';
 import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
-import { PopoversService } from '../popovers/popovers';
+import { PopoversService, PopoverContent } from '../popovers/popovers';
 import { Platform, Events } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
+import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
+import { ShoppingList } from '../../interfaces/models/shopping-list';
 
 @Injectable()
 export class ScannerService {
@@ -26,7 +29,7 @@ export class ScannerService {
   public shoppingListId: string;
   public productAlreadyInList: boolean = false;
   public searchTab: any;
-  public products: Product[] = [];
+  public products: ShoppingListItem[] = [];
   public noProductFound: boolean = false;
   private readonly searchingLoader: LoadingService;
 
@@ -40,7 +43,7 @@ export class ScannerService {
               private readonly events: Events
   ) { }
 
-  public scan(shoppingList, products) {
+  public scan(shoppingList: ShoppingList, products: ShoppingListItem[]): void {
 
     this.navigatorService.oneTimeBackButtonOverride(() => {
       // Exiting scanner
@@ -59,10 +62,10 @@ export class ScannerService {
     this.barcodeScanner.scan({ disableAnimations: true, resultDisplayDuration: 0 }).then(barcodeData => {
 
       if (barcodeData == undefined) {
-        return;
+        return undefined;
       }
 
-      const scanResult = barcodeData.text;
+      const scanResult: string = barcodeData.text;
       if (this.isValidScanResult(scanResult)) {
         //  this.searchingLoader.show();
         this.setProgramFromScanResult(scanResult);
@@ -81,14 +84,14 @@ export class ScannerService {
     return scanResult.length === 8 || scanResult.length === 10 || scanResult.length >= 12;
   }
 
-  private setProgramFromScanResult(scanResult: string) {
+  private setProgramFromScanResult(scanResult: string): void {
     this.programNumber = scanResult.length === 10 ? scanResult.substring(7, 10) : '';
-    const filteredPrograms = this.programs.filter(elem => elem.PROGRAMNO === this.programNumber);
+    const filteredPrograms: Program[] = this.programs.filter(elem => elem.PROGRAMNO === this.programNumber);
     this.isMarketOnly = filteredPrograms.length > 0 ? filteredPrograms[0].MARKETONLY === Constants.MARKET_ONLY_PROGRAM : false;
 
   }
 
-  private setSearchStringFromScanResult(scanResult: string) {
+  private setSearchStringFromScanResult(scanResult: string): void {
     if (scanResult.length > 12) {
       this.searchString = scanResult.substring(1, scanResult.length);
     } else if (scanResult.length === 10 || scanResult.length === 8) {
@@ -98,10 +101,10 @@ export class ScannerService {
     }
   }
 
-  public searchProduct() {
+  public searchProduct(): void {
     this.productProvider.searchProduct(this.searchString, this.programNumber)
       .subscribe(response => {
-        const content = {
+        const content: PopoverContent = {
 
           type: Constants.POPOVER_INFO,
           title: Strings.GENERIC_MODAL_TITLE,
@@ -112,7 +115,7 @@ export class ScannerService {
         // HACK:Temp
         if (this.searchingLoader) { this.searchingLoader.hide(); }
 
-        const responseData = JSON.parse(response.d);
+        const responseData: Product[] = JSON.parse(response.d);
         if (responseData.length > 0) {
           this.foundProduct = responseData[0];
           if (!this.shoppingListId) {
@@ -131,13 +134,13 @@ export class ScannerService {
               this.popoversProvider.show(content);
             } else {
               this.isProductInList().subscribe(resp => {
-                const data = JSON.parse(resp.d).Status === 'True';
+                const data: boolean = JSON.parse(resp.d).Status === 'True';
                 if (!data) {
-                  const newItem = {
-                    'product': this.foundProduct,
-                    'program_number': this.programNumber,
-                    'item_price': Number(this.foundProduct.YOURCOST),
-                    'quantity': this.getInitialQuantity()
+                  const newItem: ShoppingListItem = {
+                    product: this.foundProduct,
+                    program_number: this.programNumber,
+                    item_price: Number(this.foundProduct.YOURCOST),
+                    quantity: this.getInitialQuantity()
                   };
                   this.shoppingListProvider.addItemToShoppingList(this.shoppingList.ListID, newItem, this.shoppingList.isMarketOnly).subscribe(
                     () => {
@@ -169,42 +172,38 @@ export class ScannerService {
       }, errorResponse => {
         this.searchingLoader.hide();
         if (this.isPermissionError(errorResponse)) {
-          const content = {
-            title: Strings.GENERIC_ERROR, _message: Constants.POPOVER_CAMERA_PERMISSION_NOT_GRANTED,
-            get message() {
-              return this._message;
-            },
-            set message(value) {
-              this._message = value;
-            }
+          const content: PopoverContent = {
+            title: Strings.GENERIC_ERROR, message: Constants.POPOVER_CAMERA_PERMISSION_NOT_GRANTED
           };
           this.popoversProvider.show(content);
         } else {
-          const content = { title: Strings.GENERIC_ERROR, message: Strings.SCAN_ERROR };
+          const content: PopoverContent = { title: Strings.GENERIC_ERROR, message: Strings.SCAN_ERROR };
           this.popoversProvider.show(content);
         }
       });
   }
 
-  private isProductInList() {
-    return this.shoppingListProvider.checkProductInList(this.foundProduct.SKU, this.shoppingListId, this.programNumber);
+
+  private isProductInList(): Observable<any> {
+    return this.shoppingListProvider.checkProductInList(this.foundProduct.SKU, parseInt(this.shoppingListId, 10), this.programNumber);
   }
 
   private isPermissionError(scannerError: string): boolean {
     if (this.platform.is('android')) {
       return scannerError.localeCompare('Illegal access') === 0;
-    } else if (this.platform.is('ios')) {
+    } 
+    
+    if (this.platform.is('ios')) {
       return scannerError.includes('Access to the camera has been prohibited');
     }
   }
 
 
   // HACK: This method does not account for MINQTY in a program,
-  public getInitialQuantity() {
+  public getInitialQuantity(): number {
     if (this.foundProduct.QTY_ROUND_OPTION === 'X') {
       return Number(this.foundProduct.SHELF_PACK);
-    } else {
-      return 1;
     }
+    return 1;
   }
 }

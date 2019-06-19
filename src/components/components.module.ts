@@ -18,7 +18,7 @@ import { SearchBarComponent } from './searchBar/searchBar';
 import { OrderItemComponent } from './order-item/order-item';
 import { HotDealProductComponent } from './hot-deal-product/hot-deal-product';
 
-const components = [AppMenuComponent,
+const components: any[] = [AppMenuComponent,
                     PopoverComponent,
                     NavbarComponent,
                     SearchBarComponent,
@@ -43,5 +43,4 @@ const components = [AppMenuComponent,
   exports: components
 })
 
-export class ComponentsModule {
-}
+export class ComponentsModule {} //tslint:disable-line

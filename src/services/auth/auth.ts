@@ -8,6 +8,7 @@ import * as Constants from '../../util/constants';
 import { User } from '../../interfaces/models/user';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { Login } from '../../pages/login/login';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -17,11 +18,11 @@ export class AuthService {
   constructor(private readonly apiProvider: ApiService, private readonly navigatorService: NavigatorService) {
   }
 
-  private static encryption(password) {
+  private static encryption(password: string): string {
     return Md5.hashStr(password.toLowerCase()).toString();
   }
 
-  public login(credentials: LoginRequest) {
+  public login(credentials: LoginRequest): Observable<void> {
 
     credentials.username = credentials.username.toLowerCase();
     credentials.password = AuthService.encryption(credentials.password);
@@ -31,20 +32,17 @@ export class AuthService {
     });
   }
 
-  public logout() {
+  public logout(): void {
     LocalStorageHelper.removeFromLocalStorage(Constants.USER);
-  }
-
-  public logoutDeleteData() {
   }
 
   /**
    * Gets user info from the server
    */
-  public getUserInfo() {
+  public getUserInfo(): Promise<User> {
     if (this.user && this.user.userToken) {
       return new Promise((resolve, reject) => {
-        const params = { 'user_token': this.user.userToken };
+        const params: any = { user_token: this.user.userToken };
         this.apiProvider.post(ConstantsURL.URL_USER_INFO, params).subscribe(response => {
           this.user = JSON.parse(response.d);
           this.user.userToken = params.user_token;
@@ -55,12 +53,12 @@ export class AuthService {
           reject(error);
         });
       });
-    } else {
-      this.navigatorService.setRoot(Login);
     }
+    // else
+    this.navigatorService.setRoot(Login);
   }
 
-  public getUserToken() {
+  public getUserToken(): string {
     if (this.user) {
       return this.user.userToken;
     }

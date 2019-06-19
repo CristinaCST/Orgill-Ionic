@@ -7,13 +7,14 @@ import { LocalStorageHelper } from '../../helpers/local-storage';
 import { SearchProductRequest } from '../../interfaces/request-body/search-product';
 import { ApiService } from '../../services/api/api';
 import { Observable } from 'rxjs';
+import { APIResponse } from '../../interfaces/response-body/response';
 
 
 @Injectable()
 export class ProductProvider {
 private readonly userToken: string;
 constructor(private readonly apiProvider: ApiService) {
-    const userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
+    const userInfo: User = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     if (userInfo) {
       this.userToken = userInfo.userToken;
     }
@@ -39,7 +40,7 @@ protected isProductInList(listId: number, listsThatContainProduct: number[]): bo
     return listsThatContainProduct.indexOf(listId) > -1;
   }
 
-public searchProduct(searchString, programNumber) {
+  public searchProduct(searchString: string, programNumber: string): Observable<APIResponse> {
     const user: User = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     const params: SearchProductRequest = {
       'user_token': user.userToken,
@@ -56,9 +57,9 @@ public searchProduct(searchString, programNumber) {
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params);
   }
 
-public getProduct(sku, programNumber) {
+  public getProduct(sku: string, programNumber: string): Observable<Product> {
     const user: User = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
-    const params = {
+    const params: any = {
       'user_token': user.userToken,
       'division': user.division,
       'price_type': user.price_type,
@@ -77,7 +78,7 @@ public getProduct(sku, programNumber) {
     });
   }
 
-public orderHotDeal(productInfoList) {
+public orderHotDeal(productInfoList: any): Promise<APIResponse> {
     return new Promise((resolve, reject) => {
       productInfoList.user_token = this.userToken;
       try {

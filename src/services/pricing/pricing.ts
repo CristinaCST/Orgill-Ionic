@@ -17,7 +17,7 @@ export class PricingService {
    * TODO: Should make a public method out of this... Streamline the entire popover process
    * @param message Message string key or the actuall message
    */
-  private showPrompt(message: string) {
+  private showPrompt(message: string): void {
     const content: PopoverContent = {
       type: Constants.PERMISSION_MODAL,
       title: Strings.GENERIC_MODAL_TITLE,
@@ -40,17 +40,15 @@ export class PricingService {
       return undefined;
     }
 
-    if (typeof suggestedValue === 'string') {
-      suggestedValue = Number(suggestedValue.replace(/[^0-9]/g, ''));
-    }
+    const safeSuggestedValue: number = typeof suggestedValue === 'string' ? Number(suggestedValue.replace(/[^0-9]/g, '')) : suggestedValue;
 
-    let minQty = Math.max(1, Number(program.MINQTY));
-    const shelfPack = Number(product.SHELF_PACK);
+    let minQty: number = Math.max(1, Number(program.MINQTY));
+    const shelfPack: number = Number(product.SHELF_PACK);
     if (product.QTY_ROUND_OPTION === 'X' && shelfPack > 1 && minQty < shelfPack) {
       minQty = shelfPack;
     }
 
-    if (suggestedValue > Number(program.MAXQTY) && Number(program.MAXQTY) > 0) {
+    if (safeSuggestedValue > Number(program.MAXQTY) && Number(program.MAXQTY) > 0) {
 
       if (!getDefaultMode) {
         this.showPrompt(Strings.QUANTITY_ROUNDED_MAX);
@@ -59,7 +57,7 @@ export class PricingService {
       return Number(program.MAXQTY);
     }
 
-    if (suggestedValue < minQty) {
+    if (safeSuggestedValue < minQty) {
       if (!getDefaultMode) {
         this.showPrompt(Strings.QUANTITY_ROUNDED_MIN);
       }
@@ -68,30 +66,31 @@ export class PricingService {
 
     if (product.QTY_ROUND_OPTION === 'X') {
 
-      if (suggestedValue > shelfPack) {
-        if (suggestedValue % shelfPack === 0) {
-          return this.maxCheck(suggestedValue);
-        } else {
-          if (!getDefaultMode) {
-            this.showPrompt(Strings.QUANTITY_X_WARNING);
-          }
-          return this.maxCheck(shelfPack * Math.ceil(suggestedValue / shelfPack));
+      if (safeSuggestedValue > shelfPack) {
+        if (safeSuggestedValue % shelfPack === 0) {
+          return this.maxCheck(safeSuggestedValue);
         }
-      } else {
-        return shelfPack;
+        if (!getDefaultMode) {
+          this.showPrompt(Strings.QUANTITY_X_WARNING);
+        }
+        return this.maxCheck(shelfPack * Math.ceil(safeSuggestedValue / shelfPack));
+
       }
-    } else if (product.QTY_ROUND_OPTION === 'Y') {
-      if (suggestedValue < Number(product.SHELF_PACK) && suggestedValue >= (Number(product.SHELF_PACK) * 0.7)) {
+      return shelfPack;
+
+    }
+    if (product.QTY_ROUND_OPTION === 'Y') {
+      if (safeSuggestedValue < Number(product.SHELF_PACK) && safeSuggestedValue >= (Number(product.SHELF_PACK) * 0.7)) {
         // this.showPrompt(Strings.QUANTITY_Y_UNDER_70_PERCENT)
         return Number(product.SHELF_PACK);
       }
-      return this.maxCheck(suggestedValue);
-    } else {
-      return this.maxCheck(suggestedValue);
+      return this.maxCheck(safeSuggestedValue);
     }
+    return this.maxCheck(safeSuggestedValue);
+
   }
 
-  public maxCheck(value) {
+  public maxCheck(value: number): number {
     return Math.min(value, Constants.MAX_QUANTITY_HARDCAP);
   }
 
@@ -102,8 +101,8 @@ export class PricingService {
    * @param product - Product
    */
   public getPrice(quantity: number, product: Product, program: ItemProgram): number {
-    const shelfPack = Number(product.SHELF_PACK);
-    const price = Number(program.PRICE);
+    const shelfPack: number = Number(product.SHELF_PACK);
+    const price: number = Number(program.PRICE);
     return this.getCorrectedPrice(shelfPack, quantity, price, product.QTY_ROUND_OPTION);
   }
 
@@ -115,7 +114,7 @@ export class PricingService {
    * @param price - Unitary price.
    */
   public getShoppingListPrice(quantity: number, product: Product, price: number): number {
-    const shelfPack = Number(product.SHELF_PACK);
+    const shelfPack: number = Number(product.SHELF_PACK);
     return this.getCorrectedPrice(shelfPack, quantity, price, product.QTY_ROUND_OPTION);
   }
 
@@ -127,10 +126,6 @@ export class PricingService {
    * @param roundOption - The rounding option
    */
   private getCorrectedPrice(shelfPack: number, quantity: number, price: number, roundOption: string = ''): number {
-    if (quantity < shelfPack && roundOption === 'Y') {
-      return price * quantity + price * 0.04 * quantity;
-    } else {
-      return price * quantity;
-    }
+    return (quantity < shelfPack && roundOption === 'Y') ? price * quantity + price * 0.04 * quantity : price * quantity;
   }
 }

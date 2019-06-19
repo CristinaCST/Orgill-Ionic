@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 export class LocalStorageHelper {
 
 
-  public static saveToLocalStorage(key: string, item: any) {
+  public static saveToLocalStorage(key: string, item: any): void {
     localStorage.setItem(key, item);
   }
 
@@ -13,15 +13,15 @@ export class LocalStorageHelper {
 
   }
 
-  public static getFromLocalStorage(key: string) {
+  public static getFromLocalStorage(key: string): string {
     return localStorage.getItem(key);
   }
 
-  public static removeFromLocalStorage(key: string) {
+  public static removeFromLocalStorage(key: string): void {
     localStorage.removeItem(key);
   }
 
-  public static clearLocalStorage() {
+  public static clearLocalStorage(): void {
     localStorage.clear();
   }
 }

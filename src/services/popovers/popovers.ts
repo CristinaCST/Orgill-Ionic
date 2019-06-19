@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PopoverController, Popover, ListHeader } from 'ionic-angular';
+import { PopoverController, Popover } from 'ionic-angular';
 import { PopoverComponent } from '../../components/popover/popover';
 import * as Strings from '../../util/strings';
 import { Subject } from 'rxjs/Subject';
@@ -7,22 +7,29 @@ import { Observable } from 'rxjs';
 
 
 export interface PopoverContent{
-  type?: string,
-  title?: string,
-  message?: string,
-  positiveButtonText?: string,
-  negativeButtonText?: string,
-  dismissButtonText?: string
+  type?: string;
+  title?: string;
+  message?: string;
+  positiveButtonText?: string;
+  negativeButtonText?: string;
+  dismissButtonText?: string;
 }
 
 export interface DefaultPopoverResult{
-  optionSelected?: string,
+  optionSelected?: string;
 }
 
 export interface CustomListPopoverResult{
-  listName?: string,
-  type?: string,
-  listDescription?: string,
+  listName?: string;
+  type?: string;
+  listDescription?: string;
+}
+
+
+interface QueueItem {
+  content: PopoverContent;
+  continuous: boolean;
+  subject: Subject<any>;
 }
 
 @Injectable()
@@ -32,24 +39,21 @@ export class PopoversService {
   private isOpened: boolean = false;
   private popover: Popover;
   public static activeItem: PopoversService;
-  public static queue: any[] = [];
+  public static queue: QueueItem[] = [];
 
-  constructor(private readonly popoverController: PopoverController) {
-  }
-
+  constructor(private readonly popoverController: PopoverController) {}
   
-
   /**
    *
    * @param content modal content, eg: type, title, message, buttons
    * @param continuous should the modal complete after 1 input? true if so
    * @param subjectReference pass a subject if you want a specific observable to be changed
    */
-  public show(content: PopoverContent, continuous: boolean = false, subjectReference: Subject<any> = undefined): Observable<DefaultPopoverResult | CustomListPopoverResult> {
+  public show(content: PopoverContent, continuous: boolean = false, subjectReference?: Subject<any>): Observable<DefaultPopoverResult | CustomListPopoverResult> {
     if (this.isOpened) {
-      const aux = new Subject<any>();
+      const aux: Subject<any> = new Subject<any>();
       aux.next(content);
-      PopoversService.queue.push({ content, continuous, subject: aux });
+      PopoversService.queue.push({ content, continuous, subject: aux } as QueueItem);
       return aux.asObservable();
     }
 
@@ -57,7 +61,7 @@ export class PopoversService {
 
     PopoversService.activeItem = this;
 
-    const close = subjectReference == undefined ? new Subject<any>() : subjectReference;
+    const close: Subject<any> = subjectReference == undefined ? new Subject<any>() : subjectReference;
 
     this.popover = this.popoverController.create(PopoverComponent, content);
 
@@ -82,16 +86,16 @@ export class PopoversService {
 
   }
 
-  private nextInQueue() {
+  private nextInQueue(): void {
     if (PopoversService.queue.length <= 0) {
       return;
     }
 
-    const queueItem = PopoversService.queue.shift();
+    const queueItem: QueueItem = PopoversService.queue.shift();
     this.show(queueItem.content, queueItem.continuous, queueItem.subject);
   }
 
-  public closeModal() {
+  public closeModal(): void {
     if (this.isOpened) {
       PopoversService.activeItem = undefined;
       this.popover.dismiss();
@@ -99,8 +103,8 @@ export class PopoversService {
     }
   }
 
-  public setContent(title, message, positiveButtonText = Strings.MODAL_BUTTON_OK,
-                    dismissButtonText = undefined, negativeButtonText = undefined, type = undefined): PopoverContent {
+  public setContent(title: string, message: string, positiveButtonText: string = Strings.MODAL_BUTTON_OK,
+    dismissButtonText?: string, negativeButtonText?: string, type?: string): PopoverContent {
     return {
       type,
       title,
@@ -111,7 +115,7 @@ export class PopoversService {
     };
   }
 
-  public static dismissCurrent() {
+  public static dismissCurrent(): void {
     PopoversService.activeItem.closeModal();
   }
 }

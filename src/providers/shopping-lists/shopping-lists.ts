@@ -1,12 +1,22 @@
 import { Injectable } from '@angular/core';
 import { DatabaseProvider } from '../database/database';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
-import { dateTimeService } from '../../services/datetime/dateTime';
+import { DateTimeService } from '../../services/datetime/dateTime';
 import { ApiService } from '../../services/api/api';
 import * as ConstantsUrl from '../../util/constants-url';
 import * as Constants from '../../util/constants';
 import { LocalStorageHelper } from '../../helpers/local-storage';
-import { Product } from 'interfaces/models/product';
+import { Product } from '../../interfaces/models/product';
+import { APIResponse } from '../../interfaces/response-body/response';
+import { Observable } from 'rxjs';
+import { DatabaseActionResponse } from '../../interfaces/response-body/database-action-response';
+import { DatabaseOrder } from '../../interfaces/models/database-order';
+import { ProductListInfo } from '../../interfaces/models/product-list-info';
+import { OrderResult } from '../../interfaces/response-body/order-result';
+import { Moment } from 'moment';
+import { ShoppingListResponse } from '../../interfaces/response-body/shopping-list';
+import { ProductListResponse } from '../../interfaces/response-body/product-list';
+import { User } from '../../interfaces/models/user';
 
 
 @Injectable()
@@ -14,7 +24,7 @@ export class ShoppingListsProvider {
   private readonly userToken: string ;
 
   constructor(private readonly databaseProvider: DatabaseProvider, private readonly apiProvider: ApiService) {
-    const userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
+    const userInfo: User = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     if (userInfo) {
       this.userToken = userInfo.userToken;
     }
@@ -24,7 +34,7 @@ export class ShoppingListsProvider {
     return this.databaseProvider.getAllShoppingLists();
   }
 
-  public addItemToShoppingList(listId: number, shoppingListItem: ShoppingListItem, marketOnly) {
+  public addItemToShoppingList(listId: number, shoppingListItem: ShoppingListItem, marketOnly: boolean): Observable<APIResponse> {
     // return this.databaseProvider.addProductToShoppingList(listId, shoppingListItem);
     return this.apiProvider.post(ConstantsUrl.ADD_SHOPPING_LIST_ITEM, {
       user_token: this.userToken,
@@ -36,7 +46,7 @@ export class ShoppingListsProvider {
     });
   }
 
-  public getShoppingListsForProduct(productSKU: string, programNumber: string) {
+  public getShoppingListsForProduct(productSKU: string, programNumber: string): Observable<APIResponse> {
     // return this.databaseProvider.getShoppingListsForProduct(productSKU);
     return this.apiProvider.post(ConstantsUrl.CHECK_PRODUCT_SHOPPING_LISTS, {
       user_token: this.userToken,
@@ -45,7 +55,7 @@ export class ShoppingListsProvider {
     });
   }
 
-  public createNewShoppingList(name, description = '', type = '0') {
+  public createNewShoppingList(name: string, description: string = '', type: string = '0'): Observable<APIResponse> {
     // return this.databaseProvider.addShoppingList(name, description, type);
     return this.apiProvider.post(ConstantsUrl.ADD_SHOPPING_NEW_LIST, {
       user_token: this.userToken,
@@ -55,13 +65,13 @@ export class ShoppingListsProvider {
     });
   }
 
-  public createDefaultShoppingLists() {
+  public createDefaultShoppingLists(): Observable<APIResponse> {
     return this.apiProvider.post(ConstantsUrl.CREATE_DEFAULT_LISTS, {
       user_token: this.userToken
     });
   }
 
-  public removeShoppingList(listId) {
+  public removeShoppingList(listId: number): Observable<APIResponse> {
     // return this.databaseProvider.removeShoppingList(listId);
     return this.apiProvider.post(ConstantsUrl.DELETE_SHOPPING_LIST, {
       user_token: this.userToken,
@@ -69,18 +79,18 @@ export class ShoppingListsProvider {
     });
   }
 
-  public getAllShoppingLists() {
+  public getAllShoppingLists(): Observable<APIResponse> {
     return this.apiProvider.post(ConstantsUrl.GET_USER_SHOPPING_LISTS, { user_token: this.userToken });
   }
 
-  public getAllProductsInShoppingList(listId) {
+  public getAllProductsInShoppingList(listId: number): Promise<ShoppingListItem[]> {
     return new Promise((resolve, reject) => {
       this.apiProvider.post(ConstantsUrl.GET_SHOPPING_LIST_ITEMS, {
         user_token: this.userToken,
         shopping_list_id: listId
-      }).subscribe(shoppingListItemsData => {
+      }).subscribe((shoppingListItemsData: APIResponse) => {
 
-        const itemsData = JSON.parse(shoppingListItemsData.d);
+        const itemsData: ProductListResponse[] = JSON.parse(shoppingListItemsData.d);
         this.getAllProductData(itemsData).then(allProductData => {
           resolve(allProductData);
         }, err => {
@@ -91,11 +101,11 @@ export class ShoppingListsProvider {
     });
   }
 
-  public getAllProductData(productList) {
+  public getAllProductData(productList: ProductListResponse[]): Promise<ShoppingListItem[]> {
     return new Promise((resolve, reject) => {
-      const list = [];
+      const list: ShoppingListItem[] = [];
       if (productList.length === 0) {
-        return reject('No products');
+        reject('No products');
       }
      /* productList.forEach( element => {
 
@@ -148,8 +158,8 @@ export class ShoppingListsProvider {
             SHELF_PACK: element.shelf_pack
           } as Product,
           program_number: element.program_no,
-          item_price: element.price,
-          quantity: element.quantity,
+          item_price: typeof element.price === 'string' ? parseFloat(element.price) : element.price,
+          quantity: typeof element.quantity === 'string' ? parseInt(element.quantity, 10) : element.quantity,
           isCheckedInShoppingList: false,
           isExpired: this.isExpiredProgram(element.end_date)
         };
@@ -161,15 +171,15 @@ export class ShoppingListsProvider {
     });
   }
 
-  public checkNameAvailability(name): Promise<any> {
+  public checkNameAvailability(name: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.getAllShoppingLists()
         .subscribe(data => {
-        const shoppingListsData = JSON.parse(data.d);
-        let listFound = false;
+        const shoppingListsData: ShoppingListResponse[] = JSON.parse(data.d);
+        let listFound: boolean = false;
         if (shoppingListsData.length > 0) {
-          for (let i = 0; i < shoppingListsData.length; i++) {
-            if (shoppingListsData[i].list_name === name) {
+          for (const shoppingListData of shoppingListsData) {
+            if (shoppingListData.list_name === name) {
               listFound = true;
             }
           }
@@ -184,13 +194,15 @@ export class ShoppingListsProvider {
       });
   }
 
-  private isExpiredProgram(date) {
-    const now = dateTimeService.getCurrentDateTime();
-    const endDate = dateTimeService.dateInMonthDayYearFormat(date);
+  private isExpiredProgram(date: string): boolean {
+    const now: Moment = DateTimeService.getCurrentDateTime();
+    const endDate: Moment = DateTimeService.dateInMonthDayYearFormat(date);
     return now.isAfter(endDate);
   }
 
+  /*
   public setProducts(data) {
+    console.log("DATA IN SET PRODUCTS: ", data);
     const list = [];
     if (data.length > 0) {
       for (let i = 0; i < data.length; i++) {
@@ -223,9 +235,9 @@ export class ShoppingListsProvider {
       }
     }
     return list;
-  }
+  }*/
 
-  public deleteProductFromList(listId, productSku, programNo) {
+  public deleteProductFromList(listId: number, productSku: string, programNo: string): Observable<APIResponse> {
     // return this.databaseProvider.removeProductsFromShoppingList(listId, productIdsArr);
     return this.apiProvider.post(ConstantsUrl.REMOVE_SHOPPING_LIST_ITEM,
       {
@@ -236,27 +248,36 @@ export class ShoppingListsProvider {
       });
   }
 
-  public insertPurchaseToDB(purchaseInfo) {
+  public insertPurchaseToDB(purchaseInfo: DatabaseOrder): Promise<DatabaseActionResponse> {
     return this.databaseProvider.insertPurchase(purchaseInfo);
   }
 
-  public deleteItemsFromList(insertId, itemsIdsArr, shoppingListId) {
+  public deleteItemsFromList(insertId: number, itemsIdsArr: number[], shoppingListId: number): Promise<DatabaseActionResponse> {
     return this.databaseProvider.finalizePurchase(insertId, itemsIdsArr, shoppingListId);
   }
 
-  public orderProducts(productInfoList, insertToDBInfo, itemsIdsArr, shoppingListId) {
+  public orderProducts(productInfoList: ProductListInfo, insertToDBInfo: DatabaseOrder, itemsIdsArr: number[], shoppingListId: number): Promise<OrderResult> {
     return new Promise((resolve, reject) => {
         productInfoList.user_token = this.userToken;
         try {
-          this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_PRODUCTS, productInfoList).subscribe(async response => {
+          this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_PRODUCTS, productInfoList).subscribe((response: APIResponse) => {
             if (response) {
               insertToDBInfo.confirmation_number = JSON.parse(response.d);
-              const insertedPurchaseToDBInfo = await this.insertPurchaseToDB(insertToDBInfo);
-              const removedItemsFromShoppingList = await this.deleteItemsFromList(insertedPurchaseToDBInfo.insertId, itemsIdsArr, shoppingListId);
-              resolve({
-                insertedPurchaseToDBInfo, confirmationNumber: JSON.parse(response.d),
-                removedItemsFromShoppingList
+              
+              // TODO: Should change this to promise-like and get rid of await, of all awaits for that matter.
+              let insertedPurchaseToDBInfo: DatabaseActionResponse;
+              let removedItemsFromShoppingList: DatabaseActionResponse;
+              this.insertPurchaseToDB(insertToDBInfo).then((insertedDataResponse: DatabaseActionResponse) => {
+                insertedPurchaseToDBInfo = insertedDataResponse;
+                return this.deleteItemsFromList(insertedPurchaseToDBInfo.insertId, itemsIdsArr, shoppingListId);
+              }).then((removeItemsResponse: DatabaseActionResponse) => {
+                removedItemsFromShoppingList = removeItemsResponse;
+                resolve({
+                  insertedPurchaseToDBInfo, confirmationNumber: insertToDBInfo.confirmation_number,
+                  removedItemsFromShoppingList
+                } as OrderResult);
               });
+
             } else {
               reject(response);
             }
@@ -269,32 +290,35 @@ export class ShoppingListsProvider {
   }
 
 
-  public getOrderConfirmation(confirmationNumbers) {
-    const params = {
-      'user_token': this.userToken,
-      'confirmation_numbers': confirmationNumbers
+  public getOrderConfirmation(confirmationNumbers: string): Observable<APIResponse> {
+    const params: any = {
+      user_token: this.userToken,
+      confirmation_numbers: confirmationNumbers
     };
     return this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_CONFIRMATION, params);
   }
 
-  public search(shoppingListItems: ShoppingListItem[], searchString) {
-    const searchFn = value => value.toLocaleLowerCase().search(searchString.toLowerCase()) !== -1;
+  public search(shoppingListItems: ShoppingListItem[], searchString: string): ShoppingListItem[] {
+    const searchFn: (value: string) => boolean = (value: string) => {
+      return value.toLocaleLowerCase().search(searchString.toLowerCase()) !== -1;
+    };
+
     return shoppingListItems.filter(item => searchFn(item.product.NAME) || searchFn(item.product.SKU) || searchFn(item.product.UPC_CODE));
   }
 
-  public updateShoppingListItem(product: Product, shoppingListId: number, programNumber: string, price: number, quantity: number) {
+  public updateShoppingListItem(product: Product, shoppingListId: number, programNumber: string, price: number, quantity: number): Observable<APIResponse> {
     // return this.databaseProvider.updateShoppingListItem(id, shoppingListId, programNumber, price, quantity);
     return this.apiProvider.post(ConstantsUrl.UPDATE_SHOPPING_LIST_ITEM, {
       user_token: this.userToken,
       shopping_list_id: shoppingListId,
       sku: product.SKU,
-      program_no: programNumber,
+      program_no: programNumber ? programNumber : '',
       Quantity: quantity,
       Price: price
     });
   }
 
-  public checkProductInList(productSKU, listId, programNo) {
+  public checkProductInList(productSKU: string, listId: number, programNo: string): Observable<APIResponse> {
     // return new Promise(async (resolve, reject) => {
     //   try {
     //     let data = await this.databaseProvider.checkProductInList(productSKU, listId);

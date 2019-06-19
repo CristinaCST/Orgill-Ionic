@@ -23,7 +23,7 @@ export class ProductPricingComponent implements OnInit {
     });
   }
 
-  public selectProgram(program) {
+  public selectProgram(program: ItemProgram): void {
     this.programProvider.selectProgram(program);
   }
 

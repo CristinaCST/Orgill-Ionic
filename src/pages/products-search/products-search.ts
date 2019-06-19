@@ -8,6 +8,7 @@ import { Category } from '../../interfaces/models/category';
 import { Subscription } from 'rxjs/Subscription';
 import * as Constants from '../../util/constants';
 import { NavigatorService } from '../../services/navigator/navigator';
+import { getNavParam } from '../../util/validatedNavParams';
 
 @Component({
   selector: 'page-products-search',
@@ -31,31 +32,31 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.searchString = this.navParams.get('searchString');
-    this.category = this.navParams.get('category');
-    this.programNumber = this.navParams.get('programNumber');
-    this.programName = this.navParams.get('programName');
-    this.totalNumberOfProducts = this.navParams.get('numberOfProductsFound');
-    this.getProduct(this.navParams.get('searchData'));
+    this.searchString = getNavParam(this.navParams, 'searchString', 'string');
+    this.category = getNavParam(this.navParams, 'category', 'object');
+    this.programNumber = getNavParam(this.navParams, 'programNumber', 'string');
+    this.programName = getNavParam(this.navParams, 'programName', 'string');
+    this.totalNumberOfProducts = getNavParam(this.navParams, 'numberOfProductsFound', 'number');
+    this.getProduct(getNavParam(this.navParams, 'searchData', 'object'));
     this.setPaginationInfo();
   }
 
-  public sortProducts(responseData) {
-    return responseData.sort((product1, product2): number => {
+  public sortProducts(products: Product[]): Product[] {
+    return products.sort((product1, product2): number => {
       return product1.NAME.localeCompare(product2.NAME);
     });
   }
 
-  public getProduct(data) {
+  public getProduct(data: Product[]): void {
     this.products = this.sortProducts(data);
   }
 
-  public onSearched($event) {
+  public onSearched($event: string): void {
     this.loader.show();
     this.catalogProvider.search($event, this.category ? this.category.CatID : '', this.programNumber).subscribe(data => {
-      const dataFound = JSON.parse(data.d);
+      const dataFound: Product[] = JSON.parse(data.d);
 
-      const params = {
+      const params: any = {
         searchString: this.searchString,
         searchData: dataFound,
         programNumber: this.programNumber,
@@ -70,7 +71,7 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
     });
   }
 
-  public goToProductPage(product: Product) {
+  public goToProductPage(product: Product): void {
     this.navigatorService.push(ProductPage, {
       product,
       programName: this.programName,
@@ -79,19 +80,19 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
     }).then(() => console.log('%cTo product details page', 'color:pink'));
   }
 
-  public next() {
+  public next(): void {
     this.page += 1;
     this.loadNextProducts();
   }
 
-  public setPaginationInfo() {
+  public setPaginationInfo(): void {
     if (this.products.length > 0) {
-      this.totalNumberOfProducts = parseInt(this.products[0].TOTAL_REC_COUNT);
+      this.totalNumberOfProducts = parseInt(this.products[0].TOTAL_REC_COUNT, 10);
     }
     this.isPaginationEnabled = this.page * Constants.SEARCH_RESULTS_PER_PAGE < this.totalNumberOfProducts;
   }
 
-  public loadNextProducts() {
+  public loadNextProducts(): void {
     this.loader.show();
     this.getProductSubscription = this.catalogProvider.search(this.searchString, this.category ? this.category.CatID : '', this.programNumber, this.page)
       .subscribe(response => {

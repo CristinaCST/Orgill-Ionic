@@ -1,5 +1,7 @@
+import { CustomerLocation } from './customer-location';
+
 export interface LocationElement {
-    LOCATION: any;
+    LOCATION: CustomerLocation;
     POSTOFFICE: string;
     QUANTITY: number;
     WANTED: boolean;

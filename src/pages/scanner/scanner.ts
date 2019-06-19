@@ -6,7 +6,9 @@ import { CatalogsProvider } from '../../providers/catalogs/catalogs';
 import { Program } from '../../interfaces/models/program';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { ScannerService } from '../../services/scanner/scanner';
-import { ShoppingList } from 'interfaces/models/shopping-list';
+import { ShoppingList } from '../../interfaces/models/shopping-list';
+import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
+import { getNavParam } from '../../util/validatedNavParams';
 
 @Component({
   selector: 'page-scanner',
@@ -25,7 +27,7 @@ export class ScannerPage implements OnInit {
   public shoppingListId: number;
   public productAlreadyInList: boolean = false;
   public searchTab: any;
-  public products: Product[] = [];
+  public products: ShoppingListItem[] = [];
   public noProductFound: boolean = false;
   private readonly simpleLoader: LoadingService;
 
@@ -34,32 +36,32 @@ export class ScannerPage implements OnInit {
               private readonly loadingService: LoadingService,
               private readonly catalogsProvider: CatalogsProvider,
               private readonly scannerService: ScannerService) {
-                this.simpleLoader = this.loadingService.createLoader();
-              }
+    this.simpleLoader = this.loadingService.createLoader();
+  }
 
   public ngOnInit(): void {
-    if (this.navParams.get('shoppingList')) {
-      this.shoppingList = this.navParams.get('shoppingList');
+    this.shoppingList = getNavParam(this.navParams, 'shoppingList', 'object');
+    if (this.shoppingList) {
       this.shoppingListId = this.shoppingList.ListID;
-      this.products = this.navParams.get('products');
+      this.products = getNavParam(this.navParams, 'products', 'object');
       this.scannerService.scan(this.shoppingList, this.products);
     }
-    this.searchTab = this.navParams.get('type');
+    this.searchTab = getNavParam(this.navParams, 'type');
     this.scanMessage = '';
     this.catalogsProvider.getPrograms().subscribe(resp => {
-      const data = JSON.parse(resp.d);
+      const data: Program[] = JSON.parse(resp.d);
       if (data.length > 0) {
         data.forEach(elem => this.programs.push(elem));
       }
     });
   }
 
-  public onSearched($event) {
+  public onSearched($event: any): void {
     this.simpleLoader.show();
     this.catalogsProvider.search($event, '', this.programNumber).subscribe(data => {
       if (data) {
         this.simpleLoader.hide();
-        const params = {
+        const params: any = {
           type: this.searchTab,
           shoppingList: this.shoppingList,
           products: JSON.parse(data.d)

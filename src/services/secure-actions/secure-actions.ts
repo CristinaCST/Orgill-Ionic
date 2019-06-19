@@ -8,17 +8,16 @@ export class SecureActionsService {
 
   constructor(private readonly sessionValidatorProvider: SessionValidatorService) { }
 
-  public do(action) {
+  public do(action: () => void): Promise<any> | void {
     if (this.sessionValidatorProvider.isValidSession()) {
       return action();
-    } else {
-      return new Promise((resolve, reject) => {
-        resolve(this.actionQueue.push(action));
-      });
     }
+    return new Promise((resolve, reject) => {
+      resolve(this.actionQueue.push(action));
+    });
   }
 
-  public executeQueue() {
+  public executeQueue(): void {
     if (this.sessionValidatorProvider.isValidSession()) {
       this.actionQueue.forEach(action => {
         action();

@@ -1,5 +1,5 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavParams, ViewController, Content } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavParams, ViewController, Content, NavOptions } from 'ionic-angular';
 import * as Constants from '../../util/constants';
 
 @Component({
@@ -12,24 +12,23 @@ export class PopoverComponent {
   public listDescription: string = '';
   public isMarketOnlyList: boolean = false;
   private instantCloseOnNo: boolean = false;
-  @ViewChild('immuneElement') private immuneElement: Content;
+  @ViewChild('immuneElement') private readonly immuneElement: Content;
 
   constructor(private readonly navParams: NavParams,
               public viewCtrl: ViewController) {
 
 
-    
     this.data = this.navParams.data;
     if (this.data) {
       this.checkPopoverType();
     }
   }
 
-  ionViewDidLoad(){
+  public ionViewDidLoad(): void {
     this.immuneElement._elementRef.nativeElement.children[1].classList.add('keyboard-immune');
   }
 
-  public checkPopoverType() {
+  public checkPopoverType(): void {
     if (this.data.type) {
       this.data.isNewListAlert = this.data.type === Constants.POPOVER_NEW_SHOPPING_LIST;
       this.data.closeOptionAvailable = this.data.type !== Constants.POPOVER_ORDER_CONFIRMATION;
@@ -37,11 +36,11 @@ export class PopoverComponent {
     }
   }
 
-  public updateCheck() {
+  public updateCheck(): void {
     this.isMarketOnlyList = !this.isMarketOnlyList;
   }
 
-  public dismiss(option) {
+  public dismiss(option: string): void {
     const data: any = { type: this.data.type, optionSelected: option };
 
     if (this.data.isNewListAlert === true) {
@@ -51,7 +50,7 @@ export class PopoverComponent {
     }
 
 
-    let navOptions;
+    let navOptions: NavOptions;
     if (this.instantCloseOnNo && option === 'OK') {
       navOptions = { animate: false };
     }

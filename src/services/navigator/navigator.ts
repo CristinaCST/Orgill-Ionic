@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { NavController, NavOptions, App, Platform, Events } from 'ionic-angular';
+import { NavController, NavOptions, App, Platform, Events, NavParams, ViewController } from 'ionic-angular';
 import * as Equals from '../../util/equality';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import * as Constants from '../../util/constants';
 import { BehaviorSubject } from 'rxjs';
+import { Page } from 'ionic-angular/navigation/nav-util';
 
 export enum NavigationEventType{
     POP,
@@ -14,17 +15,17 @@ export enum NavigationEventType{
 @Injectable()
 export class NavigatorService {
     private _navController: NavController;  // Store the nav controller reference
-    private pageReference: any;
-    private backButtonMainFunc: any;
-    private overrideFunc: any;
+    private pageReference: Page | string;
+    private backButtonMainFunc: () => void;
+    private overrideFunc: () => void;
     public lastPage: BehaviorSubject<string> = new BehaviorSubject<string>('');
     public lastEvent: NavigationEventType;
 
-    private get navController() {
+    private get navController(): NavController {
         return this._navController ? this._navController : this.app.getActiveNavs()[0];
     }
 
-    private set navController(value) {
+    private set navController(value: NavController) {
         this._navController = value;
     }
 
@@ -40,16 +41,16 @@ export class NavigatorService {
      * @param done TransitionDoneFn
      * @param paramEquality Default value true. Should we check for param equality when we check pages?
      */
-    public push(page: any, params: any = undefined, opts: NavOptions = undefined, done: any = undefined) {
+    public push(page: Page | string, params?: any, opts?: NavOptions & { paramsEquality?: boolean }, done?: () => void): Promise<any> {
 
-        const pageName = typeof page === 'string' ? page : page.name;    // Grab the page name wheter it's directly passed or the entire Page object is passed
-        let equals = false;     // We will store if the current view is the same as the last one
+        const pageName: string = typeof page === 'string' ? page : page.name;    // Grab the page name wheter it's directly passed or the entire Page object is passed
+        let equals: boolean = false;     // We will store if the current view is the same as the last one
 
 
-        const lastPage = this.navController.last();
+        const lastPage: ViewController = this.navController.last();
         if (lastPage && lastPage.name && pageName === lastPage.name) {
 
-            if (!opts || opts['paramsEquality'] === true) {
+            if (!opts || opts.paramsEquality) {
                 if (Equals.deepIsEqual(params, lastPage.data)) {
                     equals = true;
                 }
@@ -77,26 +78,22 @@ export class NavigatorService {
                 return this.navController.pop({ animate: false });
               //  });
 
-            } else {
-                // If the view is different just proceed to push
+            } 
 
-                this.pageReference = page;
+        this.pageReference = page;
 
-                return this.secureActions.do(() => {
-                    this.announceTransition(NavigationEventType.PUSH, page);
-                    return this.navController.push(page, params, opts, done);
-                });
-            }
-
-
+        return this.secureActions.do(() => {
+            this.announceTransition(NavigationEventType.PUSH, page);
+            return this.navController.push(page, params, opts, done);
+        }) as Promise<any>;
     }
 
-    public pop(opts: NavOptions = undefined, done: any = undefined) {
+    public pop(opts?: NavOptions, done?: () => void): Promise<any> {
         this.announceTransition(NavigationEventType.POP);
         return this.navController.pop(opts, done);
     }
 
-    public setRoot(pageOrViewCtrl: any, params: any = undefined, opts: NavOptions = undefined, done: any = undefined) {
+    public setRoot(pageOrViewCtrl: any, params?: any, opts?: NavOptions, done?: () => void): Promise<any> {
         // TODO: Check what's happening to reference after setroot!
        /* if( pageOrViewCtrl !instanceof ViewController){
             this.pageReference = pageOrViewCtrl
@@ -105,13 +102,13 @@ export class NavigatorService {
         return this.navController.setRoot(pageOrViewCtrl, params, opts, done);
     }
 
-    public getNav() {
+    public getNav(): NavController {
         return this.navController;
     }
 
-    public performRefresh() {
-        const params = this.navController.getActive().getNavParams();
-        const opts = { animate: false };
+    public performRefresh(): void {
+        const params: NavParams = this.navController.getActive().getNavParams();
+        const opts: { animate: boolean } = { animate: false };
            // Insert this page without animations in the stack before this one with the exact same properties
         this.navController.insert(this.navController.getViews().length - 1, this.pageReference, params, opts, undefined).then(() => {
 
@@ -120,7 +117,7 @@ export class NavigatorService {
         });
     }
 
-    public initializeBackButton(func) {
+    public initializeBackButton(func: () => void): void {
         this.backButtonMainFunc = func;
         this.platform.registerBackButtonAction(func);
     }
@@ -129,7 +126,7 @@ export class NavigatorService {
      * One time override for the backbutton
      * @param func Pass a function to be executed once instead of the standard backbutton function
      */
-    public oneTimeBackButtonOverride(func) {
+    public oneTimeBackButtonOverride(func: () => void): void {
         this.overrideFunc = func;
         this.platform.registerBackButtonAction(() => {
             func();
@@ -142,7 +139,7 @@ export class NavigatorService {
     /**
      * Remove the current override of the backbutton
      */
-    public removeOverride() {
+    public removeOverride(): void {
         this.platform.registerBackButtonAction(this.backButtonMainFunc);
         this.overrideFunc = undefined;
     }
@@ -150,21 +147,22 @@ export class NavigatorService {
     /**
      * Call this to execute the current backbutton action manually, this will consume the override!
      */
-    public backButtonAction() {
+    public backButtonAction(): void {
         if (!this.overrideFunc) { this.backButtonMainFunc(); } else {
             this.overrideFunc();
             this.platform.registerBackButtonAction(this.backButtonMainFunc);
             this.overrideFunc = undefined;
         }
     }
-    public initialRootPage(page) {
+
+    public initialRootPage(page: string | Page): void {
         // this.announceTransition(page);
-        const name = typeof page === 'string' ? page : page.name;
+        const name: string = typeof page === 'string' ? page : page.name;
         this.lastPage.next(name);
       }
 
-    private announceTransition(navType: NavigationEventType, newPage?) {
-        const name = newPage? (typeof newPage === 'string' ? newPage : newPage.name): this.lastPage.getValue();
+    private announceTransition(navType: NavigationEventType, newPage?: string | Page): void {
+        const name: string = newPage ? (typeof newPage === 'string' ? newPage : newPage.name) : this.lastPage.getValue();
         this.events.publish(Constants.EVENT_NAVIGATE_TO_PAGE, name, navType);
         this.lastEvent = navType;
         this.lastPage.next(name);

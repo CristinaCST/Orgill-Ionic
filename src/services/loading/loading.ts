@@ -20,8 +20,8 @@ export class LoadingService {
    * @param content Optional text
    * @returns LoadingService instance that expose show() and hide()
    */
-  public createLoader(content = undefined) {
-    const newLoader = new LoadingService(this.loadingCtrl);
+  public createLoader(content?: string): LoadingService {
+    const newLoader: LoadingService = new LoadingService(this.loadingCtrl);
     newLoader.instance = true;  // We mark the object as an actual instance, this service being an actual instance (can't use instanceof)
     newLoader.content = content;
 
@@ -36,9 +36,9 @@ export class LoadingService {
   /**
    * Removes a loader from the queue if it's the case and calls the next one if this one was active
    */
-  private cleanup() {
+  private cleanup(): void {
     LoadingService.activeLoading = undefined;
-    const index = LoadingService.activeQueue.indexOf(this); // Get the position in queue of this loader
+    const index: number = LoadingService.activeQueue.indexOf(this); // Get the position in queue of this loader
 
     // Check if the object is actually in queue
     if (index > -1) {
@@ -58,7 +58,7 @@ export class LoadingService {
   /**
    * Tries to show a loader, if it's the first in the queue and valid, else it may queue it or just return
    */
-  public show() {
+  public show(): void {
 
     // Check if object is subinstance
     if (!this.instance) {
@@ -66,7 +66,7 @@ export class LoadingService {
       return;
     }
 
-    const qIndex = LoadingService.activeQueue.indexOf(this);  // Grab the index of this object in the queue if it exists
+    const qIndex: number = LoadingService.activeQueue.indexOf(this);  // Grab the index of this object in the queue if it exists
 
 
     // if the object isn't in queue
@@ -92,8 +92,8 @@ export class LoadingService {
 
 
     // Set up options of the loader
-    const spinner = 'circles';
-    let options;
+    const spinner: string = 'circles';
+    let options: { content?: string, spinner: any };
     if (this.content) {   // If it has content we pass it, if not we pass just the other options
       options = {
         content: this.content, spinner
@@ -120,14 +120,14 @@ export class LoadingService {
         this.hide();  // if it did, immediately remove it
       }
     }, err => {
-      console.error('Error in loader: ' + err);
+        console.error('Error in loader: ' + err.toString());
     });
   }
 
   /**
    * Tries to show the first of the queue if it exists
    */
-  private next() {
+  private next(): void {
     if (LoadingService.activeQueue.length > 0) {  // Check if the queue is nonempty
       if (LoadingService.activeLoading !== LoadingService.activeQueue[0]) {
         // Pick it and try to show it
@@ -145,7 +145,7 @@ export class LoadingService {
   /**
    * Hides / destroys a loader
    */
-  public hide() {
+  public hide(): void {
     if (this.isLoadingPresent) {    // if the loader is showing
       if (this.loading) { // Check if loading object is valid, this is more of a sanity check, this.LoadingPresent should be the main driver here
 
@@ -154,7 +154,7 @@ export class LoadingService {
           this.cleanup(); // If we succesfully dismiss the loader we then destroy it
           this.isLoadingPresent = false;
         }, err => {
-          console.error('Error dismissing loader with content ' + this.content + ' | ERR:' + err);
+          console.error('Error dismissing loader with content ' + this.content + ' | ERR:' + err.toString());
         });
       }
     } else if (LoadingService.activeQueue.indexOf(this) > -1 && !this.activated) {  // If it's not showing but it's in any state to be showing we clean it
@@ -168,7 +168,7 @@ export class LoadingService {
   /**
    * Hides "all" loaders by emptyin the queue and dismissing the current one
    */
-  public static hideAll() {
+  public static hideAll(): void {
     LoadingService.activeQueue = [];
     if (LoadingService.activeLoading) {
       LoadingService.activeLoading.hide();

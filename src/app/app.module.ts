@@ -64,7 +64,7 @@ import { ProductsSearchPage } from '../pages/products-search/products-search';
 import { PurchaseDetailsPage } from '../pages/purchase-details/purchase-details';
 import { PurchasesPage } from '../pages/purchases/purchases';
 
-const pages = [MyApp,
+const pages: Page[] = [MyApp,
                Catalog,
                Login,
                AboutPage,
@@ -84,6 +84,7 @@ const pages = [MyApp,
 
 // Error Handlers
 import { CustomErrorHandlerService } from '../services/error-handler/CustomErrorHandler';
+import { Page } from 'ionic-angular/navigation/nav-util';
 
 
 const errorHandler = environment.production ? CustomErrorHandlerService : IonicErrorHandler; //tslint:disable-line
@@ -144,9 +145,8 @@ const errorHandler = environment.production ? CustomErrorHandlerService : IonicE
   ]
 })
 
-export class AppModule {
-}
+export class AppModule {} //tslint:disable-line
 
-export function createTranslateLoader(http: HttpClient) {
+export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }

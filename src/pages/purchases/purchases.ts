@@ -17,15 +17,15 @@ export class PurchasesPage {
   constructor(public navigatorService: NavigatorService, public navParams: NavParams, public purchasesProvider: PurchasesProvider) {
   }
 
-  public ngOnInit() {
-    this.purchasesProvider.getLocalPurchaseHistory().then((data: Purchase[]) => {
+  public ngOnInit(): void {
+    /*this.purchasesProvider.getLocalPurchaseHistory().then((data: Purchase[]) => {
       if (data) {
         this.purchases = data;
       }
-    });
+    });*/
   }
 
-  public openOrderDetails(purchase: Purchase) {
+  public openOrderDetails(purchase: Purchase): void {
     this.navigatorService.push(PurchaseDetailsPage, { 'purchase': purchase }).catch(err => console.error(err));
   }
 

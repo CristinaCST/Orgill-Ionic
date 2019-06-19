@@ -5,6 +5,7 @@ import { NavParams } from 'ionic-angular';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
 import { ProductPage } from '../product/product';
 import { NavigatorService } from '../../services/navigator/navigator';
+import { getNavParam } from '../../util/validatedNavParams';
 
 
 @Component({
@@ -18,18 +19,18 @@ export class PurchaseDetailsPage implements OnInit {
               public navParams: NavParams, public navigatorService: NavigatorService) {
   }
 
-  public ngOnInit() {
-    this.purchase = this.navParams.get('purchase');
+  public ngOnInit(): void {
+    this.purchase = getNavParam(this.navParams, 'purchase', 'object');
     this.getLocalPurchaseItems();
   }
 
-  public getLocalPurchaseItems() {
+  public getLocalPurchaseItems(): void {
     this.purchasesProvider.getAllProductsFromPurchase(this.purchase.purchase_id).then(
       (data: ShoppingListItem[]) =>
         this.purchase.purchase_items = data);
   }
 
-  public onCheckedToDetails($event) {
+  public onCheckedToDetails($event: { product: string, program_number: string, id: string, quantity: string }): void {
     this.navigatorService.push(ProductPage, {
       product: $event.product,
       programNumber: $event.program_number,

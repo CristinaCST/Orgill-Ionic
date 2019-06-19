@@ -3,7 +3,7 @@ import { AuthService } from '../../services/auth/auth';
 import * as Strings from '../../util/strings';
 import { LoadingService } from '../../services/loading/loading';
 import { TranslateWrapperService } from '../../services/translate/translate';
-import { PopoversService } from '../../services/popovers/popovers';
+import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
 import { Catalog } from '../catalog/catalog';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
@@ -31,13 +31,13 @@ export class Login {
                 this.loginLoader = this.loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_LOGIN));
   }
 
-  public login() {
+  public login(): void {
     if (!this.isValidInput()) {
       return;
     }
 
     this.loginLoader.show();
-    const loginRequest = { username: this.username, password: this.password };
+    const loginRequest: { username: string, password: string } = { username: this.username, password: this.password };
     this.authProvider.login(loginRequest).subscribe(
       () => {
         this.authProvider.getUserInfo().then(() => {
@@ -47,7 +47,7 @@ export class Login {
       }, error => {
         console.error(error);
         this.loginLoader.hide();
-        const content = this.popoversProvider.setContent(Strings.LOGIN_ERROR_TITLE, Strings.LOGIN_ERROR_INVALID);
+        const content: PopoverContent = this.popoversProvider.setContent(Strings.LOGIN_ERROR_TITLE, Strings.LOGIN_ERROR_INVALID);
         this.popoversProvider.show(content);
       }
     );
@@ -60,12 +60,12 @@ export class Login {
       return true;
     }
 
-    const content = this.popoversProvider.setContent(Strings.LOGIN_ERROR_TITLE, Strings.LOGIN_ERROR_REQUIRED);
+    const content: PopoverContent = this.popoversProvider.setContent(Strings.LOGIN_ERROR_TITLE, Strings.LOGIN_ERROR_REQUIRED);
     this.popoversProvider.show(content);
     return false;
   }
 
-  public focusPass() {
+  public focusPass(): void {
     this.passInput._jsSetFocus();
   }
 

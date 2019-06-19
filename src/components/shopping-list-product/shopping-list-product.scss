@@ -35,6 +35,7 @@ shopping-list-product {
           margin-right: 10px;
         }
         .info {
+          margin:auto;
           width: 70%;
           div {
             display: flex;
@@ -46,7 +47,8 @@ shopping-list-product {
           }
         }
         .quantity {
-          width: 10%;
+          margin-top:2%;
+          width: 20%;
           display: flex;
           justify-content: center;
           align-items: center;

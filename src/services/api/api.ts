@@ -8,19 +8,19 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class ApiService {
 
-  public baseUrl: String;
+  public baseUrl: string;
 
   constructor(public http: HttpClient) {
     this.baseUrl = this.getServiceBaseURL();
   }
 
-  private setHeaders() {
-    const headers = {};
+  private setHeaders(): any {
+    const headers: any = {};
     headers['Content-Type'] = 'application/json';
     return headers;
   }
 
-  public get(baseUrl = this.baseUrl, path: string, params = {}): Observable<any> {
+  public get(baseUrl: string = this.baseUrl, path: string, params: any = {}): Observable<any> {
     return this.http.get(baseUrl + path, { headers: this.setHeaders(), params });
   }
 
@@ -38,10 +38,8 @@ export class ApiService {
     }
     if (LocalStorageHelper.getFromLocalStorage(Constants.DEVICE_LANGUAGE).toLowerCase().includes(Constants.LANG_FR)) {
       return ConstantsURL.URL_BASE_FR;
-    } else {
-      return ConstantsURL.URL_BASE_EN;
     }
-
+    return ConstantsURL.URL_BASE_EN;
   }
 
 

@@ -4,6 +4,9 @@ import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-l
 import { NavigatorService } from '../../services/navigator/navigator';
 import { Catalog } from '../../pages/catalog/catalog';
 import { HotDealService } from '../../services/hotdeal/hotdeal';
+import { getNavParam } from '../../util/validatedNavParams';
+import { HotDealConfirmation } from '../../interfaces/models/hot-deal-confirmation';
+import { LocationElement } from '../../interfaces/models/location-element';
 
 
 @Component({
@@ -17,8 +20,8 @@ export class OrderConfirmationPage implements OnInit {
   public orderMethod: number;
   public confirmation: string;
   private hotDealPurchase: boolean = false;
-  private hotDealLocations: any[];
-  private hotDealConfirmations: any[];
+  private hotDealLocations: LocationElement[];
+  private hotDealConfirmations: HotDealConfirmation[];
 
   constructor(
     private readonly navParams: NavParams,
@@ -28,22 +31,16 @@ export class OrderConfirmationPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.confirmationNumbers = this.checkValidParams('confirmationNumbers');
-    this.orderTotal = this.checkValidParams('orderTotal');
-    this.orderMethod = this.checkValidParams('orderMethod');
-    this.hotDealPurchase = this.checkValidParams('hotDealPurchase');
+    this.confirmationNumbers = getNavParam(this.navParams, 'confirmationNumbers', 'object');
+    this.orderTotal = getNavParam(this.navParams, 'orderTotal', 'number');
+    this.orderMethod = getNavParam(this.navParams, 'orderMethod', 'number');
+    this.hotDealPurchase = getNavParam(this.navParams, 'hotDealPurchase', 'boolean');
     if (this.hotDealPurchase) {
-      this.hotDealLocations = this.checkValidParams('hotDealLocations');
-      this.hotDealConfirmations = this.checkValidParams('hotDealConfirmations');
+      this.hotDealLocations = getNavParam(this.navParams, 'hotDealLocations', 'object');
+      this.hotDealConfirmations = getNavParam(this.navParams, 'hotDealConfirmations', 'object');
     }
     this.getOrderConfirmation();
     this.navigatorService.oneTimeBackButtonOverride(() => {this.navigatorService.setRoot(Catalog); });
-  }
-
-  public checkValidParams(type) {
-    if (this.navParams.get(type)) {
-      return this.navParams.get(type);
-    }
   }
 
   private getConfirmationNumbersQuery(): string {
@@ -54,7 +51,7 @@ export class OrderConfirmationPage implements OnInit {
     return query;
   }
 
-  public getOrderConfirmation() {
+  public getOrderConfirmation(): void {
     if (!this.hotDealPurchase) {
       this.shoppingListsProvider.getOrderConfirmation(this.getConfirmationNumbersQuery()).subscribe(data => {
         if (data) {
@@ -65,10 +62,10 @@ export class OrderConfirmationPage implements OnInit {
       });
     } else {
       if (this.hotDealConfirmations) {
-        let expired = false;
+        let expired: boolean = false;
      //   this.hotDealConfirmations[1].quantity -= 1;
         this.hotDealConfirmations.forEach((confirmation, index) => {
-          const pairingLocation = this.hotDealLocations.find(location => location.LOCATION.SHIPTONO === confirmation.customer_number);
+          const pairingLocation: LocationElement = this.hotDealLocations.find(location => location.LOCATION.SHIPTONO === confirmation.customer_number);
           this.hotDealConfirmations[index].fullLocation = pairingLocation;
           if (pairingLocation.QUANTITY > confirmation.quantity) {
             expired = true;
@@ -82,7 +79,7 @@ export class OrderConfirmationPage implements OnInit {
         this.confirmation = '';
         this.hotDealConfirmations.forEach(confirmation => {
 
-          this.confirmation += 'Confirmation for location ' + confirmation.fullLocation.LOCATION.ADDRESS + ' with confirmation number (' + confirmation.confirmation + ') and quantity (' + confirmation.quantity + ') ' + '<br>';
+          this.confirmation += 'Confirmation for location ' + confirmation.fullLocation.LOCATION.ADDRESS + ' with confirmation number (' + confirmation.confirmation + ') and quantity (' + confirmation.quantity.toString() + ') ' + '<br>';
         });
       }
     }

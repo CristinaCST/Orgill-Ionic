@@ -3,7 +3,7 @@ import { NavParams } from 'ionic-angular';
 import { Product } from '../../interfaces/models/product';
 import { ProgramProvider } from '../../providers/program/program';
 import { ItemProgram } from '../../interfaces/models/item-program';
-import { PopoversService } from '../../services/popovers/popovers';
+import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { AddToShoppingListPage } from '../add-to-shopping-list/add-to-shopping-list';
@@ -15,6 +15,7 @@ import { HotDealItem } from '../../interfaces/models/hot-deal-item';
 import { PricingService } from '../../services/pricing/pricing';
 import { HotDealService } from '../../services/hotdeal/hotdeal';
 import { ProductProvider } from '../../providers/product/product';
+import { getNavParam } from '../../util/validatedNavParams';
 
 @Component({
   selector: 'page-product',
@@ -28,7 +29,6 @@ export class ProductPage implements OnInit {
   public productPrograms: ItemProgram[] = [];
   public programNumber: string;
   public selectedProgram: ItemProgram;
-  public quantityItemPrice: number = 0;
   public programName: string;
   public isHotDeal: boolean = false;
   public hotDeal: HotDealItem;
@@ -58,18 +58,18 @@ export class ProductPage implements OnInit {
   public ngOnInit(): void {
     this.loader.show();
 
-    this.product = this.navParams.get('product');
-    this.programNumber = this.navParams.get('programNumber');
-    this.programName = this.navParams.get('programName');
-    this.subCategoryName = this.navParams.get('subcategoryName');
-    this.hotDeal = this.navParams.get('hotDeal');
-    this.isHotDeal = this.navParams.get('isHotDeal') ? true : false;
+    this.product = getNavParam(this.navParams, 'product', 'object');
+    this.programNumber = getNavParam(this.navParams, 'programNumber', 'string');
+    this.programName = getNavParam(this.navParams, 'programName', 'string');
+    this.subCategoryName = getNavParam(this.navParams, 'subcategoryName', 'string');
+    this.hotDeal = getNavParam(this.navParams, 'hotDeal', 'object');
+    this.isHotDeal = getNavParam(this.navParams, 'isHotDeal', 'boolean');
 
-    this.fromShoppingList = this.navParams.get('fromShoppingList');
+    this.fromShoppingList = getNavParam(this.navParams, 'fromShoppingList', 'boolean');
     if (this.fromShoppingList) {
-      this.shoppingListId = this.navParams.get('shoppingListId');
-     // this.id = this.navParams.get('id');
-      this.quantityFromList = this.navParams.get('quantity');
+      this.shoppingListId = getNavParam(this.navParams, 'shoppingListId', 'number');
+     // this.id = getNavParam(this.navParams, id');
+      this.quantityFromList = getNavParam(this.navParams, 'quantity', 'string');
     }
 
     if (this.isHotDeal) {
@@ -77,7 +77,7 @@ export class ProductPage implements OnInit {
         const hotDealProgram: ItemProgram = JSON.parse(program.d);
         this.productPrograms = [hotDealProgram];
         if (this.productPrograms.length === 0) {
-          const content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, Strings.MODAL_BUTTON_OK, undefined, undefined, Constants.POPOVER_ERROR);
+          const content: PopoverContent = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, Strings.MODAL_BUTTON_OK, undefined, undefined, Constants.POPOVER_ERROR);
           this.popoversProvider.show(content);
           this.navigatorService.pop().catch(err => console.error(err));
           return;
@@ -95,7 +95,7 @@ export class ProductPage implements OnInit {
         if (programs) {
           this.productPrograms = JSON.parse(programs.d);
           if (this.productPrograms.length === 0) {
-            const content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, Strings.MODAL_BUTTON_OK, undefined, undefined, Constants.POPOVER_ERROR);
+            const content: PopoverContent = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, Strings.MODAL_BUTTON_OK, undefined, undefined, Constants.POPOVER_ERROR);
             this.popoversProvider.show(content);
             this.navigatorService.pop().catch(err => console.error(err));
             return;
@@ -113,11 +113,11 @@ export class ProductPage implements OnInit {
     this.programProvider.getSelectedProgram().subscribe(selectedProgram => this.selectedProgram = selectedProgram);
   }
 
-  private getInitialProgram() {
+  private getInitialProgram(): ItemProgram {
     // let programs = this.productPrograms.filter(program => parseInt(program.PROGRAM_NO) === this.programNumber);
     // return programs.length > 0 ? programs[0] : this.productPrograms[0];
     let initialProgram: ItemProgram;
-    const programs = this.productPrograms;
+    const programs: ItemProgram[] = this.productPrograms;
     if (this.programNumber === null) {
       return programs[0];
     }
@@ -133,15 +133,15 @@ export class ProductPage implements OnInit {
     return initialProgram;
   }
 
-  public close() {
+  public close(): void {
     this.navigatorService.pop().catch(err => console.error(err));
   }
 
 
-  private getProduct() {
+  private getProduct(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.productProvider.getProduct(this.product.SKU, this.selectedProgram.PROGRAM_NO).subscribe(result => {
-        const img = this.product.IMAGE;  // Save already processed image by the product component
+        const img: string = this.product.IMAGE;  // Save already processed image by the product component
         this.product = result;  // Get the new product
         this.product.IMAGE = img; // Re-assign already processed image.
         // this.quantity = this.pricingService.validateQuantity(this.quantity,this.selectedProgram,this.product);
@@ -152,25 +152,24 @@ export class ProductPage implements OnInit {
   }
 
 
-  public addToShoppingList() {
+  public addToShoppingList(): void {
     if (this.product.QTY_ROUND_OPTION === 'Y' && this.isMinimum70percentQuantity()) {
-      const content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.Y_SHELF_PACK_QUANTITY_WARNING, Strings.MODAL_BUTTON_OK, undefined, undefined);
+      const content: PopoverContent = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.Y_SHELF_PACK_QUANTITY_WARNING, Strings.MODAL_BUTTON_OK, undefined, undefined);
       this.popoversProvider.show(content);
       this.programProvider.setPackQuantity(true);
     } else if (this.product.QTY_ROUND_OPTION === 'X' && this.quantity % Number(this.product.SHELF_PACK) !== 0) {
-      const content = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.X_SHELF_PACK_QUANTITY_WARNING, Strings.MODAL_BUTTON_OK, undefined, undefined);
+      const content: PopoverContent = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.X_SHELF_PACK_QUANTITY_WARNING, Strings.MODAL_BUTTON_OK, undefined, undefined);
       this.popoversProvider.show(content);
     } else {
       this.navigatorService.push(AddToShoppingListPage, {
         'product': this.product,
         'quantity': this.quantity,
-        'selectedProgram': this.selectedProgram,
-        'quantityItemPrice': this.quantityItemPrice
+        'selectedProgram': this.selectedProgram
       }).catch(err => console.error(err));
     }
   }
 
-  public buyNow() {
+  public buyNow(): void {
 
     const hotDeal: HotDealItem = {
       ITEM: this.product,
@@ -182,25 +181,24 @@ export class ProductPage implements OnInit {
     this.navigatorService.push(CustomerLocationPage, { hotDeal }).catch(err => console.error(err));
   }
 
-  public onQuantityChange($event = undefined) {
+  public onQuantityChange($event?: { quantity: number, total: number }): void {
     if ($event) {
       this.quantity = $event.quantity;
-      this.quantityItemPrice = $event.total;
       this.lastEvent = $event;
     }
 
     this.programProvider.setPackQuantity(false);
   }
 
-  private updateList(silent: boolean = false) {
-    return new Promise((resolve,reject)=>{
+  private updateList(silent: boolean = false): Promise<void> {
+    return new Promise((resolve, reject) => {
     if (this.fromShoppingList && this.lastEvent) {
 
       if (!silent) {
         this.loader.show();
       }
 
-      this.shoppingListProvider.updateShoppingListItem(this.product, this.shoppingListId, this.programNumber.toString(), this.lastEvent.productPrice, this.quantity).subscribe(data => {
+      this.shoppingListProvider.updateShoppingListItem(this.product, this.shoppingListId, this.programNumber, this.lastEvent.productPrice, this.quantity).subscribe(data => {
         resolve();
       },
         error => {
@@ -218,11 +216,9 @@ export class ProductPage implements OnInit {
             this.navigatorService.pop();
         });
         return false;
-    } else {
-      this.updateList(true);
-      return true;
     }
-   
+    this.updateList(true);
+    return true;
   }
 
   public isMinimum70percentQuantity(): boolean {

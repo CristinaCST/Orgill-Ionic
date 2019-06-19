@@ -8,8 +8,9 @@ import { NavigatorService } from '../../services/navigator/navigator';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { LocationElement } from '../../interfaces/models/location-element';
-import { PopoversService } from '../../services/popovers/popovers';
+import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
 import { PricingService } from '../../services/pricing/pricing';
+import { getNavParam } from '../../util/validatedNavParams';
 
 
 @Component({
@@ -46,29 +47,15 @@ export class CustomerLocationPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    if (this.navParams.get('shoppingListId')) {
-      this.shoppingListId = this.navParams.get('shoppingListId');
-    }
-    if (this.navParams.get('shoppingListItems')) {
-      this.shoppingListItems = this.navParams.get('shoppingListItems');
-    }
-    if (this.navParams.get('orderTotal')) {
-      this.orderTotal = this.navParams.get('orderTotal');
-    }
-
-    if (this.navParams.get('hotDeal')) {
-      this.isHotDeal = true;
-      this.hotDealItem = this.navParams.get('hotDeal');
-    }
+    this.shoppingListId = getNavParam(this.navParams, 'shoppingListId', 'number');
+    this.shoppingListItems = getNavParam(this.navParams, 'shoppingListItems', 'object');
+    this.orderTotal = getNavParam(this.navParams, 'orderTotal', 'number');
+    this.hotDealItem = getNavParam(this.navParams, 'hotDeal', 'object');
+    this.isHotDeal = this.hotDealItem ? true : false;
 
 
     this.userInfoProvider.getUserLocations().subscribe(locations => {
-
-      if (Constants.DEBUG_NO_LOCATIONS) {
-        locations = undefined;
-      }
-
-      if (!locations) {
+      if (!locations || Constants.DEBUG_NO_LOCATIONS) {
         this.noLocation = true;
         return;
       }
@@ -79,7 +66,7 @@ export class CustomerLocationPage implements OnInit {
         this.selectedLocation = this.userLocations[0];
       }
 
-      const min_value = this.isHotDeal ? this.pricingService.validateQuantity(1, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM, true) : 1;
+      const min_value: number = this.isHotDeal ? this.pricingService.validateQuantity(1, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM, true) : 1;
 
       this.userLocations.forEach(element => {
 
@@ -99,23 +86,23 @@ export class CustomerLocationPage implements OnInit {
   }
 
 
-  public sortLocations(responseData) {
-    return responseData.sort((location1, location2): number => {
+  public sortLocations(locations: CustomerLocation[]): CustomerLocation[] {
+    return locations.sort((location1, location2): number => {
       return location1.CUSTOMERNAME.toLowerCase().localeCompare(location2.CUSTOMERNAME.toLowerCase());
     });
   }
 
-  public sendToOrgill() {
+  public sendToOrgill(): void {
     this.redirectToOrderReview(this.sendToOrgillMethod);
   }
 
-  public checkout() {
+  public checkout(): void {
     this.redirectToOrderReview(this.checkoutMethod);
   }
 
-  public redirectToOrderReview(orderMethod: number) {
+  public redirectToOrderReview(orderMethod: number): void {
     if (this.shoppingListId != undefined) {
-      const params = {
+      const params: any = {
         orderMethod,
         postOffice: this.postOffice,
         location: this.selectedLocation,
@@ -129,7 +116,7 @@ export class CustomerLocationPage implements OnInit {
     if (this.isHotDeal) {
       const selectedLocations: LocationElement[] = [];
 
-      let valid = true;
+      let valid: boolean = true;
 
       this.hotDealLocations.forEach(element => {
         if (element.WANTED) {
@@ -143,7 +130,7 @@ export class CustomerLocationPage implements OnInit {
       });
 
       if (!valid) {
-        const content = {
+        const content: PopoverContent = {
           type: Constants.POPOVER_INFO,
           title: Strings.GENERIC_MODAL_TITLE,
           message: Strings.HOT_DEAL_LOCATION_INVALID,
@@ -155,7 +142,7 @@ export class CustomerLocationPage implements OnInit {
       }
 
       if (selectedLocations.length === 0) {
-        const content = {
+        const content: PopoverContent = {
           type: Constants.POPOVER_INFO,
           title: Strings.GENERIC_MODAL_TITLE,
           message: Strings.HOT_DEAL_NO_LOCATION,
@@ -174,35 +161,35 @@ export class CustomerLocationPage implements OnInit {
     }
   }
 
-  public setHotDealTotalPrice() {
-    let qty = 0;
+  public setHotDealTotalPrice(): void {
+    let qty: number = 0;
     this.hotDealItem.LOCATIONS.forEach(location => {
       qty += location.QUANTITY;
     });
     this.orderTotal = this.pricingService.getPrice(qty, this.hotDealItem, this.hotDealItem.PROGRAM);
   }
 
-  public add(location) {
+  public add(location: LocationElement): void {
     location.QUANTITY = Number(location.QUANTITY) + 1;
     location.QUANTITY = this.pricingService.validateQuantity(location.QUANTITY, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM);
   }
 
-  public remove(location) {
+  public remove(location: LocationElement): void {
     location.QUANTITY = Number(location.QUANTITY) - 1;
     location.QUANTITY = this.pricingService.validateQuantity(location.QUANTITY, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM);
   }
 
-  public handleQuantityChange(location) {
+  public handleQuantityChange(location: LocationElement): void {
     location.QUANTITY = this.pricingService.validateQuantity(location.QUANTITY, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM);
   }
 
-  public PONumberValidation(location) {
+  public PONumberValidation(location: LocationElement): void {
     if (!location.POSTOFFICE) {
       return;
     }
 
     if (location.POSTOFFICE.length > 15) {
-      const content = {
+      const content: PopoverContent = {
         type: Constants.POPOVER_INFO,
         title: Strings.GENERIC_MODAL_TITLE,
         message: Strings.PO_NUMBER_TOO_LONG,
@@ -213,10 +200,10 @@ export class CustomerLocationPage implements OnInit {
       location.POSTOFFICE = location.POSTOFFICE.substr(0, 15);
     }
 
-    const initialLength = location.POSTOFFICE.length;
+    const initialLength: number = location.POSTOFFICE.length;
     location.POSTOFFICE = location.POSTOFFICE.replace(/[\W_]+/g, '');
     if (initialLength !== location.POSTOFFICE.length) {
-      const content = {
+      const content: PopoverContent = {
         type: Constants.POPOVER_INFO,
         title: Strings.GENERIC_MODAL_TITLE,
         message: Strings.PO_ALPHANUMERIC_WARNING,

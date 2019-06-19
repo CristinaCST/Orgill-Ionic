@@ -9,10 +9,13 @@ import { ProductsSearchPage } from '../products-search/products-search';
 import { LoadingService } from '../../services/loading/loading';
 import * as Constants from '../../util/constants';
 import { NavigatorService } from '../../services/navigator/navigator';
+import { getNavParam } from '../../util/validatedNavParams';
+
 @Component({
   selector: 'page-products',
   templateUrl: 'products.html'
 })
+
 export class ProductsPage implements OnInit, OnDestroy {
   private getProductSubscription: Subscription;
   private programName: string;
@@ -31,16 +34,16 @@ export class ProductsPage implements OnInit, OnDestroy {
                 this.loader = loadingService.createLoader();
   }
 
-  public ngOnInit() {
-    this.programNumber = this.navParams.get('programNumber');
-    this.programName = this.navParams.get('programName');
-    this.category = this.navParams.get('category');
+  public ngOnInit(): void {
+    this.programNumber = getNavParam(this.navParams, 'programNumber', 'string');
+    this.programName = getNavParam(this.navParams, 'programName', 'string');
+    this.category = getNavParam(this.navParams, 'category', 'object');
 
     this.getProducts();
     this.setPaginationInfo();
   }
 
-  public getProducts() {
+  public getProducts(): void {
     this.loader.show();
     this.getProductSubscription = this.catalogProvider.getProducts(this.category ? this.category.CatID : '', this.programNumber, this.page).subscribe(response => {
       this.products = this.sortProducts(JSON.parse(response.d));
@@ -50,13 +53,13 @@ export class ProductsPage implements OnInit, OnDestroy {
     });
   }
 
-  public sortProducts(responseData) {
-    return responseData.sort((product1, product2): number =>
+  public sortProducts(products: Product[]): Product[] {
+    return products.sort((product1, product2): number =>
       product1.NAME.localeCompare(product2.NAME)
     );
   }
 
-  public goToProductPage(product: Product) {
+  public goToProductPage(product: Product): void {
     this.navigatorService.push(ProductPage, {
       'product': product,
       'programName': this.programName,
@@ -72,11 +75,11 @@ export class ProductsPage implements OnInit, OnDestroy {
     }
   }
 
-  public onSearched($event) {
+  public onSearched($event: string): void {
     this.loader.show();
     this.catalogProvider.search($event, this.category ? this.category.CatID : '', this.programNumber).subscribe(data => {
-      const dataFound = JSON.parse(data.d);
-      const params = {
+      const dataFound: Product[] = JSON.parse(data.d);
+      const params: any = {
         searchData: dataFound,
         programNumber: this.programNumber,
         programName: this.programName,
@@ -90,12 +93,12 @@ export class ProductsPage implements OnInit, OnDestroy {
     });
   }
 
-  public next() {
+  public next(): void {
     this.page += 1;
     this.loadNextProducts();
   }
 
-  public loadNextProducts() {
+  public loadNextProducts(): void {
     this.loader.show();
     this.getProductSubscription = this.catalogProvider.getProducts(this.category ? this.category.CatID : '', this.programNumber, this.page)
       .subscribe(response => {
@@ -105,9 +108,9 @@ export class ProductsPage implements OnInit, OnDestroy {
       });
   }
 
-  public setPaginationInfo() {
+  public setPaginationInfo(): void {
     if (this.products.length > 0) {
-      this.totalNumberOfProducts = parseInt(this.products[0].TOTAL_REC_COUNT);
+      this.totalNumberOfProducts = parseInt(this.products[0].TOTAL_REC_COUNT, 10);
     }
     this.isPaginationEnabled = this.page * Constants.PRODUCTS_PER_PAGE < this.totalNumberOfProducts;
   }

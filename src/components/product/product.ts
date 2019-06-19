@@ -17,9 +17,9 @@ export class ProductComponent implements OnInit, AfterViewInit {
     ConstantsUrl.PRODUCT_IMAGE_BASE_URL + this.product.SKU + '.JPG';
   }
 
-  public loadImage() {
+  public loadImage(): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
-      const img = new Image();
+      const img: HTMLImageElement = new Image();
       img.addEventListener('load', e => resolve(img));
       img.onerror = () => {
         reject(new Error('Failed to load URL'));

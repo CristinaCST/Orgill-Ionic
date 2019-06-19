@@ -7,6 +7,10 @@ import { NavOptions, Events } from 'ionic-angular';
 import { ProductPage } from '../../pages/product/product';
 import { NavigatorService } from '../navigator/navigator';
 import { Observable } from 'rxjs';
+import { APIResponse } from '../../interfaces/response-body/response';
+import { empty } from 'rxjs/observable/empty';
+import { Product } from '../../interfaces/models/product';
+import { User } from '../../interfaces/models/user';
 
 @Injectable()
 export class HotDealService {
@@ -22,17 +26,17 @@ export class HotDealService {
   }
 
 
-  private getUserInfo() {
-    const userToken = LocalStorageHelper.getFromLocalStorage(Constants.USER);
+  private getUserInfo(): void {
+    const userToken: string = LocalStorageHelper.getFromLocalStorage(Constants.USER);
     if (userToken) {
-      const userInfo = JSON.parse(userToken);
+      const userInfo: User = JSON.parse(userToken);
       if (userInfo) {
         this.userToken = userInfo.userToken;
       }
     }
   }
 
-  private getHotDealsProduct(sku = '') {
+  private getHotDealsProduct(sku: string = ''): Observable<APIResponse> {
     if (!this.userToken) {
       this.getUserInfo();
     }
@@ -46,7 +50,7 @@ export class HotDealService {
     // HACK: Replacement for not working backend
 
 
-    const params = {
+    const params: any = {
       'user_token': this.userToken,
       'division': '',
       'price_type': '',
@@ -60,16 +64,15 @@ export class HotDealService {
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params);
   }
 
-  public navigateToHotDeal(sku = '') {
+  public navigateToHotDeal(sku: string = ''): void {
     this.getHotDealsProduct(sku).subscribe(receivedResponse => {
-      const responseData = JSON.parse(receivedResponse.d);
-      const foundProducts = responseData;
-      if (foundProducts.length > 0) {
-        foundProducts.filter(item => item.SKU === sku);
-        const hotDeal = {
+      const responseData: Product[] = JSON.parse(receivedResponse.d);
+      if (responseData.length > 0) {
+        responseData.filter(item => item.SKU === sku);
+        const hotDeal: any = {
           isHotDeal: true,
           SKU: sku,
-          product: foundProducts[0]
+          product: responseData[0]
         };
 
         // HACK: To fix this error
@@ -80,9 +83,9 @@ export class HotDealService {
   }
 
 
-  public isHotDealExpired(timestamp = undefined) {
-    const dateString = timestamp ? timestamp : LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_PAYLOAD_TIMESTAMP);
-    const hotDealTimestamp = new Date(parseInt(dateString));
+  public isHotDealExpired(timestamp: string = ''): boolean {
+    const dateString: string = timestamp ? timestamp : LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_PAYLOAD_TIMESTAMP);
+    const hotDealTimestamp: Date = new Date(parseInt(dateString, 10));
 
     if ((new Date()).getDay() !== hotDealTimestamp.getDay()) {
       this.markHotDealExpired();
@@ -91,18 +94,18 @@ export class HotDealService {
     return false;
   }
 
-  public markHotDealExpired() {
+  public markHotDealExpired(): void {
     LocalStorageHelper.removeFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
     this.events.publish(Constants.HOT_DEAL_EXPIRED_EVENT);
   }
 
-  public checkHotDealState(sku = undefined) {
-    const hotDealSku = sku ? sku : LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
+  public checkHotDealState(sku: string): boolean {
+    const hotDealSku: string = sku ? sku : LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
     return hotDealSku && !this.isHotDealExpired() ? true : false;
   }
 
-  public getHotDealProgram(sku) {
-  const params = {
+  public getHotDealProgram(sku: string): Observable<APIResponse> {
+  const params: any = {
     'user_token': JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER)).userToken,
     'sku': sku
   };
@@ -110,7 +113,7 @@ export class HotDealService {
   if (params.user_token) {
       return this.apiService.post(ConstantsUrl.GET_HOTDEALS_PROGRAM, params);
     }
-  return Observable.of([]);
+  return empty<APIResponse>();
   }
 
 /*

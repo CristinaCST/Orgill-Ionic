@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as Strings from '../../util/strings';
-import { Purchase } from 'interfaces/models/purchase';
+import { Purchase } from '../../interfaces/models/purchase';
 
 @Component({
   selector: 'order-item',

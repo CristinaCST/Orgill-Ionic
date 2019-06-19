@@ -8,46 +8,49 @@ import * as ConstantsUrl from '../../util/constants-url';
 import * as Constants from '../../util/constants';
 import { DatabaseProvider } from '../database/database';
 import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs';
+import { APIResponse } from '../../interfaces/response-body/response';
+import { User } from '../../interfaces/models/user';
 
 @Injectable()
 export class ProgramProvider {
   private readonly userToken: string;
-  private readonly selectedProgramSubject: Subject<any> = new Subject<any>();
-  private readonly packQuantity: BehaviorSubject<any> = new BehaviorSubject<any>(false);
+  private readonly selectedProgramSubject: Subject<ItemProgram> = new Subject<ItemProgram>();
+  private readonly packQuantity: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(private readonly apiProvider: ApiService, private readonly databaseProvider: DatabaseProvider) {
-    const userInfo = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
+    const userInfo: User = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     if (userInfo) {
       this.userToken = userInfo.userToken;
     }
   }
 
-  public setPackQuantity(value) {
+  public setPackQuantity(value: boolean): void {
     this.packQuantity.next(value);
   }
 
-  public isPackQuantity() {
+  public isPackQuantity(): Observable<boolean> {
     return this.packQuantity.asObservable();
   }
 
-  public selectProgram(program: ItemProgram) {
+  public selectProgram(program: ItemProgram): void {
     this.selectedProgramSubject.next(program);
   }
 
-  public getSelectedProgram() {
+  public getSelectedProgram(): Observable<ItemProgram> {
     return this.selectedProgramSubject.asObservable();
   }
 
-  public getProductPrograms(productSku) {
-    const params = {
-      'user_token': this.userToken,
-      'sku': productSku
+  public getProductPrograms(productSku: string): Observable<APIResponse> {
+    const params: any = {
+      user_token: this.userToken,
+      sku: productSku
     };
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_PROGRAMS, params);
   }
 
 
-  public isMarketOnlyProgram(programNumber: string) {
+  public isMarketOnlyProgram(programNumber: string): Promise<any> {
     return this.databaseProvider.getMarketTypeForProgram(programNumber);
   }
 

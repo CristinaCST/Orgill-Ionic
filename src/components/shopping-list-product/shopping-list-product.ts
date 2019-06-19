@@ -16,26 +16,26 @@ export class ShoppingListProductComponent {
 
   constructor(private readonly pricingService: PricingService) {}
   
-  public ngOnInit(){
+  public ngOnInit(): void {
     this.realPrice = this.realPrice ? this.realPrice : this.getRealPrice().toFixed(Constants.DECIMAL_NUMBER);
   }
 
-  public updateCheckedItems() {
-    const data = {
+  public updateCheckedItems(): void {
+    const data: { status: string, price: string } = {
       status: this.shoppingListItem.isCheckedInShoppingList ? 'checkedItem' : 'uncheckedItem',
       price: this.realPrice
     };
     this.checked.emit(data);
   }
 
-  public goToProductDetails() {
+  public goToProductDetails(): void {
     if (!this.isDisabled) {
       return;
     }
     this.goToDetails.emit(this.shoppingListItem);
   }
 
-  public getRealPrice() {
+  public getRealPrice(): number {
     return this.pricingService.getShoppingListPrice(this.shoppingListItem.quantity, this.shoppingListItem.product, this.shoppingListItem.item_price);
   }
 }
