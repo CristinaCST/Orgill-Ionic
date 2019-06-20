@@ -15,15 +15,15 @@ export interface PopoverContent{
   dismissButtonText?: string;
 }
 
-export interface DefaultPopoverResult{
+export interface DefaultPopoverResult {
   optionSelected?: string;
 }
 
-export interface CustomListPopoverResult{
+export interface CustomListPopoverResult {
   listName?: string;
   type?: string;
   listDescription?: string;
-  optionSelected: string
+  optionSelected: string;
 }
 
 
@@ -104,7 +104,7 @@ export class PopoversService {
     }
   }
 
-  public setContent(title: string, message: string, positiveButtonText: string = Strings.MODAL_BUTTON_OK,
+  public setContent(title: string = Strings.GENERIC_MODAL_TITLE, message: string, positiveButtonText: string = Strings.MODAL_BUTTON_OK,
     dismissButtonText?: string, negativeButtonText?: string, type?: string): PopoverContent {
     return {
       type,

@@ -220,3 +220,7 @@ export const ONE_SIGNAL_PERMISSION_REMINDER: string = 'one_signal_permission_rem
 export const SAVINGS_TEXT: string = 'savings_text';
 
 export const ONE_SIGNAL_SUBSCRIPTION_REMINDER: string = 'one_signal_subscription_reminder';
+
+
+export const NO_LISTS_FOR_REGULAR_PRODUCT: string = 'shopping_list_no_remaining_list';
+export const NO_LISTS_FOR_MARKET_ONLY_PRODUCT: string = 'shopping_list_added_in_market_list';

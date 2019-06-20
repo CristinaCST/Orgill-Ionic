@@ -35,7 +35,7 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
 
     const subscription: Subscription = this.popoversProvider.show(content).subscribe((data: CustomListPopoverResult) => {
 
-      if (data.optionSelected != 'OK') {
+      if (data.optionSelected !== 'OK') {
         return;
       }
 
@@ -75,7 +75,7 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.events.subscribe('DeletedList', (listId: number) => {
+    this.events.subscribe('DeletedList', (listId: string) => {
       this.customShoppingLists = this.customShoppingLists.filter(list => list.ListID !== listId);
     });
   }
