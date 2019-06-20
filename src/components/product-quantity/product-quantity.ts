@@ -29,7 +29,8 @@ export class ProductQuantityComponent implements OnInit {
       if (program) {
         this.program = program;
         this.productPrice = this.getDecimalPrice();
-        this.handleQuantityChange();
+        this.quantity = this.getInitialQuantity();
+        this.setSavings();
       }
 
     });
@@ -129,7 +130,10 @@ export class ProductQuantityComponent implements OnInit {
   }
 
   private validateQuantity(suggestedValue: number): number {
-    this.setSavings();
     return this.pricingService.validateQuantity(suggestedValue, this.program, this.product);
+  }
+
+  private getInitialQuantity(): number {
+    return this.pricingService.validateQuantity(1, this.program, this.product, true);
   }
 }
