@@ -23,6 +23,7 @@ export interface CustomListPopoverResult{
   listName?: string;
   type?: string;
   listDescription?: string;
+  optionSelected: string
 }
 
 

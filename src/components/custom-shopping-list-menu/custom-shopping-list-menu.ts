@@ -34,6 +34,11 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
     const content: PopoverContent = this.popoversProvider.setContent(Strings.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined, Strings.MODAL_BUTTON_SAVE, undefined , Strings.MODAL_BUTTON_CANCEL, Constants.POPOVER_NEW_SHOPPING_LIST);
 
     const subscription: Subscription = this.popoversProvider.show(content).subscribe((data: CustomListPopoverResult) => {
+
+      if (data.optionSelected != 'OK') {
+        return;
+      }
+
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
           if (status === 'available') {
