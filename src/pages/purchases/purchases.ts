@@ -11,7 +11,6 @@ import { NavigatorService } from '../../services/navigator/navigator';
 })
 export class PurchasesPage {
 
-  public userToken: string;
   public purchases: Purchase[] = [];
 
   constructor(public navigatorService: NavigatorService, public navParams: NavParams, public purchasesProvider: PurchasesProvider) {

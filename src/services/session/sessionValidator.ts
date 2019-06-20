@@ -1,24 +1,26 @@
-import { Injectable } from '@angular/core';
-import { LocalStorageHelper } from '../../helpers/local-storage';
-import { DateTimeService } from '../datetime/dateTime';
-import * as Constants from '../../util/constants';
+import { Injectable, Injector } from '@angular/core';
 import { Moment } from 'moment';
+import { DateTimeService } from '../datetime/dateTimeService';
+import { AuthService } from '../auth/auth';
 
 @Injectable()
 export class SessionValidatorService {
 
+  constructor(private readonly injector: Injector) { }
+
     public isValidSession(): boolean {
-        if (!LocalStorageHelper.hasKey(Constants.USER)) {
+        const authService: AuthService = this.injector.get(AuthService);
+        if (!authService.User) {
           return false;
         }
         const now: Moment = DateTimeService.getCurrentDateTime();
-        const receivedTimestamp: string = (JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER)).time_stamp);
+        const receivedTimestamp: string = authService.User.time_stamp;
         const sessionTimestampWith4Days: Moment = DateTimeService.getTimeAfter4Days(receivedTimestamp);
 
         const status: boolean = sessionTimestampWith4Days.isSameOrAfter(now);
         if (!status) {
-         LocalStorageHelper.removeFromLocalStorage(Constants.USER);
-         // this.events.publish(Constants.EVENT_LOGIN_EXPIRED);
+          authService.logout(true);
+         // this.events.publish(Constants.EVENT_LOGIN_EXPIRED); TODO: Wat was here?
        }
         return status;
       }

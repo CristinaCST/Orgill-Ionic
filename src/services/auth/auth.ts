@@ -16,10 +16,19 @@ export class AuthService {
   private user: User = new User();
 
   constructor(private readonly apiProvider: ApiService, private readonly navigatorService: NavigatorService) {
+    this.user = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
   }
 
   private static encryption(password: string): string {
     return Md5.hashStr(password.toLowerCase()).toString();
+  }
+
+  public get User(): User {
+    return this.user;
+  }
+
+  public get userToken(): string {
+    return this.user.userToken;
   }
 
   public login(credentials: LoginRequest): Observable<void> {
@@ -28,11 +37,11 @@ export class AuthService {
     credentials.password = AuthService.encryption(credentials.password);
 
     return this.apiProvider.post(ConstantsURL.URL_LOGIN, credentials).map(response => {
-      this.user = { 'userToken': JSON.parse(response.d).User_Token };
+      this.user = { userToken: JSON.parse(response.d).User_Token };
     });
   }
 
-  public logout(): void {
+  public logout(expired: boolean = false): void {
     LocalStorageHelper.removeFromLocalStorage(Constants.USER);
   }
 

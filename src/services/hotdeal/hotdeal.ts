@@ -10,36 +10,18 @@ import { Observable } from 'rxjs';
 import { APIResponse } from '../../interfaces/response-body/response';
 import { empty } from 'rxjs/observable/empty';
 import { Product } from '../../interfaces/models/product';
-import { User } from '../../interfaces/models/user';
+import { AuthService } from '../../services/auth/auth';
 
 @Injectable()
 export class HotDealService {
-  private userToken: string;
 
   constructor(private readonly apiProvider: ApiService,
               private readonly navigatorService: NavigatorService,
               private readonly events: Events,
-              private readonly apiService: ApiService) {
-
-      this.getUserInfo();
-
-  }
-
-
-  private getUserInfo(): void {
-    const userToken: string = LocalStorageHelper.getFromLocalStorage(Constants.USER);
-    if (userToken) {
-      const userInfo: User = JSON.parse(userToken);
-      if (userInfo) {
-        this.userToken = userInfo.userToken;
-      }
-    }
-  }
+              private readonly apiService: ApiService,
+              private readonly authService: AuthService) {}
 
   private getHotDealsProduct(sku: string = ''): Observable<APIResponse> {
-    if (!this.userToken) {
-      this.getUserInfo();
-    }
 
   /*  let params = {
       'user_token': this.userToken,
@@ -51,7 +33,7 @@ export class HotDealService {
 
 
     const params: any = {
-      'user_token': this.userToken,
+      'user_token': this.authService.userToken,
       'division': '',
       'price_type': '',
       'search_string': '\'' + sku + '\'',
@@ -106,8 +88,8 @@ export class HotDealService {
 
   public getHotDealProgram(sku: string): Observable<APIResponse> {
   const params: any = {
-    'user_token': JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER)).userToken,
-    'sku': sku
+    user_token: this.authService.userToken,
+    sku: sku
   };
 
   if (params.user_token) {

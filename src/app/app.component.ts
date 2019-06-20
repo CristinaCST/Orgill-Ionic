@@ -1,6 +1,6 @@
 
 import { Component } from '@angular/core';
-import { App, Platform } from 'ionic-angular';
+import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Catalog } from '../pages/catalog/catalog';
@@ -26,7 +26,6 @@ export class MyApp {
   private readonly openedFromNotification: boolean = false;
 
   constructor(public platform: Platform,
-              public app: App,
               public statusBar: StatusBar,
               private readonly splashScreen: SplashScreen,
               private readonly translate: TranslateService,

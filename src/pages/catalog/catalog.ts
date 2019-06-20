@@ -4,7 +4,6 @@ import { Category } from '../../interfaces/models/category';
 import { CategoriesRequest } from '../../interfaces/request-body/categories';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
-import { LocalStorageHelper } from '../../helpers/local-storage';
 import { CatalogsProvider } from '../../providers/catalogs/catalogs';
 import { SubcategoriesRequest } from '../../interfaces/request-body/subcategories';
 import { ProductsPage } from '../products/products';
@@ -15,6 +14,7 @@ import { ScannerPage } from '../scanner/scanner';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { Product } from '../../interfaces/models/product';
 import { getNavParam } from '../../util/validatedNavParams';
+import { AuthService } from '../../services/auth/auth';
 
 
 @Component({
@@ -26,7 +26,6 @@ export class Catalog implements OnInit {
   public programNumber: string;
   public programName: string;
   public categories: Category[];
-  public userToken: string;
   public catalogIndex: number = 0;
   public currentSubCategory: Category;
   public menuCustomButtons: any[] = [];
@@ -34,7 +33,7 @@ export class Catalog implements OnInit {
   public simpleLoader: LoadingService;
 
   constructor(public navigatorService: NavigatorService, public navParams: NavParams, public catalogProvider: CatalogsProvider,
-              public loadingService: LoadingService, public translateProvider: TranslateWrapperService) {
+              public loadingService: LoadingService, public translateProvider: TranslateWrapperService, private readonly authService: AuthService) {
     this.menuCustomButtons.push({ action: 'scan', icon: 'barcode' });
 
     this.categoriesLoader = loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_CATEGORIES));
@@ -53,7 +52,6 @@ export class Catalog implements OnInit {
     if (!this.programNumber) {
       this.programNumber = '';
     }
-    this.userToken = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER)).userToken;
     const categoriesFromNavParam: Category[] = getNavParam(this.navParams, 'categories', 'object');
     if (categoriesFromNavParam) {
       this.categories = categoriesFromNavParam;
@@ -65,7 +63,7 @@ export class Catalog implements OnInit {
   private getCategories(): void {
     this.categoriesLoader.show();
     const params: CategoriesRequest = {
-      user_token: this.userToken,
+      user_token: this.authService.userToken,
       p: '1',
       rpp: String(Constants.CATEGORIES_PER_PAGE),
       program_number: this.programNumber,
@@ -88,7 +86,7 @@ export class Catalog implements OnInit {
   public selectCategory(category: Category): void {
     this.categoriesLoader.show();
     const params: SubcategoriesRequest = {
-      user_token: this.userToken,
+      user_token: this.authService.userToken,
       category_id: category.CatID,
       p: '1',
       rpp: String(Constants.CATEGORIES_PER_PAGE),

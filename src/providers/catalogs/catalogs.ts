@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { LocalStorageHelper } from '../../helpers/local-storage';
 import * as ConstantsUrl from '../../util/constants-url';
 import * as Constants from '../../util/constants';
 import { ApiService } from '../../services/api/api';
@@ -9,27 +8,16 @@ import { ProductsRequest } from '../../interfaces/request-body/products';
 import { SearchProductRequest } from '../../interfaces/request-body/search-product';
 import { Observable } from 'rxjs/Observable';
 import { APIResponse } from '../../interfaces/response-body/response';
-import { empty } from 'rxjs/observable/empty';
-import { User } from '../../interfaces/models/user';
+import { AuthService } from '../../services/auth/auth';
 
 @Injectable()
 export class CatalogsProvider {
 
-  private readonly user: any;
-
-  constructor(private readonly apiProvider: ApiService) {
-    const userInfo: User = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
-    if (userInfo) {
-      this.user = userInfo;
-    }
-  }
+  constructor(private readonly apiProvider: ApiService, private readonly authService: AuthService) { }
 
   public getPrograms(): Observable<APIResponse> {
-    if (this.user) {
-      const params: any = { user_token: this.user.userToken };
+      const params: any = { user_token: this.authService.userToken };
       return this.apiProvider.post(ConstantsUrl.URL_PROGRAMS, params);
-    }
-    return empty<APIResponse>();
   }
 
   public getCategories(params: CategoriesRequest): Observable<APIResponse> {
@@ -42,7 +30,7 @@ export class CatalogsProvider {
 
   public getProducts(categoryId: string, programNumber: string, page: number = 0, rpp: number = Constants.PRODUCTS_PER_PAGE, lastModified: string = ''): Observable<APIResponse> {
     const params: ProductsRequest = {
-      user_token: this.user.userToken,
+      user_token: this.authService.userToken,
 
       subcategory_id: categoryId,
       p: page + '',
@@ -55,7 +43,7 @@ export class CatalogsProvider {
 
   public getProductDetails(productSku: string): Observable<APIResponse> {
     const params: any = {
-      user_token: this.user.userToken,
+      user_token: this.authService.userToken,
       sku: productSku
     };
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_DETAIL, params);
@@ -63,9 +51,9 @@ export class CatalogsProvider {
 
   public search(searchString: string, categoryId: string, programNumber: string, page: number = 1): Observable<APIResponse> {
     const params: SearchProductRequest = {
-      user_token: this.user.userToken,
-      division: this.user.division,
-      price_type: this.user.price_type,
+      user_token: this.authService.userToken,
+      division: this.authService.User.division,
+      price_type: this.authService.User.price_type,
       search_string: searchString,
       category_id: categoryId,
       program_number: programNumber,

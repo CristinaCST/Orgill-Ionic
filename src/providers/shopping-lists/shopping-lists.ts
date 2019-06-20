@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { DatabaseProvider } from '../database/database';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
-import { DateTimeService } from '../../services/datetime/dateTime';
+import { DateTimeService } from '../../services/datetime/dateTimeService';
 import { ApiService } from '../../services/api/api';
 import * as ConstantsUrl from '../../util/constants-url';
-import * as Constants from '../../util/constants';
-import { LocalStorageHelper } from '../../helpers/local-storage';
 import { Product } from '../../interfaces/models/product';
 import { APIResponse } from '../../interfaces/response-body/response';
 import { Observable } from 'rxjs';
@@ -16,18 +14,13 @@ import { OrderResult } from '../../interfaces/response-body/order-result';
 import { Moment } from 'moment';
 import { ShoppingListResponse } from '../../interfaces/response-body/shopping-list';
 import { ProductListResponse } from '../../interfaces/response-body/product-list';
-import { User } from '../../interfaces/models/user';
+import { AuthService } from '../../services/auth/auth';
 
 
 @Injectable()
 export class ShoppingListsProvider {
-  private readonly userToken: string ;
 
-  constructor(private readonly databaseProvider: DatabaseProvider, private readonly apiProvider: ApiService) {
-    const userInfo: User = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
-    if (userInfo) {
-      this.userToken = userInfo.userToken;
-    }
+  constructor(private readonly databaseProvider: DatabaseProvider, private readonly apiProvider: ApiService, private readonly authService: AuthService) {
   }
 
   public getLocalShoppingLists(): Promise<any> {
@@ -37,7 +30,7 @@ export class ShoppingListsProvider {
   public addItemToShoppingList(listId: number, shoppingListItem: ShoppingListItem, marketOnly: boolean): Observable<APIResponse> {
     // return this.databaseProvider.addProductToShoppingList(listId, shoppingListItem);
     return this.apiProvider.post(ConstantsUrl.ADD_SHOPPING_LIST_ITEM, {
-      user_token: this.userToken,
+      user_token: this.authService.userToken,
       shopping_list_id: listId,
       sku: shoppingListItem.product.SKU,
       program_no: shoppingListItem.program_number,
@@ -49,7 +42,7 @@ export class ShoppingListsProvider {
   public getShoppingListsForProduct(productSKU: string, programNumber: string): Observable<APIResponse> {
     // return this.databaseProvider.getShoppingListsForProduct(productSKU);
     return this.apiProvider.post(ConstantsUrl.CHECK_PRODUCT_SHOPPING_LISTS, {
-      user_token: this.userToken,
+      user_token: this.authService.userToken,
       sku: productSKU,
       program_no: programNumber
     });
@@ -58,7 +51,7 @@ export class ShoppingListsProvider {
   public createNewShoppingList(name: string, description: string = '', type: string = '0'): Observable<APIResponse> {
     // return this.databaseProvider.addShoppingList(name, description, type);
     return this.apiProvider.post(ConstantsUrl.ADD_SHOPPING_NEW_LIST, {
-      user_token: this.userToken,
+      user_token: this.authService.userToken,
       list_name: name,
       list_description: description,
       list_type: type
@@ -67,26 +60,26 @@ export class ShoppingListsProvider {
 
   public createDefaultShoppingLists(): Observable<APIResponse> {
     return this.apiProvider.post(ConstantsUrl.CREATE_DEFAULT_LISTS, {
-      user_token: this.userToken
+      user_token: this.authService.userToken
     });
   }
 
   public removeShoppingList(listId: number): Observable<APIResponse> {
     // return this.databaseProvider.removeShoppingList(listId);
     return this.apiProvider.post(ConstantsUrl.DELETE_SHOPPING_LIST, {
-      user_token: this.userToken,
+      user_token: this.authService.userToken,
       shopping_list_id: listId
     });
   }
 
   public getAllShoppingLists(): Observable<APIResponse> {
-    return this.apiProvider.post(ConstantsUrl.GET_USER_SHOPPING_LISTS, { user_token: this.userToken });
+    return this.apiProvider.post(ConstantsUrl.GET_USER_SHOPPING_LISTS, { user_token: this.authService.userToken });
   }
 
   public getAllProductsInShoppingList(listId: number): Promise<ShoppingListItem[]> {
     return new Promise((resolve, reject) => {
       this.apiProvider.post(ConstantsUrl.GET_SHOPPING_LIST_ITEMS, {
-        user_token: this.userToken,
+        user_token: this.authService.userToken,
         shopping_list_id: listId
       }).subscribe((shoppingListItemsData: APIResponse) => {
 
@@ -241,7 +234,7 @@ export class ShoppingListsProvider {
     // return this.databaseProvider.removeProductsFromShoppingList(listId, productIdsArr);
     return this.apiProvider.post(ConstantsUrl.REMOVE_SHOPPING_LIST_ITEM,
       {
-        user_token: this.userToken,
+        user_token: this.authService.userToken,
         shopping_list_id: listId,
         sku: productSku,
         program_no: programNo
@@ -258,7 +251,7 @@ export class ShoppingListsProvider {
 
   public orderProducts(productInfoList: ProductListInfo, insertToDBInfo: DatabaseOrder, itemsIdsArr: number[], shoppingListId: number): Promise<OrderResult> {
     return new Promise((resolve, reject) => {
-        productInfoList.user_token = this.userToken;
+        productInfoList.user_token = this.authService.userToken;
         try {
           this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_PRODUCTS, productInfoList).subscribe((response: APIResponse) => {
             if (response) {
@@ -292,7 +285,7 @@ export class ShoppingListsProvider {
 
   public getOrderConfirmation(confirmationNumbers: string): Observable<APIResponse> {
     const params: any = {
-      user_token: this.userToken,
+      user_token: this.authService.userToken,
       confirmation_numbers: confirmationNumbers
     };
     return this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_CONFIRMATION, params);
@@ -309,7 +302,7 @@ export class ShoppingListsProvider {
   public updateShoppingListItem(product: Product, shoppingListId: number, programNumber: string, price: number, quantity: number): Observable<APIResponse> {
     // return this.databaseProvider.updateShoppingListItem(id, shoppingListId, programNumber, price, quantity);
     return this.apiProvider.post(ConstantsUrl.UPDATE_SHOPPING_LIST_ITEM, {
-      user_token: this.userToken,
+      user_token: this.authService.userToken,
       shopping_list_id: shoppingListId,
       sku: product.SKU,
       program_no: programNumber ? programNumber : '',
@@ -328,7 +321,7 @@ export class ShoppingListsProvider {
     //   }
     // });
     return this.apiProvider.post(ConstantsUrl.CHECK_PRODUCT_SHOPPING_LIST, {
-      user_token: this.userToken,
+      user_token: this.authService.userToken,
       sku: productSKU,
       shopping_list_id: listId,
       program_no: programNo

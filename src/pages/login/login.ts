@@ -22,7 +22,7 @@ export class Login {
   @ViewChild('passInput') private readonly passInput: TextInput;
 
   constructor(private readonly navigatorService: NavigatorService,
-              private readonly authProvider: AuthService,
+              private readonly authService: AuthService,
               private readonly loadingService: LoadingService,
               private readonly translateProvider: TranslateWrapperService,
               private readonly popoversProvider: PopoversService,
@@ -38,9 +38,9 @@ export class Login {
 
     this.loginLoader.show();
     const loginRequest: { username: string, password: string } = { username: this.username, password: this.password };
-    this.authProvider.login(loginRequest).subscribe(
+    this.authService.login(loginRequest).subscribe(
       () => {
-        this.authProvider.getUserInfo().then(() => {
+        this.authService.getUserInfo().then(() => {
           this.navigatorService.setRoot(Catalog).then(() => {this.secureActions.executeQueue(); }).catch(err => console.error(err));
           this.loginLoader.hide();
         });
