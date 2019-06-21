@@ -15,6 +15,7 @@ import { NavigatorService } from '../../services/navigator/navigator';
 import { ScannerService } from '../../services/scanner/scanner';
 import { Product } from '../../interfaces/models/product';
 import { getNavParam } from '../../util/validatedNavParams';
+import {PricingService} from "../../services/pricing/pricing";
 
 @Component({
   selector: 'page-shopping-list',
@@ -44,7 +45,8 @@ export class ShoppingListPage {
     private readonly translator: TranslateWrapperService,
     private readonly events: Events,
     private readonly loading: LoadingService,
-    private readonly scannerService: ScannerService) {
+    private readonly scannerService: ScannerService,
+    private readonly pricingService: PricingService) {
 
     this.loader = this.loading.createLoader();
     this.menuCustomButtons = [{ action: 'detailsList', icon: 'information-circle' }, { action: 'scan', icon: 'barcode' }];
@@ -193,7 +195,7 @@ export class ShoppingListPage {
     this.shoppingListItems.map((item, index) => {
       if (this.isSelectAll) {
         item.isCheckedInShoppingList = true;
-        this.setOrderTotal({ status: 'checkedItem', price: item.quantity * item.item_price }, index);
+        this.setOrderTotal({ status: 'checkedItem', price: this.pricingService.getShoppingListPrice(item.quantity, item.product, item.item_price)}, index);
       } else {
         item.isCheckedInShoppingList = false;
         this.selectedItems = [];

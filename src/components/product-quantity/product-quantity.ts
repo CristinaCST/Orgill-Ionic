@@ -112,6 +112,7 @@ export class ProductQuantityComponent implements OnInit {
   public handleQuantityChange(): void {
     this.setPackQuantity('CUSTOM');
     this.setTotal();
+    this.setSavings();
     const data: { quantity: number, total: number, productPrice: number } = {
       quantity: this.quantity,
       total: this.total,
@@ -121,12 +122,11 @@ export class ProductQuantityComponent implements OnInit {
   }
 
   private setSavings(): void {
-    this.savings = (Math.round((Number(this.product.SUGGESTED_RETAIL) - this.productPrice) * 100 / Number(this.product.SUGGESTED_RETAIL))).toString() + '%';
+    this.savings = (Math.round((Number(this.product.SUGGESTED_RETAIL) - this.total / this.quantity) * 100 / Number(this.product.SUGGESTED_RETAIL))) + '%';
   }
 
   public ngOnChanges(): void {
     this.handleQuantityChange();
-    this.setSavings();
   }
 
   private validateQuantity(suggestedValue: number): number {
