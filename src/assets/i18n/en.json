@@ -128,7 +128,7 @@
   "shopping_list_no_items_message": "Please select at least one list item.",
   "shopping_list_no_items_added": "No items have been added",
   "shopping_list_no_remaining_list": "You selected an everyday price, but the product is already added in all everyday lists. Create a new list.",
-  "shopping_list_added_in_market_list": "You selected a market price, but the product is already added in Market Only Cart.",
+  "shopping_list_added_in_market_list": "You selected a market price, but the product is already added in all Market Only Carts. Create a new list.",
   "shopping_list_market_only_product": "You cannot add a product from Orgill Market program to a everyday list. Please add the product to Market Only Cart instead.",
   "shopping_list_default_product": "You cannot add a product from outside the Orgill Markets to Market Only Cart. Please add the product to an everyday list.",
   "shopping_list_delete_conf_title": "Delete List",

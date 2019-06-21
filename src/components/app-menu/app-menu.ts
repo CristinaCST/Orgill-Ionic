@@ -70,6 +70,10 @@ export class AppMenuComponent implements OnInit {
     this.events.subscribe(Constants.EVENT_NAVIGATE_TO_PAGE, () => {
       this.menuCtrl.close('main_menu');
     });
+
+    this.events.subscribe(Constants.EVENT_NEW_SHOPPING_LIST, () => {
+      this.getShoppingLists();
+    });
   }
 
   public menuOpen(): void {
@@ -126,6 +130,7 @@ export class AppMenuComponent implements OnInit {
   }
 
   public getShoppingLists(): void {
+    this.customShoppingLists = [];
     this.shoppingListsProvider.getAllShoppingLists()
       .subscribe(shoppingListsResponse => {
         const shoppingLists: ShoppingListResponse[] = JSON.parse(shoppingListsResponse.d);
@@ -153,7 +158,7 @@ export class AppMenuComponent implements OnInit {
             }
           });
         }
-        this.events.subscribe('DeletedList', (listId: number) => {
+        this.events.subscribe('DeletedList', (listId: string) => {
           this.customShoppingLists = this.customShoppingLists.filter(list => list.ListID !== listId);
         });
       });

@@ -24,7 +24,7 @@ export class ScannerPage implements OnInit {
   public searchString: string;
   public foundProduct: Product;
   public shoppingList: ShoppingList;
-  public shoppingListId: number;
+  public shoppingListId: string;
   public productAlreadyInList: boolean = false;
   public searchTab: any;
   public products: ShoppingListItem[] = [];

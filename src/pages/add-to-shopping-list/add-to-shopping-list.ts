@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { Product } from '../../interfaces/models/product';
 import { ItemProgram } from '../../interfaces/models/item-program';
-import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
+import { ShoppingListsProvider, ListType } from '../../providers/shopping-lists/shopping-lists';
 import { ShoppingList } from '../../interfaces/models/shopping-list';
 import { PopoversService, CustomListPopoverResult, PopoverContent } from '../../services/popovers/popovers';
 import * as Constants from '../../util/constants';
@@ -27,7 +27,6 @@ export class AddToShoppingListPage implements OnInit {
   private product: Product;
   private selectedProgram: ItemProgram;
   private quantity: number = 0;
-  private readonly productLists: ShoppingList[] = [];
   public isAddBtnDisabled: boolean = false;
   public shoppingLists: ShoppingList[] = [];
   public listForm: FormGroup;
@@ -35,6 +34,8 @@ export class AddToShoppingListPage implements OnInit {
   public isMarketOnlyProduct: boolean = false;
   public subscription: Subscription;
   public menuCustomButtons: any[] = [];
+  private readonly invalidatedLists: string[] = [];
+  private firstValidListID: string;
   private loader: LoadingService;
 
   constructor(public navigatorService: NavigatorService,
@@ -61,78 +62,62 @@ export class AddToShoppingListPage implements OnInit {
     this.initShoppingListInformation();
   }
 
+
+  private listIsNotSameType(list: ShoppingList): boolean {
+    if (this.isMarketOnlyProduct && (list.ListType === ListType.CustomRegular || list.ListType === ListType.DefaultRegular)) {
+      return true;
+    }
+    if (!this.isMarketOnlyProduct && (list.ListType === ListType.CustomMarketOnly || list.ListType === ListType.DefaultMarketOnly)) {
+      return true;
+    }
+    return false;
+  }
+
   public initShoppingListInformation(): void {
-    // let subscription = Rx.Observable.forkJoin(this.programProvider.isMarketOnlyProgram(this.selectedProgram.PROGRAM_NO),
-    //         this.shoppingListsProvider.getShoppingListForProduct(this.product.SKU),
-    //         this.shoppingListsProvider.getLocalShoppingLists());
-    // subscription.subscribe(args=>{
-    //  this.setProductList(args[1]);
-    //       this.checkMarketOnlyProduct(args[0);
-    //       this.setAllShoppingList(args[2);
-    //       this.loading.hideLoading();
-    // })
 
-    Promise.all(
-      [this.programProvider.isMarketOnlyProgram(this.selectedProgram.PROGRAM_NO),
-       this.shoppingListsProvider.getShoppingListsForProduct(this.product.SKU, this.selectedProgram.PROGRAM_NO),
-       this.shoppingListsProvider.getAllShoppingLists()
-        // , this.shoppingListsProvider.getLocalShoppingLists()
-       ]
-    ).then(([programData, productLists, shoppingLists]) => {
-      // this.setProductList(productLists);
-      productLists.subscribe(data => {
-        console.log(' PRODUCT LISTS DATA: ', data);
-        this.setProductList(data);
-      });
-      this.checkMarketOnlyProduct(programData);
-      // this.setAllShoppingList(shoppingLists);
-      shoppingLists.subscribe(data => {
-        this.setAllShoppingList(data);
-      });
+    this.programProvider.isMarketOnlyProgram(this.selectedProgram.PROGRAM_NO).toPromise().then(isMarketOnly => {
+      this.isMarketOnlyProduct = isMarketOnly;
+      this.checkMarketOnlyProduct(isMarketOnly);
+      return this.shoppingListsProvider.getAllShoppingLists().toPromise();
+    }).then(shoppingListsResponse => {
+      const shoppingLists: ShoppingListResponse[] = JSON.parse(shoppingListsResponse.d);
+      return this.setAllShoppingList(shoppingLists);
+    }).then(() => {
+      return this.shoppingListsProvider.getShoppingListsForProduct(this.product.SKU, this.selectedProgram.PROGRAM_NO).toPromise();
+    }).then(productShoppingListsResponse => {
+      const productShoppingLists: ShoppingListResponse[] = JSON.parse(productShoppingListsResponse.d);
+      const virtualLists: ShoppingList[] = [...this.shoppingLists];
+
+
+      for (const list of productShoppingLists) {
+        for (let i: number = 0; i < virtualLists.length; i++) {
+          if (virtualLists[i].ListID === list.shopping_list_id || this.listIsNotSameType(virtualLists[i])) {
+            this.invalidatedLists.push(virtualLists[i].ListID.toString());
+            virtualLists.splice(i, 1);
+          }
+        }
+      }
+
+      if (virtualLists.length > 0) {
+        this.isAddBtnDisabled = false;
+        this.listForm.setValue({ 'listOptions': virtualLists[0].ListID });
+        this.firstValidListID = virtualLists[0].ListID;
+      } else {
+        this.listForm.setValue({ 'listOptions': '-1' });
+        this.isAddBtnDisabled = true;
+        const content: PopoverContent = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, this.isMarketOnlyProduct ? Strings.NO_LISTS_FOR_MARKET_ONLY_PRODUCT : Strings.NO_LISTS_FOR_REGULAR_PRODUCT);
+        this.popoversProvider.show(content);
+      }
       this.loader.hide();
-
     }).catch(error => console.error(error));
   }
 
-  public setProductList(productLists: APIResponse): void {
-    // for (let i = 0; i < productLists.rows.length; i++) {
-    //   this.productLists[productLists.rows.item(i).id] = productLists.rows.item(i).id;
-    // }
-    const prodLists: ShoppingListItem[] = JSON.parse(productLists.d);
-   // for (let i: number = 0; i < prodLists.length; i++) {
-     // this.productLists[prodLists[i].shopping_list_id] = prodLists[i].id;]
-
-    // TODO: Fix this
-    console.log(this.productLists !== undefined);
-    console.log(prodLists.length);
-    //  }
+  
+  public checkMarketOnlyProduct(isMarketOnly: boolean): void {
+    this.listForm.value.listOptions = isMarketOnly ? LocalStorageHelper.getFromLocalStorage(Constants.MARKET_ONLY_LIST_ID) : this.listForm.value.listOptions = LocalStorageHelper.getFromLocalStorage(Constants.DEFAULT_LIST_ID);
   }
 
-  public checkMarketOnlyProduct(data: any): void {
-    const programType: { market_only: string } = data.rows.item(0);
-    if (data.rows.length > 0) {
-      this.isMarketOnlyProduct = programType.market_only === Constants.MARKET_ONLY_PROGRAM;
-    }
-    // this.listForm.value.listOptions = data.rows.item(0).market_only.toString() === Constants.MARKET_ONLY_PROGRAM ? Constants.MARKET_ONLY_LIST_ID : Constants.DEFAULT_LIST_ID;
-    this.listForm.value.listOptions = programType.market_only === Constants.MARKET_ONLY_PROGRAM ? LocalStorageHelper.getFromLocalStorage(Constants.MARKET_ONLY_LIST_ID) : this.listForm.value.listOptions = LocalStorageHelper.getFromLocalStorage(Constants.DEFAULT_LIST_ID);
-
-    this.checkProductInList(this.listForm.value.listOptions);
-  }
-
-  public setAllShoppingList(data: APIResponse): void {
-    // if (shoppingLists.rows.length) {
-    //   for (let i = 0; i < shoppingLists.rows.length; i++) {
-    //     let list: ShoppingList = {
-    //       ListID: shoppingLists.rows.item(i).id,
-    //       ListName: shoppingLists.rows.item(i).name,
-    //       ListDescription: shoppingLists.rows.item(i).description,
-    //       ListType: shoppingLists.rows.item(i).listType
-    //     };
-    //     this.shoppingLists.push(list);
-    //   }
-    // }
-
-    const shoppingLists: ShoppingListResponse[] = JSON.parse(data.d);
+  public setAllShoppingList(shoppingLists: ShoppingListResponse[]): Promise<void> {
     const specialLists: ShoppingList[] = [];  // Can't use sort because 1 should be first, then 2 then 0.
 
     if (shoppingLists.length > 0) {
@@ -153,6 +138,8 @@ export class AddToShoppingListPage implements OnInit {
       specialLists.push(...this.shoppingLists);
       this.shoppingLists = specialLists;
     }
+
+    return Promise.resolve();
   }
 
   public newShoppingList(): void {
@@ -172,7 +159,7 @@ export class AddToShoppingListPage implements OnInit {
                 ListType: addedList.list_type
               };
               this.shoppingLists.push(list);
-              this.listForm.value.listOptions = list.ListID;
+              this.selectList(list);
             });
           } else {
             const modalContent: PopoverContent = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);
@@ -214,7 +201,7 @@ export class AddToShoppingListPage implements OnInit {
     });
   }
 
-  public checkProductInList(listId: number): void {
+  public checkProductInList(listId: string): void {
     this.shoppingListsProvider.checkProductInList(this.product.SKU, listId, this.selectedProgram.PROGRAM_NO).subscribe((data: APIResponse) => {
       const temp: string = JSON.parse(data.d).Status;
       const response: boolean = (temp === 'True');
@@ -222,6 +209,7 @@ export class AddToShoppingListPage implements OnInit {
         this.isAddBtnDisabled = true;
         this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_EXISTING_PRODUCT));
       } else {
+        this.listForm.value.listOptions = listId;
         this.isAddBtnDisabled = false;
       }
     });
@@ -236,13 +224,31 @@ export class AddToShoppingListPage implements OnInit {
 
 
   public selectList(selectedList: ShoppingList): void {
-    if (this.isMarketOnlyProduct && ((selectedList.ListType.toString() !== Constants.MARKET_ONLY_LIST_TYPE) && (selectedList.ListType.toString() !== Constants.MARKET_ONLY_CUSTOM_TYPE))) {
-      this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_MARKET_ONLY_PRODUCT));
-    } else if (!this.isMarketOnlyProduct && ((selectedList.ListType.toString() === Constants.MARKET_ONLY_LIST_TYPE) || (selectedList.ListType.toString() === Constants.MARKET_ONLY_CUSTOM_TYPE))) {
-      this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_DEFAULT_PRODUCT));
+    if (!selectedList) {
+      return;
+    }
 
+    const differentType: boolean = this.listIsNotSameType(selectedList);
+    const alreadyAdded: boolean = typeof this.invalidatedLists.find(id => id === selectedList.ListID) !== 'undefined' ? true : false;
+
+    if (alreadyAdded) {
+      this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_EXISTING_PRODUCT));
+      this.seekValidList();
+    } else if (this.isMarketOnlyProduct && differentType) {
+      this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_MARKET_ONLY_PRODUCT));
+      this.seekValidList();
+    } else if (!this.isMarketOnlyProduct && differentType) {
+      this.seekValidList();
+      this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_DEFAULT_PRODUCT));
     } else {
       this.checkProductInList(selectedList.ListID);
+      this.isAddBtnDisabled = false;
+    }
+  }
+
+  private seekValidList(): void {
+    if (this.firstValidListID) {
+      this.selectList(this.shoppingLists.find(list => list.ListID === this.firstValidListID));
     }
   }
 }

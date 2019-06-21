@@ -185,7 +185,7 @@ export class ScannerService {
 
 
   private isProductInList(): Observable<any> {
-    return this.shoppingListProvider.checkProductInList(this.foundProduct.SKU, parseInt(this.shoppingListId, 10), this.programNumber);
+    return this.shoppingListProvider.checkProductInList(this.foundProduct.SKU, this.shoppingListId, this.programNumber);
   }
 
   private isPermissionError(scannerError: string): boolean {

@@ -178,3 +178,5 @@ export const LOCAL_PRODUCT_IMAGE_PLACEHOLDER: string = '../../assets/imgs/produc
 // DEBUG
 
 export const DEBUG_TRANSLATIONS: boolean = false;
+
+export const EVENT_NEW_SHOPPING_LIST: string = 'newShoppingList';

@@ -29,7 +29,7 @@ export class ApiService {
       this.baseUrl + path,
       JSON.stringify(body),
       { headers: this.setHeaders() }
-    );
+    ).take(1);
   }
 
   private getServiceBaseURL(): string {

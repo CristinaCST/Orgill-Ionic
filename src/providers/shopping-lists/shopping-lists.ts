@@ -4,6 +4,7 @@ import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
 import { DateTimeService } from '../../services/datetime/dateTimeService';
 import { ApiService } from '../../services/api/api';
 import * as ConstantsUrl from '../../util/constants-url';
+import * as Constants from '../../util/constants';
 import { Product } from '../../interfaces/models/product';
 import { APIResponse } from '../../interfaces/response-body/response';
 import { Observable } from 'rxjs';
@@ -15,12 +16,19 @@ import { Moment } from 'moment';
 import { ShoppingListResponse } from '../../interfaces/response-body/shopping-list';
 import { ProductListResponse } from '../../interfaces/response-body/product-list';
 import { AuthService } from '../../services/auth/auth';
+import { Events } from 'ionic-angular/util/events';
 
+export enum ListType{
+  CustomRegular = '0',
+  DefaultRegular = '1',
+  DefaultMarketOnly = '2',
+  CustomMarketOnly = '3'
+}
 
 @Injectable()
 export class ShoppingListsProvider {
 
-  constructor(private readonly databaseProvider: DatabaseProvider, private readonly apiProvider: ApiService, private readonly authService: AuthService) {
+  constructor(private readonly databaseProvider: DatabaseProvider, private readonly apiProvider: ApiService, private readonly authService: AuthService, private readonly events: Events) {
   }
 
   public getLocalShoppingLists(): Promise<any> {
@@ -50,11 +58,15 @@ export class ShoppingListsProvider {
 
   public createNewShoppingList(name: string, description: string = '', type: string = '0'): Observable<APIResponse> {
     // return this.databaseProvider.addShoppingList(name, description, type);
+
     return this.apiProvider.post(ConstantsUrl.ADD_SHOPPING_NEW_LIST, {
       user_token: this.authService.userToken,
       list_name: name,
       list_description: description,
       list_type: type
+    }).map(res => {
+      this.events.publish(Constants.EVENT_NEW_SHOPPING_LIST);
+      return res;
     });
   }
 
@@ -64,7 +76,7 @@ export class ShoppingListsProvider {
     });
   }
 
-  public removeShoppingList(listId: number): Observable<APIResponse> {
+  public removeShoppingList(listId: string): Observable<APIResponse> {
     // return this.databaseProvider.removeShoppingList(listId);
     return this.apiProvider.post(ConstantsUrl.DELETE_SHOPPING_LIST, {
       user_token: this.authService.userToken,
@@ -76,7 +88,7 @@ export class ShoppingListsProvider {
     return this.apiProvider.post(ConstantsUrl.GET_USER_SHOPPING_LISTS, { user_token: this.authService.userToken });
   }
 
-  public getAllProductsInShoppingList(listId: number): Promise<ShoppingListItem[]> {
+  public getAllProductsInShoppingList(listId: string): Promise<ShoppingListItem[]> {
     return new Promise((resolve, reject) => {
       this.apiProvider.post(ConstantsUrl.GET_SHOPPING_LIST_ITEMS, {
         user_token: this.authService.userToken,
@@ -230,7 +242,7 @@ export class ShoppingListsProvider {
     return list;
   }*/
 
-  public deleteProductFromList(listId: number, productSku: string, programNo: string): Observable<APIResponse> {
+  public deleteProductFromList(listId: string, productSku: string, programNo: string): Observable<APIResponse> {
     // return this.databaseProvider.removeProductsFromShoppingList(listId, productIdsArr);
     return this.apiProvider.post(ConstantsUrl.REMOVE_SHOPPING_LIST_ITEM,
       {
@@ -311,7 +323,7 @@ export class ShoppingListsProvider {
     });
   }
 
-  public checkProductInList(productSKU: string, listId: number, programNo: string): Observable<APIResponse> {
+  public checkProductInList(productSKU: string, listId: string, programNo: string): Observable<APIResponse> {
     // return new Promise(async (resolve, reject) => {
     //   try {
     //     let data = await this.databaseProvider.checkProductInList(productSKU, listId);
