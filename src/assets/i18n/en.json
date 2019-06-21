@@ -17,6 +17,9 @@
 
   "lost_internet_connection": "There is no internet connection. Please turn on Mobile Data or WIFI in order to use the Orgill O Zone App.",
   "request_timeout_error":"An error has occurred. Please make sure you are connected to the internet and try again.",
+  "open_wifi": "Open WI-FI",
+  "open_data": "Open Data",
+
 
   "loading_content_login": "Logging in... \nPlease wait.",
   "loading_content_programs": "Searching for programs... \nPlease wait.",

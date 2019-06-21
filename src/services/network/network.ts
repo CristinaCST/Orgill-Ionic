@@ -36,7 +36,7 @@ export class NetworkService {
     }
 
     this.notified = true;
-    const content: PopoverContent = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.POPOVER_TIMEOUT_ERROR_MESSAGE, 'Open Data', 'Open WIFI');
+    const content: PopoverContent = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.POPOVER_TIMEOUT_ERROR_MESSAGE, Strings.MODAL_BUTTON_OK);
     this.popoversProvider.show(content);
   }
 }

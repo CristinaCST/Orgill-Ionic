@@ -53,6 +53,8 @@ export const POPOVER_EXPIRED_ITEMS_TITLE: string = 'shopping_list_expired_items_
 export const POPOVER_EXPIRED_ITEMS_MESSAGE: string = 'shopping_list_expired_items_message';
 
 export const POPOVER_NETWORK_OFFLINE_MESSAGE: string = 'lost_internet_connection';
+export const POPOVER_OPEN_DATA: string = 'open_data';
+export const POPOVER_OPEN_WIFI: string = 'open_wifi';
 export const POPOVER_TIMEOUT_ERROR_MESSAGE: string = 'request_timeout_error';
 export const POPOVER_PLACEHOLDER_MESSAGE: string = 'placeholder_message';
 
