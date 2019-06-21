@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.orgill.ionic" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.orgill.ionic" version="5.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Orgill</name>
     <description>The OZone</description>
     <author email="cristina.nicolae@cst-us.com" href="http://cst-us.com/">CST Team</author>
@@ -124,6 +124,6 @@
     <plugin name="onesignal-cordova-plugin" spec="2.4.5" />
     <allow-navigation href="http://192.168.100.102:8100" sessionid="d7307190" />
     <allow-navigation href="http://192.168.1.88:8100" sessionid="3d1b2f55" />
-    <engine name="android" spec="^7.0.0" />
+    <engine name="android" spec="7.1.4" />
     <engine name="ios" spec="4.5.5" />
 </widget>

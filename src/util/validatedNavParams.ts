@@ -1,8 +1,8 @@
 import { NavParams } from 'ionic-angular';
 
-export function getNavParam(navParams: NavParams, propertyName: string, expectedType: string = 'string'): any {
+export function getNavParam(navParams: NavParams, propertyName: string, expectedType: string = 'string', defaultValue?: any): any {
     const param: any = navParams.get(propertyName);
-    if (param) {
+    if (param !== undefined) {
         if (expectedType !== typeof param) {
             if (typeof param === 'string' && expectedType === 'number') {
                 console.warn('Had to cast nav param ' + param.toString() + ' param from string to number');
@@ -22,11 +22,13 @@ export function getNavParam(navParams: NavParams, propertyName: string, expected
             }
 
             console.error('Uncastable different type was received, type of navparam: ' + typeof param + ', expected type: ' + expectedType);
-            return undefined;
+            return typeof defaultValue !== 'undefined' ? defaultValue : undefined;
         }
         return param;
     }
 
-    if (expectedType !== 'boolean') { return undefined; }
+    if (expectedType !== 'boolean') {
+      return typeof defaultValue !== 'undefined' ? defaultValue : undefined;
+    }
     return false;
 }

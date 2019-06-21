@@ -26,7 +26,7 @@ export class Catalog implements OnInit {
   public programNumber: string;
   public programName: string;
   public categories: Category[];
-  public catalogIndex: number = 0;
+  public catalogIndex: number;
   public currentSubCategory: Category;
   public menuCustomButtons: any[] = [];
   public categoriesLoader: LoadingService;
@@ -43,7 +43,7 @@ export class Catalog implements OnInit {
   public ngOnInit(): void {
     this.programName = getNavParam(this.navParams, 'programName', 'string');
     this.programNumber = getNavParam(this.navParams, 'programNumber', 'number');
-    this.catalogIndex = getNavParam(this.navParams, 'catalogIndex', 'number');
+    this.catalogIndex = getNavParam(this.navParams, 'catalogIndex', 'number', 0);
     this.currentSubCategory = getNavParam(this.navParams, 'subcategory', 'object');
 
     if (!this.programName) {
