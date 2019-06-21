@@ -268,7 +268,7 @@ export class ShoppingListsProvider {
           this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_PRODUCTS, productInfoList).subscribe((response: APIResponse) => {
             if (response) {
               insertToDBInfo.confirmation_number = JSON.parse(response.d);
-              
+
               // TODO: Should change this to promise-like and get rid of await, of all awaits for that matter.
               let insertedPurchaseToDBInfo: DatabaseActionResponse;
               let removedItemsFromShoppingList: DatabaseActionResponse;
@@ -304,11 +304,12 @@ export class ShoppingListsProvider {
   }
 
   public search(shoppingListItems: ShoppingListItem[], searchString: string): ShoppingListItem[] {
-    const searchFn: (value: string) => boolean = (value: string) => {
-      return value.toLocaleLowerCase().search(searchString.toLowerCase()) !== -1;
+    const searchFn: (value: any) => boolean = (value: any) => {
+      if (!value) return false;
+      return (value).toLocaleLowerCase().search(searchString.toLowerCase()) !== -1;
     };
 
-    return shoppingListItems.filter(item => searchFn(item.product.NAME) || searchFn(item.product.SKU) || searchFn(item.product.UPC_CODE));
+    return shoppingListItems.filter(item => (searchFn(item.product.NAME) || searchFn(item.product.SKU) || searchFn(item.product.UPC_CODE)) == true);
   }
 
   public updateShoppingListItem(product: Product, shoppingListId: number, programNumber: string, price: number, quantity: number): Observable<APIResponse> {

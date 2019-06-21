@@ -61,34 +61,8 @@ export class ShoppingListPage {
       this.fillList();
     });
 
-    if (!getNavParam(this.navParams, 'fromSearch', 'boolean')) {
-      this.init();
-    } else {
-      this.fillList();
-    }
-  }
-
-  private init(): void {
-    this.loader.show();
-
-    this.fillList().then(() => {
-      this.loader.hide();
-    }, () => {
-      this.loader.hide();
-    }).catch(() => {
-      this.loader.hide();
-    });
-  }
-
-  private fillList(): Promise<void> {
     this.shoppingList = getNavParam(this.navParams, 'list', 'object');
     this.isCheckout = getNavParam(this.navParams, 'isCheckout', 'boolean');
-
-    this.shoppingListItems = getNavParam(this.navParams, 'shoppingListItems', 'object');
-    if (!this.shoppingListItems) {
-      this.shoppingListItems = [];
-    }
-    this.content.resize();
 
     this.isCustomList = !(this.shoppingList.ListType !== Constants.DEFAULT_LIST_TYPE && this.shoppingList.ListType !== Constants.MARKET_ONLY_LIST_TYPE);
     if (!this.isCustomList) {
@@ -99,6 +73,39 @@ export class ShoppingListPage {
         });
       }
     }
+
+    if (getNavParam(this.navParams, 'fromSearch', 'boolean')) {
+      this.init();
+    } else {
+      this.fillList().then(() =>
+        this.loader.hide()
+    );
+    }
+  }
+
+  //TODO: Sebastian: REFACTORING
+  private init(): void {
+    // this.fillList().then(() => {
+    //   this.loader.hide();
+    // }, () => {
+    //   this.loader.hide();
+    // }).catch(() => {
+    //   this.loader.hide();
+    // });
+    this.shoppingListItems = getNavParam(this.navParams, 'shoppingListItems', 'object');
+    console.log("shopping items", this.shoppingListItems);
+    if (!this.shoppingListItems) {
+      this.shoppingListItems = [];
+    }
+    this.content.resize();
+
+  }
+
+  private fillList(): Promise<void> {
+
+    this.loader.show();
+
+    //TODO: Sebastian: Move logic to service
     return this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: ShoppingListItem[]) => {
 
       if (data) {
@@ -212,12 +219,14 @@ export class ShoppingListPage {
   public onSearched($event: any): void {
 
     this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: ShoppingListItem[]) => {
+      //let it =  this.shoppingListProvider.search(data, $event);
       const params: any = {
         list: this.shoppingList,
         shoppingListItems: this.shoppingListProvider.search(data, $event),
         isCheckout: this.isCheckout,
         fromSearch: true
       };
+      //console.log( this.shoppingListProvider.search(data, $event));
 
       this.navigatorService.push(ShoppingListPage, params, { paramsEquality: getNavParam(this.navParams, 'fromSearch', 'boolean') ? false : true } as NavOptions).catch(err => console.error(err));
     });
