@@ -131,6 +131,7 @@ export class AppMenuComponent implements OnInit {
 
   public getShoppingLists(): void {
     this.customShoppingLists = [];
+    this.defaultShoppingLists = [];
     this.shoppingListsProvider.getAllShoppingLists()
       .subscribe(shoppingListsResponse => {
         const shoppingLists: ShoppingListResponse[] = JSON.parse(shoppingListsResponse.d);
