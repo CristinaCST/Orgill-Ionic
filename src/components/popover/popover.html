@@ -17,11 +17,11 @@
   <div *ngIf="data.isNewListAlert">
     <ion-list>
       <ion-item no-padding>
-        <ion-input [(ngModel)]="listName" type="text"
+        <ion-input [(ngModel)]="listName" type="text" maxlength="40"
                    placeholder="{{'new_list_hint_name' | translate }}"></ion-input>
       </ion-item>
       <ion-item no-padding>
-        <ion-input [(ngModel)]="listDescription" type="text"
+        <ion-input [(ngModel)]="listDescription" type="text" maxlength="50"
                    placeholder="{{'new_list_hint_desc'| translate }}"></ion-input>
       </ion-item>
       <ion-item>
