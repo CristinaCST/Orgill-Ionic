@@ -15,7 +15,6 @@ export class ProductQuantityComponent implements OnInit {
   @Input() public hotDeal: boolean;
   @Output() public quantityChange: EventEmitter<any> = new EventEmitter<any>();
   private quantity: number = 1;
-  private productPrice: number = 0;
   private total: number = 0;
   private program: ItemProgram = {} as ItemProgram;
   private programSubscription: Subscription;
@@ -28,7 +27,6 @@ export class ProductQuantityComponent implements OnInit {
     this.programSubscription = this.programProvider.getSelectedProgram().subscribe(program => {
       if (program) {
         this.program = program;
-        this.productPrice = this.getDecimalPrice();
         this.quantity = this.getInitialQuantity();
         this.handleQuantityChange();
       }
@@ -126,7 +124,7 @@ export class ProductQuantityComponent implements OnInit {
   }
 
   public ngOnChanges(): void {
-    this.handleQuantityChange();
+   // this.handleQuantityChange();
   }
 
   private validateQuantity(suggestedValue: number): number {

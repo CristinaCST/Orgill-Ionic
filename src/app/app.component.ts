@@ -65,7 +65,7 @@ export class MyApp {
           return;
         }
 
-        if (this.platform.is("android") && !this.navigatorService.getNav().canGoBack()) {
+        if (this.platform.is('android') && !this.navigatorService.getNav().canGoBack()) {
           const content: PopoverContent = {
             type: Constants.POPOVER_QUIT,
             title: Strings.GENERIC_MODAL_TITLE,

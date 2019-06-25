@@ -305,11 +305,13 @@ export class ShoppingListsProvider {
 
   public search(shoppingListItems: ShoppingListItem[], searchString: string): ShoppingListItem[] {
     const searchFn: (value: any) => boolean = (value: any) => {
-      if (!value) return false;
+      if (!value) {
+        return false;
+      }
       return (value).toLocaleLowerCase().search(searchString.toLowerCase()) !== -1;
     };
 
-    return shoppingListItems.filter(item => (searchFn(item.product.NAME) || searchFn(item.product.SKU) || searchFn(item.product.UPC_CODE)) == true);
+    return shoppingListItems.filter(item => (searchFn(item.product.NAME) || searchFn(item.product.SKU) || searchFn(item.product.UPC_CODE)));
   }
 
   public updateShoppingListItem(product: Product, shoppingListId: number, programNumber: string, price: number, quantity: number): Observable<APIResponse> {

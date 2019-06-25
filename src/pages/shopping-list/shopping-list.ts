@@ -15,7 +15,7 @@ import { NavigatorService } from '../../services/navigator/navigator';
 import { ScannerService } from '../../services/scanner/scanner';
 import { Product } from '../../interfaces/models/product';
 import { getNavParam } from '../../util/validatedNavParams';
-import {PricingService} from "../../services/pricing/pricing";
+import { PricingService } from '../../services/pricing/pricing';
 
 @Component({
   selector: 'page-shopping-list',
@@ -85,7 +85,7 @@ export class ShoppingListPage {
     }
   }
 
-  //TODO: Sebastian: REFACTORING
+  // TODO: Sebastian: REFACTORING
   private init(): void {
     // this.fillList().then(() => {
     //   this.loader.hide();
@@ -95,7 +95,6 @@ export class ShoppingListPage {
     //   this.loader.hide();
     // });
     this.shoppingListItems = getNavParam(this.navParams, 'shoppingListItems', 'object');
-    console.log("shopping items", this.shoppingListItems);
     if (!this.shoppingListItems) {
       this.shoppingListItems = [];
     }
@@ -107,7 +106,7 @@ export class ShoppingListPage {
 
     this.loader.show();
 
-    //TODO: Sebastian: Move logic to service
+    // TODO: Sebastian: Move logic to service
     return this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: ShoppingListItem[]) => {
 
       if (data) {
@@ -195,7 +194,7 @@ export class ShoppingListPage {
     this.shoppingListItems.map((item, index) => {
       if (this.isSelectAll) {
         item.isCheckedInShoppingList = true;
-        this.setOrderTotal({ status: 'checkedItem', price: this.pricingService.getShoppingListPrice(item.quantity, item.product, item.item_price)}, index);
+        this.setOrderTotal({ status: 'checkedItem', price: this.pricingService.getShoppingListPrice(item.quantity, item.product, item.item_price) }, index);
       } else {
         item.isCheckedInShoppingList = false;
         this.selectedItems = [];
@@ -221,14 +220,14 @@ export class ShoppingListPage {
   public onSearched($event: any): void {
 
     this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: ShoppingListItem[]) => {
-      //let it =  this.shoppingListProvider.search(data, $event);
+      // let it =  this.shoppingListProvider.search(data, $event);
       const params: any = {
         list: this.shoppingList,
         shoppingListItems: this.shoppingListProvider.search(data, $event),
         isCheckout: this.isCheckout,
         fromSearch: true
       };
-      //console.log( this.shoppingListProvider.search(data, $event));
+      // console.log( this.shoppingListProvider.search(data, $event));
 
       this.navigatorService.push(ShoppingListPage, params, { paramsEquality: getNavParam(this.navParams, 'fromSearch', 'boolean') ? false : true } as NavOptions).catch(err => console.error(err));
     });

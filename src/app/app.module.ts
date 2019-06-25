@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { IonicApp, IonicModule } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -15,8 +15,10 @@ import { IonicStorageModule } from '@ionic/storage';
 import { Badge } from '@ionic-native/badge';
 import { Geolocation } from '@ionic-native/geolocation';
 
+/*
 // Environments
 import { environment } from '@app/env';
+*/
 
 // Modules
 import { ComponentsModule } from '../components/components.module';
@@ -87,7 +89,8 @@ import { CustomErrorHandlerService } from '../services/error-handler/CustomError
 import { Page } from 'ionic-angular/navigation/nav-util';
 
 
-const errorHandler = environment.production ? CustomErrorHandlerService : IonicErrorHandler; //tslint:disable-line
+// const errorHandler = environment.production ? CustomErrorHandlerService : IonicErrorHandler; //tslint:disable-line
+
 
 @NgModule({
   declarations: pages,
