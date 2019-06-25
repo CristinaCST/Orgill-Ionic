@@ -88,15 +88,25 @@ export class AddToShoppingListPage implements OnInit {
       const productShoppingLists: ShoppingListResponse[] = JSON.parse(productShoppingListsResponse.d);
       const virtualLists: ShoppingList[] = [...this.shoppingLists];
 
-
-      for (const list of productShoppingLists) {
-        for (let i: number = 0; i < virtualLists.length; i++) {
-          if (virtualLists[i].ListID === list.shopping_list_id || this.listIsNotSameType(virtualLists[i])) {
-            this.invalidatedLists.push(virtualLists[i].ListID.toString());
-            virtualLists.splice(i, 1);
+      for (let virtualListIndex: number = 0; virtualListIndex < virtualLists.length; virtualListIndex++) {
+        let removed: boolean = false;
+        for (let productListIndex: number = 0; productListIndex < productShoppingLists.length; productListIndex++) {
+          if (virtualLists[virtualListIndex].ListID === productShoppingLists[productListIndex].shopping_list_id) {
+            this.invalidatedLists.push(virtualLists[virtualListIndex].ListID.toString());
+            virtualLists.splice(virtualListIndex, 1);
+            virtualListIndex--;
+            productShoppingLists.splice(productListIndex, 1);
+            productListIndex--;
+            removed = true;
+            break;
           }
         }
+        if (!removed && this.listIsNotSameType(virtualLists[virtualListIndex])) {
+          virtualLists.splice(virtualListIndex, 1);
+          virtualListIndex--;
+        }
       }
+      
 
       if (virtualLists.length > 0) {
         this.isAddBtnDisabled = false;
