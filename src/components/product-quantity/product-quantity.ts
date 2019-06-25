@@ -30,7 +30,7 @@ export class ProductQuantityComponent implements OnInit {
         this.program = program;
         this.productPrice = this.getDecimalPrice();
         this.quantity = this.getInitialQuantity();
-        this.setSavings();
+        this.handleQuantityChange();
       }
 
     });
