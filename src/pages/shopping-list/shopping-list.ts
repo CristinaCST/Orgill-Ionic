@@ -78,8 +78,9 @@ export class ShoppingListPage {
       }
     }
 
-    if (getNavParam(this.navParams, 'fromSearch', 'boolean')) {
-      this.init();
+
+    if (this.fromSearch) {
+      this.fillFromSearch();
     } else {
       this.fillList().then(() =>
         this.loader.hide()
@@ -88,20 +89,12 @@ export class ShoppingListPage {
   }
 
   // TODO: Sebastian: REFACTORING
-  private init(): void {
-    // this.fillList().then(() => {
-    //   this.loader.hide();
-    // }, () => {
-    //   this.loader.hide();
-    // }).catch(() => {
-    //   this.loader.hide();
-    // });
+  private fillFromSearch(): void {
     this.shoppingListItems = getNavParam(this.navParams, 'shoppingListItems', 'object');
     if (!this.shoppingListItems) {
       this.shoppingListItems = [];
     }
     this.content.resize();
-
   }
 
   private fillList(): Promise<void> {
@@ -115,14 +108,15 @@ export class ShoppingListPage {
         this.shoppingListItems = data;
         this.checkExpiredItems();
         this.content.resize();
+        this.loader.hide();
         return Promise.resolve();
       }
-      return Promise.reject('Empty');
+      return Promise.reject('No products');
 
-    }, err => {
-      console.error(err);
-      LoadingService.hideAll();
-    }).catch(error => { console.error(error); this.loader.hide(); });
+    }, rej => {
+      console.warn(rej);
+      this.loader.hide();
+    }).catch(error => { console.error(error); LoadingService.hideAll(); });
 
   }
 
@@ -219,13 +213,13 @@ export class ShoppingListPage {
     }
   }
 
-  public onSearched($event: any): void {
+  public onSearched(searchString: string): void {
 
     this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: ShoppingListItem[]) => {
       // let it =  this.shoppingListProvider.search(data, $event);
       const params: any = {
         list: this.shoppingList,
-        shoppingListItems: this.shoppingListProvider.search(data, $event),
+        shoppingListItems: this.shoppingListProvider.search(data, searchString),
         isCheckout: this.isCheckout,
         fromSearch: true
       };
@@ -290,8 +284,10 @@ export class ShoppingListPage {
   public doRefresh($event: any): void {
     this.fillList().then(() => {
       $event.complete();
+      this.loader.hide();
     }).catch(() => {
       $event.complete();
+      this.loader.hide();
     });
   }
 
