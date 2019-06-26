@@ -47,6 +47,7 @@ import { LoadingService } from '../services/loading/loading';
 import { ScannerService } from '../services/scanner/scanner';
 import { PricingService } from '../services/pricing/pricing';
 import { SecureActionsService } from '../services/secure-actions/secure-actions';
+import { SearchService } from '../services/search/search';
 
 // Pages
 import { MyApp } from './app.component';
@@ -143,6 +144,7 @@ import { Page } from 'ionic-angular/navigation/nav-util';
     ScannerService,
     PricingService,
     SecureActionsService,
+    SearchService,
     Geolocation,
     { provide: ErrorHandler, useClass: CustomErrorHandlerService }
   ]
