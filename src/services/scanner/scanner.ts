@@ -147,8 +147,10 @@ export class ScannerService {
                       this.productAlreadyInList = false;
 
                       // TODO: Change to constants_strings
-                      const itemName = newItem.product.NAME;
-                      content.message = Strings.ADDED_ITEM_TO_LIST;
+                      content.message = 'Added ' + newItem.product.NAME + ' to list';
+                      // WIP
+                     // const itemName = newItem.product.NAME;
+                     // content.message = Strings.ADDED_ITEM_TO_LIST;
                       this.events.publish(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST);
                       this.popoversService.show(content).subscribe(() => {
 
