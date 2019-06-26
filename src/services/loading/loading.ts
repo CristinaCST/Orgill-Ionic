@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Loading, LoadingController } from 'ionic-angular';
+import * as Constants from '../../util/constants';
+import * as Strings from '../../util/strings';
+import { PopoverContent, PopoversService } from '../../services/popovers/popovers';
 
 @Injectable()
 export class LoadingService {
@@ -12,8 +15,9 @@ export class LoadingService {
   public static activeLoading: LoadingService;   // The current showing loadingService instance
   private instance: boolean = false;  // Is this an instance or the actual service?
   private content: string;  // Content of instanace if it's given
+  public static loadingTimeout: number; // Holds timers for timeout
 
-  constructor(private readonly loadingCtrl: LoadingController) { }
+  constructor(private readonly loadingCtrl: LoadingController, private readonly popoversService: PopoversService) { }
 
   /**
    * Creates and returns a instance of this service
@@ -21,7 +25,7 @@ export class LoadingService {
    * @returns LoadingService instance that expose show() and hide()
    */
   public createLoader(content?: string): LoadingService {
-    const newLoader: LoadingService = new LoadingService(this.loadingCtrl);
+    const newLoader: LoadingService = new LoadingService(this.loadingCtrl, this.popoversService);
     newLoader.instance = true;  // We mark the object as an actual instance, this service being an actual instance (can't use instanceof)
     newLoader.content = content;
 
@@ -40,6 +44,8 @@ export class LoadingService {
     LoadingService.activeLoading = undefined;
     const index: number = LoadingService.activeQueue.indexOf(this); // Get the position in queue of this loader
 
+    clearTimeout(LoadingService.loadingTimeout); // Clear the timeout counter
+
     // Check if the object is actually in queue
     if (index > -1) {
       LoadingService.activeQueue.splice(index, 1);  // Remove it from the queue
@@ -53,6 +59,15 @@ export class LoadingService {
     this.alreadyExpired = false;
     this.activated = false;
     this.isLoadingPresent = false;
+  }
+
+  /**
+   * Throws an error using the popover service and hides all loaders.
+   */
+  private throwLoadingError(): void {
+    LoadingService.hideAll();
+    const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.POPOVER_TIMEOUT_ERROR_MESSAGE);
+    this.popoversService.show(content);
   }
 
   /**
@@ -108,6 +123,10 @@ export class LoadingService {
 
     this.loading.present().then(() => {   // Try to show it
       this.isLoadingPresent = true; // Mark it if it is going to show here so
+
+      LoadingService.loadingTimeout = setTimeout(() => {  //Register the timeout handler  
+        this.throwLoadingError();
+      }, Constants.TIMEOUT_INTERVAL);
 
       // We subscribe to the event that get's called when a loader leaves, this allows a safe check in hide() method relying on valid data
       this.loading.willLeave.subscribe(() => {
