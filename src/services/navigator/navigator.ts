@@ -30,7 +30,7 @@ export class NavigatorService {
     }
 
     public get canGoBack(): boolean {
-        return this._navController.canGoBack();
+        return this.navController.canGoBack();
     }
 
     constructor(private readonly app: App, private readonly platform: Platform, private readonly secureActions: SecureActionsService, private readonly events: Events) {
