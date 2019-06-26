@@ -46,7 +46,7 @@ export class ProductPage implements OnInit {
     public navParams: NavParams,
     private readonly loadingService: LoadingService,
     private readonly programProvider: ProgramProvider,
-    private readonly popoversProvider: PopoversService,
+    private readonly popoversService: PopoversService,
     private readonly shoppingListProvider: ShoppingListsProvider,
     private readonly pricingService: PricingService,
     private readonly hotDealService: HotDealService,
@@ -77,8 +77,8 @@ export class ProductPage implements OnInit {
         const hotDealProgram: ItemProgram = JSON.parse(program.d);
         this.productPrograms = [hotDealProgram];
         if (this.productPrograms.length === 0) {
-          const content: PopoverContent = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, Strings.MODAL_BUTTON_OK, undefined, undefined, Constants.POPOVER_ERROR);
-          this.popoversProvider.show(content);
+          const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, Strings.MODAL_BUTTON_OK, undefined, undefined, Constants.POPOVER_ERROR);
+          this.popoversService.show(content);
           this.navigatorService.pop().catch(err => console.error(err));
           return;
         }
@@ -95,8 +95,8 @@ export class ProductPage implements OnInit {
         if (programs) {
           this.productPrograms = JSON.parse(programs.d);
           if (this.productPrograms.length === 0) {
-            const content: PopoverContent = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, Strings.MODAL_BUTTON_OK, undefined, undefined, Constants.POPOVER_ERROR);
-            this.popoversProvider.show(content);
+            const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, Strings.MODAL_BUTTON_OK, undefined, undefined, Constants.POPOVER_ERROR);
+            this.popoversService.show(content);
             this.navigatorService.pop().catch(err => console.error(err));
             return;
           }
@@ -154,12 +154,12 @@ export class ProductPage implements OnInit {
 
   public addToShoppingList(): void {
     if (this.product.QTY_ROUND_OPTION === 'Y' && this.isMinimum70percentQuantity()) {
-      const content: PopoverContent = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.Y_SHELF_PACK_QUANTITY_WARNING, Strings.MODAL_BUTTON_OK, undefined, undefined);
-      this.popoversProvider.show(content);
+      const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.Y_SHELF_PACK_QUANTITY_WARNING, Strings.MODAL_BUTTON_OK, undefined, undefined);
+      this.popoversService.show(content);
       this.programProvider.setPackQuantity(true);
     } else if (this.product.QTY_ROUND_OPTION === 'X' && this.quantity % Number(this.product.SHELF_PACK) !== 0) {
-      const content: PopoverContent = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.X_SHELF_PACK_QUANTITY_WARNING, Strings.MODAL_BUTTON_OK, undefined, undefined);
-      this.popoversProvider.show(content);
+      const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.X_SHELF_PACK_QUANTITY_WARNING, Strings.MODAL_BUTTON_OK, undefined, undefined);
+      this.popoversService.show(content);
     } else {
       this.navigatorService.push(AddToShoppingListPage, {
         'product': this.product,

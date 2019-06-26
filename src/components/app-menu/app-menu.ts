@@ -42,7 +42,7 @@ export class AppMenuComponent implements OnInit {
   @Input('rootPage') public rootPage: any;
   @Input('menuContent') public menuContent: any;
 
-  constructor(private readonly popoversProvider: PopoversService,
+  constructor(private readonly popoversService: PopoversService,
               private readonly authServiceProvider: AuthService,
               private readonly catalogsProvider: CatalogsProvider,
               private readonly translateProvider: TranslateWrapperService,
@@ -101,7 +101,7 @@ export class AppMenuComponent implements OnInit {
       positiveButtonText: Strings.MODAL_BUTTON_YES
     };
 
-    this.popoversProvider.show(content).subscribe((data: DefaultPopoverResult) => {
+    this.popoversService.show(content).subscribe((data: DefaultPopoverResult) => {
         if (data.optionSelected === 'OK') {
           // this.authServiceProvider.logoutDeleteData();
           this.authServiceProvider.logout();

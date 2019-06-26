@@ -42,7 +42,7 @@ export class ShoppingListPage {
     private readonly navParams: NavParams,
     private readonly navigatorService: NavigatorService,
     private readonly shoppingListProvider: ShoppingListsProvider,
-    private readonly popoversProvider: PopoversService,
+    private readonly popoversService: PopoversService,
     private readonly translator: TranslateWrapperService,
     private readonly events: Events,
     private readonly loading: LoadingService,
@@ -123,8 +123,8 @@ export class ShoppingListPage {
   private checkExpiredItems(): void {
     const isExpired: boolean = this.shoppingListItems.filter(item => item.isExpired).length > 0;
     if (isExpired) {
-      const content: PopoverContent = this.popoversProvider.setContent(Strings.POPOVER_EXPIRED_ITEMS_TITLE, Strings.POPOVER_EXPIRED_ITEMS_MESSAGE);
-      this.popoversProvider.show(content);
+      const content: PopoverContent = this.popoversService.setContent(Strings.POPOVER_EXPIRED_ITEMS_TITLE, Strings.POPOVER_EXPIRED_ITEMS_MESSAGE);
+      this.popoversService.show(content);
     }
   }
 
@@ -200,8 +200,8 @@ export class ShoppingListPage {
 
   public continue(): void {
     if (this.nrOfSelectedItems === 0) {
-      const content: PopoverContent = this.popoversProvider.setContent(Strings.SHOPPING_LIST_NO_ITEMS_TITLE, Strings.SHOPPING_LIST_NO_ITEMS_MESSAGE);
-      this.popoversProvider.show(content);
+      const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_NO_ITEMS_TITLE, Strings.SHOPPING_LIST_NO_ITEMS_MESSAGE);
+      this.popoversService.show(content);
     } else {
       const array: ShoppingListItem[] = this.selectedItems.filter(item => item !== undefined);
       const params: any = {
@@ -263,15 +263,15 @@ export class ShoppingListPage {
     if (this.isCustomList) {
       message = this.translator.translate(Strings.SHOPPING_LIST_CUSTOM_DESCRIPTION);
     }
-    const content: PopoverContent = this.popoversProvider.setContent(this.shoppingList.ListName, message + this.shoppingList.ListDescription);
-    this.popoversProvider.show(content);
+    const content: PopoverContent = this.popoversService.setContent(this.shoppingList.ListName, message + this.shoppingList.ListDescription);
+    this.popoversService.show(content);
   }
 
   private removeList(): void {
-    const content: PopoverContent = this.popoversProvider.setContent(Strings.SHOPPING_LIST_DELETE_CONF_TITLE, Strings.SHOPPING_LIST_DELETE_CONF_MESSAGE,
+    const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_DELETE_CONF_TITLE, Strings.SHOPPING_LIST_DELETE_CONF_MESSAGE,
       Strings.MODAL_BUTTON_YES, Strings.MODAL_BUTTON_CANCEL, undefined, Constants.POPOVER_DELETE_LIST_CONFIRMATION);
 
-    this.popoversProvider.show(content).subscribe((data: DefaultPopoverResult) => {
+    this.popoversService.show(content).subscribe((data: DefaultPopoverResult) => {
       if (data.optionSelected === 'OK') {
         this.shoppingListProvider.removeShoppingList(this.shoppingList.ListID).subscribe(removedData => {
           this.events.publish('DeletedList', this.shoppingList.ListID);

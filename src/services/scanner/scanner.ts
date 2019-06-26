@@ -38,7 +38,7 @@ export class ScannerService {
               private readonly translateProvider: TranslateWrapperService,
               private readonly productProvider: ProductProvider,
               private readonly shoppingListProvider: ShoppingListsProvider,
-              private readonly popoversProvider: PopoversService,
+              private readonly popoversService: PopoversService,
               private readonly platform: Platform,
               private readonly events: Events
   ) { }
@@ -128,10 +128,10 @@ export class ScannerService {
 
             if (this.isMarketOnly && ((this.shoppingList.ListType.toString() !== Constants.MARKET_ONLY_LIST_TYPE) && (this.shoppingList.ListType.toString() !== Constants.MARKET_ONLY_CUSTOM_TYPE))) {
               content.message = this.translateProvider.translate(Constants.SCAN_MARKET_ONLY_PRODUCT);
-              this.popoversProvider.show(content);
+              this.popoversService.show(content);
             } else if (!this.isMarketOnly && ((this.shoppingList.ListType.toString() === Constants.MARKET_ONLY_LIST_TYPE) || (this.shoppingList.ListType.toString() === Constants.MARKET_ONLY_CUSTOM_TYPE))) {
               content.message = this.translateProvider.translate(Constants.SCAN_REGULAR_PRODUCT);
-              this.popoversProvider.show(content);
+              this.popoversService.show(content);
             } else {
               this.isProductInList().subscribe(resp => {
                 const data: boolean = JSON.parse(resp.d).Status === 'True';
@@ -147,16 +147,17 @@ export class ScannerService {
                       this.productAlreadyInList = false;
 
                       // TODO: Change to constants_strings
-                      content.message = 'Added ' + newItem.product.NAME + ' to list';
-                      this.events.publish('scannedProductAdded');
-                      this.popoversProvider.show(content).subscribe(() => {
+                      const itemName = newItem.product.NAME;
+                      content.message = Strings.ADDED_ITEM_TO_LIST;
+                      this.events.publish(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST);
+                      this.popoversService.show(content).subscribe(() => {
 
                       });
 
                     });
                 } else {
                   content.message = this.translateProvider.translate(Strings.SHOPPING_LIST_EXISTING_PRODUCT);
-                  this.popoversProvider.show(content);
+                  this.popoversService.show(content);
                   this.productAlreadyInList = true;
                 }
               });
@@ -165,7 +166,7 @@ export class ScannerService {
         } else {
           // TODO: Check string if its fine
           content.message = this.translateProvider.translate(Constants.SCAN_NOT_FOUND);
-          this.popoversProvider.show(content);
+          this.popoversService.show(content);
           this.noProductFound = true;
           // this.scan();
         }
@@ -175,10 +176,10 @@ export class ScannerService {
           const content: PopoverContent = {
             title: Strings.GENERIC_ERROR, message: Constants.POPOVER_CAMERA_PERMISSION_NOT_GRANTED
           };
-          this.popoversProvider.show(content);
+          this.popoversService.show(content);
         } else {
           const content: PopoverContent = { title: Strings.GENERIC_ERROR, message: Strings.SCAN_ERROR };
-          this.popoversProvider.show(content);
+          this.popoversService.show(content);
         }
       });
   }

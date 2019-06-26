@@ -98,7 +98,6 @@ export class Catalog implements OnInit {
       const responseData: Category[] = JSON.parse(response.d);
       if (responseData.length > 0) {
         const categories: Category[] = this.sortCategories(responseData);
-
         this.navigatorService.push(Catalog, {
           programName: category.CatName,
           programNumber: this.programNumber,

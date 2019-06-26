@@ -44,7 +44,7 @@ export class OneSignalService {
         private readonly badge: Badge,   // Badge for icon notification
         private readonly hotDealService: HotDealService,   // Provider to call to navigate to hotdeals provided through a push notification
         private readonly events: Events,     // Propagate one signal event to be used in other places
-        private readonly popoverService: PopoversService,     // Needed for permission modals,
+        private readonly popoversService: PopoversService,     // Needed for permission modals,
         private readonly secureActions: SecureActionsService,
         private readonly platform: Platform,
         private readonly geolocation: Geolocation,
@@ -262,8 +262,8 @@ export class OneSignalService {
                 positiveButtonText: Strings.MODAL_BUTTON_OK
             };
 
-            this.popoverService.show(content);
-            /*this.popoverService.show(content).subscribe((result: {}) => {
+            this.popoversService.show(content);
+            /*this.popoversService.show(content).subscribe((result: {}) => {
                 resolve(result);
             });*/
         });
@@ -279,7 +279,7 @@ export class OneSignalService {
             negativeButtonText: Strings.MODAL_BUTTON_NO
         };
 
-        this.popoverService.show(content).subscribe((result) => {
+        this.popoversService.show(content).subscribe((result) => {
             if (result['optionSelected'] == 'OK') {
                 this.oneSignal.setSubscription(true);
 
@@ -528,7 +528,7 @@ export class OneSignalService {
         };
 
         // Return the popover observable
-        return this.popoverService.show(popoverContent) as Observable<DefaultPopoverResult>;
+        return this.popoversService.show(popoverContent) as Observable<DefaultPopoverResult>;
     }
 
 

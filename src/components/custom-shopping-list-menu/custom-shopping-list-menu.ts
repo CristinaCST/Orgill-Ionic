@@ -21,7 +21,7 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
   @Output() public back: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private readonly shoppingListsProvider: ShoppingListsProvider,
-              private readonly popoversProvider: PopoversService,
+              private readonly popoversService: PopoversService,
               private readonly events: Events,
               private readonly navigatorService: NavigatorService) {
   }
@@ -31,9 +31,9 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
   }
 
   public addNewList(): void {
-    const content: PopoverContent = this.popoversProvider.setContent(Strings.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined, Strings.MODAL_BUTTON_SAVE, undefined , Strings.MODAL_BUTTON_CANCEL, Constants.POPOVER_NEW_SHOPPING_LIST);
+    const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined, Strings.MODAL_BUTTON_SAVE, undefined , Strings.MODAL_BUTTON_CANCEL, Constants.POPOVER_NEW_SHOPPING_LIST);
 
-    const subscription: Subscription = this.popoversProvider.show(content).subscribe((data: CustomListPopoverResult) => {
+    const subscription: Subscription = this.popoversService.show(content).subscribe((data: CustomListPopoverResult) => {
 
       if (data.optionSelected !== 'OK') {
         return;
@@ -54,8 +54,8 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
               this.customShoppingLists.push(list);
             });
           } else {
-            const innerContent: PopoverContent = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);
-            this.popoversProvider.show(innerContent);
+            const innerContent: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);
+            this.popoversService.show(innerContent);
           }
           subscription.unsubscribe();
         });

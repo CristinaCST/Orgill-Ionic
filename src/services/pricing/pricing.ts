@@ -8,7 +8,7 @@ import * as Constants from '../../util/constants';
 @Injectable()
 export class PricingService {
 
-  constructor(private readonly popoversProvider: PopoversService) {
+  constructor(private readonly popoversService: PopoversService) {
 
   }
 
@@ -25,7 +25,7 @@ export class PricingService {
       positiveButtonText: Strings.MODAL_BUTTON_OK
     };
 
-    this.popoversProvider.show(content);
+    this.popoversService.show(content);
   }
 
   /**

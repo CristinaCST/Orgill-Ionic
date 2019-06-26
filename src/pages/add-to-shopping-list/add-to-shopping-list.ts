@@ -41,7 +41,7 @@ export class AddToShoppingListPage implements OnInit {
   constructor(public navigatorService: NavigatorService,
               public navParams: NavParams,
               private readonly shoppingListsProvider: ShoppingListsProvider,
-              private readonly popoversProvider: PopoversService,
+              private readonly popoversService: PopoversService,
               private readonly formBuilder: FormBuilder,
               private readonly loadingService: LoadingService,
               private readonly programProvider: ProgramProvider) {
@@ -115,8 +115,8 @@ export class AddToShoppingListPage implements OnInit {
       } else {
         this.listForm.setValue({ 'listOptions': '-1' });
         this.isAddBtnDisabled = true;
-        const content: PopoverContent = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, this.isMarketOnlyProduct ? Strings.NO_LISTS_FOR_MARKET_ONLY_PRODUCT : Strings.NO_LISTS_FOR_REGULAR_PRODUCT);
-        this.popoversProvider.show(content);
+        const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, this.isMarketOnlyProduct ? Strings.NO_LISTS_FOR_MARKET_ONLY_PRODUCT : Strings.NO_LISTS_FOR_REGULAR_PRODUCT);
+        this.popoversService.show(content);
       }
       this.loader.hide();
     }).catch(error => console.error(error));
@@ -153,9 +153,9 @@ export class AddToShoppingListPage implements OnInit {
   }
 
   public newShoppingList(): void {
-    const content: PopoverContent = this.popoversProvider.setContent(Strings.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined,
+    const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined,
       Strings.MODAL_BUTTON_SAVE, Strings.MODAL_BUTTON_CANCEL, undefined, Constants.POPOVER_NEW_SHOPPING_LIST);
-    this.subscription = this.popoversProvider.show(content).subscribe((data: CustomListPopoverResult) => {
+    this.subscription = this.popoversService.show(content).subscribe((data: CustomListPopoverResult) => {
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
           data.type = data.type === 'default' ? Constants.CUSTOM_SHOPPING_LIST_TYPE : Constants.MARKET_ONLY_CUSTOM_TYPE;
@@ -172,8 +172,8 @@ export class AddToShoppingListPage implements OnInit {
               this.selectList(list);
             });
           } else {
-            const modalContent: PopoverContent = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);
-            this.popoversProvider.show(modalContent);
+            const modalContent: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);
+            this.popoversService.show(modalContent);
           }
           this.subscription.unsubscribe();
         });
@@ -187,8 +187,8 @@ export class AddToShoppingListPage implements OnInit {
 
   public add(): void {
     if (!this.selectedProgram) {
-      const content: PopoverContent = this.popoversProvider.setContent(Strings.SHOPPING_LIST_NO_PROGRAM_TITLE, Strings.SHOPPING_LIST_NO_PROGRAM_MESSAGE, undefined);
-      this.popoversProvider.show(content);
+      const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_NO_PROGRAM_TITLE, Strings.SHOPPING_LIST_NO_PROGRAM_MESSAGE, undefined);
+      this.popoversService.show(content);
       return;
     }
 
@@ -217,7 +217,7 @@ export class AddToShoppingListPage implements OnInit {
       const response: boolean = (temp === 'True');
       if (response) {
         this.isAddBtnDisabled = true;
-        this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_EXISTING_PRODUCT));
+        this.reset(this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_EXISTING_PRODUCT));
       } else {
         this.listForm.value.listOptions = listId;
         this.isAddBtnDisabled = false;
@@ -227,7 +227,7 @@ export class AddToShoppingListPage implements OnInit {
   }
 
   public reset(content: PopoverContent): void {
-    this.popoversProvider.show(content);
+    this.popoversService.show(content);
     this.isAddBtnDisabled = true;
     this.listForm.controls.listOptions.reset();
   }
@@ -242,14 +242,14 @@ export class AddToShoppingListPage implements OnInit {
     const alreadyAdded: boolean = typeof this.invalidatedLists.find(id => id === selectedList.ListID) !== 'undefined' ? true : false;
 
     if (alreadyAdded) {
-      this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_EXISTING_PRODUCT));
+      this.reset(this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_EXISTING_PRODUCT));
       this.seekValidList();
     } else if (this.isMarketOnlyProduct && differentType) {
-      this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_MARKET_ONLY_PRODUCT));
+      this.reset(this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_MARKET_ONLY_PRODUCT));
       this.seekValidList();
     } else if (!this.isMarketOnlyProduct && differentType) {
       this.seekValidList();
-      this.reset(this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_DEFAULT_PRODUCT));
+      this.reset(this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_DEFAULT_PRODUCT));
     } else {
       this.checkProductInList(selectedList.ListID);
       this.isAddBtnDisabled = false;

@@ -7,7 +7,7 @@ import { LoadingService } from '../loading/loading';
 @Injectable()
 export class CustomErrorHandlerService implements IonicErrorHandler {
 
-  constructor(private readonly popoversProvider: PopoversService, public loadingService: LoadingService) {
+  constructor(private readonly popoversService: PopoversService, public loadingService: LoadingService) {
   }
 
   public async handleError(error: any): Promise<void> {
@@ -36,12 +36,12 @@ export class CustomErrorHandlerService implements IonicErrorHandler {
       }
     }
 
-    const content: PopoverContent = this.popoversProvider.setContent(Strings.DEFAULT_HTTP_ERROR, errorString);
+    const content: PopoverContent = this.popoversService.setContent(Strings.DEFAULT_HTTP_ERROR, errorString);
     this.showErrorModal(content);
   }
 
   public showErrorModal(content: PopoverContent): void {
     LoadingService.hideAll();
-    this.popoversProvider.show(content);
+    this.popoversService.show(content);
   }
 }

@@ -25,7 +25,7 @@ export class Login {
               private readonly authService: AuthService,
               private readonly loadingService: LoadingService,
               private readonly translateProvider: TranslateWrapperService,
-              private readonly popoversProvider: PopoversService,
+              private readonly popoversService: PopoversService,
               private readonly secureActions: SecureActionsService) {
 
                 this.loginLoader = this.loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_LOGIN));
@@ -47,8 +47,8 @@ export class Login {
       }, error => {
         console.error(error);
         this.loginLoader.hide();
-        const content: PopoverContent = this.popoversProvider.setContent(Strings.LOGIN_ERROR_TITLE, Strings.LOGIN_ERROR_INVALID);
-        this.popoversProvider.show(content);
+        const content: PopoverContent = this.popoversService.setContent(Strings.LOGIN_ERROR_TITLE, Strings.LOGIN_ERROR_INVALID);
+        this.popoversService.show(content);
       }
     );
   }
@@ -60,8 +60,8 @@ export class Login {
       return true;
     }
 
-    const content: PopoverContent = this.popoversProvider.setContent(Strings.LOGIN_ERROR_TITLE, Strings.LOGIN_ERROR_REQUIRED);
-    this.popoversProvider.show(content);
+    const content: PopoverContent = this.popoversService.setContent(Strings.LOGIN_ERROR_TITLE, Strings.LOGIN_ERROR_REQUIRED);
+    this.popoversService.show(content);
     return false;
   }
 

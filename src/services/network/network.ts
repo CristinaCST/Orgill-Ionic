@@ -8,7 +8,7 @@ export class NetworkService {
 
   private notified: boolean = false;
 
-  constructor(private readonly network: Network, private readonly popoversProvider: PopoversService) {
+  constructor(private readonly network: Network, private readonly popoversService: PopoversService) {
 
     if (this.network.type === 'none') {
       this.openNetworkModal();
@@ -26,7 +26,7 @@ export class NetworkService {
     this.network.onConnect()
       .subscribe(() => {
         this.notified = false;
-        this.popoversProvider.closeModal();
+        this.popoversService.closeModal();
       });
   }
 
@@ -36,7 +36,7 @@ export class NetworkService {
     }
 
     this.notified = true;
-    const content: PopoverContent = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.POPOVER_TIMEOUT_ERROR_MESSAGE, Strings.MODAL_BUTTON_OK);
-    this.popoversProvider.show(content);
+    const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.POPOVER_TIMEOUT_ERROR_MESSAGE, Strings.MODAL_BUTTON_OK);
+    this.popoversService.show(content);
   }
 }

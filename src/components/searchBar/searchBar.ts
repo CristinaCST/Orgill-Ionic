@@ -16,7 +16,7 @@ export class SearchBarComponent {
   public searchString: string;
   public onInitSearchStringCopy: string;
 
-  constructor(private readonly popoversProvider: PopoversService, private readonly navigatorService: NavigatorService, private readonly searchService: SearchService) { }
+  constructor(private readonly popoversService: PopoversService, private readonly navigatorService: NavigatorService, private readonly searchService: SearchService) { }
 
   public back(): void {
     this.navigatorService.backButtonAction();
@@ -29,12 +29,11 @@ export class SearchBarComponent {
     this.onInitSearchStringCopy = this.searchService.lastSearchString;
   }
 
-
   public search(): void {
 
     if (!this.searchString || this.searchString.length < 3) {
-      const content: PopoverContent = this.popoversProvider.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SEARCH_INVALID_INPUT);
-      this.popoversProvider.show(content);
+      const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SEARCH_INVALID_INPUT);
+      this.popoversService.show(content);
       return;
     }
     this.searchService.lastSearchString = this.searchString;
