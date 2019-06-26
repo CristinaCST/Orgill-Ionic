@@ -45,7 +45,7 @@ export class SearchBarComponent {
       // Optional aestethic fix, without it, the searchString disappears before navigation is done.
       setTimeout(() => {
         this.searchString = '';
-      }, 1500);
+      }, 1.5 * 1000);
     }
   }
 
