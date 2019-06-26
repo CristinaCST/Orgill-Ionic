@@ -35,14 +35,6 @@ export class ProductQuantityComponent implements OnInit {
     if (this.quantityFromList > 0) {
       this.quantity = this.validateQuantity(this.quantityFromList);
     }
-    // this.quantity = this.validateQuantity(this.quantityFromList);
-
-    /* this.programProvider.isPackQuantity().subscribe(value => {
-       if (value === true && this.product) {
-         this.quantity = this.quantityFromList ? this.quantityFromList : Number(this.product.SHELF_PACK);
-         this.handleQuantityChange();
-       }
-     });*/
     this.setSavings();
   }
 
@@ -124,7 +116,7 @@ export class ProductQuantityComponent implements OnInit {
   }
 
   public ngOnChanges(): void {
-   // this.handleQuantityChange();
+    this.handleQuantityChange();
   }
 
   private validateQuantity(suggestedValue: number): number {
