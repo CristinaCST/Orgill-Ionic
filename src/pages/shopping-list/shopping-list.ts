@@ -24,7 +24,20 @@ import { PricingService } from '../../services/pricing/pricing';
 export class ShoppingListPage {
   @ViewChild(Content) private readonly content: Content;
 
-  public isDeleteMode: boolean = false;
+  private _deleteMode: boolean = false;
+
+  public get isDeleteMode(): boolean {
+    return this._deleteMode;
+  }
+
+  public set isDeleteMode(value: boolean) {
+    this._deleteMode = value;
+    if (!value) {
+      this.selectedItems = [];
+      this.shoppingListItems.forEach(item => item.isCheckedInShoppingList = false);
+    }
+  }
+
   private shoppingList: ShoppingList;
   private selectedItems: ShoppingListItem[] = [];
   private shoppingListItems: ShoppingListItem[] = [];
@@ -55,12 +68,11 @@ export class ShoppingListPage {
 
 
   public ionViewWillLeave(): void {
-    this.events.unsubscribe('scannedProductAdded');
+    this.events.unsubscribe(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST);
   }
 
   public ionViewWillEnter(): void {
-    // this.fillList();
-    this.events.subscribe('scannedProductAdded', () => {
+    this.events.subscribe(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST, () => {
       this.fillList();
     });
 
@@ -82,9 +94,7 @@ export class ShoppingListPage {
     if (this.fromSearch) {
       this.fillFromSearch();
     } else {
-      this.fillList().then(() =>
-        this.loader.hide()
-    );
+      this.fillList();
     }
   }
 
@@ -98,24 +108,19 @@ export class ShoppingListPage {
   }
 
   private fillList(): Promise<void> {
+    this.shoppingListItems = [];
 
     this.loader.show();
 
-    // TODO: Sebastian: Move logic to service
     return this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: ShoppingListItem[]) => {
 
       if (data) {
         this.shoppingListItems = data;
         this.checkExpiredItems();
         this.content.resize();
-        this.loader.hide();
-        return Promise.resolve();
       }
-      return Promise.reject('No products');
-
-    }, rej => {
-      console.warn(rej);
       this.loader.hide();
+      return Promise.resolve();
     }).catch(error => { console.error(error); LoadingService.hideAll(); });
 
   }
@@ -129,12 +134,13 @@ export class ShoppingListPage {
   }
 
   public delete(): void {
-    const array: ShoppingListItem[] = this.selectedItems.filter(item => item != undefined);
+    const array: ShoppingListItem[] = this.selectedItems.filter(item => item !== undefined && item !== null);
     let ok: boolean = true;
+
     if (array) {
       array.forEach(elem => {
         this.shoppingListProvider.deleteProductFromList(this.shoppingList.ListID, elem.product.SKU, elem.program_number).subscribe(
-          data => {},
+          data => { },
           error => {
             ok = false;
             console.error(error);
@@ -143,17 +149,38 @@ export class ShoppingListPage {
       });
       if (ok) {
         this.selectedItems.map((item, index) => {
-          if (item !== null) {
-            const price: string = (item.item_price * item.quantity).toFixed(Constants.DECIMAL_NUMBER);
-            this.setOrderTotal({ status: 'uncheckedItem', price }, index);
-            this.shoppingListItems = this.shoppingListItems.filter(elem => elem.product.SKU !== item.product.SKU);
+          if (item !== null && item !== undefined) {
+            this.setOrderTotal({ status: 'uncheckedItem' }, index);
           }
         });
+
+        const checkedItems: ShoppingListItem[] = this.shoppingListItems.filter(item => item.isCheckedInShoppingList);  //  Workaround for the fact that setOrderTotal actually unselects items 
+        for (let i: number = this.shoppingListItems.length - 1; i >= 0; i--) {
+          for (let j: number = checkedItems.length - 1; j >= 0; j--) {
+            if (this.shoppingListItems[i].product.SKU === checkedItems[j].product.SKU) {
+              checkedItems.splice(j, 1);      // Safe splice as we break out of this loop after this if
+              this.shoppingListItems.splice(i, 1);  // Safe splice since we iterate from the end
+              break;
+            }
+          }
+        }
+
+        if (this.shoppingListItems.length === 0) {
+          this.isDeleteMode = false;
+          if (this.isCheckout) {
+            this.navigatorService.pop();
+          }
+        }
       }
     }
   }
 
   public checkout(): void {
+    if (this.shoppingListItems.length === 0) {
+      const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_EMPTY_TITLE, Strings.SHOPPING_LIST_EMPTY_MESSAGE);
+      this.popoversService.show(content);
+      return;
+    }
     const params: any = {
       isCheckout: true,
       list: this.shoppingList,
@@ -162,17 +189,20 @@ export class ShoppingListPage {
     this.navigatorService.push(ShoppingListPage, params).catch(err => console.error(err));
   }
 
-  private setOrderTotal(event: { status: string, price: number | string }, index: number): void {
+  private setOrderTotal(event: { status: string}, index: number): void {
+
+    const item: ShoppingListItem = this.shoppingListItems[index];
+    const price: number = this.pricingService.getShoppingListPrice(item.quantity, item.product, item.item_price);
     switch (event.status) {
       case 'checkedItem':
         this.selectedItems[index] = this.shoppingListItems[index];
-        this.nrOfSelectedItems += 1;
-        this.orderTotal += typeof event.price === 'number' ? event.price : parseFloat(event.price as string);
+        this.nrOfSelectedItems++;
+        this.orderTotal += price;
         break;
       case 'uncheckedItem':
         this.selectedItems[index] = undefined;
-        this.nrOfSelectedItems -= 1;
-        this.orderTotal -= typeof event.price === 'number' ? event.price : parseFloat(event.price as string);
+        this.nrOfSelectedItems--;
+        this.orderTotal -= price;
         break;
       default:
     }
@@ -190,7 +220,7 @@ export class ShoppingListPage {
     this.shoppingListItems.map((item, index) => {
       if (this.isSelectAll) {
         item.isCheckedInShoppingList = true;
-        this.setOrderTotal({ status: 'checkedItem', price: this.pricingService.getShoppingListPrice(item.quantity, item.product, item.item_price) }, index);
+        this.setOrderTotal({ status: 'checkedItem' }, index);
       } else {
         item.isCheckedInShoppingList = false;
         this.selectedItems = [];
@@ -284,10 +314,8 @@ export class ShoppingListPage {
   public doRefresh($event: any): void {
     this.fillList().then(() => {
       $event.complete();
-      this.loader.hide();
     }).catch(() => {
       $event.complete();
-      this.loader.hide();
     });
   }
 
@@ -296,15 +324,19 @@ export class ShoppingListPage {
   }
 
   public touchstart(index: number): void {
+    if (this.isCheckout) {
+      return;
+    }
+    
     this.holdTimeoutReference = setTimeout(() => {
-      this.shoppingListItems[index].isCheckedInShoppingList = true;
-      this.selectedItems[index] = this.shoppingListItems[index];
-      this.nrOfSelectedItems += 1;
+      const item: ShoppingListItem = this.shoppingListItems[index];
+      item.isCheckedInShoppingList = true;
+      this.setOrderTotal({ status: 'checkedItem' }, index);
       this.isDeleteMode = true;
       this.navigatorService.oneTimeBackButtonOverride(() => {
-        this.isDeleteMode = false;
+       this.isDeleteMode = false;
       });
-    }, Constants.HOLD_TIME_IN_MS_TO_DELETE_MODE);
+    }, Constants.HOLD_TIME_TO_DELETE_MODE);
 
   }
 

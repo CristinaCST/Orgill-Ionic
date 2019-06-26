@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content (ionScrollStart)="scrollStart()">
-  <ion-refresher *ngIf="!fromSearch" slot="fixed" (ionRefresh)="doRefresh($event)" (ionStart)="refreshPulling($event)">
+  <ion-refresher *ngIf="!fromSearch && !isCheckout && !isDeleteMode" slot="fixed" (ionRefresh)="doRefresh($event)" (ionStart)="refreshPulling($event)">
     <ion-refresher-content>
     </ion-refresher-content>
   </ion-refresher>

@@ -133,6 +133,8 @@ export const SHOPPING_LIST_CUSTOM_DESCRIPTION: string = 'shopping_list_custom_de
 export const SHOPPING_LIST_EXISTING_PRODUCT: string = 'shopping_list_existing_product';
 export const SHOPPING_LIST_NO_PROGRAM_TITLE: string = 'shopping_list_no_program_title';
 export const SHOPPING_LIST_NO_PROGRAM_MESSAGE: string = 'shopping_list_no_program_message';
+export const SHOPPING_LIST_EMPTY_TITLE: string = 'shopping_list_empty_title';
+export const SHOPPING_LIST_EMPTY_MESSAGE: string = 'shopping_list_empty_message';
 
 export const SHOPPING_LIST_NO_ITEMS_TITLE: string = 'shopping_list_no_items_title';
 export const SHOPPING_LIST_NO_ITEMS_MESSAGE: string = 'shopping_list_no_items_message';

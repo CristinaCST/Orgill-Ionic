@@ -205,6 +205,8 @@
   "one_signal_permission_reminder":"Orgill requires push notification permissions to send you hot deals which were declined before. Please go to your settings and give those permissions if you want push notifications.",
   "one_signal_subscription_reminder":"Would you like to receive push notifications with hot deals?",
 
-  "savings_text":"Savings"
+  "savings_text":"Savings",
+  "shopping_list_empty_title":"Empty list",
+  "shopping_list_empty_message":"Shopping list is empty."
 
 }
