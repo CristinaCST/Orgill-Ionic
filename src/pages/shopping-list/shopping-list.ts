@@ -36,6 +36,7 @@ export class ShoppingListPage {
   private readonly menuCustomButtons: any[] = [];
   private readonly loader: LoadingService;
   private holdTimeoutReference: number;
+  public fromSearch: boolean = false;
 
   constructor(
     private readonly navParams: NavParams,
@@ -65,7 +66,8 @@ export class ShoppingListPage {
 
     this.shoppingList = getNavParam(this.navParams, 'list', 'object');
     this.isCheckout = getNavParam(this.navParams, 'isCheckout', 'boolean');
-
+    this.fromSearch = getNavParam(this.navParams, 'fromSearch', 'boolean');
+  
     this.isCustomList = !(this.shoppingList.ListType !== Constants.DEFAULT_LIST_TYPE && this.shoppingList.ListType !== Constants.MARKET_ONLY_LIST_TYPE);
     if (!this.isCustomList) {
       if (this.menuCustomButtons.map(d => d.action).indexOf('deleteList') === -1) {
