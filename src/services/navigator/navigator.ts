@@ -29,6 +29,10 @@ export class NavigatorService {
         this._navController = value;
     }
 
+    public get canGoBack(): boolean {
+        return this._navController.canGoBack();
+    }
+
     constructor(private readonly app: App, private readonly platform: Platform, private readonly secureActions: SecureActionsService, private readonly events: Events) {
         this.navController = this.app.getActiveNavs()[0];  // Grab it at construction
     }
@@ -100,10 +104,6 @@ export class NavigatorService {
         }*/
         this.announceTransition(NavigationEventType.SETROOT, pageOrViewCtrl);
         return this.navController.setRoot(pageOrViewCtrl, params, opts, done);
-    }
-
-    public getNav(): NavController {
-        return this.navController;
     }
 
     public performRefresh(): void {

@@ -215,8 +215,7 @@ export class AppMenuComponent implements OnInit {
       programNumber: program.PROGRAMNO
     };
 
-
-    this.navigatorService.getNav().setRoot(Catalog, params).catch(err => console.error(err));
+    this.navigatorService.setRoot(Catalog, params).catch(err => console.error(err));
   }
 
   public openBarcode(type: string): void {
