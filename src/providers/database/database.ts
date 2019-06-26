@@ -231,7 +231,7 @@ export class DatabaseProvider {
   }
 
 
-  public finalizePurchase(purchase_order_id: number, shopping_list_item_ids: number[], shopping_list_id: number): Promise<DatabaseActionResponse> {
+  public finalizePurchase(purchase_order_id: number, shopping_list_item_ids: number[], shopping_list_id: string): Promise<DatabaseActionResponse> {
 
     let placeholders: string = '';
     for (let i: number = 0; i < shopping_list_item_ids.length; i++) {

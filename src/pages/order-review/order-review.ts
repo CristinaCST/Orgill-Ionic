@@ -24,7 +24,7 @@ export class OrderReviewPage implements OnInit {
   public orderMethod: number;
   public postOffice: string = '-';
   public location: CustomerLocation;
-  public shoppingListId: number;
+  public shoppingListId: string;
   public shoppingListItems: ShoppingListItem[];
   public orderTotal: number;
   private readonly shoppingListProgramNumbers: string[] = [];
@@ -36,7 +36,7 @@ export class OrderReviewPage implements OnInit {
   constructor(private readonly navigatorService: NavigatorService,
               private readonly navParams: NavParams,
               private readonly shoppingListsProvider: ShoppingListsProvider,
-              private readonly productProvider: ProductProvider) {}
+              public readonly productProvider: ProductProvider) {}
 
   public ngOnInit(): void {
     this.orderMethod = getNavParam(this.navParams, 'orderMethod', 'number');
@@ -95,6 +95,7 @@ export class OrderReviewPage implements OnInit {
         program_number: programNumber
       };
       this.shoppingListsProvider.orderProducts(productListInfo, insertToDBInfo, itemsIds, this.shoppingListId).then((data: any) => {
+        this.removeItemsFromList(orderItems);
         if (data.insertedPurchaseToDBInfo.insertId) {
           this.confirmationNumbers.push(data.confirmationNumber);
           if (index === Object.keys(this.shoppingListProgramNumbers).length - 1) {
@@ -107,6 +108,16 @@ export class OrderReviewPage implements OnInit {
           }
         }
       }).catch(err => console.error(err));
+    });
+  }
+
+  private removeItemsFromList(items: ShoppingListItem[]): void {
+    items.forEach(item => {
+      console.log(this.shoppingListId);
+      this.shoppingListsProvider.deleteProductFromList(this.shoppingListId, item.product.SKU, item.program_number).subscribe(res => {
+        // This is here to solve Schrodinger's Observable.
+      });
+
     });
   }
 

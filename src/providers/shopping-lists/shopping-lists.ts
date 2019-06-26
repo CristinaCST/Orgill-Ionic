@@ -257,11 +257,11 @@ export class ShoppingListsProvider {
     return this.databaseProvider.insertPurchase(purchaseInfo);
   }
 
-  public deleteItemsFromList(insertId: number, itemsIdsArr: number[], shoppingListId: number): Promise<DatabaseActionResponse> {
+  public deleteItemsFromList(insertId: number, itemsIdsArr: number[], shoppingListId: string): Promise<DatabaseActionResponse> {
     return this.databaseProvider.finalizePurchase(insertId, itemsIdsArr, shoppingListId);
   }
 
-  public orderProducts(productInfoList: ProductListInfo, insertToDBInfo: DatabaseOrder, itemsIdsArr: number[], shoppingListId: number): Promise<OrderResult> {
+  public orderProducts(productInfoList: ProductListInfo, insertToDBInfo: DatabaseOrder, itemsIdsArr: number[], shoppingListId: string): Promise<OrderResult> {
     return new Promise((resolve, reject) => {
         productInfoList.user_token = this.authService.userToken;
         try {

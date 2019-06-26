@@ -4,7 +4,7 @@ export const DECIMAL_NUMBER: number = 2;
 
 export const MAX_QUANTITY_HARDCAP: number = 99999;
 
-export const HOLD_TIME_IN_MS_TO_DELETE_MODE: number = 600;
+export const HOLD_TIME_TO_DELETE_MODE: number = 0.6 * 1000; // Expressed in ms
 
 /**
  * Marker : App Language
@@ -24,8 +24,8 @@ export const REQUEST_UNAUTHORIZED_ERROR: number = 401;
 export const REQUEST_STATUS_OK: number = 200;
 export const REQUEST_TIMEOUT_ERROR: string = 'TimeoutError';
 
-export const TIMEOUT_INTERVAL: number = 30000; // 30 seconds
-export const TIMEOUT_DEFAULT_INTERVAL: number = 30000; // 30 seconds
+export const TIMEOUT_INTERVAL: number = 30 * 1000; // 30 seconds
+export const TIMEOUT_DEFAULT_INTERVAL: number = 30 * 1000; // 30 seconds
 
 /**
  * Marker : dateTimeProvider Formats
