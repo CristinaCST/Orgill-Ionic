@@ -323,13 +323,13 @@ export class OneSignalService {
      * @returns Nothing, there is no promise for promptLocation() so in the end it does not matter if we wait or not
      */
      private handleLocationPermission(): Promise<void> {
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
             this.oneSignal.setLocationShared(true);
             // GetCurrent position calls for location permission by itself
             this.geolocation.getCurrentPosition().then((res: Geoposition) => {
                 // Everything is alright
                 resolve();
-            }).catch((e)=>{
+            }).catch(e => {
                 console.error(e);
             });
 

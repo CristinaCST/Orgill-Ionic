@@ -113,7 +113,6 @@ export class ShoppingListPage {
     this.loader.show();
 
     return this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: ShoppingListItem[]) => {
-
       if (data) {
         this.shoppingListItems = data;
         this.checkExpiredItems();

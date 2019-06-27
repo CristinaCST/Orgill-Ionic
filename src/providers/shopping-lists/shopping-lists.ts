@@ -102,50 +102,16 @@ export class ShoppingListsProvider {
           reject(err);
         });
 
+      }, err => {
+        reject(err);
       });
     });
   }
 
   public getAllProductData(productList: ProductListResponse[]): Promise<ShoppingListItem[]> {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       const list: ShoppingListItem[] = [];
-      if (productList.length === 0) {
-        reject('No products');
-      }
-     /* productList.forEach( element => {
 
-        reqs.push(this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH,{
-              "user_token" : this.userToken,
-            //  "search_string" : "'" + element.sku + "'",
-              "search_string" :element.sku,
-              "category_id": "",
-              "program_number": element.program_no,
-              "p": "1",
-              "rpp": resultsPerPage
-            }));
-      });*/
-     // Observable.from(reqs).concatMap(shift => shift).subscribe( resp => {
-
-       // let data: any;
-       // data = JSON.parse(resp["d"])[0];
-     //  data = JSON.parse(resp["d"]);
-
-         // HACK: Big hack for missing API + fix
-     //  let element = productList.filter(elem=> elem.sku == data.SKU)[0];
-
-     /*   let dataIndex;
-        data.forEach((elem,index)=>{
-          productList.forEach((prod)=>{
-            if(elem.SKU==prod.sku)
-            {
-              element = prod;
-              dataIndex = index;
-            }
-          })
-        })
-
-        data = data[dataIndex];
-*/
       productList.forEach(element => {
         if (!element) {
           return;

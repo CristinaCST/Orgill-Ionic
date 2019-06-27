@@ -14,6 +14,7 @@ import { Network } from '@ionic-native/network';
 import { IonicStorageModule } from '@ionic/storage';
 import { Badge } from '@ionic-native/badge';
 import { Geolocation } from '@ionic-native/geolocation';
+import { Page } from 'ionic-angular/navigation/nav-util';
 
 /*
 // Environments
@@ -87,11 +88,7 @@ const pages: Page[] = [MyApp,
 
 // Error Handlers
 import { CustomErrorHandlerService } from '../services/error-handler/CustomErrorHandler';
-import { Page } from 'ionic-angular/navigation/nav-util';
-
-
 // const errorHandler = environment.production ? CustomErrorHandlerService : IonicErrorHandler; //tslint:disable-line
-
 
 @NgModule({
   declarations: pages,

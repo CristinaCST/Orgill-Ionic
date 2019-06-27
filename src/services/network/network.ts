@@ -19,7 +19,6 @@ export class NetworkService {
     this.network.onDisconnect()
       .subscribe(() => {
         this.notified = false;
-
         this.openNetworkModal();
       });
 

@@ -6,7 +6,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Catalog } from '../pages/catalog/catalog';
 import { Login } from '../pages/login/login';
 import { TranslateService } from '@ngx-translate/core';
-import { DatabaseProvider } from '../providers/database/database';
 import { NetworkService } from '../services/network/network';
 import { OneSignalService } from '../services/onesignal/onesignal';
 import { SessionValidatorService } from '../services/session/sessionValidator';
@@ -29,7 +28,6 @@ export class MyApp {
               public statusBar: StatusBar,
               private readonly splashScreen: SplashScreen,
               private readonly translate: TranslateService,
-              private readonly databaseProvider: DatabaseProvider,
               private readonly networkService: NetworkService,
               private readonly sessionValidatorProvider: SessionValidatorService,
               private readonly oneSignalService: OneSignalService,
@@ -89,15 +87,16 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.statusBar.overlaysWebView(false);
       this.statusBar.hide();
+      this.checkSession();
+      /*
       this.databaseProvider.getDatabaseState()
         .subscribe(isDatabaseOpen => {
           if (isDatabaseOpen) {
             this.checkSession();
           }
-        });
+        });*/
     });
   }
-
 
   private setAppLanguage(): void {
     const language: string = navigator.language;

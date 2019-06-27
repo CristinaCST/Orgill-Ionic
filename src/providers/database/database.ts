@@ -199,7 +199,7 @@ export class DatabaseProvider {
   }
 
   public addPrograms(programs: Program[]): void {
-    let programData: string[];
+//    let programData: string[];
 
     // programs.forEach(program => {
     //   programData = [program.PROGRAMNO, program.NAME, program.STARTDATE, program.ENDDATE, program.SHIPDATE, program.MARKETONLY];
@@ -211,7 +211,7 @@ export class DatabaseProvider {
     //         console.error('add program to database error: ', error);
     //       });
     // });
-
+/*
     this.asyncForEach(programs, async program => {
       programData = [program.PROGRAMNO, program.NAME, program.STARTDATE, program.ENDDATE, program.SHIPDATE, program.MARKETONLY];
       await this.database.executeSql(this.queries.addOrReplacePrograms, programData)
@@ -221,7 +221,7 @@ export class DatabaseProvider {
             error => {
               console.error('add program to database error: ', error);
             });
-    });
+    });*/
 
   }
 
