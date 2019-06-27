@@ -23,6 +23,7 @@ import { NavigatorService } from '../../services/navigator/navigator';
 import { HotDealService } from '../../services/hotdeal/hotdeal';
 import { Page } from 'ionic-angular/navigation/nav-util';
 import { ShoppingListResponse } from '../../interfaces/response-body/shopping-list';
+import { ReloadService } from '../../services/reload/reload';
 
 @Component({
   selector: 'app-menu',
@@ -52,28 +53,55 @@ export class AppMenuComponent implements OnInit {
               private readonly navigatorService: NavigatorService,
               private readonly hotDealService: HotDealService,
               private readonly menuCtrl: MenuController,
-              private readonly changeDetector: ChangeDetectorRef) {
+              private readonly changeDetector: ChangeDetectorRef,
+              private readonly reloadService: ReloadService) {
   }
 
   public ngOnInit(): void {
+   
+    this.initMenu();
+
+    this.events.subscribe(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED, this.notificationReceivedHandler);
+    this.events.subscribe(Constants.HOT_DEAL_EXPIRED_EVENT, this.hotDealExpiredHandler);
+    this.events.subscribe(Constants.EVENT_NAVIGATE_TO_PAGE, this.navigationHandler);
+    this.events.subscribe(Constants.EVENT_NEW_SHOPPING_LIST, this.newShoppingListHandler);
+    this.events.subscribe(Constants.EVENT_LOADING_FAILED, this.loadingFailedHandler);
+  }
+
+  public ngOnDestroy(): void {
+    this.events.unsubscribe(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED, this.notificationReceivedHandler);
+    this.events.unsubscribe(Constants.HOT_DEAL_EXPIRED_EVENT, this.hotDealExpiredHandler);
+    this.events.unsubscribe(Constants.EVENT_NAVIGATE_TO_PAGE, this.navigationHandler);
+    this.events.unsubscribe(Constants.EVENT_NEW_SHOPPING_LIST, this.newShoppingListHandler);
+    this.events.unsubscribe(Constants.EVENT_LOADING_FAILED, this.loadingFailedHandler);
+  }
+
+  private readonly notificationReceivedHandler = (sku: string): void => {
+    this.updateHotDealButtonToState(sku);
+  }
+
+  private readonly hotDealExpiredHandler = (): void => {
+    this.updateHotDealButtonToState();
+  }
+
+  private readonly navigationHandler = (): void => {
+    this.menuCtrl.close('main_menu');
+  }
+
+  private readonly newShoppingListHandler = (): void => {
+    this.getShoppingLists();
+  }
+
+  private readonly loadingFailedHandler = (): void => {
+    // We can't know directly (without catc\hing an error somewhere else) if custom lists are supposed to be or not empty, or some of the programs, so it's safer just to reload this in case of error.
+    this.initMenu();
+  }
+
+
+  private initMenu(): void {
     this.getPrograms();
     this.getShoppingLists();
     this.updateHotDealButtonToState();
-    this.events.subscribe(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED, sku => {
-      this.updateHotDealButtonToState(sku);
-    });
-
-    this.events.subscribe(Constants.HOT_DEAL_EXPIRED_EVENT, () => {
-      this.updateHotDealButtonToState();
-    });
-
-    this.events.subscribe(Constants.EVENT_NAVIGATE_TO_PAGE, () => {
-      this.menuCtrl.close('main_menu');
-    });
-
-    this.events.subscribe(Constants.EVENT_NEW_SHOPPING_LIST, () => {
-      this.getShoppingLists();
-    });
   }
 
   public menuOpen(): void {
@@ -162,10 +190,16 @@ export class AppMenuComponent implements OnInit {
         this.events.subscribe('DeletedList', (listId: string) => {
           this.customShoppingLists = this.customShoppingLists.filter(list => list.ListID !== listId);
         });
+      }, err => {
+        this.reloadService.paintDirty('shopping lists');
       });
   }
 
   public getPrograms(): void {
+    this.doorBusterPrograms = [];
+    this.marketOnlyPrograms = [];
+    this.everyDayPrograms = [];
+    
     this.catalogsProvider.getPrograms().subscribe(response => {
       if (response) {
         const programs: Program[] = JSON.parse(response.d) as Program[];
@@ -183,6 +217,8 @@ export class AppMenuComponent implements OnInit {
           }
         });
       }
+    }, error => {
+      this.reloadService.paintDirty('programs');
     });
   }
 

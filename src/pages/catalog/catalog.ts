@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavParams, NavOptions } from 'ionic-angular';
+import { NavParams, NavOptions, Events } from 'ionic-angular';
 import { Category } from '../../interfaces/models/category';
 import { CategoriesRequest } from '../../interfaces/request-body/categories';
 import * as Constants from '../../util/constants';
@@ -15,6 +15,7 @@ import { NavigatorService } from '../../services/navigator/navigator';
 import { Product } from '../../interfaces/models/product';
 import { getNavParam } from '../../util/validatedNavParams';
 import { AuthService } from '../../services/auth/auth';
+import { ReloadService } from '../../services/reload/reload';
 
 
 @Component({
@@ -23,17 +24,18 @@ import { AuthService } from '../../services/auth/auth';
 })
 export class Catalog implements OnInit {
 
-  public programNumber: string;
-  public programName: string;
+  private programNumber: string;
+  private programName: string;
   public categories: Category[];
-  public catalogIndex: number;
-  public currentSubCategory: Category;
-  public menuCustomButtons: any[] = [];
-  public categoriesLoader: LoadingService;
-  public simpleLoader: LoadingService;
+  private catalogIndex: number;
+  private currentSubCategory: Category;
+  private readonly menuCustomButtons: any[] = [];
+  private readonly categoriesLoader: LoadingService;
+  private readonly simpleLoader: LoadingService;
 
   constructor(public navigatorService: NavigatorService, public navParams: NavParams, public catalogProvider: CatalogsProvider,
-              public loadingService: LoadingService, public translateProvider: TranslateWrapperService, private readonly authService: AuthService) {
+              public loadingService: LoadingService, public translateProvider: TranslateWrapperService, private readonly authService: AuthService, private readonly events: Events,
+              private readonly reloadService: ReloadService) {
     this.menuCustomButtons.push({ action: 'scan', icon: 'barcode' });
 
     this.categoriesLoader = loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_CATEGORIES));
@@ -41,6 +43,21 @@ export class Catalog implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.events.subscribe(Constants.EVENT_LOADING_FAILED, this.reloadMethodHandler);
+    this.initCatalog();
+  }
+
+   public ngOnDestroy(): void {
+     this.events.unsubscribe(Constants.EVENT_LOADING_FAILED, this.reloadMethodHandler);
+  }
+
+  private readonly reloadMethodHandler = (culprit?: string): void => {
+    if (this.categories === undefined || this.categories.length === 0) {
+      this.initCatalog();
+    }
+  }
+
+  private initCatalog(): void {
     this.programName = getNavParam(this.navParams, 'programName', 'string');
     this.programNumber = getNavParam(this.navParams, 'programNumber', 'number');
     this.catalogIndex = getNavParam(this.navParams, 'catalogIndex', 'number', 0);
@@ -73,6 +90,9 @@ export class Catalog implements OnInit {
     this.catalogProvider.getCategories(params).subscribe(response => {
       const responseData: Category[] = JSON.parse(response.d);
       this.categories = this.sortCategories(responseData);
+      this.categoriesLoader.hide();
+    }, err => {
+      this.reloadService.paintDirty('categories');
       this.categoriesLoader.hide();
     });
   }
@@ -115,6 +135,8 @@ export class Catalog implements OnInit {
         this.navigatorService.push(ProductsPage, productsPageParams, { paramEquality: false } as NavOptions).catch(err => console.error(err));
         this.categoriesLoader.hide();
       }
+    }, err => {
+      // TODO: SOLVE THIS
     });
   }
 

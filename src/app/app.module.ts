@@ -49,6 +49,8 @@ import { ScannerService } from '../services/scanner/scanner';
 import { PricingService } from '../services/pricing/pricing';
 import { SecureActionsService } from '../services/secure-actions/secure-actions';
 import { SearchService } from '../services/search/search';
+import { ReloadService } from '../services/reload/reload';
+import { ErrorScheduler } from '../services/error-scheduler/error-scheduler';
 
 // Pages
 import { MyApp } from './app.component';
@@ -142,6 +144,8 @@ import { CustomErrorHandlerService } from '../services/error-handler/CustomError
     PricingService,
     SecureActionsService,
     SearchService,
+    ReloadService,
+    ErrorScheduler,
     Geolocation,
     { provide: ErrorHandler, useClass: CustomErrorHandlerService }
   ]

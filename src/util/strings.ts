@@ -31,6 +31,7 @@ export const MODAL_BUTTON_DELETE: string = 'modal_button_delete';
 export const MODAL_BUTTON_OK: string = 'modal_button_ok';
 export const MODAL_BUTTON_NOT_NOW: string = 'modal_button_not_now';
 export const MODAL_BUTTON_SETTINGS: string = 'modal_buton_settings';
+export const MODAL_BUTTON_TRY_AGAIN: string = 'modal_button_try_again';
 
 /**
  * Marker : Loading Dialog
@@ -228,3 +229,9 @@ export const ONE_SIGNAL_SUBSCRIPTION_REMINDER: string = 'one_signal_subscription
 
 export const NO_LISTS_FOR_REGULAR_PRODUCT: string = 'shopping_list_no_remaining_list';
 export const NO_LISTS_FOR_MARKET_ONLY_PRODUCT: string = 'shopping_list_added_in_market_list';
+export const ADDED_ITEM_TO_LIST: string = 'added_item_to_list';
+
+
+// Define a variable named culprit for this one to work
+export const RELOAD_ERROR_MESSAGE_WITH_CULPRIT: string = 'reload_error_message_with_culprit';
+export const RELOAD_ERROR_MESSAGE_WITHOUT_CULPRIT: string = 'reload_error_message_without_culprit';

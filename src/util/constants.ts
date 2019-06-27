@@ -180,3 +180,5 @@ export const LOCAL_PRODUCT_IMAGE_PLACEHOLDER: string = '../../assets/imgs/produc
 export const DEBUG_TRANSLATIONS: boolean = false;
 
 export const EVENT_NEW_SHOPPING_LIST: string = 'newShoppingList';
+export const EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST: string = 'listProductAdded';
+export const EVENT_LOADING_FAILED: string = 'loadingFailed';

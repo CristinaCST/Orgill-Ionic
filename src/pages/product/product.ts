@@ -16,6 +16,8 @@ import { PricingService } from '../../services/pricing/pricing';
 import { HotDealService } from '../../services/hotdeal/hotdeal';
 import { ProductProvider } from '../../providers/product/product';
 import { getNavParam } from '../../util/validatedNavParams';
+import { Events } from 'ionic-angular/util/events';
+import { ReloadService } from '../../services/reload/reload';
 
 @Component({
   selector: 'page-product',
@@ -50,12 +52,28 @@ export class ProductPage implements OnInit {
     private readonly shoppingListProvider: ShoppingListsProvider,
     private readonly pricingService: PricingService,
     private readonly hotDealService: HotDealService,
-    private readonly productProvider: ProductProvider) {
+    private readonly productProvider: ProductProvider,
+    private readonly events: Events,
+    private readonly reloadService: ReloadService) {
 
     this.loader = this.loadingService.createLoader();
   }
 
+
   public ngOnInit(): void {
+    this.events.subscribe(Constants.EVENT_LOADING_FAILED, this.loadingFailedHandler);
+    this.initProduct();
+  }
+
+  public ngOnDestroy(): void {
+    this.events.unsubscribe(Constants.EVENT_LOADING_FAILED, this.loadingFailedHandler);
+  }
+
+  private readonly loadingFailedHandler = (culprit?: string): void => {
+    this.initProduct();
+  }
+
+  public initProduct(): void {
     this.loader.show();
 
     this.product = getNavParam(this.navParams, 'product', 'object');
@@ -89,6 +107,8 @@ export class ProductPage implements OnInit {
           this.loader.hide();
         });
 
+      }, err => {
+        this.reloadService.paintDirty('hot deal program');
       });
     } else {
       this.programProvider.getProductPrograms(this.product.SKU).subscribe(programs => {
@@ -107,6 +127,8 @@ export class ProductPage implements OnInit {
             this.loader.hide();
           });
         }
+      }, err => {
+        this.reloadService.paintDirty('product programs');
       });
     }
 

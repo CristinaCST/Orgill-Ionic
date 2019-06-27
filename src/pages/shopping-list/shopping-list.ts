@@ -16,6 +16,7 @@ import { ScannerService } from '../../services/scanner/scanner';
 import { Product } from '../../interfaces/models/product';
 import { getNavParam } from '../../util/validatedNavParams';
 import { PricingService } from '../../services/pricing/pricing';
+import { ReloadService } from '../../services/reload/reload';
 
 @Component({
   selector: 'page-shopping-list',
@@ -60,12 +61,26 @@ export class ShoppingListPage {
     private readonly events: Events,
     private readonly loading: LoadingService,
     private readonly scannerService: ScannerService,
-    private readonly pricingService: PricingService) {
+    private readonly pricingService: PricingService,
+    private readonly reloadService: ReloadService) {
 
     this.loader = this.loading.createLoader();
     this.menuCustomButtons = [{ action: 'detailsList', icon: 'information-circle' }, { action: 'scan', icon: 'barcode' }];
   }
 
+  public ngOnInit(): void {
+    this.events.subscribe(Constants.EVENT_LOADING_FAILED, this.loadingFailedHandler);
+  }
+
+  public ngOnDestroy(): void {
+    this.events.unsubscribe(Constants.EVENT_LOADING_FAILED, this.loadingFailedHandler);
+  }
+
+  private readonly loadingFailedHandler = (culprit?: string): void => {
+    if (culprit === 'shopping list products') {
+      this.fillList();
+    }
+  }
 
   public ionViewWillLeave(): void {
     this.events.unsubscribe(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST);
@@ -117,10 +132,17 @@ export class ShoppingListPage {
         this.shoppingListItems = data;
         this.checkExpiredItems();
         this.content.resize();
+      } else {
+        this.shoppingListItems = [];
       }
+
       this.loader.hide();
       return Promise.resolve();
-    }).catch(error => { console.error(error); LoadingService.hideAll(); });
+    }).catch(error => {
+      this.loader.hide();
+      this.reloadService.paintDirty('shopping list products');
+      console.error(error);
+    });
 
   }
 

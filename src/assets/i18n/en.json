@@ -14,6 +14,7 @@
   "modal_button_ok":"OK",
   "modal_button_not_now":"Not now",
   "modal_buton_settings":"Settings",
+  "modal_button_try_again":"Try again",
 
   "lost_internet_connection": "There is no internet connection. Please turn on Mobile Data or WIFI in order to use the Orgill O Zone App.",
   "request_timeout_error":"An error has occurred. Please make sure you are connected to the internet and try again.",
@@ -206,7 +207,10 @@
   "one_signal_subscription_reminder":"Would you like to receive push notifications with hot deals?",
 
   "savings_text":"Savings",
+  "added_item_to_list":"Added ${itemName} to list",
   "shopping_list_empty_title":"Empty list",
-  "shopping_list_empty_message":"Shopping list is empty."
+  "shopping_list_empty_message":"Shopping list is empty.",
+  "reload_error_message_with_culprit":"Error loading ${culprit}, please try again.",
+  "reload_error_message_without_culprit":"Error loading content, please try again."
 
 }

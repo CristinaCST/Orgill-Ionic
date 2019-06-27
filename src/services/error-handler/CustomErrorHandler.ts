@@ -3,14 +3,24 @@ import { PopoversService, PopoverContent } from '../popovers/popovers';
 import * as Strings from '../../util/strings';
 import { Injectable } from '@angular/core';
 import { LoadingService } from '../loading/loading';
+import { ErrorScheduler } from '../error-scheduler/error-scheduler';
 
 @Injectable()
 export class CustomErrorHandlerService implements IonicErrorHandler {
 
-  constructor(private readonly popoversService: PopoversService, public loadingService: LoadingService) {
+  constructor(private readonly popoversService: PopoversService) {
   }
 
   public async handleError(error: any): Promise<void> {
+    if (ErrorScheduler.scheduledError !== undefined) {
+      return Promise.resolve();
+    }
+    
+    ErrorScheduler.scheduledError = this;
+
+    LoadingService.hideAll();
+    
+
     console.error('Custom error ', error);
 
     let errorString: string = Strings.SOMETHING_WENT_WRONG;
@@ -38,10 +48,15 @@ export class CustomErrorHandlerService implements IonicErrorHandler {
 
     const content: PopoverContent = this.popoversService.setContent(Strings.DEFAULT_HTTP_ERROR, errorString);
     this.showErrorModal(content);
+    
   }
 
   public showErrorModal(content: PopoverContent): void {
     LoadingService.hideAll();
-    this.popoversService.show(content);
+    this.popoversService.show(content).subscribe(res => {
+      if (ErrorScheduler.scheduledError === this) {
+        ErrorScheduler.scheduledError = undefined;
+      }
+    });
   }
 }

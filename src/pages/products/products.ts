@@ -10,6 +10,8 @@ import { LoadingService } from '../../services/loading/loading';
 import * as Constants from '../../util/constants';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { getNavParam } from '../../util/validatedNavParams';
+import { ReloadService } from '../../services/reload/reload';
+import { Events } from 'ionic-angular/util/events';
 
 @Component({
   selector: 'page-products',
@@ -30,11 +32,32 @@ export class ProductsPage implements OnInit, OnDestroy {
 
   constructor(private readonly navParams: NavParams,
               public loadingService: LoadingService,
-              private readonly catalogProvider: CatalogsProvider, private readonly navigatorService: NavigatorService) {
+              private readonly catalogProvider: CatalogsProvider,
+              private readonly navigatorService: NavigatorService,
+              private readonly reloadService: ReloadService,
+              private readonly events: Events) {
+
                 this.loader = loadingService.createLoader();
   }
 
   public ngOnInit(): void {
+    this.events.subscribe(Constants.EVENT_LOADING_FAILED, this.loadingFailedHandler);
+    this.init();
+  }
+
+  public ngOnDestroy(): void {
+    this.events.unsubscribe(Constants.EVENT_LOADING_FAILED, this.loadingFailedHandler);
+
+    if (this.page > 1) {
+      this.getProductSubscription.unsubscribe();
+    }
+  }
+
+  private readonly loadingFailedHandler = (culprit?: string): void => {
+    this.init();
+  }
+
+  private init(): void {
     this.programNumber = getNavParam(this.navParams, 'programNumber', 'string');
     this.programName = getNavParam(this.navParams, 'programName', 'string');
     this.category = getNavParam(this.navParams, 'category', 'object');
@@ -50,6 +73,9 @@ export class ProductsPage implements OnInit, OnDestroy {
       this.loader.hide();
       this.isLoading = false;
       this.setPaginationInfo();
+    }, err => {
+      this.loader.hide();
+      this.reloadService.paintDirty('products');
     });
   }
 
@@ -67,12 +93,6 @@ export class ProductsPage implements OnInit, OnDestroy {
     }).then(() => {
       // console.log('%cTo product details page', 'color:pink');
     });
-  }
-
-  public ngOnDestroy(): void {
-    if (this.page > 1) {
-      this.getProductSubscription.unsubscribe();
-    }
   }
 
   public onSearched($event: string): void {
