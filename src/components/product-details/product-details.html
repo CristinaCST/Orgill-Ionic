@@ -7,22 +7,26 @@
     <div id="product-main-info">
       <p>{{product.NAME}}</p>
       <p>{{product.VENDOR_NAME}}</p>
+      <p>{{"product_SKU" | translate}}: {{product.SKU}} {{product.QTY_ROUND_OPTION}}</p>
     </div>
     <ion-icon name="ios-arrow-forward"></ion-icon>
   </div>
   <ion-item class="product-info-container">
-    <div class="info">
+    <!--
+      <div class="info">
       <span>{{"product_SKU" | translate}}:</span>
       <span>{{product.SKU}} {{product.QTY_ROUND_OPTION}}</span>
     </div>
+    -->
     <div class="info">
       <span>{{"product_retail_upc" | translate}}:</span>
       <span>{{product.UPC_CODE}}</span>
     </div>
-    <div class="info">
+  <!--  <div class="info">
       <span>{{"product_vendor" | translate}}:</span>
       <span>{{product.VENDOR_NAME}}</span>
     </div>
+  -->
     <div class="info">
       <span>{{"product_model_number" | translate}}:</span>
       <span>{{product.MODEL}}</span>
