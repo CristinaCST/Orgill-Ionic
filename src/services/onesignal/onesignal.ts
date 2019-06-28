@@ -12,7 +12,6 @@ import { NavigatorService } from '../../services/navigator/navigator';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
-import { empty } from 'rxjs/observable/empty';
 
 enum androidPermissionState{
     AUTHORIZED = 1,
@@ -322,12 +321,13 @@ export class OneSignalService {
      * Function that checks wether we have location permission.
      * @returns Nothing, there is no promise for promptLocation() so in the end it does not matter if we wait or not
      */
-     private handleLocationPermission(): Promise<void> {
+    private handleLocationPermission(): Promise<void> {
         return new Promise(resolve => {
             this.oneSignal.setLocationShared(true);
             // GetCurrent position calls for location permission by itself
             this.geolocation.getCurrentPosition().then((res: Geoposition) => {
                 // Everything is alright
+
                 resolve();
             }).catch(e => {
                 console.error(e);
@@ -433,15 +433,14 @@ export class OneSignalService {
      * Test method for some logic.
      */
     private testOneSignal(): void {
-
         /**
          * HACK: FAKE SKU for testing
          */
         try {
             const fakeReceivedNotification: OSNotificationPayload = { additionalData: { SKU: '0011049' } } as OSNotificationPayload;
-            const fakeOpenedNotification: OSNotificationOpenedResult = { notification: fakeReceivedNotification, action: { type: 0 } };
+            // const fakeOpenedNotification: OSNotificationOpenedResult = { notification: fakeReceivedNotification, action: { type: 0 } };
 
-            this.notificationOpened(fakeOpenedNotification);
+            this.notificationReceived(fakeReceivedNotification);
         } catch (err) {
             console.log(err);
         }
@@ -510,7 +509,7 @@ export class OneSignalService {
 
         // If the modal is set to never or permission is already granted, return an empty observable.
         if (permissionModalDismissed || permission || !platformTarget) {
-            return empty<{ optionSelected: '' }>(); // Return empty observable
+            return Observable.of({ optionSelected: '' }); // Return empty observable
         }
 
         // Setup the popover content

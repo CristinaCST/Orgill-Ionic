@@ -115,7 +115,7 @@ export class AppMenuComponent implements OnInit {
     this.navigatorService.removeOverride();
   }
 
-  private updateHotDealButtonToState(sku: string = ''): void {
+  private updateHotDealButtonToState(sku?: string): void {
       this.hotDealNotification = this.hotDealService.checkHotDealState(sku);
       this.changeDetector.detectChanges();    
   }

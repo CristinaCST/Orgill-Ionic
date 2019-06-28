@@ -57,8 +57,7 @@ export class ShoppingListsProvider {
   }
 
   public createNewShoppingList(name: string, description: string = '', type: string = '0'): Observable<APIResponse> {
-    // return this.databaseProvider.addShoppingList(name, description, type);
-
+    
     return this.apiProvider.post(ConstantsUrl.ADD_SHOPPING_NEW_LIST, {
       user_token: this.authService.userToken,
       list_name: name,
@@ -77,7 +76,6 @@ export class ShoppingListsProvider {
   }
 
   public removeShoppingList(listId: string): Observable<APIResponse> {
-    // return this.databaseProvider.removeShoppingList(listId);
     return this.apiProvider.post(ConstantsUrl.DELETE_SHOPPING_LIST, {
       user_token: this.authService.userToken,
       shopping_list_id: listId

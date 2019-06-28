@@ -8,7 +8,6 @@ import { ProductPage } from '../../pages/product/product';
 import { NavigatorService } from '../navigator/navigator';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../../interfaces/response-body/response';
-import { empty } from 'rxjs/observable/empty';
 import { Product } from '../../interfaces/models/product';
 import { AuthService } from '../../services/auth/auth';
 
@@ -16,21 +15,12 @@ import { AuthService } from '../../services/auth/auth';
 export class HotDealService {
 
   constructor(private readonly apiProvider: ApiService,
-              private readonly navigatorService: NavigatorService,
-              private readonly events: Events,
-              private readonly apiService: ApiService,
-              private readonly authService: AuthService) {}
+    private readonly navigatorService: NavigatorService,
+    private readonly events: Events,
+    private readonly apiService: ApiService,
+    private readonly authService: AuthService) { }
 
-  private getHotDealsProduct(sku: string = ''): Observable<APIResponse> {
-
-  /*  let params = {
-      'user_token': this.userToken,
-      'sku': sku
-    };
-
-    return this.apiProvider.post(ConstantsUrl.GET_HOTDEALS_PRODUCT, params);*/
-    // HACK: Replacement for not working backend
-
+  private getHotDealsProduct(sku: string): Observable<APIResponse> {
 
     const params: any = {
       'user_token': this.authService.userToken,
@@ -46,7 +36,12 @@ export class HotDealService {
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params);
   }
 
-  public navigateToHotDeal(sku: string = ''): void {
+  public navigateToHotDeal(sku?: string): void {
+    const searchSku: string = sku ? sku : LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
+    if (!searchSku) {
+      return;
+    }
+
     this.getHotDealsProduct(sku).subscribe(receivedResponse => {
       const responseData: Product[] = JSON.parse(receivedResponse.d);
       if (responseData.length > 0) {
@@ -65,9 +60,13 @@ export class HotDealService {
   }
 
 
-  public isHotDealExpired(timestamp: string = ''): boolean {
+  public isHotDealExpired(timestamp?: string): boolean {
     const dateString: string = timestamp ? timestamp : LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_PAYLOAD_TIMESTAMP);
     const hotDealTimestamp: Date = new Date(parseInt(dateString, 10));
+
+    if (Constants.DEBUG_ONE_SIGNAL) {
+      return false;
+    }
 
     if ((new Date()).getDay() !== hotDealTimestamp.getDay()) {
       this.markHotDealExpired();
@@ -78,74 +77,22 @@ export class HotDealService {
 
   public markHotDealExpired(): void {
     LocalStorageHelper.removeFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
+    LocalStorageHelper.removeFromLocalStorage(Constants.ONE_SIGNAL_PAYLOAD_TIMESTAMP);
     this.events.publish(Constants.HOT_DEAL_EXPIRED_EVENT);
   }
 
-  public checkHotDealState(sku: string): boolean {
+  public checkHotDealState(sku?: string): boolean {
     const hotDealSku: string = sku ? sku : LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
     return hotDealSku && !this.isHotDealExpired() ? true : false;
   }
 
   public getHotDealProgram(sku: string): Observable<APIResponse> {
-  const params: any = {
-    user_token: this.authService.userToken,
-    sku: sku
-  };
-
-  if (params.user_token) {
-      return this.apiService.post(ConstantsUrl.GET_HOTDEALS_PROGRAM, params);
-    }
-  return empty<APIResponse>();
-  }
-
-/*
-  orderHotDeal(itemsIdsArr, shoppingListId) {
-
-    let productListInfo = {
-      order_method: ???
-      order_query: this.getOrderQuery(programNumber, orderItems)
+    const params: any = {
+      user_token: this.authService.userToken,
+      sku: sku
     };
 
-    let insertToDBInfo = {
-      PO: this.postOffice,
-      date: moment().format('MM/DD/YYYY'),
-      location: this.location.SHIPTONO,
-      type: this.orderMethod,
-      total: this.orderTotal,
-      program_number: programNumber
-    };
-
-
-    return new Promise((resolve, reject) => {
-        productInfoList.user_token = this.userToken;
-        try {
-          this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_PRODUCTS, productInfoList).subscribe(async (response) => {
-            if (response) {
-              insertToDBInfo.confirmation_number = JSON.parse(response.d);
-              let insertedPurchaseToDBInfo = await this.insertPurchaseToDB(insertToDBInfo);
-              let removedItemsFromShoppingList = await this.deleteItemsFromList(insertedPurchaseToDBInfo.insertId, itemsIdsArr, shoppingListId);
-              resolve({
-                insertedPurchaseToDBInfo: insertedPurchaseToDBInfo, confirmationNumber: JSON.parse(response.d),
-                removedItemsFromShoppingList: removedItemsFromShoppingList
-              });
-            } else {
-              reject(response);
-            }
-          })
-        } catch (e) {
-          reject(e);
-        }
-      }
-    )
+    return this.apiService.post(ConstantsUrl.GET_HOTDEALS_PROGRAM, params);
   }
-
-  insertPurchaseToDB(purchaseInfo) {
-    return this.databaseProvider.insertPurchase(purchaseInfo);
-  }
-
-  deleteItemsFromList(insertId, itemsIdsArr, shoppingListId) {
-    return this.databaseProvider.finalizePurchase(insertId, itemsIdsArr, shoppingListId);
-  }
-*/
 
 }

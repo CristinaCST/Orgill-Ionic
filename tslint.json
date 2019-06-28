@@ -59,7 +59,7 @@
     "no-switch-case-fall-through": false,
     "no-tautology-expression": true,
     "no-this-assignment": true,
-    "no-unbound-method": true,
+    "no-unbound-method": false,
     "no-unnecessary-class": false,
     "no-unsafe-any": false,
     "no-unsafe-finally": true,
