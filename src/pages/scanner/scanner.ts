@@ -29,6 +29,7 @@ export class ScannerPage implements OnInit {
   public searchTab: any;
   public products: ShoppingListItem[] = [];
   public noProductFound: boolean = false;
+  public fromSearch: boolean = false;
   private readonly simpleLoader: LoadingService;
 
   constructor(public navigatorService: NavigatorService,
@@ -43,9 +44,11 @@ export class ScannerPage implements OnInit {
     this.shoppingList = getNavParam(this.navParams, 'shoppingList', 'object');
     if (this.shoppingList) {
       this.shoppingListId = this.shoppingList.ListID;
-      this.products = getNavParam(this.navParams, 'products', 'object');
       this.scannerService.scan(this.shoppingList, this.products);
+      // TODO: What happens here
     }
+    this.products = getNavParam(this.navParams, 'products', 'object');
+    this.fromSearch = getNavParam(this.navParams, 'fromSearch', 'boolean');
     this.searchTab = getNavParam(this.navParams, 'type');
     this.scanMessage = '';
     this.catalogsProvider.getPrograms().subscribe(resp => {
@@ -64,7 +67,8 @@ export class ScannerPage implements OnInit {
         const params: any = {
           type: this.searchTab,
           shoppingList: this.shoppingList,
-          products: JSON.parse(data.d)
+          products: JSON.parse(data.d),
+          fromSearch: true
         };
         this.navigatorService.push(ScannerPage, params).catch(err => console.error(err));
       }

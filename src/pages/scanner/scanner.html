@@ -13,7 +13,7 @@
     </ion-segment-button>
   </ion-segment>
   <!-- Scanner Page Search Bar -->
-  <search-bar *ngIf="searchTab==='search_code_tab'" [showBackButton]="true"
+  <search-bar *ngIf="searchTab==='search_code_tab'" [showBackButton]="fromSearch"
               (searched)="onSearched($event)"></search-bar>
 </ion-header>
 
