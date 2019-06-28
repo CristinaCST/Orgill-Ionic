@@ -16,6 +16,7 @@ import { Badge } from '@ionic-native/badge';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Page } from 'ionic-angular/navigation/nav-util';
 
+
 /*
 // Environments
 import { environment } from '@app/env';
@@ -37,6 +38,7 @@ import { ProductProvider } from '../providers/product/product';
 import { UserInfoService } from '../services/user-info/user-info';
 import { PurchasesProvider } from '../providers/purchases/purchases';
 import { SessionValidatorService } from '../services/session/sessionValidator';
+import { OpenNativeSettings } from '@ionic-native/open-native-settings';
 
 
 // Services
@@ -90,6 +92,8 @@ const pages: Page[] = [MyApp,
 
 // Error Handlers
 import { CustomErrorHandlerService } from '../services/error-handler/CustomErrorHandler';
+
+
 // const errorHandler = environment.production ? CustomErrorHandlerService : IonicErrorHandler; //tslint:disable-line
 
 @NgModule({
@@ -147,6 +151,7 @@ import { CustomErrorHandlerService } from '../services/error-handler/CustomError
     ReloadService,
     ErrorScheduler,
     Geolocation,
+    OpenNativeSettings,
     { provide: ErrorHandler, useClass: CustomErrorHandlerService }
   ]
 })

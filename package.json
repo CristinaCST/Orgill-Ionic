@@ -27,6 +27,7 @@
     "@ionic-native/geolocation": "^4.18.0",
     "@ionic-native/network": "4.8.0",
     "@ionic-native/onesignal": "4.18",
+    "@ionic-native/open-native-settings": "4.10.0",
     "@ionic-native/splash-screen": "~4.12.0",
     "@ionic-native/sqlite": "^4.14.0",
     "@ionic-native/sqlite-porter": "4.10.0",
@@ -37,6 +38,7 @@
     "@ngx-translate/http-loader": "^3.0.1",
     "cordova-android": "7.1.4",
     "cordova-ios": "4.5.5",
+    "cordova-open-native-settings": "1.5.1",
     "cordova-plugin-android-permissions": "^1.0.0",
     "cordova-plugin-badge": "0.8.8",
     "cordova-plugin-device": "^2.0.2",
@@ -82,7 +84,8 @@
       },
       "cordova-plugin-android-permissions": {},
       "cordova-plugin-badge": {},
-      "onesignal-cordova-plugin": {}
+      "onesignal-cordova-plugin": {},
+      "cordova-open-native-settings": {}
     },
     "platforms": [
       "android",
