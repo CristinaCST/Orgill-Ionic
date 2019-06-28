@@ -61,7 +61,7 @@
           <ion-item class="po-label"> {{"customer_locations_po" | translate}}: </ion-item>
         </ion-col>
         <ion-col >
-          <ion-input class="po-input" [(ngModel)]="hotDealLocation.POSTOFFICE" (focusout)="PONumberValidation(hotDealLocation)" (keyup.enter)="checkout()" clearInput type="text"
+          <ion-input class="po-input" [(ngModel)]="hotDealLocation.POSTOFFICE" (ionFocus)="onFocus()" (focusout)="PONumberValidation(hotDealLocation)" (keyup.enter)="closeKeyboard()" clearInput type="text"
             placeholder="{{'customer_locations_po_hint' | translate}}">
           </ion-input>
         </ion-col>
@@ -78,7 +78,7 @@
           </ion-col>
 
           <ion-col col-4>
-            <ion-input clearInput (focusout)="handleQuantityChange(hotDealLocation)" (keyup.enter)="checkout()" class="po-input" [(ngModel)]="hotDealLocation.QUANTITY" min="1" maxlength="5" type="tel" inputmode="numeric" pattern="^[0-9]"
+            <ion-input clearInput (focusout)="handleQuantityChange(hotDealLocation)" (ionFocus)="onFocus()" (keyup.enter)="closeKeyboard()" class="po-input" [(ngModel)]="hotDealLocation.QUANTITY" min="1" maxlength="5" type="tel" inputmode="numeric" pattern="^[0-9]"
               placeholder="{{'customer_locations_qty_hint' | translate}}">
           </ion-input>
 
@@ -98,7 +98,7 @@
 
 </ion-content>
 
-<ion-footer padding>
+<ion-footer class="hide-on-keyboard-open" padding>
   <button *ngIf="!isHotDeal" ion-button block outline color="OrgillLightGray" (click)="sendToOrgill()">
     {{"customer_locations_send_to_orgill" | translate}}
   </button>

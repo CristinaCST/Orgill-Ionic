@@ -15,6 +15,8 @@ body.keyboard-is-open .hide-on-keyboard-open {
 }
 
 body.keyboard-is-open .scroll-content:not(.keyboard-immune){
+  // TODO: Make this work with something else, make it % also
+  //padding-bottom:300px!important;
   margin-bottom: $keyboard-margin-push-amount!important;    
 }
 

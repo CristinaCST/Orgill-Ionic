@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChildren } from '@angular/core';
-import { NavParams } from 'ionic-angular';
+import { NavParams, Keyboard, Events } from 'ionic-angular';
 import { CustomerLocation } from '../../interfaces/models/customer-location';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
 import { UserInfoService } from '../../services/user-info/user-info';
@@ -43,8 +43,11 @@ export class CustomerLocationPage implements OnInit {
               private readonly navParams: NavParams,
               private readonly userInfoProvider: UserInfoService,
               private readonly popoverProvider: PopoversService,
-              private readonly pricingService: PricingService) {
+              private readonly pricingService: PricingService,
+              private readonly keyboard: Keyboard,
+              private readonly events: Events) {
   }
+
 
   public ngOnInit(): void {
     this.shoppingListId = getNavParam(this.navParams, 'shoppingListId', 'number');
@@ -52,7 +55,6 @@ export class CustomerLocationPage implements OnInit {
     this.orderTotal = getNavParam(this.navParams, 'orderTotal', 'number');
     this.hotDealItem = getNavParam(this.navParams, 'hotDeal', 'object');
     this.isHotDeal = this.hotDealItem ? true : false;
-
 
     this.userInfoProvider.getUserLocations().subscribe(locations => {
       if (!locations || Constants.DEBUG_NO_LOCATIONS) {
@@ -85,6 +87,15 @@ export class CustomerLocationPage implements OnInit {
 
   }
 
+  public onFocus(): void {
+    if (this.keyboard.isOpen()) {
+      this.events.publish(Constants.EVENT_SCROLL_INTO_VIEW);
+    }
+  }
+
+  public closeKeyboard(keyCode: string): void {
+    this.keyboard.close();
+  }
 
   public sortLocations(locations: CustomerLocation[]): CustomerLocation[] {
     return locations.sort((location1, location2): number => {

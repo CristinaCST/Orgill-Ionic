@@ -1,6 +1,6 @@
 
 import { Component } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Catalog } from '../pages/catalog/catalog';
@@ -32,20 +32,28 @@ export class MyApp {
               private readonly sessionValidatorProvider: SessionValidatorService,
               private readonly oneSignalService: OneSignalService,
               private readonly navigatorService: NavigatorService,
-              private readonly popoverProvider: PopoversService) {
+              private readonly popoverProvider: PopoversService,
+              private readonly events: Events) {
     this.setAppLanguage();
     this.initializeApp();
   }
 
+
+  public scrollToElement(): void {
+    document.activeElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'start' });
+  }
+
   public initializeApp(): void {
     this.isLoading = true;
+
+    this.events.subscribe(Constants.EVENT_SCROLL_INTO_VIEW, this.scrollToElement);
 
     this.platform.ready().then(() => {
       this.oneSignalService.init();
 
       window.addEventListener('keyboardDidShow', () => {
         document.body.classList.add('keyboard-is-open');
-        document.activeElement.scrollIntoView(true);
+       this.scrollToElement();
       });
 
       window.addEventListener('keyboardDidHide', () => {
