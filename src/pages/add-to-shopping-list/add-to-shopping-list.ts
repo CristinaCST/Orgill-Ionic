@@ -37,6 +37,7 @@ export class AddToShoppingListPage implements OnInit {
   private readonly invalidatedLists: string[] = [];
   private firstValidListID: string;
   private loader: LoadingService;
+  private lastValidList: ShoppingList;
 
   constructor(public navigatorService: NavigatorService,
               public navParams: NavParams,
@@ -241,6 +242,7 @@ export class AddToShoppingListPage implements OnInit {
     const differentType: boolean = this.listIsNotSameType(selectedList);
     const alreadyAdded: boolean = typeof this.invalidatedLists.find(id => id === selectedList.ListID) !== 'undefined' ? true : false;
 
+    
     if (alreadyAdded) {
       this.reset(this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_EXISTING_PRODUCT));
       this.seekValidList();
@@ -251,12 +253,18 @@ export class AddToShoppingListPage implements OnInit {
       this.seekValidList();
       this.reset(this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_DEFAULT_PRODUCT));
     } else {
+      this.lastValidList = selectedList;
       this.checkProductInList(selectedList.ListID);
       this.isAddBtnDisabled = false;
     }
   }
 
   private seekValidList(): void {
+    if (this.lastValidList !== undefined) {
+      this.selectList(this.lastValidList);
+      return;
+    }
+
     if (this.firstValidListID) {
       this.selectList(this.shoppingLists.find(list => list.ListID === this.firstValidListID));
     }
