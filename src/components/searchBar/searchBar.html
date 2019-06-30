@@ -2,7 +2,13 @@
 <div class="search-container">
   <!-- Search Component Back Button -->
   <div *ngIf="showBackButton" class="back-button-container" (click)="back()">
-    <img src="../../assets/imgs/back_button.png">
+    <span class="backbutton">
+      <span class="left-component">
+        <span class="arrow"></span>
+      </span>
+      <span class="right-component"></span>
+    </span>
+    <!--<img src="../../assets/imgs/back_button.png">-->
   </div>
   <!-- Search Component Input Container-->
   <ion-item class="search-input-container" [ngClass]="showBackButton?'has-btn':''" no-lines no-border>
