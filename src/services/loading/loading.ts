@@ -166,14 +166,14 @@ export class LoadingService {
    */
   public hide(): void {
     if (this.isLoadingPresent) {    // if the loader is showing
-      if (this.loading) { // Check if loading object is valid, this is more of a sanity check, this.LoadingPresent should be the main driver here
-
-
+      if (this.loading !== undefined && this.loading !== null) { // Check if loading object is valid, this is more of a sanity check, this.LoadingPresent should be the main driver here
         this.loading.dismiss().then(() => {
           this.cleanup(); // If we succesfully dismiss the loader we then destroy it
           this.isLoadingPresent = false;
-        }, err => {
-          console.error('Error dismissing loader with content ' + this.content + ' | ERR:' + err.toString());
+        }).catch(err => {
+          this.cleanup(); // Cleanup stray loader? TODO: See if there is a way for this situation to not come.
+          this.isLoadingPresent = false;
+          console.warn('Error dismissing loader with content ' + this.content + ' | ERR: ' + err.toString());
         });
       }
     } else if (LoadingService.activeQueue.indexOf(this) > -1 && !this.activated) {  // If it's not showing but it's in any state to be showing we clean it
