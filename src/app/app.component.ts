@@ -14,6 +14,7 @@ import * as Constants from '../util/constants';
 import * as Strings from '../util/strings';
 import { PopoversService, DefaultPopoverResult, PopoverContent } from '../services/popovers/popovers';
 import { LoadingService } from '../services/loading/loading';
+import { CSSInjector } from '../helpers/css-injector';
 
 @Component({
   templateUrl: 'app.html'
@@ -51,14 +52,21 @@ export class MyApp {
     this.platform.ready().then(() => {
       this.oneSignalService.init();
 
-      window.addEventListener('keyboardDidShow', () => {
-        document.body.classList.add('keyboard-is-open');
-       this.scrollToElement();
-      });
+      if (this.platform.is('android')) {
 
-      window.addEventListener('keyboardDidHide', () => {
-        document.body.classList.remove('keyboard-is-open');
-      });
+        CSSInjector.setHead();
+
+        window.addEventListener('keyboardDidShow', (obj: Event & {keyboardHeight: number}) => {
+          console.log("received obj:", obj);
+          CSSInjector.injectCSS("body.keyboard-is-open .scroll-content:not(.keyboard-immune){"+ "margin-bottom:" + obj.keyboardHeight +"px!important;"+"}");
+          document.body.classList.add('keyboard-is-open');
+          this.scrollToElement();
+        });
+
+        window.addEventListener('keyboardDidHide', () => {
+          document.body.classList.remove('keyboard-is-open');
+        });
+      }
 
       this.navigatorService.initializeBackButton(() => {
 

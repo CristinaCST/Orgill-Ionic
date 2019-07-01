@@ -40,6 +40,8 @@ import { PurchasesProvider } from '../providers/purchases/purchases';
 import { SessionValidatorService } from '../services/session/sessionValidator';
 import { OpenNativeSettings } from '@ionic-native/open-native-settings';
 
+// Helpers
+import { CSSInjector } from '../helpers/css-injector';
 
 // Services
 import { NetworkService } from '../services/network/network';
@@ -152,6 +154,7 @@ import { CustomErrorHandlerService } from '../services/error-handler/CustomError
     ErrorScheduler,
     Geolocation,
     OpenNativeSettings,
+    CSSInjector,
     { provide: ErrorHandler, useClass: CustomErrorHandlerService }
   ]
 })
