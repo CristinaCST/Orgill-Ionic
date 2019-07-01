@@ -224,7 +224,10 @@ export class ProductPage implements OnInit {
         resolve();
       },
         error => {
+          this.loader.hide();
           console.error('error updating', error);
+          // TODO: catch this better
+          reject(error);
         });
     }
     });
@@ -236,7 +239,11 @@ export class ProductPage implements OnInit {
             this.canLeave = true;
             this.loader.hide();
             this.navigatorService.pop();
-        });
+          }).catch((err) => {
+            this.loader.hide()
+            // TODO: catch this better
+           /// throw(err);
+          });
         return false;
     }
     this.updateList(true);
