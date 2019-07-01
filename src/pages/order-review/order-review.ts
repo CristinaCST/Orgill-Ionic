@@ -11,7 +11,7 @@ import { Product } from '../../interfaces/models/product';
 import { ProductProvider } from '../../providers/product/product';
 import { DatabaseOrder } from '../../interfaces/models/database-order';
 import { ProductListInfo } from '../../interfaces/models/product-list-info';
-import { getNavParam } from '../../util/validatedNavParams';
+import { getNavParam } from '../../helpers/validatedNavParams';
 import { HotDealItem } from '../../interfaces/models/hot-deal-item';
 import { HotDealConfirmation } from '../../interfaces/models/hot-deal-confirmation';
 

@@ -14,7 +14,7 @@ import { LoadingService } from '../../services/loading/loading';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { ScannerService } from '../../services/scanner/scanner';
 import { Product } from '../../interfaces/models/product';
-import { getNavParam } from '../../util/validatedNavParams';
+import { getNavParam } from '../../helpers/validatedNavParams';
 import { PricingService } from '../../services/pricing/pricing';
 import { ReloadService } from '../../services/reload/reload';
 

@@ -4,7 +4,7 @@ import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-l
 import { NavigatorService } from '../../services/navigator/navigator';
 import { Catalog } from '../../pages/catalog/catalog';
 import { HotDealService } from '../../services/hotdeal/hotdeal';
-import { getNavParam } from '../../util/validatedNavParams';
+import { getNavParam } from '../../helpers/validatedNavParams';
 import { HotDealConfirmation } from '../../interfaces/models/hot-deal-confirmation';
 import { LocationElement } from '../../interfaces/models/location-element';
 

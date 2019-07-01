@@ -8,7 +8,7 @@ import { Category } from '../../interfaces/models/category';
 import { Subscription } from 'rxjs/Subscription';
 import * as Constants from '../../util/constants';
 import { NavigatorService } from '../../services/navigator/navigator';
-import { getNavParam } from '../../util/validatedNavParams';
+import { getNavParam } from '../../helpers/validatedNavParams';
 
 @Component({
   selector: 'page-products-search',

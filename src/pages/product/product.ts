@@ -15,7 +15,7 @@ import { HotDealItem } from '../../interfaces/models/hot-deal-item';
 import { PricingService } from '../../services/pricing/pricing';
 import { HotDealService } from '../../services/hotdeal/hotdeal';
 import { ProductProvider } from '../../providers/product/product';
-import { getNavParam } from '../../util/validatedNavParams';
+import { getNavParam } from '../../helpers/validatedNavParams';
 import { Events } from 'ionic-angular/util/events';
 import { ReloadService } from '../../services/reload/reload';
 

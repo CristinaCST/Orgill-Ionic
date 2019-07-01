@@ -16,7 +16,7 @@ import { LocalStorageHelper } from '../../helpers/local-storage';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { ShoppingListResponse } from '../../interfaces/response-body/shopping-list';
 import { APIResponse } from '../../interfaces/response-body/response';
-import { getNavParam } from '../../util/validatedNavParams';
+import { getNavParam } from '../../helpers/validatedNavParams';
 
 @Component({
   selector: 'page-add-to-shopping-list',

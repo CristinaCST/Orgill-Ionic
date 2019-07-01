@@ -3,7 +3,7 @@ import { NavParams, Events } from 'ionic-angular';
 import { Product } from '../../interfaces/models/product';
 import { CatalogsProvider } from '../../providers/catalogs/catalogs';
 import { LoadingService } from '../../services/loading/loading';
-import { getNavParam } from '../../util/validatedNavParams';
+import { getNavParam } from '../../helpers/validatedNavParams';
 import { ReloadService } from '../../services/reload/reload';
 import * as Constants from '../../util/constants';
 

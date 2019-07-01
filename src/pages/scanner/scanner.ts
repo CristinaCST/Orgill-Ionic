@@ -8,7 +8,7 @@ import { NavigatorService } from '../../services/navigator/navigator';
 import { ScannerService } from '../../services/scanner/scanner';
 import { ShoppingList } from '../../interfaces/models/shopping-list';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
-import { getNavParam } from '../../util/validatedNavParams';
+import { getNavParam } from '../../helpers/validatedNavParams';
 
 @Component({
   selector: 'page-scanner',

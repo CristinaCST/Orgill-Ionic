@@ -13,7 +13,7 @@ import { ProductsSearchPage } from '../products-search/products-search';
 import { ScannerPage } from '../scanner/scanner';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { Product } from '../../interfaces/models/product';
-import { getNavParam } from '../../util/validatedNavParams';
+import { getNavParam } from '../../helpers/validatedNavParams';
 import { AuthService } from '../../services/auth/auth';
 import { ReloadService } from '../../services/reload/reload';
 

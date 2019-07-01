@@ -10,7 +10,7 @@ import * as Strings from '../../util/strings';
 import { LocationElement } from '../../interfaces/models/location-element';
 import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
 import { PricingService } from '../../services/pricing/pricing';
-import { getNavParam } from '../../util/validatedNavParams';
+import { getNavParam } from '../../helpers/validatedNavParams';
 
 
 @Component({

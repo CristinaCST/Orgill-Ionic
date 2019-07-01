@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NavController, NavOptions, App, Platform, Events, NavParams, ViewController } from 'ionic-angular';
-import * as Equals from '../../util/equality';
+import * as Equals from '../../helpers/equality';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import * as Constants from '../../util/constants';
 import { BehaviorSubject } from 'rxjs';

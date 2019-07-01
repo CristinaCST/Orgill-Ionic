@@ -9,7 +9,7 @@ import { ProductsSearchPage } from '../products-search/products-search';
 import { LoadingService } from '../../services/loading/loading';
 import * as Constants from '../../util/constants';
 import { NavigatorService } from '../../services/navigator/navigator';
-import { getNavParam } from '../../util/validatedNavParams';
+import { getNavParam } from '../../helpers/validatedNavParams';
 import { ReloadService } from '../../services/reload/reload';
 import { Events } from 'ionic-angular/util/events';
 

@@ -5,7 +5,7 @@ import { NavParams } from 'ionic-angular';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
 import { ProductPage } from '../product/product';
 import { NavigatorService } from '../../services/navigator/navigator';
-import { getNavParam } from '../../util/validatedNavParams';
+import { getNavParam } from '../../helpers/validatedNavParams';
 
 
 @Component({
