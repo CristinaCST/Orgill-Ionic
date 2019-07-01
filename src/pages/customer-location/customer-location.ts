@@ -93,8 +93,10 @@ export class CustomerLocationPage implements OnInit {
     }
   }
 
-  public closeKeyboard(keyCode: string): void {
-    this.keyboard.close();
+  public closeKeyboard(keyCode: number): void {
+    if (keyCode === 13) {
+      this.keyboard.close();
+    }
   }
 
   public sortLocations(locations: CustomerLocation[]): CustomerLocation[] {
