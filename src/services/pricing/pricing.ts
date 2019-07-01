@@ -36,10 +36,6 @@ export class PricingService {
    * @returns number - a validated quantity or the same if it's ok.
    */
   public validateQuantity(suggestedValue: number | string, program: ItemProgram, product: Product, getDefaultMode: boolean = false): number {
-    if (!(suggestedValue as string)) {
-      return undefined;
-    }
-
     const safeSuggestedValue: number = typeof suggestedValue === 'string' ? Number(suggestedValue.replace(/[^0-9]/g, '')) : suggestedValue;
 
     let minQty: number = Math.max(1, Number(program.MINQTY));
