@@ -11,6 +11,7 @@ import { LocationElement } from '../../interfaces/models/location-element';
 import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
 import { PricingService } from '../../services/pricing/pricing';
 import { getNavParam } from '../../helpers/validatedNavParams';
+import { PONumberValidator } from '../../validators/PONumber';
 
 
 @Component({
@@ -42,7 +43,7 @@ export class CustomerLocationPage implements OnInit {
   constructor(private readonly navigatorService: NavigatorService,
               private readonly navParams: NavParams,
               private readonly userInfoProvider: UserInfoService,
-              private readonly popoverProvider: PopoversService,
+              private readonly popoversService: PopoversService,
               private readonly pricingService: PricingService,
               private readonly keyboard: Keyboard,
               private readonly events: Events) {
@@ -150,7 +151,7 @@ export class CustomerLocationPage implements OnInit {
           positiveButtonText: Strings.MODAL_BUTTON_OK
         };
 
-        this.popoverProvider.show(content);
+        this.popoversService.show(content);
         return;
       }
 
@@ -162,7 +163,7 @@ export class CustomerLocationPage implements OnInit {
           positiveButtonText: Strings.MODAL_BUTTON_OK
         };
 
-        this.popoverProvider.show(content);
+        this.popoversService.show(content);
         return;
       }
 
@@ -196,36 +197,12 @@ export class CustomerLocationPage implements OnInit {
     location.QUANTITY = this.pricingService.validateQuantity(location.QUANTITY, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM);
   }
 
-  public PONumberValidation(location: LocationElement): void {
-    if (!location.POSTOFFICE) {
-      return;
-    }
-
-    if (location.POSTOFFICE.length > 15) {
-      const content: PopoverContent = {
-        type: Constants.POPOVER_INFO,
-        title: Strings.GENERIC_MODAL_TITLE,
-        message: Strings.PO_NUMBER_TOO_LONG,
-        positiveButtonText: Strings.MODAL_BUTTON_OK
-      };
-
-      this.popoverProvider.show(content);
-      location.POSTOFFICE = location.POSTOFFICE.substr(0, 15);
-    }
-
-    const initialLength: number = location.POSTOFFICE.length;
-    location.POSTOFFICE = location.POSTOFFICE.replace(/[\W_]+/g, '');
-    if (initialLength !== location.POSTOFFICE.length) {
-      const content: PopoverContent = {
-        type: Constants.POPOVER_INFO,
-        title: Strings.GENERIC_MODAL_TITLE,
-        message: Strings.PO_ALPHANUMERIC_WARNING,
-        positiveButtonText: Strings.MODAL_BUTTON_OK
-      };
-
-      this.popoverProvider.show(content);
+  public PONumberValidation(location?: LocationElement): void {
+    if(location){
+      location.POSTOFFICE = PONumberValidator(location.POSTOFFICE, this.popoversService);
+    }else{
+      this.postOffice = PONumberValidator(this.postOffice, this.popoversService);
     }
 
   }
-
 }

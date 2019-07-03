@@ -17,7 +17,7 @@
     <ion-item-divider *ngIf="!noLocation" no-lines>{{"customer_locations_po" | translate}}:</ion-item-divider>
     <ion-item>
       <ion-input [(ngModel)]="postOffice" type="text"
-                 placeholder="{{'customer_locations_po_hint' | translate}}" (keyup.enter)="checkout()"></ion-input>
+                 placeholder="{{'customer_locations_po_hint' | translate}}" (ionFocus)="onFocus()" (focusout)="PONumberValidation()" (keyup.enter)="checkout()" maxlength="15"></ion-input>
     </ion-item>
   </ion-item-group>
   <ion-item-group [(ngModel)]="selectedLocation" padding radio-group class="locations-container">
@@ -27,7 +27,7 @@
     <ion-item *ngFor="let userLocation of userLocations">
         <ion-item>
             <ion-input [(ngModel)]="postOffice" type="text"
-                       placeholder="{{'customer_locations_po_hint' | translate}}" (keyup.enter)="checkout()"></ion-input>
+                       placeholder="{{'customer_locations_po_hint' | translate}}" (ionFocus)="onFocus()" (focusout)="PONumberValidation(hotDealLocation)" (keyup.enter)="checkout()" maxlength="15"></ion-input>
           </ion-item>
       <ion-label>
         <p [class]="selectedLocation===userLocation?'active':''"> {{userLocation.CUSTOMERNAME}} </p>
@@ -62,7 +62,7 @@
         </ion-col>
         <ion-col >
           <ion-input class="po-input" [(ngModel)]="hotDealLocation.POSTOFFICE" (ionFocus)="onFocus()" (focusout)="PONumberValidation(hotDealLocation)" (keyup.enter)="closeKeyboard()" clearInput type="text"
-            placeholder="{{'customer_locations_po_hint' | translate}}">
+            placeholder="{{'customer_locations_po_hint' | translate}}" maxlength="15">
           </ion-input>
         </ion-col>
       </ion-row>
