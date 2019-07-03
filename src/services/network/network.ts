@@ -11,16 +11,15 @@ export class NetworkService {
   public notified: boolean = false;
   public connectionStatus: boolean = true;
   public static firstConnect: boolean = true;
-  constructor(private readonly network: Network, private readonly popoversService: PopoversService, private readonly reloadService: ReloadService) {
+  constructor(private readonly network: Network, private readonly popoversService: PopoversService, private readonly reloadService: ReloadService) {}
 
-    if (this.network.type === 'none') {
+  public listenForNetworkEvents(): void {
+    if (this.network.type === 'none' || !this.network.type) {
       this.connectionStatus = false;
       NetworkService.firstConnect = false;
       this.openNetworkModal();
     }
-  }
-
-  public listenForNetworkEvents(): void {
+    
     this.network.onDisconnect()
       .subscribe(() => {
         this.notified = false;
@@ -38,7 +37,7 @@ export class NetworkService {
       });
   }
   private checkConnectionManually(): void {
-    this.connectionStatus = this.network.type === 'none' ? false : true;
+    this.connectionStatus = this.network.type === 'none' || !this.network.type ? false : true;
   }
 
   public openNetworkModal(): void {
@@ -48,6 +47,7 @@ export class NetworkService {
       this.notified = false;
       return;
     }
+
     if (this.connectionStatus) {
       ErrorScheduler.scheduledError = this;
       this.reloadService.announceRetry();
