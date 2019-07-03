@@ -13,7 +13,6 @@ product-pricing {
     .radio {
       margin: 0!important;
       display: flex !important;
-      justify-content: center !important;
     }
   }
 
@@ -46,6 +45,8 @@ product-pricing {
         min-width: 70%;
         p {
           text-align: left !important;
+          word-wrap: break-word;
+          white-space: pre-line;
         }
         p:nth-child(2) {
           font-size: $font-size-small;
@@ -54,6 +55,9 @@ product-pricing {
       }
       .price-info {
         width: 30%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
         p {
           text-align: right !important;
         }
