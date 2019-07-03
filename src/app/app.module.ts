@@ -38,7 +38,6 @@ import { ProductProvider } from '../providers/product/product';
 import { UserInfoService } from '../services/user-info/user-info';
 import { PurchasesProvider } from '../providers/purchases/purchases';
 import { SessionValidatorService } from '../services/session/sessionValidator';
-import { OpenNativeSettings } from '@ionic-native/open-native-settings';
 
 // Helpers
 import { CSSInjector } from '../helpers/css-injector';
@@ -153,7 +152,6 @@ import { CustomErrorHandlerService } from '../services/error-handler/CustomError
     ReloadService,
     ErrorScheduler,
     Geolocation,
-    OpenNativeSettings,
     CSSInjector,
     { provide: ErrorHandler, useClass: CustomErrorHandlerService }
   ]
