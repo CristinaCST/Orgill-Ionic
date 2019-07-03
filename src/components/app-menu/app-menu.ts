@@ -236,6 +236,7 @@ export class AppMenuComponent implements OnInit {
   }
 
   public showCustomShoppingListsMenu(): void {
+    this.getShoppingLists();
     this.showShoppingListsMenu = true;
   }
 
