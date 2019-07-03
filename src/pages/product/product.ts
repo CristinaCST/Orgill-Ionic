@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { Product } from '../../interfaces/models/product';
 import { ProgramProvider } from '../../providers/program/program';
@@ -39,7 +39,7 @@ export class ProductPage implements OnInit {
 
   public fromShoppingList: boolean;
   private shoppingListId: number;
-  public quantityFromList: string;
+  public quantityFromList: number;
 
   private readonly loader: LoadingService;
 
@@ -54,7 +54,8 @@ export class ProductPage implements OnInit {
     private readonly hotDealService: HotDealService,
     private readonly productProvider: ProductProvider,
     private readonly events: Events,
-    private readonly reloadService: ReloadService) {
+    private readonly reloadService: ReloadService,
+    private readonly changeDetector: ChangeDetectorRef) {
 
     this.loader = this.loadingService.createLoader();
   }
@@ -87,7 +88,9 @@ export class ProductPage implements OnInit {
     if (this.fromShoppingList) {
       this.shoppingListId = getNavParam(this.navParams, 'shoppingListId', 'number');
      // this.id = getNavParam(this.navParams, id');
-      this.quantityFromList = getNavParam(this.navParams, 'quantity', 'string');
+      this.quantityFromList = getNavParam(this.navParams, 'quantity', 'number');
+
+      this.changeDetector.detectChanges();
     }
 
     if (this.isHotDeal) {
@@ -203,7 +206,7 @@ export class ProductPage implements OnInit {
     this.navigatorService.push(CustomerLocationPage, { hotDeal }).catch(err => console.error(err));
   }
 
-  public onQuantityChange($event?: { quantity: number, total: number }): void {
+  public onQuantityChange($event?: { quantity: number, total?: number }): void {
     if ($event) {
       this.quantity = $event.quantity;
       this.lastEvent = $event;
