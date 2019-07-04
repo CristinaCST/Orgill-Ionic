@@ -12,6 +12,12 @@ ion-content {
   p {
     text-align: center;
   }
+
+  ion-list{
+    item-inner{
+      padding:0px!important;
+    }
+  }
   .modal-btn-container {
     display: flex;
     width: 100%;
@@ -39,7 +45,15 @@ ion-content {
   }
 }
 
+.error-label{
+  border-color:red;
+  border-style: solid;
+  border-width: 0px 0px 2px 0px;
 
+  input::placeholder{
+    color:red!important;
+  }
+}
 
 body.keyboard-is-open{
   .popover-content{

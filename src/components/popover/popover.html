@@ -14,10 +14,10 @@
   <p *ngIf="data.message">
     {{data.message | translate }}
   </p>
-  <div *ngIf="data.isNewListAlert">
+  <div *ngIf="data.isNewListModal">
     <ion-list>
       <ion-item no-padding>
-        <ion-input [(ngModel)]="listName" type="text" maxlength="40"
+        <ion-input #listNameInput [(ngModel)]="listName" type="text" maxlength="40" (focusout)="cleanInput()"
                    placeholder="{{'new_list_hint_name' | translate }}" (keyup.enter)="$event.target.blur()"></ion-input>
       </ion-item>
       <ion-item no-padding>
