@@ -57,7 +57,7 @@ export class NetworkService {
     }
 
     ErrorScheduler.scheduledError = this;
-    const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.POPOVER_TIMEOUT_ERROR_MESSAGE, Strings.POPOVER_OPEN_DATA, undefined, Strings.POPOVER_OPEN_WIFI, Strings.POPOVER_TIMEOUT_ERROR_MESSAGE);
+    const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.POPOVER_TIMEOUT_ERROR_MESSAGE);
     this.popoversService.show(content).subscribe(res => {
       ErrorScheduler.scheduledError = undefined;
       this.openNetworkModal();

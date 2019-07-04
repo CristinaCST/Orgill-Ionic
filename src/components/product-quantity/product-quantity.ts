@@ -27,14 +27,12 @@ export class ProductQuantityComponent implements OnInit {
     this.programSubscription = this.programProvider.getSelectedProgram().subscribe(program => {
       if (program) {
         this.program = program;
-        this.quantity = this.getInitialQuantity();
+        this.quantity = this.quantityFromList ? this.quantityFromList : this.getInitialQuantity();
         this.handleQuantityChange();
       }
 
     });
-    if (this.quantityFromList > 0) {
-      this.quantity = this.validateQuantity(this.quantityFromList);
-    }
+
     this.setSavings();
   }
 

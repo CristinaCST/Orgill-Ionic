@@ -14,6 +14,9 @@ page-add-to-shopping-list {
         flex: 1;
         white-space: normal;
         justify-content: flex-start;
+        text-overflow: ellipsis;
+        word-break: break-all;
+
 
         ion-radio {
           display: flex !important;

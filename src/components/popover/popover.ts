@@ -1,8 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavParams, ViewController, Content, NavOptions } from 'ionic-angular';
 import * as Constants from '../../util/constants';
-import * as Strings from '../../util/strings';
-import { OpenNativeSettings } from '@ionic-native/open-native-settings';
 
 
 @Component({
@@ -18,7 +16,7 @@ export class PopoverComponent {
   @ViewChild('immuneElement') private readonly immuneElement: Content;
 
   constructor(private readonly navParams: NavParams,
-              public viewCtrl: ViewController, public nativeSettings : OpenNativeSettings) {
+              public viewCtrl: ViewController) {
 
 
     this.data = this.navParams.data;
@@ -36,7 +34,6 @@ export class PopoverComponent {
       this.data.isNewListAlert = this.data.type === Constants.POPOVER_NEW_SHOPPING_LIST;
       this.data.closeOptionAvailable = this.data.type !== Constants.POPOVER_ORDER_CONFIRMATION;
       this.instantCloseOnNo = this.data.type === Constants.POPOVER_QUIT;
-      this.data.isInternetError = this.data.type === Strings.POPOVER_TIMEOUT_ERROR_MESSAGE;
     }
   }
 
@@ -51,15 +48,6 @@ export class PopoverComponent {
       data.listName = this.listName;
       data.listDescription = this.listDescription;
       data.type = this.isMarketOnlyList ? 'market_only' : 'default';
-    }
-
-    if (this.data.isInternetError) {
-      if (option === 'NO') {
-        this.nativeSettings.open('wifi');
-      }
-      if (option === 'OK') {
-        this.nativeSettings.open('network');
-      }
     }
 
 

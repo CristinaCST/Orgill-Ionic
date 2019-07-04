@@ -57,7 +57,6 @@ export class MyApp {
         CSSInjector.setHead();
 
         window.addEventListener('keyboardDidShow', (obj: Event & {keyboardHeight: number}) => {
-          console.log("received obj:", obj);
           CSSInjector.injectCSS("body.keyboard-is-open .scroll-content:not(.keyboard-immune){"+ "margin-bottom:" + obj.keyboardHeight +"px!important;"+"}");
           document.body.classList.add('keyboard-is-open');
           this.scrollToElement();

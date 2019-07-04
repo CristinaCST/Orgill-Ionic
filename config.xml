@@ -3,7 +3,7 @@
     <name>Orgill</name>
     <description>The OZone</description>
     <author email="cristina.nicolae@cst-us.com" href="http://cst-us.com/">CST Team</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.0.26:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -125,7 +125,7 @@
     <allow-navigation href="http://192.168.100.102:8100" sessionid="d7307190" />
     <allow-navigation href="http://192.168.1.88:8100" sessionid="3d1b2f55" />
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1" />
-    <plugin name="cordova-open-native-settings" spec="1.5.2" />
+    <allow-navigation href="http://192.168.0.26:8100" sessionid="53c12a60" />
     <engine name="android" spec="7.1.4" />
     <engine name="ios" spec="4.5.5" />
 </widget>
