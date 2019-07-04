@@ -21,8 +21,7 @@
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="FadeSplashScreenDuration" value="300" />
-    <preference name="KeyboardResize" value="true" />
-    <preference name="KeyboardResizeMode" value="native" />
+    <preference name="KeyboardResize" value="false" />
     <preference name="orientation" value="portrait" />
     <platform name="android">
         <allow-intent href="market:*" />

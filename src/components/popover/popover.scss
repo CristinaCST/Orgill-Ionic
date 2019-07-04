@@ -45,6 +45,7 @@ ion-content {
   }
 }
 
+
 .error-label{
   border-color:red;
   border-style: solid;
@@ -59,4 +60,4 @@ body.keyboard-is-open{
   .popover-content{
     margin-top:-$keyboard-margin-push-amount!important;  
   }
-}
+}  

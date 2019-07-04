@@ -52,12 +52,17 @@ export class MyApp {
     this.platform.ready().then(() => {
       this.oneSignalService.init();
 
-      if (this.platform.is('android')) {
+   //   if (this.platform.is('android')) {
 
         CSSInjector.setHead();
 
+
         window.addEventListener('keyboardDidShow', (obj: Event & {keyboardHeight: number}) => {
-          CSSInjector.injectCSS("body.keyboard-is-open .scroll-content:not(.keyboard-immune){"+ "margin-bottom:" + obj.keyboardHeight +"px!important;"+"}");
+          if (this.platform.is('android')) {
+            CSSInjector.injectCSS("body.keyboard-is-open .scroll-content:not(.keyboard-immune){" + "margin-bottom:" + obj.keyboardHeight + "px!important;" + "}");
+          } else {
+            CSSInjector.injectCSS("body.keyboard-is-open .scroll-content:not(.keyboard-immune){" + "margin-bottom:" + obj.keyboardHeight + "px!important; padding-bottom:0px!important;" + "}");
+          }
           document.body.classList.add('keyboard-is-open');
           this.scrollToElement();
         });
@@ -65,7 +70,7 @@ export class MyApp {
         window.addEventListener('keyboardDidHide', () => {
           document.body.classList.remove('keyboard-is-open');
         });
-      }
+      //}
 
       this.navigatorService.initializeBackButton(() => {
 
