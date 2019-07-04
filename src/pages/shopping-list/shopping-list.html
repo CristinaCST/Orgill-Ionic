@@ -4,7 +4,7 @@
   <navbar [customButtons]='menuCustomButtons' [title]="shoppingList ? shoppingList.ListName: ''" [isMenuEnabled]="true"
     [isBackEnabled]="false" (buttonClicked)="buttonClicked($event)"></navbar>
   <!-- Shopping Lists Search Bar -->
-  <search-bar [showBackButton]="false" (searched)="onSearched($event)"></search-bar>
+  <search-bar [showBackButton]="isCheckout || isDeleteMode" (searched)="onSearched($event)"></search-bar>
 </ion-header>
 
 <ion-content (ionScrollStart)="scrollStart()">
