@@ -61,18 +61,19 @@ export class HotDealService {
 
 
   public isHotDealExpired(timestamp?: string): boolean {
-    const dateString: string = timestamp ? timestamp : LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_PAYLOAD_TIMESTAMP);
-    const hotDealTimestamp: Date = new Date(parseInt(dateString, 10));
-
-    if (Constants.DEBUG_ONE_SIGNAL) {
-      return false;
-    }
-
-    if ((new Date()).getDay() !== hotDealTimestamp.getDay()) {
-      this.markHotDealExpired();
-      return true;
-    }
     return false;
+    // const dateString: string = timestamp ? timestamp : LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_PAYLOAD_TIMESTAMP);
+    // const hotDealTimestamp: Date = new Date(parseInt(dateString, 10));
+    //
+    // if (Constants.DEBUG_ONE_SIGNAL) {
+    //   return false;
+    // }
+    //
+    // if ((new Date()).getDay() !== hotDealTimestamp.getDay()) {
+    //   this.markHotDealExpired();
+    //   return true;
+    // }
+    // return false;
   }
 
   public markHotDealExpired(): void {

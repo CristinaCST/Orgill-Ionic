@@ -33,9 +33,9 @@
       </div>
     </div>
   </ion-item>
-  <p *ngIf="product.QTY_ROUND_OPTION === 'Y'" class="percent-Note">{{"four_percent_note" | translate}}</p>
   <ion-item *ngIf="!hotDeal" class="total-price">
     <span #totalLabel>{{"product_total_price" | translate}}:</span>
     <span>{{"product_currency" | translate}}{{total | number: '1.2-2'}}</span>
   </ion-item>
+  <p *ngIf="product.QTY_ROUND_OPTION === 'Y'" class="percent-Note">{{"four_percent_note" | translate}}</p>
 </div>
