@@ -235,3 +235,5 @@ export const ADDED_ITEM_TO_LIST: string = 'added_item_to_list';
 // Define a variable named culprit for this one to work
 export const RELOAD_ERROR_MESSAGE_WITH_CULPRIT: string = 'reload_error_message_with_culprit';
 export const RELOAD_ERROR_MESSAGE_WITHOUT_CULPRIT: string = 'reload_error_message_without_culprit';
+
+export const DELETE_ITEM_PROMPT_MESSAGE: string = 'delete_item_prompt_message';

@@ -155,6 +155,16 @@ export class ShoppingListPage {
   }
 
   public delete(): void {
+
+    const deletePopoverContent: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE,Strings.DELETE_ITEM_PROMPT_MESSAGE, Strings.MODAL_BUTTON_YES, undefined, Strings.MODAL_BUTTON_CANCEL);
+    this.popoversService.show(deletePopoverContent).subscribe(res =>{
+      if (res.optionSelected === 'OK') {
+        this.deleteItems();
+      }
+    })
+  }
+
+  private deleteItems(): void {
     const array: ShoppingListItem[] = this.selectedItems.filter(item => item !== undefined && item !== null);
     let ok: boolean = true;
 
