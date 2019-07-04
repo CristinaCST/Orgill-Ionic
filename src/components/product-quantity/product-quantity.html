@@ -24,7 +24,7 @@
           <ion-icon name="remove" color="OrgillRed"></ion-icon>
         </button>
         <label>
-          <input #quantityInput clearInput (focusout)="handleQuantityChange()" (keyup.enter)="handleQuantityChange()" min="1" maxlength="5" type="tel" inputmode="numeric" pattern="^[0-9]"
+          <input (focus)="onFocus()" clearInput (focusout)="handleQuantityChange()" (keyup.enter)="$event.target.blur()" min="1" maxlength="5" type="tel" inputmode="numeric" pattern="^[0-9]"
                  [(ngModel)]="quantity"/>
         </label>
         <button ion-button icon-only small clear (click)="add()">
@@ -35,7 +35,7 @@
   </ion-item>
   <p *ngIf="product.QTY_ROUND_OPTION === 'Y'" class="percent-Note">{{"four_percent_note" | translate}}</p>
   <ion-item *ngIf="!hotDeal" class="total-price">
-    <span>{{"product_total_price" | translate}}:</span>
+    <span #totalLabel>{{"product_total_price" | translate}}:</span>
     <span>{{"product_currency" | translate}}{{total | number: '1.2-2'}}</span>
   </ion-item>
 </div>

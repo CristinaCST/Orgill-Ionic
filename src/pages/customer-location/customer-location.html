@@ -57,34 +57,34 @@
 
 
       <ion-row>
-        <ion-col >
+        <ion-col col-5>
           <ion-item class="po-label"> {{"customer_locations_po" | translate}}: </ion-item>
         </ion-col>
-        <ion-col >
-          <ion-input class="po-input" [(ngModel)]="hotDealLocation.POSTOFFICE" (ionFocus)="onFocus()" (focusout)="PONumberValidation(hotDealLocation)" (keyup.enter)="closeKeyboard()" clearInput type="text"
+        <ion-col col-7>
+          <ion-input class="po-input" [(ngModel)]="hotDealLocation.POSTOFFICE" (ionFocus)="onFocus()" (focusout)="PONumberValidation(hotDealLocation)" (keyup.enter)="$event.target.blur()" clearInput type="text"
             placeholder="{{'customer_locations_po_hint' | translate}}">
           </ion-input>
         </ion-col>
       </ion-row>
 
       <ion-row>
-          <ion-col col-4>
+          <ion-col col-5>
             <ion-item class="qt-label"> {{"customer_locations_qty" | translate}}: </ion-item>
           </ion-col>
-          <ion-col col-2>
-              <button ion-button icon-only small clear (click)="remove(hotDealLocation)">
+          <ion-col col-1>
+              <button class="qtybutton" ion-button icon-only small clear (click)="remove(hotDealLocation)">
                   <ion-icon name="remove" color="OrgillRed"></ion-icon>
                 </button>
           </ion-col>
 
-          <ion-col col-4>
-            <ion-input clearInput (focusout)="handleQuantityChange(hotDealLocation)" (ionFocus)="onFocus()" (keyup.enter)="closeKeyboard()" class="po-input" [(ngModel)]="hotDealLocation.QUANTITY" min="1" maxlength="5" type="tel" inputmode="numeric" pattern="^[0-9]"
+          <ion-col col-5>
+            <ion-input clearInput (focusout)="handleQuantityChange(hotDealLocation)" (ionFocus)="onFocus()" (keyup.enter)="$event.target.blur()" class="po-input" [(ngModel)]="hotDealLocation.QUANTITY" min="1" maxlength="5" type="tel" inputmode="numeric" pattern="^[0-9]"
               placeholder="{{'customer_locations_qty_hint' | translate}}">
           </ion-input>
 
           </ion-col>
-          <ion-col col-2>
-            <button ion-button icon-only small clear (click)="add(hotDealLocation)">
+          <ion-col col-1>
+            <button class="qtybutton" ion-button icon-only small clear (click)="add(hotDealLocation)">
                 <ion-icon name="add" color="OrgillRed"></ion-icon>
               </button>
           </ion-col>

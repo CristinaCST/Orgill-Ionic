@@ -18,11 +18,11 @@
     <ion-list>
       <ion-item no-padding>
         <ion-input [(ngModel)]="listName" type="text" maxlength="40"
-                   placeholder="{{'new_list_hint_name' | translate }}"></ion-input>
+                   placeholder="{{'new_list_hint_name' | translate }}" (keyup.enter)="$event.target.blur()"></ion-input>
       </ion-item>
       <ion-item no-padding>
         <ion-input [(ngModel)]="listDescription" type="text" maxlength="50"
-                   placeholder="{{'new_list_hint_desc'| translate }}"></ion-input>
+                   placeholder="{{'new_list_hint_desc'| translate }}" (keyup.enter)="$event.target.blur()"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Is Market Only</ion-label>

@@ -83,8 +83,6 @@ export class CustomerLocationPage implements OnInit {
       });
 
     });
-
-
   }
 
   public onFocus(): void {
@@ -173,7 +171,7 @@ export class CustomerLocationPage implements OnInit {
 
     }
   }
-
+  
   public setHotDealTotalPrice(): void {
     let qty: number = 0;
     this.hotDealItem.LOCATIONS.forEach(location => {

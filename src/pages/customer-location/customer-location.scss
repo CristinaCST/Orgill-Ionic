@@ -13,13 +13,6 @@ page-customer-location {
       width: 100%;
       font-style: italic;
     }
-   /* ion-input {
-      border-bottom: 1px solid #a9a6a6;
-    }*/
-    input::placeholder {
-      color: color($colors, OrgillRed);
-      opacity: 1;
-    }
   }
   .locations-container {
     ion-item, ion-item-divider {
@@ -59,18 +52,28 @@ page-customer-location {
     padding:5px;
   }
 
-  .po-input{
-    border: 2px;
-    border-radius: 35px;
-    border-style: solid;
-    float:left!important;
-    display:flex;
-  }
-
-
   .item-inner{
     border:none!important;
   }
 
+  ion-input::placeholder {
+    color: color($colors, OrgillRed);
+    opacity: 1;
+  }
 
+  ion-input {
+    border: 2px;
+    border-radius: 35px;
+    border-style: solid;
+    input{
+      text-align: center!important;
+      padding-right:0px!important; //fix for clear-input
+    }
+  }
+  
+  .qtybutton{
+    position: absolute;
+    left:-5%;
+    top:20%;
+  }
 }

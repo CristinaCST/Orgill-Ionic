@@ -176,7 +176,6 @@ export const PERMISSION_MODAL: string = 'permissionModal';
 export const LOCAL_PRODUCT_IMAGE_PLACEHOLDER: string = '../../assets/imgs/product_placeholder.png';
 
 // DEBUG
-
 export const DEBUG_TRANSLATIONS: boolean = false;
 
 export const EVENT_NEW_SHOPPING_LIST: string = 'newShoppingList';
