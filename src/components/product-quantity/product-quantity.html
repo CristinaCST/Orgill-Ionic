@@ -24,7 +24,7 @@
           <ion-icon name="remove" color="OrgillRed"></ion-icon>
         </button>
         <label>
-          <input (focus)="onFocus()" clearInput (focusout)="handleQuantityChange()" (keyup.enter)="$event.target.blur()" min="1" maxlength="5" type="tel" inputmode="numeric" pattern="^[0-9]"
+          <input clearInput (focusout)="handleQuantityChange()" (keyup.enter)="$event.target.blur()" min="1" maxlength="5" type="tel" inputmode="numeric" pattern="^[0-9]"
                  [(ngModel)]="quantity"/>
         </label>
         <button ion-button icon-only small clear (click)="add()">
