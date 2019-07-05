@@ -169,6 +169,8 @@ export const ONE_SIGNAL_IOS_PERMISSION_DECLINED: string = 'iosDeclined';
 export const ONE_SIGNAL_PAYLOAD_TIMESTAMP: string = 'oneSignalPayloadTimestamp';
 export const HOT_DEAL_EXPIRED_EVENT: string = 'hotDealExpired';
 export const ONE_SIGNAL_DEBUG_LEVEL: number = 6;
+export const ONE_SIGNAL_CANADA_USER_TYPES: string[] = ['8', '12'];
+export const ONE_SIGNAL_RETAILER_TYPE_TAG: string = 'retailer_type';
 
 export const PERMISSION_MODAL: string = 'permissionModal';
 

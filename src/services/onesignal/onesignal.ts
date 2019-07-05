@@ -12,6 +12,7 @@ import { NavigatorService } from '../../services/navigator/navigator';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
+import { AuthService } from '../../services/auth/auth';
 
 enum androidPermissionState{
     AUTHORIZED = 1,
@@ -35,6 +36,7 @@ export class OneSignalService {
     private pushNotificationPermission: boolean = false;
     // private locationPermission: boolean = false;
 
+    // Ensures the modal only displays once or at the right time
     private readonly modalState: { initial: number, navCount: number } = { initial: 100, navCount: 0 };
     private navigationSubscription: Subscription;
 
@@ -47,7 +49,8 @@ export class OneSignalService {
         private readonly secureActions: SecureActionsService,
         private readonly platform: Platform,
         private readonly geolocation: Geolocation,
-        private readonly navigatorService: NavigatorService
+        private readonly navigatorService: NavigatorService,
+        private readonly authService: AuthService
     ) { }
 
 
@@ -77,7 +80,6 @@ export class OneSignalService {
 
         // Handle the receiving of a notification, this currently only works if application is not closed :(
         this.oneSignal.handleNotificationReceived().subscribe(data => {
-          console.log(" RECEIVED DATA: ", data);
             if (data && data.payload && this.validateDate(data.payload)) {    // Validate the structure of the notification
                 this.notificationReceived(data.payload);
             }
@@ -85,7 +87,6 @@ export class OneSignalService {
 
         // Handle the opening of a notification
         this.oneSignal.handleNotificationOpened().subscribe(data => {
-          console.log("OPENED DATA: ", data);
             if (data && data.notification && this.validateDate(data.notification.payload)) {   // Validate the structure of the notification
                 this.notificationOpened(data);
             }
@@ -101,18 +102,17 @@ export class OneSignalService {
         this.oneSignal.endInit();
 
         this.events.subscribe(Constants.EVENT_NAVIGATE_TO_PAGE, () => {
-            this.modalState.navCount++;
+            this.modalState.navCount++; // We know we navigated.
         });
 
         // Proceed to handle permissions
         this.setPermissions();
-
     }
 
     /**
      * Check or get all needed permissions.
      */
-    private setPermissions(platforms: string[] = ['android']): void {
+    private setPermissions(): void {
 
         // If OneSignal is in DEBUG mode we reset the status of permissions so we get modals again.
         if (Constants.DEBUG_ONE_SIGNAL && Constants.DEBUG_ONE_SIGNAL_CLEAN_PREFS) {
@@ -164,7 +164,6 @@ export class OneSignalService {
         });
     }
 
-
     /**
      * Handles android-side of permissions
      */
@@ -174,6 +173,18 @@ export class OneSignalService {
         if (this.pushNotificationPermission) {
             LocalStorageHelper.removeFromLocalStorage(Constants.NOTIFICATION_SUBSCRIPTION_ANDROID_PATH);
             this.handleLocationPermission();
+
+            this.secureActions.do(() => { // We make a call to secure actions and schedule our code because we need a valid user reference for this part
+                let retailer_type = 'USA';
+                for (let division in Constants.ONE_SIGNAL_CANADA_USER_TYPES) {
+                    if (division === this.authService.User.division) {
+                        retailer_type = 'CANADA';
+                        break;
+                    };
+                }
+                this.oneSignal.sendTag(Constants.ONE_SIGNAL_RETAILER_TYPE_TAG, retailer_type);
+            });
+           
         } else if (this.getPermissionDismissStatus(Constants.ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH)) {
             LocalStorageHelper.saveToLocalStorage(Constants.NOTIFICATION_SUBSCRIPTION_ANDROID_PATH, true);
         }
@@ -201,7 +212,7 @@ export class OneSignalService {
     }
 
     /**
-     * Handles iOS side of perissions setup
+     * Handles iOS side of permissions setup
      */
     private iOSPermissionsSetup(): Promise<boolean> {
 
@@ -231,8 +242,8 @@ export class OneSignalService {
                 return this.badge.requestPermission();
             }
             return Promise.resolve(hasPermission);
-        }).then(requestResult => {
-            return new Promise((resolve, reject) => {
+        }).then((requestResult: boolean) => {
+            return new Promise(resolve => {
 
                 const askedAndDeclined: string = LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_IOS_PERMISSION_DECLINED);
                 if (askedAndDeclined !== 'true' && this.pushNotificationPermission) {
@@ -264,42 +275,15 @@ export class OneSignalService {
             };
 
             this.popoversService.show(content);
-            /*this.popoversService.show(content).subscribe((result: {}) => {
-                resolve(result);
-            });*/
         });
     }
-
-    /*
-    private showSubscriptionSetting() {
-        let content = {
-            type: Constants.PERMISSION_MODAL,
-            title: Strings.GENERIC_MODAL_TITLE,
-            message: Strings.ONE_SIGNAL_SUBSCRIPTION_REMINDER,
-            positiveButtonText: Strings.MODAL_BUTTON_YES,
-            negativeButtonText: Strings.MODAL_BUTTON_NO
-        };
-
-        this.popoversService.show(content).subscribe((result) => {
-            if (result['optionSelected'] == 'OK') {
-                this.oneSignal.setSubscription(true);
-
-                // Cleanup modals
-                this.permissionSaveResult(Constants.ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH, result['optionSelected']);
-                this.handleLocationPermission();
-                LocalStorageHelper.removeFromLocalStorage(Constants.NOTIFICATION_SUBSCRIPTION_ANDROID_PATH);
-            } else {
-                this.oneSignal.setSubscription(false);
-            }
-        });
-    }*/
 
     /**
      * Special function for iOS to know whether the notification permission was granted or declined
      * @param status Save a specific status
      */
     private iosNativePermissionStatusUpdate(status?: boolean): void {
-        if (typeof status === 'undefined') {
+        if (status !== undefined) {
             this.oneSignal.getPermissionSubscriptionState().then(result => {
                 if (result.permissionStatus.hasPrompted && result.permissionStatus.state === 0) {
                     LocalStorageHelper.saveToLocalStorage(Constants.ONE_SIGNAL_IOS_PERMISSION_DECLINED, 'true');
@@ -311,13 +295,6 @@ export class OneSignalService {
             LocalStorageHelper.saveToLocalStorage(Constants.ONE_SIGNAL_IOS_PERMISSION_DECLINED, (!status).toString());
         }
     }
-
-    /*
-    private iosNativePermissionDeclined() {
-        const status = LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_IOS_PERMISSION_DECLINED);
-        return status;
-    }*/
-
 
     /**
      * Function that checks wether we have location permission.
@@ -340,7 +317,7 @@ export class OneSignalService {
 
     private notificationReceived(data: OSNotificationPayload): void {
         
-        // Log only if we areverbose logging
+        // Log only if we are verbose logging
         this.debugLog('Received package:' + JSON.stringify(data), data);
 
         this.savePackageDate(data);
@@ -393,9 +370,7 @@ export class OneSignalService {
         const notificationPayload: OSNotificationPayload = data.notification.payload;
 
         this.debugLog('NOTIFICATION OPENED with data: ' + JSON.stringify(data));
-
         this.savePackageDate(notificationPayload);
-
         this.registerHotDealInMenu(notificationPayload);
 
         // Process the notification
@@ -403,7 +378,6 @@ export class OneSignalService {
 
         // Decrease the badge counter for each notification
         if (this.platform.is('ios')) {
-
             this.badge.decrease(1);
         }
     }
@@ -453,10 +427,6 @@ export class OneSignalService {
      * @param data Should be a packet from OneSignal, it can be left null to process a simple push notification without payload
      */
     private goToHotDeal(data: OSNotificationPayload): void {
-
-        /*     if(!this.sessionValidatorService.isValidSession()){
-                 return;
-             }*/
         const sku: string = this.extractPackageSKU(data);
         this.debugLog('Sku in go to hotdeal:' + sku);
         if (data) {
@@ -464,16 +434,12 @@ export class OneSignalService {
                 this.secureActions.do(() => {
                     this.hotDealService.navigateToHotDeal(sku);
                 });
-
-
             } else {    // If there is data but the package does not respect the hot deal structure
                 this.debugLog('ONESIGNAL package is not a hot deal but it exists...' + JSON.stringify(data));
-
             }
         } else {  // If the package is empty just open the app?
             // TODO: Implement something here?
             this.debugLog('ONESIGNAL NOTIFICATION PACKET IS NULL...' + JSON.stringify(data));
-
         }
     }
 
@@ -572,10 +538,6 @@ export class OneSignalService {
     private getPermissionDismissStatus(preferenceID: string): boolean {
         return LocalStorageHelper.getFromLocalStorage(preferenceID + 'Modal') === 'true' ? true : false;
     }
-
-    /* private resetPermissionDismissStatus(preferenceID) {
-         LocalStorageHelper.removeFromLocalStorage(preferenceID + 'Modal');
-     }*/
 
     /**
      * Debug method that only works if One signal is marked as in verbose mode from constants

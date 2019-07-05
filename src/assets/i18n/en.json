@@ -186,7 +186,7 @@
   "button_uninstall": "Uninstall",
   "default_http_error":"Error",
   "no_acces":"You have no access!",
-  "something_went_wrong":"Someting went wrong...",
+  "something_went_wrong":"Something went wrong...",
 
   "location_permissions_message": "We need location permissions to send you local area deals",
   "notifications_permissions_message": "We need push notification permissions to send you hot deals",
