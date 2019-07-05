@@ -7,7 +7,6 @@ import * as Constants from '../../util/constants';
 import { Product } from '../../interfaces/models/product';
 import { APIResponse } from '../../interfaces/response-body/response';
 import { Observable } from 'rxjs';
-import { DatabaseActionResponse } from '../../interfaces/response-body/database-action-response';
 import { DatabaseOrder } from '../../interfaces/models/database-order';
 import { ProductListInfo } from '../../interfaces/models/product-list-info';
 import { OrderResult } from '../../interfaces/response-body/order-result';
@@ -253,8 +252,8 @@ export class ShoppingListsProvider {
               insertToDBInfo.confirmation_number = JSON.parse(response.d);
 
               // TODO: Should change this to promise-like and get rid of await, of all awaits for that matter.
-                resolve({confirmationNumber: insertToDBInfo.confirmation_number} as OrderResult);
-              } else {
+              resolve({ confirmationNumber: insertToDBInfo.confirmation_number } as OrderResult);
+            } else {
               reject(response);
             }
           });

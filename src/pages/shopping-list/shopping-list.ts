@@ -157,12 +157,12 @@ export class ShoppingListPage {
 
   public delete(): void {
 
-    const deletePopoverContent: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE,Strings.DELETE_ITEM_PROMPT_MESSAGE, Strings.MODAL_BUTTON_YES, undefined, Strings.MODAL_BUTTON_CANCEL);
-    this.popoversService.show(deletePopoverContent).subscribe(res =>{
+    const deletePopoverContent: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.DELETE_ITEM_PROMPT_MESSAGE, Strings.MODAL_BUTTON_YES, undefined, Strings.MODAL_BUTTON_CANCEL);
+    this.popoversService.show(deletePopoverContent).subscribe(res => {
       if (res.optionSelected === 'OK') {
         this.deleteItems();
       }
-    })
+    });
   }
 
   private deleteItems(): void {

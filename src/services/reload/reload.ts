@@ -1,10 +1,13 @@
+ // TODO: re-enable linting after fixing this
+    // tslint:disable
+
 import { Injectable } from '@angular/core';
 import { Events } from 'ionic-angular';
 import { LoadingService } from '../../services/loading/loading';
-import { PopoversService, PopoverContent, DefaultPopoverResult } from '../../services/popovers/popovers';
-import * as Strings from '../../util/strings';
+import { /* PopoversService,  PopoverContent,*/ DefaultPopoverResult } from '../../services/popovers/popovers';
+// import * as Strings from '../../util/strings';
 import * as Constants from '../../util/constants';
-import { ErrorScheduler } from '../../services/error-scheduler/error-scheduler';
+// import { ErrorScheduler } from '../../services/error-scheduler/error-scheduler';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
@@ -13,12 +16,13 @@ export class ReloadService {
     public dirty: boolean = false;
     public culprit: string;
 
-    constructor(private readonly events: Events, private readonly loadingService: LoadingService, private readonly popoversService: PopoversService) {
+    constructor(private readonly events: Events, private readonly loadingService: LoadingService /*, private readonly popoversService: PopoversService*/) {
         this.loader = this.loadingService.createLoader();
     }
 
+   
     // TODO: this should not work if we don't have network.
-    private showTryAgainModal(): Observable<DefaultPopoverResult> {
+    private showTryAgainModal(): Observable<DefaultPopoverResult> { 
         // if (ErrorScheduler.scheduledError === undefined) {
         //     ErrorScheduler.scheduledError = this;
         // } else {

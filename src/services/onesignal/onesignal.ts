@@ -175,12 +175,12 @@ export class OneSignalService {
             this.handleLocationPermission();
 
             this.secureActions.do(() => { // We make a call to secure actions and schedule our code because we need a valid user reference for this part
-                let retailer_type = 'USA';
-                for (let division in Constants.ONE_SIGNAL_CANADA_USER_TYPES) {
+                let retailer_type: string = 'USA';
+                for (const division of Constants.ONE_SIGNAL_CANADA_USER_TYPES) {
                     if (division === this.authService.User.division) {
                         retailer_type = 'CANADA';
                         break;
-                    };
+                    }
                 }
                 this.oneSignal.sendTag(Constants.ONE_SIGNAL_RETAILER_TYPE_TAG, retailer_type);
             });

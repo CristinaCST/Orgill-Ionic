@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { PurchasesProvider } from '../../providers/purchases/purchases';
 import { Purchase } from '../../interfaces/models/purchase';
 import { NavParams } from 'ionic-angular';
-import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
 import { ProductPage } from '../product/product';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { getNavParam } from '../../helpers/validatedNavParams';

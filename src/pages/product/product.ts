@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { Product } from '../../interfaces/models/product';
 import { ProgramProvider } from '../../providers/program/program';
@@ -242,8 +242,8 @@ export class ProductPage implements OnInit {
             this.canLeave = true;
             this.loader.hide();
             this.navigatorService.pop();
-          }).catch((err) => {
-            this.loader.hide()
+          }).catch(err => {
+            this.loader.hide();
             // TODO: catch this better
            /// throw(err);
           });

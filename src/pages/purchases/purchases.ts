@@ -13,8 +13,7 @@ export class PurchasesPage {
 
   public purchases: Purchase[] = [];
 
-  constructor(public navigatorService: NavigatorService, public navParams: NavParams, public purchasesProvider: PurchasesProvider) {
-  }
+  constructor(public navigatorService: NavigatorService, public navParams: NavParams, public purchasesProvider: PurchasesProvider) {}
 
   public ngOnInit(): void {
     /*this.purchasesProvider.getLocalPurchaseHistory().then((data: Purchase[]) => {

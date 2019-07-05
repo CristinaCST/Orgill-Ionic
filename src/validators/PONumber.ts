@@ -11,7 +11,7 @@ import { PopoverContent, PopoversService } from '../services/popovers/popovers';
  * @returns the validated PONumber as a string
  */
 export function PONumberValidator(POInput: string, popoverServiceReference?: PopoversService): string {
-    let POSTOFFICE = POInput;
+    let POSTOFFICE: string = POInput;
     if (!POSTOFFICE) {
         return '';
     }

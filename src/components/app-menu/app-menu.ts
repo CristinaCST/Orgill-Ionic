@@ -230,7 +230,7 @@ export class AppMenuComponent implements OnInit {
       SHIPDATE: '01/01/2014'
     };
     programs.unshift(regularProgram);
-    //this.databaseProvider.addPrograms(programs);
+    // this.databaseProvider.addPrograms(programs);
   }
 
   public showCustomShoppingListsMenu(): void {

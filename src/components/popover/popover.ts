@@ -1,7 +1,6 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavParams, ViewController, Content, NavOptions, TextInput } from 'ionic-angular';
 import * as Constants from '../../util/constants';
-
 
 @Component({
   selector: 'popover',
@@ -42,7 +41,7 @@ export class PopoverComponent {
     this.isMarketOnlyList = !this.isMarketOnlyList;
   }
 
-  private cleanInput(){
+  public cleanInput(): void {
     this.listNameElement._elementRef.nativeElement.classList.remove('error-label');
   }
 
@@ -54,7 +53,7 @@ export class PopoverComponent {
       data.listDescription = this.listDescription;
       data.type = this.isMarketOnlyList ? 'market_only' : 'default';
 
-      if(this.listName.replace(' ','').length < 1 && option === 'OK'){
+      if (this.listName.replace(' ', '').length < 1 && option === 'OK') {
         this.listNameElement._elementRef.nativeElement.classList.add('error-label');
         return;
       }

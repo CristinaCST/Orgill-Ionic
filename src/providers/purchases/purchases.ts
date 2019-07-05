@@ -1,13 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
-import { ProductPurchaseResponse } from '../../interfaces/response-body/product-purchase';
 
 @Injectable()
 export class PurchasesProvider {
-
-  constructor() {
-  }
-
   /*public getLocalPurchaseHistory(): Promise<void | Purchase[]> {
     return new Promise((resolve, reject) =>
       this.databaseProvider.getAllPurchases().then(data => {

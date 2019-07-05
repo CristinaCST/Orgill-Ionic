@@ -6,18 +6,18 @@ export class CSSInjector {
     private static injectedCSSRef: HTMLStyleElement;
 
   public static setHead(): void {
-      this.headReference = document.head;
+      CSSInjector.headReference = document.head;
   }
 
   public static injectCSS(rawCSS: string): void {
 
       // Avoid js injection 
-      const sanitizedCSS = rawCSS.replace("</style>", "").replace("<script>", "");
-      if (this.headReference) {
-          if (!this.injectedCSSRef) {
-              this.injectedCSSRef = this.headReference.appendChild(document.createElement('style'));
+      const sanitizedCSS: string = rawCSS.replace('</style>', '').replace('<script>', '');
+      if (CSSInjector.headReference) {
+          if (!CSSInjector.injectedCSSRef) {
+              CSSInjector.injectedCSSRef = CSSInjector.headReference.appendChild(document.createElement('style'));
           }
-          this.injectedCSSRef.innerHTML = sanitizedCSS;
+          CSSInjector.injectedCSSRef.innerHTML = sanitizedCSS;
       }
   }
 }

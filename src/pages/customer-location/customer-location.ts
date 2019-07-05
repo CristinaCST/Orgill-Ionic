@@ -196,11 +196,10 @@ export class CustomerLocationPage implements OnInit {
   }
 
   public PONumberValidation(location?: LocationElement): void {
-    if(location){
+    if (location) {
       location.POSTOFFICE = PONumberValidator(location.POSTOFFICE, this.popoversService);
-    }else{
+    } else {
       this.postOffice = PONumberValidator(this.postOffice, this.popoversService);
     }
-
   }
 }
