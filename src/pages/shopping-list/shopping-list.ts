@@ -51,6 +51,7 @@ export class ShoppingListPage {
   private readonly loader: LoadingService;
   private holdTimeoutReference: number;
   public fromSearch: boolean = false;
+  public holdCheckTimeout: boolean = false; // Flag to disable checking of items if we just entered Delete mode
 
   constructor(
     private readonly navParams: NavParams,
@@ -355,7 +356,7 @@ export class ShoppingListPage {
   }
 
   public touchstart(index: number): void {
-    if (this.isCheckout) {
+    if (this.isCheckout || this.isDeleteMode) {
       return;
     }
     
@@ -365,13 +366,15 @@ export class ShoppingListPage {
       this.setOrderTotal({ status: 'checkedItem' }, index);
       this.isDeleteMode = true;
       this.navigatorService.oneTimeBackButtonOverride(() => {
-       this.isDeleteMode = false;
+        this.isDeleteMode = false;
       });
+      this.holdCheckTimeout = true;
     }, Constants.HOLD_TIME_TO_DELETE_MODE);
 
   }
 
   private touchend(): void {
+    this.holdCheckTimeout = false; 
     clearTimeout(this.holdTimeoutReference);
   }
 

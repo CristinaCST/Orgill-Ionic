@@ -19,7 +19,7 @@
         <span> {{"shopping_list_items_label" | translate}}: </span>
         <span> {{"product_quantity" | translate}}: </span>
       </ion-item-divider>
-      <shopping-list-product (touchstart)="touchstart(i)" (touchend)="touchend()" *ngFor="let shoppingListItem of shoppingListItems; index as i" [isDisabled]="!isCheckout&&!isDeleteMode"
+      <shopping-list-product (touchstart)="touchstart(i)" (touchend)="touchend()" *ngFor="let shoppingListItem of shoppingListItems; index as i" [isDisabled]="!isCheckout&&!isDeleteMode&&!holdCheckTimeout"
         (checked)="onChecked($event,i)" (goToDetails)="onCheckedToDetails($event)"
         [shoppingListItem]="shoppingListItem">
       </shopping-list-product>
