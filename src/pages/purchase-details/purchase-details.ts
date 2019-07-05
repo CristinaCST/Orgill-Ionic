@@ -21,14 +21,14 @@ export class PurchaseDetailsPage implements OnInit {
 
   public ngOnInit(): void {
     this.purchase = getNavParam(this.navParams, 'purchase', 'object');
-    this.getLocalPurchaseItems();
+  //  this.getLocalPurchaseItems();
   }
 
-  public getLocalPurchaseItems(): void {
-    this.purchasesProvider.getAllProductsFromPurchase(this.purchase.purchase_id).then(
-      (data: ShoppingListItem[]) =>
-        this.purchase.purchase_items = data);
-  }
+  // public getLocalPurchaseItems(): void {
+  //   this.purchasesProvider.getAllProductsFromPurchase(this.purchase.purchase_id).then(
+  //     (data: ShoppingListItem[]) =>
+  //       this.purchase.purchase_items = data);
+  // }
 
   public onCheckedToDetails($event: { product: string, program_number: string, id: string, quantity: string }): void {
     this.navigatorService.push(ProductPage, {

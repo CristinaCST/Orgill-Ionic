@@ -8,7 +8,6 @@ import { PopoversService, DefaultPopoverResult, PopoverContent } from '../../ser
 import { AboutPage } from '../../pages/about/about';
 import { CatalogsProvider } from '../../providers/catalogs/catalogs';
 import { TranslateWrapperService } from '../../services/translate/translate';
-import { DatabaseProvider } from '../../providers/database/database';
 import { ShoppingList } from '../../interfaces/models/shopping-list';
 
 // Pages
@@ -48,7 +47,6 @@ export class AppMenuComponent implements OnInit {
               private readonly catalogsProvider: CatalogsProvider,
               private readonly translateProvider: TranslateWrapperService,
               private readonly events: Events,
-              public databaseProvider: DatabaseProvider,
               public shoppingListsProvider: ShoppingListsProvider,
               private readonly navigatorService: NavigatorService,
               private readonly hotDealService: HotDealService,
@@ -232,7 +230,7 @@ export class AppMenuComponent implements OnInit {
       SHIPDATE: '01/01/2014'
     };
     programs.unshift(regularProgram);
-    this.databaseProvider.addPrograms(programs);
+    //this.databaseProvider.addPrograms(programs);
   }
 
   public showCustomShoppingListsMenu(): void {

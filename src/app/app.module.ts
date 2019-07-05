@@ -6,10 +6,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { SQLite } from '@ionic-native/sqlite';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { OneSignal } from '@ionic-native/onesignal';
-import { SQLitePorter } from '@ionic-native/sqlite-porter';
 import { Network } from '@ionic-native/network';
 import { IonicStorageModule } from '@ionic/storage';
 import { Badge } from '@ionic-native/badge';
@@ -28,7 +26,6 @@ import { ComponentsModule } from '../components/components.module';
 // Providers
 import { ApiService } from '../services/api/api';
 import { CatalogsProvider } from '../providers/catalogs/catalogs';
-import { DatabaseProvider } from '../providers/database/database';
 import { TranslateWrapperService } from '../services/translate/translate';
 import { PopoversService } from '../services/popovers/popovers';
 import { ShoppingListsProvider } from '../providers/shopping-lists/shopping-lists';
@@ -122,8 +119,6 @@ import { CustomErrorHandlerService } from '../services/error-handler/CustomError
   providers: [
     StatusBar,
     SplashScreen,
-    SQLitePorter,
-    SQLite,
     Network,
     AuthService,
     ApiService,
@@ -131,7 +126,6 @@ import { CustomErrorHandlerService } from '../services/error-handler/CustomError
     TranslateWrapperService,
     PopoversService,
     CatalogsProvider,
-    DatabaseProvider,
     ProgramProvider,
     ShoppingListsProvider,
     BarcodeScanner,

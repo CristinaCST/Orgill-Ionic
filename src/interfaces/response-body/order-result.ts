@@ -1,7 +1,7 @@
-import { DatabaseActionResponse } from './database-action-response';
+// import { DatabaseActionResponse } from './database-action-response';
 export interface OrderResult {
-    insertedPurchaseToDBInfo: DatabaseActionResponse;
+    // insertedPurchaseToDBInfo: DatabaseActionResponse;
     confirmationNumber: string;
-    removedItemsFromShoppingList: DatabaseActionResponse;
+    // removedItemsFromShoppingList: DatabaseActionResponse;
 
 }

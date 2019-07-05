@@ -94,9 +94,9 @@ export class OrderReviewPage implements OnInit {
         total: this.orderTotal,
         program_number: programNumber
       };
-      this.shoppingListsProvider.orderProducts(productListInfo, insertToDBInfo, itemsIds, this.shoppingListId).then((data: any) => {
+      this.shoppingListsProvider.orderProducts(productListInfo, insertToDBInfo, itemsIds, this.shoppingListId).then(data => {
         this.removeItemsFromList(orderItems);
-        if (data.insertedPurchaseToDBInfo.insertId) {
+        if (data.confirmationNumber) {
           this.confirmationNumbers.push(data.confirmationNumber);
           if (index === Object.keys(this.shoppingListProgramNumbers).length - 1) {
             const navigationParams: any = {

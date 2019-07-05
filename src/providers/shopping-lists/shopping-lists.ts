@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { DatabaseProvider } from '../database/database';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
 import { DateTimeService } from '../../services/datetime/dateTimeService';
 import { ApiService } from '../../services/api/api';
@@ -28,12 +27,12 @@ export enum ListType{
 @Injectable()
 export class ShoppingListsProvider {
 
-  constructor(private readonly databaseProvider: DatabaseProvider, private readonly apiProvider: ApiService, private readonly authService: AuthService, private readonly events: Events) {
+  constructor(private readonly apiProvider: ApiService, private readonly authService: AuthService, private readonly events: Events) {
   }
 
-  public getLocalShoppingLists(): Promise<any> {
-    return this.databaseProvider.getAllShoppingLists();
-  }
+  // public getLocalShoppingLists(): Promise<any> {
+  //   return this.databaseProvider.getAllShoppingLists();
+  // }
 
   public addItemToShoppingList(listId: number, shoppingListItem: ShoppingListItem, marketOnly: boolean): Observable<APIResponse> {
     // return this.databaseProvider.addProductToShoppingList(listId, shoppingListItem);
@@ -217,37 +216,45 @@ export class ShoppingListsProvider {
       });
   }
 
-  public insertPurchaseToDB(purchaseInfo: DatabaseOrder): Promise<DatabaseActionResponse> {
-    return this.databaseProvider.insertPurchase(purchaseInfo);
-  }
+  // public insertPurchaseToDB(purchaseInfo: DatabaseOrder): Promise<DatabaseActionResponse> {
+  //   return this.databaseProvider.insertPurchase(purchaseInfo);
+  // }
 
-  public deleteItemsFromList(insertId: number, itemsIdsArr: number[], shoppingListId: string): Promise<DatabaseActionResponse> {
-    return this.databaseProvider.finalizePurchase(insertId, itemsIdsArr, shoppingListId);
-  }
+  // public deleteItemsFromList(insertId: number, itemsIdsArr: number[], shoppingListId: string): Promise<DatabaseActionResponse> {
+  //   return this.databaseProvider.finalizePurchase(insertId, itemsIdsArr, shoppingListId);
+  // }
 
+
+  // TODO: take a look at this promise hell
   public orderProducts(productInfoList: ProductListInfo, insertToDBInfo: DatabaseOrder, itemsIdsArr: number[], shoppingListId: string): Promise<OrderResult> {
     return new Promise((resolve, reject) => {
         productInfoList.user_token = this.authService.userToken;
         try {
           this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_PRODUCTS, productInfoList).subscribe((response: APIResponse) => {
+            // if (response) {
+            //   insertToDBInfo.confirmation_number = JSON.parse(response.d);
+
+            //   // TODO: Should change this to promise-like and get rid of await, of all awaits for that matter.
+            //   let insertedPurchaseToDBInfo: DatabaseActionResponse;
+            //   let removedItemsFromShoppingList: DatabaseActionResponse;
+            //   this.insertPurchaseToDB(insertToDBInfo).then((insertedDataResponse: DatabaseActionResponse) => {
+            //     insertedPurchaseToDBInfo = insertedDataResponse;
+            //     return this.deleteItemsFromList(insertedPurchaseToDBInfo.insertId, itemsIdsArr, shoppingListId);
+            //   }).then((removeItemsResponse: DatabaseActionResponse) => {
+            //     removedItemsFromShoppingList = removeItemsResponse;
+            //     resolve({
+            //       insertedPurchaseToDBInfo, confirmationNumber: insertToDBInfo.confirmation_number,
+            //       removedItemsFromShoppingList
+            //     } as OrderResult);
+            //   });
+
+            // }
             if (response) {
               insertToDBInfo.confirmation_number = JSON.parse(response.d);
 
               // TODO: Should change this to promise-like and get rid of await, of all awaits for that matter.
-              let insertedPurchaseToDBInfo: DatabaseActionResponse;
-              let removedItemsFromShoppingList: DatabaseActionResponse;
-              this.insertPurchaseToDB(insertToDBInfo).then((insertedDataResponse: DatabaseActionResponse) => {
-                insertedPurchaseToDBInfo = insertedDataResponse;
-                return this.deleteItemsFromList(insertedPurchaseToDBInfo.insertId, itemsIdsArr, shoppingListId);
-              }).then((removeItemsResponse: DatabaseActionResponse) => {
-                removedItemsFromShoppingList = removeItemsResponse;
-                resolve({
-                  insertedPurchaseToDBInfo, confirmationNumber: insertToDBInfo.confirmation_number,
-                  removedItemsFromShoppingList
-                } as OrderResult);
-              });
-
-            } else {
+                resolve({confirmationNumber: insertToDBInfo.confirmation_number} as OrderResult);
+              } else {
               reject(response);
             }
           });
