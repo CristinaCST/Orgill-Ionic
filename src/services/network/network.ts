@@ -8,43 +8,41 @@ import { ErrorScheduler } from '../../services/error-scheduler/error-scheduler';
 @Injectable()
 export class NetworkService {
 
-  public notified: boolean = false;
-  public connectionStatus: boolean = true;
+  public get connectionStatus(): boolean {
+    if (this.network.type === 'none' || !this.network.type) {
+      return false;
+    }
+    return true;
+  }
+
   public static firstConnect: boolean = true;
   constructor(private readonly network: Network, private readonly popoversService: PopoversService, private readonly reloadService: ReloadService) {}
 
   public listenForNetworkEvents(): void {
-    if (this.network.type === 'none' || !this.network.type) {
-      this.connectionStatus = false;
+    if (!this.connectionStatus) {
       NetworkService.firstConnect = false;
       this.openNetworkModal();
     }
     
-    this.network.onDisconnect()
-      .subscribe(() => {
-        this.notified = false;
+    this.network.onDisconnect().subscribe(() => {
+      // Fix for iOS lazy update of network.type, android has no issue but this fix can only affect positively android (ensure variable is set) so it should remain on both platforms 
+      setTimeout(() => {
         this.openNetworkModal();
-      });
+      }, 500);
+    });
 
-    this.network.onConnect()
-      .subscribe(() => {
-        this.notified = false;
-        this.popoversService.closeModal();
-        this.reloadService.announceRetry();
-        if (!NetworkService.firstConnect) {
-          NetworkService.firstConnect = true;
-        }
-      });
-  }
-  private checkConnectionManually(): void {
-    this.connectionStatus = this.network.type === 'none' || !this.network.type ? false : true;
+    this.network.onConnect().subscribe(() => {
+      this.popoversService.closeModal();
+      this.reloadService.announceRetry();
+      if (!NetworkService.firstConnect) {
+        NetworkService.firstConnect = true;
+      }
+    });
   }
 
   public openNetworkModal(): void {
-    this.checkConnectionManually();
 
-    if (this.notified || ErrorScheduler.scheduledError !== undefined) {
-      this.notified = false;
+    if (ErrorScheduler.scheduledError !== undefined) {
       return;
     }
 
@@ -52,7 +50,6 @@ export class NetworkService {
       ErrorScheduler.scheduledError = this;
       this.reloadService.announceRetry();
       ErrorScheduler.scheduledError = undefined;
-      this.notified = false;
       return;
     }
 
@@ -61,7 +58,6 @@ export class NetworkService {
     this.popoversService.show(content).subscribe(res => {
       ErrorScheduler.scheduledError = undefined;
       this.openNetworkModal();
-
     });
   }
 
