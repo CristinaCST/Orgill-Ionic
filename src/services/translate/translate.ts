@@ -19,14 +19,18 @@ export class TranslateWrapperService {
     }
 
     // Handle the case when translation is not ready
-    if (result === '') {
+    if (!result) {
       if (DEBUG_TRANSLATIONS) {
         console.warn('TRANSLATOR WAS LAZY');
       }
 
       result = this.translateService.instant(key);
-      if (result === '' && DEBUG_TRANSLATIONS) {
-        console.error('-------TRANSLATION FAILED FOR KEY:' + key);
+      console.warn('Instant translation:' + result);
+      if (!result || result === key) {
+        if (DEBUG_TRANSLATIONS) {
+          console.error('-------TRANSLATION FAILED FOR KEY:' + key);
+        }
+        result = '';
       }
     }
 
