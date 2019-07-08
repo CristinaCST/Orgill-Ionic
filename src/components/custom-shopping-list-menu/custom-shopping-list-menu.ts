@@ -52,6 +52,10 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
                 ListType: addedList.list_type
               };
               this.customShoppingLists.push(list);
+
+              if (this.navigatorService.isRootLevel) {
+                this.goToListPage(list);
+              }
             });
           } else {
             const innerContent: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);

@@ -21,16 +21,32 @@ export class NavigatorService {
     public lastPage: BehaviorSubject<string> = new BehaviorSubject<string>('');
     public lastEvent: NavigationEventType;
 
+    /**
+     * Tries to return the cached navController or gets it and returns it.
+     */
     private get navController(): NavController {
         return this._navController ? this._navController : this.app.getActiveNavs()[0];
     }
 
+    /**
+     * Sets the cached value of navController
+     */
     private set navController(value: NavController) {
         this._navController = value;
     }
 
+    /**
+     * Exposes inner navController.canGoBack()
+     */
     public get canGoBack(): boolean {
         return this.navController.canGoBack();
+    }
+
+    /**
+     * Returns true if there is only 1 page in navigation stack.
+     */
+    public get isRootLevel(): boolean {
+        return this.navController.getViews().length <= 1;
     }
 
     constructor(private readonly app: App, private readonly platform: Platform, private readonly secureActions: SecureActionsService, private readonly events: Events) {
