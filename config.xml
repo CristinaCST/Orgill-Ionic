@@ -1,10 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.orgill.ionic" version="5.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.orgill.ionic" version="5.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Orgill</name>
     <description>The OZone</description>
     <author email="cristina.nicolae@cst-us.com" href="http://cst-us.com/">CST Team</author>
     <content src="index.html" />
     <access origin="*" />
+    <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+        <application android:usesCleartextTraffic="true" />
+    </edit-config>
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -106,9 +109,7 @@
             <true />
         </config-file>
     </platform>
-    <allow-navigation href="http://192.168.0.145:8100" sessionid="99dfa6a6" />
-    <allow-navigation href="http://192.168.0.148:8100" sessionid="5ff30aab" />
-    <allow-navigation href="http://192.168.0.71:8100" sessionid="5ff30aab" />
+    <allow-navigation href="*" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
