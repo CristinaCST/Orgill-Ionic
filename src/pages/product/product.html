@@ -1,18 +1,18 @@
 <!-- Product Page Header -->
 <ion-header>
   <!-- Product Page Navigation Bar -->
-  <navbar [title]="programName ? programName: 'product_item_details'" [isMenuEnabled]="true"
-          [isBackEnabled]="false"></navbar>
+  <navbar [title]="programName ? programName: 'product_item_details'" [isMenuEnabled]="false"
+          [isBackEnabled]="true"></navbar>
 
   <!-- Product Page SubHeader -->
-  <ion-toolbar id="subcategory" padding-left padding-right>
-    <ion-buttons left>
+  <!--<ion-toolbar id="subcategory" padding-left padding-right>
+   < <ion-buttons left>
       <button ion-button large (click)="close()">
         <ion-icon name="ios-arrow-back"></ion-icon>
       </button>
     </ion-buttons>
     <ion-title>{{ subCategoryName? subCategoryName : product.NAME }}</ion-title>
-  </ion-toolbar>
+  </ion-toolbar>-->
 
   <!-- Product Page Tabs-->
   <ion-segment *ngIf="!isHotDeal" [(ngModel)]="activeTab">

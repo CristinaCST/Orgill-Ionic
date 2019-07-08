@@ -5,6 +5,7 @@ import * as Strings from '../../util/strings';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs';
 
+// TODO: Move these outside
 
 export interface PopoverContent{
   type?: string;
@@ -25,7 +26,6 @@ export interface CustomListPopoverResult {
   listDescription?: string;
   optionSelected: string;
 }
-
 
 interface QueueItem {
   content: PopoverContent;
