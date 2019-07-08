@@ -33,7 +33,7 @@ export class ShoppingListsProvider {
   //   return this.databaseProvider.getAllShoppingLists();
   // }
 
-  public addItemToShoppingList(listId: number, shoppingListItem: ShoppingListItem, marketOnly: boolean): Observable<APIResponse> {
+  public addItemToShoppingList(listId: string, shoppingListItem: ShoppingListItem, marketOnly: boolean): Observable<APIResponse> {
     // return this.databaseProvider.addProductToShoppingList(listId, shoppingListItem);
     return this.apiProvider.post(ConstantsUrl.ADD_SHOPPING_LIST_ITEM, {
       user_token: this.authService.userToken,

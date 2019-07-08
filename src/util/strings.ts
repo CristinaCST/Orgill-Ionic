@@ -130,7 +130,10 @@ export const SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR: string = 'new_list_name
 export const SHOPPING_LIST_NEW_DIALOG_HINT_DESCRIPTION: string = 'new_list_hint_desc';
 
 export const SHOPPING_LIST_DEFAULT: string = 'shopping_lists_default';
-export const SHOPPING_LIST_CUSTOM_DESCRIPTION: string = 'shopping_list_custom_desc';
+// export const SHOPPING_LIST_CUSTOM_DESCRIPTION: string = 'shopping_list_custom_desc';
+export const SHOPPING_LIST_DESCRIPTION_REGULAR: string = 'shopping_list_description_default_regular';
+export const SHOPPING_LIST_DESCRIPTION_MARKET: string = 'shopping_list_description_default_market';
+export const SHOPPING_LIST_DESCRIPTION_NOT_PROVIDED: string = 'shopping_list_description_not_provided';
 export const SHOPPING_LIST_EXISTING_PRODUCT: string = 'shopping_list_existing_product';
 export const SHOPPING_LIST_NO_PROGRAM_TITLE: string = 'shopping_list_no_program_title';
 export const SHOPPING_LIST_NO_PROGRAM_MESSAGE: string = 'shopping_list_no_program_message';

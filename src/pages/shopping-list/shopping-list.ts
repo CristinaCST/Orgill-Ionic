@@ -9,7 +9,6 @@ import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
 import { PopoversService, DefaultPopoverResult, PopoverContent } from '../../services/popovers/popovers';
 import { CustomerLocationPage } from '../customer-location/customer-location';
 import { ProductPage } from '../product/product';
-import { TranslateWrapperService } from '../../services/translate/translate';
 import { LoadingService } from '../../services/loading/loading';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { ScannerService } from '../../services/scanner/scanner';
@@ -58,7 +57,6 @@ export class ShoppingListPage {
     private readonly navigatorService: NavigatorService,
     private readonly shoppingListProvider: ShoppingListsProvider,
     private readonly popoversService: PopoversService,
-    private readonly translator: TranslateWrapperService,
     private readonly events: Events,
     private readonly loading: LoadingService,
     private readonly scannerService: ScannerService,
@@ -96,8 +94,9 @@ export class ShoppingListPage {
     this.isCheckout = getNavParam(this.navParams, 'isCheckout', 'boolean');
     this.fromSearch = getNavParam(this.navParams, 'fromSearch', 'boolean');
   
-    this.isCustomList = !(this.shoppingList.ListType !== Constants.DEFAULT_LIST_TYPE && this.shoppingList.ListType !== Constants.MARKET_ONLY_LIST_TYPE);
-    if (!this.isCustomList) {
+    this.isCustomList = (this.shoppingList.ListType !== Constants.DEFAULT_LIST_TYPE) && (this.shoppingList.ListType !== Constants.MARKET_ONLY_LIST_TYPE);
+
+    if (this.isCustomList) {
       if (this.menuCustomButtons.map(d => d.action).indexOf('deleteList') === -1) {
         this.menuCustomButtons.push({
           action: 'deleteList',
@@ -156,7 +155,6 @@ export class ShoppingListPage {
   }
 
   public delete(): void {
-
     const deletePopoverContent: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.DELETE_ITEM_PROMPT_MESSAGE, Strings.MODAL_BUTTON_YES, undefined, Strings.MODAL_BUTTON_CANCEL);
     this.popoversService.show(deletePopoverContent).subscribe(res => {
       if (res.optionSelected === 'OK') {
@@ -321,19 +319,27 @@ export class ShoppingListPage {
   }
 
   private getListDetails(): void {
-    let message: string = '';
-    if (this.isCustomList) {
-      message = this.translator.translate(Strings.SHOPPING_LIST_CUSTOM_DESCRIPTION);
+    let description: string = Strings.SHOPPING_LIST_DESCRIPTION_NOT_PROVIDED;
+
+    if (this.isCustomList && this.shoppingList.ListDescription) {
+      description = this.shoppingList.ListDescription;
+    } else if (this.shoppingList.ListType === Constants.DEFAULT_LIST_TYPE) {
+      description = Strings.SHOPPING_LIST_DESCRIPTION_REGULAR;
+    } else if (this.shoppingList.ListType === Constants.MARKET_ONLY_LIST_TYPE) {
+      description = Strings.SHOPPING_LIST_DESCRIPTION_MARKET;
     }
-    const content: PopoverContent = this.popoversService.setContent(this.shoppingList.ListName, message + this.shoppingList.ListDescription);
+
+    const content: PopoverContent = this.popoversService.setContent(this.shoppingList.ListName, description);
     this.popoversService.show(content);
   }
 
   private removeList(): void {
+    this.loader.show();
     const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_DELETE_CONF_TITLE, Strings.SHOPPING_LIST_DELETE_CONF_MESSAGE,
       Strings.MODAL_BUTTON_YES, Strings.MODAL_BUTTON_CANCEL, undefined, Constants.POPOVER_DELETE_LIST_CONFIRMATION);
 
     this.popoversService.show(content).subscribe((data: DefaultPopoverResult) => {
+      this.loader.hide();
       if (data.optionSelected === 'OK') {
         this.shoppingListProvider.removeShoppingList(this.shoppingList.ListID).subscribe(removedData => {
           this.events.publish('DeletedList', this.shoppingList.ListID);

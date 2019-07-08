@@ -90,8 +90,6 @@ const pages: Page[] = [MyApp,
 
 // Error Handlers
 import { CustomErrorHandlerService } from '../services/error-handler/CustomErrorHandler';
-
-
 // const errorHandler = environment.production ? CustomErrorHandlerService : IonicErrorHandler; //tslint:disable-line
 
 @NgModule({
