@@ -25,7 +25,7 @@ export class ScannerService {
   public scanMessage: string = '';
   public searchString: string;
   public foundProduct: Product;
-  public shoppingList: any;
+  public shoppingList: ShoppingList;
   public shoppingListId: string;
   public productAlreadyInList: boolean = false;
   public searchTab: any;
@@ -40,8 +40,11 @@ export class ScannerService {
               private readonly shoppingListProvider: ShoppingListsProvider,
               private readonly popoversService: PopoversService,
               private readonly platform: Platform,
-              private readonly events: Events
-  ) { }
+              private readonly events: Events,
+              private readonly loadingService: LoadingService
+  ) { 
+    this.searchingLoader = this.loadingService.createLoader();
+  }
 
   public scan(shoppingList: ShoppingList, products: ShoppingListItem[]): void {
 
@@ -102,6 +105,7 @@ export class ScannerService {
   }
 
   public searchProduct(): void {
+    this.searchingLoader.show();
     this.productProvider.searchProduct(this.searchString, this.programNumber)
       .subscribe(response => {
         const content: PopoverContent = {
@@ -112,8 +116,7 @@ export class ScannerService {
           positiveButtonText: Strings.MODAL_BUTTON_OK
         };
 
-        // HACK:Temp
-        if (this.searchingLoader) { this.searchingLoader.hide(); }
+       // this.searchingLoader.hide();
 
         const responseData: Product[] = JSON.parse(response.d);
         if (responseData.length > 0) {
@@ -126,15 +129,17 @@ export class ScannerService {
           } else {
 
 
-            if (this.isMarketOnly && ((this.shoppingList.ListType.toString() !== Constants.MARKET_ONLY_LIST_TYPE) && (this.shoppingList.ListType.toString() !== Constants.MARKET_ONLY_CUSTOM_TYPE))) {
+            if (this.isMarketOnly && ((this.shoppingList.ListType !== Constants.MARKET_ONLY_LIST_TYPE) && (this.shoppingList.ListType !== Constants.CUSTOM_LIST_MARKET_TYPE))) {
               content.message = this.translateProvider.translate(Constants.SCAN_MARKET_ONLY_PRODUCT);
+              this.searchingLoader.hide();
               this.popoversService.show(content);
-            } else if (!this.isMarketOnly && ((this.shoppingList.ListType.toString() === Constants.MARKET_ONLY_LIST_TYPE) || (this.shoppingList.ListType.toString() === Constants.MARKET_ONLY_CUSTOM_TYPE))) {
+            } else if (!this.isMarketOnly && ((this.shoppingList.ListType === Constants.MARKET_ONLY_LIST_TYPE) || (this.shoppingList.ListType === Constants.CUSTOM_LIST_MARKET_TYPE))) {
               content.message = this.translateProvider.translate(Constants.SCAN_REGULAR_PRODUCT);
+              this.searchingLoader.hide();
               this.popoversService.show(content);
             } else {
               this.isProductInList().subscribe(resp => {
-                const data: boolean = JSON.parse(resp.d).Status === 'True';
+                const data: boolean = JSON.parse(resp.d).Status === 'True'; // TODO: Wtf?
                 if (!data) {
                   const newItem: ShoppingListItem = {
                     product: this.foundProduct,
@@ -142,12 +147,13 @@ export class ScannerService {
                     item_price: Number(this.foundProduct.YOURCOST),
                     quantity: this.getInitialQuantity()
                   };
-                  this.shoppingListProvider.addItemToShoppingList(this.shoppingList.ListID, newItem, this.shoppingList.isMarketOnly).subscribe(
-                    () => {
+                  this.shoppingListProvider.addItemToShoppingList(this.shoppingList.ListID, newItem, this.isMarketOnly).subscribe(
+                    res => {
                       this.productAlreadyInList = false;
-
+                      this.searchingLoader.hide();
                       // TODO: Change to constants_strings
                       content.message = 'Added ' + newItem.product.NAME + ' to list';
+
                       // WIP
                      // const itemName = newItem.product.NAME;
                      // content.message = Strings.ADDED_ITEM_TO_LIST;
@@ -156,21 +162,28 @@ export class ScannerService {
 
                       });
 
+                    }, err => {
+                      this.searchingLoader.hide();
                     });
                 } else {
+                  this.searchingLoader.hide();
                   content.message = this.translateProvider.translate(Strings.SHOPPING_LIST_EXISTING_PRODUCT);
                   this.popoversService.show(content);
                   this.productAlreadyInList = true;
                 }
+              }, err => {
+                this.searchingLoader.hide();
               });
             }
           }
+          this.searchingLoader.hide();
         } else {
+          this.searchingLoader.hide();
           // TODO: Check string if its fine
           content.message = this.translateProvider.translate(Constants.SCAN_NOT_FOUND);
           this.popoversService.show(content);
           this.noProductFound = true;
-          // this.scan();
+          // his.scan();
         }
       }, errorResponse => {
         this.searchingLoader.hide();
