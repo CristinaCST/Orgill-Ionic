@@ -91,7 +91,7 @@ export class AppMenuComponent implements OnInit {
   }
 
   private readonly loadingFailedHandler = (): void => {
-    // We can't know directly (without catc\hing an error somewhere else) if custom lists are supposed to be or not empty, or some of the programs, so it's safer just to reload this in case of error.
+    // We can't know directly (without catching an error somewhere else) if custom lists are supposed to be or not empty, or some of the programs, so it's safer just to reload this in case of error.
     this.initMenu();
   }
 
@@ -151,7 +151,6 @@ export class AppMenuComponent implements OnInit {
   }
 
   public goToPage(page: string | Page): void {
-    // this.navigatorService.push(page).catch(err => console.error(err));
     this.navigatorService.setRoot(page).catch(err => console.error(err));
   }
 
@@ -161,9 +160,10 @@ export class AppMenuComponent implements OnInit {
     this.shoppingListsProvider.getAllShoppingLists()
       .subscribe(shoppingListsResponse => {
         const shoppingLists: ShoppingListResponse[] = JSON.parse(shoppingListsResponse.d);
-        if (shoppingLists.length === 0) {
+        if (!shoppingLists.find(list => list.list_type === Constants.DEFAULT_LIST_TYPE) && !shoppingLists.find(list => list.list_type === Constants.MARKET_ONLY_LIST_TYPE)) {
           this.shoppingListsProvider.createDefaultShoppingLists().subscribe(defaultShoppingListsResponse => {
             this.getShoppingLists();
+            return;
           });
         } else {
           shoppingLists.map(shoppingList => {

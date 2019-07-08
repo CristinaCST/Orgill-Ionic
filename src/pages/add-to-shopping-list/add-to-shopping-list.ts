@@ -159,7 +159,7 @@ export class AddToShoppingListPage implements OnInit {
     this.subscription = this.popoversService.show(content).subscribe((data: CustomListPopoverResult) => {
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
-          data.type = data.type === 'default' ? Constants.CUSTOM_SHOPPING_LIST_TYPE : Constants.MARKET_ONLY_CUSTOM_TYPE;
+          data.type = data.type === 'default' ? Constants.DEFAULT_LIST_TYPE : Constants.MARKET_ONLY_LIST_TYPE;
           if (status === 'available') {
             this.shoppingListsProvider.createNewShoppingList(data.listName, data.listDescription, data.type).subscribe(resp => {
               const addedList: ShoppingListResponse = JSON.parse(resp.d)[0];
