@@ -30,7 +30,7 @@ export class TranslateWrapperService {
         if (DEBUG_TRANSLATIONS) {
           console.error('-------TRANSLATION FAILED FOR KEY:' + key);
         }
-        result = '';
+        // result = '';
       }
     }
 

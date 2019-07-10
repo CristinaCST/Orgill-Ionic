@@ -35,6 +35,7 @@ export class MyApp {
               private readonly navigatorService: NavigatorService,
               private readonly popoverProvider: PopoversService,
               private readonly events: Events) {
+    this.translate.setDefaultLang('en');
     this.setAppLanguage();
     this.initializeApp();
   }
