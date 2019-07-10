@@ -1,20 +1,21 @@
 <!-- Purchases Page Header -->
 <ion-header>
   <!-- Purchases Page Navigation Bar -->
-  <navbar [title]="'menu_ordering_history'" [isMenuEnabled]="true"
-          [isBackEnabled]="false"></navbar>
+  <navbar [title]="'menu_ordering_history'" [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
 </ion-header>
 
 <ion-content>
+ 
   <ion-list *ngFor="let purchase of purchases">
-    <order-item [purchase]="purchase"
-                [isButtonDisabled]="false"
-                (click)="openOrderDetails(purchase)">
+      <order-item [purchase]="purchase" (click)="openOrderDetails(purchase)">
 
-    </order-item>
+      </order-item>
+    </ion-list>
 
-  </ion-list>
+    <ion-infinite-scroll #infScroll threshold="100px" (ionInfinite)="loadData($event)">
+      <ion-infinite-scroll-content>
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
   <p id="no_items_label" *ngIf="(purchases == null || purchases == undefined || purchases.length === 0)">
     {{"orders_history_no_purchase" | translate}}</p>
 </ion-content>
-

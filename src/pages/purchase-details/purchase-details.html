@@ -1,23 +1,22 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>ORDER DETAILS ({{purchase.location_number}})</ion-title>
+    <ion-title>ORDER DETAILS ({{purchase.location}})</ion-title>
   </ion-navbar>
 
   <div id="order_review_div">
     <div>
-      <order-item [purchase]="purchase" [isButtonDisabled]="true">
+      <order-item [purchase]="purchase" [label]="true">
       </order-item>
     </div>
   </div>
 </ion-header>
 
 <ion-content *ngIf="purchase">
-  <ion-item-group>
-    <shopping-list-product *ngFor="let purchaseItem of purchase.purchase_items"
-                           [isDisabled]="true"
-                           (goToDetails)="onCheckedToDetails($event)"
-                           [shoppingListItem]="purchaseItem">
-    </shopping-list-product>
-  </ion-item-group>
+
+    <purchased-item *ngFor="let purchaseItem of purchase_items"
+                           [purchasedItem]="purchaseItem"
+                           (goToDetails)="onClickToDetails($event)">
+    </purchased-item>
+
 </ion-content>

@@ -5,6 +5,9 @@ import { NavParams } from 'ionic-angular';
 import { ProductPage } from '../product/product';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { getNavParam } from '../../helpers/validatedNavParams';
+import { PurchasedItem } from '../../interfaces/models/purchased-item';
+import { LoadingService } from '../../services/loading/loading';
+import { Product } from '../../interfaces/models/product';
 
 
 @Component({
@@ -13,28 +16,32 @@ import { getNavParam } from '../../helpers/validatedNavParams';
 })
 export class PurchaseDetailsPage implements OnInit {
   public purchase: Purchase;
+  public purchase_items: PurchasedItem[];
+  private readonly loader: LoadingService;
 
-  constructor(public purchasesProvider: PurchasesProvider,
-              public navParams: NavParams, public navigatorService: NavigatorService) {
+  constructor(private readonly purchasesProvider: PurchasesProvider,
+              private readonly navParams: NavParams,
+              private readonly navigatorService: NavigatorService,
+              private readonly loadingService: LoadingService
+              ) {
+                this.loader = this.loadingService.createLoader();
   }
 
   public ngOnInit(): void {
+    this.loader.show();
     this.purchase = getNavParam(this.navParams, 'purchase', 'object');
-  //  this.getLocalPurchaseItems();
+    this.purchasesProvider.getPurchasedItems(this.purchase.id).then(res => {
+      this.loader.hide();
+      this.purchase_items = res;
+    }).catch(err => {
+      this.loader.hide();
+    });
   }
 
-  // public getLocalPurchaseItems(): void {
-  //   this.purchasesProvider.getAllProductsFromPurchase(this.purchase.purchase_id).then(
-  //     (data: ShoppingListItem[]) =>
-  //       this.purchase.purchase_items = data);
-  // }
-
-  public onCheckedToDetails($event: { product: string, program_number: string, id: string, quantity: string }): void {
+  public onClickToDetails($event: { product: Product, program_number: string}): void {
     this.navigatorService.push(ProductPage, {
       product: $event.product,
-      programNumber: $event.program_number,
-      id: $event.id,
-      quantity: $event.quantity
+      programNumber: $event.program_number
     }).catch(err => console.error(err));
   }
 

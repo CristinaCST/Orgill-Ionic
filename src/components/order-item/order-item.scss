@@ -10,14 +10,21 @@ order-item {
       margin-left: 16px;
       margin-right: 16px;
       &.header {
+        
         p:nth-child(1) {
           width: 25%;
-          display: flex;
           justify-content: flex-start;
         }
         p:nth-child(2) {
+          width: 80%;
+          justify-content: flex-start;
+          font-weight: bold;
+          white-space: nowrap;
+          overflow:hidden!important;
+          text-overflow: ellipsis!important;
+        }
+        p:nth-child(3) {
           width: inherit;
-          display: flex;
           justify-content: flex-start;
           font-weight: bold;
         }
@@ -64,4 +71,9 @@ order-item {
       }
     }
   }
+
+  button:disabled{
+    opacity:1!important;
+  }
+
 }

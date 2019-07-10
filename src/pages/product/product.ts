@@ -107,7 +107,8 @@ export class ProductPage implements OnInit {
         this.selectedProgram = initialProgram;
         this.programProvider.selectProgram(initialProgram);
         this.getProduct().then(() => {
-          this.loader.hide();
+          LoadingService.hideAll();
+         // this.loader.hide();
         });
 
       }, err => {
@@ -127,7 +128,8 @@ export class ProductPage implements OnInit {
           this.selectedProgram = initialProgram;
           this.programProvider.selectProgram(initialProgram);
           this.getProduct().then(() => {
-            this.loader.hide();
+            LoadingService.hideAll();
+           // this.loader.hide();
           });
         }
       }, err => {
@@ -170,7 +172,8 @@ export class ProductPage implements OnInit {
         this.product = result;  // Get the new product
         this.product.IMAGE = img; // Re-assign already processed image.
         // this.quantity = this.pricingService.validateQuantity(this.quantity,this.selectedProgram,this.product);
-        this.loader.hide();
+        LoadingService.hideAll();
+      //  this.loader.hide();
         resolve();
       });
     });
@@ -227,7 +230,8 @@ export class ProductPage implements OnInit {
         resolve();
       },
         error => {
-          this.loader.hide();
+          LoadingService.hideAll();
+         // this.loader.hide();
           console.error('error updating', error);
           // TODO: catch this better
           reject(error);
@@ -240,12 +244,14 @@ export class ProductPage implements OnInit {
     if ((this.navigatorService.lastEvent === NavigationEventType.POP) && this.fromShoppingList && !this.canLeave) {
           this.updateList().then(() => {
             this.canLeave = true;
-            this.loader.hide();
+            LoadingService.hideAll();
+            // this.loader.hide();
             this.navigatorService.pop();
           }).catch(err => {
-            this.loader.hide();
+            LoadingService.hideAll();
+            // this.loader.hide();
             // TODO: catch this better
-           /// throw(err);
+            /// throw(err);
           });
         return false;
     }

@@ -1,14 +1,12 @@
-import { Program } from './program';
-import { ShoppingListItem } from './shopping-list-item';
-
 export interface Purchase {
-  purchase_id: number;
-  PO: string;
+  id: string;
+  program_no: string;
+  po: string;
   date: string;
-  location_number: string;
-  type: number;
-  total: number;
-  confirmation_number: string;
-  item_program: Program;
-  purchase_items: ShoppingListItem[];
+  program_name: string;
+  type: string;
+  confirmation: string;
+  location: string;
+  purchase_date: string;
+  total?: string;
 }

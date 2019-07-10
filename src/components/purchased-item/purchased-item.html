@@ -1,0 +1,36 @@
+<div class="product-title-container">
+  <p>{{purchasedItem.name}}</p>
+  <p>{{purchasedItem.vendor_name}}</p>
+</div>
+
+<ion-item class='ion-item-border'>
+  <ion-label (click)="clickHandler()">
+    <button ion-item no-lines detail-none>
+      <div class="shopping-list-container">
+        <div class="img-container">
+          <img src="http://images.orgill.com/200x200/{{purchasedItem.sku}}.JPG">
+          <!--<img *ngIf="shoppingListItem.product.IMAGE === '0000000.jpg'" src="assets/imgs/product_placeholder.png">-->
+        </div>
+        <div class="info">
+          <div>
+            <span>{{"product_SKU" | translate}}:</span>
+            <span>{{purchasedItem.sku}} {{purchasedItem.qty_round_option}}</span>
+          </div>
+         <div>
+            <span>{{"product_item_price" | translate}}:</span>
+            <span>{{"product_currency" | translate}}{{purchasedItem.price|
+              number:'1.2-2'}}/{{purchasedItem.selling_unit}}</span>
+          </div>
+          <div>
+            <span>{{"product_total_price" | translate}}:</span>
+            <span>{{"product_currency" | translate}}{{ 1 |
+              number:'1.2-2'}}</span>
+          </div>
+        </div>
+        <div class="quantity">
+         <p> {{purchasedItem.quantity}}</p>
+        </div>
+      </div>
+    </button>
+  </ion-label>
+</ion-item>

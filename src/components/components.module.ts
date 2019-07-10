@@ -17,6 +17,7 @@ import { ShoppingListProductComponent } from './shopping-list-product/shopping-l
 import { SearchBarComponent } from './searchBar/searchBar';
 import { OrderItemComponent } from './order-item/order-item';
 import { HotDealProductComponent } from './hot-deal-product/hot-deal-product';
+import { PurchaseItemComponent } from './purchased-item/purchased-item';
 
 const components: any[] = [AppMenuComponent,
                     PopoverComponent,
@@ -29,7 +30,8 @@ const components: any[] = [AppMenuComponent,
                     ProductQuantityComponent,
                     ShoppingListProductComponent,
                     OrderItemComponent,
-                    HotDealProductComponent];
+                    HotDealProductComponent,
+                    PurchaseItemComponent];
 
 @NgModule({
   declarations: components,

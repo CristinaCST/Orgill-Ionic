@@ -34,6 +34,9 @@ export const UPDATE_SHOPPING_LIST_ITEM: string = 'update_shopping_list_item';
 export const CHECK_PRODUCT_SHOPPING_LISTS: string = 'check_product_in_shopping_lists';
 export const CHECK_PRODUCT_SHOPPING_LIST: string = 'check_product_in_shopping_list';
 
+// PAST PURCHASES
+export const USER_PAST_PURCHASES: string = 'user_past_purchases';
+export const PURCHASE_ITEMS: string = 'purchase_items';
+
 export const URL_ORDER_HOT_DEAL_PRODUCTS: string = 'order_flashproducts';
 export const PRODUCT_IMAGE_BASE_URL: string = 'http://images.orgill.com/200x200/';
-

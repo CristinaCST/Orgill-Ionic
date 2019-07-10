@@ -182,6 +182,13 @@ export const LOCAL_PRODUCT_IMAGE_PLACEHOLDER: string = '../../assets/imgs/produc
 // DEBUG
 export const DEBUG_TRANSLATIONS: boolean = (!environment.production) && false;
 
+// PLACEHOLDERS
+export const PAST_PURCHASES_DEBUG_PLACEHOLDERS: boolean = (!environment.production) && true;
+export const PAST_PURCHASES_DEBUG_ORDER_PLACEHOLDER: string = '111111';
+export const PAST_PURCHASES_DEBUG_DATE_PLACEHOLDER: string = '02/02/12';
+export const PAST_PURCHASES_DEBUG_TOTAL_PLACEHOLDER: string = '999';
+export const PAST_PURCHASES_ITEM_DEBUG_TOTAL: string = '999';
+
 export const EVENT_NEW_SHOPPING_LIST: string = 'newShoppingList';
 export const EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST: string = 'listProductAdded';
 export const EVENT_LOADING_FAILED: string = 'loadingFailed';

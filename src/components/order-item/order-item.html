@@ -1,17 +1,17 @@
-<button ion-item [ngClass]="isButtonDisabled?'details':''"
-        [attr.detail-none]="isButtonDisabled ? 'true': null"
-        [attr.no-lines]="isButtonDisabled ? 'true': null">
+<button ion-item [disabled]= "label? 'true': null" [ngClass]="label?'details':''"
+        [attr.detail-none]="label? 'true': null"
+        [attr.no-lines]="label ? 'true': null">
   <div class="header container">
-    <p>{{"orders_history_program" | translate}}:</p>
-    <p>{{purchase.item_program.PROGRAMNO ==
-      ''?purchase.item_program.NAME:purchase.item_program.NAME+''+purchase.item_program.PROGRAMNO}}</p>
+    <p>{{"orders_history_program" | translate}}: </p>
+    <p class="program-name">{{purchase.program_name}}</p>
+    <p>{{purchase.program_no ? ' (' + purchase.program_no + ')': '' }}</p>
   </div>
 
   <div class="info container">
     <div class="purchase-row">
       <div class="info-cel">
         <p>{{"orders_history_order" | translate}}: </p>
-        <p>{{purchase.confirmation_number}}</p>
+        <p>{{purchase.confirmation}}</p>
       </div>
       <div class="info-cel">
         <p>{{"orders_history_date" | translate}}:</p>
@@ -26,11 +26,11 @@
     <div class="purchase-row">
       <div class="info-cel">
         <p>{{"orders_history_po" | translate}}:</p>
-        <p>{{purchase.PO ? purchase.PO : '-' }}</p>
+        <p>{{purchase.po ? purchase.po : 'N/A' }}</p>
       </div>
       <div class="info-cel">
         <p>{{"order_review_location" | translate}}:</p>
-        <p>{{purchase.location_number}}</p>
+        <p>{{purchase.location}}</p>
       </div>
       <div class="info-cel">
         <p>{{"order_confirmation_total" | translate}}:
