@@ -214,6 +214,11 @@ export class AppMenuComponent implements OnInit {
             this.everyDayPrograms.push(program);
           }
         });
+        if (this.everyDayPrograms.length === 0) {
+          this.reloadService.paintDirty('programs');
+        }
+      } else {
+        this.reloadService.paintDirty('programs');
       }
     }, error => {
       this.reloadService.paintDirty('programs');
