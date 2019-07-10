@@ -1,3 +1,5 @@
+import { environment } from '@app/env';
+
 export const APP_CONFIGURATION_INFO: string = 'appConfigurationInfo';
 
 export const DECIMAL_NUMBER: number = 2;
@@ -160,11 +162,11 @@ export const ONE_SIGNAL_IOS_NOTIFICATION_AUTO_PROMPT: boolean = false;
 export const ONE_SIGNAL_IOS_LAUNCH_IN_WEBVIEW: boolean = false;
 export const ONE_SIGNAL_LOCATION_PREFERENCE_PATH: string = 'locationSharing';
 export const ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH: string = 'pushNotifications';
-export const ONE_SIGNAL_VERBOSE: boolean = false; // set this to false if production
+export const ONE_SIGNAL_VERBOSE: boolean = (!environment.production) && false;
 export const ONE_SIGNAL_HOT_DEAL_SKU_PATH: string = 'hotDealSku';
-export const DEBUG_ONE_SIGNAL: boolean = false;
-export const DEBUG_ONE_SIGNAL_CLEAN_PREFS: boolean = false;
-export const DEBUG_NO_LOCATIONS: boolean = false;
+export const DEBUG_ONE_SIGNAL: boolean = (!environment.production) && false;
+export const DEBUG_ONE_SIGNAL_CLEAN_PREFS: boolean = (!environment.production) && false;
+export const DEBUG_NO_LOCATIONS: boolean = (!environment.production) && false;
 export const ONE_SIGNAL_IOS_PERMISSION_DECLINED: string = 'iosDeclined';
 export const ONE_SIGNAL_PAYLOAD_TIMESTAMP: string = 'oneSignalPayloadTimestamp';
 export const HOT_DEAL_EXPIRED_EVENT: string = 'hotDealExpired';
@@ -178,7 +180,7 @@ export const PERMISSION_MODAL: string = 'permissionModal';
 export const LOCAL_PRODUCT_IMAGE_PLACEHOLDER: string = '../../assets/imgs/product_placeholder.png';
 
 // DEBUG
-export const DEBUG_TRANSLATIONS: boolean = false;
+export const DEBUG_TRANSLATIONS: boolean = (!environment.production) && false;
 
 export const EVENT_NEW_SHOPPING_LIST: string = 'newShoppingList';
 export const EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST: string = 'listProductAdded';
