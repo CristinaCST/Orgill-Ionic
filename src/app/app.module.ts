@@ -99,7 +99,8 @@ import { CustomErrorHandlerService } from '../services/error-handler/CustomError
     IonicModule.forRoot(MyApp, {
       mode: 'md', scrollPadding: false,
       scrollAssist: false,
-      autoFocusAssist: false
+      autoFocusAssist: false,
+      statusbarPadding: false
     }),
     IonicStorageModule.forRoot(),
     HttpClientModule,
