@@ -35,9 +35,9 @@ export class MyApp {
               private readonly navigatorService: NavigatorService,
               private readonly popoverProvider: PopoversService,
               private readonly events: Events) {
-    this.translate.setDefaultLang(Constants.LANG_EN);
-    this.setAppLanguage();
-    this.initializeApp();
+    this.setAppLanguage().then(()=>{
+      this.initializeApp();
+    });
   }
 
 
@@ -51,12 +51,10 @@ export class MyApp {
     this.events.subscribe(Constants.EVENT_SCROLL_INTO_VIEW, this.scrollToElement);
 
     this.platform.ready().then(() => {
+      
       this.oneSignalService.init();
 
-   //   if (this.platform.is('android')) {
-
         CSSInjector.setHead();
-
 
         window.addEventListener('keyboardDidShow', (obj: Event & {keyboardHeight: number}) => {
           if (this.platform.is('android')) {
@@ -71,7 +69,6 @@ export class MyApp {
         window.addEventListener('keyboardDidHide', () => {
           document.body.classList.remove('keyboard-is-open');
         });
-      // }
 
       this.navigatorService.initializeBackButton(() => {
 
@@ -119,12 +116,13 @@ export class MyApp {
     });
   }
 
-  private setAppLanguage(): void {
+  private setAppLanguage(): Promise<void>{
     const language: string = navigator.language;
+    this.translate.setDefaultLang('en');
     if (language.includes('fr')) {
-      this.translate.setDefaultLang('fr');
+      return this.translate.use('fr').toPromise();
     } else {
-      this.translate.setDefaultLang('en');
+      return this.translate.use('en').toPromise();
     }
   }
 
