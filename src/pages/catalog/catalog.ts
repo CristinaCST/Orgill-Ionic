@@ -64,7 +64,7 @@ export class Catalog implements OnInit {
     this.currentSubCategory = getNavParam(this.navParams, 'currentSubCategory', 'object');
 
     if (!this.programName) {
-      this.programName = this.translateProvider.translate(Strings.REGULAR_CATALOG);
+      this.programName = this.translateProvider.translate(Strings.REGULAR_CATALOG).toUpperCase();
     }
     if (!this.programNumber) {
       this.programNumber = '';
