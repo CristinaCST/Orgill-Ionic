@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import * as VersionFile from '../../util/version';
 
 @Component({
   selector: 'page-about',
   templateUrl: 'about.html'
 })
 export class AboutPage {
-  public applicationVersion: String = '1.0.0';
+  public applicationVersion: String = VersionFile.VERSION;
 }
