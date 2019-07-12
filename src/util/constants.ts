@@ -8,6 +8,9 @@ export const MAX_QUANTITY_HARDCAP: number = 99999;
 
 export const HOLD_TIME_TO_DELETE_MODE: number = 0.6 * 1000; // Expressed in ms
 
+export const SEND_TO_ORGILL_METHOD: number = 1;
+export const CHECKOUT_METHOD: number = 2;
+
 /**
  * Marker : App Language
  * =============================================================================================
@@ -164,9 +167,8 @@ export const ONE_SIGNAL_LOCATION_PREFERENCE_PATH: string = 'locationSharing';
 export const ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH: string = 'pushNotifications';
 export const ONE_SIGNAL_VERBOSE: boolean = (!environment.production) && false;
 export const ONE_SIGNAL_HOT_DEAL_SKU_PATH: string = 'hotDealSku';
-export const DEBUG_ONE_SIGNAL: boolean = (!environment.production) && false;
+export const DEBUG_ONE_SIGNAL: boolean = (!environment.production) && true;
 export const DEBUG_ONE_SIGNAL_CLEAN_PREFS: boolean = (!environment.production) && false;
-export const DEBUG_NO_LOCATIONS: boolean = (!environment.production) && false;
 export const ONE_SIGNAL_IOS_PERMISSION_DECLINED: string = 'iosDeclined';
 export const ONE_SIGNAL_PAYLOAD_TIMESTAMP: string = 'oneSignalPayloadTimestamp';
 export const HOT_DEAL_EXPIRED_EVENT: string = 'hotDealExpired';

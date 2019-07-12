@@ -7,20 +7,20 @@
 
 <ion-content [(ngSwitch)]="isHotDeal">
 
-  <ion-item *ngIf="noLocation">
+  <ion-item class="no-location" *ngIf="noLocation">
     {{"customer_locations_no_location" | translate}}
   </ion-item>
 
   <!-- Locations if not hot deal -->
   <ion-item-group *ngSwitchCase="false">
-  <ion-item-group padding class="post-container">
-    <ion-item-divider *ngIf="!noLocation" no-lines>{{"customer_locations_po" | translate}}:</ion-item-divider>
+  <ion-item-group *ngIf="!noLocation" padding class="post-container">
+    <ion-item-divider no-lines>{{"customer_locations_po" | translate}}:</ion-item-divider>
     <ion-item>
       <ion-input [(ngModel)]="postOffice" type="text"
                  placeholder="{{'customer_locations_po_hint' | translate}}" (ionFocus)="onFocus()" (focusout)="PONumberValidation()" (keyup.enter)="checkout()" maxlength="15"></ion-input>
     </ion-item>
   </ion-item-group>
-  <ion-item-group [(ngModel)]="selectedLocation" padding radio-group class="locations-container">
+  <ion-item-group *ngIf="!noLocation" [(ngModel)]="selectedLocation" padding radio-group class="locations-container">
 
     
     <ion-item-divider no-lines>{{"customer_locations_list_header" | translate}}:</ion-item-divider>

@@ -1,6 +1,7 @@
 @import "../../theme/variables";
 
 page-customer-location {
+
   .post-container {
     background-color: #f1eded;
     ion-item, ion-item-divider {
@@ -14,13 +15,26 @@ page-customer-location {
       font-style: italic;
     }
   }
+
+  .no-location{
+    ion-label.label{
+      word-wrap: break-word!important;
+      text-overflow: none!important;
+      overflow: visible!important;
+      white-space: normal!important;
+    }
+}
+
   .locations-container {
+    
+
     ion-item, ion-item-divider {
       padding: 0 !important;
     }
     ion-item-divider {
       text-transform: uppercase;
     }
+  
     ion-label {
       p {
         white-space: pre-line;

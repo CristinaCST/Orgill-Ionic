@@ -23,8 +23,8 @@ export class CustomerLocationPage implements OnInit {
 
   @ViewChildren('QTYinput') public QuantityInput: string;
 
-  public readonly sendToOrgillMethod: number = 1;
-  public readonly checkoutMethod: number = 2;
+  public readonly sendToOrgillMethod: number = Constants.SEND_TO_ORGILL_METHOD;
+  public readonly checkoutMethod: number = Constants.CHECKOUT_METHOD;
 
   public postOffice: string;
   public userLocations: CustomerLocation[] = [];
@@ -58,7 +58,7 @@ export class CustomerLocationPage implements OnInit {
     this.isHotDeal = this.hotDealItem ? true : false;
 
     this.userInfoProvider.getUserLocations().subscribe(locations => {
-      if (!locations || Constants.DEBUG_NO_LOCATIONS) {
+      if (!locations) {
         this.noLocation = true;
         return;
       }
@@ -109,7 +109,12 @@ export class CustomerLocationPage implements OnInit {
   }
 
   public checkout(): void {
-    this.redirectToOrderReview(this.checkoutMethod);
+    if (!this.noLocation) {
+      this.redirectToOrderReview(this.checkoutMethod);
+    } else {
+      const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE,Strings.NO_CUSTOMER_LOCATION);
+      this.popoversService.show(content);
+    }
   }
 
   public redirectToOrderReview(orderMethod: number): void {
@@ -168,7 +173,7 @@ export class CustomerLocationPage implements OnInit {
 
       this.hotDealItem.LOCATIONS = selectedLocations;
       this.setHotDealTotalPrice();
-      this.navigatorService.push(OrderReviewPage, { hotDealItem: this.hotDealItem, orderTotal: this.orderTotal });
+      this.navigatorService.push(OrderReviewPage, { orderMethod, hotDealItem: this.hotDealItem, orderTotal: this.orderTotal });
 
     }
   }
