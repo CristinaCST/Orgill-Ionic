@@ -3,8 +3,8 @@
   background-color: white;
   .back-button-container {
     width: 20%;
-    height: auto;
-    display:block;
+    height: 100%;
+    display: block;
     flex-grow: 2;
     
     img {
@@ -12,31 +12,27 @@
       height: 100%;
     }
     .backbutton{
-      display: inline-block;
-     // flex-grow:2;
+      display: flex;
+      min-height: 100%;
       .left-component{
-        display:inline-block;
         width:50px;
-        //height: 50px;
+        height: 47px;
         background-color: color($colors, OrgillRed);
         .arrow{
           display:block;
+          height: 47px;
+          width:auto;
           align-content: center;
-          background: url(../../assets//vector/arrow.svg);
+          background: url(../../assets/vector/arrow.svg);
           background-repeat: no-repeat;
           background-size: 30%;
           background-position: center center;
-          
         }
       }
       .right-component{
-        display:inline-block;
-        width:50px;
-        height: 50px;
-        background-color:green;
-       // border-bottom: 100px solid red;
-      //  border-left: 25px solid transparent;
-      //  border-right: 25px solid transparent;
+ 
+       border-top: 47px solid color($colors, OrgillRed);
+        border-right: 15px solid transparent;
       }
     }
   }
