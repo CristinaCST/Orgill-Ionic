@@ -14,22 +14,25 @@
 <ion-content *ngIf="!isHotDeal">
   <ion-item-group>
     <div *ngIf="location" class="location-container">
-      <ion-item-divider no-lines class="location-headers">
-        <p>{{"customer_locations" | translate}}:</p>
-        <p>{{"order_review_total" | translate}}:</p>
-      </ion-item-divider>
       <ion-item class="info-container">
         <div class="info">
-          <div>
-            <span>{{"customer_locations_po" | translate}}:</span>
-            <span>{{postOffice}}</span>
+          <div class="left-info">
+            <div>
+              <span>{{"customer_locations_po" | translate}}:</span><br>
+              <span class="po-number">{{postOffice?postOffice: 'N/A'}}</span>
+            </div>
+            <div>
+              <span>{{"order_review_location" | translate}}:</span><br>
+              <span>{{location.SHIPTONO}}</span>
+            </div>
           </div>
-          <div>
-            <span>{{"order_review_location" | translate}}:</span>
-            <span>{{location.SHIPTONO}}</span>
+          <div class="right-info">
+            <span>
+              <p>{{"order_review_total" | translate}}:</p>
+              <p>{{"product_currency"| translate}}{{orderTotal | number: '1.2-2'}}</p>
+            </span>
           </div>
         </div>
-        <p>{{"product_currency"| translate}}{{orderTotal | number: '1.2-2'}}</p>
       </ion-item>
 
       <ion-item-divider class="ship-header" no-lines>{{"order_review_ship_to" | translate}}:
@@ -89,7 +92,7 @@
       {{"cancel" | translate}}
     </button>
     <button *ngIf="!isHotDeal" ion-button block color="OrgillRed" (click)="purchase()">
-      {{"order_review_purchase" | translate}}
+      {{forwardButtonText | translate}}
     </button>
     <button *ngIf="isHotDeal" ion-button block color="OrgillRed" (click)="purchaseHotDeal()">
       {{"order_review_purchase" | translate}}

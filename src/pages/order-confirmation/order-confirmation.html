@@ -1,9 +1,9 @@
 <ion-header>
-  <navbar [isBackEnabled]="true" [title]="'order_confirmation'"> 
+  <navbar [isBackEnabled]="true" [title]="pageTitle"> 
   </navbar>
   <div class="sub-header">
     <p>{{"order_confirmation_message_status" | translate}} </p>
-    <p> {{"order_confirmation_message_method" | translate}} {{orderMethod}}</p>
+    <p> {{orderMethodString | translate}}</p>
   </div>
 </ion-header>
 
@@ -12,8 +12,12 @@
 </ion-content>
 
 <ion-footer padding>
-  <div class="total-container">
-    {{"order_review_total" | translate}}:
-    {{"product_currency" | translate}}{{orderTotal | number: '1.2-2'}}
-  </div>
+  <ion-item class="total-container">
+    <span>
+      {{"order_review_total" | translate}}:
+    </span>
+    <span>
+      {{"product_currency" | translate}}{{orderTotal | number: '1.2-2'}}
+    </span>
+  </ion-item>
 </ion-footer>

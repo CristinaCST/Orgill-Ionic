@@ -151,6 +151,8 @@ export const SHOPPING_LIST_DELETE_CONF_TITLE: string = 'shopping_list_delete_con
 export const SHOPPING_LIST_DELETE_CONF_MESSAGE: string = 'shopping_list_delete_conf_message';
 
 export const ORDER_CONFIRMATION: string = 'order_confirmation';
+export const ORDER_SENT: string = 'order_sent';
+export const ORDER_SENT_METHOD: string = 'order_sent_message_method';
 export const ORDER_CONFIRMATION_METHOD: string = 'order_confirmation_message_method';
 export const ORDER_CONFIRMATION_EMAIL: string = 'order_confirmation_message_email';
 export const ORDER_CONFIRMATION_HOME: string = 'order_confirmation_home_button';
@@ -160,6 +162,8 @@ export const ORDER_CHECKOUT: string = 'order_review_type_checkout';
 export const ORDER_ORGILL_MESSAGE: string = 'order_review_orgill_message';
 export const ORDER_CHECKOUT_MESSAGE: string = 'order_review_checkout_message';
 
+export const ORDER_REVIEW_PURCHASE: string = 'order_review_purchase';
+export const ORDER_REVIEW_SEND: string = 'order_review_send';
 /**
  * Marker : HotDeals
  * =============================================================================================
@@ -240,3 +244,4 @@ export const RELOAD_ERROR_MESSAGE_WITH_CULPRIT: string = 'reload_error_message_w
 export const RELOAD_ERROR_MESSAGE_WITHOUT_CULPRIT: string = 'reload_error_message_without_culprit';
 
 export const DELETE_ITEM_PROMPT_MESSAGE: string = 'delete_item_prompt_message';
+export const NO_CUSTOMER_LOCATION: string = 'no_customer_location';

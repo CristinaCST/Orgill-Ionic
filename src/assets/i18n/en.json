@@ -149,7 +149,7 @@
   "customer_locations_po_hint": "Enter PO #",
   "customer_locations_list_header": "Ship to location",
   "customer_locations_send_to_orgill": "Send to Orgill.com",
-  "customer_locations_no_location": "There are no locations attached to this account",
+  "customer_locations_no_location": "There are no locations attached to this account.",
 
   "order_review": "Review Order",
   "order_review_type_orgill": "Orgill.com",
@@ -164,9 +164,12 @@
   "order_review_details": "Shipment Details",
   "four_percent_note": "Note: All Y items carry a 4% up charge when purchased in less than Shelf Pack Quantities.",
   "order_review_purchase": "Purchase",
+  "order_review_send": "Send",
   "order_confirmation": "Order Confirmation",
+  "order_sent": "Order Sent",
+  "order_sent_message_method": "Your order has been sent to Orgill.com",
   "order_confirmation_message_status": "Success!",
-  "order_confirmation_message_method": "Your order has been added via ",
+  "order_confirmation_message_method": "Your order has been added via Checkout",
   "order_confirmation_message_email": "An email confirmation will be arriving shortly.",
   "order_confirmation_total": "Total",
   "order_confirmation_home_button": "Continue to catalog",
@@ -214,6 +217,7 @@
   "shopping_list_empty_message":"Shopping list is empty.",
   "reload_error_message_with_culprit":"Error loading ${culprit}, please try again.",
   "reload_error_message_without_culprit":"Error loading content, please try again.",
-  "delete_item_prompt_message": "Are you sure you want to delete these items from the shopping list?"
+  "delete_item_prompt_message": "Are you sure you want to delete these items from the shopping list?",
+  "no_customer_location": "It seems you don't have a valid ship to location. Please send your order to Orgill.com for further revisioning."
 
 }

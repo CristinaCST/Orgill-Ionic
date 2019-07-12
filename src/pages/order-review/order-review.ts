@@ -14,6 +14,8 @@ import { ProductListInfo } from '../../interfaces/models/product-list-info';
 import { getNavParam } from '../../helpers/validatedNavParams';
 import { HotDealItem } from '../../interfaces/models/hot-deal-item';
 import { HotDealConfirmation } from '../../interfaces/models/hot-deal-confirmation';
+import * as Constants from '../../util/constants';
+import * as Strings from '../../util/strings';
 
 @Component({
   selector: 'page-order-review',
@@ -32,14 +34,17 @@ export class OrderReviewPage implements OnInit {
   public isHotDeal: boolean = false;
   public hotLocations: LocationElement[];
   private hotDealItem: HotDealItem;
+  public readonly sendToOrgillMethod: number = Constants.SEND_TO_ORGILL_METHOD;
+  public forwardButtonText: string;
 
   constructor(private readonly navigatorService: NavigatorService,
-              private readonly navParams: NavParams,
-              private readonly shoppingListsProvider: ShoppingListsProvider,
-              public readonly productProvider: ProductProvider) {}
+    private readonly navParams: NavParams,
+    private readonly shoppingListsProvider: ShoppingListsProvider,
+    public readonly productProvider: ProductProvider) { }
 
   public ngOnInit(): void {
     this.orderMethod = getNavParam(this.navParams, 'orderMethod', 'number');
+    this.forwardButtonText = this.orderMethod === Constants.CHECKOUT_METHOD ? Strings.ORDER_REVIEW_PURCHASE : Strings.ORDER_REVIEW_SEND;
     this.postOffice = getNavParam(this.navParams, 'postOffice');
     this.location = getNavParam(this.navParams, 'location', 'object');
     this.shoppingListId = getNavParam(this.navParams, 'shoppingListId', 'number');
@@ -55,10 +60,10 @@ export class OrderReviewPage implements OnInit {
     }
 
     if (this.shoppingListItems) {
-    this.shoppingListItems.forEach(listItem => {
-      this.shoppingListProgramNumbers [listItem.program_number] = listItem.program_number;
-    });
-  }
+      this.shoppingListItems.forEach(listItem => {
+        this.shoppingListProgramNumbers[listItem.program_number] = listItem.program_number;
+      });
+    }
 
   }
 
@@ -113,7 +118,6 @@ export class OrderReviewPage implements OnInit {
 
   private removeItemsFromList(items: ShoppingListItem[]): void {
     items.forEach(item => {
-      console.log(this.shoppingListId);
       this.shoppingListsProvider.deleteProductFromList(this.shoppingListId, item.product.SKU, item.program_number).subscribe(res => {
         // This is here to solve Schrodinger's Observable.
       });

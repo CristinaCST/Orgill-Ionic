@@ -1,6 +1,9 @@
 @import "../../theme/variables";
 
 page-order-review {
+  .label{
+    margin: 5px 5px 5px 0;
+  }
   ion-header {
     #order-review-sub-header {
       .toolbar-background {
@@ -39,31 +42,53 @@ page-order-review {
     }
     .info-container {
       ion-label {
-        display: flex;
+       // display: flex;
       }
-
-      .info {
+      display:block;
+      width: 100%;
+      .info{
+        display:flex;
+        width:100%;
+        margin-top:2vh;
+      
+      .left-info {
+        justify-content: flex-start;
+        .po-number{
+          padding-left: 2px;
+        }
         width: 50%;
         div {
           width: 100%;
-          display: flex;
 
+         // margin-top: 2vh;
+          margin-bottom: 1vh;
           span {
-            display: flex;
+            //display: flex;
             flex: 1;
           }
           span:nth-child(1) {
             justify-content: flex-start;
-          }
-          span:nth-child(2) {
-            justify-content: flex-end;
             font-weight: bold;
           }
         }
       }
+      .right-info{
+        justify-content: flex-end!important;
+        width:50%;
+        span{
+          p:nth-child(1){
+            padding-top:3%;
+          }
+        }
+      }
+    }
       p {
         width: 50%;
-        display: flex;
+       // display: flex;
+        vertical-align: middle;
+        margin-top:auto;
+        margin-bottom:auto;
+      //  align-content: center;
         justify-content: flex-end;
         color: color($colors, OrgillRed);
         font-weight: bold;
@@ -100,4 +125,5 @@ page-order-review {
       }
     }
   }
+  
 }

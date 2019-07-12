@@ -1,6 +1,11 @@
 @import "../../theme/variables";
 
 page-order-confirmation {
+
+  .footer{
+    padding:0px!important;
+  }
+
   ion-header {
     .sub-header {
       padding: 5px;
@@ -19,4 +24,35 @@ page-order-confirmation {
       }
     }
   }
+
+  .total-container{
+    width: 100%;
+    display: flex;
+
+    .label {
+      display: flex;
+    }
+
+    .item-inner {
+      border: 0 !important;
+    }
+
+    span:nth-child(1) {
+      margin-left: 16px;
+      width: 50%;
+      text-align: left;
+      font-size: $font-size-large;
+      color: color($colors, OrgillDarkGray);
+      font-weight: bold;
+    }
+
+    span:nth-child(2) {
+      text-align: right;
+      width: 50%;
+      font-size: $font-size-large;
+      color: color($colors, OrgillRed);
+      font-weight: bold;
+    }
+  }
+
 }
