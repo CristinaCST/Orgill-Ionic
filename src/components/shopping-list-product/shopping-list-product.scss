@@ -1,6 +1,20 @@
 @import "../../theme/variables";
 
 shopping-list-product {
+
+  ion-item{
+    display:flex;
+  }
+
+  ion-label{
+   // max-width: 90%!important;
+    flex-grow: 2;
+  }
+
+  ion-checkbox{
+    margin:0px;
+  }
+  
   .ion-item-border {
     padding-bottom: $ion-app-padding !important;
     padding-left: $ion-app-padding !important;
@@ -26,6 +40,19 @@ shopping-list-product {
         padding: 0;
         margin: 0;
       }
+
+      .quantity {
+        margin-top:7%;
+        width: 20%;
+        justify-content: center;
+        align-items: center;
+        font-weight: bolder;
+        p {
+          color: black;
+          @include responsive-font($font-size-medium, $font-size-small);
+        }
+      }
+
       .shopping-list-container {
         display: flex;
         flex: 1;
@@ -43,21 +70,11 @@ shopping-list-product {
             span {
               display: flex;
               width: 50%;
+              @include responsive-font($font-size-medium, $font-size-small);
             }
           }
         }
-        .quantity {
-          margin-top:2%;
-          width: 20%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          font-weight: bolder;
-          p {
-            color: black;
-            font-size: $font-size-large !important;
-          }
-        }
+        
       }
     }
   }
@@ -73,10 +90,11 @@ shopping-list-product {
       margin: 0;
     }
     p:nth-child(1) {
-      font-size: $font-size-medium;
+      @include responsive-font($font-size-medium, $font-size-small);
+      
     }
     p:nth-child(2) {
-      font-size: $font-size-small;
+      @include responsive-font($font-size-medium, calc(#{$font-size-small} - 2px));      
       font-weight: bold;
     }
     &.checked {

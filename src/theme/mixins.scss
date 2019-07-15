@@ -1,0 +1,8 @@
+@mixin responsive-font($big-size, $small-size){
+    @media (min-width: $small-screen-width){
+        font-size: $big-size;
+      }
+    @media (max-width: $small-screen-width){
+        font-size: $small-size;
+      }
+}
