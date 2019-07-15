@@ -5,9 +5,6 @@
     <author email="cristina.nicolae@cst-us.com" href="http://cst-us.com/">CST Team</author>
     <content src="index.html" />
     <access origin="*" />
-    <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
-        <application android:usesCleartextTraffic="true" />
-    </edit-config>
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -29,6 +26,9 @@
     <hook src="src/hooks/invalidate_version.js" type="after_build" />
     <platform name="android">
         <allow-intent href="market:*" />
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:usesCleartextTraffic="true" />
+        </edit-config>
         <icon density="mdpi" src="resources/android/icon/icon_mdpi.png" />
         <icon density="hdpi" src="resources/android/icon/icon_hdpi.png" />
         <icon density="xhdpi" src="resources/android/icon/icon_xhdpi.png" />
