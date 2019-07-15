@@ -26,12 +26,13 @@ export class PurchasesProvider {
             if (!purchase.confirmation) {
               parsedPurchase.confirmation = Constants.PAST_PURCHASES_DEBUG_ORDER_PLACEHOLDER;
             }
-            if (!purchase.date) {
-              parsedPurchase.date = Constants.PAST_PURCHASES_DEBUG_DATE_PLACEHOLDER;
+            if (!purchase.purchase_date) {
+              parsedPurchase.purchase_date = Constants.PAST_PURCHASES_DEBUG_DATE_PLACEHOLDER;
             }
             if (!purchase.total) {
               parsedPurchase.total = Constants.PAST_PURCHASES_DEBUG_TOTAL_PLACEHOLDER;
             }
+            parsedPurchase.purchase_date = purchase.purchase_date.split(' ')[0];
             return parsedPurchase;
           }));
         } else {
