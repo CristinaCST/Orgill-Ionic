@@ -174,11 +174,12 @@ export class OneSignalService {
             LocalStorageHelper.removeFromLocalStorage(Constants.NOTIFICATION_SUBSCRIPTION_ANDROID_PATH);
             this.handleLocationPermission();
 
+            // TODO: Change these to Constants.
             this.secureActions.do(() => { // We make a call to secure actions and schedule our code because we need a valid user reference for this part
-                let retailer_type: string = 'USA';
+                let retailer_type: string = 'US';
                 for (const division of Constants.ONE_SIGNAL_CANADA_USER_TYPES) {
                     if (division === this.authService.User.division) {
-                        retailer_type = 'CANADA';
+                        retailer_type = 'CA';
                         break;
                     }
                 }
