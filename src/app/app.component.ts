@@ -51,17 +51,19 @@ export class MyApp {
     this.events.subscribe(Constants.EVENT_SCROLL_INTO_VIEW, this.scrollToElement);
 
     this.platform.ready().then(() => {
-      
       this.oneSignalService.init();
 
-        CSSInjector.setHead();
-
+      CSSInjector.setVar('realHeight', (window.screen.height * window.devicePixelRatio).toString());
+      CSSInjector.setVar('realWidth', (window.screen.width * window.devicePixelRatio).toString());
+    
+      // TODO: Make this better :/
         window.addEventListener('keyboardDidShow', (obj: Event & {keyboardHeight: number}) => {
           if (this.platform.is('android')) {
-            CSSInjector.injectCSS('body.keyboard-is-open .scroll-content:not(.keyboard-immune){' + 'margin-bottom:' + obj.keyboardHeight + 'px!important;' + '}');
+            CSSInjector.addRawCSS('body.keyboard-is-open .scroll-content:not(.keyboard-immune){' + 'margin-bottom:' + obj.keyboardHeight + 'px!important;' + '}');
           } else {
-            CSSInjector.injectCSS('body.keyboard-is-open .scroll-content:not(.keyboard-immune){' + 'margin-bottom:' + obj.keyboardHeight + 'px!important; padding-bottom:0px!important;' + '}');
+            CSSInjector.addRawCSS('body.keyboard-is-open .scroll-content:not(.keyboard-immune){' + 'margin-bottom:' + obj.keyboardHeight + 'px!important; padding-bottom:0px!important;' + '}');
           }
+          CSSInjector.injectCSS();
           document.body.classList.add('keyboard-is-open');
           this.scrollToElement();
         });
