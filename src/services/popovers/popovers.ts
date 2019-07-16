@@ -14,6 +14,7 @@ export interface PopoverContent{
   positiveButtonText?: string;
   negativeButtonText?: string;
   dismissButtonText?: string;
+  additionalData?: any;
 }
 
 export interface DefaultPopoverResult {
@@ -24,6 +25,11 @@ export interface CustomListPopoverResult {
   listName?: string;
   type?: string;
   listDescription?: string;
+  optionSelected: string;
+}
+
+export interface QuantityPopoverResult{ 
+  quantity: number;
   optionSelected: string;
 }
 
@@ -50,7 +56,7 @@ export class PopoversService {
    * @param continuous should the modal complete after 1 input? true if so
    * @param subjectReference pass a subject if you want a specific observable to be changed
    */
-  public show(content: PopoverContent, continuous: boolean = false, subjectReference?: Subject<any>): Observable<DefaultPopoverResult | CustomListPopoverResult> {
+  public show(content: PopoverContent, continuous: boolean = false, subjectReference?: Subject<any>): Observable<DefaultPopoverResult | CustomListPopoverResult | QuantityPopoverResult> {
     if (this.isOpened) {
       const aux: Subject<any> = new Subject<any>();
       aux.next(content);
@@ -105,14 +111,15 @@ export class PopoversService {
   }
 
   public setContent(title: string = Strings.GENERIC_MODAL_TITLE, message: string, positiveButtonText: string = Strings.MODAL_BUTTON_OK,
-    dismissButtonText?: string, negativeButtonText?: string, type?: string): PopoverContent {
+    dismissButtonText?: string, negativeButtonText?: string, type?: string, additionalData?: any): PopoverContent {
     return {
       type,
       title,
       message,
       positiveButtonText,
       negativeButtonText,
-      dismissButtonText
+      dismissButtonText,
+      additionalData
     };
   }
 

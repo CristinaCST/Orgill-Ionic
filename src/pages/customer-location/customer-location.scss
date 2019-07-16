@@ -2,6 +2,25 @@
 
 page-customer-location {
 
+  .button-container{
+    padding-top:5px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+
+
+    .button-md{
+      margin:3px;
+      border-radius: 8px;
+      height: 5rem;
+      font-size: $font-size-medium;
+      align-items: center;
+      font-weight: 600;
+      width:45%;
+      background-color: color($colors, OrgillRed);
+      color: white;
+    }
+  }
   .post-container {
     background-color: #f1eded;
     ion-item, ion-item-divider {
@@ -26,7 +45,7 @@ page-customer-location {
 }
 
   .locations-container {
-    
+    padding-top: 2px!important;
 
     ion-item, ion-item-divider {
       padding: 0 !important;
@@ -56,9 +75,11 @@ page-customer-location {
     button {
       padding: 25px !important;
       border-radius: 7px !important;
+      font-size: 35px;
     }
     button:nth-child(1) {
       margin-bottom: 10px;
+      font-size: $font-size-medium;
     }
   }
 
@@ -95,4 +116,6 @@ page-customer-location {
     box-shadow: none!important;
     border-bottom: none!important;
     }
+
+
 }

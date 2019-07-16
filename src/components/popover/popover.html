@@ -18,11 +18,11 @@
     <ion-list>
       <ion-item no-padding>
         <ion-input #listNameInput [(ngModel)]="listName" type="text" maxlength="40" (focusout)="cleanInput()"
-                   placeholder="{{'new_list_hint_name' | translate }}" (keyup.enter)="$event.target.blur()"></ion-input>
+          placeholder="{{'new_list_hint_name' | translate }}" (keyup.enter)="$event.target.blur()"></ion-input>
       </ion-item>
       <ion-item no-padding>
         <ion-input [(ngModel)]="listDescription" type="text" maxlength="50"
-                   placeholder="{{'new_list_hint_desc'| translate }}" (keyup.enter)="$event.target.blur()"></ion-input>
+          placeholder="{{'new_list_hint_desc'| translate }}" (keyup.enter)="$event.target.blur()"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Is Market Only</ion-label>
@@ -30,6 +30,18 @@
       </ion-item>
     </ion-list>
   </div>
+
+  <div class="fillQuantity" *ngIf="data.fillQuantity">
+    <button class="qtybutton" ion-button icon-only small clear (click)="substract()">
+      <ion-icon name="remove" color="OrgillRed"></ion-icon>
+    </button>
+    <ion-input clearInput (focusout)="focusout()" (keyup.enter)="$event.target.blur()" [(ngModel)]="quantity" min="1" maxlength="5" type="tel" inputmode="numeric"
+      pattern="^[0-9]" placeholder="{{'customer_locations_qty_hint' | translate}}"></ion-input>
+    <button class="qtybutton" ion-button icon-only small clear (click)="add()">
+      <ion-icon name="add" color="OrgillRed"></ion-icon>
+    </button>
+  </div>
+
   <div class="modal-btn-container">
     <div class="modals-btn">
       <button *ngIf="data.dismissButtonText" class="round bg-dark" ion-button outline (click)="dismiss('DISMISS')">

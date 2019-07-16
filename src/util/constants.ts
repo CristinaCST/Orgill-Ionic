@@ -55,6 +55,7 @@ export const POPOVER_ERROR: string = 'popoverError';
 export const POPOVER_QUIT: string = 'popoverQuit';
 export const POPOVER_INFO: string = 'popoverInfo';
 export const POPOVER_CAMERA_PERMISSION_NOT_GRANTED: string = 'popoverNoCameraPerm';
+export const POPOVER_FILL_QUANTITY: string = 'popoverQuantity';
 
 /**
  * Marker : EVENT TOPICS

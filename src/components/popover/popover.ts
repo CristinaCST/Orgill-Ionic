@@ -11,6 +11,10 @@ export class PopoverComponent {
   public listName: string = '';
   public listDescription: string = '';
   public isMarketOnlyList: boolean = false;
+  public quantity: number = 1;
+  public minqty: number = 1;  // TODO: replace with constaaaaants
+  public maxqty: number = 99999;
+  public shelfpack: number = 1;  // Don't set shelf pack if quantity round option is not X.
   private instantCloseOnNo: boolean = false;
   @ViewChild('immuneElement') private readonly immuneElement: Content;
   @ViewChild('listNameInput') private readonly listNameElement: TextInput;
@@ -33,7 +37,17 @@ export class PopoverComponent {
     if (this.data.type) {
       this.data.isNewListModal = this.data.type === Constants.POPOVER_NEW_SHOPPING_LIST;
       this.data.closeOptionAvailable = this.data.type !== Constants.POPOVER_ORDER_CONFIRMATION;
+      this.data.fillQuantity = this.data.type === Constants.POPOVER_FILL_QUANTITY;
       this.instantCloseOnNo = this.data.type === Constants.POPOVER_QUIT;
+    }
+
+    if (this.data.fillQuantity) {
+      if (this.data.additionalData) {
+        this.minqty = this.data.additionalData.minqty ? Math.max(this.minqty, this.data.additionalData.minqty) : this.minqty;
+        this.quantity = this.minqty;
+        this.maxqty = this.data.additionalData.maxqty ? Math.min(this.maxqty, this.data.additionalData.maxqty) : this.maxqty;
+        this.shelfpack = this.data.additionalData.shelfpack ? Math.max(this.shelfpack, this.data.additionalData.shelfpack) : this.shelfpack;
+      }
     }
   }
 
@@ -59,13 +73,35 @@ export class PopoverComponent {
       }
     }
 
+    if (this.data.fillQuantity === true) {
+      data.quantity = this.quantity;
+    }
+
     let navOptions: NavOptions;
     if (this.instantCloseOnNo && option === 'OK') {
       navOptions = { animate: false };
     }
 
-    this.viewCtrl.dismiss(data, undefined , navOptions ? navOptions : undefined).then(() => {
-    });
+    this.viewCtrl.dismiss(data, undefined , navOptions ? navOptions : undefined);
+  }
+
+  // TODO: Really refactor all of this...
+  public add(): void {
+    if (this.quantity + this.shelfpack > this.maxqty) {
+      return;
+    }
+    this.quantity += this.shelfpack;
+  }
+
+  public substract(): void {
+    if (this.quantity - this.shelfpack < this.minqty) {
+      return;
+    }
+    this.quantity -= this.shelfpack;
+  }
+
+  public focusout(): void {
+    this.quantity = Math.min(Math.max(this.quantity, this.minqty), this.maxqty);
   }
 
 }

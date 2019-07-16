@@ -245,3 +245,5 @@ export const RELOAD_ERROR_MESSAGE_WITHOUT_CULPRIT: string = 'reload_error_messag
 
 export const DELETE_ITEM_PROMPT_MESSAGE: string = 'delete_item_prompt_message';
 export const NO_CUSTOMER_LOCATION: string = 'no_customer_location';
+
+export const LOCATIONS_QUANTITY_MODAL_DESCRIPTION: string = 'locations_quantity_modal_description';

@@ -59,6 +59,32 @@ ion-content {
   }
 }
 
+.fillQuantity{
+  display: flex;
+  align-content: center;
+  justify-content: center;
+
+  ion-input {
+    border:0px;
+    border-bottom: 2px;
+   // border-radius: 35px;
+    border-style: solid;
+    height: 5%;
+    max-width:40%;
+  //  margin-top: auto;
+    margin-bottom: 10px;
+    input{
+      text-align: center!important;
+      padding-right:0px!important; //fix for clear-input
+    }
+  }
+  button{
+    padding:0px!important;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+}
+
 body.keyboard-is-open{
   .popover-content{
     margin-top:-$keyboard-margin-push-amount!important;  

@@ -40,6 +40,15 @@
 
 <!-- Locations if it is hot deals -->
 <ion-item-group *ngSwitchCase="true">
+  <div *ngIf="!noLocation" class="button-container">
+    <button ion-button outline block color="OrgillDarkGray" (click)="selectAll()">
+      {{ fullSelection ? ("shopping_list_deselect_all" | translate) :
+              ("shopping_list_select_all" | translate) }}
+    </button>
+    <button ion-button outline block color="OrgillDarkGray" (click)="fillQuantity()">
+        Fill quantity
+      </button>
+  </div>
   <ion-item-group [(ngModel)]="selectedLocation" padding radio-group class="locations-container">
 
 
@@ -47,7 +56,7 @@
     <ion-list *ngFor="let hotDealLocation of hotDealLocations;let i of index">
 
       <ion-item>
-        <ion-checkbox [(ngModel)]="hotDealLocation.WANTED" class="checkbox-item" item-end></ion-checkbox>
+        <ion-checkbox (ionChange)="checkboxEvent($event)" [(ngModel)]="hotDealLocation.WANTED" class="checkbox-item" item-end></ion-checkbox>
 
         <ion-label>
           <p [class]="selectedLocation===hotDealLocation?'active':''"> {{hotDealLocation.LOCATION.CUSTOMERNAME}} </p>
@@ -102,7 +111,7 @@
   <button *ngIf="!isHotDeal" ion-button block outline color="OrgillLightGray" (click)="sendToOrgill()">
     {{"customer_locations_send_to_orgill" | translate}}
   </button>
-  <button  ion-button block color="OrgillRed" (click)="checkout()">
+  <button ion-button block color="OrgillRed" (click)="checkout()">
     {{"shopping_list_checkout" | translate}}
   </button>
   

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChildren } from '@angular/core';
-import { NavParams, Keyboard, Events } from 'ionic-angular';
+import { NavParams, Keyboard, Events, Checkbox } from 'ionic-angular';
 import { CustomerLocation } from '../../interfaces/models/customer-location';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
 import { UserInfoService } from '../../services/user-info/user-info';
@@ -8,10 +8,11 @@ import { NavigatorService } from '../../services/navigator/navigator';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { LocationElement } from '../../interfaces/models/location-element';
-import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
+import { PopoversService, PopoverContent, QuantityPopoverResult } from '../../services/popovers/popovers';
 import { PricingService } from '../../services/pricing/pricing';
 import { getNavParam } from '../../helpers/validatedNavParams';
 import { PONumberValidator } from '../../validators/PONumber';
+import { HotDealItem } from 'interfaces/models/hot-deal-item';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class CustomerLocationPage implements OnInit {
   public selectedLocation: CustomerLocation;
   public hotDealLocations: LocationElement[] = [];
   public postOffices: number[];
+  public fullSelection: boolean = false;
 
 
   private shoppingListId: number;
@@ -38,7 +40,7 @@ export class CustomerLocationPage implements OnInit {
   private orderTotal: number;
   private isHotDeal: boolean = false;
   public noLocation: boolean = false;
-  private hotDealItem: any;
+  private hotDealItem: HotDealItem;
 
   constructor(private readonly navigatorService: NavigatorService,
               private readonly navParams: NavParams,
@@ -183,7 +185,7 @@ export class CustomerLocationPage implements OnInit {
     this.hotDealItem.LOCATIONS.forEach(location => {
       qty += location.QUANTITY;
     });
-    this.orderTotal = this.pricingService.getPrice(qty, this.hotDealItem, this.hotDealItem.PROGRAM);
+    this.orderTotal = this.pricingService.getPrice(qty, this.hotDealItem.ITEM, this.hotDealItem.PROGRAM);
   }
 
   public add(location: LocationElement): void {
@@ -205,6 +207,51 @@ export class CustomerLocationPage implements OnInit {
       location.POSTOFFICE = PONumberValidator(location.POSTOFFICE, this.popoversService);
     } else {
       this.postOffice = PONumberValidator(this.postOffice, this.popoversService);
+    }
+  }
+
+  public selectAll(): void {
+    if (!this.isHotDeal) {
+      return;
+    }
+
+    if (this.fullSelection) {
+      this.hotDealLocations.forEach(location => {
+        location.WANTED = false;
+      });
+      this.fullSelection = false;
+    } else {
+      this.hotDealLocations.forEach(location => {
+        location.WANTED = true;
+      });
+      this.fullSelection = true;
+    }
+  }
+
+  public fillQuantity(): void {
+    const additionalData: any = { minqty: this.hotDealItem.PROGRAM.MINQTY, maxqty: this.hotDealItem.PROGRAM.MAXQTY, shelfpack: this.hotDealItem.ITEM.QTY_ROUND_OPTION === 'X' ? this.hotDealItem.ITEM.SHELF_PACK : 1 };
+    const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.LOCATIONS_QUANTITY_MODAL_DESCRIPTION, Strings.MODAL_BUTTON_OK, Strings.MODAL_BUTTON_CANCEL, undefined, Constants.POPOVER_FILL_QUANTITY, additionalData);
+    this.popoversService.show(content).subscribe((result: QuantityPopoverResult) => {
+      if (result.optionSelected !== 'OK') {
+        return;
+      }
+      this.hotDealLocations.forEach(location => {
+        location.QUANTITY = this.pricingService.validateQuantity(result.quantity, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM);
+      });
+    });
+  }
+
+  public checkboxEvent($ev: Checkbox): void {
+    if (!$ev.checked) {
+      this.fullSelection = false;
+    } else {
+      let full: boolean = true;
+      this.hotDealLocations.forEach(location => {
+        if (!location.WANTED) {
+          full = false;
+        }
+      });
+      this.fullSelection = full;
     }
   }
 }
