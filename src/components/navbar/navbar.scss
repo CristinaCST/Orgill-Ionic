@@ -1,3 +1,4 @@
+@import '../../theme/variables.scss';
 navbar {
   ion-navbar {
     .toolbar-content {
@@ -15,5 +16,10 @@ navbar {
   ion-title{
     width:80%;
     text-overflow: ellipsis;
+  }
+
+  .toolbar-title{
+    // TODO: Replace all calcs 2px with variables.
+    @include responsive-font($font-size-medium, calc(#{$font-size-medium} - 2px));
   }
 }

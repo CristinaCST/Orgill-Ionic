@@ -45,10 +45,12 @@ product {
             white-space: normal;
           }
           p:nth-child(1) {
-            font-size: $font-size-medium;
+            //font-size: $font-size-medium;
+            @include responsive-font($font-size-medium, $font-size-small);
           }
           p:nth-child(2), p:nth-child(3) {
-            font-size: $font-size-small;
+            //font-size: $font-size-small;
+            @include responsive-font($font-size-small, $font-size-small-extra);
           }
         }
         #price-container {
@@ -62,7 +64,8 @@ product {
             display: block;
           }
           p:nth-child(1) {
-            font-size: $font-size-medium;
+           // font-size: $font-size-medium;
+            @include responsive-font($font-size-medium, calc(#{$font-size-medium} - 2px));
           }
           p:nth-child(2), p:nth-child(3) {
             font-size: $font-size-small;
