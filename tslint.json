@@ -127,7 +127,7 @@
     "no-duplicate-imports": true,
     "no-irregular-whitespace": true,
     "arrow-parens": [true, "ban-single-arg-parens"],
-    "eofline": true,
+    "eofline": false,
     "import-spacing": true,
     "new-parens": true,
     "number-literal-format": true,

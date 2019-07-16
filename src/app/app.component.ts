@@ -35,7 +35,7 @@ export class MyApp {
               private readonly navigatorService: NavigatorService,
               private readonly popoverProvider: PopoversService,
               private readonly events: Events) {
-    this.setAppLanguage().then(()=>{
+    this.setAppLanguage().then(() => {
       this.initializeApp();
     });
   }
@@ -53,8 +53,10 @@ export class MyApp {
     this.platform.ready().then(() => {
       this.oneSignalService.init();
 
-      CSSInjector.setVar('realHeight', (window.screen.height * window.devicePixelRatio).toString());
-      CSSInjector.setVar('realWidth', (window.screen.width * window.devicePixelRatio).toString());
+
+      // TODO: Make this better 
+     /* CSSInjector.setVar('smallHeight', (1000 / window.devicePixelRatio).toString());
+      CSSInjector.setVar('smallWidth', (720 / window.devicePixelRatio).toString());*/
     
       // TODO: Make this better :/
         window.addEventListener('keyboardDidShow', (obj: Event & {keyboardHeight: number}) => {
@@ -118,14 +120,13 @@ export class MyApp {
     });
   }
 
-  private setAppLanguage(): Promise<void>{
+  private setAppLanguage(): Promise<void> {
     const language: string = navigator.language;
     this.translate.setDefaultLang('en');
     if (language.includes('fr')) {
       return this.translate.use('fr').toPromise();
-    } else {
-      return this.translate.use('en').toPromise();
     }
+    return this.translate.use('en').toPromise();
   }
 
   public stopLoading(): void {

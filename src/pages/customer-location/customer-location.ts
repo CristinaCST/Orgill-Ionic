@@ -112,7 +112,7 @@ export class CustomerLocationPage implements OnInit {
     if (!this.noLocation) {
       this.redirectToOrderReview(this.checkoutMethod);
     } else {
-      const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE,Strings.NO_CUSTOMER_LOCATION);
+      const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.NO_CUSTOMER_LOCATION);
       this.popoversService.show(content);
     }
   }
