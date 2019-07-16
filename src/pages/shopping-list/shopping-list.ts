@@ -39,13 +39,12 @@ export class ShoppingListPage {
   }
 
   private shoppingList: ShoppingList;
-  private selectedItems: ShoppingListItem[] = [];
+  private selectedItems: number[] = [];
   private shoppingListItems: ShoppingListItem[] = [];
   private isCustomList: boolean = false;
   private orderTotal: number = 0;
   private isCheckout: boolean = false;
   private isSelectAll: boolean = false;
-  private nrOfSelectedItems: number = 0;
   private readonly menuCustomButtons: any[] = [];
   private readonly loader: LoadingService;
   private holdTimeoutReference: number;
@@ -85,7 +84,8 @@ export class ShoppingListPage {
     this.events.unsubscribe(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST);
   }
 
-  public ionViewWillEnter(): void {
+  public ionViewWillEnter(): void {   
+
     this.events.subscribe(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST, () => {
       this.fillList();
     });
@@ -109,8 +109,12 @@ export class ShoppingListPage {
     if (this.fromSearch) {
       this.fillFromSearch();
     } else {
-      this.fillList();
-    }
+      this.fillList().then(() => {
+        this.selectedItems.forEach(index => {
+          this.shoppingListItems[index].isCheckedInShoppingList = true;
+        });
+      });
+    }  
   }
 
   // TODO: Sebastian: REFACTORING
@@ -164,7 +168,12 @@ export class ShoppingListPage {
   }
 
   private deleteItems(): void {
-    const array: ShoppingListItem[] = this.selectedItems.filter(item => item !== undefined && item !== null);
+    const array: ShoppingListItem[] = [];
+    this.selectedItems.forEach(itemIndex => {
+      if (this.shoppingListItems[itemIndex]) {
+        array.push(this.shoppingListItems[itemIndex]);
+      }
+    });
     let ok: boolean = true;
 
     if (array) {
@@ -225,13 +234,11 @@ export class ShoppingListPage {
     const price: number = this.pricingService.getShoppingListPrice(item.quantity, item.product, item.item_price);
     switch (event.status) {
       case 'checkedItem':
-        this.selectedItems[index] = this.shoppingListItems[index];
-        this.nrOfSelectedItems++;
+        this.selectedItems.push(index);
         this.orderTotal += price;
         break;
       case 'uncheckedItem':
-        this.selectedItems[index] = undefined;
-        this.nrOfSelectedItems--;
+        this.selectedItems.splice(this.selectedItems.findIndex(elem => (elem === index)), 1);
         this.orderTotal -= price;
         break;
       default:
@@ -240,13 +247,12 @@ export class ShoppingListPage {
 
   public onChecked($event: any, index: number): void {
     this.setOrderTotal($event, index);
-    this.isSelectAll = this.nrOfSelectedItems === this.shoppingListItems.length;
+    this.isSelectAll = this.selectedItems.length === this.shoppingListItems.length;
   }
 
   public selectAll(): void {
     this.isSelectAll = !this.isSelectAll;
     this.orderTotal = 0;
-    this.nrOfSelectedItems = 0;
     this.shoppingListItems.map((item, index) => {
       if (this.isSelectAll) {
         item.isCheckedInShoppingList = true;
@@ -259,11 +265,16 @@ export class ShoppingListPage {
   }
 
   public continue(): void {
-    if (this.nrOfSelectedItems === 0) {
+    if (this.selectedItems.length === 0) {
       const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_NO_ITEMS_TITLE, Strings.SHOPPING_LIST_NO_ITEMS_MESSAGE);
       this.popoversService.show(content);
     } else {
-      const array: ShoppingListItem[] = this.selectedItems.filter(item => item !== undefined);
+      const array: ShoppingListItem[] = [];
+      this.selectedItems.forEach(itemIndex => {
+        if (this.shoppingListItems[itemIndex]) {
+          array.push(this.shoppingListItems[itemIndex]);
+        }
+      });
       const params: any = {
         shoppingListId: this.shoppingList.ListID,
         shoppingListItems: array,
