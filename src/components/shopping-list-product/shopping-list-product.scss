@@ -4,12 +4,16 @@ shopping-list-product {
 
   ion-item{
     display:flex;
+    .item-inner{
+      padding-right: 0px!important;
+    }
   }
 
   ion-label{
    // max-width: 90%!important;
     flex-grow: 2;
   }
+
 
   
   .ion-item-border {
@@ -41,6 +45,7 @@ shopping-list-product {
       .quantity {
         margin-top:auto;
         margin-bottom:auto;
+        //margin-left:10px;
         padding-top:3px;
         width: 20%;
         justify-content: center;

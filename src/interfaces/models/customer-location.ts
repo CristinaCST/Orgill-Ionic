@@ -3,4 +3,5 @@ export interface CustomerLocation {
   CUSTOMERNAME: string;
   SHIPTONO: string;
   ADDRESS: string;
+  PO_REQUIRED: string;
 }

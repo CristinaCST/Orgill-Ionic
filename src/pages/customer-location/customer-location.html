@@ -70,7 +70,7 @@
           <ion-item class="po-label"> {{"customer_locations_po" | translate}}: </ion-item>
         </ion-col>
         <ion-col >
-          <ion-input class="po-input" [(ngModel)]="hotDealLocation.POSTOFFICE" (ionFocus)="onFocus()" (focusout)="PONumberValidation(hotDealLocation)" (keyup.enter)="closeKeyboard()" clearInput type="text"
+          <ion-input class="po-input" [(ngModel)]="hotDealLocation.POSTOFFICE" (ionFocus)="onFocus()" (focusout)="PONumberValidation(hotDealLocation)" (keyup.enter)="$event.target.blur()" clearInput type="text"
             placeholder="{{'customer_locations_po_hint' | translate}}" maxlength="15">
           </ion-input>
         </ion-col>

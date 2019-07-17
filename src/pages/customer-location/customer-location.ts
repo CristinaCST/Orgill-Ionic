@@ -94,12 +94,6 @@ export class CustomerLocationPage implements OnInit {
     }
   }
 
-  public closeKeyboard(keyCode: number): void {
-    if (keyCode === 13) {
-      this.keyboard.close();
-    }
-  }
-
   public sortLocations(locations: CustomerLocation[]): CustomerLocation[] {
     return locations.sort((location1, location2): number => {
       return location1.CUSTOMERNAME.toLowerCase().localeCompare(location2.CUSTOMERNAME.toLowerCase());
@@ -129,33 +123,62 @@ export class CustomerLocationPage implements OnInit {
         shoppingListItems: this.shoppingListItems,
         orderTotal: this.orderTotal
       };
+      
+      if (!this.postOffice && this.selectedLocation.PO_REQUIRED === 'Y') {
+        const content: PopoverContent = {
+          type: Constants.POPOVER_INFO,
+          title: Strings.GENERIC_MODAL_TITLE,
+          message: Strings.PO_MISSING_REQUIRED,
+          positiveButtonText: Strings.MODAL_BUTTON_OK
+        };
+        this.popoversService.show(content);
+        return;
+      }
+
       this.navigatorService.push(OrderReviewPage, params);
     }
 
     if (this.isHotDeal) {
       const selectedLocations: LocationElement[] = [];
 
-      let valid: boolean = true;
+      let validQty: boolean = true;
+      let validPO: boolean = true;
 
       this.hotDealLocations.forEach(element => {
         if (element.WANTED) {
 
           if (element.QUANTITY == undefined || element.QUANTITY === 0) {
-            valid = false;
+            validQty = false;
+          }
+
+          if (element.LOCATION.PO_REQUIRED === 'Y' && !element.POSTOFFICE)
+          {
+            validPO = false;
           }
 
           selectedLocations.push(element);
         }
       });
 
-      if (!valid) {
+      if (!validQty) {
         const content: PopoverContent = {
           type: Constants.POPOVER_INFO,
           title: Strings.GENERIC_MODAL_TITLE,
-          message: Strings.HOT_DEAL_LOCATION_INVALID,
+          message: Strings.HOT_DEAL_LOCATION_QUANTITY_INVALID,
           positiveButtonText: Strings.MODAL_BUTTON_OK
         };
 
+        this.popoversService.show(content);
+        return;
+      }
+
+      if (!validPO) {
+        const content: PopoverContent = {
+          type: Constants.POPOVER_INFO,
+          title: Strings.GENERIC_MODAL_TITLE,
+          message: Strings.HOT_DEAL_LOCATION_PO_INVALID,
+          positiveButtonText: Strings.MODAL_BUTTON_OK
+        };
         this.popoversService.show(content);
         return;
       }
@@ -214,18 +237,10 @@ export class CustomerLocationPage implements OnInit {
     if (!this.isHotDeal) {
       return;
     }
-
-    if (this.fullSelection) {
-      this.hotDealLocations.forEach(location => {
-        location.WANTED = false;
-      });
-      this.fullSelection = false;
-    } else {
-      this.hotDealLocations.forEach(location => {
-        location.WANTED = true;
-      });
-      this.fullSelection = true;
-    }
+    this.hotDealLocations.forEach(location => {
+      location.WANTED = this.fullSelection ? false : true;
+    });
+    this.fullSelection = !this.fullSelection;
   }
 
   public fillQuantity(): void {

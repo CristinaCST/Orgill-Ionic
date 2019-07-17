@@ -169,7 +169,8 @@ export const ORDER_REVIEW_SEND: string = 'order_review_send';
  * =============================================================================================
  */
 export const HOT_DEAL_NO_LOCATION: string = 'hot_deal_no_location';
-export const HOT_DEAL_LOCATION_INVALID: string = 'hot_deal_location_invalid';
+export const HOT_DEAL_LOCATION_QUANTITY_INVALID: string = 'hot_deal_location_quantity_invalid';
+export const HOT_DEAL_LOCATION_PO_INVALID: string = 'hot_deal_missing_required_po';
 
 /**
  * Marker : Permissions strings
@@ -226,6 +227,7 @@ export const FOUR_PERCENT_NOTE: string = 'four_percent_note';
 
 export const PO_NUMBER_TOO_LONG: string = 'po_number_too_long';
 export const PO_ALPHANUMERIC_WARNING: string = 'po_alphanumeric_warning';
+export const PO_MISSING_REQUIRED: string = 'po_missing_required';
 
 export const ONE_SIGNAL_PERMISSION_REMINDER: string = 'one_signal_permission_reminder';
 
