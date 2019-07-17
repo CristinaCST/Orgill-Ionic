@@ -221,6 +221,6 @@
   "reload_error_message_without_culprit":"Error loading content, please try again.",
   "delete_item_prompt_message": "Are you sure you want to delete these items from the shopping list?",
   "no_customer_location": "It seems you don't have a valid ship to location. Please send your order to Orgill.com for further revisioning.",
-  "locations_quantity_modal_description": "Insert the quantity you want for all locations"
-
+  "locations_quantity_modal_description": "Insert the quantity you want for all locations",
+  "regular_catalog_price": "Regular Catalog Price"
 }

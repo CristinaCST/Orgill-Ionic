@@ -95,6 +95,12 @@ export class ProductPage implements OnInit {
     }
 
     if (this.isHotDeal) {
+      this.programProvider.getProductPrograms(this.product.SKU).toPromise().then(programs => {
+        if(programs){
+          this.productPrograms = JSON.parse(programs.d);
+        }
+        this.regularPrice = Number(this.productPrograms[0].PRICE);
+      }).then(()=>{
       this.hotDealService.getHotDealProgram(this.product.SKU).subscribe(program => {
         const hotDealProgram: ItemProgram = JSON.parse(program.d);
         this.productPrograms = [hotDealProgram];
@@ -115,6 +121,7 @@ export class ProductPage implements OnInit {
       }, err => {
         this.reloadService.paintDirty('hot deal program');
       });
+    });
     } else {
       this.programProvider.getProductPrograms(this.product.SKU).subscribe(programs => {
         if (programs) {

@@ -4,15 +4,21 @@
       <span>{{"product_item_price" | translate }}:</span>
       <span>{{"product_currency" | translate}}{{program.PRICE}}</span>
     </div>
+    <div *ngIf="hotDeal" class="info">
+      <span>{{"regular_catalog_price" | translate}}:</span>
+      <span>{{"product_currency" | translate}}{{regularPrice}}</span>
+    </div>
     <div class="info">
       <span>{{"product_retail_price" | translate}}:</span>
       <span>{{"product_currency" | translate}}{{product.SUGGESTED_RETAIL}}</span>
     </div>
+  
     <div *ngIf="savings && this.program.PROGRAM_NO" class="info green">
       <span>{{"savings_text" | translate}}:</span>
       <span>{{savings}}</span>
     </div>
   </ion-item>
+
 
   <ion-item *ngIf="!hotDeal" no-lines id="quantity-content">
     <div id="title">
