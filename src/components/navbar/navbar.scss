@@ -1,6 +1,7 @@
 @import '../../theme/variables.scss';
 navbar {
   ion-navbar {
+    padding-top: env(safe-area-inset-top)!important;
     .toolbar-content {
       display: flex !important;
     }

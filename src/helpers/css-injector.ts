@@ -43,15 +43,12 @@ export class CSSInjector {
      * Injects raw CSS blocks in the <head> tag, it only works once per application run.
      */
     public static injectCSS(): void {
-        if (!document.head || CSSInjector.injected) {
+        if (!document.head || CSSInjector.injected || CSSInjector.cssBlocks.length === 0) {
             return;
         }
 
-        const concatString: (acc: string, val: string | number | boolean) => string = (accumulator, currentValue) => accumulator + currentValue;
-
         CSSInjector.injectStyleElement();
-
-        CSSInjector.injectedCSSRef.innerHTML = CSSInjector.injectedCSSRef.innerHTML.concat(CSSInjector.cssBlocks.reduce(concatString));
+        CSSInjector.injectedCSSRef.innerHTML = CSSInjector.injectedCSSRef.innerHTML.concat(CSSInjector.cssBlocks.join());
         CSSInjector.injected = true;
     }
 
