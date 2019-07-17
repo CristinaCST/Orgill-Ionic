@@ -19,9 +19,11 @@ export class PurchasesProvider {
           resolve([]);
         }
 
+        const purchases: Purchase[] = JSON.parse(response.d);
+
         // Handle placeolders for development, can remove this code after feature is complete
         if (Constants.PAST_PURCHASES_DEBUG_PLACEHOLDERS) {
-          resolve(JSON.parse(response.d).map((purchase: Purchase) => {
+          purchases.map((purchase: Purchase) => {
             const parsedPurchase: Purchase = purchase;
             if (!purchase.confirmation) {
               parsedPurchase.confirmation = Constants.PAST_PURCHASES_DEBUG_ORDER_PLACEHOLDER;
@@ -34,10 +36,10 @@ export class PurchasesProvider {
             }
             parsedPurchase.purchase_date = purchase.purchase_date.split(' ')[0];
             return parsedPurchase;
-          }));
-        } else {
-          resolve(JSON.parse(response.d) as Purchase[]);
+          });
         }
+        purchases.sort((purchase1,purchase2) => new Date(purchase2.purchase_date).getTime() - new Date(purchase1.purchase_date).getTime());
+        resolve(purchases);
       });
     });
   }

@@ -54,10 +54,6 @@ export class MyApp {
       this.oneSignalService.init();
 
 
-      // TODO: Make this better 
-     /* CSSInjector.setVar('smallHeight', (1000 / window.devicePixelRatio).toString());
-      CSSInjector.setVar('smallWidth', (720 / window.devicePixelRatio).toString());*/
-    
       // TODO: Make this better :/
         window.addEventListener('keyboardDidShow', (obj: Event & {keyboardHeight: number}) => {
           if (this.platform.is('android')) {

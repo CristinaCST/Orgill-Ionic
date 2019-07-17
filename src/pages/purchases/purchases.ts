@@ -31,6 +31,7 @@ export class PurchasesPage {
 
   public ngOnInit(): void {
     this.loader.show();
+    
     this.purchasesProvider.getPurchases().then(purchases => {
       purchases.map(purchase => {
         if (!purchase.program_name) {

@@ -2,7 +2,6 @@ export interface Purchase {
   id: string;
   program_no: string;
   po: string;
-  date: string;
   program_name: string;
   type: string;
   confirmation: string;
