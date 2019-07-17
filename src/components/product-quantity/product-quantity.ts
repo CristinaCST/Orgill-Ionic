@@ -13,6 +13,7 @@ export class ProductQuantityComponent implements OnInit {
   @Input() public product: Product;
   @Input() public quantityFromList: number;
   @Input() public hotDeal: boolean;
+  @Input() public regularPrice: number;
   @Output() public quantityChange: EventEmitter<any> = new EventEmitter<any>();
   private quantity: number = 1;
   private total: number = 0;
@@ -110,7 +111,8 @@ export class ProductQuantityComponent implements OnInit {
   }
 
   private setSavings(): void {
-    this.savings = (Math.round((Number(this.product.SUGGESTED_RETAIL) - this.total / this.quantity) * 100 / Number(this.product.SUGGESTED_RETAIL))) + '%';
+    const percent: number = Math.round((Number(this.regularPrice) - this.total / this.quantity) * 100 / Number(this.product.SUGGESTED_RETAIL));
+    this.savings = percent > 0 ? percent + '%' : '';
   }
 
   public ngOnChanges(): void {

@@ -40,6 +40,7 @@ export class ProductPage implements OnInit {
   public fromShoppingList: boolean;
   private shoppingListId: number;
   public quantityFromList: number;
+  public regularPrice: number;
 
   private readonly loader: LoadingService;
 
@@ -125,6 +126,7 @@ export class ProductPage implements OnInit {
             return;
           }
           const initialProgram: ItemProgram = this.getInitialProgram();
+          this.regularPrice = Number(this.productPrograms[0].PRICE);
           this.selectedProgram = initialProgram;
           this.programProvider.selectProgram(initialProgram);
           this.getProduct().then(() => {
