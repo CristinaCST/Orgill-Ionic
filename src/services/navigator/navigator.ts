@@ -25,7 +25,13 @@ export class NavigatorService {
      * Tries to return the cached navController or gets it and returns it.
      */
     private get navController(): NavController {
-        return this._navController ? this._navController : this.app.getActiveNavs()[0];
+     
+        if(!this._navController){
+            const firstNav = this.app.getActiveNavs()[0];
+            this._navController = firstNav;
+            return firstNav;
+        } 
+        return this._navController;
     }
 
     /**
@@ -55,20 +61,18 @@ export class NavigatorService {
 
     /**
      * Wrapper for the nav controller Push, this one check if the wanted page is the same and "refreshes" it if not
-     * @param page Page as string or Page
+     * @param page Page
      * @param params Parameters for push
      * @param opts NavOptions
      * @param done TransitionDoneFn
      * @param paramEquality Default value true. Should we check for param equality when we check pages?
      */
-    public push(page: Page | string, params?: any, opts?: NavOptions & { paramsEquality?: boolean }, done?: () => void): Promise<any> {
+    public push(page: Page, params?: any, opts?: NavOptions & { paramsEquality?: boolean }, done?: () => void): Promise<any> {
 
-        const pageName: string = typeof page === 'string' ? page : page.name;    // Grab the page name wheter it's directly passed or the entire Page object is passed
         let equals: boolean = false;     // We will store if the current view is the same as the last one
 
-
         const lastPage: ViewController = this.navController.last();
-        if (lastPage && lastPage.name && pageName === lastPage.name) {
+        if (lastPage && lastPage.component === page) {
 
             if (!opts || opts.paramsEquality) {
                 if (Equals.deepIsEqual(params, lastPage.data)) {
