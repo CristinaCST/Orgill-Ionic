@@ -14,12 +14,6 @@ import { Badge } from '@ionic-native/badge';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Page } from 'ionic-angular/navigation/nav-util';
 
-
-/*
-// Environments
-import { environment } from '@app/env';
-*/
-
 // Modules
 import { ComponentsModule } from '../components/components.module';
 

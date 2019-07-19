@@ -22,22 +22,24 @@ export class PurchasesProvider {
         const purchases: Purchase[] = JSON.parse(response.d);
 
         // Handle placeolders for development, can remove this code after feature is complete
-        if (Constants.PAST_PURCHASES_DEBUG_PLACEHOLDERS) {
+      
           purchases.map((purchase: Purchase) => {
             const parsedPurchase: Purchase = purchase;
-            if (!purchase.confirmation) {
-              parsedPurchase.confirmation = Constants.PAST_PURCHASES_DEBUG_ORDER_PLACEHOLDER;
-            }
-            if (!purchase.purchase_date) {
-              parsedPurchase.purchase_date = Constants.PAST_PURCHASES_DEBUG_DATE_PLACEHOLDER;
-            }
-            if (!purchase.total) {
-              parsedPurchase.total = Constants.PAST_PURCHASES_DEBUG_TOTAL_PLACEHOLDER;
+            if (Constants.PAST_PURCHASES_DEBUG_PLACEHOLDERS) {
+              if (!purchase.confirmation) {
+                parsedPurchase.confirmation = Constants.PAST_PURCHASES_DEBUG_ORDER_PLACEHOLDER;
+              }
+              if (!purchase.purchase_date) {
+                parsedPurchase.purchase_date = Constants.PAST_PURCHASES_DEBUG_DATE_PLACEHOLDER;
+              }
+              if (!purchase.total) {
+                parsedPurchase.total = Constants.PAST_PURCHASES_DEBUG_TOTAL_PLACEHOLDER;
+              }
             }
             parsedPurchase.purchase_date = purchase.purchase_date.split(' ')[0];
             return parsedPurchase;
           });
-        }
+       
         purchases.sort((purchase1,purchase2) => new Date(purchase2.purchase_date).getTime() - new Date(purchase1.purchase_date).getTime());
         resolve(purchases);
       });
