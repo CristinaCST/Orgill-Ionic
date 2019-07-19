@@ -3,25 +3,29 @@
   background-color: white;
   .back-button-container {
     width: 20%;
-    height: 100%;
+    min-height: 100%;
     display: block;
     flex-grow: 2;
-    
+
     img {
       width: 100%;
       height: 100%;
     }
-    .backbutton{
+    .backbutton {
       display: flex;
       min-height: 100%;
-      .left-component{
-        width:50px;
-        height: 47px;
+      .left-component {
+        width: 50px;
+        min-height: 100%;
+        //height: 47px;
         background-color: color($colors, OrgillRed);
-        .arrow{
-          display:block;
-          height: 47px;
-          width:auto;
+        .arrow {
+          display: block;
+          margin-top:0px;
+          margin-bottom:0px;
+          min-height: 100%;
+          max-height: 100%;
+          width: auto;
           align-content: center;
           background: url(../../assets/vector/arrow.svg);
           background-repeat: no-repeat;
@@ -30,15 +34,21 @@
         }
       }
       .right-component{
- 
-       border-top: 47px solid color($colors, OrgillRed);
-        border-right: 15px solid transparent;
+        img{
+          //min-height: 100%;
+          max-height: 100%;
+          width: 15px;
+        }
       }
     }
   }
   .search-input-container {
     width: -webkit-fill-available;
-    background: linear-gradient(to right, color($colors, OrgillGradientLeft) 0%, color($colors, OrgillGradientRight) 100%);
+    background: linear-gradient(
+      to right,
+      color($colors, OrgillGradientLeft) 0%,
+      color($colors, OrgillGradientRight) 100%
+    );
 
     &.has-btn {
       .input-wrapper {
@@ -68,15 +78,22 @@
   }
 }
 
-.item-md.item-input.item-input-has-focus .item-inner, .item-md.item-input.input-has-focus .item-inner {
+.item-md.item-input.item-input-has-focus .item-inner,
+.item-md.item-input.input-has-focus .item-inner {
   border-bottom: 0 !important;
   box-shadow: unset;
   -webkit-box-shadow: unset;
 }
 
 #products-found-container {
-  background: linear-gradient(to right, color($colors, OrgillGradientLeft) 20%, color($colors, OrgillGradientRight) 100%);
+ /* background: linear-gradient(
+    to right,
+    color($colors, OrgillGradientLeft) 20%,
+    color($colors, OrgillGradientRight) 100%
+  );*/
+  background-color: color($colors, OrgillRed);
   text-align: right;
   padding: 2px;
-  color: grey;
+  font-weight: 400;
+  color: white;
 }
