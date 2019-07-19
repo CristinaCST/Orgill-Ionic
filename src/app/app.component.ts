@@ -132,15 +132,7 @@ export class MyApp {
 
   private checkSession(): void {
     this.stopLoading();
-    if (!this.openedFromNotification && this.sessionValidatorProvider.isValidSession()) {
-      this.rootPage = Catalog;
-      this.navigatorService.initialRootPage(this.rootPage);
-    } else {
-      this.rootPage = Login;
-      this.navigatorService.initialRootPage(this.rootPage);
-    }
-
+    this.rootPage = this.sessionValidatorProvider.isValidSession() ? Catalog : Login;
+    this.navigatorService.initialRootPage(this.rootPage);
   }
-
-
 }

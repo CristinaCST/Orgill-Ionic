@@ -8,6 +8,7 @@ import { Catalog } from '../catalog/catalog';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import { TextInput } from 'ionic-angular';
+import { OneSignalService } from '../../services/onesignal/onesignal';
 
 @Component({
   selector: 'page-login',
@@ -26,7 +27,8 @@ export class Login {
               private readonly loadingService: LoadingService,
               private readonly translateProvider: TranslateWrapperService,
               private readonly popoversService: PopoversService,
-              private readonly secureActions: SecureActionsService) {
+              private readonly secureActions: SecureActionsService,
+              private readonly oneSignalService: OneSignalService) {
 
                 this.loginLoader = this.loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_LOGIN));
   }
@@ -41,6 +43,7 @@ export class Login {
     this.authService.login(loginRequest).subscribe(
       () => {
         this.authService.getUserInfo().then(() => {
+          this.oneSignalService.sendRetailerType();
           this.navigatorService.setRoot(Catalog).then(() => {this.secureActions.executeQueue(); }).catch(err => console.error(err));
           this.loginLoader.hide();
         });
