@@ -157,8 +157,7 @@ export class AppMenuComponent implements OnInit {
   public getShoppingLists(): void {
     this.customShoppingLists = [];
     this.defaultShoppingLists = [];
-    this.shoppingListsProvider.getAllShoppingLists()
-      .subscribe(shoppingListsResponse => {
+    this.shoppingListsProvider.getAllShoppingLists().take(1).subscribe(shoppingListsResponse => {
         const shoppingLists: ShoppingListResponse[] = JSON.parse(shoppingListsResponse.d);
         if (!shoppingLists.find(list => list.list_type === Constants.DEFAULT_LIST_TYPE) && !shoppingLists.find(list => list.list_type === Constants.MARKET_ONLY_LIST_TYPE)) {
           this.shoppingListsProvider.createDefaultShoppingLists().subscribe(defaultShoppingListsResponse => {
@@ -183,6 +182,11 @@ export class AppMenuComponent implements OnInit {
             } else {
               this.customShoppingLists.push(temp);
             }
+          });
+
+          // Ensure default shopping list is always first.
+          this.defaultShoppingLists.sort((list1, list2) => {
+            return Number(list1.ListID) - Number(list2.ListID);
           });
         }
         this.events.subscribe('DeletedList', (listId: string) => {
