@@ -56,7 +56,8 @@
     <ion-list *ngFor="let hotDealLocation of hotDealLocations;let i of index">
 
       <ion-item>
-        <ion-checkbox (ionChange)="checkboxEvent($event)" [(ngModel)]="hotDealLocation.WANTED" class="checkbox-item" item-end></ion-checkbox>
+        <ion-checkbox (ionChange)="checkboxEvent($event)" [checked]="hotDealLocation.WANTED" class="checkbox-item" item-end></ion-checkbox>
+        
 
         <ion-label>
           <p [class]="selectedLocation===hotDealLocation?'active':''"> {{hotDealLocation.LOCATION.CUSTOMERNAME}} </p>

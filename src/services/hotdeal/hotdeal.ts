@@ -52,11 +52,9 @@ export class HotDealService {
           product: responseData[0]
         };
 
-        // HACK: To fix this error
         this.navigatorService.push(ProductPage, hotDeal, { paramsEquality: false } as NavOptions).catch(err => console.error(err));
       }
     });
-
   }
 
 
