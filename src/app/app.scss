@@ -6,6 +6,15 @@ ion-header {
       background: color($colors, OrgillRed) url('../assets/imgs/navbar_background.jpg') no-repeat;
       background-size: cover;
       text-align: center;
+      .toolbar-content{
+        vertical-align: bottom;
+
+      }
+    }
+  padding-top:env(safe-area-inset-top)!important;
+    ion-title {
+      text-align: center;
+      margin-left: -15px;
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { NavParams, ViewController, Content, NavOptions, TextInput } from 'ionic-angular';
 import * as Constants from '../../util/constants';
 
@@ -20,7 +20,8 @@ export class PopoverComponent {
   @ViewChild('listNameInput') private readonly listNameElement: TextInput;
 
   constructor(private readonly navParams: NavParams,
-              public viewCtrl: ViewController) {
+              public viewCtrl: ViewController,
+              private readonly changeDetector: ChangeDetectorRef) {
 
 
     this.data = this.navParams.data;
@@ -91,6 +92,7 @@ export class PopoverComponent {
       return;
     }
     this.quantity += this.shelfpack;
+    this.changeDetector.detectChanges();
   }
 
   public substract(): void {
@@ -98,6 +100,7 @@ export class PopoverComponent {
       return;
     }
     this.quantity -= this.shelfpack;
+    this.changeDetector.detectChanges();
   }
 
   public focusout(): void {

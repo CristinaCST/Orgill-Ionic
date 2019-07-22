@@ -1,11 +1,13 @@
 @import "../../theme/variables";
-
+popover{
 ion-header {
   ion-navbar {
+    padding-top:0px!important;
     ion-title {
       text-align: center;
     }
   }
+}
 }
 
 ion-content {
