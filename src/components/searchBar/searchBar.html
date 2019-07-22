@@ -2,20 +2,21 @@
 <div class="search-container">
   <!-- Search Component Back Button -->
   <div *ngIf="showBackButton" class="back-button-container" (click)="back()">
-    <span class="backbutton">
+   <span class="backbutton">
       <span class="left-component">
         <span class="arrow"></span>
       </span>
       <span class="right-component">
-        <img src="../../assets/vector/triangle.svg">
+        <span class="square"></span>
       </span>
     </span>
-    <!-- <img src="../../assets/imgs/back_button.png">-->
+   <!-- <img src="../../assets/imgs/back_button.png">-->
   </div>
   <!-- Search Component Input Container-->
   <ion-item class="search-input-container" [ngClass]="showBackButton?'has-btn':''" no-lines no-border>
-    <ion-input type="text" placeholder="{{'search_hint' | translate}}" [(ngModel)]="searchString"
-      (keyup.enter)="search()"></ion-input>
+    <ion-input type="text" placeholder="{{'search_hint' | translate}}"
+               [(ngModel)]="searchString"
+               (keyup.enter)="search()"></ion-input>
     <!-- Search Component Action Button-->
     <button ion-button icon-only clear item-right (click)="search()">
       <ion-icon name="search"></ion-icon>
