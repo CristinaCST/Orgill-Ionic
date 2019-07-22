@@ -273,12 +273,8 @@ export class AppMenuComponent implements OnInit {
     };
 
     this.navigatorService.setRoot(ShoppingListPage, params).then(() => {
-        }, err => {
-          console.error(err);
-        });
-    /*this.navigatorService.push(ShoppingListPage,params).then(()=>{
-    },(err)=>{
+    }, err => {
       console.error(err);
-    });*/
+    });
   }
 }

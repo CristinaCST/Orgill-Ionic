@@ -9,7 +9,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { OneSignal } from '@ionic-native/onesignal';
 import { Network } from '@ionic-native/network';
-import { IonicStorageModule } from '@ionic/storage';
 import { Badge } from '@ionic-native/badge';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Page } from 'ionic-angular/navigation/nav-util';
@@ -96,7 +95,6 @@ import { CustomErrorHandlerService } from '../services/error-handler/CustomError
       autoFocusAssist: false,
       statusbarPadding: false
     }),
-    IonicStorageModule.forRoot(),
     HttpClientModule,
     ComponentsModule,
 

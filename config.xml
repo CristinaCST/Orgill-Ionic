@@ -125,6 +125,4 @@
     <allow-navigation href="http://192.168.1.88:8100" sessionid="3d1b2f55" />
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1" />
     <allow-navigation href="http://192.168.0.26:8100" sessionid="53c12a60" />
-    <engine name="android" spec="7.1.4" />
-    <engine name="ios" spec="4.5.5" />
 </widget>
