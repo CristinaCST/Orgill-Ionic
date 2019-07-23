@@ -11,12 +11,21 @@ ion-header {
 
       }
     }
-  padding-top:env(safe-area-inset-top)!important;
+    //padding-top:env(safe-area-inset-top)!important;
     ion-title {
       text-align: center;
       margin-left: -15px;
     }
   }
+}
+
+ion-app.platform-ios{
+  ion-header {
+    ion-navbar, ion-toolbar {
+      padding-top:env(safe-area-inset-top)!important;
+    }
+  }
+
 }
 
 body.keyboard-is-open .hide-on-keyboard-open{
