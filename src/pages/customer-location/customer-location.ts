@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, ChangeDetectorRef} from '@angular/core';
+import { Component, OnInit, ViewChildren} from '@angular/core';
 import { NavParams, Keyboard, Events, Checkbox } from 'ionic-angular';
 import { CustomerLocation } from '../../interfaces/models/customer-location';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
@@ -48,10 +48,9 @@ export class CustomerLocationPage implements OnInit {
               private readonly popoversService: PopoversService,
               private readonly pricingService: PricingService,
               private readonly keyboard: Keyboard,
-              private readonly events: Events,
-              private readonly changeDetector: ChangeDetectorRef) {
+              private readonly events: Events) {
+              
   }
-
 
   public ngOnInit(): void {
     this.shoppingListId = getNavParam(this.navParams, 'shoppingListId', 'number');
@@ -84,7 +83,6 @@ export class CustomerLocationPage implements OnInit {
 
         this.hotDealLocations.push(locElement);
       });
-
     });
   }
 
@@ -233,7 +231,6 @@ export class CustomerLocationPage implements OnInit {
   }
 
   public selectAll(): void {
-    this.changeDetector.detectChanges();
     if (!this.isHotDeal) {
       return;
     }
@@ -242,7 +239,6 @@ export class CustomerLocationPage implements OnInit {
       location.WANTED = status;
     });
     this.fullSelection = !this.fullSelection;
-    this.changeDetector.detectChanges();
   }
 
   public fillQuantity(): void {
@@ -258,7 +254,8 @@ export class CustomerLocationPage implements OnInit {
     });
   }
 
-  public checkboxEvent($ev: Checkbox): void {
+  public checkboxEvent($ev: Checkbox, loc: LocationElement): void {
+    loc.WANTED = $ev.checked;
     if (!$ev.checked) {
       this.fullSelection = false;
     } else {
@@ -271,4 +268,5 @@ export class CustomerLocationPage implements OnInit {
       this.fullSelection = full;
     }
   }
+  
 }

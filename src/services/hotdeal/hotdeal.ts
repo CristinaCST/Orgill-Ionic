@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import * as ConstantsUrl from '../../util/constants-url';
 import * as Constants from '../../util/constants';
 import { ApiService } from '../api/api';
@@ -18,7 +18,8 @@ export class HotDealService {
     private readonly navigatorService: NavigatorService,
     private readonly events: Events,
     private readonly apiService: ApiService,
-    private readonly authService: AuthService) { }
+    private readonly authService: AuthService,
+    private readonly ngZone: NgZone) { }
 
   private getHotDealsProduct(sku: string): Observable<APIResponse> {
 
@@ -52,7 +53,10 @@ export class HotDealService {
           product: responseData[0]
         };
 
-        this.navigatorService.push(ProductPage, hotDeal, { paramsEquality: false } as NavOptions).catch(err => console.error(err));
+        this.ngZone.run(()=>{
+          this.navigatorService.push(ProductPage, hotDeal, { paramsEquality: false } as NavOptions).catch(err => console.error(err));
+        });
+       
       }
     });
   }
