@@ -17,8 +17,8 @@ export class PurchasesPage {
   private purchasesBuffer: Purchase[];
   public purchases: Purchase[] = [];
   private readonly loader: LoadingService; // TODO: Get rid of LS references per trello task
-  private readonly INITIAL_ELEMENTS: number = 9;
-  private readonly LOAD_MORE_COUNT: number = 4;
+  private readonly INITIAL_ELEMENTS: number = 9;  // TODO: CHange to constants
+  private readonly LOAD_MORE_COUNT: number = 10;  // TODO: Change to constants
 
   @ViewChild(Content) private readonly content: Content;
 
@@ -52,16 +52,13 @@ export class PurchasesPage {
 
   public loadData(infiniteLoader: InfiniteScroll): void {
     this.purchases.push(...this.purchasesBuffer.splice(0, this.LOAD_MORE_COUNT));
-    setTimeout(() => {
-      infiniteLoader.complete();
-      this.content.resize();
-      // this.changeDetector.detectChanges();
-      // App logic to determine if all data is loaded
-      // and disable the infinite scroll
-      if (this.purchasesBuffer.length === 0) {
-        infiniteLoader.enabled = false;
-      }
-    }, 500);
-  }
+    this.content.resize();
+    infiniteLoader.complete();
 
+    // App logic to determine if all data is loaded
+    // and disable the infinite scroll
+    if (this.purchasesBuffer.length === 0) {
+      infiniteLoader.enabled = false;
+    }
+  }
 }
