@@ -3,7 +3,6 @@ import { OneSignal, OSNotificationPayload, OSNotificationOpenedResult } from '@i
 import { Badge } from '@ionic-native/badge';
 import { Events, Platform } from 'ionic-angular';
 import { Observable, Subscription } from 'rxjs';
-import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 
 import { HotDealService } from '../hotdeal/hotdeal';
 import { PopoversService, PopoverContent, DefaultPopoverResult } from '../popovers/popovers';
@@ -48,7 +47,6 @@ export class OneSignalService {
         private readonly popoversService: PopoversService,     // Needed for permission modals,
         private readonly secureActions: SecureActionsService,
         private readonly platform: Platform,
-        private readonly geolocation: Geolocation,
         private readonly navigatorService: NavigatorService,
         private readonly authService: AuthService
     ) { }
@@ -302,23 +300,10 @@ export class OneSignalService {
 
     /**
      * Function that checks wether we have location permission.
-     * @returns Nothing, there is no promise for promptLocation() so in the end it does not matter if we wait or not
      */
-    private handleLocationPermission(): Promise<void> {
+    private handleLocationPermission(): void {
+        this.oneSignal.setLocationShared(true);
         this.oneSignal.promptLocation();
-        return Promise.resolve();
-      /*  return new Promise(resolve => {
-            this.oneSignal.setLocationShared(true);
-            // GetCurrent position calls for location permission by itself
-            this.geolocation.getCurrentPosition().then((res: Geoposition) => {
-                // Everything is alright
-
-                resolve();
-            }).catch(e => {
-                console.error(e);
-            });
-
-        }) as Promise<void>;*/
     }
 
     private notificationReceived(data: OSNotificationPayload): void {

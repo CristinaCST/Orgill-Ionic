@@ -5,17 +5,17 @@
 </ion-header>
 
 <ion-content>
- 
+
   <ion-list *ngFor="let purchase of purchases">
-      <order-item [purchase]="purchase" (click)="openOrderDetails(purchase)">
+    <order-item [purchase]="purchase" (click)="openOrderDetails(purchase)">
 
-      </order-item>
-    </ion-list>
+    </order-item>
+  </ion-list>
 
-    <ion-infinite-scroll #infScroll threshold="100px" (ionInfinite)="loadData($event)">
-      <ion-infinite-scroll-content>
-      </ion-infinite-scroll-content>
-    </ion-infinite-scroll>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content>
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
   <p id="no_items_label" *ngIf="(purchases == null || purchases == undefined || purchases.length === 0)">
     {{"orders_history_no_purchase" | translate}}</p>
 </ion-content>

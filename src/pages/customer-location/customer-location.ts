@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren} from '@angular/core';
+import { Component, OnInit, ViewChildren } from '@angular/core';
 import { NavParams, Keyboard, Events, Checkbox } from 'ionic-angular';
 import { CustomerLocation } from '../../interfaces/models/customer-location';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';

@@ -88,7 +88,7 @@ export class ProductPage implements OnInit {
     this.fromShoppingList = getNavParam(this.navParams, 'fromShoppingList', 'boolean');
     if (this.fromShoppingList) {
       this.shoppingListId = getNavParam(this.navParams, 'shoppingListId', 'number');
-     // this.id = getNavParam(this.navParams, id');
+      // this.id = getNavParam(this.navParams, id');
       this.quantityFromList = getNavParam(this.navParams, 'quantity', 'number');
 
       this.changeDetector.detectChanges();
@@ -96,33 +96,33 @@ export class ProductPage implements OnInit {
 
     if (this.isHotDeal) {
       this.programProvider.getProductPrograms(this.product.SKU).toPromise().then(programs => {
-        if(programs){
+        if (programs) {
           this.productPrograms = JSON.parse(programs.d);
         }
         this.regularPrice = Number(this.productPrograms[0].PRICE);
-      }).then(()=>{
-      this.hotDealService.getHotDealProgram(this.product.SKU).subscribe(program => {
-        const hotDealProgram: ItemProgram = JSON.parse(program.d);
-        this.productPrograms = [hotDealProgram];
-        if (hotDealProgram.SKU === null) {
-          const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, Strings.MODAL_BUTTON_OK, undefined, undefined, Constants.POPOVER_ERROR);
-          this.popoversService.show(content);
-          this.navigatorService.pop().catch(err => console.error(err));
-          LoadingService.hideAll();
-          return;
-        }
-        const initialProgram: ItemProgram = hotDealProgram;
-        this.selectedProgram = initialProgram;
-        this.programProvider.selectProgram(initialProgram);
-        this.getProduct().then(() => {
-          LoadingService.hideAll();
-         // this.loader.hide();
-        });
+      }).then(() => {
+        this.hotDealService.getHotDealProgram(this.product.SKU).subscribe(program => {
+          const hotDealProgram: ItemProgram = JSON.parse(program.d);
+          this.productPrograms = [hotDealProgram];
+          if (hotDealProgram.SKU === null) {
+            const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, Strings.MODAL_BUTTON_OK, undefined, undefined, Constants.POPOVER_ERROR);
+            this.popoversService.show(content);
+            this.navigatorService.pop().catch(err => console.error(err));
+            LoadingService.hideAll();
+            return;
+          }
+          const initialProgram: ItemProgram = hotDealProgram;
+          this.selectedProgram = initialProgram;
+          this.programProvider.selectProgram(initialProgram);
+          this.getProduct().then(() => {
+            LoadingService.hideAll();
+            // this.loader.hide();
+          });
 
-      }, err => {
-        this.reloadService.paintDirty('hot deal program');
+        }, err => {
+          this.reloadService.paintDirty('hot deal program');
+        });
       });
-    });
     } else {
       this.programProvider.getProductPrograms(this.product.SKU).subscribe(programs => {
         if (programs) {
@@ -139,7 +139,7 @@ export class ProductPage implements OnInit {
           this.programProvider.selectProgram(initialProgram);
           this.getProduct().then(() => {
             LoadingService.hideAll();
-           // this.loader.hide();
+            // this.loader.hide();
           });
         }
       }, err => {
@@ -183,7 +183,7 @@ export class ProductPage implements OnInit {
         this.product.IMAGE = img; // Re-assign already processed image.
         // this.quantity = this.pricingService.validateQuantity(this.quantity,this.selectedProgram,this.product);
         LoadingService.hideAll();
-      //  this.loader.hide();
+        //  this.loader.hide();
         resolve();
       });
     });
@@ -230,40 +230,40 @@ export class ProductPage implements OnInit {
 
   private updateList(silent: boolean = false): Promise<void> {
     return new Promise((resolve, reject) => {
-    if (this.fromShoppingList && this.lastEvent) {
+      if (this.fromShoppingList && this.lastEvent) {
 
-      if (!silent) {
-        this.loader.show();
+        if (!silent) {
+          this.loader.show();
+        }
+
+        this.shoppingListProvider.updateShoppingListItem(this.product, this.shoppingListId, this.programNumber, this.lastEvent.productPrice, this.quantity).subscribe(data => {
+          resolve();
+        },
+          error => {
+            LoadingService.hideAll();
+            // this.loader.hide();
+            console.error('error updating', error);
+            // TODO: catch this better
+            reject(error);
+          });
       }
-
-      this.shoppingListProvider.updateShoppingListItem(this.product, this.shoppingListId, this.programNumber, this.lastEvent.productPrice, this.quantity).subscribe(data => {
-        resolve();
-      },
-        error => {
-          LoadingService.hideAll();
-         // this.loader.hide();
-          console.error('error updating', error);
-          // TODO: catch this better
-          reject(error);
-        });
-    }
     });
   }
 
   public ionViewCanLeave(): boolean {
     if ((this.navigatorService.lastEvent === NavigationEventType.POP) && this.fromShoppingList && !this.canLeave) {
-          this.updateList().then(() => {
-            this.canLeave = true;
-            LoadingService.hideAll();
-            // this.loader.hide();
-            this.navigatorService.pop();
-          }).catch(err => {
-            LoadingService.hideAll();
-            // this.loader.hide();
-            // TODO: catch this better
-            /// throw(err);
-          });
-        return false;
+      this.updateList().then(() => {
+        this.canLeave = true;
+        LoadingService.hideAll();
+        // this.loader.hide();
+        this.navigatorService.pop();
+      }).catch(err => {
+        LoadingService.hideAll();
+        // this.loader.hide();
+        // TODO: catch this better
+        /// throw(err);
+      });
+      return false;
     }
     this.updateList(true);
     return true;

@@ -39,8 +39,8 @@ export class PurchasesProvider {
             parsedPurchase.purchase_date = purchase.purchase_date.split(' ')[0];
             return parsedPurchase;
           });
-       
-        purchases.sort((purchase1,purchase2) => new Date(purchase2.purchase_date).getTime() - new Date(purchase1.purchase_date).getTime());
+
+        purchases.sort((purchase1, purchase2) => new Date(purchase2.purchase_date).getTime() - new Date(purchase1.purchase_date).getTime());
         resolve(purchases);
       });
     });

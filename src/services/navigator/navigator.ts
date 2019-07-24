@@ -5,6 +5,7 @@ import { SecureActionsService } from '../../services/secure-actions/secure-actio
 import * as Constants from '../../util/constants';
 import { BehaviorSubject } from 'rxjs';
 import { Page } from 'ionic-angular/navigation/nav-util';
+import { NavControllerBase } from 'ionic-angular/navigation/nav-controller-base';
 
 export enum NavigationEventType{
     POP,
@@ -25,12 +26,12 @@ export class NavigatorService {
      * Tries to return the cached navController or gets it and returns it.
      */
     private get navController(): NavController {
-     
-        if(!this._navController){
-            const firstNav = this.app.getActiveNavs()[0];
+
+        if (!this._navController) {
+            const firstNav: NavControllerBase = this.app.getActiveNavs()[0];
             this._navController = firstNav;
             return firstNav;
-        } 
+        }
         return this._navController;
     }
 

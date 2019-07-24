@@ -53,10 +53,9 @@ export class HotDealService {
           product: responseData[0]
         };
 
-        this.ngZone.run(()=>{
+        this.ngZone.run(() => { // Fix for change detector deattaching randomly....
           this.navigatorService.push(ProductPage, hotDeal, { paramsEquality: false } as NavOptions).catch(err => console.error(err));
         });
-       
       }
     });
   }
