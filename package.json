@@ -75,14 +75,14 @@
       "cordova-plugin-android-permissions": {},
       "cordova-plugin-badge": {},
       "cordova-plugin-geolocation": {},
-      "onesignal-cordova-plugin": {},
       "cordova-plugin-ionic-webview": {
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
-      }
+      },
+      "onesignal-cordova-plugin": {}
     },
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ]
   },
   "config": {

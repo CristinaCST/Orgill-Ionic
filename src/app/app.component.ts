@@ -26,15 +26,15 @@ export class MyApp {
   // private readonly openedFromNotification: boolean = false;
 
   constructor(public platform: Platform,
-              public statusBar: StatusBar,
-              private readonly splashScreen: SplashScreen,
-              private readonly translate: TranslateService,
-              private readonly networkService: NetworkService,
-              private readonly sessionValidatorProvider: SessionValidatorService,
-              private readonly oneSignalService: OneSignalService,
-              private readonly navigatorService: NavigatorService,
-              private readonly popoverProvider: PopoversService,
-              private readonly events: Events) {
+    public statusBar: StatusBar,
+    private readonly splashScreen: SplashScreen,
+    private readonly translate: TranslateService,
+    private readonly networkService: NetworkService,
+    private readonly sessionValidatorProvider: SessionValidatorService,
+    private readonly oneSignalService: OneSignalService,
+    private readonly navigatorService: NavigatorService,
+    private readonly popoverProvider: PopoversService,
+    private readonly events: Events) {
     this.setAppLanguage().then(() => {
       this.initializeApp();
     });
@@ -55,23 +55,22 @@ export class MyApp {
 
 
       // TODO: Make this better :/
-        window.addEventListener('keyboardDidShow', (obj: Event & {keyboardHeight: number}) => {
-          if (this.platform.is('android')) {
-            CSSInjector.addRawCSS('body.keyboard-is-open .scroll-content:not(.keyboard-immune){' + 'margin-bottom:' + obj.keyboardHeight + 'px!important;' + '}');
-          } else {
-            CSSInjector.addRawCSS('body.keyboard-is-open .scroll-content:not(.keyboard-immune){' + 'margin-bottom:' + obj.keyboardHeight + 'px!important; padding-bottom:0px!important;' + '}');
-          }
-          CSSInjector.injectCSS();
-          document.body.classList.add('keyboard-is-open');
-          this.scrollToElement();
-        });
+      window.addEventListener('keyboardDidShow', (obj: Event & { keyboardHeight: number }) => {
+        if (this.platform.is('android')) {
+          CSSInjector.addRawCSS('body.keyboard-is-open .scroll-content:not(.keyboard-immune){' + 'margin-bottom:' + obj.keyboardHeight + 'px!important;' + '}');
+        } else {
+          CSSInjector.addRawCSS('body.keyboard-is-open .scroll-content:not(.keyboard-immune){' + 'margin-bottom:' + obj.keyboardHeight + 'px!important; padding-bottom:0px!important;' + '}');
+        }
+        CSSInjector.injectCSS();
+        document.body.classList.add('keyboard-is-open');
+        this.scrollToElement();
+      });
 
-        window.addEventListener('keyboardDidHide', () => {
-          document.body.classList.remove('keyboard-is-open');
-        });
+      window.addEventListener('keyboardDidHide', () => {
+        document.body.classList.remove('keyboard-is-open');
+      });
 
       this.navigatorService.initializeBackButton(() => {
-
         if (LoadingService.activeLoading) {
           return;
         }

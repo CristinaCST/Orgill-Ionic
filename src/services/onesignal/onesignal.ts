@@ -13,7 +13,7 @@ import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { AuthService } from '../../services/auth/auth';
 
-enum androidPermissionState{
+enum androidPermissionState {
     AUTHORIZED = 1,
     DENIED = 2
 }

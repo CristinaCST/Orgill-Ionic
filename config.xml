@@ -125,4 +125,5 @@
     <plugin name="cordova-plugin-badge" spec="~0.8.8" />
     <plugin name="onesignal-cordova-plugin" spec="~2.5.0" />
     <plugin name="cordova-plugin-ionic-webview" spec="^2" />
+    <engine name="ios" spec="5.0.1" />
 </widget>
