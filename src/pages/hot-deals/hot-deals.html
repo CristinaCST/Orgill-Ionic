@@ -1,0 +1,16 @@
+<!-- Hot Deals Page Header -->
+<ion-header>
+  <!-- Hot Deals Page Navigation Bar -->
+  <navbar [title]="'menu_hot_deal_button'" [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
+</ion-header>
+
+<ion-content>
+    <hot-deal *ngFor="let deal of hotDeals" [item]="deal" (clickEvent)="clickOnDeal($event)"></hot-deal>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content>
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  <p id="no_items_label" *ngIf="hotDeals.length === 0">
+    {{"no_hot_deals" | translate}}</p>
+</ion-content>

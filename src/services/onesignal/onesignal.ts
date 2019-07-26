@@ -4,7 +4,7 @@ import { Badge } from '@ionic-native/badge';
 import { Events, Platform } from 'ionic-angular';
 import { Observable, Subscription } from 'rxjs';
 
-import { HotDealService } from '../hotdeal/hotdeal';
+import { HotDealsService } from '../hotdeals/hotdeals';
 import { PopoversService, PopoverContent, DefaultPopoverResult } from '../popovers/popovers';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import { NavigatorService } from '../../services/navigator/navigator';
@@ -42,7 +42,7 @@ export class OneSignalService {
     constructor(
         private readonly oneSignal: OneSignal,
         private readonly badge: Badge,   // Badge for icon notification
-        private readonly hotDealService: HotDealService,   // Provider to call to navigate to hotdeals provided through a push notification
+        private readonly hotDealsService: HotDealsService,   // Provider to call to navigate to hotdeals provided through a push notification
         private readonly events: Events,     // Propagate one signal event to be used in other places
         private readonly popoversService: PopoversService,     // Needed for permission modals,
         private readonly secureActions: SecureActionsService,
@@ -165,13 +165,7 @@ export class OneSignalService {
     public sendRetailerType(): void {
         // TODO: Change these to Constants.
         this.secureActions.do(() => { // We make a call to secure actions and schedule our code because we need a valid user reference for this part
-            let retailer_type: string = 'US';
-            for (const division of Constants.ONE_SIGNAL_CANADA_USER_TYPES) {
-                if (division === this.authService.User.division) {
-                    retailer_type = 'CA';
-                    break;
-                }
-            }
+            const retailer_type: string = this.authService.getRetailerType();
             this.oneSignal.sendTag(Constants.ONE_SIGNAL_RETAILER_TYPE_TAG, retailer_type);
         });
     }
@@ -423,7 +417,7 @@ export class OneSignalService {
         if (data) {
             if (sku) {
                 this.secureActions.do(() => {
-                    this.hotDealService.navigateToHotDeal(sku);
+                    this.hotDealsService.navigateToHotDeal(sku);
                 });
             } else {    // If there is data but the package does not respect the hot deal structure
                 this.debugLog('ONESIGNAL package is not a hot deal but it exists...' + JSON.stringify(data));

@@ -13,7 +13,7 @@ import { NavigatorService, NavigationEventType } from '../../services/navigator/
 import { CustomerLocationPage } from '../../pages/customer-location/customer-location';
 import { HotDealItem } from '../../interfaces/models/hot-deal-item';
 import { PricingService } from '../../services/pricing/pricing';
-import { HotDealService } from '../../services/hotdeal/hotdeal';
+import { HotDealsService } from '../../services/hotdeals/hotdeals';
 import { ProductProvider } from '../../providers/product/product';
 import { getNavParam } from '../../helpers/validatedNavParams';
 import { Events } from 'ionic-angular/util/events';
@@ -52,7 +52,7 @@ export class ProductPage implements OnInit {
     private readonly popoversService: PopoversService,
     private readonly shoppingListProvider: ShoppingListsProvider,
     private readonly pricingService: PricingService,
-    private readonly hotDealService: HotDealService,
+    private readonly hotDealsService: HotDealsService,
     private readonly productProvider: ProductProvider,
     private readonly events: Events,
     private readonly reloadService: ReloadService,
@@ -101,7 +101,7 @@ export class ProductPage implements OnInit {
         }
         this.regularPrice = Number(this.productPrograms[0].PRICE);
       }).then(() => {
-        this.hotDealService.getHotDealProgram(this.product.SKU).subscribe(program => {
+        this.hotDealsService.getHotDealProgram(this.product.SKU).subscribe(program => {
           const hotDealProgram: ItemProgram = JSON.parse(program.d);
 
           this.productPrograms = [hotDealProgram];

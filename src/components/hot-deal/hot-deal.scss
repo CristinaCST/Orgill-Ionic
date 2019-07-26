@@ -1,0 +1,33 @@
+@import "../../theme/variables";
+
+hot-deal {
+  button {
+    padding-top:10px!important;
+    min-width: 100%;
+    min-height: 60px;
+    .button-inner{
+      display:block!important;
+      .container {
+        align-content: center;
+        text-align: center;
+
+        &.header {
+          font-size: $font-size-medium;
+          padding-bottom: 10px; 
+          color: color($colors, OrgillRed);
+          font-weight: 500;
+        }
+        &.info {
+          color: color($colors, OrgillDarkGray);
+          font-weight: 400;
+        }
+      }
+    }
+  }
+  .item-divider{
+    height:1px!important;
+    padding:1px!important;
+    padding-bottom:5px!important;
+    min-height: 0px!important;
+  }
+}

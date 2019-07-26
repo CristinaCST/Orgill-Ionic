@@ -73,4 +73,14 @@ export class AuthService {
     }
   }
 
+  public getRetailerType(): string {
+    let retailer_type: string = 'US';
+    for (const division of Constants.ONE_SIGNAL_CANADA_USER_TYPES) {
+        if (division === this.User.division) {
+            retailer_type = 'CA';
+            break;
+        }
+    }
+    return retailer_type;
+  }
 }

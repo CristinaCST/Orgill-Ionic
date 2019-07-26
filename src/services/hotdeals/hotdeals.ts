@@ -10,16 +10,29 @@ import { Observable } from 'rxjs';
 import { APIResponse } from '../../interfaces/response-body/response';
 import { Product } from '../../interfaces/models/product';
 import { AuthService } from '../../services/auth/auth';
+import { Geolocation, Geoposition } from '@ionic-native/geolocation';
+import { HotDealNotification } from 'interfaces/models/hot-deal-notification';
+import { NotificationResponse } from 'interfaces/response-body/notification-response';
+import { Platform } from 'ionic-angular/platform/platform';
+import { TranslateService } from '@ngx-translate/core';
+
+export interface GeofenceLocation{
+    lat: number;
+    lng: number;
+    radius: number;
+};
 
 @Injectable()
-export class HotDealService {
+export class HotDealsService {
 
   constructor(private readonly apiProvider: ApiService,
     private readonly navigatorService: NavigatorService,
     private readonly events: Events,
     private readonly apiService: ApiService,
     private readonly authService: AuthService,
-    private readonly ngZone: NgZone) { }
+    private readonly ngZone: NgZone,
+    private readonly geolocation: Geolocation,
+    private readonly translation: TranslateService) { }
 
   private getHotDealsProduct(sku: string): Observable<APIResponse> {
 
@@ -38,6 +51,11 @@ export class HotDealService {
   }
 
   public navigateToHotDeal(sku?: string): void {
+
+    this.checkGeofence().then(result => {
+      console.log(" ARE WE IN FENCE? " + result);
+    });
+
     const searchSku: string = sku ? sku : LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
     if (!searchSku) {
       return;
@@ -97,4 +115,62 @@ export class HotDealService {
     return this.apiService.post(ConstantsUrl.GET_HOTDEALS_PROGRAM, params);
   }
 
+  public checkGeofence(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      const params: any = {
+        user_token: this.authService.userToken
+      }
+
+      Promise.all([this.apiService.post(ConstantsUrl.GET_HOTDEALS_GEOFENCE, params).toPromise(), this.geolocation.getCurrentPosition()]).then(result => {
+        const geofenceLocation: GeofenceLocation = JSON.parse(result[0].d);
+        console.log("Geofence location:", geofenceLocation);
+        const currentLocation: Geoposition = result[1];
+        console.log("Current location", currentLocation);
+        const distance: number = this.distanceBetweenPoints(Number(geofenceLocation.lat), Number(geofenceLocation.lng), currentLocation.coords.latitude, currentLocation.coords.longitude);
+        console.log("distance between in meters:" + distance);
+        if (distance <= (Number(geofenceLocation.radius) + currentLocation.coords.accuracy)) {
+          resolve(true);
+        }
+        resolve(false);
+      }, err => {
+        console.log(err);
+        reject(err);
+      });
+    });
+  }
+
+  private distanceBetweenPoints(lat1: number, lon1: number, lat2: number, lon2: number){
+    const R = 6378.137;
+    let dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+    let dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+    let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    let d = R * c;
+    return d * 1000;
+  }
+
+  public getHotDealNotifications(): Promise<HotDealNotification[]> {
+    return new Promise((resolve) => {
+      const params = {
+        user_token: this.authService.userToken
+      }
+      this.apiProvider.post(ConstantsUrl.GET_HOTDEALS_NOTIFICATIONS, params).take(1).subscribe((result: APIResponse) => {
+        const notifications: NotificationResponse[] = JSON.parse(result.d);
+        if (notifications.length > 0) {
+          const parsedNotifications: HotDealNotification[] = notifications.map(rawNotification => {
+            return {
+              id: rawNotification.id,
+              SKU: rawNotification.data.SKU,
+              title: this.translation.currentLang === 'fr' ? rawNotification.headings.fr ? rawNotification.headings.fr : rawNotification.headings.en : rawNotification.headings.en,
+              content: this.translation.currentLang === 'fr' ? rawNotification.contents.fr ? rawNotification.contents.fr : rawNotification.contents.en : rawNotification.contents.en,
+              timestamp: rawNotification.completed_at
+            }
+          });
+          resolve(parsedNotifications);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
 }

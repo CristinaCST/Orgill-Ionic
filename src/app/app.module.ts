@@ -35,7 +35,7 @@ import { CSSInjector } from '../helpers/css-injector';
 // Services
 import { NetworkService } from '../services/network/network';
 import { OneSignalService } from '../services/onesignal/onesignal';
-import { HotDealService } from '../services/hotdeal/hotdeal';
+import { HotDealsService } from '../services/hotdeals/hotdeals';
 import { NavigatorService } from '../services/navigator/navigator';
 import { LoadingService } from '../services/loading/loading';
 import { ScannerService } from '../services/scanner/scanner';
@@ -62,6 +62,7 @@ import { OrderConfirmationPage } from '../pages/order-confirmation/order-confirm
 import { ProductsSearchPage } from '../pages/products-search/products-search';
 import { PurchaseDetailsPage } from '../pages/purchase-details/purchase-details';
 import { PurchasesPage } from '../pages/purchases/purchases';
+import { HotDealsPage } from '../pages/hot-deals/hot-deals';
 
 const pages: Page[] = [MyApp,
                Catalog,
@@ -78,7 +79,8 @@ const pages: Page[] = [MyApp,
                ProductsSearchPage,
                ScannerPage,
                PurchasesPage,
-               PurchaseDetailsPage];
+               PurchaseDetailsPage,
+               HotDealsPage];
 
 
 // Error Handlers
@@ -128,7 +130,7 @@ import { CustomErrorHandlerService } from '../services/error-handler/CustomError
     OneSignalService,
     OneSignal,
     Badge,
-    HotDealService,
+    HotDealsService,
     NavigatorService,
     ScannerService,
     PricingService,

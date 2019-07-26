@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Events, MenuController } from 'ionic-angular';
 import { Login } from '../../pages/login/login';
 import * as Constants from '../../util/constants';
@@ -19,10 +19,11 @@ import { PurchasesPage } from '../../pages/purchases/purchases';
 import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import { NavigatorService } from '../../services/navigator/navigator';
-import { HotDealService } from '../../services/hotdeal/hotdeal';
+import { HotDealsService } from '../../services/hotdeals/hotdeals';
 import { Page } from 'ionic-angular/navigation/nav-util';
 import { ShoppingListResponse } from '../../interfaces/response-body/shopping-list';
 import { ReloadService } from '../../services/reload/reload';
+import { HotDealsPage } from '../../pages/hot-deals/hot-deals';
 
 @Component({
   selector: 'app-menu',
@@ -37,7 +38,7 @@ export class AppMenuComponent implements OnInit {
   public defaultShoppingLists: ShoppingList[] = [];
   public customShoppingLists: ShoppingList[] = [];
   public showShoppingListsMenu: boolean = false;
-  public hotDealNotification: boolean = false;
+  public hotDealNotification: boolean = true;
   private backbuttonOverrideReference: number;
 
   @Input('rootPage') public rootPage: any;
@@ -50,38 +51,36 @@ export class AppMenuComponent implements OnInit {
               private readonly events: Events,
               public shoppingListsProvider: ShoppingListsProvider,
               private readonly navigatorService: NavigatorService,
-              private readonly hotDealService: HotDealService,
+              private readonly hotDealsService: HotDealsService,
               private readonly menuCtrl: MenuController,
-              private readonly changeDetector: ChangeDetectorRef,
               private readonly reloadService: ReloadService) {
   }
 
   public ngOnInit(): void {
    
     this.initMenu();
-
-    this.events.subscribe(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED, this.notificationReceivedHandler);
-    this.events.subscribe(Constants.HOT_DEAL_EXPIRED_EVENT, this.hotDealExpiredHandler);
+   // this.events.subscribe(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED, this.notificationReceivedHandler);
+   // this.events.subscribe(Constants.HOT_DEAL_EXPIRED_EVENT, this.hotDealExpiredHandler);
     this.events.subscribe(Constants.EVENT_NAVIGATE_TO_PAGE, this.navigationHandler);
     this.events.subscribe(Constants.EVENT_NEW_SHOPPING_LIST, this.newShoppingListHandler);
     this.events.subscribe(Constants.EVENT_LOADING_FAILED, this.loadingFailedHandler);
   }
 
   public ngOnDestroy(): void {
-    this.events.unsubscribe(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED, this.notificationReceivedHandler);
-    this.events.unsubscribe(Constants.HOT_DEAL_EXPIRED_EVENT, this.hotDealExpiredHandler);
+    // this.events.unsubscribe(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED, this.notificationReceivedHandler);
+    // this.events.unsubscribe(Constants.HOT_DEAL_EXPIRED_EVENT, this.hotDealExpiredHandler);
     this.events.unsubscribe(Constants.EVENT_NAVIGATE_TO_PAGE, this.navigationHandler);
     this.events.unsubscribe(Constants.EVENT_NEW_SHOPPING_LIST, this.newShoppingListHandler);
     this.events.unsubscribe(Constants.EVENT_LOADING_FAILED, this.loadingFailedHandler);
   }
 
-  private readonly notificationReceivedHandler = (sku: string): void => {
+  /*private readonly notificationReceivedHandler = (sku: string): void => {
     this.updateHotDealButtonToState(sku);
-  }
-
+  }*/
+/*
   private readonly hotDealExpiredHandler = (): void => {
     this.updateHotDealButtonToState();
-  }
+  }*/
 
   private readonly navigationHandler = (): void => {
     this.menuCtrl.close('main_menu');
@@ -98,6 +97,12 @@ export class AppMenuComponent implements OnInit {
 
 
   private initMenu(): void {
+    this.authServiceProvider.getUserInfo().then(info => {
+      const retailer_type: string = this.authServiceProvider.getRetailerType();
+
+      // Temporary disable hot deals for CA;
+      this.hotDealNotification = retailer_type === 'US';
+    });
     this.getPrograms();
     this.getShoppingLists();
     this.updateHotDealButtonToState();
@@ -115,8 +120,8 @@ export class AppMenuComponent implements OnInit {
   }
 
   private updateHotDealButtonToState(sku?: string): void {
-      this.hotDealNotification = this.hotDealService.checkHotDealState(sku);
-      this.changeDetector.detectChanges();    
+    //  this.hotDealNotification = this.hotDealService.checkHotDealState(sku);
+    //  this.changeDetector.detectChanges();    
   }
 
   public logout(): void {
@@ -140,7 +145,7 @@ export class AppMenuComponent implements OnInit {
 
 
   public hotDealPage(): void {
-    if (this.hotDealService.isHotDealExpired()) {
+   /* if (this.hotDealService.isHotDealExpired()) {
       this.hotDealNotification = false;
       return;
     }
@@ -148,7 +153,9 @@ export class AppMenuComponent implements OnInit {
     const hotDealSku: string = LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
     if (hotDealSku) {
       this.hotDealService.navigateToHotDeal(hotDealSku);
-    }
+    }*/
+
+    this.navigatorService.setRoot(HotDealsPage).catch(err => console.error(err));
   }
 
   public goToPage(page: string | Page): void {
@@ -207,10 +214,10 @@ export class AppMenuComponent implements OnInit {
     this.catalogsProvider.getPrograms().subscribe(response => {
       if (response) {
         const programs: Program[] = JSON.parse(response.d) as Program[];
-        this.addProgramsToDB(programs);
+        this.addProgramsToDB(programs); // TODO: Refactor this, creates regular program
         programs.map(program => {
           if (program.MARKETONLY.toUpperCase().includes('Y')) {
-            if (program.NAME.toUpperCase().includes('DOOR BUSTER BOOKING')) {
+            if (program.NAME.toUpperCase().includes('DOOR BUSTER BOOKING')) { // TODO: Fix this
               program.NAME.replace('DOOR BUSTER BOOKING', '');
               this.doorBusterPrograms.push(program);
             } else {
@@ -220,7 +227,7 @@ export class AppMenuComponent implements OnInit {
             this.everyDayPrograms.push(program);
           }
         });
-        if (this.everyDayPrograms.length === 0) {
+        if (this.everyDayPrograms.length === 0) {  // TODO: When these errored?
           this.reloadService.paintDirty('programs');
         }
       } else {
@@ -231,6 +238,7 @@ export class AppMenuComponent implements OnInit {
     });
   }
 
+  
   public addProgramsToDB(programs: Program[]): void {
     const regularProgram: Program = {
       NAME: this.translateProvider.translate(Strings.REGULAR_CATALOG).toUpperCase(),
@@ -243,6 +251,7 @@ export class AppMenuComponent implements OnInit {
     programs.unshift(regularProgram);
     // this.databaseProvider.addPrograms(programs);
   }
+
 
   public showCustomShoppingListsMenu(): void {
     this.getShoppingLists();

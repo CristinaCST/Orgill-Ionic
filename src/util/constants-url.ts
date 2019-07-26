@@ -18,7 +18,11 @@ export const URL_PRODUCT_PRICE: string = 'item_price';
 export const URL_SHOPPING_LISTS_ORDER_PRODUCTS: string = 'order_products';
 export const URL_SHOPPING_LISTS_ORDER_CONFIRMATION: string = 'order_confirmation';
 
+
+// HOT DEALS
 export const GET_HOTDEALS_PROGRAM: string = 'get_flashprogram_item';
+export const GET_HOTDEALS_GEOFENCE: string = 'geofenceParameters';
+export const GET_HOTDEALS_NOTIFICATIONS: string = 'get_notifications';
 
 // SHOPPING LISTS API
 export const ADD_SHOPPING_NEW_LIST: string = 'save_shopping_list';
