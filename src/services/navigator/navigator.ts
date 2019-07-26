@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { NavController, NavOptions, App, Platform, Events, NavParams, ViewController } from 'ionic-angular';
+import { NavController, NavOptions, App, Platform, Events, NavParams, ViewController, NavControllerBase} from 'ionic-angular';
 import * as Equals from '../../helpers/equality';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import * as Constants from '../../util/constants';
 import { BehaviorSubject } from 'rxjs';
 import { Page } from 'ionic-angular/navigation/nav-util';
-import { NavControllerBase } from 'ionic-angular/navigation/nav-controller-base';
 
 export enum NavigationEventType{
     POP,

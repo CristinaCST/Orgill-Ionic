@@ -9,13 +9,20 @@ import { User } from '../../interfaces/models/user';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { Login } from '../../pages/login/login';
 import { Observable } from 'rxjs';
+import { Events } from 'ionic-angular';
+import { Moment } from 'moment';
+import { DateTimeService } from '../../services/datetime/dateTimeService';
 
 @Injectable()
 export class AuthService {
 
   private user: User = new User();
+  private firstAuthCheck: boolean = true;
 
-  constructor(private readonly apiProvider: ApiService, private readonly navigatorService: NavigatorService) {
+  constructor(private readonly apiProvider: ApiService,
+              private readonly navigatorService: NavigatorService,
+              private readonly events: Events) {
+
     this.user = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
   }
 
@@ -49,12 +56,17 @@ export class AuthService {
    * Gets user info from the server
    */
   public getUserInfo(): Promise<User> {
+    console.log("BA");
     if (this.user && this.user.userToken) {
+      console.log("BA");
       return new Promise((resolve, reject) => {
         const params: any = { user_token: this.user.userToken };
-        this.apiProvider.post(ConstantsURL.URL_USER_INFO, params).subscribe(response => {
+        this.apiProvider.post(ConstantsURL.URL_USER_INFO, params).take(1).subscribe(response => {
           this.user = JSON.parse(response.d);
           this.user.userToken = params.user_token;
+          this.events.publish(Constants.EVENT_AUTH);
+          console.log("EVENT AUTH");
+          console.log("REPSPONSE", response);
           LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
           resolve();
         }, error => {
@@ -67,12 +79,6 @@ export class AuthService {
     this.navigatorService.setRoot(Login);
   }
 
-  public getUserToken(): string {
-    if (this.user) {
-      return this.user.userToken;
-    }
-  }
-
   public getRetailerType(): string {
     let retailer_type: string = 'US';
     for (const division of Constants.ONE_SIGNAL_CANADA_USER_TYPES) {
@@ -82,5 +88,24 @@ export class AuthService {
         }
     }
     return retailer_type;
+  }
+
+  public isValidSession(): boolean {
+    if (!this.User) {
+      return false;
+    }
+    const now: Moment = DateTimeService.getCurrentDateTime();
+    const receivedTimestamp: string = this.User.time_stamp;
+    const sessionTimestampWith4Days: Moment = DateTimeService.getTimeAfter4Days(receivedTimestamp);
+
+    const status: boolean = sessionTimestampWith4Days.isSameOrAfter(now);
+    if (!status) {
+      this.logout(true);
+      // this.events.publish(Constants.EVENT_LOGIN_EXPIRED); TODO: Wat was here?
+    }
+    if (this.firstAuthCheck) {
+      this.events.publish(Constants.EVENT_AUTH); // Workaround since this service skips auth procedure
+    }
+    return status;
   }
 }

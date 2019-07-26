@@ -43,7 +43,6 @@ export class Login {
     this.authService.login(loginRequest).subscribe(
       () => {
         this.authService.getUserInfo().then(() => {
-          this.oneSignalService.sendRetailerType();
           this.navigatorService.setRoot(Catalog).then(() => {this.secureActions.executeQueue(); }).catch(err => console.error(err));
           this.loginLoader.hide();
         });

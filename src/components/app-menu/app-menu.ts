@@ -19,12 +19,10 @@ import { PurchasesPage } from '../../pages/purchases/purchases';
 import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import { NavigatorService } from '../../services/navigator/navigator';
-import { HotDealsService } from '../../services/hotdeals/hotdeals';
 import { Page } from 'ionic-angular/navigation/nav-util';
 import { ShoppingListResponse } from '../../interfaces/response-body/shopping-list';
 import { ReloadService } from '../../services/reload/reload';
 import { HotDealsPage } from '../../pages/hot-deals/hot-deals';
-
 @Component({
   selector: 'app-menu',
   templateUrl: 'app-menu.html'
@@ -45,13 +43,12 @@ export class AppMenuComponent implements OnInit {
   @Input('menuContent') public menuContent: any;
 
   constructor(private readonly popoversService: PopoversService,
-              private readonly authServiceProvider: AuthService,
+              private readonly authService: AuthService,
               private readonly catalogsProvider: CatalogsProvider,
               private readonly translateProvider: TranslateWrapperService,
               private readonly events: Events,
               public shoppingListsProvider: ShoppingListsProvider,
               private readonly navigatorService: NavigatorService,
-              private readonly hotDealsService: HotDealsService,
               private readonly menuCtrl: MenuController,
               private readonly reloadService: ReloadService) {
   }
@@ -97,12 +94,13 @@ export class AppMenuComponent implements OnInit {
 
 
   private initMenu(): void {
-    this.authServiceProvider.getUserInfo().then(info => {
-      const retailer_type: string = this.authServiceProvider.getRetailerType();
+      console.log("Getting retailer type in menu");
+      const retailer_type: string = this.authService.getRetailerType();
+        // Temporary disable hot deals for CA;
+        this.hotDealNotification = retailer_type === 'US';
+      
 
-      // Temporary disable hot deals for CA;
-      this.hotDealNotification = retailer_type === 'US';
-    });
+    
     this.getPrograms();
     this.getShoppingLists();
     this.updateHotDealButtonToState();
@@ -135,8 +133,8 @@ export class AppMenuComponent implements OnInit {
 
     this.popoversService.show(content).subscribe((data: DefaultPopoverResult) => {
         if (data.optionSelected === 'OK') {
-          // this.authServiceProvider.logoutDeleteData();
-          this.authServiceProvider.logout();
+          // this.authService.logoutDeleteData();
+          this.authService.logout();
           this.navigatorService.setRoot(Login).catch(err => console.error(err));
         }
       }

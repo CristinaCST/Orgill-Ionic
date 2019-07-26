@@ -8,13 +8,13 @@ import { Login } from '../pages/login/login';
 import { TranslateService } from '@ngx-translate/core';
 import { NetworkService } from '../services/network/network';
 import { OneSignalService } from '../services/onesignal/onesignal';
-import { SessionValidatorService } from '../services/session/sessionValidator';
 import { NavigatorService } from '../services/navigator/navigator';
 import * as Constants from '../util/constants';
 import * as Strings from '../util/strings';
 import { PopoversService, DefaultPopoverResult, PopoverContent } from '../services/popovers/popovers';
 import { LoadingService } from '../services/loading/loading';
 import { CSSInjector } from '../helpers/css-injector';
+import { AuthService } from '../services/auth/auth';
 
 @Component({
   templateUrl: 'app.html'
@@ -30,11 +30,11 @@ export class MyApp {
     private readonly splashScreen: SplashScreen,
     private readonly translate: TranslateService,
     private readonly networkService: NetworkService,
-    private readonly sessionValidatorProvider: SessionValidatorService,
     private readonly oneSignalService: OneSignalService,
     private readonly navigatorService: NavigatorService,
     private readonly popoverProvider: PopoversService,
-    private readonly events: Events) {
+    private readonly events: Events,
+    private readonly authService: AuthService) {
     this.setAppLanguage().then(() => {
       this.initializeApp();
     });
@@ -131,7 +131,7 @@ export class MyApp {
 
   private checkSession(): void {
     this.stopLoading();
-    this.rootPage = this.sessionValidatorProvider.isValidSession() ? Catalog : Login;
+    this.rootPage = this.authService.isValidSession() ? Catalog : Login;
     this.navigatorService.initialRootPage(this.rootPage);
   }
 }

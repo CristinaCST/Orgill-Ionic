@@ -11,6 +11,8 @@ export const HOLD_TIME_TO_DELETE_MODE: number = 0.6 * 1000; // Expressed in ms
 export const SEND_TO_ORGILL_METHOD: number = 1;
 export const CHECKOUT_METHOD: number = 2;
 
+export const EVENT_AUTH: string = 'eventAuth';
+
 /**
  * Marker : App Language
  * =============================================================================================

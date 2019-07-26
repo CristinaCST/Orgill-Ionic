@@ -14,7 +14,7 @@ export class PurchasesProvider {
 
   public getPurchases(): Promise<Purchase[]> {
     return new Promise<Purchase[]>(resolve => {
-      this.apiService.post(ConstantsUrl.USER_PAST_PURCHASES, { user_token: this.authService.getUserToken() }).subscribe((response: APIResponse) => {
+      this.apiService.post(ConstantsUrl.USER_PAST_PURCHASES, { user_token: this.authService.userToken }).subscribe((response: APIResponse) => {
         if (!response) {
           resolve([]);
         }
@@ -48,7 +48,7 @@ export class PurchasesProvider {
 
   public getPurchasedItems(order_id: string): Promise<PurchasedItem[]> {
     return new Promise<PurchasedItem[]>(resolve => {
-      this.apiService.post(ConstantsUrl.PURCHASE_ITEMS, { user_token: this.authService.getUserToken(), purchase_order_id: order_id }).subscribe((response: APIResponse) => {
+      this.apiService.post(ConstantsUrl.PURCHASE_ITEMS, { user_token: this.authService.userToken, purchase_order_id: order_id }).subscribe((response: APIResponse) => {
         if (!response) {
           resolve([]);
         }

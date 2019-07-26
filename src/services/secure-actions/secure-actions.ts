@@ -1,15 +1,20 @@
-import { Injectable } from '@angular/core';
-import { SessionValidatorService } from '../session/sessionValidator';
-
+import { Injectable, Injector } from '@angular/core';
 
 @Injectable()
 export class SecureActionsService {
   private actionQueue: any[] = [];
+  private authService: any;
 
-  constructor(private readonly sessionValidatorProvider: SessionValidatorService) { }
+  constructor(private readonly injector: Injector) { 
+    
+    setTimeout(() => this.authService = this.injector.get('AuthService'),1000);
+  }
+
+
+  // TODO: Improve this service
 
   public do(action: () => void): Promise<any> | void {
-    if (this.sessionValidatorProvider.isValidSession()) {
+    if (this.authService.isValidSession()) {
       return action();
     }
     return new Promise((resolve, reject) => {
@@ -18,7 +23,7 @@ export class SecureActionsService {
   }
 
   public executeQueue(): void {
-    if (this.sessionValidatorProvider.isValidSession()) {
+    if (this.authService.isValidSession()) {
       this.actionQueue.forEach(action => {
         action();
       });

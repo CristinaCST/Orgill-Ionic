@@ -103,6 +103,9 @@ export class OneSignalService {
             this.modalState.navCount++; // We know we navigated.
         });
 
+        this.events.subscribe(Constants.EVENT_AUTH, () => {
+            this.sendRetailerType();
+        });
         // Proceed to handle permissions
         this.setPermissions();
     }
@@ -162,12 +165,13 @@ export class OneSignalService {
         });
     }
 
+    /**
+     * Sends retailer type. Needs login to be valid already.
+     */
     public sendRetailerType(): void {
-        // TODO: Change these to Constants.
-        this.secureActions.do(() => { // We make a call to secure actions and schedule our code because we need a valid user reference for this part
-            const retailer_type: string = this.authService.getRetailerType();
-            this.oneSignal.sendTag(Constants.ONE_SIGNAL_RETAILER_TYPE_TAG, retailer_type);
-        });
+        console.log('Sent retailer type');
+        const retailer_type: string = this.authService.getRetailerType();
+        this.oneSignal.sendTag(Constants.ONE_SIGNAL_RETAILER_TYPE_TAG, retailer_type);
     }
 
     /**

@@ -27,7 +27,6 @@ import { AuthService } from '../services/auth/auth';
 import { ProductProvider } from '../providers/product/product';
 import { UserInfoService } from '../services/user-info/user-info';
 import { PurchasesProvider } from '../providers/purchases/purchases';
-import { SessionValidatorService } from '../services/session/sessionValidator';
 
 // Helpers
 import { CSSInjector } from '../helpers/css-injector';
@@ -126,7 +125,6 @@ import { CustomErrorHandlerService } from '../services/error-handler/CustomError
     UserInfoService,
     PurchasesProvider,
     NetworkService,
-    SessionValidatorService,
     OneSignalService,
     OneSignal,
     Badge,
