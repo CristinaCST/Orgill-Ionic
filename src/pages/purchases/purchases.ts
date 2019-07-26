@@ -39,7 +39,7 @@ export class PurchasesPage {
         }
       });
       this.loader.hide();
-      this.purchasesBuffer = purchases;
+      this.purchasesBuffer.push(...purchases);
       this.purchases.push(...this.purchasesBuffer.splice(0, this.INITIAL_ELEMENTS));
     }).catch(err => {
       this.loader.hide();

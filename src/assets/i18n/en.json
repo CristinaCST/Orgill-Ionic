@@ -206,12 +206,13 @@
   "hot_deal_missing_required_po":"At least one of the location chosen requires a PO number and none was provided.",
 
   "quantity_too_high_overflow":"The quantity introduced is too high, try a lower number",
-  "menu_hot_deal_button":"Hot Deal",
+  "menu_hot_deal_button":"Hot Deals",
   "po_number_too_long":"PO number can't be longer than 15 characters.",
   "po_missing_required":"PO number is required for this location but none was provided.",
   "po_alphanumeric_warning":"PO number must be alphanumeric, additional characters have been removed",
   "one_signal_permission_reminder":"Orgill requires push notification permissions to send you hot deals which were declined before. Please go to your settings and give those permissions if you want push notifications.",
   "one_signal_subscription_reminder":"Would you like to receive push notifications with hot deals?",
+  "no_hot_deals": "No available hot deals",
 
   "savings_text":"Savings",
   "added_item_to_list":"Added ${itemName} to list",
@@ -222,5 +223,5 @@
   "delete_item_prompt_message": "Are you sure you want to delete these items from the shopping list?",
   "no_customer_location": "It seems you don't have a valid ship to location. Please send your order to Orgill.com for further revisioning.",
   "locations_quantity_modal_description": "Insert the quantity you want for all locations",
-  "regular_catalog_price": "Regular Catalog Price"
+  "regular_catalog_price": "Regular Dealer Price"
 }

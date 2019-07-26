@@ -16,6 +16,6 @@
     <ion-infinite-scroll-content>
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
-  <p id="no_items_label" *ngIf="(purchases == null || purchases == undefined || purchases.length === 0)">
+  <p id="no_items_label" *ngIf="purchases.length === 0">
     {{"orders_history_no_purchase" | translate}}</p>
 </ion-content>
