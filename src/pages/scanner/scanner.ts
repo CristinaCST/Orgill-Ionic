@@ -72,6 +72,8 @@ export class ScannerPage implements OnInit {
         };
         this.navigatorService.push(ScannerPage, params).catch(err => console.error(err));
       }
+    }, err => {
+      LoadingService.hideAll();
     });
   }
 

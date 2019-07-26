@@ -110,6 +110,8 @@ export class ProductsPage implements OnInit, OnDestroy {
       this.navigatorService.push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions).then(
        // () => console.log('%cTo product search page', 'color:blue')
         );
+    }, err =>{
+      LoadingService.hideAll();
     });
   }
 

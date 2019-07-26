@@ -103,6 +103,7 @@ export class ProductPage implements OnInit {
       }).then(() => {
         this.hotDealService.getHotDealProgram(this.product.SKU).subscribe(program => {
           const hotDealProgram: ItemProgram = JSON.parse(program.d);
+
           this.productPrograms = [hotDealProgram];
           if (hotDealProgram.SKU === null) {
             const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, Strings.MODAL_BUTTON_OK, undefined, undefined, Constants.POPOVER_ERROR);

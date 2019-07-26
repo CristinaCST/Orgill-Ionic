@@ -68,6 +68,8 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
         // () => console.log('%cTo product search page', 'color:blue')
         );
       this.loader.hide();
+    }, err => {
+      LoadingService.hideAll();
     });
   }
 
