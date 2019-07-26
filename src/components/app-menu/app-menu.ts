@@ -38,6 +38,7 @@ export class AppMenuComponent implements OnInit {
   public customShoppingLists: ShoppingList[] = [];
   public showShoppingListsMenu: boolean = false;
   public hotDealNotification: boolean = false;
+  private backbuttonOverrideReference: number;
 
   @Input('rootPage') public rootPage: any;
   @Input('menuContent') public menuContent: any;
@@ -103,14 +104,14 @@ export class AppMenuComponent implements OnInit {
   }
 
   public menuOpen(): void {
-    this.navigatorService.oneTimeBackButtonOverride(() => {
+    this.backbuttonOverrideReference = this.navigatorService.oneTimeBackButtonOverride(() => {
       this.menuCtrl.close('main_menu');
     });
   }
 
   public menuClose(): void {
   //  this.events.unsubscribe(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED,this.checkHotDealState);
-    this.navigatorService.removeOverride();
+   this.navigatorService.removeOverride(this.backbuttonOverrideReference);
   }
 
   private updateHotDealButtonToState(sku?: string): void {
@@ -202,6 +203,7 @@ export class AppMenuComponent implements OnInit {
     this.marketOnlyPrograms = [];
     this.everyDayPrograms = [];
     
+    // TODO: Refactor this
     this.catalogsProvider.getPrograms().subscribe(response => {
       if (response) {
         const programs: Program[] = JSON.parse(response.d) as Program[];

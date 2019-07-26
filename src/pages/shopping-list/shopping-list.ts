@@ -16,6 +16,7 @@ import { Product } from '../../interfaces/models/product';
 import { getNavParam } from '../../helpers/validatedNavParams';
 import { PricingService } from '../../services/pricing/pricing';
 import { ReloadService } from '../../services/reload/reload';
+import { Platform } from 'ionic-angular/platform/platform';
 
 @Component({
   selector: 'page-shopping-list',
@@ -60,7 +61,8 @@ export class ShoppingListPage {
     private readonly loading: LoadingService,
     private readonly scannerService: ScannerService,
     private readonly pricingService: PricingService,
-    private readonly reloadService: ReloadService) {
+    private readonly reloadService: ReloadService,
+    private readonly platform: Platform) {
 
     this.loader = this.loading.createLoader();
     this.menuCustomButtons = [{ action: 'detailsList', icon: 'information-circle' }, { action: 'scan', icon: 'barcode' }];
@@ -379,13 +381,20 @@ export class ShoppingListPage {
     
     this.holdTimeoutReference = setTimeout(() => {
       const item: ShoppingListItem = this.shoppingListItems[index];
-      item.isCheckedInShoppingList = true;
-      this.setOrderTotal({ status: 'checkedItem' }, index);
+
+      if (!this.platform.is('ios')) {
+        item.isCheckedInShoppingList = true;
+        this.setOrderTotal({ status: 'checkedItem' }, index);
+      }
+
       this.isDeleteMode = true;
       this.navigatorService.oneTimeBackButtonOverride(() => {
         this.isDeleteMode = false;
       });
-      this.holdCheckTimeout = true;
+      
+      if (!this.platform.is('ios')) {
+        this.holdCheckTimeout = true;
+      }
     }, Constants.HOLD_TIME_TO_DELETE_MODE);
 
   }

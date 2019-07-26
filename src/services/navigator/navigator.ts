@@ -13,12 +13,18 @@ export enum NavigationEventType{
     SETROOT
 }
 
+export interface BackbuttonOverride {
+    id: number;
+    override(): void;
+}
+
 @Injectable()
 export class NavigatorService {
     private _navController: NavController;  // Store the nav controller reference
     private pageReference: Page | string;
     private backButtonMainFunc: () => void;
-    private overrideFunc: () => void;
+    private backButtonOverrides: BackbuttonOverride[] = [];
+    private overridesID: number = 0;    // Starting point for overrides ID returned.
     public lastPage: BehaviorSubject<string> = new BehaviorSubject<string>('');
     public lastEvent: NavigationEventType;
 
@@ -123,6 +129,7 @@ export class NavigatorService {
        /* if( pageOrViewCtrl !instanceof ViewController){
             this.pageReference = pageOrViewCtrl
         }*/
+        this.backButtonOverrides = [];
         this.announceTransition(NavigationEventType.SETROOT, pageOrViewCtrl);
         return this.navController.setRoot(pageOrViewCtrl, params, opts, done);
     }
@@ -139,45 +146,54 @@ export class NavigatorService {
     }
 
     public initializeBackButton(func: () => void): void {
+       
         this.backButtonMainFunc = func;
-        this.platform.registerBackButtonAction(func);
+        this.platform.registerBackButtonAction(() => this.backButtonAction());
     }
 
     /**
      * One time override for the backbutton
      * @param func Pass a function to be executed once instead of the standard backbutton function
+     * @returns number Returns an ID you can and should use to remove a backbutton reference if it was not used directly.
      */
-    public oneTimeBackButtonOverride(func: () => void): void {
-        this.overrideFunc = func;
-        this.platform.registerBackButtonAction(() => {
-            func();
-            this.platform.registerBackButtonAction(this.backButtonMainFunc);
-            this.overrideFunc = undefined;
-        });
+    public oneTimeBackButtonOverride(func: () => void): number {       
+        const id: number = this.overridesID++;
+        this.backButtonOverrides.push({ id, override: func });
+        return id;
     }
 
 
     /**
-     * Remove the current override of the backbutton
+     * Remove the latest override of the backbutton
      */
-    public removeOverride(): void {
-        this.platform.registerBackButtonAction(this.backButtonMainFunc);
-        this.overrideFunc = undefined;
+    public removeOverride(id: number): void {
+        if (this.backButtonOverrides.length > 0) {
+            const index: number = this.backButtonOverrides.findIndex(elem => elem.id === id);
+            if (index > -1) {
+                this.backButtonOverrides.splice(index, 1);
+            }
+        }
     }
 
     /**
      * Call this to execute the current backbutton action manually, this will consume the override!
      */
-    public backButtonAction(): void {
-        if (!this.overrideFunc) { this.backButtonMainFunc(); } else {
-            this.overrideFunc();
-            this.platform.registerBackButtonAction(this.backButtonMainFunc);
-            this.overrideFunc = undefined;
+    public backButtonAction(id?: number): void {
+        if (this.backButtonOverrides.length === 0) {
+            this.backButtonMainFunc();
+        } else {
+            if (id !== undefined) {
+                const index: number = this.backButtonOverrides.findIndex(elem => elem.id === id);
+                if (index > -1) {
+                    this.backButtonOverrides.splice(index, 1)[0].override();
+                }
+            } else {
+                this.backButtonOverrides.pop().override();
+            }
         }
     }
 
     public initialRootPage(page: string | Page): void {
-        // this.announceTransition(page);
         const name: string = typeof page === 'string' ? page : page.name;
         this.lastPage.next(name);
       }
