@@ -169,7 +169,6 @@ export class OneSignalService {
      * Sends retailer type after user logs in.
      */
     public sendRetailerType(): void {
-        console.log('Sent retailer type');
         this.authService.getRetailerType().then(retailer_type => {
             this.oneSignal.sendTag(Constants.ONE_SIGNAL_RETAILER_TYPE_TAG, retailer_type);
         });
