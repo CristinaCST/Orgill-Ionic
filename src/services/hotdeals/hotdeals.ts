@@ -4,7 +4,7 @@ import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { ApiService } from '../api/api';
 import { LocalStorageHelper } from '../../helpers/local-storage';
-import { NavOptions, Events } from 'ionic-angular';
+import { NavOptions } from 'ionic-angular';
 import { ProductPage } from '../../pages/product/product';
 import { NavigatorService } from '../navigator/navigator';
 import { Observable } from 'rxjs';
@@ -29,7 +29,6 @@ export class HotDealsService {
 
   constructor(private readonly apiProvider: ApiService,
     private readonly navigatorService: NavigatorService,
-    private readonly events: Events,
     private readonly apiService: ApiService,
     private readonly authService: AuthService,
     private readonly ngZone: NgZone,
@@ -76,33 +75,6 @@ export class HotDealsService {
     });
   }
 
-
-  public isHotDealExpired(timestamp?: string): boolean {
-    return false;
-    // const dateString: string = timestamp ? timestamp : LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_PAYLOAD_TIMESTAMP);
-    // const hotDealTimestamp: Date = new Date(parseInt(dateString, 10));
-    //
-    // if (Constants.DEBUG_ONE_SIGNAL) {
-    //   return false;
-    // }
-    //
-    // if ((new Date()).getDay() !== hotDealTimestamp.getDay()) {
-    //   this.markHotDealExpired();
-    //   return true;
-    // }
-    // return false;
-  }
-
-  public markHotDealExpired(): void {
-    LocalStorageHelper.removeFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
-    LocalStorageHelper.removeFromLocalStorage(Constants.ONE_SIGNAL_PAYLOAD_TIMESTAMP);
-    this.events.publish(Constants.HOT_DEAL_EXPIRED_EVENT);
-  }
-
-  public checkHotDealState(sku?: string): boolean {
-    const hotDealSku: string = sku ? sku : LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
-    return hotDealSku && !this.isHotDealExpired() ? true : false;
-  }
 
   public getHotDealProgram(sku: string): Observable<APIResponse> {
     const params: any = {
@@ -180,5 +152,33 @@ export class HotDealsService {
         }
       });
     });
+  }
+
+  private dealAccessString(SKU: string): string {
+    return SKU.substring(0, 3) + Constants.OVERRIDE_ADDITIONAL_CODE;
+  }
+
+  public overrideDealAccess(SKU: string, code: string): void {
+    const accessString: string = this.dealAccessString(SKU);
+    if (accessString === code) {
+      LocalStorageHelper.saveToLocalStorage(this.dealAccessString(SKU), Date.now());
+    }
+  }
+
+  /**
+   * Checks if the hot deal has a valid override, if it has an expired one, it clears it.
+   * @param SKU SKU of current hot deal item
+   */
+  public dealHasValidOverride(SKU: string): boolean {
+    const accessString: string = this.dealAccessString(SKU);
+    const timestamp: string = LocalStorageHelper.getFromLocalStorage(accessString);
+    if (timestamp) {
+      const parsedDate: Date = new Date(Number(timestamp));
+      if (parsedDate.getTime() + Constants.OVERRIDE_EXPIRE_TIME > Date.now()) {
+        return true;
+      }
+      LocalStorageHelper.removeFromLocalStorage(accessString);
+    }
+    return false;
   }
 }

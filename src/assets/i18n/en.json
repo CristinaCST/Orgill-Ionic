@@ -162,6 +162,7 @@
   "order_review_location": "Location",
   "order_review_ship_to": "Ship To",
   "order_review_details": "Shipment Details",
+  "order_review_support_button": "Support",
   "four_percent_note": "Note: All Y items carry a 4% up charge when purchased in less than Shelf Pack Quantities.",
   "order_review_purchase": "Purchase",
   "order_review_send": "Send",
@@ -225,5 +226,6 @@
   "delete_item_prompt_message": "Are you sure you want to delete these items from the shopping list?",
   "no_customer_location": "It seems you don't have a valid ship to location. Please send your order to Orgill.com for further revisioning.",
   "locations_quantity_modal_description": "Insert the quantity you want for all locations",
-  "regular_catalog_price": "Regular Dealer Price"
+  "regular_catalog_price": "Regular Dealer Price",
+  "support_code_hint": "Support code"
 }

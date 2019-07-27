@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavParams } from 'ionic-angular';
+import { NavParams, PopoverController, Popover } from 'ionic-angular';
 import { CustomerLocation } from '../../interfaces/models/customer-location';
 import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
@@ -17,8 +17,10 @@ import { HotDealConfirmation } from '../../interfaces/models/hot-deal-confirmati
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { HotDealsService } from '../../services/hotdeals/hotdeals';
-import { PopoverContent, DefaultPopoverResult, PopoversService } from '../../services/popovers/popovers';
+import { PopoverContent, DefaultPopoverResult, PopoversService, SupportPopoverResult } from '../../services/popovers/popovers';
 import { LoadingService } from '../../services/loading/loading';
+import { NavbarCustomButton } from '../../interfaces/models/navbar-custom-button';
+import { MoreOptionsComponent } from '../../components/more-options/more-options';
 
 @Component({
   selector: 'page-order-review',
@@ -40,14 +42,17 @@ export class OrderReviewPage implements OnInit {
   public readonly sendToOrgillMethod: number = Constants.SEND_TO_ORGILL_METHOD;
   public forwardButtonText: string;
   private readonly simpleLoader: LoadingService;
+  private readonly customButtons: NavbarCustomButton[] = [];
+  private supportButtonPopover: Popover;
 
   constructor(private readonly navigatorService: NavigatorService,
-    private readonly navParams: NavParams,
-    private readonly shoppingListsProvider: ShoppingListsProvider,
-    public readonly productProvider: ProductProvider,
-    private readonly hotDealsService: HotDealsService,
-    private readonly popoversService: PopoversService,
-    private readonly loadingService: LoadingService) {
+              private readonly navParams: NavParams,
+              private readonly shoppingListsProvider: ShoppingListsProvider,
+              public readonly productProvider: ProductProvider,
+              private readonly hotDealsService: HotDealsService,
+              private readonly popoversService: PopoversService,
+              private readonly loadingService: LoadingService,
+              private readonly popoverController: PopoverController) {
       this.simpleLoader = this.loadingService.createLoader();
     }
 
@@ -62,10 +67,18 @@ export class OrderReviewPage implements OnInit {
     this.isHotDeal = getNavParam(this.navParams, 'isHotDeal', 'boolean');
     this.hotDealItem = getNavParam(this.navParams, 'hotDealItem', 'object');
 
+    // TODO: Why 2 isHotDeal checks?
     if (this.hotDealItem) {
       this.isHotDeal = true;
 
       this.hotLocations = this.hotDealItem.LOCATIONS;
+    }
+
+    if (this.isHotDeal) {
+      this.customButtons.push({
+        action: $event => this.showSupportButton($event),
+        icon: 'more'
+      });
     }
 
     if (this.shoppingListItems) {
@@ -90,6 +103,32 @@ export class OrderReviewPage implements OnInit {
       query.push({ order: location.LOCATION.SHIPTONO + ':' + (location.POSTOFFICE ? location.POSTOFFICE : '') + ':' + (programNumber ? programNumber : '') + ':' + item.SKU + '|' + location.QUANTITY.toString() });
     });
     return query;
+  }
+
+
+  private showSupportButton($event: any): void {
+    this.supportButtonPopover = this.popoverController.create(MoreOptionsComponent, {
+      action: () => {
+        this.supportModal();
+      }
+    }, { cssClass: 'more-actions' });
+    this.supportButtonPopover.present({ ev: $event });
+  }
+
+  private supportModal(): void {
+    this.supportButtonPopover.dismiss();
+    const content: PopoverContent = {
+      type: Constants.POPOVER_SUPPORT_HOT_DEAL,
+      title: Strings.GENERIC_MODAL_TITLE,
+      positiveButtonText: Strings.MODAL_BUTTON_OK,
+      dismissButtonText: Strings.MODAL_BUTTON_CANCEL
+    };
+
+    this.popoversService.show(content).toPromise().then((result: SupportPopoverResult) => {
+      if (result.optionSelected === 'OK') {
+        this.hotDealsService.overrideDealAccess(this.hotDealItem.ITEM.SKU, result.code);
+      }
+    });
   }
 
   public purchase(): void {
@@ -138,12 +177,10 @@ export class OrderReviewPage implements OnInit {
     this.simpleLoader.show();
     this.hotDealsService.checkGeofence().then(isInRange => {
 
-      if (!isInRange) {
+      if (!isInRange && !this.hotDealsService.dealHasValidOverride(this.hotDealItem.ITEM.SKU)) {
         return Promise.reject('range');
       }
-      return Promise.resolve();
-
-      
+      return Promise.resolve();      
     }, err => {
       this.simpleLoader.hide();
     }).then(() => {

@@ -15,6 +15,7 @@ export class PopoverComponent {
   public minqty: number = 1;  // TODO: replace with constaaaaants
   public maxqty: number = 99999;
   public shelfpack: number = 1;  // Don't set shelf pack if quantity round option is not X.
+  public supportCode: number;
   private instantCloseOnNo: boolean = false;
   @ViewChild('immuneElement') private readonly immuneElement: Content;
   @ViewChild('listNameInput') private readonly listNameElement: TextInput;
@@ -40,6 +41,7 @@ export class PopoverComponent {
       this.data.closeOptionAvailable = this.data.type !== Constants.POPOVER_ORDER_CONFIRMATION;
       this.data.fillQuantity = this.data.type === Constants.POPOVER_FILL_QUANTITY;
       this.instantCloseOnNo = this.data.type === Constants.POPOVER_QUIT;
+      this.data.supportModal = this.data.type === Constants.POPOVER_SUPPORT_HOT_DEAL;
     }
 
     if (this.data.fillQuantity) {
@@ -76,6 +78,10 @@ export class PopoverComponent {
 
     if (this.data.fillQuantity === true) {
       data.quantity = this.quantity;
+    }
+
+    if (this.data.supportModal === true) {
+      data.code = this.supportCode.toString();
     }
 
     let navOptions: NavOptions;

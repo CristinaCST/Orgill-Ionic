@@ -46,8 +46,8 @@ export class AddToShoppingListPage implements OnInit {
               private readonly popoversService: PopoversService,
               private readonly formBuilder: FormBuilder,
               private readonly loadingService: LoadingService,
-              private readonly programProvider: ProgramProvider) {
-    this.menuCustomButtons.push({ action: ()=>{this.newShoppingList()}, icon: 'add' });
+    private readonly programProvider: ProgramProvider) {
+    this.menuCustomButtons.push({ action: () => this.newShoppingList(), icon: 'add' });
   }
 
   public ngOnInit(): void {

@@ -42,6 +42,13 @@
     </button>
   </div>
 
+  <div class="supportModal" *ngIf="data.supportModal">
+    <ion-item no-padding>
+      <ion-input [(ngModel)]="supportCode" type="tel" inputmode="numeric" maxlength="10" pattern="^[0-9]"
+        placeholder="{{'support_code_hint'| translate }}" (keyup.enter)="$event.target.blur()"></ion-input>
+    </ion-item>
+  </div>
+
   <div class="modal-btn-container">
     <div class="modals-btn">
       <button *ngIf="data.dismissButtonText" class="round bg-dark" ion-button outline (click)="dismiss('DISMISS')">

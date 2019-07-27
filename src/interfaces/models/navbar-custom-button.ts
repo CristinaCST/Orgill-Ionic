@@ -1,5 +1,5 @@
 export interface NavbarCustomButton{
     identifier?: string;
-    action: () => any;
+    action(event: any): any;
     icon: string;
 }

@@ -19,7 +19,7 @@ export class NavbarComponent {
     this.navigatorService.backButtonAction();
   }
 
-  public buttonActions(action: () => any): void {
-    action();
+  public buttonActions(action: ($ev?: any) => any, $event: any): void {
+    action($event);
   }
 }

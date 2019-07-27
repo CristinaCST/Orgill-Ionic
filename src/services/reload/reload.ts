@@ -22,22 +22,22 @@ export class ReloadService {
 
    
     // TODO: this should not work if we don't have network.
-    private showTryAgainModal(): Observable<DefaultPopoverResult> { 
-        // if (ErrorScheduler.scheduledError === undefined) {
-        //     ErrorScheduler.scheduledError = this;
-        // } else {
-        //     return Observable.of({});
-        // }
-        //
-        //
-        // const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.RELOAD_ERROR_MESSAGE_WITHOUT_CULPRIT, Strings.MODAL_BUTTON_TRY_AGAIN);
-        // /*if(this.culprit !== ' '){
-        //     const culprit: string = this.culprit;
-        //     content.message = Strings.RELOAD_ERROR_MESSAGE_WITH_CULPRIT;
-        // }*/
-        // return this.popoversService.show(content);
-      return Observable.of({});
-    }
+    // private showTryAgainModal(): Observable<DefaultPopoverResult> { 
+    //     // if (ErrorScheduler.scheduledError === undefined) {
+    //     //     ErrorScheduler.scheduledError = this;
+    //     // } else {
+    //     //     return Observable.of({});
+    //     // }
+    //     //
+    //     //
+    //     // const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.RELOAD_ERROR_MESSAGE_WITHOUT_CULPRIT, Strings.MODAL_BUTTON_TRY_AGAIN);
+    //     // /*if(this.culprit !== ' '){
+    //     //     const culprit: string = this.culprit;
+    //     //     content.message = Strings.RELOAD_ERROR_MESSAGE_WITH_CULPRIT;
+    //     // }*/
+    //     // return this.popoversService.show(content);
+    //   return Observable.of({});
+    // }
 
     public paintDirty(target?: string): void {
         // if (this.dirty) {

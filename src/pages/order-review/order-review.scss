@@ -124,6 +124,15 @@ page-order-review {
         margin-left: 5px;
       }
     }
+  }  
+}
+
+ion-popover.more-actions{
+  ion-backdrop{
+    opacity: 0!important;
   }
-  
+  .popover-content{
+    border-radius:0px!important;
+  }
+ 
 }

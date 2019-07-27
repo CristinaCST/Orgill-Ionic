@@ -18,19 +18,21 @@ export interface PopoverContent{
 }
 
 export interface DefaultPopoverResult {
-  optionSelected?: string;
+  optionSelected: string;
 }
 
-export interface CustomListPopoverResult {
+export interface CustomListPopoverResult extends DefaultPopoverResult {
   listName?: string;
   type?: string;
   listDescription?: string;
-  optionSelected: string;
 }
 
-export interface QuantityPopoverResult{ 
+export interface QuantityPopoverResult extends DefaultPopoverResult {
   quantity: number;
-  optionSelected: string;
+}
+
+export interface SupportPopoverResult extends DefaultPopoverResult {
+  code: string;
 }
 
 interface QueueItem {

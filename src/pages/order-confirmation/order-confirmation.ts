@@ -3,7 +3,6 @@ import { NavParams } from 'ionic-angular';
 import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { Catalog } from '../../pages/catalog/catalog';
-import { HotDealsService } from '../../services/hotdeals/hotdeals';
 import { getNavParam } from '../../helpers/validatedNavParams';
 import { HotDealConfirmation } from '../../interfaces/models/hot-deal-confirmation';
 import { LocationElement } from '../../interfaces/models/location-element';
@@ -30,8 +29,7 @@ export class OrderConfirmationPage implements OnInit {
   constructor(
     private readonly navParams: NavParams,
     private readonly shoppingListsProvider: ShoppingListsProvider,
-    private readonly navigatorService: NavigatorService,
-    private readonly hotDealsService: HotDealsService) {
+    private readonly navigatorService: NavigatorService) {
   }
 
   public ngOnInit(): void {
@@ -78,9 +76,9 @@ export class OrderConfirmationPage implements OnInit {
         });
 
 
-        // TODO: What?
+        // TODO: EXPIRY CODE
         if (expired) {
-          this.hotDealsService.markHotDealExpired();
+          // this.hotDealsService.markHotDealExpired();
         }
 
         this.confirmation = '';
