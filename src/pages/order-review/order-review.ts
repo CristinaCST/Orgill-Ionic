@@ -16,6 +16,9 @@ import { HotDealItem } from '../../interfaces/models/hot-deal-item';
 import { HotDealConfirmation } from '../../interfaces/models/hot-deal-confirmation';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
+import { HotDealsService } from '../../services/hotdeals/hotdeals';
+import { PopoverContent, DefaultPopoverResult, PopoversService } from '../../services/popovers/popovers';
+import { LoadingService } from '../../services/loading/loading';
 
 @Component({
   selector: 'page-order-review',
@@ -36,11 +39,17 @@ export class OrderReviewPage implements OnInit {
   private hotDealItem: HotDealItem;
   public readonly sendToOrgillMethod: number = Constants.SEND_TO_ORGILL_METHOD;
   public forwardButtonText: string;
+  private readonly simpleLoader: LoadingService;
 
   constructor(private readonly navigatorService: NavigatorService,
     private readonly navParams: NavParams,
     private readonly shoppingListsProvider: ShoppingListsProvider,
-    public readonly productProvider: ProductProvider) { }
+    public readonly productProvider: ProductProvider,
+    private readonly hotDealsService: HotDealsService,
+    private readonly popoversService: PopoversService,
+    private readonly loadingService: LoadingService) {
+      this.simpleLoader = this.loadingService.createLoader();
+    }
 
   public ngOnInit(): void {
     this.orderMethod = getNavParam(this.navParams, 'orderMethod', 'number');
@@ -91,7 +100,7 @@ export class OrderReviewPage implements OnInit {
         order_method: this.orderMethod,
         order_query: this.getOrderQuery(programNumber, orderItems)
       };
-      const insertToDBInfo: DatabaseOrder = {
+      const insertToDBInfo: DatabaseOrder = {   // TODO: Get rid of this
         PO: this.postOffice,
         date: moment().format('MM/DD/YYYY'),
         location: this.location.SHIPTONO,
@@ -126,41 +135,66 @@ export class OrderReviewPage implements OnInit {
   }
 
   public purchaseHotDeal(): void {
+    this.simpleLoader.show();
+    this.hotDealsService.checkGeofence().then(isInRange => {
 
-    const programNumber: string = this.hotDealItem.PROGRAM.PROGRAM_NO;
-    const orderItem: Product = this.hotDealItem.ITEM;
+      if (!isInRange) {
+        return Promise.reject('range');
+      }
+      return Promise.resolve();
 
-    const productListInfo: any = {
-      order_method: 2,
-      order_query: this.getHotDealQuery(programNumber, orderItem, this.hotDealItem.LOCATIONS)
-    };
+      
+    }, err => {
+      this.simpleLoader.hide();
+    }).then(() => {
+      const programNumber: string = this.hotDealItem.PROGRAM.PROGRAM_NO;
+      const orderItem: Product = this.hotDealItem.ITEM;
 
-    this.productProvider.orderHotDeal(productListInfo).then((data: any) => {
-      const confirmations: HotDealConfirmation[] = [];
-
-
-      JSON.parse(data.d).forEach((result: HotDealConfirmation) => {
-        confirmations.push(result);
-      });
-
-      const navigationParams: any = {
-        orderTotal: this.orderTotal,
-        orderMethod: this.orderMethod,
-        hotDealConfirmations: confirmations,
-        hotDealLocations: this.hotDealItem.LOCATIONS,
-        hotDealPurchase: true
+      const productListInfo: any = {
+        order_method: 2,
+        order_query: this.getHotDealQuery(programNumber, orderItem, this.hotDealItem.LOCATIONS)
       };
 
-      this.navigatorService.push(OrderConfirmationPage, navigationParams).catch(err => console.error(err));
+      this.productProvider.orderHotDeal(productListInfo).then((data: any) => {
+        const confirmations: HotDealConfirmation[] = [];
 
 
-    }).catch(err => console.error(err));
+        JSON.parse(data.d).forEach((result: HotDealConfirmation) => {
+          confirmations.push(result);
+        });
+
+        const navigationParams: any = {
+          orderTotal: this.orderTotal,
+          orderMethod: this.orderMethod,
+          hotDealConfirmations: confirmations,
+          hotDealLocations: this.hotDealItem.LOCATIONS,
+          hotDealPurchase: true
+        };
+        this.simpleLoader.hide();
+        this.navigatorService.push(OrderConfirmationPage, navigationParams).catch(err => console.error(err));
+
+
+      }).catch(err => console.error(err));
+    }, rej => {
+
+      const popoverContent: PopoverContent = {
+        type: Constants.PERMISSION_MODAL,
+        title: Strings.GENERIC_MODAL_TITLE,
+        message: Strings.LOCATION_TOO_FAR,
+        positiveButtonText: Strings.MODAL_BUTTON_OK
+    };
+
+        LoadingService.hideAll();
+        // Return the popover observable
+        this.popoversService.show(popoverContent).subscribe((result: DefaultPopoverResult) => {
+        });
+
+      });
+    
   }
 
 
   public cancel(): void {
     this.navigatorService.pop().catch(err => console.error(err));
   }
-
-
 }

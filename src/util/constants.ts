@@ -14,6 +14,12 @@ export const CHECKOUT_METHOD: number = 2;
 export const EVENT_AUTH: string = 'eventAuth';
 export const EVENT_INVALID_AUTH: string = 'invalidAuth';
 
+// Time in milliseconds representing how much time is valid a native location check (could be done earlier)
+// Put 0 to force real-time location when prompting. WARNING: If this value is set, cached location will be retrieved instead of trying to get realtime.
+export const LOCATION_MAXIMUM_AGE: number = 0; 
+
+export const LOCATION_TIMEOUT: number = 1000 * 15; // Time in milliseconds after a location results considers it unavailable (or off).
+
 /**
  * Marker : App Language
  * =============================================================================================

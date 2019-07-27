@@ -1,6 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import * as ConstantsUrl from '../../util/constants-url';
 import * as Constants from '../../util/constants';
+import * as Strings from '../../util/strings';
 import { ApiService } from '../api/api';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import { NavOptions, Events } from 'ionic-angular';
@@ -13,8 +14,9 @@ import { AuthService } from '../../services/auth/auth';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { HotDealNotification } from 'interfaces/models/hot-deal-notification';
 import { NotificationResponse } from 'interfaces/response-body/notification-response';
-import { Platform } from 'ionic-angular/platform/platform';
 import { TranslateService } from '@ngx-translate/core';
+import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
+import { LoadingService } from '../../services/loading/loading';
 
 export interface GeofenceLocation{
     lat: number;
@@ -32,7 +34,8 @@ export class HotDealsService {
     private readonly authService: AuthService,
     private readonly ngZone: NgZone,
     private readonly geolocation: Geolocation,
-    private readonly translation: TranslateService) { }
+    private readonly translation: TranslateService,
+    private readonly popoversService: PopoversService) { }
 
   private getHotDealsProduct(sku: string): Observable<APIResponse> {
 
@@ -51,11 +54,6 @@ export class HotDealsService {
   }
 
   public navigateToHotDeal(sku?: string): void {
-
-    this.checkGeofence().then(result => {
-      console.log(" ARE WE IN FENCE? " + result);
-    });
-
     const searchSku: string = sku ? sku : LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
     if (!searchSku) {
       return;
@@ -121,37 +119,46 @@ export class HotDealsService {
         user_token: this.authService.userToken
       };
 
-      Promise.all([this.apiService.post(ConstantsUrl.GET_HOTDEALS_GEOFENCE, params).toPromise(), this.geolocation.getCurrentPosition()]).then(result => {
+
+      Promise.all([this.apiService.post(ConstantsUrl.GET_HOTDEALS_GEOFENCE, params).toPromise(), this.geolocation.getCurrentPosition({ enableHighAccuracy: true, maximumAge: Constants.LOCATION_MAXIMUM_AGE, timeout: Constants.LOCATION_TIMEOUT })]).then(result => {
         const geofenceLocation: GeofenceLocation = JSON.parse(result[0].d);
-        console.log("Geofence location:", geofenceLocation);
         const currentLocation: Geoposition = result[1];
-        console.log("Current location", currentLocation);
         const distance: number = this.distanceBetweenPoints(Number(geofenceLocation.lat), Number(geofenceLocation.lng), currentLocation.coords.latitude, currentLocation.coords.longitude);
-        console.log("distance between in meters:" + distance);
-        if (distance <= (Number(geofenceLocation.radius) + currentLocation.coords.accuracy)) {
+        if (distance <= (Number(geofenceLocation.radius) + currentLocation.coords.accuracy)) { 
           resolve(true);
         }
         resolve(false);
-      }, err => {
-        console.log(err);
-        reject(err);
+      }, (err: PositionError) => {
+        console.error(err);
+        // Code 3 = Timeout expired => No location signal or location is off.
+        const message: string = err.code === 3 ? Strings.LOCATION_ERROR : Strings.LOCATION_PERMISSIONS_MESSAGE;
+
+        const popoverContent: PopoverContent = {
+          type: Constants.PERMISSION_MODAL,
+          title: Strings.GENERIC_MODAL_TITLE,
+          message,
+          positiveButtonText: Strings.MODAL_BUTTON_OK
+        };
+
+        LoadingService.hideAll();
+        this.popoversService.show(popoverContent);
       });
     });
   }
 
-  private distanceBetweenPoints(lat1: number, lon1: number, lat2: number, lon2: number) {
-    const R = 6378.137;
-    let dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
-    let dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
-    let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    let d = R * c;
+  private distanceBetweenPoints(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const R: number = 6378.137;
+    const dLat: number = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+    const dLon: number = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+    const a: number = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c: number = Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * 2;
+    const d: number = R * c;
     return d * 1000;
   }
 
   public getHotDealNotifications(): Promise<HotDealNotification[]> {
     return new Promise(resolve => {
-      const params = {
+      const params: any = {
         user_token: this.authService.userToken
       };
 

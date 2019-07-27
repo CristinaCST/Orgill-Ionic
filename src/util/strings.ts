@@ -177,6 +177,8 @@ export const HOT_DEAL_LOCATION_PO_INVALID: string = 'hot_deal_missing_required_p
  * =============================================================================================
  */
 export const LOCATION_PERMISSIONS_MESSAGE: string = 'location_permissions_message';
+export const LOCATION_ERROR: string = 'location_error';
+export const LOCATION_TOO_FAR: string = 'hot_deal_location_too_far';
 export const NOTIFICATIONS_PERMISSIONS_MESSAGE: string = 'notifications_permissions_message';
 export const PERMISSION_NEVER_BUTTON: string = 'permission_never_show_button';
 export const PERMISSION_ALLOW_BUTTON: string = 'permission_allow_button';
