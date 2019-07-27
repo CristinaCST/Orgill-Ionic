@@ -4,8 +4,7 @@
   <navbar [title]="programName"
           [isMenuEnabled]="true"
           [isBackEnabled]="false"
-          [customButtons]='menuCustomButtons'
-          (buttonClicked)="goToScanPage()"></navbar>
+          [customButtons]='menuCustomButtons'></navbar>
   <!-- Catalog Page Search Bar -->
   <search-bar [showBackButton]="catalogIndex!==0"
               (searched)="onSearched($event)"></search-bar>

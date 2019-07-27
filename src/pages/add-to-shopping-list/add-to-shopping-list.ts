@@ -17,6 +17,7 @@ import { NavigatorService } from '../../services/navigator/navigator';
 import { ShoppingListResponse } from '../../interfaces/response-body/shopping-list';
 import { APIResponse } from '../../interfaces/response-body/response';
 import { getNavParam } from '../../helpers/validatedNavParams';
+import { NavbarCustomButton } from '../../interfaces/models/navbar-custom-button';
 
 @Component({
   selector: 'page-add-to-shopping-list',
@@ -33,7 +34,7 @@ export class AddToShoppingListPage implements OnInit {
   public model: any = {};
   public isMarketOnlyProduct: boolean = false;
   public subscription: Subscription;
-  public menuCustomButtons: any[] = [];
+  public menuCustomButtons: NavbarCustomButton[] = [];
   private readonly invalidatedLists: string[] = [];
   private firstValidListID: string;
   private loader: LoadingService;
@@ -46,7 +47,7 @@ export class AddToShoppingListPage implements OnInit {
               private readonly formBuilder: FormBuilder,
               private readonly loadingService: LoadingService,
               private readonly programProvider: ProgramProvider) {
-    this.menuCustomButtons.push({ action: 'addList', icon: 'add' });
+    this.menuCustomButtons.push({ action: ()=>{this.newShoppingList()}, icon: 'add' });
   }
 
   public ngOnInit(): void {

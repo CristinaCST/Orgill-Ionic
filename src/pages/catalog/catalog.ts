@@ -16,6 +16,7 @@ import { Product } from '../../interfaces/models/product';
 import { getNavParam } from '../../helpers/validatedNavParams';
 import { AuthService } from '../../services/auth/auth';
 import { ReloadService } from '../../services/reload/reload';
+import { NavbarCustomButton } from '../../interfaces/models/navbar-custom-button';
 
 
 @Component({
@@ -29,14 +30,14 @@ export class Catalog implements OnInit {
   public categories: Category[];
   private catalogIndex: number;
   private currentSubCategory: Category;
-  private readonly menuCustomButtons: any[] = [];
+  private readonly menuCustomButtons: NavbarCustomButton[] = [];
   private readonly categoriesLoader: LoadingService;
   private readonly simpleLoader: LoadingService;
 
   constructor(public navigatorService: NavigatorService, public navParams: NavParams, public catalogProvider: CatalogsProvider,
               public loadingService: LoadingService, public translateProvider: TranslateWrapperService, private readonly authService: AuthService, private readonly events: Events,
               private readonly reloadService: ReloadService) {
-    this.menuCustomButtons.push({ action: 'scan', icon: 'barcode' });
+    this.menuCustomButtons.push({ action: () => this.goToScanPage(), icon: 'barcode' });
 
     this.categoriesLoader = loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_CATEGORIES));
     this.simpleLoader = loadingService.createLoader();

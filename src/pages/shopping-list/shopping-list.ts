@@ -17,6 +17,7 @@ import { getNavParam } from '../../helpers/validatedNavParams';
 import { PricingService } from '../../services/pricing/pricing';
 import { ReloadService } from '../../services/reload/reload';
 import { Platform } from 'ionic-angular/platform/platform';
+import { NavbarCustomButton } from '../../interfaces/models/navbar-custom-button';
 
 @Component({
   selector: 'page-shopping-list',
@@ -46,7 +47,7 @@ export class ShoppingListPage {
   private orderTotal: number = 0;
   private isCheckout: boolean = false;
   private isSelectAll: boolean = false;
-  private readonly menuCustomButtons: any[] = [];
+  private readonly menuCustomButtons: NavbarCustomButton[] = [];
   private readonly loader: LoadingService;
   private holdTimeoutReference: number;
   public fromSearch: boolean = false;
@@ -65,7 +66,7 @@ export class ShoppingListPage {
     private readonly platform: Platform) {
 
     this.loader = this.loading.createLoader();
-    this.menuCustomButtons = [{ action: 'detailsList', icon: 'information-circle' }, { action: 'scan', icon: 'barcode' }];
+    this.menuCustomButtons = [{ action: () => this.getListDetails(), icon: 'information-circle' }, { action: () => this.scan(), icon: 'barcode' }];
   }
 
   public ngOnInit(): void {
@@ -99,9 +100,10 @@ export class ShoppingListPage {
     this.isCustomList = (this.shoppingList.ListType !== Constants.DEFAULT_LIST_TYPE) && (this.shoppingList.ListType !== Constants.MARKET_ONLY_LIST_TYPE);
 
     if (this.isCustomList) {
-      if (this.menuCustomButtons.map(d => d.action).indexOf('deleteList') === -1) {
+      if (this.menuCustomButtons.map(button => button.identifier).indexOf('deleteList') === -1) {
         this.menuCustomButtons.push({
-          action: 'deleteList',
+          identifier: 'deleteList',
+          action: () => this.removeList(),
           icon: 'trash'
         });
       }
@@ -314,6 +316,7 @@ export class ShoppingListPage {
       quantity: $event.quantity
     }).catch(err => console.error(err));
   }
+
 
   public buttonClicked($event: { type: string }): void {
     switch ($event.type) {
