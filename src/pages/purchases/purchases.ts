@@ -14,7 +14,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class PurchasesPage {
 
-  private readonly purchasesBuffer: Purchase[];
+  private readonly purchasesBuffer: Purchase[] = [];
   public purchases: Purchase[] = [];
   private readonly loader: LoadingService; // TODO: Get rid of LS references per trello task
   private readonly INITIAL_ELEMENTS: number = 9;  // TODO: CHange to constants
