@@ -19,14 +19,14 @@ export class HotDealsPage {
 
   constructor(private readonly hotDealsService: HotDealsService,
     private readonly loadingService: LoadingService) {
-    this.simpleLoader = loadingService.createLoader();
+    this.simpleLoader = this.loadingService.createLoader();
   }
 
   public ngOnInit(): void {
     this.simpleLoader.show();
     this.hotDealsService.getHotDealNotifications().then(res => {
       this.hotDealsBuffer.push(...res);
-      this.hotDeals.push(...this.hotDealsBuffer.splice(0,this.INITIAL_ELEMENTS));
+      this.hotDeals.push(...this.hotDealsBuffer.splice(0, this.INITIAL_ELEMENTS));
       this.simpleLoader.hide();
     }).catch(err => {
       console.error(err);
@@ -36,7 +36,7 @@ export class HotDealsPage {
   }
 
   public clickOnDeal(notification: HotDealNotification): void {
-    this.hotDealsService.navigateToHotDeal(notification.SKU.replace('\'',''));
+    this.hotDealsService.navigateToHotDeal(notification.SKU.replace('\'', ''));
   }
 
   public loadData(infiniteLoader: InfiniteScroll): void {

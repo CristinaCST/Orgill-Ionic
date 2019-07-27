@@ -6,9 +6,7 @@ import * as ConstantsURL from '../../util/constants-url';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import * as Constants from '../../util/constants';
 import { User } from '../../interfaces/models/user';
-import { NavigatorService } from '../../services/navigator/navigator';
-import { Login } from '../../pages/login/login';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { Events } from 'ionic-angular';
 import { Moment } from 'moment';
 import { DateTimeService } from '../../services/datetime/dateTimeService';
@@ -17,13 +15,21 @@ import { DateTimeService } from '../../services/datetime/dateTimeService';
 export class AuthService {
 
   private user: User = new User();
-  private firstAuthCheck: boolean = true;
+  private secureActionsQueue: (() => any)[] = [];
+  public authState: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(private readonly apiProvider: ApiService,
-              private readonly navigatorService: NavigatorService,
               private readonly events: Events) {
-
+    
+      this.authState.subscribe(authOk => {
+      if (authOk) {
+        this.events.publish(Constants.EVENT_AUTH);
+      }
+    });
     this.user = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
+    if (this.user && this.isValidSession()) {
+      this.authState.next(true);
+    }
   }
 
   private static encryption(password: string): string {
@@ -49,6 +55,7 @@ export class AuthService {
   }
 
   public logout(expired: boolean = false): void {
+    this.authState.next(false);
     LocalStorageHelper.removeFromLocalStorage(Constants.USER);
   }
 
@@ -56,17 +63,15 @@ export class AuthService {
    * Gets user info from the server
    */
   public getUserInfo(): Promise<User> {
-    console.log("BA");
     if (this.user && this.user.userToken) {
-      console.log("BA");
       return new Promise((resolve, reject) => {
         const params: any = { user_token: this.user.userToken };
         this.apiProvider.post(ConstantsURL.URL_USER_INFO, params).take(1).subscribe(response => {
           this.user = JSON.parse(response.d);
           this.user.userToken = params.user_token;
+          this.authState.next(true);
           this.events.publish(Constants.EVENT_AUTH);
-          console.log("EVENT AUTH");
-          console.log("REPSPONSE", response);
+          this.executeQueue();
           LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
           resolve();
         }, error => {
@@ -75,19 +80,23 @@ export class AuthService {
         });
       });
     }
-    // else
-    this.navigatorService.setRoot(Login);
+
+    this.events.publish(Constants.EVENT_INVALID_AUTH);
   }
 
-  public getRetailerType(): string {
-    let retailer_type: string = 'US';
-    for (const division of Constants.ONE_SIGNAL_CANADA_USER_TYPES) {
-        if (division === this.User.division) {
+  public getRetailerType(): Promise<string> {
+    return new Promise(resolve => {
+      this.executeSecureAction(() => {
+        let retailer_type: string = 'US';
+        for (const division of Constants.ONE_SIGNAL_CANADA_USER_TYPES) {
+          if (division === this.User.division) {
             retailer_type = 'CA';
             break;
+          }
         }
-    }
-    return retailer_type;
+        resolve(retailer_type);
+      });
+    });
   }
 
   public isValidSession(): boolean {
@@ -99,13 +108,28 @@ export class AuthService {
     const sessionTimestampWith4Days: Moment = DateTimeService.getTimeAfter4Days(receivedTimestamp);
 
     const status: boolean = sessionTimestampWith4Days.isSameOrAfter(now);
-    if (!status) {
-      this.logout(true);
+
+    if (status) {
+      this.executeQueue();
+      return status;
+    }
+
+    this.logout(true);
       // this.events.publish(Constants.EVENT_LOGIN_EXPIRED); TODO: Wat was here?
+    
+  }
+
+  public executeSecureAction(action: () => void): void {
+    if (this.isValidSession()) {
+      return action();
     }
-    if (this.firstAuthCheck) {
-      this.events.publish(Constants.EVENT_AUTH); // Workaround since this service skips auth procedure
+    this.secureActionsQueue.push(action);
+  }
+
+  private executeQueue(): void {
+    if (this.secureActionsQueue.length > 0) {
+      this.secureActionsQueue.forEach(action => action());
+      this.secureActionsQueue = [];
     }
-    return status;
   }
 }

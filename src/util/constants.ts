@@ -12,6 +12,7 @@ export const SEND_TO_ORGILL_METHOD: number = 1;
 export const CHECKOUT_METHOD: number = 2;
 
 export const EVENT_AUTH: string = 'eventAuth';
+export const EVENT_INVALID_AUTH: string = 'invalidAuth';
 
 /**
  * Marker : App Language

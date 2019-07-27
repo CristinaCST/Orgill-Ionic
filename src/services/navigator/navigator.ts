@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { NavController, NavOptions, App, Platform, Events, NavParams, ViewController, NavControllerBase} from 'ionic-angular';
+import { NavController, NavOptions, App, Platform, Events, NavParams, ViewController, NavControllerBase } from 'ionic-angular';
 import * as Equals from '../../helpers/equality';
-import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import * as Constants from '../../util/constants';
 import { BehaviorSubject } from 'rxjs';
 import { Page } from 'ionic-angular/navigation/nav-util';
+import { Login } from '../../pages/login/login';
 
 export enum NavigationEventType{
     POP,
@@ -27,6 +27,15 @@ export class NavigatorService {
     public lastPage: BehaviorSubject<string> = new BehaviorSubject<string>('');
     public lastEvent: NavigationEventType;
 
+    constructor(private readonly app: App,
+                private readonly platform: Platform,
+                private readonly events: Events) {
+                this.navController = this.app.getActiveNavs()[0];  // Grab it at construction
+                this.events.subscribe(Constants.EVENT_INVALID_AUTH, () => {
+                    this.setRoot(Login);
+                });
+                
+}
     /**
      * Tries to return the cached navController or gets it and returns it.
      */
@@ -59,10 +68,6 @@ export class NavigatorService {
      */
     public get isRootLevel(): boolean {
         return this.navController.getViews().length <= 1;
-    }
-
-    constructor(private readonly app: App, private readonly platform: Platform, private readonly secureActions: SecureActionsService, private readonly events: Events) {
-        this.navController = this.app.getActiveNavs()[0];  // Grab it at construction
     }
 
     /**
@@ -112,10 +117,10 @@ export class NavigatorService {
 
         this.pageReference = page;
 
-        return this.secureActions.do(() => {
-            this.announceTransition(NavigationEventType.PUSH, page);
+        // return this.authService.executeSecureAction(() => {
+        //    this.announceTransition(NavigationEventType.PUSH, page);
             return this.navController.push(page, params, opts, done);
-        }) as Promise<any>;
+      //  }) as Promise<any>;
     }
 
     public pop(opts?: NavOptions, done?: () => void): Promise<any> {

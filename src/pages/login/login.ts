@@ -6,9 +6,7 @@ import { TranslateWrapperService } from '../../services/translate/translate';
 import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
 import { Catalog } from '../catalog/catalog';
 import { NavigatorService } from '../../services/navigator/navigator';
-import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import { TextInput } from 'ionic-angular';
-import { OneSignalService } from '../../services/onesignal/onesignal';
 
 @Component({
   selector: 'page-login',
@@ -26,9 +24,7 @@ export class Login {
               private readonly authService: AuthService,
               private readonly loadingService: LoadingService,
               private readonly translateProvider: TranslateWrapperService,
-              private readonly popoversService: PopoversService,
-              private readonly secureActions: SecureActionsService,
-              private readonly oneSignalService: OneSignalService) {
+              private readonly popoversService: PopoversService) {
 
                 this.loginLoader = this.loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_LOGIN));
   }
@@ -38,12 +34,13 @@ export class Login {
       return;
     }
 
+    // TODO: Refactor the auth logic wtf.
     this.loginLoader.show();
     const loginRequest: { username: string, password: string } = { username: this.username, password: this.password };
     this.authService.login(loginRequest).subscribe(
       () => {
         this.authService.getUserInfo().then(() => {
-          this.navigatorService.setRoot(Catalog).then(() => {this.secureActions.executeQueue(); }).catch(err => console.error(err));
+          this.navigatorService.setRoot(Catalog);
           this.loginLoader.hide();
         });
       }, error => {

@@ -6,7 +6,6 @@ import { Observable, Subscription } from 'rxjs';
 
 import { HotDealsService } from '../hotdeals/hotdeals';
 import { PopoversService, PopoverContent, DefaultPopoverResult } from '../popovers/popovers';
-import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import * as Constants from '../../util/constants';
@@ -45,7 +44,6 @@ export class OneSignalService {
         private readonly hotDealsService: HotDealsService,   // Provider to call to navigate to hotdeals provided through a push notification
         private readonly events: Events,     // Propagate one signal event to be used in other places
         private readonly popoversService: PopoversService,     // Needed for permission modals,
-        private readonly secureActions: SecureActionsService,
         private readonly platform: Platform,
         private readonly navigatorService: NavigatorService,
         private readonly authService: AuthService
@@ -103,8 +101,10 @@ export class OneSignalService {
             this.modalState.navCount++; // We know we navigated.
         });
 
-        this.events.subscribe(Constants.EVENT_AUTH, () => {
-            this.sendRetailerType();
+        this.authService.authState.subscribe(validAuth => {
+            if (validAuth) {
+                this.sendRetailerType();
+            }
         });
         // Proceed to handle permissions
         this.setPermissions();
@@ -166,12 +166,13 @@ export class OneSignalService {
     }
 
     /**
-     * Sends retailer type. Needs login to be valid already.
+     * Sends retailer type after user logs in.
      */
     public sendRetailerType(): void {
         console.log('Sent retailer type');
-        const retailer_type: string = this.authService.getRetailerType();
-        this.oneSignal.sendTag(Constants.ONE_SIGNAL_RETAILER_TYPE_TAG, retailer_type);
+        this.authService.getRetailerType().then(retailer_type => {
+            this.oneSignal.sendTag(Constants.ONE_SIGNAL_RETAILER_TYPE_TAG, retailer_type);
+        });
     }
 
     /**
@@ -420,7 +421,7 @@ export class OneSignalService {
         this.debugLog('Sku in go to hotdeal:' + sku);
         if (data) {
             if (sku) {
-                this.secureActions.do(() => {
+                this.authService.executeSecureAction(() => {
                     this.hotDealsService.navigateToHotDeal(sku);
                 });
             } else {    // If there is data but the package does not respect the hot deal structure

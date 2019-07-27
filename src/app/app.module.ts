@@ -39,7 +39,6 @@ import { NavigatorService } from '../services/navigator/navigator';
 import { LoadingService } from '../services/loading/loading';
 import { ScannerService } from '../services/scanner/scanner';
 import { PricingService } from '../services/pricing/pricing';
-import { SecureActionsService } from '../services/secure-actions/secure-actions';
 import { SearchService } from '../services/search/search';
 import { ReloadService } from '../services/reload/reload';
 import { ErrorScheduler } from '../services/error-scheduler/error-scheduler';
@@ -132,7 +131,6 @@ import { CustomErrorHandlerService } from '../services/error-handler/CustomError
     NavigatorService,
     ScannerService,
     PricingService,
-    SecureActionsService,
     SearchService,
     ReloadService,
     ErrorScheduler,

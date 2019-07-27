@@ -26,19 +26,19 @@ export class MyApp {
   // private readonly openedFromNotification: boolean = false;
 
   constructor(public platform: Platform,
-    public statusBar: StatusBar,
-    private readonly splashScreen: SplashScreen,
-    private readonly translate: TranslateService,
-    private readonly networkService: NetworkService,
-    private readonly oneSignalService: OneSignalService,
-    private readonly navigatorService: NavigatorService,
-    private readonly popoverProvider: PopoversService,
-    private readonly events: Events,
-    private readonly authService: AuthService) {
-    this.setAppLanguage().then(() => {
-      this.initializeApp();
-    });
-  }
+              public statusBar: StatusBar,
+              private readonly splashScreen: SplashScreen,
+              private readonly translate: TranslateService,
+              private readonly networkService: NetworkService,
+              private readonly oneSignalService: OneSignalService,
+              private readonly navigatorService: NavigatorService,
+              private readonly popoverProvider: PopoversService,
+              private readonly events: Events,
+              private readonly authService: AuthService) {
+                this.setAppLanguage().then(() => {
+                  this.initializeApp();
+                });
+              }
 
 
   public scrollToElement(): void {
@@ -105,13 +105,6 @@ export class MyApp {
       this.statusBar.overlaysWebView(false);
       this.statusBar.hide();
       this.checkSession();
-      /*
-      this.databaseProvider.getDatabaseState()
-        .subscribe(isDatabaseOpen => {
-          if (isDatabaseOpen) {
-            this.checkSession();
-          }
-        });*/
     });
   }
 

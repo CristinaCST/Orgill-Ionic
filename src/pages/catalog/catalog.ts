@@ -158,7 +158,7 @@ export class Catalog implements OnInit {
           );
         this.simpleLoader.hide();
       }
-    }, err=>{
+    }, err => {
       LoadingService.hideAll();
     });
   }

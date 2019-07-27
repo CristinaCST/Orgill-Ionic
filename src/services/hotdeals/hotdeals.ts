@@ -20,7 +20,7 @@ export interface GeofenceLocation{
     lat: number;
     lng: number;
     radius: number;
-};
+}
 
 @Injectable()
 export class HotDealsService {
@@ -119,7 +119,7 @@ export class HotDealsService {
     return new Promise((resolve, reject) => {
       const params: any = {
         user_token: this.authService.userToken
-      }
+      };
 
       Promise.all([this.apiService.post(ConstantsUrl.GET_HOTDEALS_GEOFENCE, params).toPromise(), this.geolocation.getCurrentPosition()]).then(result => {
         const geofenceLocation: GeofenceLocation = JSON.parse(result[0].d);
@@ -139,21 +139,22 @@ export class HotDealsService {
     });
   }
 
-  private distanceBetweenPoints(lat1: number, lon1: number, lat2: number, lon2: number){
+  private distanceBetweenPoints(lat1: number, lon1: number, lat2: number, lon2: number) {
     const R = 6378.137;
     let dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
     let dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
-    let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
-    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     let d = R * c;
     return d * 1000;
   }
 
   public getHotDealNotifications(): Promise<HotDealNotification[]> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const params = {
         user_token: this.authService.userToken
-      }
+      };
+
       this.apiProvider.post(ConstantsUrl.GET_HOTDEALS_NOTIFICATIONS, params).take(1).subscribe((result: APIResponse) => {
         const notifications: NotificationResponse[] = JSON.parse(result.d);
         if (notifications.length > 0) {
@@ -164,7 +165,7 @@ export class HotDealsService {
               title: this.translation.currentLang === 'fr' ? rawNotification.headings.fr ? rawNotification.headings.fr : rawNotification.headings.en : rawNotification.headings.en,
               content: this.translation.currentLang === 'fr' ? rawNotification.contents.fr ? rawNotification.contents.fr : rawNotification.contents.en : rawNotification.contents.en,
               timestamp: rawNotification.completed_at
-            }
+            };
           });
           resolve(parsedNotifications);
         } else {

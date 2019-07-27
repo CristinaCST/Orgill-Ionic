@@ -94,12 +94,10 @@ export class AppMenuComponent implements OnInit {
 
 
   private initMenu(): void {
-      console.log("Getting retailer type in menu");
-      const retailer_type: string = this.authService.getRetailerType();
-        // Temporary disable hot deals for CA;
-        this.hotDealNotification = retailer_type === 'US';
-      
-
+    this.authService.getRetailerType().then(retailer_type => {
+      // Temporary disable hot deals for CA;
+      this.hotDealNotification = retailer_type === 'US';
+    });
     
     this.getPrograms();
     this.getShoppingLists();
