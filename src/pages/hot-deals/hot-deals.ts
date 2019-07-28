@@ -34,7 +34,7 @@ export class HotDealsPage {
       // To fix the issues, we manually check for scroll area size and load enough items
       // The timeout is needed to allow this.content. sizes to update.
       const loadInterval: number = setInterval(() => {
-        if (this.content.contentHeight * 2 <= this.content.scrollHeight) {
+        if (this.content.contentHeight * 2 <= this.content.scrollHeight || this.hotDealsBuffer.length === 0) {
           this.simpleLoader.hide();
           clearInterval(loadInterval);
           return;
