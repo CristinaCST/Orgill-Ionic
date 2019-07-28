@@ -51,11 +51,14 @@ export class AuthService {
 
     return this.apiProvider.post(ConstantsURL.URL_LOGIN, credentials).map(response => {
       this.user = { userToken: JSON.parse(response.d).User_Token };
+      //this.authState.next(true);
+      console.log('set new user');
     });
   }
 
   public logout(expired: boolean = false): void {
     this.authState.next(false);
+    this.user = undefined;
     LocalStorageHelper.removeFromLocalStorage(Constants.USER);
   }
 
@@ -119,6 +122,10 @@ export class AuthService {
     
   }
 
+  /**
+   * Represents a way to execute code only when a user is logged in.
+   * @param action 
+   */
   public executeSecureAction(action: () => void): void {
     if (this.isValidSession()) {
       return action();
@@ -131,5 +138,17 @@ export class AuthService {
       this.secureActionsQueue.forEach(action => action());
       this.secureActionsQueue = [];
     }
+  }
+
+  /**
+   * New promise that should fire when or if you are logged in. This should replace the secure actions queue to give more freedom
+   * Only token is granted to be present when this method fires, userInfo may still need grabbing TODO: Check this.
+   */
+
+  public waitForAuth(): Observable<void> {
+    return this.authState.filter(val => val).take(1).map((elem) => {
+      console.log("ONLY 1");
+      return;
+     });
   }
 }

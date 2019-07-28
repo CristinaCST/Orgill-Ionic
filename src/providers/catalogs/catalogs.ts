@@ -16,8 +16,10 @@ export class CatalogsProvider {
   constructor(private readonly apiProvider: ApiService, private readonly authService: AuthService) { }
 
   public getPrograms(): Observable<APIResponse> {
-      const params: any = { user_token: this.authService.userToken };
-      return this.apiProvider.post(ConstantsUrl.URL_PROGRAMS, params);
+      return this.authService.waitForAuth().flatMap(()=>{
+        const params: any = { user_token: this.authService.userToken };
+        return this.apiProvider.post(ConstantsUrl.URL_PROGRAMS, params) as Observable<APIResponse>;
+      });
   }
 
   public getCategories(params: CategoriesRequest): Observable<APIResponse> {
