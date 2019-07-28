@@ -12,7 +12,8 @@ import { PopoversService, PopoverContent, QuantityPopoverResult } from '../../se
 import { PricingService } from '../../services/pricing/pricing';
 import { getNavParam } from '../../helpers/validatedNavParams';
 import { PONumberValidator } from '../../validators/PONumber';
-import { HotDealItem } from 'interfaces/models/hot-deal-item';
+import { HotDealItem } from '../../interfaces/models/hot-deal-item';
+import { LoadingService } from '../../services/loading/loading';
 
 
 @Component({
@@ -41,6 +42,7 @@ export class CustomerLocationPage implements OnInit {
   private isHotDeal: boolean = false;
   public noLocation: boolean = false;
   private hotDealItem: HotDealItem;
+  private loader: LoadingService;
 
   constructor(private readonly navigatorService: NavigatorService,
               private readonly navParams: NavParams,
@@ -48,18 +50,20 @@ export class CustomerLocationPage implements OnInit {
               private readonly popoversService: PopoversService,
               private readonly pricingService: PricingService,
               private readonly keyboard: Keyboard,
-              private readonly events: Events) {
-              
+              private readonly events: Events,
+              private readonly loadingService: LoadingService) {
+                this.loader = this.loadingService.createLoader();
   }
 
   public ngOnInit(): void {
+    this.loader.show();
     this.shoppingListId = getNavParam(this.navParams, 'shoppingListId', 'number');
     this.shoppingListItems = getNavParam(this.navParams, 'shoppingListItems', 'object');
     this.orderTotal = getNavParam(this.navParams, 'orderTotal', 'number');
     this.hotDealItem = getNavParam(this.navParams, 'hotDeal', 'object');
     this.isHotDeal = this.hotDealItem ? true : false;
 
-    this.userInfoProvider.getUserLocations().subscribe(locations => {
+    this.userInfoProvider.getUserLocations().take(1).subscribe(locations => {
       if (!locations) {
         this.noLocation = true;
         return;
@@ -83,6 +87,8 @@ export class CustomerLocationPage implements OnInit {
 
         this.hotDealLocations.push(locElement);
       });
+
+      this.loader.hide();
     });
   }
 
