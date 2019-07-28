@@ -7,7 +7,7 @@
 <ion-content>
   <div class="main" ion-item no-lines>
     <div id="image-container">
-      <img *ngIf="!imageIsLoading" [src]="product.IMAGE">
+      <img *ngIf="!imageIsLoading" [src]="imageURL">
       <ion-spinner *ngIf="imageIsLoading===true"></ion-spinner>
     </div>
     <div id="product-main-info">

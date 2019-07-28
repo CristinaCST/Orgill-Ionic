@@ -3,9 +3,10 @@
   <!-- Product Component Image Container-->
   <div id="image-container">
     <!-- Product Component Image-->
-    <img *ngIf="!imageIsLoading" [src]="product.IMAGE">
+    <img *ngIf="!imageIsLoading" [src]="imageURL">
     <!-- Product Component Image Loading Spinner-->
     <ion-spinner *ngIf="imageIsLoading===true"></ion-spinner>
+   
   </div>
   <!-- Product Component Information Container-->
   <div id="product-info-container">

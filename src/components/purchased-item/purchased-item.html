@@ -8,8 +8,8 @@
     <button ion-item no-lines detail-none>
       <div class="shopping-list-container">
         <div class="img-container">
-          <img src="http://images.orgill.com/200x200/{{purchasedItem.sku}}.JPG">
-          <!--<img *ngIf="shoppingListItem.product.IMAGE === '0000000.jpg'" src="assets/imgs/product_placeholder.png">-->
+          <img *ngIf="!imageIsLoading" [src]="imageURL">
+          <ion-spinner *ngIf="imageIsLoading===true"></ion-spinner>
         </div>
         <div class="info">
           <div>

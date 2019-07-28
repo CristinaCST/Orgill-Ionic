@@ -27,6 +27,7 @@ import { AuthService } from '../services/auth/auth';
 import { ProductProvider } from '../providers/product/product';
 import { UserInfoService } from '../services/user-info/user-info';
 import { PurchasesProvider } from '../providers/purchases/purchases';
+import { ProductImageProvider } from '../providers/product-image/product-image';
 
 // Helpers
 import { CSSInjector } from '../helpers/css-injector';
@@ -136,6 +137,7 @@ import { CustomErrorHandlerService } from '../services/error-handler/CustomError
     ErrorScheduler,
     Geolocation,
     CSSInjector,
+    ProductImageProvider,
     { provide: ErrorHandler, useClass: CustomErrorHandlerService }
   ]
 })
