@@ -17,6 +17,13 @@ export const EVENT_INVALID_AUTH: string = 'invalidAuth';
 export const OVERRIDE_ADDITIONAL_CODE: string = '4100';
 export const OVERRIDE_EXPIRE_TIME: number = 1000 * 60 * 15; // Expire time in milliseconds for the override.
 
+// How many elements should infinite loaders through the app display in initial step?
+// This value works more like a maximum, if there is still space on the page for more elements, more will be loaded anyway
+export const INFINITE_LOADER_INITIAL_ELEMENTS: number = 10;
+
+// How many elements an infinite loader will load on it's event?
+export const INFINITE_LOADER_LOAD_COUNT: number = 10;
+
 // Time in milliseconds representing how much time is valid a native location check (could be done earlier)
 // Put 0 to force real-time location when prompting. WARNING: If this value is set, cached location will be retrieved instead of trying to get realtime.
 export const LOCATION_MAXIMUM_AGE: number = 0; 

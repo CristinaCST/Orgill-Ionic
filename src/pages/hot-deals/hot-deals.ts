@@ -3,6 +3,7 @@ import { HotDealNotification } from '../../interfaces/models/hot-deal-notificati
 import { HotDealsService } from '../../services/hotdeals/hotdeals';
 import { LoadingService } from '../../services/loading/loading';
 import { InfiniteScroll, Content } from 'ionic-angular';
+import * as Constants from '../../util/constants';
 
 @Component({
   selector: 'hot-deals',
@@ -12,10 +13,9 @@ export class HotDealsPage {
   private readonly hotDealsBuffer: HotDealNotification[] = [];
   private readonly hotDeals: HotDealNotification[] = [];
   private readonly simpleLoader: LoadingService;
-  private readonly INITIAL_ELEMENTS: number = 9;  // TODO: CHange to constants
-  private readonly LOAD_MORE_COUNT: number = 10;  // TODO: Change to constants
 
   @ViewChild(Content) private readonly content: Content;
+  @ViewChild(InfiniteScroll) private readonly infiniteScroll: InfiniteScroll;
 
   constructor(private readonly hotDealsService: HotDealsService,
     private readonly loadingService: LoadingService) {
@@ -25,9 +25,23 @@ export class HotDealsPage {
   public ngOnInit(): void {
     this.simpleLoader.show();
     this.hotDealsService.getHotDealNotifications().then(res => {
+
       this.hotDealsBuffer.push(...res);
-      this.hotDeals.push(...this.hotDealsBuffer.splice(0, this.INITIAL_ELEMENTS));
-      this.simpleLoader.hide();
+      this.hotDeals.push(...this.hotDealsBuffer.splice(0, Constants.INFINITE_LOADER_INITIAL_ELEMENTS));
+      this.content.resize();
+
+       // HACK: Infinite loader was buggy and didn't update sizes properly
+      // To fix the issues, we manually check for scroll area size and load enough items
+      // The timeout is needed to allow this.content. sizes to update.
+      const loadInterval: number = setInterval(() => {
+        if (this.content.contentHeight * 2 <= this.content.scrollHeight) {
+          this.simpleLoader.hide();
+          clearInterval(loadInterval);
+          return;
+        }
+        this.infiniteScroll.ionInfinite.emit(this.infiniteScroll);
+      }, 20);
+
     }).catch(err => {
       console.error(err);
       LoadingService.hideAll();
@@ -40,12 +54,10 @@ export class HotDealsPage {
   }
 
   public loadData(infiniteLoader: InfiniteScroll): void {
-    this.hotDeals.push(...this.hotDealsBuffer.splice(0, this.LOAD_MORE_COUNT));
+    this.hotDeals.push(...this.hotDealsBuffer.splice(0, Constants.INFINITE_LOADER_LOAD_COUNT));
     this.content.resize();
     infiniteLoader.complete();
 
-    // App logic to determine if all data is loaded
-    // and disable the infinite scroll
     if (this.hotDealsBuffer.length === 0) {
       infiniteLoader.enabled = false;
     }

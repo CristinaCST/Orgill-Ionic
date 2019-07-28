@@ -6,11 +6,10 @@
 
 <ion-content>
 
-  <ion-list *ngFor="let purchase of purchases">
-    <order-item [purchase]="purchase" (click)="openOrderDetails(purchase)">
 
+    <order-item *ngFor="let purchase of purchases" [purchase]="purchase" (click)="openOrderDetails(purchase)">
     </order-item>
-  </ion-list>
+
 
   <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
     <ion-infinite-scroll-content>
