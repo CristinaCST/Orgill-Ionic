@@ -8,10 +8,10 @@
       <span>{{"regular_catalog_price" | translate}}:</span>
       <span>{{"product_currency" | translate}}{{regularPrice}}</span>
     </div>
-    <div class="info">
+    <!-- <div class="info">
       <span>{{"product_retail_price" | translate}}:</span>
       <span>{{"product_currency" | translate}}{{product.SUGGESTED_RETAIL}}</span>
-    </div>
+    </div> -->
   
     <div *ngIf="savings && this.program.PROGRAM_NO" class="info green">
       <span>{{"savings_text" | translate}}:</span>
