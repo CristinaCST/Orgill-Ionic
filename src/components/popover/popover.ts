@@ -94,7 +94,7 @@ export class PopoverComponent {
 
   // TODO: Really refactor all of this...
   public add(): void {
-    if (this.quantity + this.shelfpack > this.maxqty) {
+    if (this.quantity + this.shelfpack > this.maxqty && this.maxqty > 0) {
       return;
     }
     this.quantity += this.shelfpack;
@@ -110,7 +110,7 @@ export class PopoverComponent {
   }
 
   public focusout(): void {
-    this.quantity = Math.min(Math.max(this.quantity, this.minqty), this.maxqty);
+    this.quantity = Math.min(Math.max(this.quantity, this.minqty), this.maxqty > 0 ? this.maxqty : Constants.MAX_QUANTITY_HARDCAP);
   }
 
 }
