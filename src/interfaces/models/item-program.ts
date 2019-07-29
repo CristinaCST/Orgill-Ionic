@@ -6,4 +6,5 @@ export interface ItemProgram {
   PRICE: string;
   MINQTY: string;
   MAXQTY: string;
+  REGPRICE?: string;
 }

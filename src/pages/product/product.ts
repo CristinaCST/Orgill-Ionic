@@ -95,14 +95,11 @@ export class ProductPage implements OnInit {
     }
 
     if (this.isHotDeal) {
-      this.programProvider.getProductPrograms(this.product.SKU).toPromise().then(programs => {
-        if (programs) {
-          this.productPrograms = JSON.parse(programs.d);
-        }
-        this.regularPrice = Number(this.productPrograms[0].PRICE);
-      }).then(() => {
+        
         this.hotDealsService.getHotDealProgram(this.product.SKU).subscribe(program => {
           const hotDealProgram: ItemProgram = JSON.parse(program.d);
+
+          this.regularPrice = Number(hotDealProgram.REGPRICE);
 
           this.productPrograms = [hotDealProgram];
           if (hotDealProgram.SKU === null) {
@@ -123,7 +120,7 @@ export class ProductPage implements OnInit {
         }, err => {
           this.reloadService.paintDirty('hot deal program');
         });
-      });
+   
     } else {
       this.programProvider.getProductPrograms(this.product.SKU).subscribe(programs => {
         if (programs) {
