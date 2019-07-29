@@ -154,13 +154,14 @@ export class AddToShoppingListPage implements OnInit {
     return Promise.resolve();
   }
 
+  // TODO: Why are there 2 methods that do the same thing?
   public newShoppingList(): void {
     const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined,
       Strings.MODAL_BUTTON_SAVE, Strings.MODAL_BUTTON_CANCEL, undefined, Constants.POPOVER_NEW_SHOPPING_LIST);
-    this.subscription = this.popoversService.show(content).subscribe((data: CustomListPopoverResult) => {
+    this.popoversService.show(content).take(1).subscribe((data: CustomListPopoverResult) => {
       if (data && data.listName) {
         this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
-          data.type = data.type === 'default' ? Constants.DEFAULT_LIST_TYPE : Constants.MARKET_ONLY_LIST_TYPE;
+          data.type = data.type === 'default' ? Constants.CUSTOM_LIST_DEFAULT_TYPE : Constants.CUSTOM_LIST_MARKET_TYPE;
           if (status === 'available') {
             this.shoppingListsProvider.createNewShoppingList(data.listName, data.listDescription, data.type).subscribe(resp => {
               const addedList: ShoppingListResponse = JSON.parse(resp.d)[0];
@@ -177,7 +178,6 @@ export class AddToShoppingListPage implements OnInit {
             const modalContent: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);
             this.popoversService.show(modalContent);
           }
-          this.subscription.unsubscribe();
         });
       }
     });

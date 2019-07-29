@@ -30,10 +30,11 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
     this.back.emit('backToMainMenu');
   }
 
+    // TODO: Why are there 2 methods that do the same thing?
   public addNewList(): void {
-    const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined, Strings.MODAL_BUTTON_SAVE, undefined , Strings.MODAL_BUTTON_CANCEL, Constants.POPOVER_NEW_SHOPPING_LIST);
+    const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_NEW_DIALOG_TITLE, undefined, Strings.MODAL_BUTTON_SAVE, undefined, Strings.MODAL_BUTTON_CANCEL, Constants.POPOVER_NEW_SHOPPING_LIST);
 
-    const subscription: Subscription = this.popoversService.show(content).subscribe((data: CustomListPopoverResult) => {
+    this.popoversService.show(content).take(1).subscribe((data: CustomListPopoverResult) => {
 
       if (data.optionSelected !== 'OK') {
         return;
@@ -61,7 +62,6 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
             const innerContent: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_NEW_DIALOG_NAME_EXISTS_ERROR);
             this.popoversService.show(innerContent);
           }
-          subscription.unsubscribe();
         });
       }
     });
