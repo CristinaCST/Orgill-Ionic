@@ -201,11 +201,11 @@ export class OrderReviewPage implements OnInit {
         });
 
         const navigationParams: any = {
-          orderTotal: this.orderTotal,
           orderMethod: this.orderMethod,
           hotDealConfirmations: confirmations,
           hotDealLocations: this.hotDealItem.LOCATIONS,
-          hotDealPurchase: true
+          hotDealPurchase: true,
+          hotDealItem: this.hotDealItem
         };
         this.simpleLoader.hide();
         this.navigatorService.push(OrderConfirmationPage, navigationParams).catch(err => console.error(err));

@@ -8,6 +8,8 @@ import { HotDealConfirmation } from '../../interfaces/models/hot-deal-confirmati
 import { LocationElement } from '../../interfaces/models/location-element';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
+import { HotDealItem } from '../../interfaces/models/hot-deal-item';
+import { PricingService } from '../../services/pricing/pricing';
 
 @Component({
   selector: 'page-order-confirmation',
@@ -25,11 +27,13 @@ export class OrderConfirmationPage implements OnInit {
   private hotDealPurchase: boolean = false;
   private hotDealLocations: LocationElement[];
   private hotDealConfirmations: HotDealConfirmation[];
+  private hotDealItem: HotDealItem;
 
   constructor(
     private readonly navParams: NavParams,
     private readonly shoppingListsProvider: ShoppingListsProvider,
-    private readonly navigatorService: NavigatorService) {
+    private readonly navigatorService: NavigatorService,
+    private readonly pricingService: PricingService) {
   }
 
   public ngOnInit(): void {
@@ -39,6 +43,7 @@ export class OrderConfirmationPage implements OnInit {
     this.pageTitle = this.orderMethod === Constants.CHECKOUT_METHOD ? Strings.ORDER_CONFIRMATION : Strings.ORDER_SENT;
     this.orderMethodString = this.orderMethod === Constants.CHECKOUT_METHOD ? Strings.ORDER_CONFIRMATION_METHOD : Strings.ORDER_SENT_METHOD;
     this.hotDealPurchase = getNavParam(this.navParams, 'hotDealPurchase', 'boolean');
+    this.hotDealItem = getNavParam(this.navParams, 'hotDealItem', 'object');
     if (this.hotDealPurchase) {
       this.hotDealLocations = getNavParam(this.navParams, 'hotDealLocations', 'object');
       this.hotDealConfirmations = getNavParam(this.navParams, 'hotDealConfirmations', 'object');
@@ -66,20 +71,17 @@ export class OrderConfirmationPage implements OnInit {
       });
     } else {
       if (this.hotDealConfirmations) {
+        this.orderTotal = 0;
+        let finalQty = 0;
         let expired: boolean = false;
         this.hotDealConfirmations.forEach((confirmation, index) => {
           const pairingLocation: LocationElement = this.hotDealLocations.find(location => location.LOCATION.SHIPTONO === confirmation.customer_number);
           this.hotDealConfirmations[index].fullLocation = pairingLocation;
-          if (pairingLocation.QUANTITY > confirmation.quantity) {
-            expired = true;
-          }
+          finalQty += confirmation.quantity;
         });
 
-
-        // TODO: EXPIRY CODE
-        if (expired) {
-          // this.hotDealsService.markHotDealExpired();
-        }
+        console.log("THIS HOT DEAL ITEM", this.hotDealItem);
+        this.orderTotal = this.pricingService.getPrice(finalQty, this.hotDealItem.ITEM, this.hotDealItem.PROGRAM);
 
         this.confirmation = '';
         this.hotDealConfirmations.forEach(confirmation => {
