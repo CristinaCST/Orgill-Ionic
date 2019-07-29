@@ -1,5 +1,5 @@
 export interface ProductsRequest {
-  user_token: string;
+  user_token?: string;
   p: string;
   rpp: string;
   program_number: string;

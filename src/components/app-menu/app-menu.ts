@@ -23,6 +23,8 @@ import { Page } from 'ionic-angular/navigation/nav-util';
 import { ShoppingListResponse } from '../../interfaces/response-body/shopping-list';
 import { ReloadService } from '../../services/reload/reload';
 import { HotDealsPage } from '../../pages/hot-deals/hot-deals';
+import { OneSignalService } from '../../services/onesignal/onesignal';
+import { LoadingService } from '../../services/loading/loading';
 @Component({
   selector: 'app-menu',
   templateUrl: 'app-menu.html'
@@ -38,6 +40,7 @@ export class AppMenuComponent implements OnInit {
   public showShoppingListsMenu: boolean = false;
   public hotDealNotification: boolean = true;
   private backbuttonOverrideReference: number;
+  private loader: LoadingService;
 
   @Input('rootPage') public rootPage: any;
   @Input('menuContent') public menuContent: any;
@@ -47,10 +50,13 @@ export class AppMenuComponent implements OnInit {
               private readonly catalogsProvider: CatalogsProvider,
               private readonly translateProvider: TranslateWrapperService,
               private readonly events: Events,
-              public shoppingListsProvider: ShoppingListsProvider,
+              private readonly shoppingListsProvider: ShoppingListsProvider,
               private readonly navigatorService: NavigatorService,
               private readonly menuCtrl: MenuController,
-              private readonly reloadService: ReloadService) {
+              private readonly reloadService: ReloadService,
+              private readonly oneSignal: OneSignalService,
+              private readonly loadingService: LoadingService) {
+                this.loader = this.loadingService.createLoader();
   }
 
   public ngOnInit(): void {
@@ -94,7 +100,7 @@ export class AppMenuComponent implements OnInit {
 
 
   private initMenu(): void {
-    this.authService.getRetailerType().then(retailer_type => {
+    this.oneSignal.getRetailerType().then(retailer_type => {
       // Temporary disable hot deals for CA;
       this.hotDealNotification = retailer_type === 'US';
     });
@@ -159,6 +165,7 @@ export class AppMenuComponent implements OnInit {
   }
 
   public getShoppingLists(): void {
+    this.loader.show();
     this.customShoppingLists = [];
     this.defaultShoppingLists = [];
     this.shoppingListsProvider.getAllShoppingLists().take(1).subscribe(shoppingListsResponse => {
@@ -192,12 +199,15 @@ export class AppMenuComponent implements OnInit {
           this.defaultShoppingLists.sort((list1, list2) => {
             return Number(list1.ListID) - Number(list2.ListID);
           });
+
+          this.loader.hide();
         }
         this.events.subscribe('DeletedList', (listId: string) => {
           this.customShoppingLists = this.customShoppingLists.filter(list => list.ListID !== listId);
         });
       }, err => {
         this.reloadService.paintDirty('shopping lists');
+        LoadingService.hideAll();
       });
   }
 

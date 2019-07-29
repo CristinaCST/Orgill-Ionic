@@ -13,7 +13,6 @@ import { OrderResult } from '../../interfaces/response-body/order-result';
 import { Moment } from 'moment';
 import { ShoppingListResponse } from '../../interfaces/response-body/shopping-list';
 import { ProductListResponse } from '../../interfaces/response-body/product-list';
-import { AuthService } from '../../services/auth/auth';
 import { Events } from 'ionic-angular/util/events';
 
 export enum ListType{
@@ -26,7 +25,7 @@ export enum ListType{
 @Injectable()
 export class ShoppingListsProvider {
 
-  constructor(private readonly apiProvider: ApiService, private readonly authService: AuthService, private readonly events: Events) {
+  constructor(private readonly apiProvider: ApiService, private readonly events: Events) {
   }
 
   // public getLocalShoppingLists(): Promise<any> {
@@ -36,60 +35,53 @@ export class ShoppingListsProvider {
   public addItemToShoppingList(listId: string, shoppingListItem: ShoppingListItem, marketOnly: boolean): Observable<APIResponse> {
     // return this.databaseProvider.addProductToShoppingList(listId, shoppingListItem);
     return this.apiProvider.post(ConstantsUrl.ADD_SHOPPING_LIST_ITEM, {
-      user_token: this.authService.userToken,
       shopping_list_id: listId,
       sku: shoppingListItem.product.SKU,
       program_no: shoppingListItem.program_number,
       Quantity: shoppingListItem.quantity,
       Price: shoppingListItem.item_price
-    });
+    }, true);
   }
 
   public getShoppingListsForProduct(productSKU: string, programNumber: string): Observable<APIResponse> {
     // return this.databaseProvider.getShoppingListsForProduct(productSKU);
     return this.apiProvider.post(ConstantsUrl.CHECK_PRODUCT_SHOPPING_LISTS, {
-      user_token: this.authService.userToken,
       sku: productSKU,
       program_no: programNumber
-    });
+    }, true);
   }
 
   public createNewShoppingList(name: string, description: string = '', type: string = '0'): Observable<APIResponse> {
     
     return this.apiProvider.post(ConstantsUrl.ADD_SHOPPING_NEW_LIST, {
-      user_token: this.authService.userToken,
       list_name: name,
       list_description: description,
       list_type: type
-    }).map(res => {
+    }, true).map(res => {
       this.events.publish(Constants.EVENT_NEW_SHOPPING_LIST);
       return res;
     });
   }
 
   public createDefaultShoppingLists(): Observable<APIResponse> {
-    return this.apiProvider.post(ConstantsUrl.CREATE_DEFAULT_LISTS, {
-      user_token: this.authService.userToken
-    });
+    return this.apiProvider.post(ConstantsUrl.CREATE_DEFAULT_LISTS, {}, true);
   }
 
   public removeShoppingList(listId: string): Observable<APIResponse> {
     return this.apiProvider.post(ConstantsUrl.DELETE_SHOPPING_LIST, {
-      user_token: this.authService.userToken,
       shopping_list_id: listId
-    });
+    }, true);
   }
 
   public getAllShoppingLists(): Observable<APIResponse> {
-    return this.apiProvider.post(ConstantsUrl.GET_USER_SHOPPING_LISTS, { user_token: this.authService.userToken });
+    return this.apiProvider.post(ConstantsUrl.GET_USER_SHOPPING_LISTS, {}, true);
   }
 
   public getAllProductsInShoppingList(listId: string): Promise<ShoppingListItem[]> {
     return new Promise((resolve, reject) => {
       this.apiProvider.post(ConstantsUrl.GET_SHOPPING_LIST_ITEMS, {
-        user_token: this.authService.userToken,
         shopping_list_id: listId
-      }).subscribe((shoppingListItemsData: APIResponse) => {
+      }, true).subscribe((shoppingListItemsData: APIResponse) => {
 
         const itemsData: ProductListResponse[] = JSON.parse(shoppingListItemsData.d);
         this.getAllProductData(itemsData).then(allProductData => {
@@ -208,11 +200,10 @@ export class ShoppingListsProvider {
     // return this.databaseProvider.removeProductsFromShoppingList(listId, productIdsArr);
     return this.apiProvider.post(ConstantsUrl.REMOVE_SHOPPING_LIST_ITEM,
       {
-        user_token: this.authService.userToken,
         shopping_list_id: listId,
         sku: productSku,
         program_no: programNo
-      });
+      },true);
   }
 
   // public insertPurchaseToDB(purchaseInfo: DatabaseOrder): Promise<DatabaseActionResponse> {
@@ -227,9 +218,8 @@ export class ShoppingListsProvider {
   // TODO: take a look at this promise hell
   public orderProducts(productInfoList: ProductListInfo, insertToDBInfo: DatabaseOrder, itemsIdsArr: number[], shoppingListId: string): Promise<OrderResult> {
     return new Promise((resolve, reject) => {
-        productInfoList.user_token = this.authService.userToken;
         try {
-          this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_PRODUCTS, productInfoList).subscribe((response: APIResponse) => {
+          this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_PRODUCTS, productInfoList, true).subscribe((response: APIResponse) => {
             // if (response) {
             //   insertToDBInfo.confirmation_number = JSON.parse(response.d);
 
@@ -267,10 +257,9 @@ export class ShoppingListsProvider {
 
   public getOrderConfirmation(confirmationNumbers: string): Observable<APIResponse> {
     const params: any = {
-      user_token: this.authService.userToken,
       confirmation_numbers: confirmationNumbers
     };
-    return this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_CONFIRMATION, params);
+    return this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_CONFIRMATION, params, true);
   }
 
   public search(shoppingListItems: ShoppingListItem[], searchString: string): ShoppingListItem[] {
@@ -287,13 +276,12 @@ export class ShoppingListsProvider {
   public updateShoppingListItem(product: Product, shoppingListId: number, programNumber: string, price: number, quantity: number): Observable<APIResponse> {
     // return this.databaseProvider.updateShoppingListItem(id, shoppingListId, programNumber, price, quantity);
     return this.apiProvider.post(ConstantsUrl.UPDATE_SHOPPING_LIST_ITEM, {
-      user_token: this.authService.userToken,
       shopping_list_id: shoppingListId,
       sku: product.SKU,
       program_no: programNumber ? programNumber : '',
       Quantity: quantity,
       Price: price
-    });
+    }, true);
   }
 
   public checkProductInList(productSKU: string, listId: string, programNo: string): Observable<APIResponse> {
@@ -306,11 +294,10 @@ export class ShoppingListsProvider {
     //   }
     // });
     return this.apiProvider.post(ConstantsUrl.CHECK_PRODUCT_SHOPPING_LIST, {
-      user_token: this.authService.userToken,
       sku: productSKU,
       shopping_list_id: listId,
       program_no: programNo
-    });
+    }, true);
   }
 
 }

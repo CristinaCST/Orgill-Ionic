@@ -62,6 +62,7 @@ import { ProductsSearchPage } from '../pages/products-search/products-search';
 import { PurchaseDetailsPage } from '../pages/purchase-details/purchase-details';
 import { PurchasesPage } from '../pages/purchases/purchases';
 import { HotDealsPage } from '../pages/hot-deals/hot-deals';
+import { SecureActionsService } from '../services/secure-actions/secure-actions';
 
 const pages: Page[] = [MyApp,
                Catalog,
@@ -138,6 +139,7 @@ import { CustomErrorHandlerService } from '../services/error-handler/CustomError
     Geolocation,
     CSSInjector,
     ProductImageProvider,
+    SecureActionsService,
     { provide: ErrorHandler, useClass: CustomErrorHandlerService }
   ]
 })

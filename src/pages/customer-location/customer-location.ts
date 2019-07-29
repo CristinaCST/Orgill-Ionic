@@ -249,6 +249,7 @@ export class CustomerLocationPage implements OnInit {
 
   public fillQuantity(): void {
     const additionalData: any = { minqty: this.hotDealItem.PROGRAM.MINQTY, maxqty: this.hotDealItem.PROGRAM.MAXQTY, shelfpack: this.hotDealItem.ITEM.QTY_ROUND_OPTION === 'X' ? this.hotDealItem.ITEM.SHELF_PACK : 1 };
+
     const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.LOCATIONS_QUANTITY_MODAL_DESCRIPTION, Strings.MODAL_BUTTON_OK, Strings.MODAL_BUTTON_CANCEL, undefined, Constants.POPOVER_FILL_QUANTITY, additionalData);
     this.popoversService.show(content).subscribe((result: QuantityPopoverResult) => {
       if (result.optionSelected !== 'OK') {

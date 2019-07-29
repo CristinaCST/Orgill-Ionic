@@ -7,12 +7,14 @@ import { ApiService } from '../../services/api/api';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../../interfaces/response-body/response';
 import { AuthService } from '../../services/auth/auth';
+import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 
 
 @Injectable()
 export class ProductProvider {
 
-constructor(private readonly apiProvider: ApiService, private readonly authService: AuthService) {}
+constructor(private readonly apiProvider: ApiService,
+            private readonly secureActions: SecureActionsService) {}
 
 public isYCategoryProduct(product: Product): boolean {
     return product.QTY_ROUND_OPTION === 'Y';
@@ -28,46 +30,50 @@ protected isProductInList(listId: number, listsThatContainProduct: number[]): bo
 
   public searchProduct(searchString: string, programNumber: string): Observable<APIResponse> {
 
-    const params: SearchProductRequest = {
-      'user_token': this.authService.userToken,
-      'division': this.authService.User.division,
-      'price_type': this.authService.User.price_type,
-      'search_string': searchString,
-      'category_id': '',
-      'program_number': programNumber,
-      'p': '1',
-      'rpp': String(Constants.SEARCH_RESULTS_PER_PAGE),
-      'last_modified': ''
-    };
-
-    return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params);
+    return this.secureActions.waitForAuth().flatMap(user=>{
+      const params: SearchProductRequest = {
+        user_token: user.userToken,
+        division: user.division,
+        price_type: user.price_type,
+        search_string: searchString,
+        category_id: '',
+        program_number: programNumber,
+        p: '1',
+        rpp: String(Constants.SEARCH_RESULTS_PER_PAGE),
+        last_modified: ''
+      };
+  
+      return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params);
+    });    
   }
 
   public getProduct(sku: string, programNumber: string): Observable<Product> {
-    const params: any = {
-      'user_token': this.authService.userToken,
-      'division': this.authService.User.division,
-      'price_type': this.authService.User.price_type,
-      'search_string': '\'' + sku + '\'',
-      'category_id': '',
-      'program_number': programNumber,
-      'rpp': '1',
-      'p': '1'
-    };
-
-    return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params).map(result => {
-      if (result) {
-        return JSON.parse(result.d)[0];
-      }
-      return Observable.of([]);
+    return this.secureActions.waitForAuth().flatMap(user=>{
+      const params: any = {
+        'user_token': user.userToken,
+        'division': user.division,
+        'price_type': user.price_type,
+        'search_string': '\'' + sku + '\'',
+        'category_id': '',
+        'program_number': programNumber,
+        'rpp': '1',
+        'p': '1'
+      };
+  
+      return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params).map(result => {
+        if (result) {
+          return JSON.parse(result.d)[0];
+        }
+        return Observable.of([]);
+      });
     });
+   
   }
 
 public orderHotDeal(productInfoList: any): Promise<APIResponse> {
     return new Promise((resolve, reject) => {
-      productInfoList.user_token = this.authService.userToken;
       try {
-        this.apiProvider.post(ConstantsUrl.URL_ORDER_HOT_DEAL_PRODUCTS, productInfoList).subscribe(response => {
+        this.apiProvider.post(ConstantsUrl.URL_ORDER_HOT_DEAL_PRODUCTS, productInfoList, true).subscribe(response => {
           if (response) {
               resolve(response);
 

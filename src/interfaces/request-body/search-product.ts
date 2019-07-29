@@ -1,5 +1,5 @@
 export interface SearchProductRequest {
-  user_token: string;
+  user_token?: string;
   division: string;
   price_type: string;
   search_string: string;

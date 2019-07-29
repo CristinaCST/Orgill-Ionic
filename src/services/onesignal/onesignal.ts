@@ -11,6 +11,7 @@ import { LocalStorageHelper } from '../../helpers/local-storage';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { AuthService } from '../../services/auth/auth';
+import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 
 enum androidPermissionState {
     AUTHORIZED = 1,
@@ -46,7 +47,7 @@ export class OneSignalService {
         private readonly popoversService: PopoversService,     // Needed for permission modals,
         private readonly platform: Platform,
         private readonly navigatorService: NavigatorService,
-        private readonly authService: AuthService
+        private readonly secureActions: SecureActionsService
     ) { }
 
 
@@ -101,10 +102,8 @@ export class OneSignalService {
             this.modalState.navCount++; // We know we navigated.
         });
 
-        this.authService.authState.subscribe(validAuth => {
-            if (validAuth) {
+        this.secureActions.waitForAuth().subscribe(user => {
                 this.sendRetailerType();
-            }
         });
         // Proceed to handle permissions
         this.setPermissions();
@@ -169,8 +168,23 @@ export class OneSignalService {
      * Sends retailer type after user logs in.
      */
     public sendRetailerType(): void {
-        this.authService.getRetailerType().then(retailer_type => {
+        this.getRetailerType().then(retailer_type => {
             this.oneSignal.sendTag(Constants.ONE_SIGNAL_RETAILER_TYPE_TAG, retailer_type);
+        });
+    }
+
+    public getRetailerType(): Promise<string> {
+        return new Promise(resolve => {
+            this.secureActions.waitForAuth().subscribe(user => {
+                let retailer_type: string = 'US';
+                for (const division of Constants.ONE_SIGNAL_CANADA_USER_TYPES) {
+                    if (division === user.division) {
+                        retailer_type = 'CA';
+                        break;
+                    }
+                }
+                resolve(retailer_type);
+            });
         });
     }
 
@@ -420,7 +434,7 @@ export class OneSignalService {
         this.debugLog('Sku in go to hotdeal:' + sku);
         if (data) {
             if (sku) {
-                this.authService.executeSecureAction(() => {
+                this.secureActions.waitForAuth().subscribe(() => {
                     this.hotDealsService.navigateToHotDeal(sku);
                 });
             } else {    // If there is data but the package does not respect the hot deal structure

@@ -15,7 +15,7 @@ export class ProgramProvider {
   private readonly selectedProgramSubject: Subject<ItemProgram> = new Subject<ItemProgram>();
   private readonly packQuantity: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  constructor(private readonly apiProvider: ApiService, private readonly authService: AuthService) {}
+  constructor(private readonly apiProvider: ApiService) {}
 
   public setPackQuantity(value: boolean): void {
     this.packQuantity.next(value);
@@ -35,15 +35,14 @@ export class ProgramProvider {
 
   public getProductPrograms(productSku: string): Observable<APIResponse> {
     const params: any = {
-      user_token: this.authService.userToken,
       sku: productSku
     };
-    return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_PROGRAMS, params);
+    return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_PROGRAMS, params, true);
   }
 
 
   public isMarketOnlyProgram(programNumber: string): Observable<boolean> {
-    return this.apiProvider.post(ConstantsUrl.URL_PROGRAMS, { user_token: this.authService.userToken }).take(1).map(receivedPrograms => {
+    return this.apiProvider.post(ConstantsUrl.URL_PROGRAMS, {}, true).take(1).map(receivedPrograms => {
       const programs: Program[] = JSON.parse(receivedPrograms.d);
       if (programs.length > 0) {
         const wantedProgram: Program = programs.find(program => program.PROGRAMNO === programNumber && program.MARKETONLY === 'Y');

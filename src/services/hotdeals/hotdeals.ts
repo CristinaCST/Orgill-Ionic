@@ -39,7 +39,6 @@ export class HotDealsService {
   private getHotDealsProduct(sku: string): Observable<APIResponse> {
 
     const params: any = {
-      'user_token': this.authService.userToken,
       'division': '',
       'price_type': '',
       'search_string': '\'' + sku + '\'',
@@ -49,7 +48,7 @@ export class HotDealsService {
       'rpp': '1',
       'last_modified': ''
     };
-    return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params);
+    return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params, true);
   }
 
   public navigateToHotDeal(sku?: string): void {
@@ -78,21 +77,15 @@ export class HotDealsService {
 
   public getHotDealProgram(sku: string): Observable<APIResponse> {
     const params: any = {
-      user_token: this.authService.userToken,
       sku: sku
     };
 
-    return this.apiService.post(ConstantsUrl.GET_HOTDEALS_PROGRAM, params);
+    return this.apiService.post(ConstantsUrl.GET_HOTDEALS_PROGRAM, params, true);
   }
 
   public checkGeofence(): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      const params: any = {
-        user_token: this.authService.userToken
-      };
-
-
-      Promise.all([this.apiService.post(ConstantsUrl.GET_HOTDEALS_GEOFENCE, params).toPromise(), this.geolocation.getCurrentPosition({ enableHighAccuracy: true, maximumAge: Constants.LOCATION_MAXIMUM_AGE, timeout: Constants.LOCATION_TIMEOUT })]).then(result => {
+      Promise.all([this.apiService.post(ConstantsUrl.GET_HOTDEALS_GEOFENCE, {}, true).toPromise(), this.geolocation.getCurrentPosition({ enableHighAccuracy: true, maximumAge: Constants.LOCATION_MAXIMUM_AGE, timeout: Constants.LOCATION_TIMEOUT })]).then(result => {
         const geofenceLocation: GeofenceLocation = JSON.parse(result[0].d);
         const currentLocation: Geoposition = result[1];
         const distance: number = this.distanceBetweenPoints(Number(geofenceLocation.lat), Number(geofenceLocation.lng), currentLocation.coords.latitude, currentLocation.coords.longitude);
@@ -130,11 +123,8 @@ export class HotDealsService {
 
   public getHotDealNotifications(): Promise<HotDealNotification[]> {
     return new Promise(resolve => {
-      const params: any = {
-        user_token: this.authService.userToken
-      };
 
-      this.apiProvider.post(ConstantsUrl.GET_HOTDEALS_NOTIFICATIONS, params).take(1).subscribe((result: APIResponse) => {
+      this.apiProvider.post(ConstantsUrl.GET_HOTDEALS_NOTIFICATIONS, {}, true).take(1).subscribe((result: APIResponse) => {
         const notifications: NotificationResponse[] = JSON.parse(result.d);
         if (notifications.length > 0) {
           const parsedNotifications: HotDealNotification[] = notifications.map(rawNotification => {

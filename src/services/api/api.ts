@@ -4,13 +4,14 @@ import { LocalStorageHelper } from '../../helpers/local-storage';
 import * as ConstantsURL from '../../util/constants-url';
 import * as Constants from '../../util/constants';
 import { Observable } from 'rxjs/Observable';
+import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 
 @Injectable()
 export class ApiService {
 
   public baseUrl: string;
 
-  constructor(public http: HttpClient) {
+  constructor(private readonly http: HttpClient, private readonly secureActions: SecureActionsService) {
     this.baseUrl = this.getServiceBaseURL();
   }
 
@@ -24,7 +25,18 @@ export class ApiService {
     return this.http.get(baseUrl + path, { headers: this.setHeaders(), params });
   }
 
-  public post(path: string, body: Object = {}): Observable<any> {
+  public post(path: string, body: Object = {}, requiresToken: boolean = false): Observable<any> {
+    if (requiresToken) {
+      return this.secureActions.waitForAuth().flatMap(user => {
+        body['user_token'] = user.userToken;
+        return this.http.post(
+          this.baseUrl + path,
+          JSON.stringify(body),
+          { headers: this.setHeaders() }
+        ).take(1);
+      });
+    }
+    
     return this.http.post(
       this.baseUrl + path,
       JSON.stringify(body),

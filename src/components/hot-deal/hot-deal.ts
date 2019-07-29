@@ -6,12 +6,7 @@ import { HotDealNotification } from '../../interfaces/models/hot-deal-notificati
   templateUrl: 'hot-deal.html'
 })
 
-export class HotDealComponent implements OnInit {
-
+export class HotDealComponent {
   @Input('item') public item: HotDealNotification;
   @Output('clickEvent') public clickEvent: EventEmitter<HotDealNotification> = new EventEmitter<HotDealNotification>();
-
-  public ngOnInit(): void {
-
-  }
 }

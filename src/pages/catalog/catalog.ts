@@ -81,7 +81,6 @@ export class Catalog implements OnInit {
   private getCategories(): void {
     this.categoriesLoader.show();
     const params: CategoriesRequest = {
-      user_token: this.authService.userToken,
       p: '1',
       rpp: String(Constants.CATEGORIES_PER_PAGE),
       program_number: this.programNumber,
@@ -107,7 +106,6 @@ export class Catalog implements OnInit {
   public selectCategory(category: Category): void {
     this.categoriesLoader.show();
     const params: SubcategoriesRequest = {
-      user_token: this.authService.userToken,
       category_id: category.CatID,
       p: '1',
       rpp: String(Constants.CATEGORIES_PER_PAGE),

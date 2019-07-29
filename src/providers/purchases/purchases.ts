@@ -3,18 +3,16 @@ import { ApiService } from '../../services/api/api';
 import { Purchase } from '../../interfaces/models/purchase';
 import * as ConstantsUrl from '../../util/constants-url';
 import * as Constants from '../../util/constants';
-import { AuthService } from '../../services/auth/auth';
 import { APIResponse } from '../../interfaces/response-body/response';
 import { PurchasedItem } from 'interfaces/models/purchased-item';
 
 @Injectable()
 export class PurchasesProvider {
-  constructor(private readonly apiService: ApiService,
-              private readonly authService: AuthService) { }
+  constructor(private readonly apiService: ApiService) { }
 
   public getPurchases(): Promise<Purchase[]> {
     return new Promise<Purchase[]>(resolve => {
-      this.apiService.post(ConstantsUrl.USER_PAST_PURCHASES, { user_token: this.authService.userToken }).subscribe((response: APIResponse) => {
+      this.apiService.post(ConstantsUrl.USER_PAST_PURCHASES, { }, true).subscribe((response: APIResponse) => {
         if (!response) {
           resolve([]);
         }
@@ -48,7 +46,7 @@ export class PurchasesProvider {
 
   public getPurchasedItems(order_id: string): Promise<PurchasedItem[]> {
     return new Promise<PurchasedItem[]>(resolve => {
-      this.apiService.post(ConstantsUrl.PURCHASE_ITEMS, { user_token: this.authService.userToken, purchase_order_id: order_id }).subscribe((response: APIResponse) => {
+      this.apiService.post(ConstantsUrl.PURCHASE_ITEMS, { purchase_order_id: order_id }, true).subscribe((response: APIResponse) => {
         if (!response) {
           resolve([]);
         }
