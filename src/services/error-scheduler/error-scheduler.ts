@@ -42,6 +42,7 @@ export class ErrorScheduler {
   }
 
   private endWait(): void {
+    LoadingService.hideAll();
     this.acceptNewErrors = false;
     clearTimeout(this.waitTimeoutReference);
     this.waitTimeoutReference = undefined;
@@ -62,6 +63,7 @@ export class ErrorScheduler {
     }
     this.showErrorModal(content).subscribe(res=>{
       this.acceptNewErrors = true;
+     // LoadingService.hideAll();
     });
   }
 
