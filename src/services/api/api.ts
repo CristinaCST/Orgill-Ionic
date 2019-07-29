@@ -5,13 +5,14 @@ import * as ConstantsURL from '../../util/constants-url';
 import * as Constants from '../../util/constants';
 import { Observable } from 'rxjs/Observable';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
+import { Events } from 'ionic-angular/util/events';
 
 @Injectable()
 export class ApiService {
 
   public baseUrl: string;
 
-  constructor(private readonly http: HttpClient, private readonly secureActions: SecureActionsService) {
+  constructor(private readonly http: HttpClient, private readonly secureActions: SecureActionsService, private readonly events: Events) {
     this.baseUrl = this.getServiceBaseURL();
   }
 
@@ -28,7 +29,7 @@ export class ApiService {
   public post(path: string, body: Object = {}, requiresToken: boolean = false): Observable<any> {
     if (requiresToken) {
       return this.secureActions.waitForAuth().flatMap(user => {
-        body['user_token'] = user.userToken;
+        body['user_token'] = user.userToken+'0';
         return this.http.post(
           this.baseUrl + path,
           JSON.stringify(body),

@@ -41,24 +41,19 @@ export class NetworkService {
   }
 
   public openNetworkModal(): void {
-
-    if (ErrorScheduler.scheduledError !== undefined) {
-      return;
-    }
-
     if (this.connectionStatus) {
-      ErrorScheduler.scheduledError = this;
+      //ErrorScheduler.scheduledError = this;
       this.reloadService.announceRetry();
-      ErrorScheduler.scheduledError = undefined;
+    //  ErrorScheduler.scheduledError = undefined;
       return;
     }
 
-    ErrorScheduler.scheduledError = this;
-    const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.POPOVER_TIMEOUT_ERROR_MESSAGE);
-    this.popoversService.show(content).subscribe(res => {
-      ErrorScheduler.scheduledError = undefined;
-      this.openNetworkModal();
-    });
+    // ErrorScheduler.scheduledError = this;
+
+    // this.popoversService.show(content).subscribe(res => {
+    //   ErrorScheduler.scheduledError = undefined;
+    //   this.openNetworkModal();
+    // });
   }
 
  

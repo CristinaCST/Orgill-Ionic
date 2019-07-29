@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicModule } from 'ionic-angular';
+import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
@@ -31,6 +31,9 @@ import { ProductImageProvider } from '../providers/product-image/product-image';
 
 // Helpers
 import { CSSInjector } from '../helpers/css-injector';
+
+// Interceptors
+import { UnauthorizedInterceptor } from '../interceptors/unauthorized-interceptor';
 
 // Services
 import { NetworkService } from '../services/network/network';
@@ -84,8 +87,7 @@ const pages: Page[] = [MyApp,
 
 
 // Error Handlers
-import { CustomErrorHandlerService } from '../services/error-handler/CustomErrorHandler';
-// const errorHandler = environment.production ? CustomErrorHandlerService : IonicErrorHandler; //tslint:disable-line
+import { CustomErrorHandler} from '../services/error-handler/error-handler';
 
 @NgModule({
   declarations: pages,
@@ -140,7 +142,8 @@ import { CustomErrorHandlerService } from '../services/error-handler/CustomError
     CSSInjector,
     ProductImageProvider,
     SecureActionsService,
-    { provide: ErrorHandler, useClass: CustomErrorHandlerService }
+    { provide: ErrorHandler, useClass: CustomErrorHandler },
+    { provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true },
   ]
 })
 

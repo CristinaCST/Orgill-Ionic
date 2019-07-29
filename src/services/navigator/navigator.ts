@@ -5,6 +5,8 @@ import * as Constants from '../../util/constants';
 import { BehaviorSubject } from 'rxjs';
 import { Page } from 'ionic-angular/navigation/nav-util';
 import { Login } from '../../pages/login/login';
+import { LoadingService } from '../../services/loading/loading';
+import { ErrorScheduler } from '../../services/error-scheduler/error-scheduler';
 
 export enum NavigationEventType{
     POP,
@@ -29,10 +31,13 @@ export class NavigatorService {
 
     constructor(private readonly app: App,
                 private readonly platform: Platform,
-                private readonly events: Events) {
+                private readonly events: Events,
+                private readonly errorScheduler: ErrorScheduler) {
                 this.navController = this.app.getActiveNavs()[0];  // Grab it at construction
                 this.events.subscribe(Constants.EVENT_INVALID_AUTH, () => {
+                    LoadingService.hideAll();
                     this.setRoot(Login);
+                    this.errorScheduler.showCustomError('LOGOUT');
                 });
                 
 }
