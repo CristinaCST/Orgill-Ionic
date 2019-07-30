@@ -4,16 +4,14 @@ import { HotDealsService } from '../../services/hotdeals/hotdeals';
 import { LoadingService } from '../../services/loading/loading';
 import { InfiniteScroll, Content, Events } from 'ionic-angular';
 import * as Constants from '../../util/constants';
-import { ReloadService } from '../../services/reload/reload';
-import { NavigatorService } from '../../services/navigator/navigator';
 
 @Component({
   selector: 'hot-deals',
   templateUrl: 'hot-deals.html'
 })
 export class HotDealsPage {
-  private readonly hotDealsBuffer: HotDealNotification[] = [];
-  private readonly hotDeals: HotDealNotification[] = [];
+  private hotDealsBuffer: HotDealNotification[] = [];
+  private hotDeals: HotDealNotification[] = [];
   private readonly simpleLoader: LoadingService;
 
   @ViewChild(Content) private readonly content: Content;
@@ -21,9 +19,7 @@ export class HotDealsPage {
 
   constructor(private readonly hotDealsService: HotDealsService,
     private readonly loadingService: LoadingService,
-    private readonly events: Events,
-    private readonly reloadService: ReloadService,
-    private readonly navigatorService: NavigatorService) {
+    private readonly events: Events) {
     this.simpleLoader = this.loadingService.createLoader();
   }
 
@@ -33,13 +29,20 @@ export class HotDealsPage {
   }
 
   private readonly loadingFailedHandler = (culprit?: string): void => {
-    if(culprit === 'hotdeals' || !culprit){
-     // this.initHotDeals();
-     this.navigatorService.performRefresh();
+    this.infiniteScroll.enable(false);
+    if (culprit === 'hotdeals' || !culprit) {
+      this.initHotDeals();
+      // this.navigatorService.performRefresh();
     }
   }
 
   private initHotDeals(): void {
+
+    this.hotDealsBuffer = [];
+    this.hotDeals = [];
+    this.content.resize();
+
+    this.infiniteScroll.enable(true);
     this.simpleLoader.show();
     this.hotDealsService.getHotDealNotifications().then(res => {
 
@@ -62,8 +65,7 @@ export class HotDealsPage {
     }).catch(err => {
       console.error(err);
       LoadingService.hideAll();
-      console.log('paint dirty');
-      this.reloadService.paintDirty('hotdeals');
+     // this.reloadService.paintDirty('hotdeals');
     });
   }
 

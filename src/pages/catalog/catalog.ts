@@ -14,8 +14,6 @@ import { ScannerPage } from '../scanner/scanner';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { Product } from '../../interfaces/models/product';
 import { getNavParam } from '../../helpers/validatedNavParams';
-import { AuthService } from '../../services/auth/auth';
-import { ReloadService } from '../../services/reload/reload';
 import { NavbarCustomButton } from '../../interfaces/models/navbar-custom-button';
 
 
@@ -35,8 +33,7 @@ export class Catalog implements OnInit {
   private readonly simpleLoader: LoadingService;
 
   constructor(public navigatorService: NavigatorService, public navParams: NavParams, public catalogProvider: CatalogsProvider,
-              public loadingService: LoadingService, public translateProvider: TranslateWrapperService, private readonly authService: AuthService, private readonly events: Events,
-              private readonly reloadService: ReloadService) {
+              public loadingService: LoadingService, public translateProvider: TranslateWrapperService, private readonly events: Events) {
     this.menuCustomButtons.push({ action: () => this.goToScanPage(), icon: 'barcode' });
 
     this.categoriesLoader = loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_CATEGORIES));
@@ -92,7 +89,7 @@ export class Catalog implements OnInit {
       this.categories = this.sortCategories(responseData);
       this.categoriesLoader.hide();
     }, err => {
-      this.reloadService.paintDirty('categories');
+   //   this.reloadService.paintDirty('categories');
       this.categoriesLoader.hide();
     });
   }

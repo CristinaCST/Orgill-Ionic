@@ -17,7 +17,6 @@ import { HotDealsService } from '../../services/hotdeals/hotdeals';
 import { ProductProvider } from '../../providers/product/product';
 import { getNavParam } from '../../helpers/validatedNavParams';
 import { Events } from 'ionic-angular/util/events';
-import { ReloadService } from '../../services/reload/reload';
 
 @Component({
   selector: 'page-product',
@@ -55,7 +54,6 @@ export class ProductPage implements OnInit {
     private readonly hotDealsService: HotDealsService,
     private readonly productProvider: ProductProvider,
     private readonly events: Events,
-    private readonly reloadService: ReloadService,
     private readonly changeDetector: ChangeDetectorRef) {
 
     this.loader = this.loadingService.createLoader();
@@ -120,7 +118,7 @@ export class ProductPage implements OnInit {
           });
 
         }, err => {
-          this.reloadService.paintDirty('hot deal program');
+        //  this.reloadService.paintDirty('hot deal program');
         });
    
     } else {
@@ -143,7 +141,7 @@ export class ProductPage implements OnInit {
           });
         }
       }, err => {
-        this.reloadService.paintDirty('product programs');
+      //  this.reloadService.paintDirty('product programs');
       });
     }
 

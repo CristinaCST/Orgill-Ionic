@@ -38,7 +38,7 @@ export class ReloadService {
     }
 
     public announceRetry(all?: boolean): void {
-        console.log('announcing retry with culprit', all?'':this.culprit);
+        // console.log('announcing retry with culprit', all?'':this.culprit);
         this.events.publish(Constants.EVENT_LOADING_FAILED,  all?'':this.culprit);
     }
 }

@@ -21,7 +21,6 @@ import { LocalStorageHelper } from '../../helpers/local-storage';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { Page } from 'ionic-angular/navigation/nav-util';
 import { ShoppingListResponse } from '../../interfaces/response-body/shopping-list';
-import { ReloadService } from '../../services/reload/reload';
 import { HotDealsPage } from '../../pages/hot-deals/hot-deals';
 import { OneSignalService } from '../../services/onesignal/onesignal';
 import { LoadingService } from '../../services/loading/loading';
@@ -53,7 +52,6 @@ export class AppMenuComponent implements OnInit {
               private readonly shoppingListsProvider: ShoppingListsProvider,
               private readonly navigatorService: NavigatorService,
               private readonly menuCtrl: MenuController,
-              private readonly reloadService: ReloadService,
               private readonly oneSignal: OneSignalService,
               private readonly loadingService: LoadingService) {
                 this.loader = this.loadingService.createLoader();
@@ -179,7 +177,7 @@ export class AppMenuComponent implements OnInit {
           this.customShoppingLists = this.customShoppingLists.filter(list => list.ListID !== listId);
         });
       }, err => {
-        this.reloadService.paintDirty('shopping lists');
+        // this.reloadService.paintDirty('shopping lists');
         LoadingService.hideAll();
       });
   }
@@ -207,13 +205,13 @@ export class AppMenuComponent implements OnInit {
           }
         });
         if (this.everyDayPrograms.length === 0) {  // TODO: When these errored?
-          this.reloadService.paintDirty('programs');
+     //     this.reloadService.paintDirty('programs');
         }
       } else {
-        this.reloadService.paintDirty('programs');
+    //    this.reloadService.paintDirty('programs');
       }
     }, error => {
-      this.reloadService.paintDirty('programs');
+    //  this.reloadService.paintDirty('programs');
     });
   }
 

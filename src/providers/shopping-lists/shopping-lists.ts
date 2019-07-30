@@ -160,7 +160,7 @@ export class ShoppingListsProvider {
         shopping_list_id: listId,
         sku: productSku,
         program_no: programNo
-      },true);
+      }, true);
   }
 
   // TODO: take a look at this promise hell

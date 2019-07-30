@@ -10,7 +10,6 @@ import { LoadingService } from '../../services/loading/loading';
 import * as Constants from '../../util/constants';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { getNavParam } from '../../helpers/validatedNavParams';
-import { ReloadService } from '../../services/reload/reload';
 import { Events } from 'ionic-angular/util/events';
 
 @Component({
@@ -34,7 +33,6 @@ export class ProductsPage implements OnInit, OnDestroy {
               public loadingService: LoadingService,
               private readonly catalogProvider: CatalogsProvider,
               private readonly navigatorService: NavigatorService,
-              private readonly reloadService: ReloadService,
               private readonly events: Events) {
 
                 this.loader = loadingService.createLoader();
@@ -77,7 +75,7 @@ export class ProductsPage implements OnInit, OnDestroy {
       this.setPaginationInfo();
     }, err => {
       this.loader.hide();
-      this.reloadService.paintDirty('products');
+     // this.reloadService.paintDirty('products');
     });
   }
 

@@ -4,7 +4,6 @@ import { Product } from '../../interfaces/models/product';
 import { CatalogsProvider } from '../../providers/catalogs/catalogs';
 import { LoadingService } from '../../services/loading/loading';
 import { getNavParam } from '../../helpers/validatedNavParams';
-import { ReloadService } from '../../services/reload/reload';
 import * as Constants from '../../util/constants';
 import { ProductImageProvider } from '../../providers/product-image/product-image';
 
@@ -23,7 +22,6 @@ export class ProductDescriptionPage implements OnInit, AfterViewInit {
               private readonly catalogProvider: CatalogsProvider,
               public loadingService: LoadingService,
               private readonly events: Events,
-              private readonly reloadService: ReloadService,
               private readonly imageProvider: ProductImageProvider) {
                 this.loader = this.loadingService.createLoader();
   }
@@ -50,7 +48,7 @@ export class ProductDescriptionPage implements OnInit, AfterViewInit {
       this.description = JSON.parse(description.d).description;
       this.loader.hide();
     }, err => {
-      this.reloadService.paintDirty('product description');
+     // this.reloadService.paintDirty('product description');
     });
   }
 

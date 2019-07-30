@@ -5,14 +5,13 @@ import * as ConstantsURL from '../../util/constants-url';
 import * as Constants from '../../util/constants';
 import { Observable } from 'rxjs/Observable';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
-import { Events } from 'ionic-angular/util/events';
 
 @Injectable()
 export class ApiService {
 
   public baseUrl: string;
 
-  constructor(private readonly http: HttpClient, private readonly secureActions: SecureActionsService, private readonly events: Events) {
+  constructor(private readonly http: HttpClient, private readonly secureActions: SecureActionsService) {
     this.baseUrl = this.getServiceBaseURL();
   }
 

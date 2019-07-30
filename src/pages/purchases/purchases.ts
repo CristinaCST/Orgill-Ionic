@@ -8,7 +8,6 @@ import { InfiniteScroll, Content, Events } from 'ionic-angular';
 import * as Strings from '../../util/strings';
 import * as Constants from '../../util/constants';
 import { TranslateService } from '@ngx-translate/core';
-import { ReloadService } from '../../services/reload/reload';
 
 @Component({
   selector: 'page-purchases',
@@ -27,8 +26,7 @@ export class PurchasesPage {
     private readonly purchasesProvider: PurchasesProvider,
     private readonly loadingService: LoadingService,
     private readonly translateService: TranslateService,
-    private readonly events: Events,
-    private readonly reloadService: ReloadService) {
+    private readonly events: Events) {
     this.loader = this.loadingService.createLoader();
   }
 
@@ -38,10 +36,10 @@ export class PurchasesPage {
   }
 
   private readonly reloadMethodHandler = (culprit?: string): void => {
-    if(culprit === 'purchases' || !culprit){
-     // this.initPurchases();
-     this.navigatorService.performRefresh();
-     
+    this.infiniteScroll.enable(false);
+    if (culprit === 'purchases' || !culprit) {
+      this.initPurchases();
+      // this.navigatorService.performRefresh();
     }
   }
   
@@ -50,6 +48,7 @@ export class PurchasesPage {
     this.purchasesBuffer = [];
     this.content.resize();
     
+   this.infiniteScroll.enable(true);
     this.purchasesProvider.getPurchases().then(purchases => {
       purchases.map(purchase => {
         if (!purchase.program_name) {
@@ -77,7 +76,7 @@ export class PurchasesPage {
               
     }).catch(err => {
       LoadingService.hideAll();
-      this.reloadService.paintDirty('purchases');
+     // this.reloadService.paintDirty('purchases');
     });
 
   }

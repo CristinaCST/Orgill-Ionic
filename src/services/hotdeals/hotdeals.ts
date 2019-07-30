@@ -10,7 +10,6 @@ import { NavigatorService } from '../navigator/navigator';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../../interfaces/response-body/response';
 import { Product } from '../../interfaces/models/product';
-import { AuthService } from '../../services/auth/auth';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { HotDealNotification } from 'interfaces/models/hot-deal-notification';
 import { NotificationResponse } from 'interfaces/response-body/notification-response';
@@ -30,7 +29,6 @@ export class HotDealsService {
   constructor(private readonly apiProvider: ApiService,
     private readonly navigatorService: NavigatorService,
     private readonly apiService: ApiService,
-    private readonly authService: AuthService,
     private readonly ngZone: NgZone,
     private readonly geolocation: Geolocation,
     private readonly translation: TranslateService,

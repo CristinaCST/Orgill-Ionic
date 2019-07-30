@@ -72,8 +72,7 @@ export class OrderConfirmationPage implements OnInit {
     } else {
       if (this.hotDealConfirmations) {
         this.orderTotal = 0;
-        let finalQty = 0;
-        let expired: boolean = false;
+        let finalQty: number = 0;
         this.hotDealConfirmations.forEach((confirmation, index) => {
           const pairingLocation: LocationElement = this.hotDealLocations.find(location => location.LOCATION.SHIPTONO === confirmation.customer_number);
           this.hotDealConfirmations[index].fullLocation = pairingLocation;

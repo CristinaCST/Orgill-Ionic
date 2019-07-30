@@ -15,7 +15,6 @@ import { ScannerService } from '../../services/scanner/scanner';
 import { Product } from '../../interfaces/models/product';
 import { getNavParam } from '../../helpers/validatedNavParams';
 import { PricingService } from '../../services/pricing/pricing';
-import { ReloadService } from '../../services/reload/reload';
 import { Platform } from 'ionic-angular/platform/platform';
 import { NavbarCustomButton } from '../../interfaces/models/navbar-custom-button';
 
@@ -62,7 +61,6 @@ export class ShoppingListPage {
     private readonly loading: LoadingService,
     private readonly scannerService: ScannerService,
     private readonly pricingService: PricingService,
-    private readonly reloadService: ReloadService,
     private readonly platform: Platform) {
 
     this.loader = this.loading.createLoader();
@@ -148,7 +146,7 @@ export class ShoppingListPage {
       return Promise.resolve();
     }).catch(error => {
       this.loader.hide();
-      this.reloadService.paintDirty('shopping list products');
+     // this.reloadService.paintDirty('shopping list products');
       console.error(error);
     });
 
@@ -239,7 +237,7 @@ export class ShoppingListPage {
     const price: number = this.pricingService.getShoppingListPrice(item.quantity, item.product, item.item_price);
     switch (event.status) {
       case 'checkedItem':
-        const alreadySelected = this.selectedItems.indexOf(index) > -1 ? true : false;
+        const alreadySelected: boolean = this.selectedItems.indexOf(index) > -1 ? true : false;
         if (!alreadySelected) {
           this.selectedItems.push(index);
         }

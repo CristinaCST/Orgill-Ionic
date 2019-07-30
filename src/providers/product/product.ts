@@ -6,7 +6,6 @@ import { SearchProductRequest } from '../../interfaces/request-body/search-produ
 import { ApiService } from '../../services/api/api';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../../interfaces/response-body/response';
-import { AuthService } from '../../services/auth/auth';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 
 
@@ -30,7 +29,7 @@ protected isProductInList(listId: number, listsThatContainProduct: number[]): bo
 
   public searchProduct(searchString: string, programNumber: string): Observable<APIResponse> {
 
-    return this.secureActions.waitForAuth().flatMap(user=>{
+    return this.secureActions.waitForAuth().flatMap(user => {
       const params: SearchProductRequest = {
         user_token: user.userToken,
         division: user.division,
@@ -48,7 +47,7 @@ protected isProductInList(listId: number, listsThatContainProduct: number[]): bo
   }
 
   public getProduct(sku: string, programNumber: string): Observable<Product> {
-    return this.secureActions.waitForAuth().flatMap(user=>{
+    return this.secureActions.waitForAuth().flatMap(user => {
       const params: any = {
         'user_token': user.userToken,
         'division': user.division,

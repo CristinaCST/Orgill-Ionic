@@ -7,7 +7,6 @@ import * as ConstantsUrl from '../../util/constants-url';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../../interfaces/response-body/response';
-import { AuthService } from '../../services/auth/auth';
 import { Program } from 'interfaces/models/program';
 
 @Injectable()

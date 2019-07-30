@@ -6,7 +6,7 @@ import * as ConstantsURL from '../../util/constants-url';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import * as Constants from '../../util/constants';
 import { User } from '../../interfaces/models/user';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Events } from 'ionic-angular';
 import { Moment } from 'moment';
 import { DateTimeService } from '../../services/datetime/dateTimeService';
@@ -16,7 +16,7 @@ import { SecureActionsService } from '../../services/secure-actions/secure-actio
 export class AuthService {
 
   private user: User = new User();
-  private secureActionsQueue: (() => any)[] = [];
+  private readonly secureActionsQueue: (() => any)[] = [];
 
   constructor(private readonly apiProvider: ApiService,
               private readonly events: Events,

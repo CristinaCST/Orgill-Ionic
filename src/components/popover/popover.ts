@@ -88,7 +88,7 @@ export class PopoverComponent {
     if (this.instantCloseOnNo && option === 'OK') {
       navOptions = { animate: false };
     }
-
+    
     this.viewCtrl.dismiss(data, undefined , navOptions ? navOptions : undefined);
   }
 

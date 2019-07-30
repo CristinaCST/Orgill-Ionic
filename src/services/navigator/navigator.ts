@@ -23,7 +23,6 @@ export interface BackbuttonOverride {
 @Injectable()
 export class NavigatorService {
     private _navController: NavController;  // Store the nav controller reference
-    private pageReference: Page | string;
     private backButtonMainFunc: () => void;
     private backButtonOverrides: BackbuttonOverride[] = [];
     private overridesID: number = 0;    // Starting point for overrides ID returned.
@@ -121,7 +120,7 @@ export class NavigatorService {
 
             } 
 
-        this.pageReference = page;
+       // this.pageReference = page;
 
         // return this.authService.executeSecureAction(() => {
         //    this.announceTransition(NavigationEventType.PUSH, page);
@@ -145,10 +144,11 @@ export class NavigatorService {
     }
 
     public performRefresh(): void {
+      
         const params: NavParams = this.navController.getActive().getNavParams();
         const opts: { animate: boolean } = { animate: false };
            // Insert this page without animations in the stack before this one with the exact same properties
-        this.navController.insert(this.navController.getViews().length - 1, this.pageReference, params, opts, undefined).then(() => {
+        this.navController.insert(this.navController.getViews().length - 1, this.navController.getActive().component, params, opts, undefined).then(() => {
 
             // Afterwards, pop this one without animations and return the promise as normal
             this.navController.pop({ animate: false });
