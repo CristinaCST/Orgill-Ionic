@@ -42,7 +42,7 @@ export class CustomerLocationPage implements OnInit {
   private isHotDeal: boolean = false;
   public noLocation: boolean = false;
   private hotDealItem: HotDealItem;
-  private loader: LoadingService;
+  private readonly loader: LoadingService;
 
   constructor(private readonly navigatorService: NavigatorService,
               private readonly navParams: NavParams,

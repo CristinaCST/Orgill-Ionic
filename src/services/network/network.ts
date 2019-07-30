@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Network } from '@ionic-native/network';
-import { PopoversService, PopoverContent } from '../popovers/popovers';
+import { PopoversService } from '../popovers/popovers';
 import { ReloadService } from '../../services/reload/reload';
 import { ErrorScheduler } from '../../services/error-scheduler/error-scheduler';
 
@@ -25,11 +25,11 @@ export class NetworkService {
       NetworkService.firstConnect = false;
       this.openNetworkModal();
     }
-  
-    this.network.onchange().distinctUntilKeyChanged('type').subscribe(state=>{
-      if(state.type === 'offline'){
+
+    this.network.onchange().distinctUntilKeyChanged('type').subscribe(state => {
+      if (state.type === 'offline') {
         this.openNetworkModal();
-      }else{
+      } else {
         this.popoversService.closeModal();
         this.reloadService.announceRetry(true);
       }
@@ -43,13 +43,12 @@ export class NetworkService {
       return;
     }
 
-    this.errorScheduler.showNetworkError().then(res=>{
-      if(res.optionSelected === 'OK')
-      {
+    this.errorScheduler.showNetworkError().then(res => {
+      if (res.optionSelected === 'OK') {
         this.openNetworkModal();
-      }      
+      }
     });
   }
 
- 
+
 }

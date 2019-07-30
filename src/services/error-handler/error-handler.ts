@@ -1,19 +1,16 @@
-import { IonicErrorHandler,  Events } from 'ionic-angular';
-import { PopoversService, PopoverContent, DefaultPopoverResult } from '../popovers/popovers';
+import { IonicErrorHandler } from 'ionic-angular';
 import * as Strings from '../../util/strings';
 import { Injectable } from '@angular/core';
-import { LoadingService } from '../loading/loading';
 import { ErrorScheduler } from '../error-scheduler/error-scheduler';
-import { Observable } from 'rxjs/Observable';
-
 
 @Injectable()
 export class CustomErrorHandler implements IonicErrorHandler {  
-  
-  public async handleError(error: any): Promise<void> {
-    console.error('Custom error ', error);
 
-    let errorString: string = Strings.SOMETHING_WENT_WRONG;
+  constructor(private readonly errorScheduler: ErrorScheduler) { }
+
+  public async handleError(error: any): Promise<void> {
+    const errorString: string = Strings.SOMETHING_WENT_WRONG;
+    this.errorScheduler.showCustomError(errorString);
   }
 
 }

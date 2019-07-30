@@ -56,9 +56,7 @@ export class PurchasesPage {
         }
         this.infiniteScroll.ionInfinite.emit(this.infiniteScroll);
       }, 20);
-
-      
-        
+              
     }).catch(err => {
       this.loader.hide();
     });

@@ -75,8 +75,10 @@ export class MyApp {
           return;
         }
 
+
+        // TODO: This could be moved
         if (PopoversService.activeItem) {
-          PopoversService.dismissCurrent();
+         // PopoversService.dismissCurrent();
           return;
         }
 

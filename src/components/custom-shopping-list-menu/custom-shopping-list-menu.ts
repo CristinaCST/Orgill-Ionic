@@ -9,7 +9,6 @@ import { ShoppingListPage } from '../../pages/shopping-list/shopping-list';
 import { Events } from 'ionic-angular';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { ShoppingListResponse } from '../../interfaces/response-body/shopping-list';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'custom-shopping-list-menu',

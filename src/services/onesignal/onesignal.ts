@@ -10,7 +10,6 @@ import { NavigatorService } from '../../services/navigator/navigator';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
-import { AuthService } from '../../services/auth/auth';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 
 enum androidPermissionState {
@@ -176,14 +175,8 @@ export class OneSignalService {
     public getRetailerType(): Promise<string> {
         return new Promise(resolve => {
             this.secureActions.waitForAuth().subscribe(user => {
-                let retailer_type: string = 'US';
-                for (const division of Constants.ONE_SIGNAL_CANADA_USER_TYPES) {
-                    if (division === user.division) {
-                        retailer_type = 'CA';
-                        break;
-                    }
-                }
-                resolve(retailer_type);
+                const index = Constants.ONE_SIGNAL_CANADA_USER_TYPES.indexOf(user.division);
+                resolve(index > -1 ? 'CA' : 'US');
             });
         });
     }

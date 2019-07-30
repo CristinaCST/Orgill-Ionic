@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { IonicApp, IonicModule } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -87,7 +87,7 @@ const pages: Page[] = [MyApp,
 
 
 // Error Handlers
-import { CustomErrorHandler} from '../services/error-handler/error-handler';
+import { CustomErrorHandler } from '../services/error-handler/error-handler';
 
 @NgModule({
   declarations: pages,
@@ -143,7 +143,7 @@ import { CustomErrorHandler} from '../services/error-handler/error-handler';
     ProductImageProvider,
     SecureActionsService,
     { provide: ErrorHandler, useClass: CustomErrorHandler },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ]
 })
 
