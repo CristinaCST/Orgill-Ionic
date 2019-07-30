@@ -5,11 +5,11 @@ order-item {
     width: 100%;
     margin: 0;
     padding: 0 !important;
-    .container {
+    .container{
       display: flex;
       margin-left: 16px;
       //margin-right: 16px;
-      &.header {
+      &.header, &.footer {
         
         p:nth-child(1) {
           width: 25%;
@@ -29,6 +29,13 @@ order-item {
           font-weight: bold;
         }
       }
+
+      &.footer{
+        p:nth-child(1){
+          width:15%;
+        }
+      }
+
       &.info {
         .purchase-row {
           width: calc(50% - 8px);
@@ -74,6 +81,10 @@ order-item {
 
   button:disabled{
     opacity:1!important;
+  }
+
+  .program-name{
+    text-align:left;
   }
 
 }
