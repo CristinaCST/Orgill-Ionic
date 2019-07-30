@@ -5,21 +5,27 @@ hot-deal {
     padding-top:10px!important;
     min-width: 100%;
     min-height: 60px;
+    height: auto;
     .button-inner{
-      display:block!important;
+     // display: flex!important;
       .container {
         align-content: center;
         text-align: center;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
 
-        &.header {
+        .header {
           font-size: $font-size-medium;
           padding-bottom: 10px; 
           color: color($colors, OrgillRed);
           font-weight: 500;
         }
-        &.info {
+        .info {
           color: color($colors, OrgillDarkGray);
           font-weight: 400;
+          word-wrap:break-word;
+          white-space: normal;
         }
       }
     }
