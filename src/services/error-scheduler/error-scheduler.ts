@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { PopoversService, PopoverContent, DefaultPopoverResult } from '../../services/popovers/popovers';
-import { Events } from 'ionic-angular';
 import * as Strings from '../../util/strings';
-import { Observable } from 'rxjs';
 import { LoadingService } from '../../services/loading/loading';
 
+
+// HACK: This entire error handler is a mess.
 
 // Main type of errors, in the order of priority.
 enum ErrorPriority {
@@ -17,31 +17,22 @@ enum ErrorPriority {
 @Injectable()
 export class ErrorScheduler {
   private priority: ErrorPriority;
-  private waitBuffer: number = 300; // Time to wait for error events if we don't have top priority.
+  private readonly waitBuffer: number = 300; // Time to wait for error events if we don't have top priority.
   private customContent: string;
   private waitTimeoutReference: number;
-  private acceptNewErrors: boolean = true;
-  private customAction: (any) => void;
+  public acceptNewErrors: boolean = true;
+  private customAction: (arg: any) => void;
 
-  constructor(private readonly popoversService: PopoversService, private readonly events: Events) { }
+  constructor(private readonly popoversService: PopoversService) { }
 
-  public async handleError(error: any): Promise<void> {
-    console.error('Custom error ', error);
-
-    let errorString: string = Strings.SOMETHING_WENT_WRONG;
-  }
-
-  private beginWait(action: (any) => void): void {
+  private beginWait(action: (arg: any) => void): void {
     if (action) {
       this.customAction = action;
     }
 
-    if (this.waitTimeoutReference) {
+    if (this.waitTimeoutReference !== undefined) {
       return;
     }
-
-
-  
 
     this.waitTimeoutReference = setTimeout(() => {
       this.endWait();
@@ -55,7 +46,6 @@ export class ErrorScheduler {
     clearTimeout(this.waitTimeoutReference);
     this.waitTimeoutReference = undefined;
     let content: PopoverContent;
-    console.log("priority: " + this.priority);
     switch (this.priority) {
       case ErrorPriority.networkError:
         content = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.POPOVER_NETWORK_OFFLINE_MESSAGE, Strings.MODAL_BUTTON_TRY_AGAIN);
@@ -72,7 +62,7 @@ export class ErrorScheduler {
     }
 
     LoadingService.hideAll();
-    return this.popoversService.show(content).do((res) => {
+    return this.popoversService.show(content).do(res => {
       this.acceptNewErrors = true;
       if (this.customAction) {
         this.customAction(res);
@@ -82,16 +72,16 @@ export class ErrorScheduler {
 
   public showNetworkError(): Promise<DefaultPopoverResult> {
     this.priority = ErrorPriority.networkError;
+    this.customAction = undefined;
     return this.endWait();
   }
 
-  public showRetryError(action?: (any) => void): void {
+  public showRetryError(action?: (arg: any) => void): void {
     this.priority = ErrorPriority.retryError;
-    this.customAction = action;
     this.beginWait(action);
   }
 
-  public showCustomError(content: string, action?: (any) => void): void {
+  public showCustomError(content: string, action?: (arg: any) => void): void {
     this.priority = ErrorPriority.customError;
     this.customContent = content;
     this.beginWait(action);
