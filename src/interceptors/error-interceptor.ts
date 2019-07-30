@@ -16,11 +16,12 @@ export class ErrorInterceptor implements HttpInterceptor {
 
     return next.handle(req).pipe(catchError((err, caught) => {
       if (err.status === 401 && req.url !== (ConstantsUrl.URL_BASE_EN + ConstantsUrl.URL_LOGIN)) {
-        console.log("SHOULDNT BE HERE");
+        console.error("SHOULDNT BE HERE");
         this.events.publish(Constants.EVENT_INVALID_AUTH);
         return Observable.throw('Unauthorized');
       }
       if (err.status === 500 || err.status === 502 || err.status === 503) {
+        console.error("OMG", err);
         this.events.publish(Constants.EVENT_SERVER_ERROR);
       }
       return Observable.throw('Error');

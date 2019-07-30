@@ -2,8 +2,10 @@ import { Component, ViewChild } from '@angular/core';
 import { HotDealNotification } from '../../interfaces/models/hot-deal-notification';
 import { HotDealsService } from '../../services/hotdeals/hotdeals';
 import { LoadingService } from '../../services/loading/loading';
-import { InfiniteScroll, Content } from 'ionic-angular';
+import { InfiniteScroll, Content, Events } from 'ionic-angular';
 import * as Constants from '../../util/constants';
+import { ReloadService } from '../../services/reload/reload';
+import { NavigatorService } from '../../services/navigator/navigator';
 
 @Component({
   selector: 'hot-deals',
@@ -18,11 +20,26 @@ export class HotDealsPage {
   @ViewChild(InfiniteScroll) private readonly infiniteScroll: InfiniteScroll;
 
   constructor(private readonly hotDealsService: HotDealsService,
-    private readonly loadingService: LoadingService) {
+    private readonly loadingService: LoadingService,
+    private readonly events: Events,
+    private readonly reloadService: ReloadService,
+    private readonly navigatorService: NavigatorService) {
     this.simpleLoader = this.loadingService.createLoader();
   }
 
   public ngOnInit(): void {
+    this.events.subscribe(Constants.EVENT_LOADING_FAILED, this.loadingFailedHandler);
+    this.initHotDeals();
+  }
+
+  private readonly loadingFailedHandler = (culprit?: string): void => {
+    if(culprit === 'hotdeals' || !culprit){
+     // this.initHotDeals();
+     this.navigatorService.performRefresh();
+    }
+  }
+
+  private initHotDeals(): void {
     this.simpleLoader.show();
     this.hotDealsService.getHotDealNotifications().then(res => {
 
@@ -45,8 +62,9 @@ export class HotDealsPage {
     }).catch(err => {
       console.error(err);
       LoadingService.hideAll();
+      console.log('paint dirty');
+      this.reloadService.paintDirty('hotdeals');
     });
-
   }
 
   public clickOnDeal(notification: HotDealNotification): void {

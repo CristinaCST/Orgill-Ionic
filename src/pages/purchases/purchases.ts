@@ -4,10 +4,11 @@ import { Purchase } from '../../interfaces/models/purchase';
 import { PurchaseDetailsPage } from '../purchase-details/purchase-details';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { LoadingService } from '../../services/loading/loading';
-import { InfiniteScroll, Content } from 'ionic-angular';
+import { InfiniteScroll, Content, Events } from 'ionic-angular';
 import * as Strings from '../../util/strings';
 import * as Constants from '../../util/constants';
 import { TranslateService } from '@ngx-translate/core';
+import { ReloadService } from '../../services/reload/reload';
 
 @Component({
   selector: 'page-purchases',
@@ -15,7 +16,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class PurchasesPage {
 
-  private readonly purchasesBuffer: Purchase[] = [];
+  private purchasesBuffer: Purchase[] = [];
   public purchases: Purchase[] = [];
   private readonly loader: LoadingService; // TODO: Get rid of LS references per trello task
 
@@ -25,12 +26,29 @@ export class PurchasesPage {
   constructor(private readonly navigatorService: NavigatorService,
     private readonly purchasesProvider: PurchasesProvider,
     private readonly loadingService: LoadingService,
-    private readonly translateService: TranslateService) {
+    private readonly translateService: TranslateService,
+    private readonly events: Events,
+    private readonly reloadService: ReloadService) {
     this.loader = this.loadingService.createLoader();
   }
 
   public ngOnInit(): void {
-    this.loader.show();
+    this.events.subscribe(Constants.EVENT_LOADING_FAILED, this.reloadMethodHandler);
+    this.initPurchases();
+  }
+
+  private readonly reloadMethodHandler = (culprit?: string): void => {
+    if(culprit === 'purchases' || !culprit){
+     // this.initPurchases();
+     this.navigatorService.performRefresh();
+     
+    }
+  }
+  
+  private initPurchases(): void {
+    this.purchases = [];
+    this.purchasesBuffer = [];
+    this.content.resize();
     
     this.purchasesProvider.getPurchases().then(purchases => {
       purchases.map(purchase => {
@@ -58,7 +76,8 @@ export class PurchasesPage {
       }, 20);
               
     }).catch(err => {
-      this.loader.hide();
+      LoadingService.hideAll();
+      this.reloadService.paintDirty('purchases');
     });
 
   }

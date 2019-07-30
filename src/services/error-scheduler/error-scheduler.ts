@@ -32,14 +32,16 @@ export class ErrorScheduler {
   }
 
   private beginWait(action: (any) => void): void {
+    if (action) {
+      this.customAction = action;
+    }
+
     if (this.waitTimeoutReference) {
       return;
     }
 
 
-    if (action) {
-      this.customAction = action;
-    }
+  
 
     this.waitTimeoutReference = setTimeout(() => {
       this.endWait();
@@ -53,6 +55,7 @@ export class ErrorScheduler {
     clearTimeout(this.waitTimeoutReference);
     this.waitTimeoutReference = undefined;
     let content: PopoverContent;
+    console.log("priority: " + this.priority);
     switch (this.priority) {
       case ErrorPriority.networkError:
         content = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.POPOVER_NETWORK_OFFLINE_MESSAGE, Strings.MODAL_BUTTON_TRY_AGAIN);
@@ -61,7 +64,7 @@ export class ErrorScheduler {
         content = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.RELOAD_ERROR_MESSAGE_WITHOUT_CULPRIT, Strings.MODAL_BUTTON_TRY_AGAIN);
         break;
       case ErrorPriority.customError:
-        content = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, this.customContent ? this.customContent : 'BROKEN');
+        content = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, this.customContent ? this.customContent : Strings.GENERIC_ERROR);
         break;
       default:
         content = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.GENERIC_ERROR);
@@ -84,6 +87,7 @@ export class ErrorScheduler {
 
   public showRetryError(action?: (any) => void): void {
     this.priority = ErrorPriority.retryError;
+    this.customAction = action;
     this.beginWait(action);
   }
 
