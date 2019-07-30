@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PopoverController, Popover } from 'ionic-angular';
+import { PopoverController, Popover, PopoverOptions } from 'ionic-angular';
 import { PopoverComponent } from '../../components/popover/popover';
 import * as Strings from '../../util/strings';
 import { Subject } from 'rxjs/Subject';
@@ -39,6 +39,7 @@ interface QueueItem {
   content: PopoverContent;
   continuous: boolean;
   subject: Subject<any>;
+  opts: PopoverOptions;
 }
 
 @Injectable()
@@ -58,7 +59,7 @@ export class PopoversService {
    * @param continuous should the modal complete after 1 input? true if so
    * @param subjectReference pass a subject if you want a specific observable to be changed
    */
-  public show(content: PopoverContent, continuous: boolean = false, subjectReference?: Subject<any>): Observable<DefaultPopoverResult | CustomListPopoverResult | QuantityPopoverResult> {
+  public show(content: PopoverContent, continuous: boolean = false, opts?: PopoverOptions, subjectReference?: Subject<any>): Observable<DefaultPopoverResult | CustomListPopoverResult | QuantityPopoverResult> {
     if (this.isOpened) {
       const aux: Subject<any> = new Subject<any>();
       aux.next(content);
@@ -72,7 +73,7 @@ export class PopoversService {
 
     const close: Subject<any> = subjectReference == undefined ? new Subject<any>() : subjectReference;
 
-    this.popover = this.popoverController.create(PopoverComponent, content);
+    this.popover = this.popoverController.create(PopoverComponent, content, opts);
 
     this.popover.onDidDismiss(data => {
       this.isOpened = false;
@@ -101,7 +102,7 @@ export class PopoversService {
     }
 
     const queueItem: QueueItem = PopoversService.queue.shift();
-    this.show(queueItem.content, queueItem.continuous, queueItem.subject);
+    this.show(queueItem.content, queueItem.continuous, queueItem.opts, queueItem.subject);
   }
 
   public closeModal(): void {

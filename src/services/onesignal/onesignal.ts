@@ -175,7 +175,7 @@ export class OneSignalService {
     public getRetailerType(): Promise<string> {
         return new Promise(resolve => {
             this.secureActions.waitForAuth().subscribe(user => {
-                const index = Constants.ONE_SIGNAL_CANADA_USER_TYPES.indexOf(user.division);
+                const index: number = Constants.ONE_SIGNAL_CANADA_USER_TYPES.indexOf(user.division);
                 resolve(index > -1 ? 'CA' : 'US');
             });
         });
@@ -281,7 +281,7 @@ export class OneSignalService {
                 positiveButtonText: Strings.MODAL_BUTTON_OK
             };
 
-            this.popoversService.show(content);
+            this.popoversService.show(content, false, { enableBackdropDismiss: false });
         });
     }
 
@@ -487,7 +487,7 @@ export class OneSignalService {
         };
 
         // Return the popover observable
-        return this.popoversService.show(popoverContent) as Observable<DefaultPopoverResult>;
+        return this.popoversService.show(popoverContent, false, { enableBackdropDismiss: false }) as Observable<DefaultPopoverResult>;
     }
 
 
