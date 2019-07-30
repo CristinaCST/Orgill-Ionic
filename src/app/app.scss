@@ -20,12 +20,18 @@ ion-header {
 }
 
 ion-app.platform-ios{
-  ion-header {
-    ion-navbar, ion-toolbar {
+  .ion-page{
+    ion-header:not(popover){
+      ion-navbar {
+        padding-top:env(safe-area-inset-top)!important;
+      }
+    }
+  }
+  .menu-inner{
+    ion-toolbar{
       padding-top:env(safe-area-inset-top)!important;
     }
   }
-
 }
 
 body.keyboard-is-open .hide-on-keyboard-open{
