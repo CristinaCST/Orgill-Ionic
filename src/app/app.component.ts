@@ -57,9 +57,9 @@ export class MyApp {
       // TODO: Make this better :/
       window.addEventListener('keyboardDidShow', (obj: Event & { keyboardHeight: number }) => {
         if (this.platform.is('android')) {
-          CSSInjector.addRawCSS('body.keyboard-is-open .scroll-content:not(.keyboard-immune){' + 'margin-bottom:' + obj.keyboardHeight + 'px!important;' + '}');
+          CSSInjector.addRawCSS('body.keyboard-is-open .scroll-content:not(.keyboard-immune){margin-bottom:' + obj.keyboardHeight + 'px!important;}');
         } else {
-          CSSInjector.addRawCSS('body.keyboard-is-open .scroll-content:not(.keyboard-immune){' + 'margin-bottom:' + obj.keyboardHeight + 'px!important; padding-bottom:0px!important;' + '}');
+          CSSInjector.addRawCSS('body.keyboard-is-open .scroll-content:not(.keyboard-immune){margin-bottom:' + obj.keyboardHeight + 'px!important; padding-bottom:0px!important;} body.keyboard-is-open .keyboard-immune{padding-bottom:0px!important;}');
         }
         CSSInjector.injectCSS();
         document.body.classList.add('keyboard-is-open');
