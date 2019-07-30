@@ -6,9 +6,12 @@ ion-header {
     ion-title {
       text-align: center;
     }
+    button .button-effect {
+      display: none!important;
+    }
   }
 }
-}
+
 
 ion-content {
   p {
@@ -85,6 +88,7 @@ ion-content {
     margin-top: auto;
     margin-bottom: auto;
   }
+}
 }
 
 body.keyboard-is-open{
