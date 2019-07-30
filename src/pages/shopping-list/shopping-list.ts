@@ -232,13 +232,17 @@ export class ShoppingListPage {
     this.navigatorService.push(ShoppingListPage, params).catch(err => console.error(err));
   }
 
-  private setOrderTotal(event: { status: string}, index: number): void {
 
+  // This system is overly complicated
+  private setOrderTotal(event: { status: string}, index: number): void {
     const item: ShoppingListItem = this.shoppingListItems[index];
     const price: number = this.pricingService.getShoppingListPrice(item.quantity, item.product, item.item_price);
     switch (event.status) {
       case 'checkedItem':
-        this.selectedItems.push(index);
+        const alreadySelected = this.selectedItems.indexOf(index) > -1 ? true : false;
+        if (!alreadySelected) {
+          this.selectedItems.push(index);
+        }
         this.orderTotal += price;
         break;
       case 'uncheckedItem':
@@ -246,6 +250,7 @@ export class ShoppingListPage {
         this.orderTotal -= price;
         break;
       default:
+        console.warn('no op specified in setOrderTotal');
     }
   }
 
@@ -291,14 +296,13 @@ export class ShoppingListPage {
   public onSearched(searchString: string): void {
     this.loader.show();
     this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: ShoppingListItem[]) => {
-      // let it =  this.shoppingListProvider.search(data, $event);
       const params: any = {
         list: this.shoppingList,
         shoppingListItems: this.shoppingListProvider.search(data, searchString),
         isCheckout: this.isCheckout,
         fromSearch: true
       };
-      // console.log( this.shoppingListProvider.search(data, $event));
+
       this.loader.hide();
       this.navigatorService.push(ShoppingListPage, params, { paramsEquality: getNavParam(this.navParams, 'fromSearch', 'boolean') ? false : true } as NavOptions).catch(err => console.error(err));
     }, err => {
