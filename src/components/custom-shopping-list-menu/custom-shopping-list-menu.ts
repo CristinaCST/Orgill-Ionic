@@ -71,7 +71,7 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
     const params: any = {
       list
     };
-    this.navigatorService.push(ShoppingListPage, params).catch(err => console.error(err));
+    this.navigatorService.push(ShoppingListPage, params, { paramsEquality: false }).catch(err => console.error(err));
   }
 
   public ngOnDestroy(): void {

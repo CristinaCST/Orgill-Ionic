@@ -62,28 +62,16 @@ export class AppMenuComponent implements OnInit {
   public ngOnInit(): void {
    
     this.initMenu();
-   // this.events.subscribe(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED, this.notificationReceivedHandler);
-   // this.events.subscribe(Constants.HOT_DEAL_EXPIRED_EVENT, this.hotDealExpiredHandler);
     this.events.subscribe(Constants.EVENT_NAVIGATE_TO_PAGE, this.navigationHandler);
     this.events.subscribe(Constants.EVENT_NEW_SHOPPING_LIST, this.newShoppingListHandler);
     this.events.subscribe(Constants.EVENT_LOADING_FAILED, this.loadingFailedHandler);
   }
 
   public ngOnDestroy(): void {
-    // this.events.unsubscribe(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED, this.notificationReceivedHandler);
-    // this.events.unsubscribe(Constants.HOT_DEAL_EXPIRED_EVENT, this.hotDealExpiredHandler);
     this.events.unsubscribe(Constants.EVENT_NAVIGATE_TO_PAGE, this.navigationHandler);
     this.events.unsubscribe(Constants.EVENT_NEW_SHOPPING_LIST, this.newShoppingListHandler);
     this.events.unsubscribe(Constants.EVENT_LOADING_FAILED, this.loadingFailedHandler);
   }
-
-  /*private readonly notificationReceivedHandler = (sku: string): void => {
-    this.updateHotDealButtonToState(sku);
-  }*/
-/*
-  private readonly hotDealExpiredHandler = (): void => {
-    this.updateHotDealButtonToState();
-  }*/
 
   private readonly navigationHandler = (): void => {
     this.menuCtrl.close('main_menu');
@@ -109,7 +97,6 @@ export class AppMenuComponent implements OnInit {
     
     this.getPrograms();
     this.getShoppingLists();
-    this.updateHotDealButtonToState();
   }
 
   public menuOpen(): void {
@@ -119,13 +106,7 @@ export class AppMenuComponent implements OnInit {
   }
 
   public menuClose(): void {
-  //  this.events.unsubscribe(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED,this.checkHotDealState);
    this.navigatorService.removeOverride(this.backbuttonOverrideReference);
-  }
-
-  private updateHotDealButtonToState(sku?: string): void {
-    //  this.hotDealNotification = this.hotDealService.checkHotDealState(sku);
-    //  this.changeDetector.detectChanges();    
   }
 
   public logout(): void {
@@ -149,16 +130,6 @@ export class AppMenuComponent implements OnInit {
 
 
   public hotDealPage(): void {
-   /* if (this.hotDealService.isHotDealExpired()) {
-      this.hotDealNotification = false;
-      return;
-    }
-
-    const hotDealSku: string = LocalStorageHelper.getFromLocalStorage(Constants.ONE_SIGNAL_HOT_DEAL_SKU_PATH);
-    if (hotDealSku) {
-      this.hotDealService.navigateToHotDeal(hotDealSku);
-    }*/
-
     this.navigatorService.setRoot(HotDealsPage).catch(err => console.error(err));
   }
 

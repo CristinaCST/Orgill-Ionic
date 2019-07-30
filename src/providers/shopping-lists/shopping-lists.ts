@@ -28,12 +28,8 @@ export class ShoppingListsProvider {
   constructor(private readonly apiProvider: ApiService, private readonly events: Events) {
   }
 
-  // public getLocalShoppingLists(): Promise<any> {
-  //   return this.databaseProvider.getAllShoppingLists();
-  // }
 
   public addItemToShoppingList(listId: string, shoppingListItem: ShoppingListItem, marketOnly: boolean): Observable<APIResponse> {
-    // return this.databaseProvider.addProductToShoppingList(listId, shoppingListItem);
     return this.apiProvider.post(ConstantsUrl.ADD_SHOPPING_LIST_ITEM, {
       shopping_list_id: listId,
       sku: shoppingListItem.product.SKU,
@@ -44,7 +40,6 @@ export class ShoppingListsProvider {
   }
 
   public getShoppingListsForProduct(productSKU: string, programNumber: string): Observable<APIResponse> {
-    // return this.databaseProvider.getShoppingListsForProduct(productSKU);
     return this.apiProvider.post(ConstantsUrl.CHECK_PRODUCT_SHOPPING_LISTS, {
       sku: productSKU,
       program_no: programNumber
@@ -159,45 +154,7 @@ export class ShoppingListsProvider {
     return now.isAfter(endDate);
   }
 
-  /*
-  public setProducts(data) {
-    console.log("DATA IN SET PRODUCTS: ", data);
-    const list = [];
-    if (data.length > 0) {
-      for (let i = 0; i < data.length; i++) {
-        const item = data[i];
-        const shoppingListProduct: ShoppingListItem = {
-          id: item.id,
-          product: {
-            CatID: item.CatID,
-            SKU: item.SKU,
-            QTY_ROUND_OPTION: item.QTY_ROUND_OPTION,
-            MODEL: item.MODEL,
-            NAME: item.NAME,
-            VENDOR_NAME: item.VENDOR_NAME,
-            SELLING_UNIT: item.SELLING_UNIT,
-            UPC_CODE: item.UPC_CODE,
-            SUGGESTED_RETAIL: item.SUGGESTED_RETAIL,
-            YOURCOST: item.YOURCOST,
-            IMAGE: item.IMAGE,
-            SHELF_PACK: item.SHELF_PACK,
-            VELOCITY_CODE: item.VELOCITY_CODE,
-            TOTAL_REC_COUNT: item.TOTAL_REC_COUNT
-          },
-          program_number: item.program_no,
-          item_price: item.price,
-          quantity: item.quantity,
-          isCheckedInShoppingList: false,
-          isExpired: this.isExpiredProgram(item.end_date)
-        };
-        list.push(shoppingListProduct);
-      }
-    }
-    return list;
-  }*/
-
   public deleteProductFromList(listId: string, productSku: string, programNo: string): Observable<APIResponse> {
-    // return this.databaseProvider.removeProductsFromShoppingList(listId, productIdsArr);
     return this.apiProvider.post(ConstantsUrl.REMOVE_SHOPPING_LIST_ITEM,
       {
         shopping_list_id: listId,
@@ -206,38 +163,12 @@ export class ShoppingListsProvider {
       },true);
   }
 
-  // public insertPurchaseToDB(purchaseInfo: DatabaseOrder): Promise<DatabaseActionResponse> {
-  //   return this.databaseProvider.insertPurchase(purchaseInfo);
-  // }
-
-  // public deleteItemsFromList(insertId: number, itemsIdsArr: number[], shoppingListId: string): Promise<DatabaseActionResponse> {
-  //   return this.databaseProvider.finalizePurchase(insertId, itemsIdsArr, shoppingListId);
-  // }
-
-
   // TODO: take a look at this promise hell
   public orderProducts(productInfoList: ProductListInfo, insertToDBInfo: DatabaseOrder, itemsIdsArr: number[], shoppingListId: string): Promise<OrderResult> {
     return new Promise((resolve, reject) => {
         try {
           this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_PRODUCTS, productInfoList, true).subscribe((response: APIResponse) => {
-            // if (response) {
-            //   insertToDBInfo.confirmation_number = JSON.parse(response.d);
 
-            //   // TODO: Should change this to promise-like and get rid of await, of all awaits for that matter.
-            //   let insertedPurchaseToDBInfo: DatabaseActionResponse;
-            //   let removedItemsFromShoppingList: DatabaseActionResponse;
-            //   this.insertPurchaseToDB(insertToDBInfo).then((insertedDataResponse: DatabaseActionResponse) => {
-            //     insertedPurchaseToDBInfo = insertedDataResponse;
-            //     return this.deleteItemsFromList(insertedPurchaseToDBInfo.insertId, itemsIdsArr, shoppingListId);
-            //   }).then((removeItemsResponse: DatabaseActionResponse) => {
-            //     removedItemsFromShoppingList = removeItemsResponse;
-            //     resolve({
-            //       insertedPurchaseToDBInfo, confirmationNumber: insertToDBInfo.confirmation_number,
-            //       removedItemsFromShoppingList
-            //     } as OrderResult);
-            //   });
-
-            // }
             if (response) {
               insertToDBInfo.confirmation_number = JSON.parse(response.d);
 
@@ -274,7 +205,6 @@ export class ShoppingListsProvider {
   }
 
   public updateShoppingListItem(product: Product, shoppingListId: number, programNumber: string, price: number, quantity: number): Observable<APIResponse> {
-    // return this.databaseProvider.updateShoppingListItem(id, shoppingListId, programNumber, price, quantity);
     return this.apiProvider.post(ConstantsUrl.UPDATE_SHOPPING_LIST_ITEM, {
       shopping_list_id: shoppingListId,
       sku: product.SKU,
@@ -285,14 +215,7 @@ export class ShoppingListsProvider {
   }
 
   public checkProductInList(productSKU: string, listId: string, programNo: string): Observable<APIResponse> {
-    // return new Promise(async (resolve, reject) => {
-    //   try {
-    //     let data = await this.databaseProvider.checkProductInList(productSKU, listId);
-    //     resolve(data.rows.item(0).is_item_in_list > 0);
-    //   } catch (e) {
-    //     reject(e);
-    //   }
-    // });
+
     return this.apiProvider.post(ConstantsUrl.CHECK_PRODUCT_SHOPPING_LIST, {
       sku: productSKU,
       shopping_list_id: listId,
