@@ -72,7 +72,9 @@ export class ProductPage implements OnInit {
   }
 
   private readonly loadingFailedHandler = (culprit?: string): void => {
-    this.initProduct();
+    if (culprit === 'hot deal program' || !culprit || culprit === 'product program') {
+      this.initProduct();
+    }
   }
 
   public initProduct(): void {

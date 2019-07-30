@@ -112,6 +112,8 @@ export const EVENT_HOT_DEAL_NOTIFICATION_RECEIVED: string = 'notificationsHotDea
 
 export const EVENT_NAVIGATION_NEW_PAGE: string = 'newPageEvent';
 
+export const EVENT_SERVER_ERROR: string = 'eventServerError';
+
 export const NOTIFICATION_SETTINGS_WARNING_PATH: string = 'notificationSettingsWarningPath';
 
 export const NOTIFICATION_SUBSCRIPTION_ANDROID_PATH: string = 'notficationSubscriptionAndroidPath';

@@ -78,7 +78,7 @@ export class ShoppingListPage {
   }
 
   private readonly loadingFailedHandler = (culprit?: string): void => {
-    if (culprit === 'shopping list products') {
+    if (culprit === 'shopping list products' || !culprit) {
       this.fillList();
     }
   }

@@ -80,7 +80,6 @@ export class OrderConfirmationPage implements OnInit {
           finalQty += confirmation.quantity;
         });
 
-        console.log("THIS HOT DEAL ITEM", this.hotDealItem);
         this.orderTotal = this.pricingService.getPrice(finalQty, this.hotDealItem.ITEM, this.hotDealItem.PROGRAM);
 
         this.confirmation = '';

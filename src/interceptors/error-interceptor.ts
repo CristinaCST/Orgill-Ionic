@@ -7,7 +7,7 @@ import { Events } from 'ionic-angular/util/events';
 import * as Constants from '../util/constants';
 
 @Injectable()
-export class UnauthorizedInterceptor implements HttpInterceptor {
+export class ErrorInterceptor implements HttpInterceptor {
     constructor(private readonly events: Events){
 
     }
@@ -16,9 +16,13 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
    // return next.handle(req);
     return next.handle(req).pipe(catchError((err, caught) => {
         console.log('err', err);
-        if (err.status === 401 || err.status === 403) {
+        if (err.status === 401) {
             this.events.publish(Constants.EVENT_INVALID_AUTH);
             return Observable.throw('Unauthorized');
+        }
+        if (err.status === 500 || err.status === 502 || err.status === 503)
+        {
+          this.events.publish(Constants.EVENT_SERVER_ERROR);
         }
         return Observable.throw('Error');
       }));

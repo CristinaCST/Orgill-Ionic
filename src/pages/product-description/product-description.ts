@@ -38,7 +38,9 @@ export class ProductDescriptionPage implements OnInit, AfterViewInit {
   }
 
   private readonly loadingFailedHandler = (culprit?: string): void => {
-    this.initDescription();
+    if (culprit === 'product description' || !culprit) {
+      this.initDescription();
+    }
   }
 
   private initDescription(): void {

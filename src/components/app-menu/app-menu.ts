@@ -93,9 +93,11 @@ export class AppMenuComponent implements OnInit {
     this.getShoppingLists();
   }
 
-  private readonly loadingFailedHandler = (): void => {
+  private readonly loadingFailedHandler = (culprit: string): void => {
     // We can't know directly (without catching an error somewhere else) if custom lists are supposed to be or not empty, or some of the programs, so it's safer just to reload this in case of error.
-    this.initMenu();
+    if(culprit === 'shopping lists' || culprit === 'programs' || !culprit){
+      this.initMenu();
+    }
   }
 
 

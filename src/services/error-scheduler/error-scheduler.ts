@@ -6,13 +6,13 @@ import { Observable } from 'rxjs';
 import { LoadingService } from '../../services/loading/loading';
 
 
-  // Main type of errors, in the order of priority.
-  enum ErrorPriority {
-    networkError,
-    retryError,
-    customError,
-    genericError
-  }
+// Main type of errors, in the order of priority.
+enum ErrorPriority {
+  networkError,
+  retryError,
+  customError,
+  genericError
+}
 
 @Injectable()
 export class ErrorScheduler {
@@ -21,8 +21,9 @@ export class ErrorScheduler {
   private customContent: string;
   private waitTimeoutReference: number;
   private acceptNewErrors: boolean = true;
+  private customAction: (any) => void;
 
-  constructor(private readonly popoversService: PopoversService, private readonly events: Events) {}
+  constructor(private readonly popoversService: PopoversService, private readonly events: Events) { }
 
   public async handleError(error: any): Promise<void> {
     console.error('Custom error ', error);
@@ -30,18 +31,23 @@ export class ErrorScheduler {
     let errorString: string = Strings.SOMETHING_WENT_WRONG;
   }
 
-  private beginWait(): void {
-    if(this.waitTimeoutReference){
+  private beginWait(action: (any) => void): void {
+    if (this.waitTimeoutReference) {
       return;
     }
-  
-    this.waitTimeoutReference = setTimeout(()=>{
+
+
+    if (action) {
+      this.customAction = action;
+    }
+
+    this.waitTimeoutReference = setTimeout(() => {
       this.endWait();
     }, this.waitBuffer);
 
   }
 
-  private endWait(): void {
+  private endWait(): Promise<DefaultPopoverResult> {
     LoadingService.hideAll();
     this.acceptNewErrors = false;
     clearTimeout(this.waitTimeoutReference);
@@ -49,43 +55,42 @@ export class ErrorScheduler {
     let content: PopoverContent;
     switch (this.priority) {
       case ErrorPriority.networkError:
-        content = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.POPOVER_TIMEOUT_ERROR_MESSAGE);
+        content = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.POPOVER_NETWORK_OFFLINE_MESSAGE, Strings.MODAL_BUTTON_TRY_AGAIN);
         break;
       case ErrorPriority.retryError:
         content = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.RELOAD_ERROR_MESSAGE_WITHOUT_CULPRIT, Strings.MODAL_BUTTON_TRY_AGAIN);
         break;
       case ErrorPriority.customError:
-        content = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE , this.customContent?this.customContent:'BROKEN');
+        content = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, this.customContent ? this.customContent : 'BROKEN');
         break;
       default:
         content = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.GENERIC_ERROR);
         break;
     }
-    this.showErrorModal(content).subscribe(res=>{
+
+    LoadingService.hideAll();
+    return this.popoversService.show(content).do((res) => {
       this.acceptNewErrors = true;
-     // LoadingService.hideAll();
-    });
+      if (this.customAction) {
+        this.customAction(res);
+      }
+    }).toPromise() as Promise<DefaultPopoverResult>;
   }
 
-  public showNetworkError(): void {
+  public showNetworkError(): Promise<DefaultPopoverResult> {
     this.priority = ErrorPriority.networkError;
-    this.endWait();
+    return this.endWait();
   }
 
-  public showRetryError(): void {
+  public showRetryError(action?: (any) => void): void {
     this.priority = ErrorPriority.retryError;
-    this.beginWait();
+    this.beginWait(action);
   }
 
-  public showCustomError(content: string): void {
+  public showCustomError(content: string, action?: (any) => void): void {
     this.priority = ErrorPriority.customError;
     this.customContent = content;
-    this.beginWait();
+    this.beginWait(action);
   }
-
-  private showErrorModal(content: PopoverContent): Observable<DefaultPopoverResult> {
-    LoadingService.hideAll();
-    return this.popoversService.show(content);
-  }
-  }
+}
 

@@ -29,7 +29,8 @@ export class ApiService {
   public post(path: string, body: Object = {}, requiresToken: boolean = false): Observable<any> {
     if (requiresToken) {
       return this.secureActions.waitForAuth().flatMap(user => {
-        body['user_token'] = user.userToken+'0';
+        body['user_token'] = user.userToken;
+       
         return this.http.post(
           this.baseUrl + path,
           JSON.stringify(body),

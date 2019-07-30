@@ -54,6 +54,7 @@ export class ProductsPage implements OnInit, OnDestroy {
   }
 
   private readonly loadingFailedHandler = (culprit?: string): void => {
+    if(culprit === 'products' || !culprit)
     this.init();
   }
 

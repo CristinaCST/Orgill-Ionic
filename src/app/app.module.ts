@@ -33,7 +33,7 @@ import { ProductImageProvider } from '../providers/product-image/product-image';
 import { CSSInjector } from '../helpers/css-injector';
 
 // Interceptors
-import { UnauthorizedInterceptor } from '../interceptors/unauthorized-interceptor';
+import { ErrorInterceptor } from '../interceptors/error-interceptor';
 
 // Services
 import { NetworkService } from '../services/network/network';
@@ -143,7 +143,7 @@ import { CustomErrorHandler} from '../services/error-handler/error-handler';
     ProductImageProvider,
     SecureActionsService,
     { provide: ErrorHandler, useClass: CustomErrorHandler },
-    { provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ]
 })
 

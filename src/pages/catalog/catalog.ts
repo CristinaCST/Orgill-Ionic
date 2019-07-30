@@ -53,7 +53,7 @@ export class Catalog implements OnInit {
   }
 
   private readonly reloadMethodHandler = (culprit?: string): void => {
-    if (this.categories === undefined || this.categories.length === 0) {
+    if (this.categories === undefined || this.categories.length === 0 || culprit === 'categories' || !culprit) {
       this.initCatalog();
     }
   }
