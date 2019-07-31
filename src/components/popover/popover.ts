@@ -19,6 +19,7 @@ export class PopoverComponent {
   private instantCloseOnNo: boolean = false;
   @ViewChild('immuneElement') private readonly immuneElement: Content;
   @ViewChild('listNameInput') private readonly listNameElement: TextInput;
+  @ViewChild('supportCodeInput') private readonly supportCodeInput: TextInput;
 
   constructor(private readonly navParams: NavParams,
               public viewCtrl: ViewController,
@@ -80,8 +81,12 @@ export class PopoverComponent {
       data.quantity = this.quantity;
     }
 
-    if (this.data.supportModal === true) {
-      data.code = this.supportCode?this.supportCode.toString():undefined;
+
+    if (this.data.supportModal === true && this.data.additionalData.validator) {
+      if (this.supportCode === undefined || !this.data.additionalData.validator(this.supportCode.toString())) {
+        this.supportCodeInput._elementRef.nativeElement.classList.add('error-label');
+        return;
+      }
     }
 
     let navOptions: NavOptions;

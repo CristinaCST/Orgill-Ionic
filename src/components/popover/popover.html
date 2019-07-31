@@ -44,7 +44,7 @@
 
   <div class="supportModal" *ngIf="data.supportModal">
     <ion-item no-padding>
-      <ion-input [(ngModel)]="supportCode" type="tel" inputmode="numeric" maxlength="10" pattern="^[0-9]"
+      <ion-input #supportCodeInput [(ngModel)]="supportCode" type="tel" inputmode="numeric" maxlength="10" pattern="^[0-9]"
         placeholder="{{'support_code_hint'| translate }}" (keyup.enter)="$event.target.blur()"></ion-input>
     </ion-item>
   </div>

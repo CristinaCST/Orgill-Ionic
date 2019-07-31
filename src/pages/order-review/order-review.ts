@@ -17,7 +17,7 @@ import { HotDealConfirmation } from '../../interfaces/models/hot-deal-confirmati
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { HotDealsService } from '../../services/hotdeals/hotdeals';
-import { PopoverContent, DefaultPopoverResult, PopoversService, SupportPopoverResult } from '../../services/popovers/popovers';
+import { PopoverContent, DefaultPopoverResult, PopoversService } from '../../services/popovers/popovers';
 import { LoadingService } from '../../services/loading/loading';
 import { NavbarCustomButton } from '../../interfaces/models/navbar-custom-button';
 import { MoreOptionsComponent } from '../../components/more-options/more-options';
@@ -121,14 +121,11 @@ export class OrderReviewPage implements OnInit {
       type: Constants.POPOVER_SUPPORT_HOT_DEAL,
       title: Strings.GENERIC_MODAL_TITLE,
       positiveButtonText: Strings.MODAL_BUTTON_OK,
-      dismissButtonText: Strings.MODAL_BUTTON_CANCEL
+      dismissButtonText: Strings.MODAL_BUTTON_CANCEL,
+      additionalData: { validator: (code: string) => this.hotDealsService.overrideDealAccess(this.hotDealItem.ITEM.SKU, code) }
     };
 
-    this.popoversService.show(content).toPromise().then((result: SupportPopoverResult) => {
-      if (result.optionSelected === 'OK') {
-        this.hotDealsService.overrideDealAccess(this.hotDealItem.ITEM.SKU, result.code);
-      }
-    });
+    this.popoversService.show(content);
   }
 
   public purchase(): void {

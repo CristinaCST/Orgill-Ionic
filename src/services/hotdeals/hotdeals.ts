@@ -146,11 +146,17 @@ export class HotDealsService {
     return SKU.substring(0, 3) + Constants.OVERRIDE_ADDITIONAL_CODE;
   }
 
-  public overrideDealAccess(SKU: string, code: string): void {
+  /**
+   * Tries to override hot deal purchase access with a given code.
+   * @returns boolean Wether it succeded.
+   */
+  public overrideDealAccess(SKU: string, code: string): boolean {
     const accessString: string = this.dealAccessString(SKU);
-    if (accessString === code) {
+    const codeValid: boolean = accessString === code;
+    if (codeValid) {
       LocalStorageHelper.saveToLocalStorage(this.dealAccessString(SKU), Date.now());
     }
+    return codeValid;
   }
 
   /**
