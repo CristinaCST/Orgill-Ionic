@@ -103,7 +103,7 @@
     "no-unnecessary-qualifier": true,
     "one-variable-per-declaration": true,
     "prefer-method-signature": true,
-    "prefer-switch": true,
+    "prefer-switch": false,
     "prefer-while": true,
     "return-undefined": true,
     "space-before-function-paren": false,
