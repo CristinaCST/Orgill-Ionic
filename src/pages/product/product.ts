@@ -40,6 +40,7 @@ export class ProductPage implements OnInit {
   private shoppingListId: number;
   public quantityFromList: number;
   public regularPrice: number;
+  private isAvailable: boolean = true;
 
   private readonly loader: LoadingService;
 
@@ -95,32 +96,35 @@ export class ProductPage implements OnInit {
     }
 
     if (this.isHotDeal) {
-        
-        this.hotDealsService.getHotDealProgram(this.product.SKU).subscribe(program => {
-          const hotDealProgram: ItemProgram = JSON.parse(program.d);
 
-          this.regularPrice = Number(hotDealProgram.REGPRICE);
+      this.hotDealsService.getHotDealProgram(this.product.SKU).subscribe(program => {
+        const hotDealProgram: ItemProgram = JSON.parse(program.d);
+        const availQty: number = Number(hotDealProgram.AVAILQTY);
+        if (!isNaN(availQty) && availQty <= 0) {
+          this.isAvailable = false;
+        }
+        this.regularPrice = Number(hotDealProgram.REGPRICE);
 
-          this.productPrograms = [hotDealProgram];
-          if (hotDealProgram.SKU === null) {
-            const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, Strings.MODAL_BUTTON_OK, undefined, undefined, Constants.POPOVER_ERROR);
-            this.popoversService.show(content);
-            this.navigatorService.pop().catch(err => console.error(err));
-            LoadingService.hideAll();
-            return;
-          }
-          const initialProgram: ItemProgram = hotDealProgram;
-          this.selectedProgram = initialProgram;
-          this.programProvider.selectProgram(initialProgram);
-          this.getProduct().then(() => {
-            LoadingService.hideAll();
-            // this.loader.hide();
-          });
-
-        }, err => {
-        //  this.reloadService.paintDirty('hot deal program');
+        this.productPrograms = [hotDealProgram];
+        if (hotDealProgram.SKU === null) {
+          const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.PRODUCT_NOT_AVAILABLE, Strings.MODAL_BUTTON_OK, undefined, undefined, Constants.POPOVER_ERROR);
+          this.popoversService.show(content);
+          this.navigatorService.pop().catch(err => console.error(err));
+          LoadingService.hideAll();
+          return;
+        }
+        const initialProgram: ItemProgram = hotDealProgram;
+        this.selectedProgram = initialProgram;
+        this.programProvider.selectProgram(initialProgram);
+        this.getProduct().then(() => {
+          LoadingService.hideAll();
+          // this.loader.hide();
         });
-   
+
+      }, err => {
+        //  this.reloadService.paintDirty('hot deal program');
+      });
+
     } else {
       this.programProvider.getProductPrograms(this.product.SKU).subscribe(programs => {
         if (programs) {
@@ -213,6 +217,12 @@ export class ProductPage implements OnInit {
       PROGRAM: this.selectedProgram,
       TOTAL_QUANTITY: this.pricingService.validateQuantity(this.quantity, this.selectedProgram, this.product)
     };
+
+    if (!this.isAvailable) {
+      const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SOLD_OUT_MESSAGE);
+      this.popoversService.show(content);
+      return;
+    }
 
     this.navigatorService.push(CustomerLocationPage, { hotDeal }).catch(err => console.error(err));
   }

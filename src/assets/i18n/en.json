@@ -208,7 +208,7 @@
   "hot_deal_missing_required_po":"At least one of the location chosen requires a PO number and none was provided.",
 
   "quantity_too_high_overflow":"The quantity introduced is too high, try a lower number",
-  "menu_hot_deal_button":"Hot Deals",
+  "menu_hot_deal_button":"Hot Buys",
   "po_number_too_long":"PO number can't be longer than 15 characters.",
   "po_missing_required":"PO number is required for this location but none was provided.",
   "po_alphanumeric_warning":"PO number must be alphanumeric, additional characters have been removed",
@@ -227,5 +227,8 @@
   "no_customer_location": "It seems you don't have a valid ship to location. Please send your order to Orgill.com for further revisioning.",
   "locations_quantity_modal_description": "Insert the quantity you want for all locations",
   "regular_catalog_price": "Regular Dealer Price",
-  "support_code_hint": "Support code"
+  "support_code_hint": "Support code",
+  "session_expired": "You session has expired, please log in again.",
+  "sold_out_button": "SOLD OUT",
+  "sold_out_message": "Sorry, the quantity offered by our vendor is sold out. Please watch for the next available deal at the top of the hour."
 }
