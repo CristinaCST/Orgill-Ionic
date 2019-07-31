@@ -11,16 +11,19 @@ import { Events } from 'ionic-angular';
 import { Moment } from 'moment';
 import { DateTimeService } from '../../services/datetime/dateTimeService';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
+import * as Strings from '../../util/strings';
+import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
 
 @Injectable()
 export class AuthService {
 
   private user: User = new User();
-  private readonly secureActionsQueue: (() => any)[] = [];
+  // protected readonly secureActionsQueue: (() => any)[] = [];
 
   constructor(private readonly apiProvider: ApiService,
               private readonly events: Events,
-              private readonly secureActions: SecureActionsService) {
+              private readonly secureActions: SecureActionsService,
+              private readonly popoverService: PopoversService) {
     
       this.secureActions.authState.subscribe(authOk => {
       if (authOk) {
@@ -97,8 +100,11 @@ export class AuthService {
       return status;
     }
 
+
+    const content: PopoverContent = this.popoverService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SESSION_EXPIRED);
+    this.popoverService.show(content);
+
     this.logout(true);
-      // this.events.publish(Constants.EVENT_LOGIN_EXPIRED); TODO: Wat was here?
     
   }
 

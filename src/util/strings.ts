@@ -253,3 +253,5 @@ export const NO_CUSTOMER_LOCATION: string = 'no_customer_location';
 export const LOCATIONS_QUANTITY_MODAL_DESCRIPTION: string = 'locations_quantity_modal_description';
 
 export const REGULAR_CATALOG_PRICE: string = 'regular_catalog_price';
+
+export const SESSION_EXPIRED: string = 'session_expired';
