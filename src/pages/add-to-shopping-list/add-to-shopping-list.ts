@@ -147,6 +147,7 @@ export class AddToShoppingListPage implements OnInit {
     }
 
     if (specialLists.length > 0) {
+      specialLists.sort((listA, listB) => Number(listA.ListType) - Number(listB.ListType));
       specialLists.push(...this.shoppingLists);
       this.shoppingLists = specialLists;
     }
@@ -243,7 +244,7 @@ export class AddToShoppingListPage implements OnInit {
     const differentType: boolean = this.listIsNotSameType(selectedList);
     const alreadyAdded: boolean = typeof this.invalidatedLists.find(id => id === selectedList.ListID) !== 'undefined' ? true : false;
 
-    
+    // TODO: Switch 
     if (alreadyAdded) {
       this.reset(this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_EXISTING_PRODUCT));
       this.seekValidList();
