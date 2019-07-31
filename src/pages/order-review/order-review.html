@@ -1,7 +1,8 @@
 <!-- Order Review Page Header -->
 <ion-header>
   <!-- Order Review Page Navigation Bar -->
-  <navbar [title]="'customer_locations'" [customButtons]="customButtons" [isMenuEnabled]="false" [isBackEnabled]="true"></navbar>
+  <navbar [title]="'customer_locations'" [customButtons]="customButtons" [isMenuEnabled]="false" [isBackEnabled]="true">
+  </navbar>
   <!-- Order Review SubHeader -->
   <ion-toolbar id="order-review-sub-header" padding-left padding-right *ngIf="orderMethod">
     <ion-title> {{orderMethod===sendToOrgillMethod?("order_review_orgill_message"| translate):(

@@ -59,7 +59,7 @@ export class PopoversService {
    * @param continuous should the modal complete after 1 input? true if so
    * @param subjectReference pass a subject if you want a specific observable to be changed
    */
-  public show(content: PopoverContent, continuous: boolean = false, opts?: PopoverOptions, subjectReference?: Subject<any>): Observable<DefaultPopoverResult | CustomListPopoverResult | QuantityPopoverResult> {
+  public show(content: PopoverContent, continuous: boolean = false, opts?: PopoverOptions, subjectReference?: Subject<any>): Observable<DefaultPopoverResult | CustomListPopoverResult | QuantityPopoverResult | SupportPopoverResult> {
     if (this.isOpened) {
       const aux: Subject<any> = new Subject<any>();
       aux.next(content);

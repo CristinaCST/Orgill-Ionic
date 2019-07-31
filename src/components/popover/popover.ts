@@ -81,7 +81,7 @@ export class PopoverComponent {
     }
 
     if (this.data.supportModal === true) {
-      data.code = this.supportCode.toString();
+      data.code = this.supportCode?this.supportCode.toString():undefined;
     }
 
     let navOptions: NavOptions;
