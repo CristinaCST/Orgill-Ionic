@@ -25,11 +25,11 @@ export class ApiService {
     return this.http.get(baseUrl + path, { headers: this.setHeaders(), params });
   }
 
-  public post(path: string, body: Object = {}, requiresToken: boolean = false): Observable<any> {
+  public post(path: string, body: any & { user_token?: string }, requiresToken: boolean = false): Observable<any> {
     if (requiresToken) {
       return this.secureActions.waitForAuth().flatMap(user => {
-        body['user_token'] = user.userToken;
-       
+        body.user_token = user.userToken;
+
         return this.http.post(
           this.baseUrl + path,
           JSON.stringify(body),

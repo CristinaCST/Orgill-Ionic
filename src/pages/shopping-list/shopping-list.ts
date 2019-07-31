@@ -17,6 +17,7 @@ import { getNavParam } from '../../helpers/validatedNavParams';
 import { PricingService } from '../../services/pricing/pricing';
 import { Platform } from 'ionic-angular/platform/platform';
 import { NavbarCustomButton } from '../../interfaces/models/navbar-custom-button';
+import { Catalog } from '../../pages/catalog/catalog';
 
 @Component({
   selector: 'page-shopping-list',
@@ -51,6 +52,7 @@ export class ShoppingListPage {
   private holdTimeoutReference: number;
   public fromSearch: boolean = false;
   public holdCheckTimeout: boolean = false; // Flag to disable checking of items if we just entered Delete mode
+  protected isLoading: boolean = true;
 
   constructor(
     private readonly navParams: NavParams,
@@ -129,6 +131,7 @@ export class ShoppingListPage {
   }
 
   private fillList(): Promise<void> {
+    this.isLoading = true;
     this.shoppingListItems = [];
 
     this.loader.show();
@@ -143,8 +146,10 @@ export class ShoppingListPage {
       }
 
       this.loader.hide();
+      this.isLoading = false;
       return Promise.resolve();
     }).catch(error => {
+      this.isLoading = false;
       this.loader.hide();
      // this.reloadService.paintDirty('shopping list products');
       console.error(error);

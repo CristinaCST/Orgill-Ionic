@@ -94,7 +94,10 @@ product-quantity {
   }
 
   .percent-Note{
-    color:gray
+    text-align: center;
+    color: color($colors, OrgillLightGray);
+    padding-left: 5px;
+    padding-right: 5px;
   }
 
   .total-price {

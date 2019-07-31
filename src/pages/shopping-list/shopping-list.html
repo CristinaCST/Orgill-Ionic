@@ -25,7 +25,7 @@
       </shopping-list-product>
     </ion-item-group>
 
-    <p *ngIf="!shoppingListItems.length">{{"shopping_list_no_items_added" | translate}}</p>
+    <p *ngIf="!shoppingListItems.length && !isLoading">{{"shopping_list_no_items_added" | translate}}</p>
 
 </ion-content>
 

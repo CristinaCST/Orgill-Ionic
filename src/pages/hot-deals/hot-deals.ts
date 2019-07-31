@@ -12,6 +12,7 @@ import * as Constants from '../../util/constants';
 export class HotDealsPage {
   private hotDealsBuffer: HotDealNotification[] = [];
   private hotDeals: HotDealNotification[] = [];
+  protected isLoading: boolean = true;
   private readonly simpleLoader: LoadingService;
 
   @ViewChild(Content) private readonly content: Content;
@@ -37,7 +38,7 @@ export class HotDealsPage {
   }
 
   private initHotDeals(): void {
-
+    this.isLoading = true;
     this.hotDealsBuffer = [];
     this.hotDeals = [];
     this.content.resize();
@@ -57,12 +58,14 @@ export class HotDealsPage {
         if (this.content.contentHeight * 2 <= this.content.scrollHeight || this.hotDealsBuffer.length === 0) {
           this.simpleLoader.hide();
           clearInterval(loadInterval);
+          this.isLoading = false;
           return;
         }
         this.infiniteScroll.ionInfinite.emit(this.infiniteScroll);
       }, 20);
 
     }).catch(err => {
+      this.isLoading = false;
       console.error(err);
       LoadingService.hideAll();
      // this.reloadService.paintDirty('hotdeals');

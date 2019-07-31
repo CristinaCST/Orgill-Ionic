@@ -15,6 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class PurchasesPage {
 
+  protected isLoading: boolean = true;
   private purchasesBuffer: Purchase[] = [];
   public purchases: Purchase[] = [];
   private readonly loader: LoadingService; // TODO: Get rid of LS references per trello task
@@ -44,6 +45,8 @@ export class PurchasesPage {
   }
   
   private initPurchases(): void {
+    this.loader.show();
+    this.isLoading = true;
     this.purchases = [];
     this.purchasesBuffer = [];
     this.content.resize();
@@ -69,12 +72,14 @@ export class PurchasesPage {
         if (this.content.contentHeight * 2 <= this.content.scrollHeight || this.purchasesBuffer.length === 0) {
           this.loader.hide();
           clearInterval(loadInterval);
+          this.isLoading = false;
           return;
         }
         this.infiniteScroll.ionInfinite.emit(this.infiniteScroll);
       }, 20);
               
     }).catch(err => {
+      this.isLoading = false;
       LoadingService.hideAll();
      // this.reloadService.paintDirty('purchases');
     });

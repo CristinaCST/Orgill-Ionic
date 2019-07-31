@@ -7,14 +7,14 @@
 <ion-content>
 
 
-    <order-item *ngFor="let purchase of purchases" [purchase]="purchase" (click)="openOrderDetails(purchase)">
-    </order-item>
-
+  <order-item *ngFor="let purchase of purchases" [purchase]="purchase" (click)="openOrderDetails(purchase)">
+  </order-item>
+  <p id="no_items_label" *ngIf="purchases.length === 0 && !isLoading">
+    {{"orders_history_no_purchase" | translate}}</p>
 
   <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
     <ion-infinite-scroll-content>
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
-  <p id="no_items_label" *ngIf="purchases.length === 0">
-    {{"orders_history_no_purchase" | translate}}</p>
+
 </ion-content>
