@@ -359,12 +359,11 @@ export class ShoppingListPage {
       Strings.MODAL_BUTTON_YES, Strings.MODAL_BUTTON_CANCEL, undefined, Constants.POPOVER_DELETE_LIST_CONFIRMATION);
 
     this.popoversService.show(content).subscribe((data: DefaultPopoverResult) => {
-      this.loader.show();
-      
       if (data.optionSelected === 'OK') {
+        this.loader.show();
         this.shoppingListProvider.removeShoppingList(this.shoppingList.ListID).subscribe(removedData => {
           this.events.publish('DeletedList', this.shoppingList.ListID);
-          this.navigatorService.pop().then(() => this.loader.hide()).catch(err => console.error(err));
+          this.navigatorService.setRoot(Catalog).then(() => this.loader.hide()).catch(err => console.error(err));
         });
       }
     });
