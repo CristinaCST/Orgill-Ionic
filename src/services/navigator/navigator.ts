@@ -84,7 +84,6 @@ export class NavigatorService {
      * @param paramEquality Default value true. Should we check for param equality when we check pages?
      */
     public push(page: Page, params?: any, opts?: NavOptions & { paramsEquality?: boolean }, done?: () => void): Promise<any> {
-
         let equals: boolean = false;     // We will store if the current view is the same as the last one
 
         const lastPage: ViewController = this.navController.last();
@@ -120,13 +119,10 @@ export class NavigatorService {
 
             } 
 
-       // this.pageReference = page;
-
-        // return this.authService.executeSecureAction(() => {
-        //    this.announceTransition(NavigationEventType.PUSH, page);
+            this.announceTransition(NavigationEventType.PUSH, page);
             return this.navController.push(page, params, opts, done);
-      //  }) as Promise<any>;
     }
+    
 
     public pop(opts?: NavOptions, done?: () => void): Promise<any> {
         this.announceTransition(NavigationEventType.POP);

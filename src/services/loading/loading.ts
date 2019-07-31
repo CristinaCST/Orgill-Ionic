@@ -124,6 +124,7 @@ export class LoadingService {
     this.loading.present().then(() => {   // Try to show it
       this.isLoadingPresent = true; // Mark it if it is going to show here so
 
+      clearTimeout(LoadingService.loadingTimeout);
       LoadingService.loadingTimeout = setTimeout(() => {  // Register the timeout handler  
         this.throwLoadingError();
       }, Constants.TIMEOUT_INTERVAL);
