@@ -81,8 +81,7 @@ export class PopoverComponent {
       data.quantity = this.quantity;
     }
 
-
-    if (this.data.supportModal === true && this.data.additionalData.validator) {
+    if (data.optionSelected === 'OK' && this.data.supportModal === true && this.data.additionalData.validator) {
       if (this.supportCode === undefined || !this.data.additionalData.validator(this.supportCode.toString())) {
         this.supportCodeInput._elementRef.nativeElement.classList.add('error-label');
         return;
