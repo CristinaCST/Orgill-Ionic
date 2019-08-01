@@ -46,7 +46,6 @@ export class HotDealsPage {
     this.infiniteScroll.enable(true);
     this.simpleLoader.show();
     this.hotDealsService.getHotDealNotifications().then(res => {
-
       this.hotDealsBuffer.push(...res);
       this.hotDeals.push(...this.hotDealsBuffer.splice(0, Constants.INFINITE_LOADER_INITIAL_ELEMENTS));
       this.content.resize();
@@ -73,7 +72,9 @@ export class HotDealsPage {
   }
 
   public clickOnDeal(notification: HotDealNotification): void {
-    this.hotDealsService.navigateToHotDeal(notification.SKU.replace('\'', ''));
+    if (notification.SKU) {
+      this.hotDealsService.navigateToHotDeal(notification.SKU.replace('\'', ''));
+    }
   }
 
   public loadData(infiniteLoader: InfiniteScroll): void {
