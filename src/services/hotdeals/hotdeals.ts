@@ -127,11 +127,11 @@ export class HotDealsService {
         if (notifications.length > 0) {
           const parsedNotifications: HotDealNotification[] = notifications.map(rawNotification => {
             return {
-              id: rawNotification.id,
-              SKU: rawNotification.data.SKU,
+              id: rawNotification.id ? rawNotification.id : '',
+              SKU: rawNotification.data ? rawNotification.data.SKU ? rawNotification.data.SKU : '' : '',
               title: this.translation.currentLang === 'fr' ? rawNotification.headings.fr ? rawNotification.headings.fr : rawNotification.headings.en : rawNotification.headings.en,
               content: this.translation.currentLang === 'fr' ? rawNotification.contents.fr ? rawNotification.contents.fr : rawNotification.contents.en : rawNotification.contents.en,
-              timestamp: rawNotification.completed_at
+              timestamp: rawNotification.completed_at ? rawNotification.completed_at : ''
             };
           });
           resolve(parsedNotifications);
