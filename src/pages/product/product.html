@@ -37,5 +37,5 @@
 
 <ion-footer class="hide-on-keyboard-open" *ngIf="!fromShoppingList" [(ngSwitch)]="isHotDeal">
   <button id="add-shopping" *ngSwitchCase="false" (click)="addToShoppingList()">{{"button_add_to_list" | translate}}</button>
-  <button id="add-shopping" *ngSwitchCase="true" (click)="buyNow()">{{isAvailable?"button_buy_now":"sold_out_button" | translate}}</button>
+  <button id="add-shopping" *ngSwitchCase="true" (click)="buyNow()">{{(isAvailable?"button_buy_now":"sold_out_button") | translate}}</button>
 </ion-footer>
