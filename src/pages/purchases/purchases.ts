@@ -24,11 +24,11 @@ export class PurchasesPage {
   @ViewChild(InfiniteScroll) private readonly infiniteScroll: InfiniteScroll;
 
   constructor(private readonly navigatorService: NavigatorService,
-    private readonly purchasesProvider: PurchasesProvider,
-    private readonly loadingService: LoadingService,
-    private readonly translateService: TranslateService,
-    private readonly events: Events) {
-    this.loader = this.loadingService.createLoader();
+              private readonly purchasesProvider: PurchasesProvider,
+              private readonly loadingService: LoadingService,
+              private readonly translateService: TranslateService,
+              private readonly events: Events) {
+                this.loader = this.loadingService.createLoader();
   }
 
   public ngOnInit(): void {

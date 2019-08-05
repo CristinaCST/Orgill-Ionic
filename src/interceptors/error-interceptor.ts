@@ -9,11 +9,9 @@ import * as ConstantsUrl from '../util/constants-url';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private readonly events: Events) {
+  constructor(private readonly events: Events) { }
 
-  }
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
     return next.handle(req).pipe(catchError((err, caught) => {
       if (err.status === 401 && req.url !== (ConstantsUrl.URL_BASE_EN + ConstantsUrl.URL_LOGIN)) {
         this.events.publish(Constants.EVENT_INVALID_AUTH);

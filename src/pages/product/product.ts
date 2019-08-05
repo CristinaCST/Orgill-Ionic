@@ -116,10 +116,7 @@ export class ProductPage implements OnInit {
         const initialProgram: ItemProgram = hotDealProgram;
         this.selectedProgram = initialProgram;
         this.programProvider.selectProgram(initialProgram);
-        this.getProduct().then(() => {
-          LoadingService.hideAll();
-          // this.loader.hide();
-        });
+        this.getProduct();
 
       }, err => {
         //  this.reloadService.paintDirty('hot deal program');
@@ -139,10 +136,7 @@ export class ProductPage implements OnInit {
           this.regularPrice = Number(this.productPrograms[0].PRICE);
           this.selectedProgram = initialProgram;
           this.programProvider.selectProgram(initialProgram);
-          this.getProduct().then(() => {
-            LoadingService.hideAll();
-            // this.loader.hide();
-          });
+          this.getProduct();
         }
       }, err => {
       //  this.reloadService.paintDirty('product programs');
@@ -179,15 +173,16 @@ export class ProductPage implements OnInit {
 
   private getProduct(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.productProvider.getProduct(this.product.SKU, this.selectedProgram.PROGRAM_NO).subscribe(result => {
-        const img: string = this.product.IMAGE;  // Save already processed image by the product component
-        this.product = result;  // Get the new product
-        this.product.IMAGE = img; // Re-assign already processed image.
-        // this.quantity = this.pricingService.validateQuantity(this.quantity,this.selectedProgram,this.product);
+      if (this.isHotDeal || this.product.MODEL) { // Temp check for a non-vital field to check if a product is passed completely and can be used without further calls.
         LoadingService.hideAll();
-        //  this.loader.hide();
         resolve();
-      });
+      } else {
+        this.productProvider.getProduct(this.product.SKU, this.selectedProgram.PROGRAM_NO).subscribe(result => {
+          this.product = result;  // Get the new product
+          LoadingService.hideAll();
+          resolve();
+        });
+      }
     });
   }
 
