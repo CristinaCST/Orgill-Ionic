@@ -1,12 +1,12 @@
-<button ion-button color="light" clear full outline (click)="clickEvent.emit(item)" enabled="true">
+<div class='hot-deal-container' (click)="clickEvent.emit(item)">
   <div class="container">
-  <div class="header">
-    {{item.title}}
-  </div>
+    <div class="header">
+      {{item.title}}
+    </div>
 
-  <div class="info">
-   {{item.content}}
+    <div class="info">
+      {{item.content}}
+    </div>
   </div>
 </div>
-</button>
 <ion-item-divider></ion-item-divider>

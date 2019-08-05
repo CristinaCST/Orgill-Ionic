@@ -1,17 +1,18 @@
 @import "../../theme/variables";
 
 hot-deal {
-  button {
+  //display:flex!important;
+  .hot-deal-container{
     padding-top:10px!important;
-    min-width: 100%;
-    min-height: 60px;
-    height: auto;
-    .button-inner{
-     // display: flex!important;
+   // min-height: 60px;
+    display:flex!important;
+
       .container {
         align-content: center;
         text-align: center;
-        width: 100%;
+        width:100%;
+        padding-left:10px;
+        padding-right:10px;
         display: flex;
         flex-direction: column;
 
