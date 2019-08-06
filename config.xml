@@ -24,6 +24,8 @@
     <preference name="KeyboardResize" value="false" />
     <preference name="orientation" value="portrait" />
     <hook src="src/hooks/invalidate_version.js" type="after_build" />
+    <hook src="src/hooks/required_gps.js" type="after_platform_add" />
+    <hook src="src/hooks/gradle_upgrade.js" type="after_platform_add" />
     <platform name="android">
         <allow-intent href="market:*" />
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">

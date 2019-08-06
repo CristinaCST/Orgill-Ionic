@@ -7,7 +7,6 @@ module.exports = function(ctx){
         return;
     }
 
-    let valid = true;   // Flag to show errors if we catch any error or we get to an invalid point
     const version_path = 'src/util/version.ts'; //Target file
     const fpath = path.join(ctx.opts.projectRoot, version_path);  // Computed path of target file
 
@@ -18,15 +17,15 @@ module.exports = function(ctx){
     }
    
     try {   
-        let version_file = fs.readFileSync(fpath).toString();   // Grab the contents of the file as string
-        parsed_file = version_file.replace('=', '_');   // Nuke it
+        const version_file = fs.readFileSync(fpath).toString();   // Grab the contents of the file as string
+        const arsed_file = version_file.replace('=', '_');   // Nuke it
         fs.writeFileSync(fpath, parsed_file);   // Write the nuke in file
     } catch (e) {
         console.error('\x1b[31m%s\x1b[0m','[VERSION-INVALIDATOR] HOOK ERROR: ' + e);  // If we get any error print it and abort
         return;
     }
        
-    console.log('\x1b[32m%s\x1b[0m',"[VERSION-INVALIDATOR] INFO: Version file invalidated after release build");  // If we got here everything was god
+    console.log('\x1b[32m%s\x1b[0m',"[VERSION-INVALIDATOR] INFO: Version file invalidated after release build");  // If we got here everything was good
 }
 
 /* Leaving this here for upgrade potential. Currently the path is hardcoded, we can make a special file using this code.
