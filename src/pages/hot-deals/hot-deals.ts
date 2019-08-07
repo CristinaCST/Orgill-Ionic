@@ -73,6 +73,7 @@ export class HotDealsPage {
 
   public clickOnDeal(notification: HotDealNotification): void {
     if (notification.SKU) {
+      this.simpleLoader.show();
       this.hotDealsService.navigateToHotDeal(notification.SKU.replace('\'', ''));
     }
   }
