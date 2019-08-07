@@ -111,7 +111,7 @@ export class ProductQuantityComponent implements OnInit {
   }
 
   private setSavings(): void {
-    const percent: number = Math.round((Number(this.regularPrice) - this.total / this.quantity) * 100 / Number(this.product.SUGGESTED_RETAIL));
+    const percent: number = Math.round((this.regularPrice - this.total / this.quantity) / this.regularPrice * 100);
     this.savings = percent > 0 ? percent + '%' : '';
   }
 
