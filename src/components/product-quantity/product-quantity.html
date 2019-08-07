@@ -17,6 +17,12 @@
       <span>{{"savings_text" | translate}}:</span>
       <span>{{savings}}</span>
     </div>
+
+    <div *ngIf="hotDeal && program.MAXQTY > 0 " class="info red">
+      <span>{{"max_quantity_location_text" | translate}}:</span>
+      <span>{{program.MAXQTY}}</span>
+    </div>
+
   </ion-item>
 
   <ion-item *ngIf="!hotDeal" no-lines id="quantity-content">

@@ -218,6 +218,7 @@
   "hot_deal_location_too_far": "Your location tells us you are no longer at the market. If you think this is incorrect please see customer service or try again.",
 
   "savings_text":"Savings",
+  "max_quantity_location_text":"Max quantity per location",
   "added_item_to_list":"Added ${itemName} to list",
   "shopping_list_empty_title":"Empty list",
   "shopping_list_empty_message":"Shopping list is empty.",
