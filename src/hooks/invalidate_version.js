@@ -18,7 +18,7 @@ module.exports = function(ctx){
    
     try {   
         const version_file = fs.readFileSync(fpath).toString();   // Grab the contents of the file as string
-        const arsed_file = version_file.replace('=', '_');   // Nuke it
+        const parsed_file = version_file.replace('=', '_');   // Nuke it
         fs.writeFileSync(fpath, parsed_file);   // Write the nuke in file
     } catch (e) {
         console.error('\x1b[31m%s\x1b[0m','[VERSION-INVALIDATOR] HOOK ERROR: ' + e);  // If we get any error print it and abort
