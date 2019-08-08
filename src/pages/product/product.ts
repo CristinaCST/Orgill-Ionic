@@ -89,7 +89,6 @@ export class ProductPage implements OnInit {
     this.fromShoppingList = getNavParam(this.navParams, 'fromShoppingList', 'boolean');
     if (this.fromShoppingList) {
       this.shoppingListId = getNavParam(this.navParams, 'shoppingListId', 'number');
-      // this.id = getNavParam(this.navParams, id');
       this.quantityFromList = getNavParam(this.navParams, 'quantity', 'number');
 
       this.changeDetector.detectChanges();
@@ -178,6 +177,11 @@ export class ProductPage implements OnInit {
         resolve();
       } else {
         this.productProvider.getProduct(this.product.SKU, this.selectedProgram.PROGRAM_NO).subscribe(result => {
+          // if(result == undefined){
+          //   LoadingService.hideAll();
+          //   resolve();
+          // }
+
           this.product = result;  // Get the new product
           LoadingService.hideAll();
           resolve();

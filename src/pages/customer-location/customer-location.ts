@@ -214,14 +214,61 @@ export class CustomerLocationPage implements OnInit {
     this.orderTotal = this.pricingService.getPrice(qty, this.hotDealItem.ITEM, this.hotDealItem.PROGRAM);
   }
 
+  // public add(location: LocationElement): void {
+  //   location.QUANTITY = Number(location.QUANTITY) + 1;
+  //   location.QUANTITY = this.pricingService.validateQuantity(location.QUANTITY, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM);
+  // }
+
+  // public remove(location: LocationElement): void {
+  //   location.QUANTITY = Number(location.QUANTITY) - 1;
+  //   location.QUANTITY = this.pricingService.validateQuantity(location.QUANTITY, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM);
+  // }
+
   public add(location: LocationElement): void {
-    location.QUANTITY = Number(location.QUANTITY) + 1;
-    location.QUANTITY = this.pricingService.validateQuantity(location.QUANTITY, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM);
+    if (this.hotDealItem.ITEM.QTY_ROUND_OPTION === 'X') {
+      this.setPackQuantity(location, 'ADD');
+    } else {
+      location.QUANTITY++;
+    }
+    this.handleQuantityChange(location);
+
   }
 
   public remove(location: LocationElement): void {
-    location.QUANTITY = Number(location.QUANTITY) - 1;
-    location.QUANTITY = this.pricingService.validateQuantity(location.QUANTITY, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM);
+    if (this.hotDealItem.ITEM.QTY_ROUND_OPTION === 'X') {
+      if (location.QUANTITY > Number(this.hotDealItem.ITEM.SHELF_PACK)) {
+        this.setPackQuantity(location, 'REMOVE');
+      }
+    } else if (this.hotDealItem.ITEM.QTY_ROUND_OPTION === 'Y' && location.QUANTITY <= Number(this.hotDealItem.ITEM.SHELF_PACK) && location.QUANTITY >= Number(this.hotDealItem.ITEM.SHELF_PACK) * 0.7) {
+      location.QUANTITY = Math.floor(Number(this.hotDealItem.ITEM.SHELF_PACK) * 0.7);
+    } else {
+      if (location.QUANTITY > 1) {
+        location.QUANTITY--;
+      }
+    }
+    this.handleQuantityChange(location);
+  }
+
+  // TODO: Move all this quantity logic in a better service :/
+  public setPackQuantity(location: LocationElement, actionType: string): void {
+    const selfPackQuantity: number = Number(this.hotDealItem.ITEM.SHELF_PACK);
+    const newQuantity: number = this.validateQuantity(location.QUANTITY);
+    switch (actionType) {
+      case 'ADD':
+        location.QUANTITY = newQuantity + ((this.hotDealItem.ITEM.QTY_ROUND_OPTION === 'X') ? selfPackQuantity : 1);
+        break;
+      case 'REMOVE':
+        location.QUANTITY = newQuantity - ((this.hotDealItem.ITEM.QTY_ROUND_OPTION === 'X') ? selfPackQuantity : 1);
+        break;
+      default:
+        location.QUANTITY = newQuantity;
+    }
+
+    location.QUANTITY = this.pricingService.maxCheck(location.QUANTITY, this.hotDealItem.PROGRAM);
+  }
+
+  private validateQuantity(suggestedValue: number): number {
+    return this.pricingService.validateQuantity(suggestedValue, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM);
   }
 
   public handleQuantityChange(location: LocationElement): void {

@@ -94,7 +94,7 @@ export class ProductQuantityComponent implements OnInit {
         this.quantity = newQuantity;
     }
 
-    this.quantity = this.pricingService.maxCheck(this.quantity);
+    this.quantity = this.pricingService.maxCheck(this.quantity, this.program);
   }
 
 
@@ -112,7 +112,7 @@ export class ProductQuantityComponent implements OnInit {
 
   private setSavings(): void {
     // One day this formula will be very valued again, Cristina wrote it btw.
-    //const percent: number = Math.round((this.regularPrice - this.total / this.quantity) / this.regularPrice * 100);
+    // const percent: number = Math.round((this.regularPrice - this.total / this.quantity) / this.regularPrice * 100);
     const percent: number = Math.round((this.regularPrice - Number(this.program.PRICE)) / this.regularPrice * 100);
     this.savings = percent > 0 ? percent + '%' : '';
   }
