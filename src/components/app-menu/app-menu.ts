@@ -194,8 +194,9 @@ export class AppMenuComponent implements OnInit {
         this.addProgramsToDB(programs); // TODO: Refactor this, creates regular program
         programs.map(program => {
           if (program.MARKETONLY.toUpperCase().includes('Y')) {
+           
             if (program.NAME.toUpperCase().includes('DOOR BUSTER BOOKING')) { // TODO: Fix this
-              program.NAME.replace('DOOR BUSTER BOOKING', '');
+              program.NAME = program.NAME.replace('DOOR BUSTER BOOKING', '');
               this.doorBusterPrograms.push(program);
             } else {
               this.marketOnlyPrograms.push(program);
