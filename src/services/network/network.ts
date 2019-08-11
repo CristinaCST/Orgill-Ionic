@@ -3,6 +3,7 @@ import { Network } from '@ionic-native/network';
 import { PopoversService } from '../popovers/popovers';
 import { ReloadService } from '../../services/reload/reload';
 import { ErrorScheduler } from '../../services/error-scheduler/error-scheduler';
+import * as Constants from '../../util/constants';
 
 @Injectable()
 export class NetworkService {
@@ -16,9 +17,9 @@ export class NetworkService {
 
   public static firstConnect: boolean = true;
   constructor(private readonly network: Network,
-              private readonly popoversService: PopoversService,
-              private readonly reloadService: ReloadService,
-              private readonly errorScheduler: ErrorScheduler) {}
+    private readonly popoversService: PopoversService,
+    private readonly reloadService: ReloadService,
+    private readonly errorScheduler: ErrorScheduler) { }
 
   public listenForNetworkEvents(): void {
     if (!this.connectionStatus) {
@@ -30,7 +31,7 @@ export class NetworkService {
       if (state.type === 'offline') {
         this.openNetworkModal();
       } else {
-        this.popoversService.closeModal();
+        this.popoversService.closeModal(Constants.POPOVER_NETWORK_OFFLINE);
         this.reloadService.announceRetry(true);
       }
     });

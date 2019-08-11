@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PopoversService, PopoverContent, DefaultPopoverResult } from '../../services/popovers/popovers';
 import * as Strings from '../../util/strings';
+import * as Constants from '../../util/constants';
 import { LoadingService } from '../../services/loading/loading';
 
 
@@ -48,7 +49,7 @@ export class ErrorScheduler {
     let content: PopoverContent;
     switch (this.priority) {
       case ErrorPriority.networkError:
-        content = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.POPOVER_NETWORK_OFFLINE_MESSAGE, Strings.MODAL_BUTTON_TRY_AGAIN);
+        content = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.POPOVER_NETWORK_OFFLINE_MESSAGE, Strings.MODAL_BUTTON_TRY_AGAIN, undefined, undefined, Constants.POPOVER_NETWORK_OFFLINE);
         break;
       case ErrorPriority.retryError:
         content = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.RELOAD_ERROR_MESSAGE_WITHOUT_CULPRIT, Strings.MODAL_BUTTON_TRY_AGAIN);

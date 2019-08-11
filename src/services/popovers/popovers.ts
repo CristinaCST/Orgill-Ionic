@@ -47,6 +47,7 @@ export class PopoversService {
 
   // private close = new Subject<any>();
   private isOpened: boolean = false;
+  public type: string = undefined;
   private popover: Popover;
   public static activeItem: PopoversService;
   public static queue: QueueItem[] = [];
@@ -89,6 +90,7 @@ export class PopoversService {
       }
       this.nextInQueue();
     });
+    this.type = content.type;
     this.popover.present().catch(err => console.error(err));
     if (subjectReference == undefined) {
       return close.asObservable();
@@ -105,7 +107,19 @@ export class PopoversService {
     this.show(queueItem.content, queueItem.continuous, queueItem.opts, queueItem.subject);
   }
 
-  public closeModal(): void {
+  public closeModal(popoverType?: string): void {
+    if (popoverType !== undefined) {
+      for (let i: number = PopoversService.queue.length - 1; i >= 0; i--) {
+        if (PopoversService.queue[i].content.type === popoverType) {
+          PopoversService.queue.splice(i, 1);
+        }
+      }
+    }
+
+    if (this.type !== popoverType) {
+      return;
+    }
+
     if (this.isOpened) {
       PopoversService.activeItem = undefined;
       this.popover.dismiss();
