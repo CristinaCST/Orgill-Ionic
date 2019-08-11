@@ -9,6 +9,7 @@ import { ScannerService } from '../../services/scanner/scanner';
 import { ShoppingList } from '../../interfaces/models/shopping-list';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
 import { getNavParam } from '../../helpers/validatedNavParams';
+import { ProductPage } from '../../pages/product/product';
 
 @Component({
   selector: 'page-scanner',
@@ -76,5 +77,15 @@ export class ScannerPage implements OnInit {
       LoadingService.hideAll();
     });
   }
+
+  public goToProductPage(product: Product): void {
+    this.navigatorService.push(ProductPage, {
+      product,
+      programName: '',
+      programNumber: '',
+      subcategoryName: ''
+    });
+  }
+
 
 }

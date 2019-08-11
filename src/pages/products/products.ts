@@ -85,6 +85,7 @@ export class ProductsPage implements OnInit, OnDestroy {
     );
   }
 
+  // TODO: Why this appears 2 times, now 3...?
   public goToProductPage(product: Product): void {
     this.navigatorService.push(ProductPage, {
       'product': product,
