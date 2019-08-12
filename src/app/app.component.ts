@@ -23,7 +23,6 @@ export class MyApp {
 
   public rootPage: any;
   public isLoading: boolean = true;
-  // private readonly openedFromNotification: boolean = false;
 
   constructor(public platform: Platform,
               public statusBar: StatusBar,

@@ -18,7 +18,6 @@ import { PopoversService, PopoverContent } from '../../services/popovers/popover
 export class AuthService {
 
   private user: User = new User();
-  // protected readonly secureActionsQueue: (() => any)[] = [];
 
   constructor(private readonly apiProvider: ApiService,
               private readonly events: Events,
@@ -67,12 +66,11 @@ export class AuthService {
     if (this.user && this.user.userToken) {
       return new Promise((resolve, reject) => {
         const params: any = { user_token: this.user.userToken };
-        this.apiProvider.post(ConstantsURL.URL_USER_INFO, params).take(1).subscribe(response => {
+        this.apiProvider.post(ConstantsURL.URL_USER_INFO, params).subscribe(response => {
           this.user = JSON.parse(response.d);
           this.user.userToken = params.user_token;
           this.secureActions.setAuthState(true, this.user);
           this.events.publish(Constants.EVENT_AUTH);
-          // this.executeQueue();
           LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
           resolve();
         }, error => {
