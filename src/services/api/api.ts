@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { LocalStorageHelper } from '../../helpers/local-storage';
-import * as ConstantsURL from '../../util/constants-url';
-import * as Constants from '../../util/constants';
 import { Observable } from 'rxjs/Observable';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class ApiService {
@@ -46,13 +44,13 @@ export class ApiService {
   }
 
   private getServiceBaseURL(): string {
-    if (! LocalStorageHelper.hasKey(Constants.DEVICE_LANGUAGE)) {
-      return ConstantsURL.URL_BASE_EN;
-    }
-    if (LocalStorageHelper.getFromLocalStorage(Constants.DEVICE_LANGUAGE).toLowerCase().includes(Constants.LANG_FR)) {
-      return ConstantsURL.URL_BASE_FR;
-    }
-    return ConstantsURL.URL_BASE_EN;
+    // if (!LocalStorageHelper.hasKey(Constants.DEVICE_LANGUAGE)) {
+    //   return ConstantsURL.URL_BASE_EN;
+    // }
+    // if (LocalStorageHelper.getFromLocalStorage(Constants.DEVICE_LANGUAGE).toLowerCase().includes(Constants.LANG_FR)) {
+    //   return ConstantsURL.URL_BASE_FR;
+    // }
+    return environment.baseUrlEnglish;
   }
 
 

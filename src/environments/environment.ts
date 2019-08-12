@@ -1,5 +1,6 @@
+import { URL_BASE_PROD } from '../util/constants-url';
 export const environment: { production: boolean, baseUrlEnglish: string, baseUrlFrench: string } = {
   production: true,
-  baseUrlEnglish: 'http://dmwebservice.orgill.com/service.asmx',
+  baseUrlEnglish: URL_BASE_PROD,
   baseUrlFrench: 'http://dmwebservice-cafr.orgill.com/service.asmx'
 };

@@ -1,4 +1,4 @@
-import { environment } from '@app/env';
+import { environment } from '../environments/environment';
 
 export const APP_CONFIGURATION_INFO: string = 'appConfigurationInfo';
 

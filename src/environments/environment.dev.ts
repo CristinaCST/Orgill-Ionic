@@ -1,5 +1,6 @@
+import { URL_BASE_DEV } from '../util/constants-url';
 export const environment: { production: boolean, baseUrlEnglish: string, baseUrlFrench: string } = {
   production: false,
-  baseUrlEnglish: 'http://reststage.orgill.com/service.asmx',
+  baseUrlEnglish: URL_BASE_DEV,
   baseUrlFrench: 'http://reststage.orgill.com/service.asmx'
 };
