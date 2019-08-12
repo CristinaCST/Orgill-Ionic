@@ -204,9 +204,15 @@ export class NavigatorService {
         this.lastPage.next(name);
       }
 
-    private announceTransition(navType: NavigationEventType, newPage?: string | Page): void {
-        const name: string = newPage ? (typeof newPage === 'string' ? newPage : newPage.name) : this.lastPage.getValue();
-        this.events.publish(Constants.EVENT_NAVIGATE_TO_PAGE, name, navType);
+    private announceTransition(navType: NavigationEventType, newPage?: Page): void {
+         // TODO: Deprecated code, this behaviour is dangerous in production.
+         const name: string = newPage ? (typeof newPage === 'string' ? newPage : newPage.name) : this.lastPage.getValue();
+        
+
+        // const name: string = newPage? newPage.component : 
+        // console.log(" PAGE NAME IN ANNOUNCE TRANSITION IN PROD RELEASE BUILD" + name);
+        // console.log("COMPONENT:" + this.navController.last().component.toString());
+        this.events.publish(Constants.EVENT_NAVIGATE_TO_PAGE, navType);
         this.lastEvent = navType;
         this.lastPage.next(name);
     }
