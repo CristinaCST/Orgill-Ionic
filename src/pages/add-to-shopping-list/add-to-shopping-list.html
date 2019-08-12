@@ -15,12 +15,14 @@
       <ion-item-divider no-lines class="header">
         {{"shopping_list_add_select_message" | translate}}
       </ion-item-divider>
-      <ion-item *ngFor="let shoppingList of shoppingLists">
-        <ion-label>
-          {{shoppingList.ListName}}
-          <ion-radio [value]="shoppingList.ListID" (ionSelect)="selectList(shoppingList)"></ion-radio>
-        </ion-label>
-      </ion-item>
+      <ng-container *ngFor="let shoppingList of shoppingLists">
+        <ion-item id={{shoppingList.ListID}}>
+          <ion-label>
+            {{shoppingList.ListName}}
+            <ion-radio [value]="shoppingList.ListID" (ionSelect)="selectList(shoppingList)"></ion-radio>
+          </ion-label>
+        </ion-item>
+      </ng-container>
     </ion-list>
   </form>
 

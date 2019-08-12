@@ -12,7 +12,7 @@ export class SearchService {
     return this._lastSearchString;
   }
 
-  public set lastSearchString(value) {
+  public set lastSearchString(value: string) {
     this._lastSearchString = value;
   }
   public rootSearch: boolean = true; // Is the current searchbar interaction with a root-level searchbar?
@@ -28,7 +28,7 @@ export class SearchService {
   }
 
   // TODO: Remove this! This is a workaround!
-  public clearText() {
+  public clearText(): void {
     this.lastSearchString = '';
     this.rootSearch = true;
   }

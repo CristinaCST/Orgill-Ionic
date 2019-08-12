@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { NavParams } from 'ionic-angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NavParams, Content } from 'ionic-angular';
 import { Product } from '../../interfaces/models/product';
 import { ItemProgram } from '../../interfaces/models/item-program';
 import { ShoppingListsProvider, ListType } from '../../providers/shopping-lists/shopping-lists';
@@ -40,12 +40,14 @@ export class AddToShoppingListPage implements OnInit {
   private loader: LoadingService;
   private lastValidList: ShoppingList;
 
+  @ViewChild(Content) private readonly content: Content;
+
   constructor(public navigatorService: NavigatorService,
-              public navParams: NavParams,
-              private readonly shoppingListsProvider: ShoppingListsProvider,
-              private readonly popoversService: PopoversService,
-              private readonly formBuilder: FormBuilder,
-              private readonly loadingService: LoadingService,
+    public navParams: NavParams,
+    private readonly shoppingListsProvider: ShoppingListsProvider,
+    private readonly popoversService: PopoversService,
+    private readonly formBuilder: FormBuilder,
+    private readonly loadingService: LoadingService,
     private readonly programProvider: ProgramProvider) {
     this.menuCustomButtons.push({ action: () => this.newShoppingList(), icon: 'add' });
   }
@@ -108,12 +110,13 @@ export class AddToShoppingListPage implements OnInit {
           virtualListIndex--;
         }
       }
-      
+
 
       if (virtualLists.length > 0) {
         this.isAddBtnDisabled = false;
         this.listForm.setValue({ 'listOptions': virtualLists[0].ListID });
         this.firstValidListID = virtualLists[0].ListID;
+        this.scrollToList(this.firstValidListID);
       } else {
         this.listForm.setValue({ 'listOptions': '-1' });
         this.isAddBtnDisabled = true;
@@ -124,7 +127,7 @@ export class AddToShoppingListPage implements OnInit {
     }).catch(error => console.error(error));
   }
 
-  
+
   public checkMarketOnlyProduct(isMarketOnly: boolean): void {
     this.listForm.value.listOptions = isMarketOnly ? LocalStorageHelper.getFromLocalStorage(Constants.MARKET_ONLY_LIST_ID) : this.listForm.value.listOptions = LocalStorageHelper.getFromLocalStorage(Constants.DEFAULT_LIST_ID);
   }
@@ -207,7 +210,6 @@ export class AddToShoppingListPage implements OnInit {
     };
 
     this.loader.show();
-    // TODO: UPDATE WHEN APIS ARE READY
     this.shoppingListsProvider.addItemToShoppingList(this.listForm.value.listOptions, listItem, this.listForm.value.listOptions.isMarketOnly).subscribe(() => {
       this.loader.hide();
       this.cancel();
@@ -217,7 +219,7 @@ export class AddToShoppingListPage implements OnInit {
   public checkProductInList(listId: string): void {
     this.shoppingListsProvider.checkProductInList(this.product.SKU, listId, this.selectedProgram.PROGRAM_NO).subscribe((data: APIResponse) => {
       const temp: string = JSON.parse(data.d).Status;
-      const response: boolean = (temp === 'True');
+      const response: boolean = temp.toLowerCase() === 'true';
       if (response) {
         this.isAddBtnDisabled = true;
         this.reset(this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_EXISTING_PRODUCT));
@@ -255,9 +257,22 @@ export class AddToShoppingListPage implements OnInit {
       this.seekValidList();
       this.reset(this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_DEFAULT_PRODUCT));
     } else {
+      this.scrollToList(selectedList.ListID);
       this.lastValidList = selectedList;
       this.checkProductInList(selectedList.ListID);
       this.isAddBtnDisabled = false;
+
+    }
+  }
+
+
+  // TODO: Hacky, but it works.
+  private scrollToList(id: string): void {
+    const element: any = document.getElementById(id);
+    if (!element) {
+      this.content.scrollToBottom();
+    } else {
+      this.content.scrollTo(0, element.offsetTop - 50);
     }
   }
 
