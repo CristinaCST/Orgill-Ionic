@@ -6,14 +6,15 @@ import { catchError } from 'rxjs/operators';
 import { Events } from 'ionic-angular/util/events';
 import * as Constants from '../util/constants';
 import * as ConstantsUrl from '../util/constants-url';
+import { environment } from '../environments/environment';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
   constructor(private readonly events: Events) { }
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(req).pipe(catchError((err, caught) => {
-      if (err.status === 401 && req.url !== (ConstantsUrl.URL_BASE_EN + ConstantsUrl.URL_LOGIN)) {
+    return next.handle(req).pipe(catchError(err => {
+      if (err.status === 401 && req.url !== (environment.baseUrlEnglish + ConstantsUrl.URL_LOGIN)) {
         this.events.publish(Constants.EVENT_INVALID_AUTH);
         return Observable.throw('Unauthorized');
       }
