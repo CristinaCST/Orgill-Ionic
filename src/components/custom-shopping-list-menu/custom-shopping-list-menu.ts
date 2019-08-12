@@ -9,6 +9,7 @@ import { ShoppingListPage } from '../../pages/shopping-list/shopping-list';
 import { Events } from 'ionic-angular';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { ShoppingListResponse } from '../../interfaces/response-body/shopping-list';
+import { SearchService } from '../../services/search/search';
 
 @Component({
   selector: 'custom-shopping-list-menu',
@@ -22,7 +23,8 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
   constructor(private readonly shoppingListsProvider: ShoppingListsProvider,
               private readonly popoversService: PopoversService,
               private readonly events: Events,
-              private readonly navigatorService: NavigatorService) {
+              private readonly navigatorService: NavigatorService,
+              private readonly searchService: SearchService) {
   }
 
   public backToMainMenu(): void {
@@ -70,6 +72,7 @@ export class CustomShoppingListMenuComponent implements OnInit, OnDestroy {
     const params: any = {
       list
     };
+    this.searchService.clearText(); // TODO: Workaround
     this.navigatorService.push(ShoppingListPage, params, { paramsEquality: false }).catch(err => console.error(err));
   }
 

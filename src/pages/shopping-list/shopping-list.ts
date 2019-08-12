@@ -18,6 +18,7 @@ import { PricingService } from '../../services/pricing/pricing';
 import { Platform } from 'ionic-angular/platform/platform';
 import { NavbarCustomButton } from '../../interfaces/models/navbar-custom-button';
 import { Catalog } from '../../pages/catalog/catalog';
+import { SearchService } from '../../services/search/search';
 
 @Component({
   selector: 'page-shopping-list',
@@ -63,7 +64,8 @@ export class ShoppingListPage {
     private readonly loading: LoadingService,
     private readonly scannerService: ScannerService,
     private readonly pricingService: PricingService,
-    private readonly platform: Platform) {
+    private readonly platform: Platform,
+    private readonly searchService: SearchService) {
 
     this.loader = this.loading.createLoader();
     this.menuCustomButtons = [{ action: () => this.getListDetails(), icon: 'information-circle' }, { action: () => this.scan(), icon: 'barcode' }];
@@ -87,7 +89,8 @@ export class ShoppingListPage {
     this.events.unsubscribe(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST);
   }
 
-  public ionViewWillEnter(): void {   
+  public ionViewWillEnter(): void {
+
     this.events.subscribe(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST, () => {
       this.fillList();
     });
@@ -221,6 +224,7 @@ export class ShoppingListPage {
   }
 
   public checkout(): void {
+    this.searchService.clearText();
     if (this.shoppingListItems.length === 0) {
       const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_EMPTY_TITLE, Strings.SHOPPING_LIST_EMPTY_MESSAGE);
       this.popoversService.show(content);
@@ -235,7 +239,7 @@ export class ShoppingListPage {
   }
 
 
-  // This system is overly complicated
+  // TODO: This system is overly complicated
   private setOrderTotal(event: { status: string}, index: number): void {
     const item: ShoppingListItem = this.shoppingListItems[index];
     const price: number = this.pricingService.getShoppingListPrice(item.quantity, item.product, item.item_price);
