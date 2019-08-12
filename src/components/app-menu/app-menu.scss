@@ -2,6 +2,19 @@
 
 app-menu {
   #main_menu {
+    div.catalogs{
+      button{
+        .label{
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis!important;
+          &.label-md{
+            display: block!important;
+            align-items: center;
+          }
+        }
+      }
+    }
     .content {
       background: color($colors, OrgillDarkGray) linear-gradient(to left, #4c4c4c, #333333);
 
@@ -19,6 +32,7 @@ app-menu {
           color: white;
           .label {
             padding-left: 16px !important;
+
             &.label-md {
               display: flex;
               align-items: center;
