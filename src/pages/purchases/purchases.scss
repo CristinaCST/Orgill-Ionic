@@ -1,3 +1,4 @@
+@import "../../theme/variables";
 page-purchases {
     ion-list{
         margin-bottom:2px!important;
@@ -6,5 +7,10 @@ page-purchases {
         p{
             padding-left:5px;
         }
+    }
+    .no-items{
+        text-align: center;
+        font-weight: 400;
+        font-size: $font-size-medium;
     }
 }
