@@ -1,8 +1,12 @@
 @import "../../theme/variables";
 
 app-menu {
+  button .button-effect {
+    display: none!important;
+  }
   #main_menu {
     div.catalogs{
+    
       button{
         .label{
           overflow: hidden;
