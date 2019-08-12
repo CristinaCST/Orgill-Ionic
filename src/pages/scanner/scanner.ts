@@ -71,7 +71,7 @@ export class ScannerPage implements OnInit {
           products: JSON.parse(data.d),
           fromSearch: true
         };
-        this.navigatorService.push(ScannerPage, params).catch(err => console.error(err));
+        this.navigatorService.push(ScannerPage, params, { paramsEquality: false }).catch(err => console.error(err));
       }
     }, err => {
       LoadingService.hideAll();
