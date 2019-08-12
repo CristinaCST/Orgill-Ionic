@@ -11,6 +11,7 @@ import { LocalStorageHelper } from '../../helpers/local-storage';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
+import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 
 enum androidPermissionState {
     AUTHORIZED = 1,
@@ -46,7 +47,8 @@ export class OneSignalService {
         private readonly popoversService: PopoversService,     // Needed for permission modals,
         private readonly platform: Platform,
         private readonly navigatorService: NavigatorService,
-        private readonly secureActions: SecureActionsService
+        private readonly secureActions: SecureActionsService,
+        private readonly geolocation: Geolocation
     ) { }
 
 
@@ -306,10 +308,22 @@ export class OneSignalService {
     /**
      * Function that checks wether we have location permission.
      */
-    private handleLocationPermission(): void {
+    private handleLocationPermission(): Promise<void> {
         this.oneSignal.setLocationShared(true);
-        this.oneSignal.promptLocation();
-    }
+       // this.oneSignal.promptLocation(); HACK: This is graphically glitching, good job one signal :/
+            return new Promise(resolve => {
+                this.oneSignal.setLocationShared(true);
+                // GetCurrent position calls for location permission by itself
+                this.geolocation.getCurrentPosition().then((res: Geoposition) => {
+                    // Everything is alright
+    
+                    resolve();
+                }).catch(e => {
+                    console.error(e);
+                });
+    
+            }) as Promise<void>;
+        }
 
     private notificationReceived(data: OSNotificationPayload): void {
         
