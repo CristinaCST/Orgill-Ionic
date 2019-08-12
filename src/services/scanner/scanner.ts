@@ -48,9 +48,9 @@ export class ScannerService {
 
   public scan(shoppingList: ShoppingList, products: ShoppingListItem[]): void {
 
-    this.navigatorService.oneTimeBackButtonOverride(() => {
-      // Exiting scanner
-    });
+     const buttonOverride: number = this.navigatorService.oneTimeBackButtonOverride(() => {
+       // Exiting scanner
+     });
 
     if (shoppingList) {
       this.shoppingList = shoppingList;
@@ -64,7 +64,9 @@ export class ScannerService {
     this.selectedProduct = {};
     this.barcodeScanner.scan({ disableAnimations: true, resultDisplayDuration: 0 }).then(barcodeData => {
 
-      if (barcodeData == undefined) {
+      this.navigatorService.removeOverride(buttonOverride);
+
+      if (barcodeData === undefined) {
         return undefined;
       }
 

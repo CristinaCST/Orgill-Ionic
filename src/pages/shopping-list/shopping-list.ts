@@ -88,7 +88,6 @@ export class ShoppingListPage {
   }
 
   public ionViewWillEnter(): void {   
-
     this.events.subscribe(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST, () => {
       this.fillList();
     });
