@@ -182,8 +182,8 @@ export const MARKET_ONLY_LIST_TYPE: string = '2';
 export const CUSTOM_LIST_MARKET_TYPE: string = '3';
 
 // ONE SIGNAL SETUP
-export const ONE_SIGNAL_API_KEY: string = 'be33b136-2960-435a-b22f-b12ade07e393';
-export const ONE_SIGNAL_ANDROID_PROJECT_TITLE: string = 'orgill-test';
+export const ONE_SIGNAL_API_KEY: string = 'a11b3e10-bce2-41e9-a6d0-746042798d7e';
+export const ONE_SIGNAL_ANDROID_PROJECT_TITLE: string = 'orgill-5a5ba';
 export const ONE_SIGNAL_IOS_NOTIFICATION_AUTO_PROMPT: boolean = false;
 export const ONE_SIGNAL_IOS_LAUNCH_IN_WEBVIEW: boolean = false;
 export const ONE_SIGNAL_LOCATION_PREFERENCE_PATH: string = 'locationSharing';
