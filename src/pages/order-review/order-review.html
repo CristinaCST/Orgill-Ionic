@@ -89,10 +89,10 @@
     <button ion-button outline block color="OrgillDarkGray" (click)="cancel()">
       {{"cancel" | translate}}
     </button>
-    <button *ngIf="!isHotDeal" ion-button block color="OrgillRed" (click)="purchase()">
+    <button ion-button *ngIf="!isHotDeal"  block color="OrgillRed" (click)="purchase()">
       {{forwardButtonText | translate}}
     </button>
-    <button *ngIf="isHotDeal" ion-button block color="OrgillRed" (click)="purchaseHotDeal()">
+    <button ion-button *ngIf="isHotDeal" block color="OrgillRed" (click)="purchaseHotDeal()">
       {{"order_review_purchase" | translate}}
     </button>
   </div>

@@ -46,15 +46,15 @@ export class OrderReviewPage implements OnInit {
   private supportButtonPopover: Popover;
 
   constructor(private readonly navigatorService: NavigatorService,
-              private readonly navParams: NavParams,
-              private readonly shoppingListsProvider: ShoppingListsProvider,
-              public readonly productProvider: ProductProvider,
-              private readonly hotDealsService: HotDealsService,
-              private readonly popoversService: PopoversService,
-              private readonly loadingService: LoadingService,
-              private readonly popoverController: PopoverController) {
-      this.simpleLoader = this.loadingService.createLoader();
-    }
+    private readonly navParams: NavParams,
+    private readonly shoppingListsProvider: ShoppingListsProvider,
+    public readonly productProvider: ProductProvider,
+    private readonly hotDealsService: HotDealsService,
+    private readonly popoversService: PopoversService,
+    private readonly loadingService: LoadingService,
+    private readonly popoverController: PopoverController) {
+    this.simpleLoader = this.loadingService.createLoader();
+  }
 
   public ngOnInit(): void {
     this.orderMethod = getNavParam(this.navParams, 'orderMethod', 'number');
@@ -129,6 +129,7 @@ export class OrderReviewPage implements OnInit {
   }
 
   public purchase(): void {
+    this.simpleLoader.show();
     Object.keys(this.shoppingListProgramNumbers).map((programNumber, index) => {
       const orderItems: ShoppingListItem[] = this.shoppingListItems.filter(item => item.program_number === programNumber);
       const itemsIds: number[] = orderItems.reduce((arr, item) => arr.concat(item.id), []);
@@ -154,10 +155,14 @@ export class OrderReviewPage implements OnInit {
               orderTotal: this.orderTotal,
               orderMethod: this.orderMethod
             };
+            this.simpleLoader.hide();
             this.navigatorService.push(OrderConfirmationPage, navigationParams).catch(err => console.error(err));
           }
         }
-      }).catch(err => console.error(err));
+      }).catch(err => {
+        LoadingService.hideAll();
+        console.error(err);
+      });
     });
   }
 
@@ -177,7 +182,7 @@ export class OrderReviewPage implements OnInit {
       if (!isInRange && !this.hotDealsService.dealHasValidOverride(this.hotDealItem.ITEM.SKU)) {
         return Promise.reject('range');
       }
-      return Promise.resolve();      
+      return Promise.resolve();
     }, err => {
       this.simpleLoader.hide();
     }).then(() => {
@@ -216,15 +221,15 @@ export class OrderReviewPage implements OnInit {
         title: Strings.GENERIC_MODAL_TITLE,
         message: Strings.LOCATION_TOO_FAR,
         positiveButtonText: Strings.MODAL_BUTTON_OK
-    };
+      };
 
-        LoadingService.hideAll();
-        // Return the popover observable
-        this.popoversService.show(popoverContent).subscribe((result: DefaultPopoverResult) => {
-        });
-
+      LoadingService.hideAll();
+      // Return the popover observable
+      this.popoversService.show(popoverContent).subscribe((result: DefaultPopoverResult) => {
       });
-    
+
+    });
+
   }
 
 
