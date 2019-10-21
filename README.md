@@ -7,29 +7,67 @@ cordova platform add android
 cordova platform add ios
 ```
 # Run
-On device 
+
+## On device 
+
+* For Android:
 ```sh
-ionic cordova run android/ios --device 
+ionic cordova run android --device 
 ```
-On emulator
+
+* For iOS:
 ```sh
-ionic cordova run android/ios 
+ionic cordova run ios --device 
 ```
-Livereload
+
+## On emulator
+
+* For Android:
 ```sh
-ionic cordova run android/ios --device --livereload 
+ionic cordova run android 
+```
+
+* For iOS:
+```sh
+ionic cordova run ios 
+```
+
+## Livereload
+
+* For Android: 
+```sh
+ionic cordova run android --device --livereload 
+```
+
+* For iOS: 
+```sh
+ionic cordova run ios --device --livereload 
 ```
 
 # Build
 
-Development
-```sh
-ionic cordova build android/ios --dev
-```
-Production 
+## Development
 
+* For Android:
 ```sh
-ionic cordova build android/ios --prod --release 
+ionic cordova build android --dev
+```
+
+* For iOS:
+```sh
+ionic cordova build ios --dev
+```
+
+## Production 
+
+* For Android:
+```sh
+ionic cordova build android --prod --release 
+```
+
+* For iOS:
+```sh
+ionic cordova build ios --prod --release 
 ```
 
 
