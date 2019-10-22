@@ -1,0 +1,22 @@
+page-settings {
+    .content {
+      height: 100%;
+      width: 100%;
+      position: relative !important;
+      background-color: lightgray;
+  
+      .about-page-container {
+        width: 90%;
+        display: flex;
+        justify-content: center;
+        margin: 10% 5%;
+        #info {
+          font-size: 20px;
+          font-weight: bold;
+          justify-content: center;
+          text-align: center;
+        }
+      }
+    }
+  }
+  
