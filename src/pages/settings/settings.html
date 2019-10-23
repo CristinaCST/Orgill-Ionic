@@ -1,20 +1,15 @@
 <!-- About Page Header -->
 <ion-header>
-    <navbar [title]="'The O Zone'" [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
+    <navbar [title]="'Settings'" [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
   </ion-header>
   <!-- About Page Content -->
   <ion-content>
     <div class="settings-page-container">
-      <div>
-        <!-- Orgill Logo -->
-        <div id="logo">
-             <img src="../../assets/imgs/orgill_logo.png">
-        </div>
-        <!-- Orgill info & App Version-->
-        <div id="info">
-          <p> &#9400; 2019 Orgill, Inc.</p>
-          <p>Version {{applicationVersion}}</p>
-        </div>
+      <div class="settingsList">
+        <p>
+          Push Notifications 
+        </p>
+       <ion-toggle (ionChange)="pushNotificationsSwitch($event)" ></ion-toggle>
       </div>
     </div>
   </ion-content>

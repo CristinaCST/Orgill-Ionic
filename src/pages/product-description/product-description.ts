@@ -46,6 +46,7 @@ export class ProductDescriptionPage implements OnInit, AfterViewInit {
     this.loader.show();
     this.catalogProvider.getProductDetails(this.product.SKU).subscribe(description => {
       this.description = JSON.parse(description.d).description;
+      console.log(description.d);
       this.loader.hide();
     }, err => {
      // this.reloadService.paintDirty('product description');

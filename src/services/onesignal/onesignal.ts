@@ -188,6 +188,8 @@ export class OneSignalService {
      */
     private androidPermissionsSetup(): void {
         this.oneSignal.setSubscription(this.pushNotificationPermission);
+        this.oneSignal.addPermissionObserver();
+        this.oneSignal.addSubscriptionObserver();
 
         if (this.pushNotificationPermission) {
             LocalStorageHelper.removeFromLocalStorage(Constants.NOTIFICATION_SUBSCRIPTION_ANDROID_PATH);
@@ -218,6 +220,37 @@ export class OneSignalService {
                 }
             });
         }
+    }
+
+    public androidPermissionSwitchOn(): void{
+        let self = this;
+        console.log("User before switch:", this.oneSignal.getPermissionSubscriptionState());
+        this.oneSignal.getPermissionSubscriptionState().then(
+            function (state){
+                if(!state.subscriptionStatus.subscribed){
+                    self.oneSignal.setSubscription(true);
+                }
+            }
+        );
+        console.log("User after switch:", this.oneSignal.getPermissionSubscriptionState());
+    }
+
+    public androidPermissionSwitchOff(): void {
+        let self = this;
+        console.log("User before switch:", this.oneSignal.getPermissionSubscriptionState());
+        this.oneSignal.getPermissionSubscriptionState().then(
+            function (state){
+                if(state.subscriptionStatus.subscribed){
+                    console.log("this is the state inside the promise:", state)
+                    self.oneSignal.setSubscription(false);
+                }
+            }
+        ).then(
+            function (){
+                console.log("User after switch inside Promise:", this.oneSignal.getPermissionSubscriptionState());
+            }
+        );
+        console.log("User after switch:", this.oneSignal.getPermissionSubscriptionState());
     }
 
     /**
