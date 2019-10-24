@@ -9,7 +9,7 @@
         <p>
           Push Notifications 
         </p>
-       <ion-toggle (ionChange)="pushNotificationsSwitch($event)" ></ion-toggle>
+       <ion-toggle [checked]="notificationsAllowed" (ionChange)="pushNotificationsSwitch($event)" ></ion-toggle>
       </div>
     </div>
   </ion-content>

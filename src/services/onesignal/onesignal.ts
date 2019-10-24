@@ -186,6 +186,15 @@ export class OneSignalService {
     /**
      * Handles android-side of permissions
      */
+
+    public isPermissionsOn(): boolean {
+        let permision = false;
+        this.oneSignal.getPermissionSubscriptionState().then(function(state){
+            permision = state.subscriptionStatus.subscribed;
+        })
+        return permision;
+    } 
+    
     private androidPermissionsSetup(): void {
         this.oneSignal.setSubscription(this.pushNotificationPermission);
         this.oneSignal.addPermissionObserver();

@@ -8,11 +8,12 @@ import { OneSignalService } from '../../services/onesignal/onesignal';
 })
 export class SettingsPage {
   public applicationVersion: String = VersionFile.VERSION;
+  public notificationsAllowed: boolean = false;
 
   constructor(
     private readonly oneSignalService: OneSignalService
   ){
-
+    this.notificationsAllowed = this.oneSignalService.isPermissionsOn();
   }
 
   public pushNotificationsSwitch(event): void {
