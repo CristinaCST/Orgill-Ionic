@@ -3,7 +3,7 @@
     <name>Orgill</name>
     <description>The OZone</description>
     <author email="cristina.nicolae@cst-us.com" href="http://cst-us.com/">CST Team</author>
-    <content original-src="index.html" src="http://192.168.0.37:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
