@@ -15,6 +15,7 @@ import { NavigatorService } from '../../services/navigator/navigator';
 import { Product } from '../../interfaces/models/product';
 import { getNavParam } from '../../helpers/validatedNavParams';
 import { NavbarCustomButton } from '../../interfaces/models/navbar-custom-button';
+import { PopoversService, DefaultPopoverResult, PopoverContent } from '../../services/popovers/popovers';
 
 
 @Component({
@@ -33,8 +34,8 @@ export class Catalog implements OnInit {
   private readonly simpleLoader: LoadingService;
 
   constructor(public navigatorService: NavigatorService, public navParams: NavParams, public catalogProvider: CatalogsProvider,
-              public loadingService: LoadingService, public translateProvider: TranslateWrapperService, private readonly events: Events) {
-    this.menuCustomButtons.push({ action: () => this.goToScanPage(), icon: 'barcode' });
+              public loadingService: LoadingService, public popoversService: PopoversService, public translateProvider: TranslateWrapperService, private readonly events: Events) {
+    this.menuCustomButtons.push({ action: () => this.getCatalogDetails(), icon: 'information-circle' }, { action: () => this.goToScanPage(), icon: 'barcode' });
 
     this.categoriesLoader = loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_CATEGORIES));
     this.simpleLoader = loadingService.createLoader();
@@ -134,6 +135,21 @@ export class Catalog implements OnInit {
     }, err => {
       // TODO: SOLVE THIS
     });
+  }
+
+  private getCatalogDetails(): void {
+    let description: string = Strings.SHOPPING_LIST_DESCRIPTION_NOT_PROVIDED;
+
+    // if (this.isCustomList && this.shoppingList.ListDescription) {
+    //   description = this.shoppingList.ListDescription;
+    // } else if (this.shoppingList.ListType === Constants.DEFAULT_LIST_TYPE) {
+    //   description = Strings.SHOPPING_LIST_DESCRIPTION_REGULAR;
+    // } else if (this.shoppingList.ListType === Constants.MARKET_ONLY_LIST_TYPE) {
+    //   description = Strings.SHOPPING_LIST_DESCRIPTION_MARKET;
+    // }
+
+    const content: PopoverContent = this.popoversService.setContent(this.programName, description);
+    this.popoversService.show(content);
   }
 
   public onSearched($event: any): void {

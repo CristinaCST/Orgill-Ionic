@@ -229,6 +229,7 @@
   "no_customer_location": "It seems you don't have a valid ship to location. Please send your order to Orgill.com for further revisioning.",
   "locations_quantity_modal_description": "Insert the quantity you want for all locations",
   "regular_catalog_price": "Regular Dealer Price",
+  "catlog_description_not_provided": "Catalog description not provided.",
   "support_code_hint": "Support code",
   "session_expired": "You session has expired, please log in again.",
   "sold_out_button": "SOLD OUT",
