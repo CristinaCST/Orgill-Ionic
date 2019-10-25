@@ -12,6 +12,7 @@ import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
+import { resolveDefinition } from '@angular/core/src/view/util';
 
 enum androidPermissionState {
     AUTHORIZED = 1,
@@ -182,19 +183,10 @@ export class OneSignalService {
             });
         });
     }
-
+    
     /**
      * Handles android-side of permissions
      */
-
-    public isPermissionsOn(): boolean {
-        let permision = false;
-        this.oneSignal.getPermissionSubscriptionState().then(function(state){
-            permision = state.subscriptionStatus.subscribed;
-        })
-        return permision;
-    } 
-    
     private androidPermissionsSetup(): void {
         this.oneSignal.setSubscription(this.pushNotificationPermission);
         this.oneSignal.addPermissionObserver();
@@ -231,9 +223,21 @@ export class OneSignalService {
         }
     }
 
-    public androidPermissionSwitchOn(): void{
+    /*
+        Checks if user is subscribed to push notifications
+    */
+
+    public isSubscriptionOn(): Promise<boolean> {
+        return this.oneSignal.getPermissionSubscriptionState().then(state => {
+            return state.subscriptionStatus.subscribed;
+        });
+    }
+
+    /*
+        Sets on subscription of user to push notifications
+    */
+    public androidSubscriptionSwitchOn(): void{
         let self = this;
-        console.log("User before switch:", this.oneSignal.getPermissionSubscriptionState());
         this.oneSignal.getPermissionSubscriptionState().then(
             function (state){
                 if(!state.subscriptionStatus.subscribed){
@@ -241,25 +245,20 @@ export class OneSignalService {
                 }
             }
         );
-        console.log("User after switch:", this.oneSignal.getPermissionSubscriptionState());
     }
 
-    public androidPermissionSwitchOff(): void {
+    /*
+        Sets off subscription of user to push notifications
+    */
+    public androidSubscriptionSwitchOff(): void {
         let self = this;
-        console.log("User before switch:", this.oneSignal.getPermissionSubscriptionState());
         this.oneSignal.getPermissionSubscriptionState().then(
             function (state){
                 if(state.subscriptionStatus.subscribed){
-                    console.log("this is the state inside the promise:", state)
                     self.oneSignal.setSubscription(false);
                 }
             }
-        ).then(
-            function (){
-                console.log("User after switch inside Promise:", this.oneSignal.getPermissionSubscriptionState());
-            }
         );
-        console.log("User after switch:", this.oneSignal.getPermissionSubscriptionState());
     }
 
     /**

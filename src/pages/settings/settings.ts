@@ -13,14 +13,14 @@ export class SettingsPage {
   constructor(
     private readonly oneSignalService: OneSignalService
   ){
-    this.notificationsAllowed = this.oneSignalService.isPermissionsOn();
+    this.oneSignalService.isSubscriptionOn().then(state => this.notificationsAllowed = state);
   }
 
   public pushNotificationsSwitch(event): void {
       if(event.checked){
-          this.oneSignalService.androidPermissionSwitchOn();
+          this.oneSignalService.androidSubscriptionSwitchOn();
       } else {
-          this.oneSignalService.androidPermissionSwitchOff();
+          this.oneSignalService.androidSubscriptionSwitchOff();
       }
   }
 }
