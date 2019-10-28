@@ -3,7 +3,7 @@
     <name>Orgill</name>
     <description>The OZone</description>
     <author email="cristina.nicolae@cst-us.com" href="http://cst-us.com/">CST Team</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.100.190:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -115,6 +115,7 @@
     <allow-navigation href="*" />
     <allow-navigation href="http://192.168.1.47:8100" />
     <allow-navigation href="http://192.168.0.37:8100" />
+    <allow-navigation href="http://192.168.100.190:8100" />
     <engine name="android" spec="^6.2.3" />
     <engine name="ios" spec="^5.0.1" />
     <plugin name="cordova-plugin-android-permissions" spec="^1.0.0" />
