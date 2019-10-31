@@ -16,6 +16,7 @@ import { Product } from '../../interfaces/models/product';
 import { getNavParam } from '../../helpers/validatedNavParams';
 import { NavbarCustomButton } from '../../interfaces/models/navbar-custom-button';
 import { PopoversService, DefaultPopoverResult, PopoverContent } from '../../services/popovers/popovers';
+import { Program } from 'interfaces/models/program';
 
 
 @Component({
@@ -24,6 +25,7 @@ import { PopoversService, DefaultPopoverResult, PopoverContent } from '../../ser
 })
 export class Catalog implements OnInit {
 
+  private programs: Program[];
   private programNumber: string;
   private programName: string;
   public categories: Category[];
@@ -73,7 +75,14 @@ export class Catalog implements OnInit {
       this.categories = categoriesFromNavParam;
     } else {
       this.getCategories();
+      this.getPrograms();
     }
+  }
+
+  private getPrograms(): void {
+    this.catalogProvider.getPrograms().subscribe(response =>{
+      this.programs = JSON.parse(response.d);
+    })
   }
 
   private getCategories(): void {
@@ -139,14 +148,13 @@ export class Catalog implements OnInit {
 
   private getCatalogDetails(): void {
     let description: string = Strings.SHOPPING_LIST_DESCRIPTION_NOT_PROVIDED;
-
-    // if (this.isCustomList && this.shoppingList.ListDescription) {
-    //   description = this.shoppingList.ListDescription;
-    // } else if (this.shoppingList.ListType === Constants.DEFAULT_LIST_TYPE) {
-    //   description = Strings.SHOPPING_LIST_DESCRIPTION_REGULAR;
-    // } else if (this.shoppingList.ListType === Constants.MARKET_ONLY_LIST_TYPE) {
-    //   description = Strings.SHOPPING_LIST_DESCRIPTION_MARKET;
-    // }
+    
+    let program = this.programs.filter(singleProgram=> {
+      return singleProgram.PROGRAMNO == this.programNumber;
+    })[0];
+    if(this.programNumber != '' && program){
+      description = 'Start date: ' + program.STARTDATE + ' ' + 'End Date:' + program.ENDDATE;
+    }
 
     const content: PopoverContent = this.popoversService.setContent(this.programName, description);
     this.popoversService.show(content);
