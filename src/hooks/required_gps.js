@@ -2,13 +2,13 @@
  * This hook helps with location feature on older android devices.
  */
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 const hookTag = '[REQUIRED-GPS]';
 
 module.exports = function (ctx) {
 
-    let android= false;
+    let android = false;
     ctx.opts.platforms.forEach(platform => {
         if (platform.indexOf('android') > -1) {
             android = true;
@@ -24,7 +24,7 @@ module.exports = function (ctx) {
     }
 
     const androidJsonPath = path.join(ctx.opts.projectRoot, 'platforms/android/android.json');
-    const androidManifestPath = path.join(ctx.opts.projectRoot, 'platforms/android/app/src/main/AndroidManifest.xml'); 
+    const androidManifestPath = path.join(ctx.opts.projectRoot, 'platforms/android/app/src/main/AndroidManifest.xml');
 
     if (!fs.existsSync(androidJsonPath) || !fs.existsSync(androidManifestPath)) {  // If the file doesn't exist we print such error and abort
         console.error('\x1b[31m%s\x1b[0m', hookTag + ' HOOK ERROR: at least one of the targeted files doesn\'t exist');
@@ -34,8 +34,8 @@ module.exports = function (ctx) {
     try {
         const androidJsonFileContents = fs.readFileSync(androidJsonPath).toString();
         const androidManifestFileContents = fs.readFileSync(androidManifestPath).toString();
-        fs.writeFileSync(androidJsonPath, androidJsonFileContents.replace('android:name=\\"android.hardware.location.gps\\" />', 'android:name=\\"android.hardware.location.gps\\" required=\\"true\\" />')); 
-        fs.writeFileSync(androidManifestPath, androidManifestFileContents.replace('<uses-feature android:name="android.hardware.location.gps" />', '')); 
+        fs.writeFileSync(androidJsonPath, androidJsonFileContents.replace('android:name=\\"android.hardware.location.gps\\" />', 'android:name=\\"android.hardware.location.gps\\" required=\\"true\\" />'));
+        fs.writeFileSync(androidManifestPath, androidManifestFileContents.replace('<uses-feature android:name="android.hardware.location.gps" />', ''));
     } catch (e) {
         console.error('\x1b[31m%s\x1b[0m', hookTag + ' HOOK ERROR: ' + e);  // If we get any error print it and abort
         return;

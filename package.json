@@ -8,9 +8,7 @@
         "start": "ionic-app-scripts serve",
         "clean": "ionic-app-scripts clean",
         "build": "ionic-app-scripts build",
-        "lint": "ionic-app-scripts lint",
-        "ionic:build:before": "node ./config/environment-script.js prod",
-        "ionic:serve:before": "node ./config/environment-script.js dev"
+        "lint": "ionic-app-scripts lint"
     },
     "dependencies": {
         "@angular/animations": "^5.2.11",
@@ -35,7 +33,7 @@
         "@ngx-translate/core": "^9.1.1",
         "@ngx-translate/http-loader": "^2.0.1",
         "build": "^0.1.4",
-        "cordova-android": "^6.2.3",
+        "cordova-android": "8.1.0",
         "cordova-browser": "6.0.0",
         "cordova-ios": "^5.0.1",
         "cordova-plugin-android-permissions": "^1.0.0",

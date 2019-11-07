@@ -50,24 +50,24 @@ ionic cordova run ios --device --livereload
 
 * For Android:
 ```sh
-ionic cordova build android --dev
+ionic cordova build android
 ```
 
 * For iOS:
 ```sh
-ionic cordova build ios --dev
+ionic cordova build ios
 ```
 
 ## Production 
 
 * For Android:
 ```sh
-ionic cordova build android --prod --release 
+ionic cordova build android --release -- --prod
 ```
 
 * For iOS:
 ```sh
-ionic cordova build ios --prod --release 
+ionic cordova build ios --release -- --prod
 ```
 
 
