@@ -1,26 +1,21 @@
 var fs = require('fs');
 
-function readWriteSync() {
-  let env = process.env.ENV || 'prod';
-  console.log('ENVVNVNVNVN', env)
+// if (process.argv.length < 3){
+//   console.log('////////')
+//   console.error("Please specify dev or prod environment in package.json by adding a third parameter to the ionic:serve:build")
+//   console.log('////////')
+//   return;
+// }
 
-  var data = fs.readFileSync(`src/environments/environment.${env}.ts`, 'utf-8');
-  fs.writeFileSync('src/environments/environment.ts', data, 'utf-8');
-  console.log('DATAAA', data)
-  
-  consoleOut();
-}
+let env = process.argv[2] || prod;
+let filePath = `src/environments/environment.${env}.ts`;
 
-function consoleOut() {
-  let env = process.env.ENV || 'prod';
-  let filePath = `src/environments/environment.${env}.ts`;
-  
-  console.log("============ PREPARE ENV FILE =============");
-  console.log("                                           ");
-  console.log("                 "+env+"                   ");
-  console.log("              "+filePath+"                 ");
-  console.log("                                           ");
-  console.log("===========================================");
-}
+var data = fs.readFileSync(filePath, 'utf-8');
+fs.writeFileSync('src/environments/environment.ts', data, 'utf-8');
 
-readWriteSync();
+console.log("============ PREPARE ENV FILE =============");
+console.log("                                           ");
+console.log("                 "+env+"                   ");
+console.log("              "+filePath+"                 ");
+console.log("                                           ");
+console.log("===========================================");
