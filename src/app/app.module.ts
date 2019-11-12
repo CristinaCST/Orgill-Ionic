@@ -51,6 +51,7 @@ import { ErrorScheduler } from '../services/error-scheduler/error-scheduler';
 import { MyApp } from './app.component';
 import { Catalog } from '../pages/catalog/catalog';
 import { Login } from '../pages/login/login';
+import { SettingsPage } from '../pages/settings/settings';
 import { AboutPage } from '../pages/about/about';
 import { ProductsPage } from '../pages/products/products';
 import { ProductPage } from '../pages/product/product';
@@ -71,6 +72,7 @@ const pages: Page[] = [MyApp,
                Catalog,
                Login,
                AboutPage,
+               SettingsPage,
                ProductsPage,
                ProductPage,
                ProductDescriptionPage,

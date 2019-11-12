@@ -45,6 +45,7 @@
   "menu_ordering_history": "Achats Antérieurs",
   "menu_account_offline": "Navigation Hors Ligne",
   "menu_about": "À propos",
+  "menu-settings": "Settings",
   "menu_account_logout": "Fermer La Session",
   "deprecated_database_title": "Une nouvelle base de données est disponible",
   "deprecated_database_message": "Une nouvelle base de données est disponible. Voulez-vous continuer à télécharger la page?",
