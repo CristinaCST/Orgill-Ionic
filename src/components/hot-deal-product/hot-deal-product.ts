@@ -1,5 +1,6 @@
 import { Component, Input, AfterViewInit } from '@angular/core';
 import { ProductImageProvider } from '../../providers/product-image/product-image';
+import { ItemProgram } from '../../interfaces/models/item-program';
 import { Product } from '../../interfaces/models/product';
 
 @Component({
@@ -12,6 +13,7 @@ export class HotDealProductComponent implements AfterViewInit {
 
   @Input('hotDealItem') public hotDealItem: Product;
   @Input('orderTotal') public orderTotal: number;
+  @Input() public priceHotDealItem: ItemProgram;
 
   public imageURL: string = '';
   public imageIsLoading: boolean = true;
