@@ -1,0 +1,16 @@
+<!-- About Page Header -->
+<ion-header>
+    <navbar [title]="'Settings'" [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
+  </ion-header>
+  <!-- About Page Content -->
+  <ion-content>
+    <div class="settings-page-container">
+      <div class="settingsList">
+        <p>
+          {{"push_notifications_setting" | translate}}
+        </p>
+       <ion-toggle [checked]="notificationsAllowed" (ionChange)="pushNotificationsSwitch($event)" ></ion-toggle>
+      </div>
+    </div>
+  </ion-content>
+  

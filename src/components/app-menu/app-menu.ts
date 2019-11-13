@@ -5,7 +5,6 @@ import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { AuthService } from '../../services/auth/auth';
 import { PopoversService, DefaultPopoverResult, PopoverContent } from '../../services/popovers/popovers';
-import { AboutPage } from '../../pages/about/about';
 import { CatalogsProvider } from '../../providers/catalogs/catalogs';
 import { TranslateWrapperService } from '../../services/translate/translate';
 import { ShoppingList } from '../../interfaces/models/shopping-list';
@@ -16,6 +15,8 @@ import { Catalog } from '../../pages/catalog/catalog';
 import { ScannerPage } from '../../pages/scanner/scanner';
 import { ShoppingListPage } from '../../pages/shopping-list/shopping-list';
 import { PurchasesPage } from '../../pages/purchases/purchases';
+import { AboutPage } from '../../pages/about/about';
+import { SettingsPage } from '../../pages/settings/settings';
 import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import { NavigatorService } from '../../services/navigator/navigator';
@@ -30,7 +31,7 @@ import { LoadingService } from '../../services/loading/loading';
 })
 export class AppMenuComponent implements OnInit {
 
-  public menuPages: any = { aboutPage: AboutPage, pastPurchases: PurchasesPage };
+  public menuPages: any = { aboutPage: AboutPage, pastPurchases: PurchasesPage, settingsPage: SettingsPage };
   public everyDayPrograms: Program[] = [];
   public marketOnlyPrograms: Program[] = [];
   public doorBusterPrograms: Program[] = [];
