@@ -153,7 +153,7 @@ export class Catalog implements OnInit {
       return singleProgram.PROGRAMNO == this.programNumber;
     })[0];
     if(this.programNumber != '' && program){
-      description = 'Start date: ' + program.STARTDATE + ' ' + 'End Date:' + program.ENDDATE;
+      description = 'Start date: ' + program.STARTDATE + ' ' + ' End Date:' + program.ENDDATE + ' Release Date:' + program.SHIPDATE;
     }
 
     const content: PopoverContent = this.popoversService.setContent(this.programName, description);
