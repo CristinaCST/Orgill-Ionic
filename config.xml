@@ -128,4 +128,5 @@
     <plugin name="onesignal-cordova-plugin" spec="~2.5.0" />
     <plugin name="cordova-plugin-ionic-webview" spec="^2" />
     <engine name="android" spec="8.0.0" />
+    <allow-navigation href="http://localhost:8100" sessionid="0985bc67" />
 </widget>

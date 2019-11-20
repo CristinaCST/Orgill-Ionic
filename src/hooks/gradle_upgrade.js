@@ -2,8 +2,8 @@
  * This hook helps with automatically getting the project ready for build with the upgraded gradle version.
  */
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 const hookTag = '[GRADLE-UPGRADE]';
 
 module.exports = function (ctx) {
@@ -14,11 +14,12 @@ module.exports = function (ctx) {
         }
     });
 
-    if (!android)
+    if (!android) {
         return;
+    }
 
-    const gradleVersionPath = path.join(ctx.opts.projectRoot,'platforms/android/build.gradle');
-    const gradleWrapperPath = path.join(ctx.opts.projectRoot,'platforms/android/cordova/lib/builders/ProjectBuilder.js');
+    const gradleVersionPath = path.join(ctx.opts.projectRoot, 'platforms/android/build.gradle');
+    const gradleWrapperPath = path.join(ctx.opts.projectRoot, 'platforms/android/cordova/lib/builders/ProjectBuilder.js');
     // const androidManifestPath = path.join(ctx.opts.projectRoot,'platforms/android/app/src/main/AndroidManifest.xml');
     // const buildGradlePath = path.join(ctx.opts.projectRoot,'platforms/android/app/build.gradle');
 
@@ -28,7 +29,7 @@ module.exports = function (ctx) {
     }
 
     try {
-        const gradleVersionFileContents = fs.readFileSync(gradleVersionPath).toString(); 
+        const gradleVersionFileContents = fs.readFileSync(gradleVersionPath).toString();
         const gradleWrapperFileContents = fs.readFileSync(gradleWrapperPath).toString();
         // const androidManifestFileContents = fs.readFileSync(androidManifestPath).toString();
         // const buildGradleFileContents = fs.readFileSync(buildGradlePath).toString();

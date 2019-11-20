@@ -48,6 +48,7 @@
   "menu_ordering_history": "Past Purchases",
   "menu_account_offline": "Offline Browsing",
   "menu_about": "About",
+  "menu_settings": "Settings",
   "menu_account_logout": "Logout",
 
   "username": "Username",
@@ -217,6 +218,7 @@
   "one_signal_subscription_reminder":"Would you like to receive push notifications with hot buys?",
   "no_hot_deals": "No available hot buys",
   "hot_deal_location_too_far": "Your location tells us you are no longer at the market. If you think this is incorrect please see customer service or try again.",
+  "push_notifications_setting": "Push Notifications",
 
   "savings_text":"Savings",
   "max_quantity_location_text":"Max quantity per location",
