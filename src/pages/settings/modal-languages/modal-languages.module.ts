@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
+import { TranslateModule } from '@ngx-translate/core';
 import { ModalLanguagesPage } from './modal-languages';
 
 @NgModule({
@@ -7,7 +8,7 @@ import { ModalLanguagesPage } from './modal-languages';
     ModalLanguagesPage
   ],
   imports: [
-    IonicPageModule.forChild(ModalLanguagesPage)
+    IonicPageModule.forChild(ModalLanguagesPage), TranslateModule
   ]
 })
 export class ModalLanguagesPageModule {}
