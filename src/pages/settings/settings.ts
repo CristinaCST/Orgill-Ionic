@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import * as VersionFile from '../../util/version';
 import { OneSignalService } from '../../services/onesignal/onesignal';
-import { NavController, ModalController, Modal } from 'ionic-angular';
+import { ModalController, Modal } from 'ionic-angular';
 
 @Component({
   selector: 'page-settings',
@@ -13,7 +13,6 @@ export class SettingsPage {
 
   constructor(
     private readonly oneSignalService: OneSignalService,
-    public navCtrl: NavController,
     private readonly modal: ModalController
   ) {
     this.oneSignalService.isSubscriptionOn().then(state => this.notificationsAllowed = state);

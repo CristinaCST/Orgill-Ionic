@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { TranslateService } from '@ngx-translate/core';
+import { IonicPage, ViewController } from 'ionic-angular';
 
-/**
- * Generated class for the ModalLanguagesPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -15,24 +10,23 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 })
 export class ModalLanguagesPage {
 
-  public languages: any = {
-    english: undefined,
-    french: true
-  };
-
   constructor(
-    public navCtrl: NavController, 
-    public navParams: NavParams,
+    public translate: TranslateService,
     public view: ViewController) {
+
+      const browserLanguage: string = translate.getBrowserLang();
+      translate.setDefaultLang(browserLanguage);
+  }
+
+  public switchLanguage(language: string): void {
+    this.translate.use(language);
   }
 
   public ionViewDidLoad(): void {
-    console.log('ionViewDidLoad ModalLanguagesPage');
   }
 
   public closeModal(): void {
     this.view.dismiss();
-    console.log(this.languages);
   }
 
 }
