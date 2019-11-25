@@ -16,7 +16,7 @@ export class SettingsPage {
     this.oneSignalService.isSubscriptionOn().then(state => this.notificationsAllowed = state);
   }
 
-  public pushNotificationsSwitch(event): void {
+  public pushNotificationsSwitch(event: any): void {
       if (event.checked) {
           this.oneSignalService.androidSubscriptionSwitchOn();
       } else {

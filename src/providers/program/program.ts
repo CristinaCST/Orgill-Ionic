@@ -32,7 +32,7 @@ export class ProgramProvider {
     return this.selectedProgramSubject.asObservable();
   }
 
-  public getPrograms(): Observable<APIResponse>{
+  public getPrograms(): Observable<APIResponse> {
     return this.apiProvider.post(ConstantsUrl.URL_PROGRAMS, true);
   }
 

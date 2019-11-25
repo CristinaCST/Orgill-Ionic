@@ -18,7 +18,7 @@ export class PopoverComponent {
   public shelfpack: number = 1;  // Don't set shelf pack if quantity round option is not X.
   public supportCode: number;
   private instantCloseOnNo: boolean = false;
-  private programInfo: Program;
+  protected programInfo: Program;
   @ViewChild('immuneElement') private readonly immuneElement: Content;
   @ViewChild('listNameInput') private readonly listNameElement: TextInput;
   @ViewChild('supportCodeInput') private readonly supportCodeInput: TextInput;
@@ -56,7 +56,7 @@ export class PopoverComponent {
       }
     }
 
-    if (this.data.type === 'catalogInfo'){
+    if (this.data.type === 'catalogInfo') {
       this.programInfo = JSON.parse(this.data.message);
     }
   }
