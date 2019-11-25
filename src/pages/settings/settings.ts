@@ -12,12 +12,12 @@ export class SettingsPage {
 
   constructor(
     private readonly oneSignalService: OneSignalService
-  ){
+  ) {
     this.oneSignalService.isSubscriptionOn().then(state => this.notificationsAllowed = state);
   }
 
   public pushNotificationsSwitch(event): void {
-      if(event.checked){
+      if (event.checked) {
           this.oneSignalService.androidSubscriptionSwitchOn();
       } else {
           this.oneSignalService.androidSubscriptionSwitchOff();

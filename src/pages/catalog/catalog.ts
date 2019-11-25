@@ -147,16 +147,18 @@ export class Catalog implements OnInit {
   }
 
   private getCatalogDetails(): void {
-    let description: string = Strings.SHOPPING_LIST_DESCRIPTION_NOT_PROVIDED;
     
     let program = this.programs.filter(singleProgram=> {
       return singleProgram.PROGRAMNO == this.programNumber;
     })[0];
-    if(this.programNumber != '' && program){
-      description = 'Start date: ' + program.STARTDATE + ' ' + ' End Date:' + program.ENDDATE + ' Release Date:' + program.SHIPDATE;
+
+    let content: PopoverContent;
+    if (this.programNumber != '' && program) {
+      content = this.popoversService.setContent(this.programName, JSON.stringify(program), undefined, undefined, undefined, 'catalogInfo');
+    } else {
+      content = this.popoversService.setContent(this.programName, Strings.SHOPPING_LIST_DESCRIPTION_NOT_PROVIDED);
     }
 
-    const content: PopoverContent = this.popoversService.setContent(this.programName, description);
     this.popoversService.show(content);
   }
 
