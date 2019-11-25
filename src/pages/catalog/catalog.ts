@@ -15,7 +15,7 @@ import { NavigatorService } from '../../services/navigator/navigator';
 import { Product } from '../../interfaces/models/product';
 import { getNavParam } from '../../helpers/validatedNavParams';
 import { NavbarCustomButton } from '../../interfaces/models/navbar-custom-button';
-import { PopoversService, DefaultPopoverResult, PopoverContent } from '../../services/popovers/popovers';
+import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
 import { Program } from 'interfaces/models/program';
 
 
@@ -80,9 +80,9 @@ export class Catalog implements OnInit {
   }
 
   private getPrograms(): void {
-    this.catalogProvider.getPrograms().subscribe(response =>{
+    this.catalogProvider.getPrograms().subscribe(response => {
       this.programs = JSON.parse(response.d);
-    })
+    });
   }
 
   private getCategories(): void {
@@ -148,12 +148,12 @@ export class Catalog implements OnInit {
 
   private getCatalogDetails(): void {
     
-    let program = this.programs.filter(singleProgram=> {
-      return singleProgram.PROGRAMNO == this.programNumber;
+    const program: Program = this.programs.filter(singleProgram => {
+      return singleProgram.PROGRAMNO === this.programNumber;
     })[0];
 
     let content: PopoverContent;
-    if (this.programNumber != '' && program) {
+    if (this.programNumber !== '' && program) {
       content = this.popoversService.setContent(this.programName, JSON.stringify(program), undefined, undefined, undefined, 'catalogInfo');
     } else {
       content = this.popoversService.setContent(this.programName, Strings.SHOPPING_LIST_DESCRIPTION_NOT_PROVIDED);
