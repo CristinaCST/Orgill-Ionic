@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { OneSignal, OSNotificationPayload, OSNotificationOpenedResult } from '@ionic-native/onesignal';
+import { OneSignal, OSNotificationPayload, OSNotificationOpenedResult, OSPermissionSubscriptionState } from '@ionic-native/onesignal';
 import { Badge } from '@ionic-native/badge';
 import { Events, Platform } from 'ionic-angular';
 import { Observable, Subscription } from 'rxjs';
@@ -12,7 +12,6 @@ import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
-import { resolveDefinition } from '@angular/core/src/view/util';
 
 enum androidPermissionState {
     AUTHORIZED = 1,
@@ -233,32 +232,26 @@ export class OneSignalService {
         });
     }
 
-    /*
-        Sets on subscription of user to push notifications
-    */
-    public androidSubscriptionSwitchOn(): void{
-        let self = this;
-        this.oneSignal.getPermissionSubscriptionState().then(
-            function (state){
-                if(!state.subscriptionStatus.subscribed){
-                    self.oneSignal.setSubscription(true);
-                }
-            }
-        );
+    /**
+     * Sets subscription
+     */
+    private setSubscriptionSwitch(state: OSPermissionSubscriptionState, isOn: boolean): void {
+        this.oneSignal.setSubscription(isOn);
     }
 
     /*
-        Sets off subscription of user to push notifications
+        Verifies the current subscription status, and sets it to true
+    */
+    public androidSubscriptionSwitchOn(): void {
+        this.oneSignal.getPermissionSubscriptionState().then((state: OSPermissionSubscriptionState) => this.setSubscriptionSwitch(state, true));
+    }
+
+    /*
+        Verifies the current subscription status, and sets it to false
     */
     public androidSubscriptionSwitchOff(): void {
-        let self = this;
-        this.oneSignal.getPermissionSubscriptionState().then(
-            function (state){
-                if(state.subscriptionStatus.subscribed){
-                    self.oneSignal.setSubscription(false);
-                }
-            }
-        );
+        this.oneSignal.getPermissionSubscriptionState().then((state: OSPermissionSubscriptionState) => this.setSubscriptionSwitch(state, false));
+
     }
 
     /**

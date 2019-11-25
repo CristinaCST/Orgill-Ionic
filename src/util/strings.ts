@@ -87,6 +87,7 @@ export const MENU_ACCOUNT_LOGOUT: string = 'menu_account_logout';
  * =============================================================================================
  */
 export const REGULAR_CATALOG: string = 'regular_catalog';
+export const CATALOG_DESCRIPTION_NOT_PROVIDED: string = 'catalog_description_not_provided';
 
 /**
  * Marker : Catalog strings

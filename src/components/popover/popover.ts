@@ -1,6 +1,7 @@
 import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { NavParams, ViewController, Content, NavOptions, TextInput } from 'ionic-angular';
 import * as Constants from '../../util/constants';
+import { Program } from 'interfaces/models/program';
 
 @Component({
   selector: 'popover',
@@ -17,6 +18,7 @@ export class PopoverComponent {
   public shelfpack: number = 1;  // Don't set shelf pack if quantity round option is not X.
   public supportCode: number;
   private instantCloseOnNo: boolean = false;
+  protected programInfo: Program;
   @ViewChild('immuneElement') private readonly immuneElement: Content;
   @ViewChild('listNameInput') private readonly listNameElement: TextInput;
   @ViewChild('supportCodeInput') private readonly supportCodeInput: TextInput;
@@ -52,6 +54,10 @@ export class PopoverComponent {
         this.maxqty = this.data.additionalData.maxqty ? Math.min(this.maxqty, this.data.additionalData.maxqty) : this.maxqty;
         this.shelfpack = this.data.additionalData.shelfpack ? Math.max(this.shelfpack, this.data.additionalData.shelfpack) : this.shelfpack;
       }
+    }
+
+    if (this.data.type === 'catalogInfo') {
+      this.programInfo = JSON.parse(this.data.message);
     }
   }
 
