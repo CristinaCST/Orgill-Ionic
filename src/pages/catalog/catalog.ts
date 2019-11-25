@@ -149,7 +149,7 @@ export class Catalog implements OnInit {
   private getCatalogDetails(): void {
     
     const program: Program = this.programs.filter(singleProgram => {
-      return singleProgram.PROGRAMNO === this.programNumber;
+      return singleProgram.PROGRAMNO === this.programNumber.toString();
     })[0];
 
     let content: PopoverContent;
