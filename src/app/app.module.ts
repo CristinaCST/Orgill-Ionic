@@ -149,7 +149,7 @@ import { CustomErrorHandler } from '../services/error-handler/error-handler';
   ]
 })
 
-export class AppModule {} //tslint:disable-line
+export class AppModule {}
 
 export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
