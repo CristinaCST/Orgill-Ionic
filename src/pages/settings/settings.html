@@ -11,6 +11,13 @@
         </p>
        <ion-toggle [checked]="notificationsAllowed" (ionChange)="pushNotificationsSwitch($event)" ></ion-toggle>
       </div>
+      <div class="settingsList">
+        <p>
+          {{"languages" | translate}}
+        </p>
+
+        <button ion-button small (click)="openModal()" id="chooseBtn">{{"choose" | translate}}</button>
+      </div>
     </div>
   </ion-content>
   

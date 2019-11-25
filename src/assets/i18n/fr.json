@@ -169,5 +169,8 @@
   "notifications_permissions_message": "Orgill veut envoyer des notifications push",
   "notifications_permissions_btn_success": "Permettre",
   "notifications_permissions_btn_dismiss": "Nier",
-  "location_never_show": "Ne plus montrer"
+  "location_never_show": "Ne plus montrer",
+  "close": "Proche",
+  "languages": "Langues",
+  "choose": "Choisir"
 }

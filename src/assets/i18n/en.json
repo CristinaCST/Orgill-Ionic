@@ -234,5 +234,8 @@
   "support_code_hint": "Support code",
   "session_expired": "You session has expired, please log in again.",
   "sold_out_button": "SOLD OUT",
-  "sold_out_message": "Sorry, the quantity offered by our vendor is sold out. Please watch for the next available deal at the top of the hour."
+  "sold_out_message": "Sorry, the quantity offered by our vendor is sold out. Please watch for the next available deal at the top of the hour.",
+  "close": "Close",
+  "languages": "Languages",
+  "choose": "Choose"
 }
