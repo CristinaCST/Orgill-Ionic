@@ -18,6 +18,7 @@
       <ng-container *ngFor="let shoppingList of shoppingLists">
         <ion-item id={{shoppingList.ListID}}>
           <ion-label>
+              <ion-icon name="basket" *ngIf="shoppingList.ListType === '3'" class="basket-icon"></ion-icon>
             {{shoppingList.ListName}}
             <ion-radio [value]="shoppingList.ListID" (ionSelect)="selectList(shoppingList)"></ion-radio>
           </ion-label>
