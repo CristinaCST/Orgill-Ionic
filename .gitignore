@@ -29,8 +29,10 @@ plugins/android.json
 plugins/ios.json
 www/
 $RECYCLE.BIN/
+config.xml
+package-lock.json
 
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
-package-lock.json
+
