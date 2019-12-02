@@ -15,6 +15,8 @@ import { NavigatorService } from '../../services/navigator/navigator';
 import { Product } from '../../interfaces/models/product';
 import { getNavParam } from '../../helpers/validatedNavParams';
 import { NavbarCustomButton } from '../../interfaces/models/navbar-custom-button';
+import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
+import { Program } from 'interfaces/models/program';
 
 
 @Component({
@@ -23,6 +25,7 @@ import { NavbarCustomButton } from '../../interfaces/models/navbar-custom-button
 })
 export class Catalog implements OnInit {
 
+  private programs: Program[];
   private programNumber: string;
   private programName: string;
   public categories: Category[];
@@ -33,8 +36,8 @@ export class Catalog implements OnInit {
   private readonly simpleLoader: LoadingService;
 
   constructor(public navigatorService: NavigatorService, public navParams: NavParams, public catalogProvider: CatalogsProvider,
-              public loadingService: LoadingService, public translateProvider: TranslateWrapperService, private readonly events: Events) {
-    this.menuCustomButtons.push({ action: () => this.goToScanPage(), icon: 'barcode' });
+              public loadingService: LoadingService, public popoversService: PopoversService, public translateProvider: TranslateWrapperService, private readonly events: Events) {
+    this.menuCustomButtons.push({ action: () => this.getCatalogDetails(), icon: 'information-circle' }, { action: () => this.goToScanPage(), icon: 'barcode' });
 
     this.categoriesLoader = loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_CATEGORIES));
     this.simpleLoader = loadingService.createLoader();
@@ -72,7 +75,14 @@ export class Catalog implements OnInit {
       this.categories = categoriesFromNavParam;
     } else {
       this.getCategories();
+      this.getPrograms();
     }
+  }
+
+  private getPrograms(): void {
+    this.catalogProvider.getPrograms().subscribe(response => {
+      this.programs = JSON.parse(response.d);
+    });
   }
 
   private getCategories(): void {
@@ -134,6 +144,22 @@ export class Catalog implements OnInit {
     }, err => {
       // TODO: SOLVE THIS
     });
+  }
+
+  private getCatalogDetails(): void {
+    
+    const program: Program = this.programs.filter(singleProgram => {
+      return singleProgram.PROGRAMNO === this.programNumber.toString();
+    })[0];
+
+    let content: PopoverContent;
+    if (this.programNumber !== '' && program) {
+      content = this.popoversService.setContent(this.programName, JSON.stringify(program), undefined, undefined, undefined, 'catalogInfo');
+    } else {
+      content = this.popoversService.setContent(this.programName, Strings.SHOPPING_LIST_DESCRIPTION_NOT_PROVIDED);
+    }
+
+    this.popoversService.show(content);
   }
 
   public onSearched($event: any): void {

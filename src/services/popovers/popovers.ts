@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export interface PopoverContent{
   type?: string;
   title?: string;
-  message?: string;
+  message?: string | HTMLElement;
   positiveButtonText?: string;
   negativeButtonText?: string;
   dismissButtonText?: string;
@@ -127,7 +127,7 @@ export class PopoversService {
     }
   }
 
-  public setContent(title: string = Strings.GENERIC_MODAL_TITLE, message: string, positiveButtonText: string = Strings.MODAL_BUTTON_OK,
+  public setContent(title: string = Strings.GENERIC_MODAL_TITLE, message: string | HTMLElement, positiveButtonText: string = Strings.MODAL_BUTTON_OK,
     dismissButtonText?: string, negativeButtonText?: string, type?: string, additionalData?: any): PopoverContent {
     return {
       type,

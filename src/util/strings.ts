@@ -79,6 +79,7 @@ export const MENU_SEARCH_SCAN: string = 'menu_search_scan';
 export const MENU_ORDERING_HISTORY: string = 'menu_ordering_history';
 export const MENU_ACCOUNT_OFFLINE: string = 'menu_account_offline';
 export const MENU_ABOUT: string = 'menu_about';
+export const MENU_SETTINGS: string = 'menu_settings';
 export const MENU_ACCOUNT_LOGOUT: string = 'menu_account_logout';
 
 /**
@@ -86,6 +87,7 @@ export const MENU_ACCOUNT_LOGOUT: string = 'menu_account_logout';
  * =============================================================================================
  */
 export const REGULAR_CATALOG: string = 'regular_catalog';
+export const CATALOG_DESCRIPTION_NOT_PROVIDED: string = 'catalog_description_not_provided';
 
 /**
  * Marker : Catalog strings

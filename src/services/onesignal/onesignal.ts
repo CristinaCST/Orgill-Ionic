@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { OneSignal, OSNotificationPayload, OSNotificationOpenedResult } from '@ionic-native/onesignal';
+import { OneSignal, OSNotificationPayload, OSNotificationOpenedResult, OSPermissionSubscriptionState } from '@ionic-native/onesignal';
 import { Badge } from '@ionic-native/badge';
 import { Events, Platform } from 'ionic-angular';
 import { Observable, Subscription } from 'rxjs';
@@ -73,19 +73,19 @@ export class OneSignalService {
             this.oneSignal.iOSSettings(iosSettings);
         }
 
-        // How will oneSignal notifications will show while using the app.
+        // How oneSignal notifications will show while using the app.
         this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification);
 
         // Handle the receiving of a notification, this currently only works if application is not closed :(
         this.oneSignal.handleNotificationReceived().subscribe(data => {
-            if (data && data.payload && this.validateDate(data.payload)) {    // Validate the structure of the notification
+            if (data && data.payload) {    // Validate the structure of the notification
                 this.notificationReceived(data.payload);
             }
         });
 
         // Handle the opening of a notification
         this.oneSignal.handleNotificationOpened().subscribe(data => {
-            if (data && data.notification && this.validateDate(data.notification.payload)) {   // Validate the structure of the notification
+            if (data && data.notification) {   // Validate the structure of the notification
                 this.notificationOpened(data);
             }
         });
@@ -182,12 +182,14 @@ export class OneSignalService {
             });
         });
     }
-
+    
     /**
      * Handles android-side of permissions
      */
     private androidPermissionsSetup(): void {
         this.oneSignal.setSubscription(this.pushNotificationPermission);
+        this.oneSignal.addPermissionObserver();
+        this.oneSignal.addSubscriptionObserver();
 
         if (this.pushNotificationPermission) {
             LocalStorageHelper.removeFromLocalStorage(Constants.NOTIFICATION_SUBSCRIPTION_ANDROID_PATH);
@@ -218,6 +220,38 @@ export class OneSignalService {
                 }
             });
         }
+    }
+
+    /*
+        Checks if user is subscribed to push notifications
+    */
+
+    public isSubscriptionOn(): Promise<boolean> {
+        return this.oneSignal.getPermissionSubscriptionState().then(state => {
+            return state.subscriptionStatus.subscribed;
+        });
+    }
+
+    /**
+     * Sets subscription
+     */
+    private setSubscriptionSwitch(state: OSPermissionSubscriptionState, isOn: boolean): void {
+        this.oneSignal.setSubscription(isOn);
+    }
+
+    /*
+        Verifies the current subscription status, and sets it to true
+    */
+    public androidSubscriptionSwitchOn(): void {
+        this.oneSignal.getPermissionSubscriptionState().then((state: OSPermissionSubscriptionState) => this.setSubscriptionSwitch(state, true));
+    }
+
+    /*
+        Verifies the current subscription status, and sets it to false
+    */
+    public androidSubscriptionSwitchOff(): void {
+        this.oneSignal.getPermissionSubscriptionState().then((state: OSPermissionSubscriptionState) => this.setSubscriptionSwitch(state, false));
+
     }
 
     /**
@@ -355,24 +389,6 @@ export class OneSignalService {
             this.events.publish(Constants.EVENT_HOT_DEAL_NOTIFICATION_RECEIVED, sku);
         }
 
-    }
-
-    /**
-     * Handles date validation
-     * @param package notification package
-     */
-    private validateDate(pckg: OSNotificationPayload): boolean {
-        // const date: string = JSON.parse(pckg.rawPayload)['google.sent_time'] as string;
-        //
-        // /** DEBUG ONLY */
-        // // let dbgDate = new Date();
-        // // date = dbgDate.setDate(dbgDate.getDate() - 2);
-        // // =====
-        // if (this.hotDealService.isHotDealExpired(date)) {
-        //     this.hotDealService.markHotDealExpired();
-        //     return false;
-        // }
-        return true;
     }
 
     private notificationOpened(data: OSNotificationOpenedResult): void {

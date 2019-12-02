@@ -1,94 +1,97 @@
 {
-  "name": "Orgill-Ionic",
-  "version": "0.0.1",
-  "author": "Orgill Team",
-  "homepage": "http://orgill.com/",
-  "private": true,
-  "scripts": {
-    "start": "ionic-app-scripts serve",
-    "clean": "ionic-app-scripts clean",
-    "build": "ionic-app-scripts build",
-    "lint": "ionic-app-scripts lint",
-    "i18n": "sync-i18n --files ./src/assets/i18n/*.json --primary en --languages fr"
-  },
-  "dependencies": {
-    "@angular/animations": "^5.2.11",
-    "@angular/common": "^5.2.11",
-    "@angular/compiler": "^5.2.11",
-    "@angular/compiler-cli": "^5.2.11",
-    "@angular/core": "^5.2.11",
-    "@angular/forms": "^5.2.11",
-    "@angular/http": "^5.2.11",
-    "@angular/platform-browser": "^5.2.11",
-    "@angular/platform-browser-dynamic": "^5.2.11",
-    "@ionic-native/android-permissions": "^4.18.0",
-    "@ionic-native/badge": "^4.20.0",
-    "@ionic-native/barcode-scanner": "^4.14.0",
-    "@ionic-native/core": "^4.12.0",
-    "@ionic-native/geolocation": "^4.20.0",
-    "@ionic-native/network": "^4.8.0",
-    "@ionic-native/onesignal": "^4.18",
-    "@ionic-native/splash-screen": "^4.12.0",
-    "@ionic-native/status-bar": "^4.12.0",
-    "@ionic/angular-toolkit": "^2.0.0",
-    "@ngx-translate/core": "^9.1.1",
-    "@ngx-translate/http-loader": "^2.0.1",
-    "build": "^0.1.4",
-    "cordova-android": "^8.1.0",
-    "cordova-ios": "^5.0.1",
-    "cordova-plugin-android-permissions": "^1.0.0",
-    "cordova-plugin-badge": "^0.8.8",
-    "cordova-plugin-device": "^2.0.2",
-    "cordova-plugin-geolocation": "^4.0.1",
-    "cordova-plugin-ionic-keyboard": "2.1.3",
-    "cordova-plugin-ionic-webview": "2.5.1",
-    "cordova-plugin-network-information": "^2.0.1",
-    "cordova-plugin-splashscreen": "^5.0.2",
-    "cordova-plugin-statusbar": "^2.4.2",
-    "cordova-plugin-whitelist": "^1.3.3",
-    "cordova-res": "^0.6.0",
-    "i18next": "^17.2.0",
-    "i18next-json-sync": "^2.3.1",
-    "ionic-angular": "3.9.8",
-    "ionicons": "3.0.0",
-    "moment": "latest",
-    "onesignal-cordova-plugin": "2.5.0",
-    "phonegap-plugin-barcodescanner": "^8.0.1",
-    "rxjs": "5.5.12",
-    "sw-toolbox": "3.6.0",
-    "ts-md5": "^1.2.4",
-    "zone.js": "0.8.29"
-  },
-  "devDependencies": {
-    "@ionic/app-scripts": "^3.2.4",
-    "typescript": "~2.6.0"
-  },
-  "description": "An Ionic project",
-  "cordova": {
-    "plugins": {
-      "cordova-plugin-whitelist": {},
-      "cordova-plugin-device": {},
-      "cordova-plugin-splashscreen": {},
-      "cordova-plugin-statusbar": {},
-      "cordova-plugin-network-information": {},
-      "phonegap-plugin-barcodescanner": {
-        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+    "name": "Orgill-Ionic",
+    "version": "0.0.1",
+    "author": "Orgill Team",
+    "homepage": "http://orgill.com/",
+    "private": true,
+    "scripts": {
+        "start": "ionic-app-scripts serve",
+        "clean": "ionic-app-scripts clean",
+        "build": "ionic-app-scripts build",
+        "lint": "ionic-app-scripts lint",
+        "browser": "ionic-app-scripts serve --sourceMap source-map --iscordovaserve --wwwDir platforms/browser/www/ --buildDir platforms/browser/www/build",
+        "i18n": "sync-i18n --files ./src/assets/i18n/*.json --primary en --languages fr"
       },
-      "cordova-plugin-android-permissions": {},
-      "cordova-plugin-badge": {},
-      "cordova-plugin-geolocation": {},
-      "cordova-plugin-ionic-webview": {
-        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
-      },
-      "onesignal-cordova-plugin": {},
-      "cordova-plugin-ionic-keyboard": {}
+    "dependencies": {
+        "@angular/animations": "^5.2.11",
+        "@angular/common": "^5.2.11",
+        "@angular/compiler": "^5.2.11",
+        "@angular/compiler-cli": "^5.2.11",
+        "@angular/core": "^5.2.11",
+        "@angular/forms": "^5.2.11",
+        "@angular/http": "^5.2.11",
+        "@angular/platform-browser": "^5.2.11",
+        "@angular/platform-browser-dynamic": "^5.2.11",
+        "@ionic-native/android-permissions": "^4.18.0",
+        "@ionic-native/badge": "^4.20.0",
+        "@ionic-native/barcode-scanner": "^4.14.0",
+        "@ionic-native/core": "^4.12.0",
+        "@ionic-native/geolocation": "^4.20.0",
+        "@ionic-native/network": "^4.8.0",
+        "@ionic-native/onesignal": "^4.18",
+        "@ionic-native/splash-screen": "^4.12.0",
+        "@ionic-native/status-bar": "^4.12.0",
+        "@ionic/angular-toolkit": "^2.0.0",
+        "@ngx-translate/core": "^9.1.1",
+        "@ngx-translate/http-loader": "^2.0.1",
+        "build": "^0.1.4",
+        "cordova-android": "8.1.0",
+        "cordova-browser": "6.0.0",
+        "cordova-ios": "^5.0.1",
+        "cordova-plugin-android-permissions": "^1.0.0",
+        "cordova-plugin-badge": "^0.8.8",
+        "cordova-plugin-device": "^2.0.2",
+        "cordova-plugin-geolocation": "^4.0.1",
+        "cordova-plugin-ionic-keyboard": "^2.1.3",
+        "cordova-plugin-ionic-webview": "^2.5.1",
+        "cordova-plugin-network-information": "^2.0.1",
+        "cordova-plugin-splashscreen": "^5.0.2",
+        "cordova-plugin-statusbar": "^2.4.2",
+        "cordova-plugin-whitelist": "^1.3.3",
+        "cordova-res": "^0.6.0",
+        "i18next": "^17.2.0",
+        "i18next-json-sync": "^2.3.1",
+        "ionic-angular": "3.9.8",
+        "ionicons": "3.0.0",
+        "moment": "latest",
+        "onesignal-cordova-plugin": "^2.7.0",
+        "phonegap-plugin-barcodescanner": "^8.0.1",
+        "rxjs": "5.5.12",
+        "sw-toolbox": "3.6.0",
+        "ts-md5": "^1.2.4",
+        "zone.js": "0.8.29"
     },
-    "platforms": [
-      "ios",
-      "android"
-    ]
-  },
-  "config": {
-    "ionic_webpack": "./config/webpack.config.js"
-  }
+    "devDependencies": {
+        "@ionic/app-scripts": "^3.2.4",
+        "typescript": "~2.6.0"
+    },
+    "description": "An Ionic project",
+    "cordova": {
+        "plugins": {
+            "cordova-plugin-whitelist": {},
+            "cordova-plugin-device": {},
+            "cordova-plugin-splashscreen": {},
+            "cordova-plugin-statusbar": {},
+            "cordova-plugin-network-information": {},
+            "phonegap-plugin-barcodescanner": {
+                "ANDROID_SUPPORT_V4_VERSION": "27.+"
+            },
+            "cordova-plugin-android-permissions": {},
+            "cordova-plugin-badge": {},
+            "cordova-plugin-geolocation": {},
+            "cordova-plugin-ionic-webview": {
+                "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
+            },
+            "cordova-plugin-ionic-keyboard": {},
+            "onesignal-cordova-plugin": {}
+        },
+        "platforms": [
+            "android",
+            "browser",
+            "ios"
+        ]
+    },
+    "config": {
+        "ionic_webpack": "./config/webpack.config.js"
+    }
 }

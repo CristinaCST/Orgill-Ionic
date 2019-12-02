@@ -1,0 +1,22 @@
+<ion-header>
+    <ion-navbar>
+            <ion-buttons right>
+                <button id="closeBtn" ion-button icon-only (click)="closeModal()">
+                    {{"close" | translate}} 
+                </button>
+            </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-list radio-group>
+        <ion-item>
+                    <ion-label>English</ion-label>
+                    <ion-radio [checked]="translate.currentLang == 'en'"  (click)="switchLanguage('en')"></ion-radio>
+        </ion-item>
+        <ion-item>
+                    <ion-label>French</ion-label>
+                    <ion-radio [checked]="translate.currentLang == 'fr'" (click)="switchLanguage('fr')"></ion-radio>
+        </ion-item>
+    </ion-list>
+</ion-content>

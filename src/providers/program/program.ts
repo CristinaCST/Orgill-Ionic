@@ -32,6 +32,10 @@ export class ProgramProvider {
     return this.selectedProgramSubject.asObservable();
   }
 
+  public getPrograms(): Observable<APIResponse> {
+    return this.apiProvider.post(ConstantsUrl.URL_PROGRAMS, true);
+  }
+
   public getProductPrograms(productSku: string): Observable<APIResponse> {
     const params: any = {
       sku: productSku
