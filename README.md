@@ -71,6 +71,22 @@ ionic cordova build ios --release -- --prod
 ```
 
 
+* Build APK for Android from Android Studio 
+```
+Build --> Generate Signed Bundle/ APK
+Select APK
+Press next
+Key store path: /project/platforms/android/keystore
+Key store password: starts with sU7 
+Key alias: release
+Key password: same as key store password
+Press next
+Choose release
+Check both signature versions
+Press finish
+```
+
+
 
 # Clean
 ```sh
