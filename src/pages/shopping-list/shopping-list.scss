@@ -29,11 +29,11 @@ page-shopping-list {
     background-color: white;
     div:nth-child(1) {
       display: flex;
-      button:nth-child(1) {
-        margin-right: 5px;
-      }
-      button:nth-child(2) {
+      button{
         margin-left: 5px;
+        span{
+          white-space: normal;
+        }
       }
     }
     div:nth-child(2) {

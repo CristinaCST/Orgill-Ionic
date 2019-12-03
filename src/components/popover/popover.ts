@@ -81,6 +81,11 @@ export class PopoverComponent {
         this.listNameElement._elementRef.nativeElement.classList.add('error-label');
         return;
       }
+
+      if (this.data.isNewListModal && option === 'OK' && !this.listName.trim()) {
+        this.listNameElement._elementRef.nativeElement.classList.add('error-label');
+        return;
+      }
     }
 
     if (this.data.fillQuantity === true) {
