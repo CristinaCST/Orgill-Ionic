@@ -44,6 +44,7 @@ page-order-confirmation {
       font-size: $font-size-large;
       color: color($colors, OrgillDarkGray);
       font-weight: bold;
+      white-space: normal;
     }
 
     span:nth-child(2) {
