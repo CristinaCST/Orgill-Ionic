@@ -1,5 +1,6 @@
 import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { NavParams, ViewController, Content, NavOptions, TextInput } from 'ionic-angular';
+import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
 import * as Constants from '../../util/constants';
 import { Program } from 'interfaces/models/program';
 
@@ -19,6 +20,7 @@ export class PopoverComponent {
   public supportCode: number;
   private instantCloseOnNo: boolean = false;
   protected programInfo: Program;
+  protected productsNotAvailable: ShoppingListItem;
   @ViewChild('immuneElement') private readonly immuneElement: Content;
   @ViewChild('listNameInput') private readonly listNameElement: TextInput;
   @ViewChild('supportCodeInput') private readonly supportCodeInput: TextInput;
@@ -58,6 +60,9 @@ export class PopoverComponent {
 
     if (this.data.type === 'catalogInfo') {
       this.programInfo = JSON.parse(this.data.message);
+    }
+    if (this.data.type === 'notAvailable') {
+      this.productsNotAvailable = JSON.parse(this.data.message); 
     }
   }
 

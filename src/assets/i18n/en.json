@@ -204,6 +204,8 @@
   "shopping_list_existing_product": "The product is already added in this list.",
   "shopping_list_expired_items_message": "You have items in your cart on expired programs.  \n\nPlease review these items.",
   "shopping_list_expired_items_title": "Updated Prices",
+  "no_product_quantity_available_title": "Products not available",
+  "no_product_quantity_available_message": "The following items have been removed from your list. The product is no longer available",
   "shopping_list_items_label": "Items",
   "shopping_list_market_only_product": "You cannot add a product from Orgill Market program to a everyday list. Please add the product to Market Only Cart instead.",
   "shopping_list_no_items_added": "No items have been added",

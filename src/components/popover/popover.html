@@ -9,24 +9,37 @@
   </ion-navbar>
 </ion-header>
 
-
+<!-- show content in popup for different cases -->
 <ion-content #immuneElement *ngIf="data">
-  <div *ngIf="data.type === 'catalogInfo'">
-      <p>
-        Start date: {{programInfo.STARTDATE}}
-      </p>
-      <p>
-        End date: {{programInfo.ENDDATE}}
-      </p>
-      <p>
-        Release date: {{programInfo.SHIPDATE}}
-      </p>  
-  </div>
-  <div *ngIf="data.type !== 'catalogInfo'">
-    <p *ngIf="data.message">
-      {{data.message | translate}}
-    </p>
-  </div>
+      <div [ngSwitch]="data.type">
+        <div *ngSwitchCase="'catalogInfo'">
+            <p>
+                Start date: {{programInfo.STARTDATE}}
+              </p>
+              <p>
+                End date: {{programInfo.ENDDATE}}
+              </p>
+              <p>
+                Release date: {{programInfo.SHIPDATE}}
+              </p>  
+        </div>
+        <div *ngSwitchCase="'notAvailable'" class="productNotAvailable">
+            <p>
+                The following items have been removed from your list. The product may no longer be available or the program has ended. 
+            </p>
+            <div *ngFor="let product of productsNotAvailable">
+                  <ul id="products-na-p">
+                      <li><b>SKU:</b> {{product.sku}} {{product.name}} <b>Quantity:</b> {{product.quantity}}</li>
+                  </ul>
+            </div> 
+        </div>
+        <div *ngSwitchDefault>
+            <p *ngIf="data.message">
+                {{data.message | translate}}
+              </p>
+        </div>
+      </div>
+
   <div *ngIf="data.isNewListModal">
     <ion-list>
       <ion-item no-padding>

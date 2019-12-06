@@ -13,4 +13,5 @@ export interface Product {
   SHELF_PACK: string;
   VELOCITY_CODE: string;
   TOTAL_REC_COUNT: string;
+  program_number?: any;
 }

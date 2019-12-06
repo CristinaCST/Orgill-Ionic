@@ -142,6 +142,7 @@ export class ShoppingListPage {
       if (data) {
         this.shoppingListItems = data;
         this.checkExpiredItems();
+        this.checkQuantityItems();
         this.content.resize();
       } else {
         this.shoppingListItems = [];
@@ -156,7 +157,6 @@ export class ShoppingListPage {
      // this.reloadService.paintDirty('shopping list products');
       console.error(error);
     });
-
   }
 
   private checkExpiredItems(): void {
@@ -164,6 +164,30 @@ export class ShoppingListPage {
     if (isExpired) {
       const content: PopoverContent = this.popoversService.setContent(Strings.POPOVER_EXPIRED_ITEMS_TITLE, Strings.POPOVER_EXPIRED_ITEMS_MESSAGE);
       this.popoversService.show(content);
+    }
+  }
+
+  private removeNoQuantityProducts(listOfProductsForRemove: Product[]): void {
+    listOfProductsForRemove.forEach(elem => {
+      this.shoppingListProvider.deleteProductFromList(this.shoppingList.ListID, elem.SKU, elem.program_number).subscribe(
+        data => { console.log('done'); },
+        error => {
+          console.error(error);
+        }
+      );
+    });
+  }
+
+  private checkQuantityItems(): void { 
+    if (this.shoppingListItems.length > 0) {
+      const productsInShoppingList: any = this.shoppingListItems.map((item: any) => ({ name: item.product.NAME, SKU: item.product.SKU, quantity: item.quantity, program_number: item.program_number }));
+      const noQuantityProducts: Product[] = productsInShoppingList.filter(item => item.quantity < 1);
+      const content: PopoverContent = this.popoversService.setContent(Strings.POPOVER_NOQUANTITY_ITEMS_TITLE, JSON.stringify(noQuantityProducts), undefined, undefined, undefined, 'notAvailable');
+      
+      if (noQuantityProducts.length > 0) {
+        this.popoversService.show(content);
+        this.removeNoQuantityProducts(noQuantityProducts);
+      } 
     }
   }
 
