@@ -96,10 +96,14 @@ export class ProductsPage implements OnInit, OnDestroy {
     });
   }
 
+  private filterBadRequest(data: Product[]): Product[] {
+    return data[0].CatID === 'Bad Request' ? [] : data;
+  }
+
   public onSearched($event: string): void {
     this.loader.show();
     this.catalogProvider.search($event, this.category ? this.category.CatID : '', this.programNumber).subscribe(data => {
-      const dataFound: Product[] = JSON.parse(data.d);
+      const dataFound: Product[] = this.filterBadRequest(JSON.parse(data.d));
       const params: any = {
         searchData: dataFound,
         programNumber: this.programNumber,
