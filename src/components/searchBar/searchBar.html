@@ -14,7 +14,7 @@
   </div>
   <!-- Search Component Input Container-->
   <ion-item class="search-input-container" [ngClass]="showBackButton?'has-btn':''" no-lines no-border>
-    <ion-input type="text" placeholder="{{'search_hint' | translate}}"
+    <ion-input type="text" placeholder="{{'search_hint' | translate}}" type="text" maxlength="50"
                [(ngModel)]="searchString"
                (keyup.enter)="search()"></ion-input>
     <!-- Search Component Action Button-->
