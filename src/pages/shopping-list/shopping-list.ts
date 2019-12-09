@@ -167,10 +167,10 @@ export class ShoppingListPage {
     }
   }
 
-  private removeNoQuantityProducts(listOfProductsForRemove: Product[]): void {
+  private removeNoQuantityProducts(listOfProductsForRemove: ShoppingListItem[]): void {
     listOfProductsForRemove.forEach(elem => {
-      this.shoppingListProvider.deleteProductFromList(this.shoppingList.ListID, elem.SKU, elem.program_number).subscribe(
-        data => { console.log('done'); },
+      this.shoppingListProvider.deleteProductFromList(this.shoppingList.ListID, elem.product.SKU, elem.program_number).subscribe(
+        () => { },
         error => {
           console.error(error);
         }
@@ -180,8 +180,7 @@ export class ShoppingListPage {
 
   private checkQuantityItems(): void { 
     if (this.shoppingListItems.length > 0) {
-      const productsInShoppingList: any = this.shoppingListItems.map((item: any) => ({ name: item.product.NAME, SKU: item.product.SKU, quantity: item.quantity, program_number: item.program_number }));
-      const noQuantityProducts: Product[] = productsInShoppingList.filter(item => item.quantity < 1);
+      const noQuantityProducts: ShoppingListItem[] = this.shoppingListItems.filter(item => item.quantity < 1);
       const content: PopoverContent = this.popoversService.setContent(Strings.POPOVER_NOQUANTITY_ITEMS_TITLE, JSON.stringify(noQuantityProducts), undefined, undefined, undefined, 'notAvailable');
       
       if (noQuantityProducts.length > 0) {

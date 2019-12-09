@@ -29,7 +29,7 @@
             </p>
             <div *ngFor="let product of productsNotAvailable">
                   <ul id="products-na-p">
-                      <li><b>SKU:</b> {{product.sku}} {{product.name}} <b>Quantity:</b> {{product.quantity}}</li>
+                      <li><b>SKU:</b> {{product.product.SKU}} {{product.product.NAME}} <b>Quantity:</b> {{product.quantity}}</li>
                   </ul>
             </div> 
         </div>
