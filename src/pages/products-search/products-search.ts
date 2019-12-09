@@ -51,10 +51,14 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
     this.products = this.sortProducts(data);
   }
 
+  private filterBadRequest(data: Product[]): Product[] {
+    return data[0].CatID === 'Bad Request' ? [] : data;
+  }
+
   public onSearched($event: string): void {
     this.loader.show();
     this.catalogProvider.search($event, this.category ? this.category.CatID : '', this.programNumber).subscribe(data => {
-      const dataFound: Product[] = JSON.parse(data.d);
+      const dataFound: Product[] = this.filterBadRequest(JSON.parse(data.d));
 
       const params: any = {
         searchString: this.searchString,
@@ -98,7 +102,7 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
     this.loader.show();
     this.getProductSubscription = this.catalogProvider.search(this.searchString, this.category ? this.category.CatID : '', this.programNumber, this.page)
       .subscribe(response => {
-        this.products = this.products.concat(this.sortProducts(JSON.parse(response.d)));
+        this.products = this.products.concat(this.sortProducts(this.filterBadRequest(JSON.parse(response.d))));
         this.setPaginationInfo();
         this.loader.hide();
       });

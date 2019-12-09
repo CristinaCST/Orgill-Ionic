@@ -46,6 +46,7 @@ page-shopping-list {
         margin: 0;
         font-size: $font-size-large;
         font-weight: bold;
+        white-space: normal;
       }
       div:nth-child(2) {
         display: flex;

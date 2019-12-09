@@ -162,11 +162,15 @@ export class Catalog implements OnInit {
     this.popoversService.show(content);
   }
 
+  private filterBadRequest(data: Product[]): Product[] {
+    return data[0].CatID === 'Bad Request' ? [] : data;
+  }
+
   public onSearched($event: any): void {
     this.simpleLoader.show();
     this.catalogProvider.search($event, this.currentSubCategory ? this.currentSubCategory.CatID : '', this.programNumber).subscribe(data => {
       if (data) {
-        const dataFound: Product[] = JSON.parse(data.d);
+        const dataFound: Product[] = this.filterBadRequest(JSON.parse(data.d));
         const params: any = {
           searchString: $event,
           searchData: dataFound,
