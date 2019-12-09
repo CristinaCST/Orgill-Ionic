@@ -155,7 +155,6 @@ export class ShoppingListsProvider {
   }
 
   public deleteProductFromList(listId: string, productSku: string, programNo: string): Observable<APIResponse> {
-    console.log('delete', listId, productSku, programNo);
     return this.apiProvider.post(ConstantsUrl.REMOVE_SHOPPING_LIST_ITEM,
       {
         shopping_list_id: listId,
