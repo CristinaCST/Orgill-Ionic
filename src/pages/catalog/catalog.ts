@@ -163,6 +163,7 @@ export class Catalog implements OnInit {
   }
 
   private filterBadRequest(data: Product[]): Product[] {
+    if(data.length === 0) { return [] }
     return data[0].CatID === 'Bad Request' ? [] : data;
   }
 
