@@ -99,6 +99,10 @@ export class AppMenuComponent implements OnInit {
   }
 
   public menuOpen(): void {
+    if (this.translateProvider.shouldReloadPrograms) {
+      this.translateProvider.shouldReloadPrograms = false;
+      this.ngOnInit();
+    }
     this.backbuttonOverrideReference = this.navigatorService.oneTimeBackButtonOverride(() => {
       this.menuCtrl.close('main_menu');
     });

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, ViewController } from 'ionic-angular';
+import { TranslateWrapperService } from '../../../services/translate/translate';
 
 
 @IonicPage()
@@ -12,7 +13,9 @@ export class ModalLanguagesPage {
 
   constructor(
     public translate: TranslateService,
-    public view: ViewController) {
+    public view: ViewController,
+    public translateWrapper: TranslateWrapperService) {
+
 
       const browserLanguage: string = translate.getBrowserLang();
       translate.setDefaultLang(browserLanguage);
@@ -20,6 +23,7 @@ export class ModalLanguagesPage {
 
   public switchLanguage(language: string): void {
     this.translate.use(language);
+    this.translateWrapper.shouldReloadPrograms = true;
   }
 
   public ionViewDidLoad(): void {

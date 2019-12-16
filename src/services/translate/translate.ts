@@ -36,4 +36,6 @@ export class TranslateWrapperService {
 
     return result;
   }
+
+  public shouldReloadPrograms: boolean = false;
 }
