@@ -20,6 +20,7 @@ export class PopoverComponent {
   public supportCode: number;
   private instantCloseOnNo: boolean = false;
   protected programInfo: Program;
+  protected popoverTitle: string;
   protected productsNotAvailable: ShoppingListItem;
   @ViewChild('immuneElement') private readonly immuneElement: Content;
   @ViewChild('listNameInput') private readonly listNameElement: TextInput;
@@ -31,6 +32,7 @@ export class PopoverComponent {
 
 
     this.data = this.navParams.data;
+    this.popoverTitle = this.data.title;
     if (this.data) {
       this.checkPopoverType();
     }
@@ -60,6 +62,8 @@ export class PopoverComponent {
 
     if (this.data.type === 'catalogInfo') {
       this.programInfo = JSON.parse(this.data.message);
+      this.popoverTitle = "Program Information";
+
     }
     if (this.data.type === 'notAvailable') {
       this.productsNotAvailable = JSON.parse(this.data.message); 
