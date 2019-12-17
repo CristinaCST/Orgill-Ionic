@@ -97,8 +97,7 @@ export class ProductsPage implements OnInit, OnDestroy {
   }
 
   private filterBadRequest(data: Product[]): Product[] {
-    if(data.length === 0) { return [] }
-    return data[0].CatID === 'Bad Request' ? [] : data;
+    return data.length === 0 || data[0].CatID === 'Bad Request' ? [] : data;
   }
 
   public onSearched($event: string): void {
