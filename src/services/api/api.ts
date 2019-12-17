@@ -3,13 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import { environment } from '../../environments/environment';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class ApiService {
 
   public baseUrl: string;
 
-  constructor(private readonly http: HttpClient, private readonly secureActions: SecureActionsService) {
+  constructor(private readonly http: HttpClient, private readonly secureActions: SecureActionsService, public translate: TranslateService) {
+    
     this.baseUrl = this.getServiceBaseURL();
   }
 
@@ -20,10 +22,14 @@ export class ApiService {
   }
 
   public get(baseUrl: string = this.baseUrl, path: string, params: any = {}): Observable<any> {
+    this.baseUrl = this.getServiceBaseURL();
+
     return this.http.get(baseUrl + path, { headers: this.setHeaders(), params });
   }
 
   public post(path: string, body: any & { user_token?: string }, requiresToken: boolean = false): Observable<any> {
+    this.baseUrl = this.getServiceBaseURL();
+
     if (requiresToken) {
       return this.secureActions.waitForAuth().flatMap(user => {
         body.user_token = user.userToken;
@@ -50,6 +56,9 @@ export class ApiService {
     // if (LocalStorageHelper.getFromLocalStorage(Constants.DEVICE_LANGUAGE).toLowerCase().includes(Constants.LANG_FR)) {
     //   return ConstantsURL.URL_BASE_FR;
     // }
+    if (this.translate.currentLang === 'fr') {
+      return environment.baseUrlFrench;
+    }
     return environment.baseUrlEnglish;
   }
 
