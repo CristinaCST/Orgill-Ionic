@@ -219,5 +219,10 @@
   "something_went_wrong": "Quelque chose s'est mal passé ...",
   "summary_tab": "Détails et Sommaire",
   "support_code_hint": "Code d'assistance",
-  "username": "Nom d'utilisateur"
+  "username": "Nom d'utilisateur",
+
+  "start_date": "",
+  "end_date": "",
+  "release_date": ""
+  // "menu_scanner_title": traducerea este tot in engleza 
 }

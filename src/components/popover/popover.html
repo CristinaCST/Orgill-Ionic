@@ -14,13 +14,13 @@
       <div [ngSwitch]="data.type">
         <div *ngSwitchCase="'catalogInfo'">
             <p>
-                Start date: {{programInfo.STARTDATE}}
+                {{'start_date' | translate}}: {{programInfo.STARTDATE}}
               </p>
               <p>
-                End date: {{programInfo.ENDDATE}}
+                {{'end_date' | translate}}: {{programInfo.ENDDATE}}
               </p>
               <p>
-                Release date: {{programInfo.SHIPDATE}}
+                {{'release_date' | translate}}: {{programInfo.SHIPDATE}}
               </p>  
         </div>
         <div *ngSwitchCase="'notAvailable'" class="productNotAvailable">
