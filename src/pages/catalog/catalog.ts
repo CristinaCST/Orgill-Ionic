@@ -163,7 +163,7 @@ export class Catalog implements OnInit {
   }
 
   private filterBadRequest(data: Product[]): Product[] {
-    return data[0].CatID === 'Bad Request' ? [] : data;
+    return data.length === 0 || data[0].CatID === 'Bad Request' ? [] : data;
   }
 
   public onSearched($event: any): void {

@@ -52,7 +52,7 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
   }
 
   private filterBadRequest(data: Product[]): Product[] {
-    return data[0].CatID === 'Bad Request' ? [] : data;
+    return data.length === 0 || data[0].CatID === 'Bad Request' ? [] : data;
   }
 
   public onSearched($event: string): void {
