@@ -68,7 +68,6 @@
   "menu_header_shopping_lists": "LISTES D'ACHATS",
   "menu_hot_deal_button": "Hot Buys",
   "menu_ordering_history": "Achats Antérieurs",
-  "menu_scanner_title": "SCAN BARCODE",
   "menu_search_code": "Entrer Le Code",
   "menu_search_scan": "Numériser Le Code Barres",
   "menu_shopping_lists": "Mes Listes d'achats",
@@ -161,7 +160,6 @@
   "product_shelf_pack": "Emballage",
   "product_total_price": "Prix total",
   "product_vendor": "Fournisseur",
-  "push_notifications_setting": "Notifications Push",
   "quantity_rounded_max": "La quantité souhaitée dépasse le maximum pour ce programme de produits.",
   "quantity_rounded_min": "La quantité souhaitée est inférieure au minimum requis pour ce produit.",
   "quantity_too_high_overflow": "La quantité introduite est trop élevée, essayez un nombre inférieur",
@@ -170,7 +168,7 @@
   "reload_error_message_with_culprit": "Erreur lors du chargement de $ {coupable}, veuillez réessayer.",
   "reload_error_message_without_culprit": "Erreur lors du chargement du contenu, veuillez réessayer.",
   "request_timeout_error": "Une erreur est survenue. Vérifiez que vous êtes connecté à Internet et réessayez.",
-  "saving_text": "épargne",
+  "savings_text": "épargne",
   "scan_barcode_tab": "Numériser le code barres",
   "scan_error": "Une erreur est survenue pendant l'analyse.",
   "scan_grant_button": "Autoriser",
@@ -221,8 +219,14 @@
   "support_code_hint": "Code d'assistance",
   "username": "Nom d'utilisateur",
 
-  "start_date": "",
-  "end_date": "",
-  "release_date": ""
-  // "menu_scanner_title": traducerea este tot in engleza 
+  "start_date": "Date de début",
+  "end_date": "Date de fin",
+  "release_date": "Date de sortie",
+  "menu_settings": "Paramètres",
+  "start_scan": "Lancer le Numériser",
+  "push_notifications_setting": "Notifications Push",
+  "add_to_list": "Ajouter à la liste",
+  "menu_scanner_title": "SCAN BARCODE",
+  "cancel": "Annuler",
+  "ok": "Ok"
 }

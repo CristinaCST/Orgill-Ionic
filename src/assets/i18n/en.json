@@ -9,6 +9,8 @@
   "button_update": "Update",
   "catlog_description_not_provided": "Catalog description not provided.",
   "choose": "Choose",
+  "cancel": "Cancel",
+  "ok": "Ok",
   "close": "Close",
   "customer_locations": "PO & Location",
   "customer_locations_list_header": "Ship to location",
@@ -70,6 +72,7 @@
   "menu_scanner_title": "SCAN BARCODE",
   "menu_search_code": "Enter Code",
   "menu_search_scan": "Scan Barcode",
+  "start_scan": "Start Scan",
   "menu_settings": "Settings",
   "menu_shopping_lists": "My shopping lists",
   "menu_shopping_lists_new": "New Shopping List",
@@ -224,5 +227,6 @@
   "something_went_wrong": "Something went wrong...",
   "summary_tab": "Details & Summary",
   "support_code_hint": "Support code",
-  "username": "Username"
+  "username": "Username",
+  "add_to_list": "Add to list"
 }
