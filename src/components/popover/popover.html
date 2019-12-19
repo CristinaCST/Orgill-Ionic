@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar *ngIf="data">
-    <ion-title *ngIf="data.title">{{data.title | translate }}</ion-title>
+    <ion-title *ngIf="data.title">{{ popoverTitle | translate }}</ion-title>
     <ion-buttons end *ngIf="data.closeOptionAvailable === true">
       <button ion-button icon-only (click)="dismiss()">
         <ion-icon name="close"></ion-icon>
@@ -13,7 +13,10 @@
 <ion-content #immuneElement *ngIf="data">
       <div [ngSwitch]="data.type">
         <div *ngSwitchCase="'catalogInfo'">
-            <p>
+              <p>
+                {{programInfo.NAME}}
+              </p>
+              <p>
                 {{'start_date' | translate}}: {{programInfo.STARTDATE}}
               </p>
               <p>
