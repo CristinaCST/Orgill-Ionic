@@ -62,7 +62,7 @@ export class PopoverComponent {
 
     if (this.data.type === 'catalogInfo') {
       this.programInfo = JSON.parse(this.data.message);
-      this.popoverTitle = "Program Information";
+      this.popoverTitle = 'Program Information';
 
     }
     if (this.data.type === 'notAvailable') {
