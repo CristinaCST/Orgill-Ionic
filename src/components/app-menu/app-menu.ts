@@ -132,6 +132,16 @@ export class AppMenuComponent implements OnInit {
   }
 
 
+  public isAlreadyInList(arrayOfLists: ShoppingList[], list: ShoppingList): boolean {
+    let foundList: boolean = false;
+    arrayOfLists.forEach(singleList => {
+      if (singleList.ListID === list.ListID) {
+        foundList = true;
+      }
+    });
+    return foundList;
+  }
+
   public hotDealPage(): void {
     this.navigatorService.setRoot(HotDealsPage).catch(err => console.error(err));
   }
@@ -160,14 +170,18 @@ export class AppMenuComponent implements OnInit {
               ListType: shoppingList.list_type
             };
             if (shoppingList.list_type === Constants.DEFAULT_LIST_TYPE || shoppingList.list_type === Constants.MARKET_ONLY_LIST_TYPE) {
-              this.defaultShoppingLists.push(temp);
+              if (!this.isAlreadyInList(this.defaultShoppingLists, temp)) {
+                this.defaultShoppingLists.push(temp);
+              }
               if (shoppingList.list_type === Constants.DEFAULT_LIST_TYPE) {
                 LocalStorageHelper.saveToLocalStorage(Constants.DEFAULT_LIST_ID, shoppingList.shopping_list_id);
               } else {
                 LocalStorageHelper.saveToLocalStorage(Constants.MARKET_ONLY_LIST_ID, shoppingList.shopping_list_id);
               }
             } else {
-              this.customShoppingLists.push(temp);
+              if (!this.isAlreadyInList(this.customShoppingLists, temp)) {
+                this.customShoppingLists.push(temp);
+              }
             }
           });
 
