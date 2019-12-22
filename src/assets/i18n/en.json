@@ -138,6 +138,8 @@
   "start_date": "Start date",
   "end_date": "End date",
   "release_date": "Release date",
+  "ship_date": "Ship date",
+  "terms": "Terms",
   "orders_history_date": "Date",
   "orders_history_no_purchase": "No existing past purchases",
   "orders_history_order": "Order",

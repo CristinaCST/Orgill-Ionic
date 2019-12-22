@@ -25,6 +25,12 @@
               <p>
                 {{'release_date' | translate}}: {{programInfo.SHIPDATE}}
               </p>  
+              <p>
+                {{'ship_date' | translate}}: {{programInfo.SHIPDATE}}
+              </p>  
+              <p *ngIf="programInfo.TERMS">
+                  {{'terms' | translate}}: {{programInfo.TERMS}}
+              </p> 
         </div>
         <div *ngSwitchCase="'notAvailable'" class="productNotAvailable">
             <p>

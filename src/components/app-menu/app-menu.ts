@@ -243,7 +243,8 @@ export class AppMenuComponent implements OnInit {
       MARKETONLY: 'N',
       STARTDATE: '01/01/2014',
       ENDDATE: '01/01/2024',
-      SHIPDATE: '01/01/2014'
+      SHIPDATE: '01/01/2014',
+      TERMS: ''
     };
     programs.unshift(regularProgram);
     // this.databaseProvider.addPrograms(programs);

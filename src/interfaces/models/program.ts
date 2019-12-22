@@ -5,4 +5,5 @@ export interface Program {
   ENDDATE: string;
   SHIPDATE: string;
   MARKETONLY: string;
+  TERMS: string;
 }
