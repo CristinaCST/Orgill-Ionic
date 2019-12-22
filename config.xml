@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.orgill.ionic" version="6.4" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.orgill.ionic" version="6.7.5" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Orgill</name>
     <description>The OZone</description>
     <author email="cristina.nicolae@cst-us.com" href="http://cst-us.com/">CST Team</author>
@@ -23,6 +23,7 @@
     <preference name="FadeSplashScreenDuration" value="300" />
     <preference name="KeyboardResize" value="false" />
     <preference name="orientation" value="portrait" />
+    <preference name="WKWebViewOnly" value="true" />
     <hook src="src/hooks/invalidate_version.js" type="after_build" />
     <hook src="src/hooks/required_gps.js" type="after_platform_add" />
     <hook src="src/hooks/gradle_upgrade.js" type="after_platform_add" />
