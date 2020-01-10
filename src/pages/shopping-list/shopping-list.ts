@@ -42,7 +42,7 @@ export class ShoppingListPage {
   }
 
   private shoppingList: ShoppingList;
-  private selectedItems: number[] = [];
+  public selectedItems: any = [];
   private shoppingListItems: ShoppingListItem[] = [];
   private isCustomList: boolean = false;
   private orderTotal: number = 0;
@@ -98,7 +98,6 @@ export class ShoppingListPage {
     this.shoppingList = getNavParam(this.navParams, 'list', 'object');
     this.isCheckout = getNavParam(this.navParams, 'isCheckout', 'boolean');
     this.fromSearch = getNavParam(this.navParams, 'fromSearch', 'boolean');
-  
     this.isCustomList = (this.shoppingList.ListType !== Constants.DEFAULT_LIST_TYPE) && (this.shoppingList.ListType !== Constants.MARKET_ONLY_LIST_TYPE);
 
     if (this.isCustomList) {
@@ -120,7 +119,7 @@ export class ShoppingListPage {
           this.shoppingListItems[index].isCheckedInShoppingList = true;
         });
       });
-    }  
+    }
   }
 
   // TODO: Sebastian: REFACTORING
@@ -140,7 +139,11 @@ export class ShoppingListPage {
 
     return this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: ShoppingListItem[]) => {
       if (data) {
-        this.shoppingListItems = data;
+        this.shoppingListItems = data.map(item => {
+            item.isCheckedInShoppingList = Boolean(this.selectedItems.find(findItem =>
+            findItem.product.SKU === item.product.SKU && findItem.isCheckedInShoppingList));
+            return item;
+        });
         this.checkExpiredItems();
         this.checkQuantityItems();
         this.content.resize();
@@ -178,15 +181,14 @@ export class ShoppingListPage {
     });
   }
 
-  private checkQuantityItems(): void { 
+  private checkQuantityItems(): void {
     if (this.shoppingListItems.length > 0) {
       const noQuantityProducts: ShoppingListItem[] = this.shoppingListItems.filter(item => item.quantity < 1);
       const content: PopoverContent = this.popoversService.setContent(Strings.POPOVER_NOQUANTITY_ITEMS_TITLE, JSON.stringify(noQuantityProducts), undefined, undefined, undefined, 'notAvailable');
-      
       if (noQuantityProducts.length > 0) {
         this.popoversService.show(content);
         this.removeNoQuantityProducts(noQuantityProducts);
-      } 
+      }
     }
   }
 
@@ -225,7 +227,7 @@ export class ShoppingListPage {
           }
         });
 
-        const checkedItems: ShoppingListItem[] = this.shoppingListItems.filter(item => item.isCheckedInShoppingList);  //  Workaround for the fact that setOrderTotal actually unselects items 
+        const checkedItems: ShoppingListItem[] = this.shoppingListItems.filter(item => item.isCheckedInShoppingList);  //  Workaround for the fact that setOrderTotal actually unselects items
         for (let i: number = this.shoppingListItems.length - 1; i >= 0; i--) {
           for (let j: number = checkedItems.length - 1; j >= 0; j--) {
             if (this.shoppingListItems[i].product.SKU === checkedItems[j].product.SKU) {
@@ -263,14 +265,14 @@ export class ShoppingListPage {
 
 
   // TODO: This system is overly complicated
-  private setOrderTotal(event: { status: string}, index: number): void {
-    const item: ShoppingListItem = this.shoppingListItems[index];
+  private setOrderTotal(event: any, index: number): void {
+    const item: ShoppingListItem = event.product;
     const price: number = this.pricingService.getShoppingListPrice(item.quantity, item.product, item.item_price);
     switch (event.status) {
       case 'checkedItem':
         const alreadySelected: boolean = this.selectedItems.indexOf(index) > -1 ? true : false;
         if (!alreadySelected) {
-          this.selectedItems.push(index);
+          this.selectedItems.push(item);
         }
         this.orderTotal += price;
         break;
@@ -307,15 +309,9 @@ export class ShoppingListPage {
       const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_NO_ITEMS_TITLE, Strings.SHOPPING_LIST_NO_ITEMS_MESSAGE);
       this.popoversService.show(content);
     } else {
-      const array: ShoppingListItem[] = [];
-      this.selectedItems.forEach(itemIndex => {
-        if (this.shoppingListItems[itemIndex]) {
-          array.push(this.shoppingListItems[itemIndex]);
-        }
-      });
       const params: any = {
         shoppingListId: this.shoppingList.ListID,
-        shoppingListItems: array,
+        shoppingListItems: this.selectedItems,
         orderTotal: this.orderTotal
       };
       this.navigatorService.push(CustomerLocationPage, params).catch(err => console.error(err));
@@ -385,7 +381,6 @@ export class ShoppingListPage {
   }
 
   private removeList(): void {
-   
     const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_DELETE_CONF_TITLE, Strings.SHOPPING_LIST_DELETE_CONF_MESSAGE,
       Strings.MODAL_BUTTON_YES, Strings.MODAL_BUTTON_CANCEL, undefined, Constants.POPOVER_DELETE_LIST_CONFIRMATION);
 
@@ -416,7 +411,7 @@ export class ShoppingListPage {
     if (this.isCheckout || this.isDeleteMode) {
       return;
     }
-    
+
     this.holdTimeoutReference = setTimeout(() => {
       const item: ShoppingListItem = this.shoppingListItems[index];
 
@@ -429,7 +424,7 @@ export class ShoppingListPage {
       this.navigatorService.oneTimeBackButtonOverride(() => {
         this.isDeleteMode = false;
       });
-      
+
       if (!this.platform.is('ios')) {
         this.holdCheckTimeout = true;
       }
@@ -438,7 +433,7 @@ export class ShoppingListPage {
   }
 
   private touchend(): void {
-    this.holdCheckTimeout = false; 
+    this.holdCheckTimeout = false;
     clearTimeout(this.holdTimeoutReference);
   }
 
