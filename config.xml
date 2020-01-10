@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.orgill.ionic" version="6.7.5" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+
+<widget id="com.orgill.ionic" version="6.7.7" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Orgill</name>
     <description>The OZone</description>
     <author email="cristina.nicolae@cst-us.com" href="http://cst-us.com/">CST Team</author>
@@ -128,6 +129,5 @@
     <plugin name="cordova-plugin-badge" spec="~0.8.8" />
     <plugin name="onesignal-cordova-plugin" spec="~2.5.0" />
     <plugin name="cordova-plugin-ionic-webview" spec="^2" />
-    <engine name="android" spec="8.0.0" />
     <allow-navigation href="http://localhost:8100" sessionid="0985bc67" />
 </widget>
