@@ -35,7 +35,6 @@
         "@ngx-translate/core": "^9.1.1",
         "@ngx-translate/http-loader": "^2.0.1",
         "build": "^0.1.4",
-        "cordova-android": "8.1.0",
         "cordova-browser": "^6.0.0",
         "cordova-ios": "^5.1.1",
         "cordova-plugin-android-permissions": "^1.0.0",
@@ -87,8 +86,8 @@
         },
         "platforms": [
             "android",
-            "ios",
-            "browser"
+            "browser",
+            "ios"
         ]
     },
     "config": {
