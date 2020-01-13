@@ -24,23 +24,23 @@
               </p>
               <p>
                 {{'release_date' | translate}}: {{programInfo.SHIPDATE}}
-              </p>  
+              </p>
               <p>
                 {{'ship_date' | translate}}: {{programInfo.SHIPDATE}}
-              </p>  
+              </p>
               <p *ngIf="programInfo.TERMS">
                   {{'terms' | translate}}: {{programInfo.TERMS}}
-              </p> 
+              </p>
         </div>
         <div *ngSwitchCase="'notAvailable'" class="productNotAvailable">
             <p>
-                The following items have been removed from your list. The product may no longer be available or the program has ended. 
+                The following items have been removed from your list. The product may no longer be available or the program has ended.
             </p>
             <div *ngFor="let product of productsNotAvailable">
                   <ul id="products-na-p">
                       <li><b>SKU:</b> {{product.product.SKU}} {{product.product.NAME}} <b>Quantity:</b> {{product.quantity}}</li>
                   </ul>
-            </div> 
+            </div>
         </div>
         <div *ngSwitchDefault>
             <p *ngIf="data.message">
@@ -60,7 +60,7 @@
           placeholder="{{'new_list_hint_desc'| translate }}" (keyup.enter)="$event.target.blur()"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Is Market Only</ion-label>
+        <ion-label><ion-icon name="basket" style="margin-right: 4px;"></ion-icon>Is Market Only</ion-label>
         <ion-checkbox (ionChange)="updateCheck()"></ion-checkbox>
       </ion-item>
     </ion-list>
