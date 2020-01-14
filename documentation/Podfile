@@ -1,0 +1,10 @@
+# This file is needed for the build process of the app for the iOS platform. 
+# Information about this file's usage can be found in the GitLab > Orgill-Ionic > Wiki > How build, release and deploy an iOS version of the app.
+
+target 'project_name' do
+    pod 'OneSignal', '>= 2.11.2', '< 3.0'
+  end
+  
+  target 'OneSignalNotificationServiceExtension' do
+    pod 'OneSignal', '>= 2.11.2', '< 3.0'
+  end
