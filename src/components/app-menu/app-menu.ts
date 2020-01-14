@@ -201,6 +201,14 @@ export class AppMenuComponent implements OnInit {
       });
   }
 
+  private repeatingInProgramList(list: Program[], tested: Program): boolean {
+    let doesRepeat: boolean = false;
+    list.forEach((someList: Program) => {
+      if (someList.PROGRAMNO === tested.PROGRAMNO) { doesRepeat = true; }
+    });
+    return doesRepeat;
+  }
+
   public getPrograms(): void {
     this.doorBusterPrograms = [];
     this.marketOnlyPrograms = [];
@@ -216,12 +224,12 @@ export class AppMenuComponent implements OnInit {
            
             if (program.NAME.toUpperCase().includes('DOOR BUSTER BOOKING')) { // TODO: Fix this
               program.NAME = program.NAME.replace('DOOR BUSTER BOOKING', '');
-              this.doorBusterPrograms.push(program);
+              if (!this.repeatingInProgramList(this.doorBusterPrograms, program)) { this.doorBusterPrograms.push(program); }
             } else {
-              this.marketOnlyPrograms.push(program);
+              if (!this.repeatingInProgramList(this.marketOnlyPrograms, program)) { this.marketOnlyPrograms.push(program); }
             }
           } else {
-            this.everyDayPrograms.push(program);
+            if (!this.repeatingInProgramList(this.everyDayPrograms, program)) { this.everyDayPrograms.push(program); }
           }
         });
         if (this.everyDayPrograms.length === 0) {  // TODO: When these errored?
