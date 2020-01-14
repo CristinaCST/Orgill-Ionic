@@ -202,11 +202,7 @@ export class AppMenuComponent implements OnInit {
   }
 
   private repeatingInProgramList(list: Program[], tested: Program): boolean {
-    let doesRepeat: boolean = false;
-    list.forEach((someList: Program) => {
-      if (someList.PROGRAMNO === tested.PROGRAMNO) { doesRepeat = true; }
-    });
-    return doesRepeat;
+    return list.findIndex(program => program.PROGRAMNO === tested.PROGRAMNO) > -1;
   }
 
   public getPrograms(): void {
