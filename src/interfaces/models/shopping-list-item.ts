@@ -8,4 +8,5 @@ export interface ShoppingListItem {
   item_price: number;
   isCheckedInShoppingList?: boolean;
   isExpired?: boolean;
+  price?: number;
 }
