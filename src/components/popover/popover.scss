@@ -23,6 +23,10 @@ ion-content {
     }
   }
 
+  .basket-icon {
+    margin-right: 4px;
+  }
+
   #products-na-p {
     li {
       text-align: left !important;
@@ -107,6 +111,6 @@ ion-content {
 
 body.keyboard-is-open{
   .popover-content{
-    margin-top:-$keyboard-margin-push-amount!important;  
+    margin-top:-$keyboard-margin-push-amount!important;
   }
-}  
+}
