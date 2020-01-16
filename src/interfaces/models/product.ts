@@ -1,4 +1,6 @@
 export interface Product {
+  program_number?: string;
+  product: Product;
   CatID: string;
   SKU: string;
   QTY_ROUND_OPTION: string;

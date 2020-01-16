@@ -6,6 +6,7 @@ import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
+import { SelectItemEvent } from '../../interfaces/models/select-item-event';
 import { PopoversService, DefaultPopoverResult, PopoverContent } from '../../services/popovers/popovers';
 import { CustomerLocationPage } from '../customer-location/customer-location';
 import { ProductPage } from '../product/product';
@@ -42,7 +43,7 @@ export class ShoppingListPage {
   }
 
   private shoppingList: ShoppingList;
-  private selectedItems: number[] = [];
+  public selectedItems: ShoppingListItem[] = [];
   private shoppingListItems: ShoppingListItem[] = [];
   private isCustomList: boolean = false;
   private orderTotal: number = 0;
@@ -98,7 +99,7 @@ export class ShoppingListPage {
     this.shoppingList = getNavParam(this.navParams, 'list', 'object');
     this.isCheckout = getNavParam(this.navParams, 'isCheckout', 'boolean');
     this.fromSearch = getNavParam(this.navParams, 'fromSearch', 'boolean');
-  
+
     this.isCustomList = (this.shoppingList.ListType !== Constants.DEFAULT_LIST_TYPE) && (this.shoppingList.ListType !== Constants.MARKET_ONLY_LIST_TYPE);
 
     if (this.isCustomList) {
@@ -116,16 +117,29 @@ export class ShoppingListPage {
       this.fillFromSearch();
     } else {
       this.fillList().then(() => {
-        this.selectedItems.forEach(index => {
-          this.shoppingListItems[index].isCheckedInShoppingList = true;
+        this.shoppingListItems.forEach(item => {
+          item.isCheckedInShoppingList = Boolean(this.selectedItems.find(searchItem => {
+            return searchItem.product.product.SKU === item.product.SKU;
+          }));
         });
+        this.updateTotalPrice();
       });
-    }  
+    }
+  }
+
+
+  private updateTotalPrice(): void {
+    this.orderTotal = this.selectedItems.reduce((accumulator, element) => accumulator += Number(element.price), 0);
   }
 
   // TODO: Sebastian: REFACTORING
   private fillFromSearch(): void {
+    this.selectedItems = getNavParam(this.navParams, 'selectedItemsOnSearch', 'object');
     this.shoppingListItems = getNavParam(this.navParams, 'shoppingListItems', 'object');
+    this.shoppingListItems.map(item => {
+      item.isCheckedInShoppingList = Boolean(this.selectedItems.find(itemSearch => itemSearch.product.product.SKU === item.product.SKU));
+    });
+    this.orderTotal = getNavParam(this.navParams, 'orderTotalOnSearch', 'number');
     if (!this.shoppingListItems) {
       this.shoppingListItems = [];
     }
@@ -140,7 +154,11 @@ export class ShoppingListPage {
 
     return this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: ShoppingListItem[]) => {
       if (data) {
-        this.shoppingListItems = data;
+        this.shoppingListItems = data.map(item => {
+          item.isCheckedInShoppingList = Boolean(this.selectedItems.find(findItem =>
+            findItem.product.SKU === item.product.SKU && findItem.isCheckedInShoppingList));
+          return item;
+        });
         this.checkExpiredItems();
         this.checkQuantityItems();
         this.content.resize();
@@ -154,7 +172,7 @@ export class ShoppingListPage {
     }).catch(error => {
       this.isLoading = false;
       this.loader.hide();
-     // this.reloadService.paintDirty('shopping list products');
+      // this.reloadService.paintDirty('shopping list products');
       console.error(error);
     });
   }
@@ -178,15 +196,14 @@ export class ShoppingListPage {
     });
   }
 
-  private checkQuantityItems(): void { 
+  private checkQuantityItems(): void {
     if (this.shoppingListItems.length > 0) {
       const noQuantityProducts: ShoppingListItem[] = this.shoppingListItems.filter(item => item.quantity < 1);
       const content: PopoverContent = this.popoversService.setContent(Strings.POPOVER_NOQUANTITY_ITEMS_TITLE, JSON.stringify(noQuantityProducts), undefined, undefined, undefined, 'notAvailable');
-      
       if (noQuantityProducts.length > 0) {
         this.popoversService.show(content);
         this.removeNoQuantityProducts(noQuantityProducts);
-      } 
+      }
     }
   }
 
@@ -200,17 +217,11 @@ export class ShoppingListPage {
   }
 
   private deleteItems(): void {
-    const array: ShoppingListItem[] = [];
-    this.selectedItems.forEach(itemIndex => {
-      if (this.shoppingListItems[itemIndex]) {
-        array.push(this.shoppingListItems[itemIndex]);
-      }
-    });
     let ok: boolean = true;
 
-    if (array) {
-      array.forEach(elem => {
-        this.shoppingListProvider.deleteProductFromList(this.shoppingList.ListID, elem.product.SKU, elem.program_number).subscribe(
+    if (this.selectedItems.length > 0) {
+      this.selectedItems.forEach(selectedItem => {
+        this.shoppingListProvider.deleteProductFromList(this.shoppingList.ListID, selectedItem.product.product.SKU, selectedItem.product.program_number).subscribe(
           data => { },
           error => {
             ok = false;
@@ -219,21 +230,14 @@ export class ShoppingListPage {
         );
       });
       if (ok) {
-        this.selectedItems.map((item, index) => {
-          if (item !== null && item !== undefined) {
-            this.setOrderTotal({ status: 'uncheckedItem' }, index);
-          }
-        });
 
-        const checkedItems: ShoppingListItem[] = this.shoppingListItems.filter(item => item.isCheckedInShoppingList);  //  Workaround for the fact that setOrderTotal actually unselects items 
-        for (let i: number = this.shoppingListItems.length - 1; i >= 0; i--) {
-          for (let j: number = checkedItems.length - 1; j >= 0; j--) {
-            if (this.shoppingListItems[i].product.SKU === checkedItems[j].product.SKU) {
-              checkedItems.splice(j, 1);      // Safe splice as we break out of this loop after this if
-              this.shoppingListItems.splice(i, 1);  // Safe splice since we iterate from the end
-              break;
-            }
-          }
+        const checkedItems: ShoppingListItem[] = this.shoppingListItems.filter(item => item.isCheckedInShoppingList);  //  Workaround for the fact that setOrderTotal actually unselects items
+
+        for (const checkedItem of checkedItems) {
+          this.shoppingListItems.splice(this.shoppingListItems.findIndex(item => item.product.SKU === checkedItem.product.SKU), 1);
+          this.selectedItems.splice(this.selectedItems.findIndex(shoppingListItem => shoppingListItem.product.product.SKU === checkedItem.product.SKU), 1);
+          const price: number = this.pricingService.getShoppingListPrice(checkedItem.quantity, checkedItem.product, checkedItem.item_price);
+          this.orderTotal -= price;
         }
 
         if (this.shoppingListItems.length === 0) {
@@ -263,38 +267,36 @@ export class ShoppingListPage {
 
 
   // TODO: This system is overly complicated
-  private setOrderTotal(event: { status: string}, index: number): void {
-    const item: ShoppingListItem = this.shoppingListItems[index];
-    const price: number = this.pricingService.getShoppingListPrice(item.quantity, item.product, item.item_price);
+  private setOrderTotal(event: SelectItemEvent): void {
+    const item: any = event;
     switch (event.status) {
       case 'checkedItem':
-        const alreadySelected: boolean = this.selectedItems.indexOf(index) > -1 ? true : false;
+        const alreadySelected: boolean = this.selectedItems.filter(selectedItem => selectedItem.product.SKU === event.product.product.SKU).length > 0;
         if (!alreadySelected) {
-          this.selectedItems.push(index);
+          this.selectedItems.push(item);
         }
-        this.orderTotal += price;
         break;
       case 'uncheckedItem':
-        this.selectedItems.splice(this.selectedItems.findIndex(elem => (elem === index)), 1);
-        this.orderTotal -= price;
+        this.selectedItems.splice(this.selectedItems.findIndex(shoppingListItem => shoppingListItem.product.product.SKU === item.product.product.SKU), 1);
         break;
       default:
         console.warn('no op specified in setOrderTotal');
     }
+    this.updateTotalPrice();
   }
 
-  public onChecked($event: any, index: number): void {
-    this.setOrderTotal($event, index);
+  public onChecked($event: any): void {
+    this.setOrderTotal($event);
     this.isSelectAll = this.selectedItems.length === this.shoppingListItems.length;
   }
 
   public selectAll(): void {
     this.isSelectAll = !this.isSelectAll;
     this.orderTotal = 0;
-    this.shoppingListItems.map((item, index) => {
+    this.shoppingListItems.forEach(item => {
       if (this.isSelectAll) {
         item.isCheckedInShoppingList = true;
-        this.setOrderTotal({ status: 'checkedItem' }, index);
+        this.setOrderTotal({ status: 'checkedItem', product: item });
       } else {
         item.isCheckedInShoppingList = false;
         this.selectedItems = [];
@@ -307,15 +309,9 @@ export class ShoppingListPage {
       const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_NO_ITEMS_TITLE, Strings.SHOPPING_LIST_NO_ITEMS_MESSAGE);
       this.popoversService.show(content);
     } else {
-      const array: ShoppingListItem[] = [];
-      this.selectedItems.forEach(itemIndex => {
-        if (this.shoppingListItems[itemIndex]) {
-          array.push(this.shoppingListItems[itemIndex]);
-        }
-      });
       const params: any = {
         shoppingListId: this.shoppingList.ListID,
-        shoppingListItems: array,
+        shoppingListItems: this.selectedItems.map(item => item.product),
         orderTotal: this.orderTotal
       };
       this.navigatorService.push(CustomerLocationPage, params).catch(err => console.error(err));
@@ -329,9 +325,10 @@ export class ShoppingListPage {
         list: this.shoppingList,
         shoppingListItems: this.shoppingListProvider.search(data, searchString),
         isCheckout: this.isCheckout,
-        fromSearch: true
+        fromSearch: true,
+        orderTotalOnSearch: this.orderTotal,
+        selectedItemsOnSearch: this.selectedItems
       };
-
       this.loader.hide();
       this.navigatorService.push(ShoppingListPage, params, { paramsEquality: getNavParam(this.navParams, 'fromSearch', 'boolean') ? false : true } as NavOptions).catch(err => console.error(err));
     }, err => {
@@ -385,7 +382,6 @@ export class ShoppingListPage {
   }
 
   private removeList(): void {
-   
     const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_DELETE_CONF_TITLE, Strings.SHOPPING_LIST_DELETE_CONF_MESSAGE,
       Strings.MODAL_BUTTON_YES, Strings.MODAL_BUTTON_CANCEL, undefined, Constants.POPOVER_DELETE_LIST_CONFIRMATION);
 
@@ -416,20 +412,20 @@ export class ShoppingListPage {
     if (this.isCheckout || this.isDeleteMode) {
       return;
     }
-    
+
     this.holdTimeoutReference = setTimeout(() => {
       const item: ShoppingListItem = this.shoppingListItems[index];
 
       if (!this.platform.is('ios')) {
         item.isCheckedInShoppingList = true;
-        this.setOrderTotal({ status: 'checkedItem' }, index);
+        this.setOrderTotal({ status: 'checkedItem' });
       }
 
       this.isDeleteMode = true;
       this.navigatorService.oneTimeBackButtonOverride(() => {
         this.isDeleteMode = false;
       });
-      
+
       if (!this.platform.is('ios')) {
         this.holdCheckTimeout = true;
       }
@@ -438,7 +434,7 @@ export class ShoppingListPage {
   }
 
   private touchend(): void {
-    this.holdCheckTimeout = false; 
+    this.holdCheckTimeout = false;
     clearTimeout(this.holdTimeoutReference);
   }
 

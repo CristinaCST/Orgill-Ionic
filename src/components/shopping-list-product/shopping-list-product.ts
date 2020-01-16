@@ -19,15 +19,16 @@ export class ShoppingListProductComponent implements AfterViewInit {
 
   constructor(private readonly pricingService: PricingService,
               private readonly imageProvider: ProductImageProvider) {}
-  
+
   public ngOnInit(): void {
     this.realPrice = this.realPrice ? this.realPrice : this.getRealPrice().toFixed(Constants.DECIMAL_NUMBER);
   }
 
   public updateCheckedItems(): void {
-    const data: { status: string, price: string } = {
+    const data: { status: string, price: string, product: ShoppingListItem } = {
       status: this.shoppingListItem.isCheckedInShoppingList ? 'checkedItem' : 'uncheckedItem',
-      price: this.realPrice
+      price: this.realPrice,
+      product: this.shoppingListItem
     };
     this.checked.emit(data);
   }
