@@ -294,13 +294,14 @@ export class ShoppingListPage {
     this.isSelectAll = !this.isSelectAll;
     this.orderTotal = 0;
     this.shoppingListItems.forEach(item => {
-      if (this.isSelectAll) {
-        item.isCheckedInShoppingList = true;
-        this.setOrderTotal({ status: 'checkedItem', product: item });
-      } else {
-        item.isCheckedInShoppingList = false;
-        this.selectedItems = [];
-      }
+        if (!item.isCheckedInShoppingList) {
+          const correctPrice: number = this.pricingService.getShoppingListPrice(item.quantity, item.product, item.item_price);
+          this.setOrderTotal({ status: 'checkedItem', price: String(correctPrice), product: item });
+        }
+        item.isCheckedInShoppingList = this.isSelectAll;
+        if (!this.isSelectAll) {
+          this.selectedItems = [];
+        }
     });
   }
 
