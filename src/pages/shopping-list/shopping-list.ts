@@ -115,6 +115,8 @@ export class ShoppingListPage {
 
     if (this.fromSearch) {
       this.fillFromSearch();
+      this.checkSelectAllOnSearch();
+      this.updateTotalPrice();
     } else {
       this.fillList().then(() => {
         this.shoppingListItems.forEach(item => {
@@ -130,6 +132,16 @@ export class ShoppingListPage {
 
   private updateTotalPrice(): void {
     this.orderTotal = this.selectedItems.reduce((accumulator, element) => accumulator += Number(element.price), 0);
+  }
+
+  private checkSelectAllOnSearch(): void {
+    const productsCheckedInShoppingList: ShoppingListItem[] = [];
+    this.shoppingListItems.forEach(item => {
+      if (item.isCheckedInShoppingList) {
+        productsCheckedInShoppingList.push(item);
+      }
+      this.shoppingListItems.length === productsCheckedInShoppingList.length ? this.isSelectAll = true : this.isSelectAll = false;
+    });
   }
 
   // TODO: Sebastian: REFACTORING
@@ -287,7 +299,7 @@ export class ShoppingListPage {
 
   public onChecked($event: any): void {
     this.setOrderTotal($event);
-    this.isSelectAll = this.selectedItems.length === this.shoppingListItems.length;
+    this.checkSelectAllOnSearch();
   }
 
   public selectAll(): void {
