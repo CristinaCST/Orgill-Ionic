@@ -115,7 +115,6 @@ export class ShoppingListPage {
 
     if (this.fromSearch) {
       this.fillFromSearch();
-      this.checkSelectAllOnSearch();
       this.updateTotalPrice();
     } else {
       this.fillList().then(() => {
@@ -124,7 +123,8 @@ export class ShoppingListPage {
             return searchItem.product.product.SKU === item.product.SKU;
           }));
         });
-        this.updateTotalPrice();
+        this.shoppingListItems.length === this.selectedItems.length ? this.isSelectAll = true : this.isSelectAll = false;
+          this.updateTotalPrice();
       });
     }
   }
@@ -132,16 +132,6 @@ export class ShoppingListPage {
 
   private updateTotalPrice(): void {
     this.orderTotal = this.selectedItems.reduce((accumulator, element) => accumulator += Number(element.price), 0);
-  }
-
-  private checkSelectAllOnSearch(): void {
-    const productsCheckedInShoppingList: ShoppingListItem[] = [];
-    this.shoppingListItems.forEach(item => {
-      if (item.isCheckedInShoppingList) {
-        productsCheckedInShoppingList.push(item);
-      }
-      this.shoppingListItems.length === productsCheckedInShoppingList.length ? this.isSelectAll = true : this.isSelectAll = false;
-    });
   }
 
   // TODO: Sebastian: REFACTORING
@@ -168,11 +158,12 @@ export class ShoppingListPage {
       if (data) {
         this.shoppingListItems = data.map(item => {
           item.isCheckedInShoppingList = Boolean(this.selectedItems.find(findItem =>
-            findItem.product.SKU === item.product.SKU && findItem.isCheckedInShoppingList));
+            findItem.product.product.SKU === item.product.SKU && findItem.isCheckedInShoppingList));
           return item;
         });
         this.checkExpiredItems();
         this.checkQuantityItems();
+        this.updateTotalPrice();
         this.content.resize();
       } else {
         this.shoppingListItems = [];
@@ -248,8 +239,7 @@ export class ShoppingListPage {
         for (const checkedItem of checkedItems) {
           this.shoppingListItems.splice(this.shoppingListItems.findIndex(item => item.product.SKU === checkedItem.product.SKU), 1);
           this.selectedItems.splice(this.selectedItems.findIndex(shoppingListItem => shoppingListItem.product.product.SKU === checkedItem.product.SKU), 1);
-          const price: number = this.pricingService.getShoppingListPrice(checkedItem.quantity, checkedItem.product, checkedItem.item_price);
-          this.orderTotal -= price;
+          this.updateTotalPrice();
         }
 
         if (this.shoppingListItems.length === 0) {
@@ -299,22 +289,34 @@ export class ShoppingListPage {
 
   public onChecked($event: any): void {
     this.setOrderTotal($event);
-    this.checkSelectAllOnSearch();
+    this.selectedItems.length === this.shoppingListItems.length ? this.isSelectAll = true : this.isSelectAll = false;
   }
 
   public selectAll(): void {
     this.isSelectAll = !this.isSelectAll;
-    this.orderTotal = 0;
     this.shoppingListItems.forEach(item => {
         if (!item.isCheckedInShoppingList) {
+          item.isCheckedInShoppingList = true;
           const correctPrice: number = this.pricingService.getShoppingListPrice(item.quantity, item.product, item.item_price);
           this.setOrderTotal({ status: 'checkedItem', price: String(correctPrice), product: item });
         }
         item.isCheckedInShoppingList = this.isSelectAll;
-        if (!this.isSelectAll) {
+        this.updateTotalPrice();
+
+        if (!this.isSelectAll && this.fromSearch) {
+          this.shoppingListItems.map(shoppingListItem => {
+            this.selectedItems = this.selectedItems.filter(shoppItem => shoppItem.product.product.SKU !== shoppingListItem.product.SKU);
+          });
+          this.updateTotalPrice();
+        }
+
+        if (!this.isSelectAll && !this.fromSearch) {
           this.selectedItems = [];
+          this.updateTotalPrice();
         }
     });
+
+
   }
 
   public continue(): void {
