@@ -89,10 +89,10 @@ export class AppMenuComponent implements OnInit {
 
 
   private initMenu(): void {
-    // this.oneSignal.getRetailerType().then(retailer_type => {
-    //   // Temporary disable hot deals for CA;
-    //   this.hotDealNotification = retailer_type === 'US';
-    // });
+    this.oneSignal.getRetailerType().then(retailer_type => {
+      // Temporary disable hot deals for CA;
+      this.hotDealNotification = retailer_type === 'US';
+    });
     
     this.getPrograms();
     this.getShoppingLists();
