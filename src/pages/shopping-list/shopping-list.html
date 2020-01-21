@@ -30,11 +30,11 @@
 </ion-content>
 
 <ion-footer class="footer" padding>
-  <div *ngIf="isCheckout || isDeleteMode ">
-    <button ion-button outline block color="OrgillRed" [disabled]="!selectedItems.length" (click)="delete()">
+  <div *ngIf="isCheckout || isDeleteMode">
+    <button *ngIf="!fromSearch" ion-button outline block color="OrgillRed" [disabled]="!selectedItems.length" (click)="delete()">
       {{"modal_button_delete" | translate}}
     </button>
-    <button ion-button outline block color="OrgillDarkGray" (click)="selectAll()">
+    <button *ngIf="!fromSearch" ion-button outline block color="OrgillDarkGray" (click)="selectAll()">
       {{ isSelectAll ? ("shopping_list_deselect_all" | translate) :
       ("shopping_list_select_all" | translate) }}
     </button>
