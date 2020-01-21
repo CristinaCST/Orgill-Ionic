@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-
-<widget id="com.orgill.ionic" version="6.7.7" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Orgill</name>
+<widget android-versionCode="85" id="com.orgill.test" version="6.7.10" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Orgill Test</name>
     <description>The OZone</description>
     <author email="cristina.nicolae@cst-us.com" href="http://cst-us.com/">CST Team</author>
     <content src="index.html" />
@@ -112,6 +111,13 @@
         </config-file>
         <config-file parent="OneSignal_disable_badge_clearing" target="*-Info.plist">
             <true />
+        </config-file>
+        <config-file parent="UIBackgroundModes" target="*-Info.plist">
+            <array>
+                <string>fetch</string>
+                <string>location</string>
+                <string>remote-notification</string>
+            </array>
         </config-file>
     </platform>
     <allow-navigation href="*" />
