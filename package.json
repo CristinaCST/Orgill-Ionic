@@ -10,7 +10,8 @@
         "build": "ionic-app-scripts build",
         "lint": "ionic-app-scripts lint",
         "browser": "ionic-app-scripts serve --sourceMap source-map --iscordovaserve --wwwDir platforms/browser/www/ --buildDir platforms/browser/www/build",
-        "i18n": "sync-i18n --files ./src/assets/i18n/*.json --primary en --languages fr"
+        "i18n": "sync-i18n --files ./src/assets/i18n/*.json --primary en --languages fr",
+        "build_android": "sh ./build_scripts/auto_build_android.sh"
     },
     "dependencies": {
         "@angular/animations": "^5.2.11",
@@ -35,6 +36,7 @@
         "@ngx-translate/core": "^9.1.1",
         "@ngx-translate/http-loader": "^2.0.1",
         "build": "^0.1.4",
+        "cordova-android": "8.1.0",
         "cordova-browser": "^6.0.0",
         "cordova-ios": "^5.1.1",
         "cordova-plugin-android-permissions": "^1.0.0",
@@ -85,9 +87,9 @@
             "onesignal-cordova-plugin": {}
         },
         "platforms": [
-            "android",
             "browser",
-            "ios"
+            "ios",
+            "android"
         ]
     },
     "config": {

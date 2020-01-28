@@ -1,3 +1,3 @@
-export const VERSION: string = '6.7.4';
-// This file is here as a helper for our manual workaround of changing about page version, which is not reliable with plugins.
-// At the time of writing this file the hook for it is pretty basic and will not find this file if it's name is modified or it's path, please leave it here unless you modified the hook
+export const VERSION: string = '6.7.10';
+export const API_KEY: string = 'be33b136-2960-435a-b22f-b12ade07e393';
+export const PROJECT_TITLE: string = 'orgill-test';
