@@ -134,6 +134,8 @@
   "order_review_type_orgill": "Orgill.ca",
   "order_sent": "Commande envoyée",
   "order_sent_message_method": "Votre commande a été envoyée à Orgill.com",
+  "error_confirmation_message_status": "Erreur!",
+  "hotDeal_error_message_status": "Nous sommes désolés, votre commande n'a pas pu être exécutée.",
   "orders_history_date": "Date",
   "orders_history_no_purchase": "Aucun achat passé existant",
   "orders_history_order": "Commande",
