@@ -26,7 +26,7 @@ export const INFINITE_LOADER_LOAD_COUNT: number = 10;
 
 // Time in milliseconds representing how much time is valid a native location check (could be done earlier)
 // Put 0 to force real-time location when prompting. WARNING: If this value is set, cached location will be retrieved instead of trying to get realtime.
-export const LOCATION_MAXIMUM_AGE: number = 0; 
+export const LOCATION_MAXIMUM_AGE: number = 0;
 
 export const LOCATION_TIMEOUT: number = 1000 * 15; // Time in milliseconds after a location results considers it unavailable (or off).
 
@@ -181,9 +181,14 @@ export const DEFAULT_LIST_TYPE: string = '1';
 export const MARKET_ONLY_LIST_TYPE: string = '2';
 export const CUSTOM_LIST_MARKET_TYPE: string = '3';
 
-// ONE SIGNAL SETUP
-export const ONE_SIGNAL_API_KEY: string = 'a11b3e10-bce2-41e9-a6d0-746042798d7e';
-export const ONE_SIGNAL_ANDROID_PROJECT_TITLE: string = 'orgill-5a5ba';
+// ONE SIGNAL SETUP /// PROD
+//export const ONE_SIGNAL_API_KEY: string = 'a11b3e10-bce2-41e9-a6d0-746042798d7e';
+//export const ONE_SIGNAL_ANDROID_PROJECT_TITLE: string = 'orgill-5a5ba';
+
+// ONE SIGNAL SETUP /// TEST
+export const ONE_SIGNAL_API_KEY: string = 'be33b136-2960-435a-b22f-b12ade07e393';
+export const ONE_SIGNAL_ANDROID_PROJECT_TITLE: string = 'orgill-test';
+
 export const ONE_SIGNAL_IOS_NOTIFICATION_AUTO_PROMPT: boolean = false;
 export const ONE_SIGNAL_IOS_LAUNCH_IN_WEBVIEW: boolean = false;
 export const ONE_SIGNAL_LOCATION_PREFERENCE_PATH: string = 'locationSharing';

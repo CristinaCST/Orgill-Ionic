@@ -24,6 +24,7 @@ export class OrderConfirmationPage implements OnInit {
   public orderMethodString: string;
   public confirmation: string;
   public pageTitle: string;
+  public hotDealNoQuantity: boolean;
   private hotDealPurchase: boolean = false;
   private hotDealLocations: LocationElement[];
   private hotDealConfirmations: HotDealConfirmation[];
@@ -70,7 +71,7 @@ export class OrderConfirmationPage implements OnInit {
         }
       });
     } else {
-      if (this.hotDealConfirmations) {
+      if (this.hotDealConfirmations.filter(hotdeal => hotdeal.quantity > 0)) {
         this.orderTotal = 0;
         let finalQty: number = 0;
         this.hotDealConfirmations.forEach((confirmation, index) => {
@@ -87,7 +88,12 @@ export class OrderConfirmationPage implements OnInit {
           this.confirmation += 'Confirmation for location ' + confirmation.fullLocation.LOCATION.ADDRESS + ' with confirmation number (' + confirmation.confirmation + ') and quantity (' + confirmation.quantity.toString() + ') ' + '<br>';
         });
       }
-    }
+      this.hotDealConfirmations.filter(hotdeal => {
+        if (hotdeal.quantity <= 0) {
+          this.confirmation = hotdeal.ErrorMessage;
+          this.hotDealNoQuantity = true;
+        }
+      });
   }
-
+  }
 }

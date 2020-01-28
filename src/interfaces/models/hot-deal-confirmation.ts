@@ -6,4 +6,5 @@ export interface HotDealConfirmation {
     customer_number: string;
     fullLocation: LocationElement;
     quantity: number;
+    ErrorMessage?: string;
 }

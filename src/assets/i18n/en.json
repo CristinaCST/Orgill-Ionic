@@ -135,6 +135,8 @@
   "order_review_type_orgill": "Orgill.com",
   "order_sent": "Order Sent",
   "order_sent_message_method": "Your order has been sent to Orgill.com",
+  "error_confirmation_message_status": "Error!",
+  "hotDeal_error_message_status": "We are sorry, your order could not be fulfilled.",
   "start_date": "Start date",
   "end_date": "End date",
   "release_date": "Release date",

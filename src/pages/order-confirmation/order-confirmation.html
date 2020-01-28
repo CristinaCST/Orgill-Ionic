@@ -1,9 +1,13 @@
 <ion-header>
-  <navbar [isBackEnabled]="true" [title]="pageTitle"> 
+  <navbar [isBackEnabled]="true" [title]="pageTitle">
   </navbar>
-  <div class="sub-header">
+  <div *ngIf="!hotDealNoQuantity" class="sub-header">
     <p>{{"order_confirmation_message_status" | translate}} </p>
     <p> {{orderMethodString | translate}}</p>
+  </div>
+  <div *ngIf="hotDealNoQuantity" class="sub-header">
+    <p>{{"error_confirmation_message_status" | translate}} </p>
+    <p> {{"hotDeal_error_message_status"| translate}}</p>
   </div>
 </ion-header>
 
