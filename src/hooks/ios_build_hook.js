@@ -62,7 +62,7 @@ module.exports = function(context) {
             proj.addBuildPhase([ 'NotificationService.m' ], 'PBXSourcesBuildPhase', 'Sources', target.uuid);
             proj.addBuildPhase([], 'PBXResourcesBuildPhase', 'Resources', target.uuid);
             proj.addBuildPhase([], 'PBXFrameworksBuildPhase', 'Frameworks', target.uuid);
-            
+            proj.addFramework('UIKit.framework');
 
 
 
@@ -110,7 +110,7 @@ module.exports = function(context) {
 
                     proj.hash.project.objects['XCBuildConfiguration'][ref].buildSettings['PRODUCT_NAME'] = `${extName}`;
                     // proj.addBuildPhase([], 'PBXFrameworksBuildPhase', 'Frameworks', target.uuid);
-                    // proj.addBuildPhase([], 'PBXFrameworksBuildPhase', 'Frameworks', 'WebKit.framework');
+                    
                     }
                 }
 
