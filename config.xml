@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.orgill.ionic" version="6.7.10" android-versionCode="85" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Orgill</name>
+<widget android-versionCode="86" id="com.orgill.test" version="6.7.11" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>Orgill Test</name>
     <description>The OZone</description>
     <author email="cristina.nicolae@cst-us.com" href="http://cst-us.com/">CST Team</author>
-    <content original-src="index.html" src="http://localhost:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
