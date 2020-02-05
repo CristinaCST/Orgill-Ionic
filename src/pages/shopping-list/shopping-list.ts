@@ -206,6 +206,11 @@ export class ShoppingListPage {
       if (noQuantityProducts.length > 0) {
         this.popoversService.show(content);
         this.removeNoQuantityProducts(noQuantityProducts);
+        this.popoversService.popover.onDidDismiss(data => {
+          if (data.type === 'notAvailable') {
+            this.fillList();
+          }
+        });
       }
     }
   }
