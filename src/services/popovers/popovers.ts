@@ -48,12 +48,12 @@ export class PopoversService {
   // private close = new Subject<any>();
   private isOpened: boolean = false;
   public type: string = undefined;
-  private popover: Popover;
+  public popover: Popover;
   public static activeItem: PopoversService;
   public static queue: QueueItem[] = [];
 
   constructor(private readonly popoverController: PopoverController) {}
-  
+
   /**
    *
    * @param content modal content, eg: type, title, message, buttons
