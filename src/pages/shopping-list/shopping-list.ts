@@ -201,7 +201,7 @@ export class ShoppingListPage {
 
   private checkQuantityItems(): void {
     if (this.shoppingListItems.length > 0) {
-      const noQuantityProducts: ShoppingListItem[] = this.shoppingListItems.filter(item => item.quantity < 3);
+      const noQuantityProducts: ShoppingListItem[] = this.shoppingListItems.filter(item => item.quantity < 1);
       const content: PopoverContent = this.popoversService.setContent(Strings.POPOVER_NOQUANTITY_ITEMS_TITLE, JSON.stringify(noQuantityProducts), undefined, undefined, undefined, 'notAvailable');
       if (noQuantityProducts.length > 0) {
         this.popoversService.show(content);
