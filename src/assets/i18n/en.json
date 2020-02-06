@@ -213,6 +213,8 @@
   "shopping_list_empty_title": "Empty list",
   "shopping_list_existing_product": "The product is already added in this list.",
   "shopping_list_expired_items_message": "You have items in your cart on expired programs.  \n\nPlease review these items.",
+  "permission request": "Permission request",
+  "please_grant_camera_permission": "Please grant camera permission in order to scan product barcode",
   "shopping_list_expired_items_title": "Updated Prices",
   "no_product_quantity_available_title": "Products not available",
   "no_product_quantity_available_message": "The following items have been removed from your list. The product is no longer available",

@@ -53,6 +53,9 @@ export const LOADING_ALERT_CONTENT_CUSTOMER_LOCATIONS: string = 'loading_content
 export const POPOVER_EXPIRED_ITEMS_TITLE: string = 'shopping_list_expired_items_title';
 export const POPOVER_EXPIRED_ITEMS_MESSAGE: string = 'shopping_list_expired_items_message';
 
+export const POPOVER_CAMERA_PERMISSION_TITLE: string = 'permission request';
+export const POPOVER_CAMERA_PERMISSION_MESSAGE: string = 'please_grant_camera_permission';
+
 export const POPOVER_NOQUANTITY_ITEMS_TITLE: string = 'no_product_quantity_available_title';
 export const POPOVER_NOQUANTITY_ITEMS_MESSAGE: string = 'no_product_quantity_available_message';
 
