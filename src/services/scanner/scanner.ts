@@ -42,7 +42,7 @@ export class ScannerService {
               private readonly platform: Platform,
               private readonly events: Events,
               private readonly loadingService: LoadingService
-  ) { 
+  ) {
     this.searchingLoader = this.loadingService.createLoader();
   }
 
@@ -82,6 +82,8 @@ export class ScannerService {
       }
     }, err => {
       console.error(err);
+      const content: PopoverContent = this.popoversService.setContent(Strings.POPOVER_CAMERA_PERMISSION_TITLE, Strings.POPOVER_CAMERA_PERMISSION_MESSAGE);
+      this.popoversService.show(content);
     });
   }
 
@@ -209,8 +211,8 @@ export class ScannerService {
   private isPermissionError(scannerError: string): boolean {
     if (this.platform.is('android')) {
       return scannerError.localeCompare('Illegal access') === 0;
-    } 
-    
+    }
+
     if (this.platform.is('ios')) {
       return scannerError.includes('Access to the camera has been prohibited');
     }

@@ -208,6 +208,8 @@
   "shopping_list_existing_product": "Le produit est déjà ajouté à cette liste.",
   "shopping_list_expired_items_message": "Vous avez des articles dans votre panier sur les programmes expirés. \n \n Veuillez vérifier ces éléments.",
   "shopping_list_expired_items_title": "Prix Mis à Jour",
+  "permission request": "Demande d'autorisation",
+  "please_grant_camera_permission": "Veuillez accorder l'autorisation de l'appareil photo afin de numériser le code-barres du produit",
   "shopping_list_items_label": "Articles",
   "shopping_list_market_only_product": "Vous ne pouvez pas ajouter un produit du programme Orgill Market à une liste quotidienne. Veuillez ajouter le produit à Market Only Cart.",
   "shopping_list_no_items_added": "Aucun article n'a été ajouté",
