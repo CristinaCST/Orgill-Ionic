@@ -186,8 +186,8 @@ export const CUSTOM_LIST_MARKET_TYPE: string = '3';
 // export const ONE_SIGNAL_ANDROID_PROJECT_TITLE: string = 'orgill-5a5ba';
 
 // ONE SIGNAL SETUP /// TEST
-export const ONE_SIGNAL_API_KEY: string = 'be33b136-2960-435a-b22f-b12ade07e393';
-export const ONE_SIGNAL_ANDROID_PROJECT_TITLE: string = 'orgill-test';
+// export const ONE_SIGNAL_API_KEY: string = 'be33b136-2960-435a-b22f-b12ade07e393';
+// export const ONE_SIGNAL_ANDROID_PROJECT_TITLE: string = 'orgill-test';
 
 export const ONE_SIGNAL_IOS_NOTIFICATION_AUTO_PROMPT: boolean = false;
 export const ONE_SIGNAL_IOS_LAUNCH_IN_WEBVIEW: boolean = false;

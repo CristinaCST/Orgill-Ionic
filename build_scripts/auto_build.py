@@ -10,11 +10,11 @@ ET.register_namespace('cdv', "http://cordova.apache.org/ns/1.0")
 
 #########################################################
 # This area MUST be edited, to set the version of the app
-version = '6.7.12'
-version_code = '87'
-build_type = "test" #"regular"
+version = '7.0.0'
+version_code = '700'
+build_type = "regular" #"regular"
 #########################################################
-app_name = "Orgill Test" if build_type == "test" else "Orgill"
+app_name = "Orgill Test" if build_type == "test" else "Orgill “O” Zone"
 oneSignalAppID = "be33b136-2960-435a-b22f-b12ade07e393" if build_type == "test" else "a11b3e10-bce2-41e9-a6d0-746042798d7e"
 oneSignalFirebaseName = "orgill-test" if build_type == "test" else "orgill-5a5ba"
 
