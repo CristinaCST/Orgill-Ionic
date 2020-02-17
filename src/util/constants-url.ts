@@ -1,7 +1,7 @@
 export const URL_BASE_EN: string = 'http://reststage.orgill.com/service.asmx/';
 export const URL_BASE_FR: string = 'http://dmwebservice-cafr.orgill.com/service.asmx/';
 
-export const URL_BASE_DEV: string = 'http://dmwebservice.orgill.com/service.asmx/';
+export const URL_BASE_DEV: string = 'http://reststage.orgill.com/service.asmx/';
 export const URL_BASE_PROD: string = 'http://dmwebservice.orgill.com/service.asmx/';
 
 export const URL_LOGIN: string = 'Authenticate';
