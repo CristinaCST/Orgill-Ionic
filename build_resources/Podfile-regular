@@ -1,4 +1,4 @@
-target 'Orgill “O” Zone' do
+target 'Orgill O Zone' do
     pod 'OneSignal', '>= 2.11.2', '< 3.0'
 end
 
