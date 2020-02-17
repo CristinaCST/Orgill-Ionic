@@ -10,6 +10,7 @@ import { NavigatorService } from '../../services/navigator/navigator';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
+import * as Versions from '../../util/version';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 
@@ -58,7 +59,7 @@ export class OneSignalService {
     public init(): void {
 
         // Begin initialiation with specific API keys
-        this.oneSignal.startInit(Constants.ONE_SIGNAL_API_KEY, Constants.ONE_SIGNAL_ANDROID_PROJECT_TITLE);
+        this.oneSignal.startInit(Versions.API_KEY, Versions.PROJECT_TITLE);
 
         if (this.platform.is('ios')) {
             const iosSettings: { kOSSettingsKeyAutoPrompt: boolean, kOSSettingsKeyInAppLaunchURL: boolean } = {
