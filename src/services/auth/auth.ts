@@ -19,7 +19,7 @@ export class AuthService {
 
   private user: User = new User();
   public allowSwitch: string;
-  public allowLanguageSwitch: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public allowLanguageSwitchListener: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(private readonly apiProvider: ApiService,
               private readonly events: Events,
@@ -44,10 +44,6 @@ export class AuthService {
   private get User(): User {
     return this.user;
   }
-
-  public getAllowLanguageSwitchListener(): Observable<boolean> {
-    return this.allowLanguageSwitch.asObservable();
-}
 
   public login(credentials: LoginRequest): Observable<void> {
 
@@ -76,7 +72,7 @@ export class AuthService {
           this.user = JSON.parse(response.d);
           this.user.userToken = params.user_token;
           this.allowSwitch = JSON.parse(response.d).division;
-          this.allowLanguageSwitch.next(this.allowSwitch === '8');
+          this.allowLanguageSwitchListener.next(this.allowSwitch === '8');
           this.secureActions.setAuthState(true, this.user);
           this.events.publish(Constants.EVENT_AUTH);
           LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));

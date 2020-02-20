@@ -22,7 +22,7 @@ export class SettingsPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.authService.getAllowLanguageSwitchListener().subscribe(result => {
+    this.authService.allowLanguageSwitchListener.subscribe(result => {
       this.allowLanguageSwitch = result;
     });
   }
