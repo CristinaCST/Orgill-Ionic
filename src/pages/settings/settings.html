@@ -11,7 +11,7 @@
         </p>
        <ion-toggle [checked]="notificationsAllowed" (ionChange)="pushNotificationsSwitch($event)" ></ion-toggle>
       </div>
-      <div class="settingsList">
+      <div *ngIf="allowLanguageSwitch" class="settingsList">
         <p>
           {{"languages" | translate}}
         </p>
@@ -20,4 +20,3 @@
       </div>
     </div>
   </ion-content>
-  

@@ -7,8 +7,9 @@ function isEmptyString(str){
 
 
 module.exports = function(context) {
-    console.log('Starting hook to add notification extension to project');
 
+    if(context.opts.platforms.indexOf('ios') > -1 ){
+    console.log('Starting hook to add notification extension to project');
     const cordovaCommon = context.requireCordovaModule('cordova-common');
     const appConfig = new cordovaCommon.ConfigParser('config.xml');
     const appName = appConfig.name();
@@ -110,7 +111,7 @@ module.exports = function(context) {
 
                     proj.hash.project.objects['XCBuildConfiguration'][ref].buildSettings['PRODUCT_NAME'] = `${extName}`;
                     // proj.addBuildPhase([], 'PBXFrameworksBuildPhase', 'Frameworks', target.uuid);
-                    
+
                     }
                 }
 
@@ -120,4 +121,5 @@ module.exports = function(context) {
 
         });
     }, 3000);
+  }
 };

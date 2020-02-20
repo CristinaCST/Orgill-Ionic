@@ -6,7 +6,7 @@ import * as ConstantsURL from '../../util/constants-url';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import * as Constants from '../../util/constants';
 import { User } from '../../interfaces/models/user';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Events } from 'ionic-angular';
 import { Moment } from 'moment';
 import { DateTimeService } from '../../services/datetime/dateTimeService';
@@ -18,12 +18,14 @@ import { PopoversService, PopoverContent } from '../../services/popovers/popover
 export class AuthService {
 
   private user: User = new User();
+  public allowSwitch: string;
+  public allowLanguageSwitchListener: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(private readonly apiProvider: ApiService,
               private readonly events: Events,
               private readonly secureActions: SecureActionsService,
               private readonly popoverService: PopoversService) {
-    
+
       this.secureActions.authState.subscribe(authOk => {
       if (authOk) {
         this.events.publish(Constants.EVENT_AUTH);
@@ -69,6 +71,8 @@ export class AuthService {
         this.apiProvider.post(ConstantsURL.URL_USER_INFO, params).subscribe(response => {
           this.user = JSON.parse(response.d);
           this.user.userToken = params.user_token;
+          this.allowSwitch = JSON.parse(response.d).division;
+          this.allowLanguageSwitchListener.next(this.allowSwitch === '8');
           this.secureActions.setAuthState(true, this.user);
           this.events.publish(Constants.EVENT_AUTH);
           LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
@@ -103,7 +107,7 @@ export class AuthService {
     this.popoverService.show(content);
 
     this.logout(true);
-    
+
   }
 
 }
