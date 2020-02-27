@@ -93,8 +93,8 @@ export class OneSignalService {
 
         // Set the logging level of OneSignal
         this.oneSignal.setLogLevel({
-            logLevel: Constants.ONE_SIGNAL_VERBOSE ? Constants.ONE_SIGNAL_DEBUG_LEVEL : 1, // Are we verbose logging by choice? If not, log only fatal errors
-            visualLevel: 0  // Never pop up error as alerts with the built-in system.
+            logLevel: 6, // Are we verbose logging by choice? If not, log only fatal errors
+            visualLevel: 0 // Never pop up error as alerts with the built-in system.
         });
 
         // End the settings phase of oneSignal
@@ -183,7 +183,7 @@ export class OneSignalService {
             });
         });
     }
-    
+
     /**
      * Handles android-side of permissions
      */
@@ -195,8 +195,8 @@ export class OneSignalService {
         if (this.pushNotificationPermission) {
             LocalStorageHelper.removeFromLocalStorage(Constants.NOTIFICATION_SUBSCRIPTION_ANDROID_PATH);
             this.handleLocationPermission();
-           
-           
+
+
         } else if (this.getPermissionDismissStatus(Constants.ONE_SIGNAL_NOTIFICATION_PREFERENCE_PATH)) {
             LocalStorageHelper.saveToLocalStorage(Constants.NOTIFICATION_SUBSCRIPTION_ANDROID_PATH, true);
         }
@@ -296,7 +296,7 @@ export class OneSignalService {
                         this.iosNativePermissionStatusUpdate(result);
 
                         if (result) {
-                            this.handleLocationPermission();
+                            this.handleLocationPermission(true);
                         }
                         resolve(result);
                     });
@@ -343,25 +343,29 @@ export class OneSignalService {
     /**
      * Function that checks wether we have location permission.
      */
-    private handleLocationPermission(): Promise<void> {
-        this.oneSignal.setLocationShared(true);
-       // this.oneSignal.promptLocation(); HACK: This is graphically glitching, good job one signal :/
-            return new Promise(resolve => {
-                this.oneSignal.setLocationShared(true);
-                // GetCurrent position calls for location permission by itself
-                this.geolocation.getCurrentPosition().then((res: Geoposition) => {
-                    // Everything is alright
-    
-                    resolve();
-                }).catch(e => {
-                    console.error(e);
-                });
-    
-            }) as Promise<void>;
-        }
+  private handleLocationPermission(ios: boolean = false): Promise<void> {
+    this.oneSignal.setLocationShared(true);
+    if (ios) {
+      this.oneSignal.promptLocation();
+      return new Promise(resolve => resolve());
+    }
+    // HACK: This is graphically glitching, good job one signal :/
+    return new Promise(resolve => {
+      this.oneSignal.setLocationShared(true);
+      // GetCurrent position calls for location permission by itself
+      this.geolocation.getCurrentPosition().then((res: Geoposition) => {
+        // Everything is alright
+
+        resolve();
+      }).catch(e => {
+        console.error(e);
+      });
+
+    }) as Promise<void>;
+  }
 
     private notificationReceived(data: OSNotificationPayload): void {
-        
+
         // Log only if we are verbose logging
         this.debugLog('Received package:' + JSON.stringify(data), data);
 
