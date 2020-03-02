@@ -12,7 +12,7 @@
   <ion-content *ngIf="showShoppingListsMenu===false" class="content">
     <ion-item-group class="group">
       <!-- Every day catalog -->
-  
+
       <div class="catalogs">
         <ion-item-divider no-lines>
           {{"menu_header_everyday_catalog" | translate}}:
@@ -59,7 +59,7 @@
       </button>
       <button (click)="goToListPage(list)" menuClose icon-left detail-none ion-item
               *ngFor="let list of defaultShoppingLists">
-        <ion-icon class="menu-icon" name="cart"></ion-icon>
+        <ion-icon class="menu-icon" [name]="list.ListName === 'Default Shopping Cart' ? 'cart' : 'basket'"></ion-icon>
         {{list.ListName}}
       </button>
 
@@ -72,9 +72,9 @@
         {{"menu_hot_deal_button" | translate}}
       </button>
 
-      
+
       <button ion-item class="item" detail-none menuClose icon-left (click)="goToPage(menuPages.pastPurchases)">
-        <ion-icon name="basket"></ion-icon>
+        <ion-icon name="archive"></ion-icon>
         {{"menu_ordering_history"| translate}}
       </button>
 
