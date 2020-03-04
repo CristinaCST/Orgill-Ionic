@@ -93,8 +93,7 @@ export class OneSignalService {
 
         // Set the logging level of OneSignal
         this.oneSignal.setLogLevel({
-         // logLevel: Constants.ONE_SIGNAL_VERBOSE ? Constants.ONE_SIGNAL_DEBUG_LEVEL : 1,
-            logLevel: 6, // Are we verbose logging by choice? If not, log only fatal errors
+            logLevel: Constants.ONE_SIGNAL_VERBOSE ? Constants.ONE_SIGNAL_DEBUG_LEVEL : 1,
             visualLevel: 0 // Never pop up error as alerts with the built-in system.
         });
 
