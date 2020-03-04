@@ -15,6 +15,7 @@ import { Platform, Events } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
 import { ShoppingList } from '../../interfaces/models/shopping-list';
+import { CatalogsProvider } from '../../providers/catalogs/catalogs';
 
 @Injectable()
 export class ScannerService {
@@ -41,9 +42,11 @@ export class ScannerService {
               private readonly popoversService: PopoversService,
               private readonly platform: Platform,
               private readonly events: Events,
-              private readonly loadingService: LoadingService
+              private readonly loadingService: LoadingService,
+              public catalogProvider: CatalogsProvider
   ) {
     this.searchingLoader = this.loadingService.createLoader();
+    this.getPrograms();
   }
 
   public scan(shoppingList: ShoppingList, products: ShoppingListItem[]): void {
@@ -87,6 +90,13 @@ export class ScannerService {
     });
   }
 
+  public getPrograms(): any {
+    this.catalogProvider.getPrograms().subscribe(getProgramsResult => {
+      this.programs = JSON.parse(getProgramsResult.d);
+    });
+  }
+
+
   private isValidScanResult(scanResult: string): boolean {
     return scanResult.length === 8 || scanResult.length === 10 || scanResult.length >= 12;
   }
@@ -95,7 +105,6 @@ export class ScannerService {
     this.programNumber = scanResult.length === 10 ? scanResult.substring(7, 10) : '';
     const filteredPrograms: Program[] = this.programs.filter(elem => elem.PROGRAMNO === this.programNumber);
     this.isMarketOnly = filteredPrograms.length > 0 ? filteredPrograms[0].MARKETONLY === Constants.MARKET_ONLY_PROGRAM : false;
-
   }
 
   private setSearchStringFromScanResult(scanResult: string): void {
