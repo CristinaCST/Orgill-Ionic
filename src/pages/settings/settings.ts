@@ -35,8 +35,6 @@ export class SettingsPage implements OnInit {
       }
   }
 
-
-
   public openModal(): void {
     const modalLanguages: Modal = this.modal.create('ModalLanguagesPage');
     modalLanguages.present();
