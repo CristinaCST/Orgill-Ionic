@@ -39,7 +39,7 @@ export class PopoverComponent {
   }
 
   public ionViewDidLoad(): void {
-    this.immuneElement._elementRef.nativeElement.children[1].classList.add('keyboard-immune');
+    this.immuneElement._elementRef.nativeElement.children[1].ngClass.add('keyboard-immune');
   }
 
   public checkPopoverType(): void {
@@ -66,7 +66,7 @@ export class PopoverComponent {
 
     }
     if (this.data.type === 'notAvailable') {
-      this.productsNotAvailable = JSON.parse(this.data.message); 
+      this.productsNotAvailable = JSON.parse(this.data.message);
     }
   }
 
@@ -75,7 +75,7 @@ export class PopoverComponent {
   }
 
   public cleanInput(): void {
-    this.listNameElement._elementRef.nativeElement.classList.remove('error-label');
+    this.listNameElement._elementRef.nativeElement.ngClass.remove('error-label');
   }
 
   public dismiss(option: string): void {
@@ -87,12 +87,12 @@ export class PopoverComponent {
       data.type = this.isMarketOnlyList ? 'market_only' : 'default';
 
       if (this.listName.replace(' ', '').length < 1 && option === 'OK') {
-        this.listNameElement._elementRef.nativeElement.classList.add('error-label');
+        this.listNameElement._elementRef.nativeElement.ngClass.add('error-label');
         return;
       }
 
       if (this.data.isNewListModal && option === 'OK' && !this.listName.trim()) {
-        this.listNameElement._elementRef.nativeElement.classList.add('error-label');
+        this.listNameElement._elementRef.nativeElement.ngClass.add('error-label');
         return;
       }
     }
@@ -103,7 +103,7 @@ export class PopoverComponent {
 
     if (data.optionSelected === 'OK' && this.data.supportModal === true && this.data.additionalData.validator) {
       if (this.supportCode === undefined || !this.data.additionalData.validator(this.supportCode.toString())) {
-        this.supportCodeInput._elementRef.nativeElement.classList.add('error-label');
+        this.supportCodeInput._elementRef.nativeElement.ngClass.add('error-label');
         return;
       }
     }
@@ -112,7 +112,7 @@ export class PopoverComponent {
     if (this.instantCloseOnNo && option === 'OK') {
       navOptions = { animate: false };
     }
-    
+
     this.viewCtrl.dismiss(data, undefined , navOptions ? navOptions : undefined);
   }
 
