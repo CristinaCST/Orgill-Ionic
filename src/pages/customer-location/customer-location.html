@@ -2,7 +2,7 @@
 <ion-header>
   <!-- Customer Location Page Navigation Bar -->
   <navbar [title]="'customer_locations'" [isMenuEnabled]="false" [isBackEnabled]="true"></navbar>
-  
+
 </ion-header>
 
 <ion-content [(ngSwitch)]="isHotDeal">
@@ -14,15 +14,14 @@
   <!-- Locations if not hot deal -->
   <ion-item-group *ngSwitchCase="false">
   <ion-item-group *ngIf="!noLocation" padding class="post-container">
-    <ion-item-divider no-lines>{{"customer_locations_po" | translate}}:</ion-item-divider>
+    <ion-item class="customer-number">{{"customer_number" | translate | uppercase}}: {{selectedLocation?.CUSTOMERNO}}</ion-item>
+    <ion-item-divider no-lines>{{"customer_locations_po" | translate | uppercase}}:</ion-item-divider>
     <ion-item>
       <ion-input [(ngModel)]="postOffice" type="text"
                  placeholder="{{'customer_locations_po_hint' | translate}}" (ionFocus)="onFocus()" (focusout)="PONumberValidation()" (keyup.enter)="$event.target.blur()"maxlength="15"></ion-input>
     </ion-item>
   </ion-item-group>
   <ion-item-group *ngIf="!noLocation" [(ngModel)]="selectedLocation" padding radio-group class="locations-container">
-
-    
     <ion-item-divider no-lines>{{"customer_locations_list_header" | translate}}:</ion-item-divider>
     <ion-item *ngFor="let userLocation of userLocations">
       <ion-label>
@@ -47,13 +46,13 @@
   </div>
   <ion-item-group [(ngModel)]="selectedLocation" padding radio-group class="locations-container">
 
-
+    <ion-item class="customer-number">{{"customer_number" | translate | uppercase}}: {{selectedLocation?.CUSTOMERNO}}</ion-item>
     <ion-item-divider *ngIf="!noLocation" no-lines>{{"customer_locations_list_header" | translate}}:</ion-item-divider>
     <ion-list *ngFor="let hotDealLocation of hotDealLocations;let i of index">
 
       <ion-item>
         <ion-checkbox (ionChange)="checkboxEvent($event,hotDealLocation)" [checked]="hotDealLocation.WANTED" class="checkbox-item" item-end></ion-checkbox>
-        
+
 
         <ion-label>
           <p [class]="selectedLocation===hotDealLocation?'active':''"> {{hotDealLocation.LOCATION.CUSTOMERNAME}} </p>
@@ -111,6 +110,6 @@
   <button ion-button block color="OrgillRed" (click)="checkout()">
     {{"shopping_list_checkout" | translate}}
   </button>
-  
+
 </ion-footer>
 
