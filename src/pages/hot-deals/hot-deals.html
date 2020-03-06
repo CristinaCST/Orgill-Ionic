@@ -5,6 +5,13 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+        pullingIcon="arrow-dropdown"
+        refreshingSpinner="circles"
+        refreshingText="Refreshing">
+    </ion-refresher-content>
+  </ion-refresher>
   <hot-deal *ngFor="let deal of hotDeals" [item]="deal" (clickEvent)="clickOnDeal($event)"></hot-deal>
   <p class="no-items" *ngIf="hotDeals.length === 0 && !isLoading">
     {{"no_hot_deals" | translate}}</p>

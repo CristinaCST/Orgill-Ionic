@@ -71,6 +71,11 @@ export class HotDealsPage {
     });
   }
 
+  public doRefresh($event: any): void {
+    this.initHotDeals();
+    $event.complete();
+  }
+
   public clickOnDeal(notification: HotDealNotification): void {
     if (notification.SKU) {
       this.simpleLoader.show();
