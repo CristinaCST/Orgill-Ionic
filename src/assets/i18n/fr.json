@@ -12,6 +12,7 @@
   "customer_locations": "PO & Ville",
   "customer_locations_list_header": "Adresse de livraison",
   "customer_locations_no_location": "Aucun emplacement n'est associé à ce compte.",
+  "customer_number": "Numéro de client",
   "customer_locations_po": "No. de commande",
   "customer_locations_po_hint": "Entrer PO #",
   "customer_locations_qty": "Quantité",

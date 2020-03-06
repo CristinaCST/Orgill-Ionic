@@ -15,6 +15,7 @@
   "customer_locations": "PO & Location",
   "customer_locations_list_header": "Ship to location",
   "customer_locations_no_location": "There are no locations attached to this account.",
+  "customer_number": "Customer Number",
   "customer_locations_po": "PO Number",
   "customer_locations_po_hint": "Enter PO #",
   "customer_locations_qty": "Quantity",

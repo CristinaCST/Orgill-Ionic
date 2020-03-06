@@ -2,6 +2,11 @@
 
 page-customer-location {
 
+  .customer-number {
+    color: #858585;
+    font-size: 14px;
+  }
+
   .button-container{
     padding-top:5px;
     display: flex;
@@ -53,7 +58,7 @@ page-customer-location {
     ion-item-divider {
       text-transform: uppercase;
     }
-  
+
     ion-label {
       p {
         white-space: pre-line;
@@ -105,7 +110,7 @@ page-customer-location {
       padding-right:0px!important; //fix for clear-input
     }
   }
-  
+
   .qtybutton{
     position: absolute;
     left:-5%;
