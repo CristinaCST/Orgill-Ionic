@@ -48,7 +48,8 @@ product {
             //font-size: $font-size-medium;
             @include responsive-font($font-size-medium, $font-size-small);
           }
-          p:nth-child(2), p:nth-child(3) {
+          p:nth-child(2),
+          p:nth-child(3) {
             //font-size: $font-size-small;
             @include responsive-font($font-size-small, $font-size-small-extra);
           }
@@ -60,16 +61,20 @@ product {
           align-items: center;
           justify-content: flex-end;
           margin: 0;
-          margin-left: 13px;
+          margin-left: 10px;
           white-space: normal;
           div {
             display: block;
           }
           p:nth-child(1) {
-           // font-size: $font-size-medium;
-            @include responsive-font($font-size-medium, calc(#{$font-size-medium} - 2px));
+            // font-size: $font-size-medium;
+            @include responsive-font(
+              $font-size-medium,
+              calc(#{$font-size-medium} - 2px)
+            );
           }
-          p:nth-child(2), p:nth-child(3) {
+          p:nth-child(2),
+          p:nth-child(3) {
             font-size: $font-size-small;
           }
         }
