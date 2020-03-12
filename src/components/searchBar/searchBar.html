@@ -16,6 +16,7 @@
   <ion-item class="search-input-container" [ngClass]="showBackButton?'has-btn':''" no-lines no-border>
     <ion-input type="text" placeholder="{{'search_hint' | translate}}" type="text" maxlength="50"
                [(ngModel)]="searchString"
+               (input)="getText($event)"
                (keyup.enter)="search()"></ion-input>
     <!-- Search Component Action Button-->
     <button ion-button icon-only clear item-right (click)="search()">

@@ -30,6 +30,18 @@ export class SearchBarComponent {
     this.onInitSearchStringCopy = this.searchService.lastSearchString;
   }
 
+  // Input validation on product search field
+  public getText(e: any): void {
+    const elementValue: any = e.srcElement.value;
+    if (elementValue) {
+      const regex: any = /^[0-9a-zA-Z]+$/;
+       const tempValue: any = elementValue.substring(0, elementValue.length - 1);
+       if (!regex.test(elementValue)) {
+         e.srcElement.value = tempValue;
+       }
+    }
+  }
+
   public search(): void {
 
     if (!this.searchString || this.searchString.length < 3) {
