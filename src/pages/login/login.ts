@@ -4,9 +4,9 @@ import * as Strings from '../../util/strings';
 import { LoadingService } from '../../services/loading/loading';
 import { TranslateWrapperService } from '../../services/translate/translate';
 import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
-import { Catalog } from '../catalog/catalog';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { TextInput } from 'ionic-angular';
+import { LandingPage } from '../../pages/landing/landing';
 
 @Component({
   selector: 'page-login',
@@ -40,7 +40,7 @@ export class Login {
     this.authService.login(loginRequest).subscribe(
       () => {
         this.authService.getUserInfo().then(() => {
-          this.navigatorService.setRoot(Catalog);
+          this.navigatorService.setRoot(LandingPage);
           this.loginLoader.hide();
         });
       }, error => {

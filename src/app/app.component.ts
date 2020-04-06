@@ -15,6 +15,7 @@ import { PopoversService, DefaultPopoverResult, PopoverContent } from '../servic
 import { LoadingService } from '../services/loading/loading';
 import { CSSInjector } from '../helpers/css-injector';
 import { AuthService } from '../services/auth/auth';
+import { LandingPage } from '../pages/landing/landing';
 
 @Component({
   templateUrl: 'app.html'
@@ -125,7 +126,7 @@ export class MyApp {
 
   private checkSession(): void {
     this.stopLoading();
-    this.rootPage = this.authService.isValidSession() ? Catalog : Login;
+    this.rootPage = this.authService.isValidSession() ? LandingPage : Login;
     this.navigatorService.initialRootPage(this.rootPage);
   }
 }

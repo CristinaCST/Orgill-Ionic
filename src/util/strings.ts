@@ -264,3 +264,8 @@ export const REGULAR_CATALOG_PRICE: string = 'regular_catalog_price';
 
 export const SESSION_EXPIRED: string = 'session_expired';
 export const SOLD_OUT_MESSAGE: string = 'sold_out_message';
+
+/**
+ * Marker : Landing Page strings 
+ */
+export const LANDING_PAGE_TITLE = "main_page_title";

@@ -1,0 +1,29 @@
+<!-- Landing Page Header -->
+<ion-header>
+  <!-- Landing Page Navigation Bar -->
+  <navbar [title]=pageTitle [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
+  <!-- Landing Page Search Bar -->
+  <search-bar [showBackButton]="false" (searched)="onSearched($event)"></search-bar>
+</ion-header>
+
+<!-- Landing Page Content -->
+<ion-content>
+  <div class="main-wrapper">
+    <div class="landing-big-button">
+      <ion-card href class="ion-activatable button-background" (click)="goToScanPage()">
+        <ion-card-content>
+          {{"start_ordering" | translate}}
+          <img src="../../assets/imgs/landing_page_scan.png" />
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div class="landing-big-button">
+      <ion-card class="button-background" (click)="goToShoppingLists()">
+        <ion-card-content>
+          {{"shopping_carts" | translate}}
+          <img src="../../assets/imgs/landing_page_cart.png" />
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

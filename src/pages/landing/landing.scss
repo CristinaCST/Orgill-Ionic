@@ -1,0 +1,18 @@
+.button-background {
+  background: linear-gradient(
+    to left,
+    color($colors, OrgillGradientLeft) 20%,
+    color($colors, OrgillGradientRight) 100%
+  );
+  text-align: center;
+  padding: 0px;
+}
+
+.landing-big-button {
+  width: 50%;
+  height: 50%;
+}
+
+.main-wrapper {
+  display: flex;
+}
