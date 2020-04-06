@@ -1,0 +1,20 @@
+<!-- All shopping list Page Header -->
+<ion-header>
+  <!-- All shopping list Navigation Bar -->
+  <navbar [title]=pageTitle [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
+  <!-- All shopping list Search Bar -->
+</ion-header>
+
+<!-- All shopping list Content -->
+<ion-content>
+  <ion-list>
+    <ng-container *ngFor="let shoppingList of mainList">
+      <button ion-item class="item" id="{{shoppingList.ListID}}" (click)="goToShoppingList(shoppingList)">
+        <ion-label>
+          <ion-icon name="basket" *ngIf="shoppingList.ListType === '3'" class="basket-icon"></ion-icon>
+          {{shoppingList.ListName}}
+        </ion-label>
+      </button>
+    </ng-container>
+  </ion-list>
+</ion-content>

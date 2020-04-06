@@ -67,6 +67,8 @@ import { PurchaseDetailsPage } from '../pages/purchase-details/purchase-details'
 import { PurchasesPage } from '../pages/purchases/purchases';
 import { HotDealsPage } from '../pages/hot-deals/hot-deals';
 import { SecureActionsService } from '../services/secure-actions/secure-actions';
+import { LandingPage } from '../pages/landing/landing';
+import { AllShoppingLists } from '../pages/all-shopping-lists/all-shopping-lists';
 
 const pages: Page[] = [MyApp,
                Catalog,
@@ -83,8 +85,10 @@ const pages: Page[] = [MyApp,
                OrderConfirmationPage,
                ProductsSearchPage,
                ScannerPage,
+               LandingPage,
                PurchasesPage,
                PurchaseDetailsPage,
+               AllShoppingLists,
                HotDealsPage];
 
 
