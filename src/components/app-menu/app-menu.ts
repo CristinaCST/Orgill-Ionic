@@ -25,13 +25,14 @@ import { ShoppingListResponse } from '../../interfaces/response-body/shopping-li
 import { HotDealsPage } from '../../pages/hot-deals/hot-deals';
 import { OneSignalService } from '../../services/onesignal/onesignal';
 import { LoadingService } from '../../services/loading/loading';
+import { LandingPage } from '../../pages/landing/landing';
 @Component({
   selector: 'app-menu',
   templateUrl: 'app-menu.html'
 })
 export class AppMenuComponent implements OnInit {
 
-  public menuPages: any = { aboutPage: AboutPage, pastPurchases: PurchasesPage, settingsPage: SettingsPage };
+  public menuPages: any = { landingPage: LandingPage, aboutPage: AboutPage, pastPurchases: PurchasesPage, settingsPage: SettingsPage };
   public everyDayPrograms: Program[] = [];
   public marketOnlyPrograms: Program[] = [];
   public doorBusterPrograms: Program[] = [];
@@ -46,20 +47,20 @@ export class AppMenuComponent implements OnInit {
   @Input('menuContent') public menuContent: any;
 
   constructor(private readonly popoversService: PopoversService,
-              private readonly authService: AuthService,
-              private readonly catalogsProvider: CatalogsProvider,
-              private readonly translateProvider: TranslateWrapperService,
-              private readonly events: Events,
-              private readonly shoppingListsProvider: ShoppingListsProvider,
-              private readonly navigatorService: NavigatorService,
-              private readonly menuCtrl: MenuController,
-              private readonly oneSignal: OneSignalService,
-              private readonly loadingService: LoadingService) {
-                this.loader = this.loadingService.createLoader();
+    private readonly authService: AuthService,
+    private readonly catalogsProvider: CatalogsProvider,
+    private readonly translateProvider: TranslateWrapperService,
+    private readonly events: Events,
+    private readonly shoppingListsProvider: ShoppingListsProvider,
+    private readonly navigatorService: NavigatorService,
+    private readonly menuCtrl: MenuController,
+    private readonly oneSignal: OneSignalService,
+    private readonly loadingService: LoadingService) {
+    this.loader = this.loadingService.createLoader();
   }
 
   public ngOnInit(): void {
-   
+
     this.initMenu();
     this.events.subscribe(Constants.EVENT_NAVIGATE_TO_PAGE, this.navigationHandler);
     this.events.subscribe(Constants.EVENT_NEW_SHOPPING_LIST, this.newShoppingListHandler);
@@ -93,7 +94,7 @@ export class AppMenuComponent implements OnInit {
       // Temporary disable hot deals for CA;
       this.hotDealNotification = retailer_type === 'US';
     });
-    
+
     this.getPrograms();
     this.getShoppingLists();
   }
@@ -109,7 +110,7 @@ export class AppMenuComponent implements OnInit {
   }
 
   public menuClose(): void {
-   this.navigatorService.removeOverride(this.backbuttonOverrideReference);
+    this.navigatorService.removeOverride(this.backbuttonOverrideReference);
   }
 
   public logout(): void {
@@ -122,13 +123,18 @@ export class AppMenuComponent implements OnInit {
     };
 
     this.popoversService.show(content).subscribe((data: DefaultPopoverResult) => {
-        if (data.optionSelected === 'OK') {
-          // this.authService.logoutDeleteData();
-          this.authService.logout();
-          this.navigatorService.setRoot(Login).catch(err => console.error(err));
-        }
+      if (data.optionSelected === 'OK') {
+        // this.authService.logoutDeleteData();
+        this.authService.logout();
+        this.navigatorService.setRoot(Login).catch(err => console.error(err));
       }
+    }
     );
+  }
+
+  public goToHomePage(): void {
+    this.rootPage = this.authService.isValidSession() ? LandingPage : Login;
+    this.navigatorService.setRoot(this.rootPage).catch(err => console.error(err));
   }
 
 
@@ -155,50 +161,50 @@ export class AppMenuComponent implements OnInit {
     this.customShoppingLists = [];
     this.defaultShoppingLists = [];
     this.shoppingListsProvider.getAllShoppingLists().take(1).subscribe(shoppingListsResponse => {
-        const shoppingLists: ShoppingListResponse[] = JSON.parse(shoppingListsResponse.d);
-        if (!shoppingLists.find(list => list.list_type === Constants.DEFAULT_LIST_TYPE) && !shoppingLists.find(list => list.list_type === Constants.MARKET_ONLY_LIST_TYPE)) {
-          this.shoppingListsProvider.createDefaultShoppingLists().subscribe(defaultShoppingListsResponse => {
-            this.getShoppingLists();
-            return;
-          });
-        } else {
-          shoppingLists.map(shoppingList => {
-            const temp: ShoppingList = {
-              ListID: shoppingList.shopping_list_id,
-              ListDescription: shoppingList.list_description,
-              ListName: shoppingList.list_name,
-              ListType: shoppingList.list_type
-            };
-            if (shoppingList.list_type === Constants.DEFAULT_LIST_TYPE || shoppingList.list_type === Constants.MARKET_ONLY_LIST_TYPE) {
-              if (!this.isAlreadyInList(this.defaultShoppingLists, temp)) {
-                this.defaultShoppingLists.push(temp);
-              }
-              if (shoppingList.list_type === Constants.DEFAULT_LIST_TYPE) {
-                LocalStorageHelper.saveToLocalStorage(Constants.DEFAULT_LIST_ID, shoppingList.shopping_list_id);
-              } else {
-                LocalStorageHelper.saveToLocalStorage(Constants.MARKET_ONLY_LIST_ID, shoppingList.shopping_list_id);
-              }
-            } else {
-              if (!this.isAlreadyInList(this.customShoppingLists, temp)) {
-                this.customShoppingLists.push(temp);
-              }
-            }
-          });
-
-          // Ensure default shopping list is always first.
-          this.defaultShoppingLists.sort((list1, list2) => {
-            return Number(list1.ListID) - Number(list2.ListID);
-          });
-
-          this.loader.hide();
-        }
-        this.events.subscribe('DeletedList', (listId: string) => {
-          this.customShoppingLists = this.customShoppingLists.filter(list => list.ListID !== listId);
+      const shoppingLists: ShoppingListResponse[] = JSON.parse(shoppingListsResponse.d);
+      if (!shoppingLists.find(list => list.list_type === Constants.DEFAULT_LIST_TYPE) && !shoppingLists.find(list => list.list_type === Constants.MARKET_ONLY_LIST_TYPE)) {
+        this.shoppingListsProvider.createDefaultShoppingLists().subscribe(defaultShoppingListsResponse => {
+          this.getShoppingLists();
+          return;
         });
-      }, err => {
-        // this.reloadService.paintDirty('shopping lists');
-        LoadingService.hideAll();
+      } else {
+        shoppingLists.map(shoppingList => {
+          const temp: ShoppingList = {
+            ListID: shoppingList.shopping_list_id,
+            ListDescription: shoppingList.list_description,
+            ListName: shoppingList.list_name,
+            ListType: shoppingList.list_type
+          };
+          if (shoppingList.list_type === Constants.DEFAULT_LIST_TYPE || shoppingList.list_type === Constants.MARKET_ONLY_LIST_TYPE) {
+            if (!this.isAlreadyInList(this.defaultShoppingLists, temp)) {
+              this.defaultShoppingLists.push(temp);
+            }
+            if (shoppingList.list_type === Constants.DEFAULT_LIST_TYPE) {
+              LocalStorageHelper.saveToLocalStorage(Constants.DEFAULT_LIST_ID, shoppingList.shopping_list_id);
+            } else {
+              LocalStorageHelper.saveToLocalStorage(Constants.MARKET_ONLY_LIST_ID, shoppingList.shopping_list_id);
+            }
+          } else {
+            if (!this.isAlreadyInList(this.customShoppingLists, temp)) {
+              this.customShoppingLists.push(temp);
+            }
+          }
+        });
+
+        // Ensure default shopping list is always first.
+        this.defaultShoppingLists.sort((list1, list2) => {
+          return Number(list1.ListID) - Number(list2.ListID);
+        });
+
+        this.loader.hide();
+      }
+      this.events.subscribe('DeletedList', (listId: string) => {
+        this.customShoppingLists = this.customShoppingLists.filter(list => list.ListID !== listId);
       });
+    }, err => {
+      // this.reloadService.paintDirty('shopping lists');
+      LoadingService.hideAll();
+    });
   }
 
   private repeatingInProgramList(list: Program[], tested: Program): boolean {
@@ -209,7 +215,7 @@ export class AppMenuComponent implements OnInit {
     this.doorBusterPrograms = [];
     this.marketOnlyPrograms = [];
     this.everyDayPrograms = [];
-    
+
     // TODO: Refactor this
     this.catalogsProvider.getPrograms().subscribe(response => {
       if (response) {
@@ -217,7 +223,7 @@ export class AppMenuComponent implements OnInit {
         this.addProgramsToDB(programs); // TODO: Refactor this, creates regular program
         programs.map(program => {
           if (program.MARKETONLY.toUpperCase().includes('Y')) {
-           
+
             if (program.NAME.toUpperCase().includes('DOOR BUSTER BOOKING')) { // TODO: Fix this
               program.NAME = program.NAME.replace('DOOR BUSTER BOOKING', '');
               if (!this.repeatingInProgramList(this.doorBusterPrograms, program)) { this.doorBusterPrograms.push(program); }
@@ -229,17 +235,17 @@ export class AppMenuComponent implements OnInit {
           }
         });
         if (this.everyDayPrograms.length === 0) {  // TODO: When these errored?
-     //     this.reloadService.paintDirty('programs');
+          //     this.reloadService.paintDirty('programs');
         }
       } else {
-    //    this.reloadService.paintDirty('programs');
+        //    this.reloadService.paintDirty('programs');
       }
     }, error => {
-    //  this.reloadService.paintDirty('programs');
+      //  this.reloadService.paintDirty('programs');
     });
   }
 
-  
+
   public addProgramsToDB(programs: Program[]): void {
     const regularProgram: Program = {
       NAME: this.translateProvider.translate(Strings.REGULAR_CATALOG).toUpperCase(),
