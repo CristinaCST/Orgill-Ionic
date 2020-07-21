@@ -1,3 +1,5 @@
+@import "../../theme//variables.scss";
+
 page-catalog {
   .item-md {
     padding-left: 0 !important;
@@ -11,4 +13,12 @@ page-catalog {
   .input-wrapper {
     margin-left: 16px;
   }
+}
+
+.no-products {
+  display: flex;
+  margin-top: 15px;
+  justify-content: center;
+  font-size: $font-size-large;
+  font-weight: bold;
 }

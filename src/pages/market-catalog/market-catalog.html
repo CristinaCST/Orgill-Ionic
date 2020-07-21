@@ -1,0 +1,15 @@
+<ion-header>
+  <navbar [title]=pageTitle [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
+</ion-header>
+
+<!-- All market catalog programs -->
+<ion-content>
+  <ion-list>
+    <ng-container>
+      <button ion-item class="item" *ngFor="let program of marketOnlyPrograms" (click)="showMarketPrograms(program)">
+        {{program.NAME}}
+      </button>
+    </ng-container>
+  </ion-list>
+</ion-content>
+

@@ -67,29 +67,32 @@ import { PurchaseDetailsPage } from '../pages/purchase-details/purchase-details'
 import { PurchasesPage } from '../pages/purchases/purchases';
 import { HotDealsPage } from '../pages/hot-deals/hot-deals';
 import { SecureActionsService } from '../services/secure-actions/secure-actions';
+import { MarketCatalogsService } from '../services/market-catalog/market-catalog';
 import { LandingPage } from '../pages/landing/landing';
 import { AllShoppingLists } from '../pages/all-shopping-lists/all-shopping-lists';
+import { MarketCatalogPage } from '../pages/market-catalog/market-catalog';
 
 const pages: Page[] = [MyApp,
-               Catalog,
-               Login,
-               AboutPage,
-               SettingsPage,
-               ProductsPage,
-               ProductPage,
-               ProductDescriptionPage,
-               AddToShoppingListPage,
-               ShoppingListPage,
-               CustomerLocationPage,
-               OrderReviewPage,
-               OrderConfirmationPage,
-               ProductsSearchPage,
-               ScannerPage,
-               LandingPage,
-               PurchasesPage,
-               PurchaseDetailsPage,
-               AllShoppingLists,
-               HotDealsPage];
+  Catalog,
+  Login,
+  AboutPage,
+  SettingsPage,
+  ProductsPage,
+  ProductPage,
+  ProductDescriptionPage,
+  AddToShoppingListPage,
+  ShoppingListPage,
+  CustomerLocationPage,
+  OrderReviewPage,
+  OrderConfirmationPage,
+  ProductsSearchPage,
+  ScannerPage,
+  LandingPage,
+  PurchasesPage,
+  PurchaseDetailsPage,
+  AllShoppingLists,
+  MarketCatalogPage,
+  HotDealsPage];
 
 
 // Error Handlers
@@ -148,12 +151,13 @@ import { CustomErrorHandler } from '../services/error-handler/error-handler';
     CSSInjector,
     ProductImageProvider,
     SecureActionsService,
+    MarketCatalogsService,
     { provide: ErrorHandler, useClass: CustomErrorHandler },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ]
 })
 
-export class AppModule {}
+export class AppModule { }
 
 export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
