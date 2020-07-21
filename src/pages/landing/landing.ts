@@ -19,8 +19,6 @@ import { Catalog } from '../catalog/catalog';
 })
 export class LandingPage {
 
-  public pages: any = { scannerPage: ScannerPage, allShoppingLists: AllShoppingLists, catalog: Catalog, promotions: Catalog };
-
   private readonly simpleLoader: LoadingService;
   public pageTitle: string = this.translateProvider.translate(LANDING_PAGE_TITLE);
 
@@ -36,7 +34,6 @@ export class LandingPage {
   }
 
   public goToPage(page: any): any {
-    console.log('page', page);
     switch (page) {
       case 'scannerPage':
         this.scannerService.scan(undefined, undefined);

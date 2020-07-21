@@ -13,11 +13,6 @@
 }
 
 .button-background {
-  // background: linear-gradient(
-  //   to left,
-  //   color($colors, OrgillGradientLeft) 20%,
-  //   color($colors, OrgillGradientRight) 100%
-  // );
   background-color: #f3f3f3;
   width: 155px;
   height: 135px;
@@ -69,13 +64,48 @@ ion-card-content {
   color: #8b8b8b;
 }
 
+@media only screen and (min-device-width: 881px) and (max-device-width: 1100px) {
+  .main-wrapper {
+    margin-top: 80px;
+  }
+  .button-background {
+    width: 350px;
+    height: 280px;
+    margin-bottom: 50px;
+  }
+}
+
+@media only screen and (min-device-width: 630px) and (max-device-width: 880px) {
+  .button-background {
+    width: 275px;
+    height: 200px;
+    margin-bottom: 30px;
+  }
+}
+
+@media only screen and (min-device-width: 520px) and (max-device-width: 629px) {
+  .button-background {
+    width: 200px;
+    height: 180px;
+    margin-bottom: 30px;
+  }
+}
+
+// Iphone 5 320px
 @media only screen and (min-device-width: 300px) and (max-device-width: 355px) {
+  .main-wrapper {
+    margin-top: 10px;
+  }
   .button-background {
     width: 135px;
   }
 }
 
+// Galaxy Fold 280px
 @media only screen and (max-device-width: 299px) {
+  .main-wrapper {
+    margin-top: 5px;
+  }
   .button-background {
     width: 115px;
   }
