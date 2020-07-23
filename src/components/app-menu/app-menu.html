@@ -13,6 +13,11 @@
     <ion-item-group class="group">
       <!-- Every day catalog -->
 
+      <button ion-item detail-none menuClose icon-left (click)="goToPage(menuPages.landingPage)">
+        <ion-icon class="home-icon" name="home"></ion-icon>
+        <span class="home-button">{{"home" | translate}}</span>
+      </button>
+
       <div class="catalogs">
         <ion-item-divider no-lines>
           {{"menu_header_everyday_catalog" | translate}}:

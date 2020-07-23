@@ -56,6 +56,7 @@
   "lost_internet_connection": "Il n'y a pas de connexion internet. Veuillez activer les données mobiles ou WIFI pour utiliser l'application Orgill O Zone.",
   "max_quantity_location_text": "Quantité maximale par emplacement",
   "main_page_title": "Commande d'Orgill",
+  "home": "ACCUEIL",
   "menu": "Menu",
   "menu_about": "À propos",
   "menu_account_logout": "Fermer La Session",
@@ -228,6 +229,7 @@
   "something_went_wrong": "Quelque chose s'est mal passé ...",
   "start_ordering": "Commencer la commande",
   "summary_tab": "Détails et Sommaire",
+  "promotions": "Les promotions",
   "support_code_hint": "Code d'assistance",
   "username": "Nom d'utilisateur",
 

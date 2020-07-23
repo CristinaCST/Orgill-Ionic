@@ -7,23 +7,53 @@
 </ion-header>
 
 <!-- Landing Page Content -->
-<ion-content>
+<ion-content class="main-container">
   <div class="main-wrapper">
     <div class="landing-big-button">
-      <ion-card href class="ion-activatable button-background" (click)="goToScanPage()">
+      <ion-card href class="button-background" (click)="goToPage('scannerPage')">
         <ion-card-content>
-          {{"start_ordering" | translate}}
-          <img src="../../assets/imgs/landing_page_scan.png" />
+          <div class="card-title">{{"start_ordering" | translate}}</div>
+          <img src="../../assets/imgs/landing_page_scan.svg" />
         </ion-card-content>
       </ion-card>
     </div>
+
     <div class="landing-big-button">
-      <ion-card class="button-background" (click)="goToShoppingLists()">
+      <ion-card class="button-background" (click)="goToPage('allShoppingLists')">
         <ion-card-content>
-          {{"shopping_carts" | translate}}
-          <img src="../../assets/imgs/landing_page_cart.png" />
+          <div class="card-title">{{"shopping_carts" | translate}}</div>
+          <img src="../../assets/imgs/landing_page_cart.svg" />
         </ion-card-content>
       </ion-card>
     </div>
+
+    <div class="landing-big-button">
+      <ion-card class="button-background" (click)="goToPage('catalog')">
+        <ion-card-content>
+          <div class="card-title">{{"regular_catalog" | translate}}</div>
+          <img src="../../assets/imgs/landing_page_catalog.svg" />
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <div class="landing-big-button">
+      <ion-card class="button-background" (click)="goToPage('promotions')">
+        <ion-card-content>
+          <div class="card-title">{{"promotions" | translate}}</div>
+          <img src="../../assets/imgs/landing_page_promotions.svg" />
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+  </div>
+
+  <div class="order-track">
+    <img src="../../assets/imgs/iconfinder_truck.svg" />
+    <div class="card-tile">Track my Orgill order</div>
+    <ion-icon class="right-arrow" name="arrow-forward"></ion-icon>
+  </div>
+
+  <div class="homepage-footer">
+    <p>&copy; 2020 • Orgill </p>
   </div>
 </ion-content>

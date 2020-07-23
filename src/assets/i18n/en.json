@@ -57,6 +57,7 @@
   "lost_internet_connection": "There is no internet connection. Please turn on Mobile Data or WIFI in order to use the Orgill O Zone App.",
   "max_quantity_location_text": "Max quantity per location",
   "main_page_title": "Orgill Ordering",
+  "home": "HOME",
   "menu": "Menu",
   "menu_about": "About",
   "menu_account_logout": "Logout",
@@ -236,6 +237,7 @@
   "something_went_wrong": "Something went wrong...",
   "start_ordering": "Start Ordering",
   "summary_tab": "Details & Summary",
+  "promotions": "Promotions",
   "support_code_hint": "Support code",
   "username": "Username",
   "add_to_list": "Add to list"

@@ -2,25 +2,25 @@
 
 app-menu {
   button .button-effect {
-    display: none!important;
+    display: none !important;
   }
   #main_menu {
-    div.catalogs{
-    
-      button{
-        .label{
+    div.catalogs {
+      button {
+        .label {
           overflow: hidden;
           white-space: nowrap;
-          text-overflow: ellipsis!important;
-          &.label-md{
-            display: block!important;
+          text-overflow: ellipsis !important;
+          &.label-md {
+            display: block !important;
             align-items: center;
           }
         }
       }
     }
     .content {
-      background: color($colors, OrgillDarkGray) linear-gradient(to left, #4c4c4c, #333333);
+      background: color($colors, OrgillDarkGray)
+        linear-gradient(to left, #4c4c4c, #333333);
 
       .group {
         & * {
@@ -66,15 +66,19 @@ app-menu {
     }
   }
 
+  .home-icon {
+    height: 19px;
+  }
+
   .item-divider {
     background-color: transparent;
-    color:gray!important;
+    color: gray !important;
     margin-bottom: 0 !important;
     margin-left: $ion-app-padding-half;
     margin-right: $ion-app-padding-half;
   }
-  
-  .flash_icon{
+
+  .flash_icon {
     margin-left: 6px;
     margin-right: 6px;
   }

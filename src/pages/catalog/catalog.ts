@@ -36,7 +36,7 @@ export class Catalog implements OnInit {
   private readonly simpleLoader: LoadingService;
 
   constructor(public navigatorService: NavigatorService, public navParams: NavParams, public catalogProvider: CatalogsProvider,
-              public loadingService: LoadingService, public popoversService: PopoversService, public translateProvider: TranslateWrapperService, private readonly events: Events) {
+    public loadingService: LoadingService, public popoversService: PopoversService, public translateProvider: TranslateWrapperService, private readonly events: Events) {
     this.menuCustomButtons.push({ action: () => this.getCatalogDetails(), icon: 'information-circle' }, { action: () => this.goToScanPage(), icon: 'barcode' });
 
     this.categoriesLoader = loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_CATEGORIES));
@@ -48,8 +48,8 @@ export class Catalog implements OnInit {
     this.initCatalog();
   }
 
-   public ngOnDestroy(): void {
-     this.events.unsubscribe(Constants.EVENT_LOADING_FAILED, this.reloadMethodHandler);
+  public ngOnDestroy(): void {
+    this.events.unsubscribe(Constants.EVENT_LOADING_FAILED, this.reloadMethodHandler);
   }
 
   private readonly reloadMethodHandler = (culprit?: string): void => {
@@ -99,7 +99,7 @@ export class Catalog implements OnInit {
       this.categories = this.sortCategories(responseData);
       this.categoriesLoader.hide();
     }, err => {
-   //   this.reloadService.paintDirty('categories');
+      //   this.reloadService.paintDirty('categories');
       this.categoriesLoader.hide();
     });
   }
@@ -147,7 +147,7 @@ export class Catalog implements OnInit {
   }
 
   private getCatalogDetails(): void {
-    
+
     const program: Program = this.programs.filter(singleProgram => {
       return singleProgram.PROGRAMNO === this.programNumber.toString();
     })[0];
@@ -181,7 +181,7 @@ export class Catalog implements OnInit {
         };
         this.navigatorService.push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions).then(
           // () => console.log('%cTo product search page', 'color:green')
-          );
+        );
         this.simpleLoader.hide();
       }
     }, err => {
