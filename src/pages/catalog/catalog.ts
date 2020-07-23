@@ -27,11 +27,11 @@ export class Catalog implements OnInit {
 
   private programs: Program[];
   private programNumber: string;
-  private programName: string;
+  public programName: string;
   public categories: Category[];
-  private catalogIndex: number;
+  public catalogIndex: number;
   private currentSubCategory: Category;
-  private readonly menuCustomButtons: NavbarCustomButton[] = [];
+  public readonly menuCustomButtons: NavbarCustomButton[] = [];
   private readonly categoriesLoader: LoadingService;
   private readonly simpleLoader: LoadingService;
 

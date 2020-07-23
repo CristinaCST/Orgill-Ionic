@@ -4,6 +4,7 @@ import { Login } from '../../pages/login/login';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { AuthService } from '../../services/auth/auth';
+import { MarketCatalogsService } from '../../services/market-catalog/market-catalog';
 import { PopoversService, DefaultPopoverResult, PopoverContent } from '../../services/popovers/popovers';
 import { CatalogsProvider } from '../../providers/catalogs/catalogs';
 import { TranslateWrapperService } from '../../services/translate/translate';
@@ -26,6 +27,7 @@ import { HotDealsPage } from '../../pages/hot-deals/hot-deals';
 import { OneSignalService } from '../../services/onesignal/onesignal';
 import { LoadingService } from '../../services/loading/loading';
 import { LandingPage } from '../../pages/landing/landing';
+
 @Component({
   selector: 'app-menu',
   templateUrl: 'app-menu.html'
@@ -48,6 +50,7 @@ export class AppMenuComponent implements OnInit {
 
   constructor(private readonly popoversService: PopoversService,
     private readonly authService: AuthService,
+    private readonly marketCatalogsService: MarketCatalogsService,
     private readonly catalogsProvider: CatalogsProvider,
     private readonly translateProvider: TranslateWrapperService,
     private readonly events: Events,
@@ -228,7 +231,10 @@ export class AppMenuComponent implements OnInit {
               program.NAME = program.NAME.replace('DOOR BUSTER BOOKING', '');
               if (!this.repeatingInProgramList(this.doorBusterPrograms, program)) { this.doorBusterPrograms.push(program); }
             } else {
-              if (!this.repeatingInProgramList(this.marketOnlyPrograms, program)) { this.marketOnlyPrograms.push(program); }
+              if (!this.repeatingInProgramList(this.marketOnlyPrograms, program)) {
+                this.marketOnlyPrograms.push(program);
+                this.marketCatalogsService.setMarketOnlyPrograms(this.marketOnlyPrograms);
+              }
             }
           } else {
             if (!this.repeatingInProgramList(this.everyDayPrograms, program)) { this.everyDayPrograms.push(program); }

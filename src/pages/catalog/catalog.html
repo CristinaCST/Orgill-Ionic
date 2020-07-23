@@ -11,10 +11,14 @@
 </ion-header>
 
 <!-- Catalog Page Content -->
-<ion-content>
+<ion-content *ngIf="categories && categories.length">
   <ion-list>
     <button class="red-arrow" ion-item *ngFor="let category of categories" (click)="selectCategory(category)">
       {{category.CatName}}
     </button>
   </ion-list>
+</ion-content>
+
+<ion-content *ngIf="categories && categories.length < 1">
+    <p class="no-products">{{"no_products_found" | translate}}</p>
 </ion-content>

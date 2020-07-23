@@ -266,6 +266,7 @@ export const SESSION_EXPIRED: string = 'session_expired';
 export const SOLD_OUT_MESSAGE: string = 'sold_out_message';
 
 /**
- * Marker : Landing Page strings 
+ * Marker : Landing Page strings
  */
-export const LANDING_PAGE_TITLE = "main_page_title";
+export const LANDING_PAGE_TITLE: string = 'main_page_title';
+export const MARKET_CATALOG: string = 'menu_header_market_catalog';
