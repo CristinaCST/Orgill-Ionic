@@ -10,7 +10,7 @@ import { Product } from '../../interfaces/models/product';
 import { ProductsSearchPage } from '../../pages/products-search/products-search';
 import { REGULAR_CATALOG, LANDING_PAGE_TITLE } from '../../util/strings';
 import { AllShoppingLists } from '../../pages/all-shopping-lists/all-shopping-lists';
-import { MarketCatalogPage } from '../../pages/market-catalog/market-catalog';
+import { PromotionsPage } from '../market-catalog/promotions-page';
 import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
 import { Catalog } from '../catalog/catalog';
 
@@ -50,7 +50,7 @@ export class LandingPage {
       case 'catalog':
         return this.navigatorService.push(Catalog).catch(err => console.error(err));
       case 'promotions':
-        return this.navigatorService.push(MarketCatalogPage).catch(err => console.error(err));
+        return this.navigatorService.push(PromotionsPage).catch(err => console.error(err));
 
       default:
         this.navigatorService.push(Catalog).catch(err => console.error(err));
