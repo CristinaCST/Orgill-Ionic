@@ -238,7 +238,7 @@ export class AppMenuComponent implements OnInit {
           } else {
             if (!this.repeatingInProgramList(this.everyDayPrograms, program)) {
               this.everyDayPrograms.push(program);
-              const promotionsPrograms: Program[] = this.everyDayPrograms.filter(everyProgram => everyProgram.NAME !== this.translateProvider.translate(Strings.REGULAR_CATALOG).toUpperCase());
+              const promotionsPrograms: Program[] = this.everyDayPrograms.filter(everyProgram => everyProgram.NAME.toUpperCase() !== this.translateProvider.translate(Strings.REGULAR_CATALOG).toUpperCase());
               this.promotionsService.setPromotionsOnlyPrograms(promotionsPrograms);
             }
           }
