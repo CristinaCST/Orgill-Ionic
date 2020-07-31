@@ -1,33 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateWrapperService } from '../../services/translate/translate';
 import { NavigatorService } from '../../services/navigator/navigator';
-import { Catalog } from '../../pages/catalog/catalog';
+import { Catalog } from '../catalog/catalog';
 import { MARKET_CATALOG } from '../../util/strings';
 import { Program } from '../../interfaces/models/program';
 import { ThrowStmt } from '@angular/compiler';
-import { MarketCatalogsService } from '../../services/market-catalog/market-catalog';
+import { PromotionsService } from '../../services/promotions/promotions';
 
 @Component({
-  selector: 'market-catalog',
-  templateUrl: 'market-catalog.html'
+  selector: 'promotions-page',
+  templateUrl: 'promotions-page.html'
 })
-export class MarketCatalogPage implements OnInit {
-  public pageTitle: string = this.translateProvider.translate(MARKET_CATALOG);
+export class PromotionsPage implements OnInit {
+  public pageTitle: string = this.translateProvider.translate('promotions');
 
-  public marketOnlyPrograms: Program[] = [];
+  public promotionsOnlyPrograms: Program[] = [];
 
   constructor(
     public translateProvider: TranslateWrapperService,
-    private readonly marketCatalogsService: MarketCatalogsService,
+    private readonly promotionsService: PromotionsService,
     private readonly navigatorService: NavigatorService) {
 
   }
 
   public ngOnInit(): void {
-    this.getMarketOnlyPrograms();
+    this.getPromotionsOnlyPrograms();
   }
 
-  public showMarketPrograms(program: Program): void {
+  public showPromotionsPrograms(program: Program): void {
     const params: any = {
       programName: program.NAME,
       programNumber: program.PROGRAMNO
@@ -36,9 +36,9 @@ export class MarketCatalogPage implements OnInit {
     this.navigatorService.setRoot(Catalog, params).catch(err => console.error(err));
   }
 
-  public getMarketOnlyPrograms(): void {
-    this.marketCatalogsService.marketOnlyPrograms$.subscribe(data => {
-      this.marketOnlyPrograms = data;
+  public getPromotionsOnlyPrograms(): void {
+    this.promotionsService.promotionsOnlyPrograms$.subscribe(data => {
+      this.promotionsOnlyPrograms = data;
     });
   }
 

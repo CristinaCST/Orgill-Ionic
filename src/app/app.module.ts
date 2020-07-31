@@ -67,10 +67,10 @@ import { PurchaseDetailsPage } from '../pages/purchase-details/purchase-details'
 import { PurchasesPage } from '../pages/purchases/purchases';
 import { HotDealsPage } from '../pages/hot-deals/hot-deals';
 import { SecureActionsService } from '../services/secure-actions/secure-actions';
-import { MarketCatalogsService } from '../services/market-catalog/market-catalog';
+import { PromotionsService } from '../services/promotions/promotions';
 import { LandingPage } from '../pages/landing/landing';
 import { AllShoppingLists } from '../pages/all-shopping-lists/all-shopping-lists';
-import { MarketCatalogPage } from '../pages/market-catalog/market-catalog';
+import { PromotionsPage } from '../pages/market-catalog/promotions-page';
 
 const pages: Page[] = [MyApp,
   Catalog,
@@ -91,7 +91,7 @@ const pages: Page[] = [MyApp,
   PurchasesPage,
   PurchaseDetailsPage,
   AllShoppingLists,
-  MarketCatalogPage,
+  PromotionsPage,
   HotDealsPage];
 
 
@@ -151,7 +151,7 @@ import { CustomErrorHandler } from '../services/error-handler/error-handler';
     CSSInjector,
     ProductImageProvider,
     SecureActionsService,
-    MarketCatalogsService,
+    PromotionsService,
     { provide: ErrorHandler, useClass: CustomErrorHandler },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ]

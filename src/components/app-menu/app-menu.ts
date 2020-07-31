@@ -4,7 +4,7 @@ import { Login } from '../../pages/login/login';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { AuthService } from '../../services/auth/auth';
-import { MarketCatalogsService } from '../../services/market-catalog/market-catalog';
+import { PromotionsService } from '../../services/promotions/promotions';
 import { PopoversService, DefaultPopoverResult, PopoverContent } from '../../services/popovers/popovers';
 import { CatalogsProvider } from '../../providers/catalogs/catalogs';
 import { TranslateWrapperService } from '../../services/translate/translate';
@@ -50,7 +50,7 @@ export class AppMenuComponent implements OnInit {
 
   constructor(private readonly popoversService: PopoversService,
     private readonly authService: AuthService,
-    private readonly marketCatalogsService: MarketCatalogsService,
+    private readonly promotionsService: PromotionsService,
     private readonly catalogsProvider: CatalogsProvider,
     private readonly translateProvider: TranslateWrapperService,
     private readonly events: Events,
@@ -233,11 +233,14 @@ export class AppMenuComponent implements OnInit {
             } else {
               if (!this.repeatingInProgramList(this.marketOnlyPrograms, program)) {
                 this.marketOnlyPrograms.push(program);
-                this.marketCatalogsService.setMarketOnlyPrograms(this.marketOnlyPrograms);
               }
             }
           } else {
-            if (!this.repeatingInProgramList(this.everyDayPrograms, program)) { this.everyDayPrograms.push(program); }
+            if (!this.repeatingInProgramList(this.everyDayPrograms, program)) {
+              this.everyDayPrograms.push(program);
+              const promotionsPrograms: Program[] = this.everyDayPrograms.filter(everyProgram => everyProgram.NAME !== this.translateProvider.translate(Strings.REGULAR_CATALOG).toUpperCase());
+              this.promotionsService.setPromotionsOnlyPrograms(promotionsPrograms);
+            }
           }
         });
         if (this.everyDayPrograms.length === 0) {  // TODO: When these errored?
