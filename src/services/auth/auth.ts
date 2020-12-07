@@ -1,29 +1,25 @@
-import { Injectable } from "@angular/core";
-import { Md5 } from "ts-md5";
-import { LoginRequest } from "../../interfaces/request-body/login";
-import { ApiService } from "../api/api";
-import * as ConstantsURL from "../../util/constants-url";
-import { LocalStorageHelper } from "../../helpers/local-storage";
-import * as Constants from "../../util/constants";
-import { User } from "../../interfaces/models/user";
-import { BehaviorSubject, Observable } from "rxjs";
-import { Events } from "ionic-angular";
-import { Moment } from "moment";
-import { DateTimeService } from "../../services/datetime/dateTimeService";
-import { SecureActionsService } from "../../services/secure-actions/secure-actions";
-import * as Strings from "../../util/strings";
-import {
-  PopoversService,
-  PopoverContent,
-} from "../../services/popovers/popovers";
+import { Injectable } from '@angular/core';
+import { Md5 } from 'ts-md5';
+import { LoginRequest } from '../../interfaces/request-body/login';
+import { ApiService } from '../api/api';
+import * as ConstantsURL from '../../util/constants-url';
+import { LocalStorageHelper } from '../../helpers/local-storage';
+import * as Constants from '../../util/constants';
+import { User } from '../../interfaces/models/user';
+import { BehaviorSubject, Observable } from 'rxjs';
+// import { exhaust } from 'rxjs/operators';
+import { Events } from 'ionic-angular';
+import { Moment } from 'moment';
+import { DateTimeService } from '../../services/datetime/dateTimeService';
+import { SecureActionsService } from '../../services/secure-actions/secure-actions';
+import * as Strings from '../../util/strings';
+import { PopoversService, PopoverContent, CustomListPopoverResult } from '../../services/popovers/popovers';
 
 @Injectable()
 export class AuthService {
   private user: User = new User();
   public allowSwitch: string;
-  public allowLanguageSwitchListener: BehaviorSubject<
-    boolean
-  > = new BehaviorSubject<boolean>(false);
+  public allowLanguageSwitchListener: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(
     private readonly apiProvider: ApiService,
@@ -31,14 +27,12 @@ export class AuthService {
     private readonly secureActions: SecureActionsService,
     private readonly popoverService: PopoversService
   ) {
-    this.secureActions.authState.subscribe((authOk) => {
+    this.secureActions.authState.subscribe(authOk => {
       if (authOk) {
         this.events.publish(Constants.EVENT_AUTH);
       }
     });
-    this.user = JSON.parse(
-      LocalStorageHelper.getFromLocalStorage(Constants.USER)
-    );
+    this.user = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER));
     if (this.user && this.isValidSession()) {
       this.secureActions.setAuthState(true, this.user);
     }
@@ -56,25 +50,42 @@ export class AuthService {
     credentials.username = credentials.username.toLowerCase();
     credentials.password = AuthService.encryption(credentials.password);
 
-    return this.apiProvider
-      .post(ConstantsURL.URL_LOGIN, credentials)
-      .map((response) => {
-        const data = JSON.parse(response.d);
+    return this.apiProvider.post(ConstantsURL.URL_LOGIN, credentials).map(response => {
+      const data: { ErrCode: string; User_Token: string } = JSON.parse(response.d);
 
-        if (data.ErrCode && data.ErrCode === "Password has expired!") {
-          //TODO: reset password button needs an action on click.
-          //NOTE: need to figure out where that 2nd popover comes from.
-          const content: PopoverContent = this.popoverService.setContent(
-            Strings.POPOVER_PASSWORD_EXPIRED_TITLE,
-            Strings.POPOVER_PASSWORD_EXPIRED_MESSAGE,
-            Strings.MODAL_BUTTON_TRY_AGAIN,
-            Strings.MODAL_BUTTON_RESET_PASSWORD
-          );
-          this.popoverService.show(content);
-        }
+      this.user = { userToken: data.User_Token };
 
-        this.user = { userToken: data.User_Token };
-      });
+      if (data.ErrCode && data.ErrCode === 'Password has expired!') {
+        const content: PopoverContent = this.popoverService.setContent(
+          Strings.POPOVER_PASSWORD_EXPIRED_TITLE,
+          Strings.POPOVER_PASSWORD_EXPIRED_MESSAGE,
+          Strings.MODAL_BUTTON_TRY_AGAIN,
+          Strings.MODAL_BUTTON_RESET_PASSWORD
+        );
+
+        this.popoverService
+          .show(content)
+          .first()
+          .subscribe({
+            next(info: CustomListPopoverResult): void {
+              if (info.optionSelected !== 'DISMISS') {
+                return;
+              }
+
+              // TODO: redirect should go in here
+              // redirect to external link?
+              // window.open('http://example.com', '_system');
+            },
+            error(err: string): void {
+              // handle error here
+              console.error(err);
+            },
+            complete(): void {
+              this.complete().exhaust();
+            }
+          });
+      }
+    });
   }
 
   public logout(expired: boolean = false): void {
@@ -91,20 +102,17 @@ export class AuthService {
       return new Promise((resolve, reject) => {
         const params: any = { user_token: this.user.userToken };
         this.apiProvider.post(ConstantsURL.URL_USER_INFO, params).subscribe(
-          (response) => {
+          response => {
             this.user = JSON.parse(response.d);
             this.user.userToken = params.user_token;
             this.allowSwitch = JSON.parse(response.d).division;
-            this.allowLanguageSwitchListener.next(this.allowSwitch === "8");
+            this.allowLanguageSwitchListener.next(this.allowSwitch === '8');
             this.secureActions.setAuthState(true, this.user);
             this.events.publish(Constants.EVENT_AUTH);
-            LocalStorageHelper.saveToLocalStorage(
-              Constants.USER,
-              JSON.stringify(this.user)
-            );
+            LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
             resolve();
           },
-          (error) => {
+          error => {
             console.error(error);
             reject(error);
           }
@@ -121,9 +129,7 @@ export class AuthService {
     }
     const now: Moment = DateTimeService.getCurrentDateTime();
     const receivedTimestamp: string = this.User.time_stamp;
-    const sessionTimestampWith4Days: Moment = DateTimeService.getTimeAfter4Days(
-      receivedTimestamp
-    );
+    const sessionTimestampWith4Days: Moment = DateTimeService.getTimeAfter4Days(receivedTimestamp);
 
     const status: boolean = sessionTimestampWith4Days.isSameOrAfter(now);
 
