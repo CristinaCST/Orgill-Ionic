@@ -5,7 +5,7 @@ export const environment: {
   baseUrlEnglish: string;
   baseUrlFrench: string;
 } = {
-  production: false,
-  baseUrlEnglish: URL_BASE_DEV,
+  production: true,
+  baseUrlEnglish: URL_BASE_PROD,
   baseUrlFrench: 'http://dmwebservice-cafr.orgill.com/service.asmx/'
 };

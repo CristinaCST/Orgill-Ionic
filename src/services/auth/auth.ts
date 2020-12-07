@@ -72,13 +72,12 @@ export class AuthService {
                 return;
               }
 
-              // TODO: redirect should go in here
-              // redirect to external link?
-              // window.open('http://example.com', '_system');
+              // redirect to orgill site
+              window.open('https://www.orgill.com/', '_system');
             },
-            error(err: string): void {
+            error(err: { message: string }): void {
               // handle error here
-              console.error(err);
+              console.error(err.message);
             },
             complete(): void {
               this.complete().exhaust();
