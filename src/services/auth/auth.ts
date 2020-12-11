@@ -7,7 +7,6 @@ import { LocalStorageHelper } from '../../helpers/local-storage';
 import * as Constants from '../../util/constants';
 import { User } from '../../interfaces/models/user';
 import { BehaviorSubject, Observable } from 'rxjs';
-// import { exhaust } from 'rxjs/operators';
 import { Events } from 'ionic-angular';
 import { Moment } from 'moment';
 import { DateTimeService } from '../../services/datetime/dateTimeService';
@@ -73,7 +72,7 @@ export class AuthService {
               }
 
               // redirect to orgill site
-              window.open('https://www.orgill.com/', '_system');
+              window.open('https://www.orgill.com/index.aspx?tab=8', '_system');
             },
             error(err: { message: string }): void {
               // handle error here

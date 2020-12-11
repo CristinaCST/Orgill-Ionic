@@ -239,5 +239,8 @@
   "ship_date": "Date d'expédition",
   "terms": "Termes",
   "cancel": "Annuler",
-  "ok": "Ok"
+  "ok": "Ok",
+  "modal_button_reset_password": "Réinitialiser le mot de passe",
+  "expired_password_title": "Le mot de passe a expiré!",
+  "expired_password_message": "Veuillez réinitialiser votre mot de passe."
 }
