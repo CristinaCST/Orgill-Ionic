@@ -232,12 +232,24 @@
   "promotions": "Les promotions",
   "support_code_hint": "Code d'assistance",
   "username": "Nom d'utilisateur",
-
   "start_date": "Date de début",
   "end_date": "Date de fin",
   "release_date": "Date de sortie",
   "ship_date": "Date d'expédition",
   "terms": "Termes",
   "cancel": "Annuler",
-  "ok": "Ok"
+  "ok": "Ok",
+  "track_order": "Suivre ma commande Orgill",
+  "track_order_loader_text": "Vérification des livraisons en attente",
+  "track_order_select_location": "Sélectionnez un emplacement",
+  "track_order_customer_name": "Nom du client",
+  "track_order_ship_no": "Numéro de livraison",
+  "track_order_map_details": "Détails de la carte",
+  "track_order_refresh_map": "Actualiser la carte",
+  "track_order_truck_on_road": "Camion sur route",
+  "track_order_distance": "Distance",
+  "track_order_invoices": "Les factures",
+  "track_order_more_info": "Afficher plus d'informations",
+  "track_order_other_locations": "Sélectionnez un autre emplacement",
+  "track_order_no_deliveries": "Vous n'avez aucune livraison pour aujourd'hui!"
 }

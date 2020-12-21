@@ -1,0 +1,140 @@
+@import '../../theme//variables.scss';
+
+page-route-tracking {
+  .deliveries-header {
+    position: relative;
+
+    .truck-image {
+      width: 100%;
+    }
+
+    .deliveries-title {
+      position: absolute;
+      top: 50%;
+      left: 5%;
+      margin: 0;
+      padding: 0 0 20px;
+      color: color($colors, light);
+      font-size: $font-size-medium;
+      transform: translateY(-50%);
+    }
+  }
+
+  .order-container {
+    margin: 30px 15px;
+    padding: 20px;
+    border: 1px solid #c9c9c9;
+    border-radius: 20px;
+
+    .order-footer {
+      display: flex;
+      margin: 40px 0 0;
+      justify-content: space-between;
+    }
+  }
+
+  .map-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 10px 20px;
+    background: color($colors, light);
+
+    .map {
+      height: 100%;
+      border-radius: 20px;
+    }
+
+    .map-details-container {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      z-index: 9;
+      width: calc(100% - 60px);
+      padding: 10px 15px;
+      background: color($colors, light);
+      border-radius: 20px;
+      transform: translateX(-50%);
+      box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.4);
+    }
+
+    .travel-wrapper,
+    .travel-btns,
+    .more-info-wrapper {
+      display: flex;
+      margin: 15px 0;
+      justify-content: space-between;
+    }
+
+    .more-info-wrapper {
+      margin-bottom: 50%;
+
+      .info-shipping {
+        margin: 20px 0;
+      }
+    }
+  }
+
+  .map-not-found {
+    display: flex;
+    width: 60%;
+    margin: 60px auto;
+    background: color($colors, light);
+    align-items: center;
+    justify-content: center;
+  }
+
+  .map-warning-message {
+    width: 70%;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    font-size: $font-size-large;
+  }
+
+  .map-overlay {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    bottom: 10px;
+    left: 20px;
+    z-index: 8;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  .order-title {
+    margin: 10px 0 0;
+    color: color($colors, dark);
+    font-size: $font-size-small;
+    font-weight: bold;
+  }
+
+  .order-subtitle {
+    margin: 0;
+    font-size: $font-size-small-extra;
+    color: color($colors, OrgillMediumGray);
+  }
+
+  .order-btn {
+    padding: 10px 15px;
+    font-size: $font-size-small-extra;
+    color: color($colors, light);
+    background: color($colors, OrgillRed);
+
+    &.refresh-map {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      z-index: 9;
+    }
+
+    &.empty {
+      color: color($colors, dark);
+      background: color($colors, light);
+      border: 2px solid color($colors, OrgillRed);
+    }
+  }
+}

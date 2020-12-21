@@ -240,5 +240,18 @@
   "promotions": "Promotions",
   "support_code_hint": "Support code",
   "username": "Username",
-  "add_to_list": "Add to list"
+  "add_to_list": "Add to list",
+  "track_order": "Track my Orgill order",
+  "track_order_loader_text": "Checking pending deliveries.",
+  "track_order_select_location": "Select a location",
+  "track_order_customer_name": "Customer name",
+  "track_order_ship_no": "Ship to no",
+  "track_order_map_details": "View map details",
+  "track_order_refresh_map": "Refresh map",
+  "track_order_truck_on_road": "Truck on road",
+  "track_order_distance": "Distance",
+  "track_order_invoices": "Invoices",
+  "track_order_more_info": "View more info",
+  "track_order_other_locations": "Select other location",
+  "track_order_no_deliveries": "You do not have any deliveries for today!"
 }

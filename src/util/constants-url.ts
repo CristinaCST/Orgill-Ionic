@@ -21,7 +21,6 @@ export const URL_PRODUCT_PRICE: string = 'item_price';
 export const URL_SHOPPING_LISTS_ORDER_PRODUCTS: string = 'order_products';
 export const URL_SHOPPING_LISTS_ORDER_CONFIRMATION: string = 'order_confirmation';
 
-
 // HOT DEALS
 export const GET_HOTDEALS_PROGRAM: string = 'get_flashprogram_item';
 export const GET_HOTDEALS_GEOFENCE: string = 'geofenceParameters';
@@ -47,3 +46,31 @@ export const PURCHASE_ITEMS: string = 'purchase_items';
 
 export const URL_ORDER_HOT_DEAL_PRODUCTS: string = 'order_flashproducts';
 export const PRODUCT_IMAGE_BASE_URL: string = 'http://images.orgill.com/200x200/';
+
+// ROUTE TRACKING API?
+const TRACKING_API_BASE_URL: string = '//40.122.36.68/api/';
+
+/**
+ * params
+ * ship_to_no: string
+ */
+export const GET_STORE_ROUTE_AND_STOPS: string = TRACKING_API_BASE_URL + 'Customer/GetStoreRouteAndStops';
+
+/**
+ * request body
+ * username: string
+ * password: string
+ */
+export const VENDOR_ACCOUNT_LOGIN: string = TRACKING_API_BASE_URL + 'VendorAccount/Login';
+
+/**
+ * params
+ * user_token: string
+ */
+export const GET_CUSTOMER_LOCATIONS: string = TRACKING_API_BASE_URL + 'VendorAccount/GetCustomerLocations';
+
+/**
+ * params
+ * size: integer
+ */
+export const TEST_GET_TODAY_CUSTOMERS: string = TRACKING_API_BASE_URL + 'Test/GetTodayCustomers';

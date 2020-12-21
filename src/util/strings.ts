@@ -102,7 +102,6 @@ export const CATALOG_DESCRIPTION_NOT_PROVIDED: string = 'catalog_description_not
 export const PRODUCT_SUMMARY_TAB: string = 'summary_tab';
 export const PRODUCT_PRICING_TAB: string = 'pricing_tab';
 
-
 /**
  * Marker : Search strings
  * =============================================================================================
@@ -193,7 +192,6 @@ export const PERMISSION_ALLOW_BUTTON: string = 'permission_allow_button';
 export const PERMISSION_DENY_BUTTON: string = 'permission_deny_button';
 export const PERMISSION_MODAL_TITLE: string = 'permission_modal_title';
 
-
 /**
  * Marker : Past Purchases
  * =======================================================================================
@@ -201,7 +199,6 @@ export const PERMISSION_MODAL_TITLE: string = 'permission_modal_title';
 export const ORDER_HISTORY_PAGE: string = 'history';
 export const ORDER_DETAILS_PAGE: string = 'details';
 export const PRODUCT_NOT_AVAILABLE: string = 'product_not_available';
-
 
 /**
  * Marker : Offline browsing
@@ -212,11 +209,9 @@ export const DATABASE_DEPRECATED_TITLE: string = 'deprecated_database_title';
 export const DATABASE_DEPRECATED_MESSAGE: string = 'deprecated_database_message';
 export const DATABASE_DEPRECATED_CANCELED_TEXT: string = 'deprecated_database_canceled_text';
 
-
 export const DEFAULT_HTTP_ERROR: string = 'default_http_error';
 export const NO_ACCES: string = 'no_acces';
 export const SOMETHING_WENT_WRONG: string = 'something_went_wrong';
-
 
 /**
  *  Marker : Quantiy And Price validation
@@ -229,7 +224,6 @@ export const QUANTITY_ROUNDED_MIN: string = 'quantity_rounded_min';
 export const QUANTITY_ROUNDED_MAX: string = 'quantity_rounded_max';
 
 export const PRICE_HAS_PENALTY: string = 'price_has_penalty';
-
 
 export const QUANTITY_TOO_HIGH_OVERFLOW: string = 'quantity_too_high_overflow';
 
@@ -245,11 +239,9 @@ export const SAVINGS_TEXT: string = 'savings_text';
 
 export const ONE_SIGNAL_SUBSCRIPTION_REMINDER: string = 'one_signal_subscription_reminder';
 
-
 export const NO_LISTS_FOR_REGULAR_PRODUCT: string = 'shopping_list_no_remaining_list';
 export const NO_LISTS_FOR_MARKET_ONLY_PRODUCT: string = 'shopping_list_added_in_market_list';
 export const ADDED_ITEM_TO_LIST: string = 'added_item_to_list';
-
 
 // Define a variable named culprit for this one to work
 export const RELOAD_ERROR_MESSAGE_WITH_CULPRIT: string = 'reload_error_message_with_culprit';
@@ -270,3 +262,8 @@ export const SOLD_OUT_MESSAGE: string = 'sold_out_message';
  */
 export const LANDING_PAGE_TITLE: string = 'main_page_title';
 export const MARKET_CATALOG: string = 'menu_header_market_catalog';
+
+/**
+ * Track order page
+ */
+export const TRACK_ORDER_LOADER_TEXT: string = 'track_order_loader_text';

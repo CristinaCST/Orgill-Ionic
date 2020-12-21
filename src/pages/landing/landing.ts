@@ -13,13 +13,13 @@ import { AllShoppingLists } from '../../pages/all-shopping-lists/all-shopping-li
 import { PromotionsPage } from '../market-catalog/promotions-page';
 import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
 import { Catalog } from '../catalog/catalog';
+import { RouteTrackingPage } from '../../pages/route-tracking/route-tracking';
 
 @Component({
   selector: 'page-landing',
   templateUrl: 'landing.html'
 })
 export class LandingPage {
-
   private readonly simpleLoader: LoadingService;
   public pageTitle: string = this.translateProvider.translate(LANDING_PAGE_TITLE);
 
@@ -51,6 +51,8 @@ export class LandingPage {
         return this.navigatorService.push(Catalog).catch(err => console.error(err));
       case 'promotions':
         return this.navigatorService.push(PromotionsPage).catch(err => console.error(err));
+      case 'routeTracking':
+        return this.navigatorService.push(RouteTrackingPage).catch(err => console.error(err));
 
       default:
         this.navigatorService.push(Catalog).catch(err => console.error(err));
@@ -64,22 +66,26 @@ export class LandingPage {
 
   public onSearched($event: any): void {
     this.simpleLoader.show();
-    this.catalogProvider.search($event, '', '').subscribe(data => {
-      if (data) {
-        const dataFound: Product[] = this.filterBadRequest(JSON.parse(data.d));
-        const params: any = {
-          searchString: $event,
-          searchData: dataFound,
-          programNumber: '',
-          programName: this.translateProvider.translate(REGULAR_CATALOG).toUpperCase(),
-          numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
-        };
-        this.navigatorService.push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions).then();
-        this.simpleLoader.hide();
+    this.catalogProvider.search($event, '', '').subscribe(
+      data => {
+        if (data) {
+          const dataFound: Product[] = this.filterBadRequest(JSON.parse(data.d));
+          const params: any = {
+            searchString: $event,
+            searchData: dataFound,
+            programNumber: '',
+            programName: this.translateProvider.translate(REGULAR_CATALOG).toUpperCase(),
+            numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
+          };
+          this.navigatorService
+            .push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions)
+            .then();
+          this.simpleLoader.hide();
+        }
+      },
+      err => {
+        LoadingService.hideAll();
       }
-    }, err => {
-      LoadingService.hideAll();
-    }
     );
   }
 }

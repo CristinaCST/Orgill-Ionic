@@ -7,11 +7,13 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class ApiService {
-
   public baseUrl: string;
 
-  constructor(private readonly http: HttpClient, private readonly secureActions: SecureActionsService, public translate: TranslateService) {
-    
+  constructor(
+    private readonly http: HttpClient,
+    private readonly secureActions: SecureActionsService,
+    public translate: TranslateService
+  ) {
     this.baseUrl = this.getServiceBaseURL();
   }
 
@@ -27,26 +29,25 @@ export class ApiService {
     return this.http.get(baseUrl + path, { headers: this.setHeaders(), params });
   }
 
-  public post(path: string, body: any & { user_token?: string }, requiresToken: boolean = false): Observable<any> {
-    this.baseUrl = this.getServiceBaseURL();
+  public post(
+    path: string,
+    body: any & { user_token?: string },
+    requiresToken: boolean = false,
+    useExternalAPI: boolean = false
+  ): Observable<any> {
+    this.baseUrl = useExternalAPI ? '' : this.getServiceBaseURL();
 
     if (requiresToken) {
       return this.secureActions.waitForAuth().flatMap(user => {
         body.user_token = user.userToken;
 
-        return this.http.post(
-          this.baseUrl + path,
-          JSON.stringify(body),
-          { headers: this.setHeaders() }
-        ).take(1);
+        return this.http
+          .post(this.baseUrl + path, JSON.stringify(body), { headers: this.setHeaders() })
+          .take(1);
       });
     }
-    
-    return this.http.post(
-      this.baseUrl + path,
-      JSON.stringify(body),
-      { headers: this.setHeaders() }
-    ).take(1);
+
+    return this.http.post(this.baseUrl + path, JSON.stringify(body), { headers: this.setHeaders() }).take(1);
   }
 
   private getServiceBaseURL(): string {
@@ -61,6 +62,4 @@ export class ApiService {
     }
     return environment.baseUrlEnglish;
   }
-
-
 }
