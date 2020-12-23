@@ -1,4 +1,10 @@
-<ion-menu id="main_menu" (ionOpen)="menuOpen()" (ionClose)="menuClose()"[content]="menuContent" persistent='true'>
+<ion-menu
+  id="main_menu"
+  (ionOpen)="menuOpen()"
+  (ionClose)="menuClose()"
+  [content]="menuContent"
+  persistent="true"
+>
   <!-- Menu Header-->
   <ion-header *ngIf="showShoppingListsMenu===false">
     <ion-toolbar>
@@ -19,27 +25,60 @@
       </button>
 
       <div class="catalogs">
-        <ion-item-divider no-lines>
-          {{"menu_header_everyday_catalog" | translate}}:
-        </ion-item-divider>
-        <button ion-item class="item" menuClose *ngFor="let program of everyDayPrograms" (click)="showCategories(program)">
+        <ion-item-divider no-lines> {{"menu_header_everyday_catalog" | translate}}: </ion-item-divider>
+        <button
+          ion-item
+          class="item"
+          menuClose
+          *ngFor="let program of everyDayPrograms"
+          (click)="showCategories(program)"
+        >
           {{program.NAME}}
         </button>
+
         <ion-item *ngIf="!everyDayPrograms.length" class="item" detail-none>
           {{"menu_error_loading_programs" | translate}}
         </ion-item>
+
         <!-- Market Only catalog -->
         <ion-item-divider *ngIf="marketOnlyPrograms.length" no-lines>
           {{"menu_header_market_catalog" | translate}}:
         </ion-item-divider>
-        <button ion-item class="item" menuClose *ngFor="let program of marketOnlyPrograms" (click)="showCategories(program)">
+        <button
+          ion-item
+          class="item"
+          menuClose
+          *ngFor="let program of marketOnlyPrograms"
+          (click)="showCategories(program)"
+        >
           {{program.NAME}}
         </button>
+
         <!-- Door Buster catalog -->
         <ion-item-divider *ngIf="doorBusterPrograms.length" no-lines>
           {{"menu_header_door_buster_bookings_catalog" | translate}}:
         </ion-item-divider>
-        <button ion-item class="item" menuClose *ngFor="let program of doorBusterPrograms" (click)="showCategories(program)">
+        <button
+          ion-item
+          class="item"
+          menuClose
+          *ngFor="let program of doorBusterPrograms"
+          (click)="showCategories(program)"
+        >
+          {{program.NAME}}
+        </button>
+
+        <!-- OBEONLY catalog -->
+        <ion-item-divider *ngIf="obeOnlyPrograms.length" no-lines>
+          {{"menu_header_obeonly_catalog" | translate | uppercase}}:
+        </ion-item-divider>
+        <button
+          ion-item
+          class="item"
+          menuClose
+          *ngFor="let program of obeOnlyPrograms"
+          (click)="showCategories(program)"
+        >
           {{program.NAME}}
         </button>
       </div>
@@ -62,8 +101,14 @@
         <ion-icon class="menu-icon" name="list-box"></ion-icon>
         {{"menu_shopping_lists" | translate}}
       </button>
-      <button (click)="goToListPage(list)" menuClose icon-left detail-none ion-item
-              *ngFor="let list of defaultShoppingLists">
+      <button
+        (click)="goToListPage(list)"
+        menuClose
+        icon-left
+        detail-none
+        ion-item
+        *ngFor="let list of defaultShoppingLists"
+      >
         <ion-icon class="menu-icon" [name]="list.ListType === '1' ? 'cart' : 'basket'"></ion-icon>
         {{list.ListName}}
       </button>
@@ -71,14 +116,27 @@
       <!-- Ordering -->
       <ion-item-divider no-lines>{{"menu_header_ordering" | translate}}:</ion-item-divider>
 
-
-      <button ion-item class="item" detail-none menuClose icon-left *ngIf="hotDealNotification" (click)="hotDealPage()">
+      <button
+        ion-item
+        class="item"
+        detail-none
+        menuClose
+        icon-left
+        *ngIf="hotDealNotification"
+        (click)="hotDealPage()"
+      >
         <ion-icon class="flash_icon" name="flash"></ion-icon>
         {{"menu_hot_deal_button" | translate}}
       </button>
 
-
-      <button ion-item class="item" detail-none menuClose icon-left (click)="goToPage(menuPages.pastPurchases)">
+      <button
+        ion-item
+        class="item"
+        detail-none
+        menuClose
+        icon-left
+        (click)="goToPage(menuPages.pastPurchases)"
+      >
         <ion-icon name="archive"></ion-icon>
         {{"menu_ordering_history"| translate}}
       </button>
@@ -104,6 +162,9 @@
   </ion-content>
 
   <!-- Secondary Menu With Custom Shopping Lists -->
-  <custom-shopping-list-menu [customShoppingLists]="customShoppingLists" (back)="onBack($event)"
-                             *ngIf="showShoppingListsMenu===true"></custom-shopping-list-menu>
+  <custom-shopping-list-menu
+    [customShoppingLists]="customShoppingLists"
+    (back)="onBack($event)"
+    *ngIf="showShoppingListsMenu===true"
+  ></custom-shopping-list-menu>
 </ion-menu>
