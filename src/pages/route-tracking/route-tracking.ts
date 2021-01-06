@@ -21,11 +21,10 @@ export class RouteTrackingPage {
   @ViewChild('Map') private readonly mapElement: ElementRef;
   private readonly deliveryLoader: LoadingService;
   private currentMapIndex: number;
-  // public refreshCurrentMap: boolean;
   public currentDeliveries: any[] = [];
   public showMap: boolean;
   public showMoreInfo: boolean;
-  public mapDetails;
+  public mapDetails = {};
 
   constructor(
     private readonly mapInstance: GoogleMapsProvider,
@@ -66,6 +65,7 @@ export class RouteTrackingPage {
     if (!this.showMap || !data) {
       this.showMoreInfo = false;
       this.currentMapIndex = -1;
+      this.mapDetails = {};
       return;
     }
 
@@ -80,6 +80,7 @@ export class RouteTrackingPage {
     if (this.currentMapIndex < 0) {
       return;
     }
+    this.showMoreInfo = false;
     this.fetchCurrentRoute(this.currentDeliveries[this.currentMapIndex].customerLocation, true);
   }
 
@@ -90,37 +91,31 @@ export class RouteTrackingPage {
         zoom: 10
       })
       .then(() => {
-        const destination = this.mapInstance.getLatLng(data.end.latitude, data.end.longitude);
-
-        this.mapInstance.getGeocodedAddress(data.customerLocation.address).subscribe({
-          next: geocodedAddress => {
-            this.mapInstance.setMapRoute(
-              geocodedAddress,
-              destination,
-              {
-                location: this.mapInstance.getLatLng(data.truck.latitude, data.truck.longitude)
-              },
-              data.stops.map(stop => ({
-                location: this.mapInstance.getLatLng(stop.latitude, stop.longitude),
-                stopover: true
-              }))
-            );
-          }
-        });
-
-        this.mapInstance.getEtaAndDistance(data.customerLocation.address, destination).subscribe({
-          next: distanceAndTime => {
-            this.mapDetails.eta = distanceAndTime.eta;
-            this.mapDetails.distance = distanceAndTime.distance;
-          }
-        });
+        this.mapInstance
+          .setMapRoute(
+            { location: this.mapInstance.getLatLng(data.truck.latitude, data.truck.longitude) },
+            this.mapInstance.getLatLng(data.end.latitude, data.end.longitude),
+            data.stops.map(stop => ({
+              location: this.mapInstance.getLatLng(stop.latitude, stop.longitude),
+              stopover: true
+            }))
+          )
+          .subscribe({
+            next: data => {
+              Object.assign(this.mapDetails, {
+                distance: data.distance,
+                eta: data.duration
+              });
+            }
+          });
       });
 
-    this.mapDetails = {
+    Object.assign(this.mapDetails, {
       customerName: data.customerLocation.customerName,
       shipToNo: data.customerLocation.shipToNo,
+      truckId: data.customerLocation.customerNo,
       invoices: data.invoices
-    };
+    });
   }
 
   private updateDeliveriesList(customerLocation, routesAndStops, refreshMap?: boolean): void {
@@ -131,7 +126,6 @@ export class RouteTrackingPage {
 
     if (refreshMap && this.currentMapIndex >= 0) {
       this.currentDeliveries[this.currentMapIndex] = data;
-      console.log(data);
       this.populateMapWindow(data);
     } else {
       this.currentDeliveries.push(data);

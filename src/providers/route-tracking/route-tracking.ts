@@ -25,19 +25,19 @@ export class RouteTrackingProvider {
     return this.secureActions.waitForAuth().flatMap(user => {
       return this.apiProvider.get(GET_CUSTOMER_LOCATIONS, '', {
         user_token: user.userToken
-      }) as Observable<any>;
+      });
     });
   }
 
   public getStoreRouteAndStops(ship_to_no: string): Observable<any> {
     return this.apiProvider.get(GET_STORE_ROUTE_AND_STOPS, '', {
       ship_to_no
-    }) as Observable<any>;
+    });
   }
 
   public testGetTodayCustomers(numberOfShipments: number = 1): Observable<any> {
     return this.apiProvider.get(TEST_GET_TODAY_CUSTOMERS, '', {
       size: numberOfShipments
-    }) as Observable<any>;
+    });
   }
 }

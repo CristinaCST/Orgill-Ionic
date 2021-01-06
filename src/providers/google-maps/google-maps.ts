@@ -3,7 +3,7 @@
 import { Injectable } from '@angular/core';
 import { Loader } from '@googlemaps/js-api-loader';
 import { GMAPS_API_KEY } from '../../util/constants';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 
 /*
   Generated class for the GoogleMapsProvider provider.
@@ -15,9 +15,6 @@ import { Observable, Subscription } from 'rxjs';
 export class GoogleMapsProvider {
   private map: google.maps.Map;
   private readonly mapMarkers: google.maps.Marker[] = [];
-  private sortedWaypoints: google.maps.DirectionsWaypoint[];
-  private sortedWaypointsForTruckRoute: google.maps.DirectionsWaypoint[];
-  private mapLoaded: boolean;
   private readonly loader: Loader = new Loader({
     apiKey: GMAPS_API_KEY,
     version: 'weekly'
@@ -39,161 +36,60 @@ export class GoogleMapsProvider {
   }
 
   /**
-   * Display a route between two points. If we assume that the trucks position is dynamic,
-   * then the route should update according to its location.
-   * @param origin - start point.
+   * Display a route between two points. In our Transportation app the origin point should be
+   * the current truck position and the destination point should be the client location.
+   * @param origin - start point or current position of truck.
    * @param destination - end point.
-   * @param truckLocation - current position of truck.
    * @param waypoints - array of points between origin and destination.
    * @param travelMode - DRIVING, BICYCLING, TRANSIT, WALKING.
    */
   public setMapRoute(
-    origin: string | google.maps.LatLng | google.maps.LatLngLiteral | google.maps.Place,
+    origin: google.maps.DirectionsWaypoint,
     destination: string | google.maps.LatLng | google.maps.LatLngLiteral | google.maps.Place,
-    truckLocation: google.maps.DirectionsWaypoint,
     waypoints: google.maps.DirectionsWaypoint[] = [],
     travelMode: google.maps.TravelMode = google.maps.TravelMode.DRIVING
-  ): void {
-    const directionsService: google.maps.DirectionsService = new google.maps.DirectionsService();
-    const directionsRenderer: google.maps.DirectionsRenderer = new google.maps.DirectionsRenderer();
-    directionsRenderer.setMap(this.map);
-
-    this.computeStops(origin, truckLocation, waypoints).subscribe({
-      complete: () => {
-        directionsService.route(
-          { origin, destination, waypoints: this.sortedWaypoints, travelMode },
-          (result, status) => {
-            if (status === 'OK') {
-              directionsRenderer.setOptions({
-                suppressMarkers: true,
-                polylineOptions: {
-                  strokeColor: '#8EACFC',
-                  strokeOpacity: 1,
-                  strokeWeight: 5,
-                  zIndex: 1
-                }
-              });
-
-              directionsRenderer.setDirections(result);
-            } else {
-              console.warn('Error: ' + status);
-            }
-          }
-        );
-
-        this.drawTruckRoute(origin, truckLocation.location);
-      }
-    });
-
-    this.drawMarkers(origin, destination, truckLocation);
-  }
-
-  /**
-   * This will sort the waypoints by distance, the trucks location will also
-   * be treated as a waypoint.
-   * @param origin - start point.
-   * @param waypoints - array of points between origin and destination.
-   * @param travelMode - DRIVING, BICYCLING, TRANSIT, WALKING.
-   */
-  private computeStops(
-    origin: string | google.maps.LatLng | google.maps.LatLngLiteral | google.maps.Place,
-    truckLocation: google.maps.DirectionsWaypoint,
-    waypoints: google.maps.DirectionsWaypoint[],
-    travelMode: google.maps.TravelMode = google.maps.TravelMode.DRIVING
   ): Observable<any> {
-    const waypointsDistance = {};
-    let waypointsDistanceKeys: any[];
-    let truckLocationDistance: number;
+    const directionsService: google.maps.DirectionsService = new google.maps.DirectionsService();
+    const directionsRenderer: google.maps.DirectionsRenderer = new google.maps.DirectionsRenderer();
 
-    const distanceMatrix: google.maps.DistanceMatrixService = new google.maps.DistanceMatrixService();
+    directionsRenderer.setMap(this.map);
+    directionsRenderer.setOptions({
+      suppressMarkers: true,
+      polylineOptions: {
+        strokeColor: '#8EACFC',
+        strokeOpacity: 1,
+        strokeWeight: 5,
+        zIndex: 1
+      }
+    });
+    this.drawMarkers(origin.location, destination, true);
+
     return Observable.create(observer => {
-      waypoints.unshift(truckLocation); // put truckLocation at index zero
-      // TODO: this could be better written
-      waypoints.forEach((waypoint, index) => {
-        distanceMatrix.getDistanceMatrix(
-          { origins: [origin], destinations: [waypoint.location], travelMode },
-          (result, status) => {
-            if (status === 'OK') {
-              const distance: number = result.rows[0].elements[0].distance.value;
-              waypointsDistance[distance] = waypoint;
-              waypointsDistanceKeys = Object.keys(waypointsDistance);
+      directionsService.route(
+        { origin: origin.location, destination, waypoints, travelMode },
+        (result, status) => {
+          if (status === 'OK') {
+            directionsRenderer.setDirections(result);
 
-              if (index === 0) {
-                truckLocationDistance = distance;
-              }
-
-              if (index + 1 === waypoints.length) {
-                waypointsDistanceKeys.sort((a, b) => a - b);
-
-                this.sortedWaypoints = waypointsDistanceKeys.map(key => waypointsDistance[key]);
-
-                this.sortedWaypointsForTruckRoute = waypointsDistanceKeys
-                  .filter(key => truckLocationDistance > key)
-                  .map(key => waypointsDistance[key]);
-
-                observer.complete();
-              }
-            } else {
-              console.warn('Error: ' + status);
-            }
+            observer.next(this.calculateTotalDistanceAndTime(result));
+          } else {
+            console.warn('Error: ' + status);
           }
-        );
-      });
+        }
+      );
     });
   }
 
   /**
-   * Draw a route from origin to truckLocation.
-   * This one will have a dark blue.
-   * @param origin - start point.
-   * @param truckLocation - current position of truck.
-   */
-  private drawTruckRoute(
-    origin: string | google.maps.LatLng | google.maps.LatLngLiteral | google.maps.Place,
-    truckLocation: string | google.maps.LatLng | google.maps.LatLngLiteral | google.maps.Place
-  ): void {
-    const directionsService: google.maps.DirectionsService = new google.maps.DirectionsService();
-    const directionsRenderer: google.maps.DirectionsRenderer = new google.maps.DirectionsRenderer();
-    directionsRenderer.setMap(this.map);
-
-    directionsService.route(
-      {
-        origin,
-        destination: truckLocation,
-        waypoints: this.sortedWaypointsForTruckRoute,
-        travelMode: google.maps.TravelMode.DRIVING
-      },
-      (result, status) => {
-        if (status === 'OK') {
-          directionsRenderer.setOptions({
-            suppressMarkers: true,
-            polylineOptions: {
-              strokeColor: '#2F67FF',
-              strokeOpacity: 1,
-              strokeWeight: 5,
-              zIndex: 2
-            }
-          });
-
-          directionsRenderer.setDirections(result);
-        } else {
-          console.warn('Error: ' + status);
-        }
-      }
-    );
-  }
-
-  /**
-   * Place custom markers on map.
-   * TODO: this could be handled better
+   * Place custom markers on map for origin and destination.
    * @param origin - start point.
    * @param destination - end point.
-   * @param truckLocation - current position of truck.
+   * @param truckMarkerAtOrigin - origin marker will be replaced with a truck icon.
    */
   private drawMarkers(
     origin: string | google.maps.LatLng | google.maps.LatLngLiteral | google.maps.Place,
     destination: string | google.maps.LatLng | google.maps.LatLngLiteral | google.maps.Place,
-    truckLocation: google.maps.DirectionsWaypoint
+    truckMarkerAtOrigin: boolean = false
   ): void {
     const markerOptions: any = {
       icon: {
@@ -202,6 +98,14 @@ export class GoogleMapsProvider {
         zIndex: 1
       }
     };
+
+    if (truckMarkerAtOrigin) {
+      markerOptions.icon = {
+        url: '../../assets/imgs/icon-truck.png',
+        scaledSize: new google.maps.Size(50, 37),
+        zIndex: 3
+      };
+    }
     this.addMapMarkers([origin], markerOptions);
 
     markerOptions.icon = {
@@ -217,47 +121,31 @@ export class GoogleMapsProvider {
       zIndex: 2
     };
     this.addMapMarkers([destination], markerOptions);
-
-    markerOptions.icon = {
-      url: '../../assets/imgs/icon-truck.png',
-      scaledSize: new google.maps.Size(50, 37),
-      zIndex: 3
-    };
-    this.addMapMarkers([truckLocation.location], markerOptions);
   }
 
   /**
-   * address - the string address to be converted to geographic coordinates
+   * The directions service will sometime return segmented values for distance and duration,
+   * this function will calculate the total for both.
+   * @param data - the response from the directions service request
+   * @return - total distance and duration.
    */
-  public getGeocodedAddress(address: string): Observable<any> {
-    return Observable.create(observer => {
-      new google.maps.Geocoder().geocode({ address }, (result, status) => {
-        if (status === 'OK') {
-          const location = result[0].geometry.location;
-          observer.next(this.getLatLng(location.lat(), location.lng()));
-        } else {
-          console.warn('Error: ' + status);
-        }
-      });
-    });
-  }
+  private calculateTotalDistanceAndTime(data: google.maps.DirectionsResult): any {
+    let totalDistance: number = 0;
+    let totalTime: number = 0;
+    const results = {
+      distance: '',
+      duration: ''
+    };
 
-  public getEtaAndDistance(origin, destination): Observable<any> {
-    return Observable.create(observer => {
-      new google.maps.DistanceMatrixService().getDistanceMatrix(
-        {
-          origins: [origin],
-          destinations: [destination],
-          travelMode: google.maps.TravelMode.DRIVING
-        },
-        (result, status) => {
-          if (status === 'OK') {
-            const element = result.rows[0].elements[0];
-            observer.next({ eta: element.duration.text, distance: element.distance.text });
-          }
-        }
-      );
+    data.routes[0].legs.forEach(leg => {
+      totalDistance += leg.distance.value;
+      totalTime += leg.duration.value;
     });
+
+    results.distance = `${Math.round(totalDistance / 1609.344)} miles`; // meters to miles
+    results.duration = `${Math.floor(totalTime / 3600)} hours ${Math.round((totalTime % 3600) / 60)} minutes`; // seconds to hours and minutes
+
+    return results;
   }
 
   /**
@@ -280,7 +168,6 @@ export class GoogleMapsProvider {
   }
 
   /**
-   *
    * @param markerIndex - the index of the marker to be removed.
    */
   public removeMapMarkers(markerIndex: number): void {

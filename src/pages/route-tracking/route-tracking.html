@@ -19,30 +19,32 @@
 
     <div class="order-container" *ngFor="let order of currentDeliveries">
       <div class="order-header">
-        <h5 class="order-subtitle">{{track_order_customer_name | translate}}</h5>
+        <h5 class="order-subtitle">{{"track_order_customer_name" | translate}}</h5>
         <h4 class="order-title">{{order.customerLocation.customerName}}</h4>
       </div>
 
       <div class="order-footer">
         <div>
-          <h5 class="order-subtitle">{{track_order_ship_no | translate}}</h5>
+          <h5 class="order-subtitle">{{"track_order_ship_no" | translate}}</h5>
           <h4 class="order-title">{{order.customerLocation.shipToNo}}</h4>
         </div>
 
-        <button class="order-btn" (click)="toggleMap(order)">{{track_order_map_details | translate}}</button>
+        <button class="order-btn" (click)="toggleMap(order)">
+          {{"track_order_map_details" | translate}}
+        </button>
       </div>
     </div>
 
     <div class="map-container" *ngIf="showMap">
       <button class="order-btn refresh-map" (click)="refreshMao()">
-        {{track_order_refresh_map | translate}}
+        {{"track_order_refresh_map" | translate}}
       </button>
 
       <div #Map class="map"></div>
 
       <div class="map-details-container" *ngIf="mapDetails">
         <h4 class="order-title">
-          {{track_order_truck_on_road | translate}}: <span>{{mapDetails.truckId}}</span>
+          {{"track_order_truck_on_road" | translate}}: <span>{{mapDetails.truckId}}</span>
         </h4>
 
         <div class="travel-wrapper">
@@ -52,7 +54,7 @@
           </div>
 
           <div class="travel-distance">
-            <h5 class="order-subtitle">{{track_order_distance | translate}}</h5>
+            <h5 class="order-subtitle">{{"track_order_distance" | translate}}</h5>
             <h4 class="order-title">{{mapDetails.distance}}</h4>
           </div>
         </div>
@@ -60,28 +62,28 @@
         <div class="more-info-wrapper" *ngIf="showMoreInfo">
           <div class="info-customer-wrapper">
             <div class="info-customer">
-              <h5 class="order-subtitle">{{track_order_customer_name | translate}}</h5>
+              <h5 class="order-subtitle">{{"track_order_customer_name" | translate}}</h5>
               <h4 class="order-title">{{mapDetails.customerName}}</h4>
             </div>
 
             <div class="info-shipping">
-              <h5 class="order-subtitle">{{track_order_ship_no | translate}}</h5>
+              <h5 class="order-subtitle">{{"track_order_ship_no" | translate}}</h5>
               <h4 class="order-title">{{mapDetails.shipToNo}}</h4>
             </div>
           </div>
 
           <div class="info-invoices-wrapper">
-            <h5 class="order-subtitle">{{track_order_invoices | translate}}</h5>
+            <h5 class="order-subtitle">{{"track_order_invoices" | translate}}</h5>
             <h4 class="order-title" *ngFor="let invoice of mapDetails.invoices">{{invoice}}</h4>
           </div>
         </div>
 
         <div class="travel-btns">
           <button class="order-btn" (click)="[showMoreInfo = !showMoreInfo]">
-            {{track_order_more_info | translate}}
+            {{"track_order_more_info" | translate}}
           </button>
           <button class="order-btn empty" (click)="toggleMap()">
-            {{track_order_other_locations | translate}}
+            {{"track_order_other_locations" | translate}}
           </button>
         </div>
       </div>
@@ -91,7 +93,7 @@
   </div>
 
   <ng-template #noDeliveries>
-    <img class="map-not-found" src="../../assets/imgs/map_not_found.jpg" />
+    <img class="map-not-found" src="../../assets/imgs/no-deliveries.png" />
     <h2 class="map-warning-message">{{"track_order_no_deliveries" | translate}}</h2>
   </ng-template>
 </ion-content>
