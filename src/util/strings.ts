@@ -32,6 +32,7 @@ export const MODAL_BUTTON_OK: string = 'modal_button_ok';
 export const MODAL_BUTTON_NOT_NOW: string = 'modal_button_not_now';
 export const MODAL_BUTTON_SETTINGS: string = 'modal_buton_settings';
 export const MODAL_BUTTON_TRY_AGAIN: string = 'modal_button_try_again';
+export const MODAL_BUTTON_RESET_PASSWORD: string = 'modal_button_reset_password';
 
 /**
  * Marker : Loading Dialog
@@ -64,6 +65,9 @@ export const POPOVER_OPEN_DATA: string = 'open_data';
 export const POPOVER_OPEN_WIFI: string = 'open_wifi';
 export const POPOVER_TIMEOUT_ERROR_MESSAGE: string = 'request_timeout_error';
 export const POPOVER_PLACEHOLDER_MESSAGE: string = 'placeholder_message';
+
+export const POPOVER_PASSWORD_EXPIRED_TITLE: string = 'expired_password_title';
+export const POPOVER_PASSWORD_EXPIRED_MESSAGE: string = 'expired_password_message';
 
 /**
  * Marker : Login/Logout strings
@@ -234,10 +238,6 @@ export const PO_ALPHANUMERIC_WARNING: string = 'po_alphanumeric_warning';
 export const PO_MISSING_REQUIRED: string = 'po_missing_required';
 
 export const ONE_SIGNAL_PERMISSION_REMINDER: string = 'one_signal_permission_reminder';
-
-export const SAVINGS_TEXT: string = 'savings_text';
-
-export const ONE_SIGNAL_SUBSCRIPTION_REMINDER: string = 'one_signal_subscription_reminder';
 
 export const NO_LISTS_FOR_REGULAR_PRODUCT: string = 'shopping_list_no_remaining_list';
 export const NO_LISTS_FOR_MARKET_ONLY_PRODUCT: string = 'shopping_list_added_in_market_list';

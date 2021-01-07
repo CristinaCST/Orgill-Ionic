@@ -12,21 +12,21 @@ import { Moment } from 'moment';
 import { DateTimeService } from '../../services/datetime/dateTimeService';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import * as Strings from '../../util/strings';
-import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
+import { PopoversService, PopoverContent, CustomListPopoverResult } from '../../services/popovers/popovers';
 
 @Injectable()
 export class AuthService {
-
   private user: User = new User();
   public allowSwitch: string;
   public allowLanguageSwitchListener: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  constructor(private readonly apiProvider: ApiService,
-              private readonly events: Events,
-              private readonly secureActions: SecureActionsService,
-              private readonly popoverService: PopoversService) {
-
-      this.secureActions.authState.subscribe(authOk => {
+  constructor(
+    private readonly apiProvider: ApiService,
+    private readonly events: Events,
+    private readonly secureActions: SecureActionsService,
+    private readonly popoverService: PopoversService
+  ) {
+    this.secureActions.authState.subscribe(authOk => {
       if (authOk) {
         this.events.publish(Constants.EVENT_AUTH);
       }
@@ -46,12 +46,43 @@ export class AuthService {
   }
 
   public login(credentials: LoginRequest): Observable<void> {
-
     credentials.username = credentials.username.toLowerCase();
     credentials.password = AuthService.encryption(credentials.password);
 
     return this.apiProvider.post(ConstantsURL.URL_LOGIN, credentials).map(response => {
-      this.user = { userToken: JSON.parse(response.d).User_Token };
+      const data: { ErrCode: string; User_Token: string } = JSON.parse(response.d);
+
+      this.user = { userToken: data.User_Token };
+
+      if (data.ErrCode && data.ErrCode === 'Password has expired!') {
+        const content: PopoverContent = this.popoverService.setContent(
+          Strings.POPOVER_PASSWORD_EXPIRED_TITLE,
+          Strings.POPOVER_PASSWORD_EXPIRED_MESSAGE,
+          Strings.MODAL_BUTTON_TRY_AGAIN,
+          Strings.MODAL_BUTTON_RESET_PASSWORD
+        );
+
+        this.popoverService
+          .show(content)
+          .first()
+          .subscribe({
+            next(info: CustomListPopoverResult): void {
+              if (info.optionSelected !== 'DISMISS') {
+                return;
+              }
+
+              // redirect to orgill site
+              window.open('https://www.orgill.com/index.aspx?tab=8', '_system');
+            },
+            error(err: { message: string }): void {
+              // handle error here
+              console.error(err.message);
+            },
+            complete(): void {
+              this.complete().exhaust();
+            }
+          });
+      }
     });
   }
 
@@ -68,19 +99,22 @@ export class AuthService {
     if (this.user && this.user.userToken) {
       return new Promise((resolve, reject) => {
         const params: any = { user_token: this.user.userToken };
-        this.apiProvider.post(ConstantsURL.URL_USER_INFO, params).subscribe(response => {
-          this.user = JSON.parse(response.d);
-          this.user.userToken = params.user_token;
-          this.allowSwitch = JSON.parse(response.d).division;
-          this.allowLanguageSwitchListener.next(this.allowSwitch === '8');
-          this.secureActions.setAuthState(true, this.user);
-          this.events.publish(Constants.EVENT_AUTH);
-          LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
-          resolve();
-        }, error => {
-          console.error(error);
-          reject(error);
-        });
+        this.apiProvider.post(ConstantsURL.URL_USER_INFO, params).subscribe(
+          response => {
+            this.user = JSON.parse(response.d);
+            this.user.userToken = params.user_token;
+            this.allowSwitch = JSON.parse(response.d).division;
+            this.allowLanguageSwitchListener.next(this.allowSwitch === '8');
+            this.secureActions.setAuthState(true, this.user);
+            this.events.publish(Constants.EVENT_AUTH);
+            LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
+            resolve();
+          },
+          error => {
+            console.error(error);
+            reject(error);
+          }
+        );
       });
     }
 
@@ -102,12 +136,12 @@ export class AuthService {
       return status;
     }
 
-
-    const content: PopoverContent = this.popoverService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SESSION_EXPIRED);
+    const content: PopoverContent = this.popoverService.setContent(
+      Strings.GENERIC_MODAL_TITLE,
+      Strings.SESSION_EXPIRED
+    );
     this.popoverService.show(content);
 
     this.logout(true);
-
   }
-
 }
