@@ -6,4 +6,5 @@ export interface Program {
   SHIPDATE: string;
   MARKETONLY: string;
   TERMS: string;
+  OBEONLY: string;
 }
