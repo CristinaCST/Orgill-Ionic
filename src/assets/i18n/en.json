@@ -240,5 +240,8 @@
   "promotions": "Promotions",
   "support_code_hint": "Support code",
   "username": "Username",
-  "add_to_list": "Add to list"
+  "add_to_list": "Add to list",
+  "modal_button_reset_password": "Reset password",
+  "expired_password_title": "Password has expired!",
+  "expired_password_message": "Please reset your password."
 }
