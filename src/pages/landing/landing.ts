@@ -22,6 +22,7 @@ import { RouteTrackingPage } from '../../pages/route-tracking/route-tracking';
 export class LandingPage {
   private readonly simpleLoader: LoadingService;
   public pageTitle: string = this.translateProvider.translate(LANDING_PAGE_TITLE);
+  public copyrightYear: number = new Date().getFullYear();
 
   constructor(
     public navigatorService: NavigatorService,
