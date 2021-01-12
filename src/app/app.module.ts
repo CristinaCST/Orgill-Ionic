@@ -28,6 +28,7 @@ import { ProductProvider } from '../providers/product/product';
 import { UserInfoService } from '../services/user-info/user-info';
 import { PurchasesProvider } from '../providers/purchases/purchases';
 import { ProductImageProvider } from '../providers/product-image/product-image';
+import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
 
 // Helpers
 import { CSSInjector } from '../helpers/css-injector';
@@ -71,8 +72,10 @@ import { PromotionsService } from '../services/promotions/promotions';
 import { LandingPage } from '../pages/landing/landing';
 import { AllShoppingLists } from '../pages/all-shopping-lists/all-shopping-lists';
 import { PromotionsPage } from '../pages/market-catalog/promotions-page';
+import { RouteTrackingPage } from '../pages/route-tracking/route-tracking';
 
-const pages: Page[] = [MyApp,
+const pages: Page[] = [
+  MyApp,
   Catalog,
   Login,
   AboutPage,
@@ -92,18 +95,21 @@ const pages: Page[] = [MyApp,
   PurchaseDetailsPage,
   AllShoppingLists,
   PromotionsPage,
-  HotDealsPage];
-
+  HotDealsPage,
+  RouteTrackingPage
+];
 
 // Error Handlers
 import { CustomErrorHandler } from '../services/error-handler/error-handler';
+import { RouteTrackingProvider } from '../providers/route-tracking/route-tracking';
 
 @NgModule({
   declarations: pages,
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp, {
-      mode: 'md', scrollPadding: false,
+      mode: 'md',
+      scrollPadding: false,
       scrollAssist: false,
       autoFocusAssist: false,
       statusbarPadding: false
@@ -114,10 +120,11 @@ import { CustomErrorHandler } from '../services/error-handler/error-handler';
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
+        useFactory: createTranslateLoader,
         deps: [HttpClient]
       }
-    })],
+    })
+  ],
   bootstrap: [IonicApp],
   entryComponents: pages,
   providers: [
@@ -152,12 +159,13 @@ import { CustomErrorHandler } from '../services/error-handler/error-handler';
     ProductImageProvider,
     SecureActionsService,
     PromotionsService,
+    GoogleMapsProvider,
     { provide: ErrorHandler, useClass: CustomErrorHandler },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    RouteTrackingProvider
   ]
 })
-
-export class AppModule { }
+export class AppModule {}
 
 export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');

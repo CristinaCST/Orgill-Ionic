@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateWrapperService } from '../../services/translate/translate';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { Catalog } from '../catalog/catalog';
-import { MARKET_CATALOG } from '../../util/strings';
 import { Program } from '../../interfaces/models/program';
-import { ThrowStmt } from '@angular/compiler';
 import { PromotionsService } from '../../services/promotions/promotions';
 
 @Component({
@@ -19,9 +17,8 @@ export class PromotionsPage implements OnInit {
   constructor(
     public translateProvider: TranslateWrapperService,
     private readonly promotionsService: PromotionsService,
-    private readonly navigatorService: NavigatorService) {
-
-  }
+    private readonly navigatorService: NavigatorService
+  ) {}
 
   public ngOnInit(): void {
     this.getPromotionsOnlyPrograms();
@@ -41,5 +38,4 @@ export class PromotionsPage implements OnInit {
       this.promotionsOnlyPrograms = data;
     });
   }
-
 }

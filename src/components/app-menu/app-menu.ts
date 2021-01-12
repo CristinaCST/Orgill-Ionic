@@ -84,18 +84,18 @@ export class AppMenuComponent implements OnInit {
 
   private readonly navigationHandler = (): void => {
     this.menuCtrl.close('main_menu');
-  };
+  }
 
   private readonly newShoppingListHandler = (): void => {
     this.getShoppingLists();
-  };
+  }
 
   private readonly loadingFailedHandler = (culprit: string): void => {
     // We can't know directly (without catching an error somewhere else) if custom lists are supposed to be or not empty, or some of the programs, so it's safer just to reload this in case of error.
     if (culprit === 'shopping lists' || culprit === 'programs' || !culprit) {
       this.initMenu();
     }
-  };
+  }
 
   private initMenu(): void {
     this.oneSignal.getRetailerType().then(retailer_type => {

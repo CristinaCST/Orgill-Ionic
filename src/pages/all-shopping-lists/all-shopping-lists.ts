@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ShoppingList } from '../../interfaces/models/shopping-list';
 import { LoadingService } from '../../services/loading/loading';
 import { NavigatorService } from '../../services/navigator/navigator';
-import { NavParams } from 'ionic-angular';
 import { TranslateWrapperService } from '../../services/translate/translate';
 import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
 import { APIResponse } from '../../interfaces/response-body/response';
@@ -28,7 +27,7 @@ export class AllShoppingLists implements OnInit {
     this.loader = loadingService.createLoader();
     this.getShoppingLists();
   }
-  ngOnInit() {}
+  public ngOnInit(): void {}
 
   public getShoppingLists(): void {
     this.loader.show();

@@ -1,7 +1,7 @@
 <!-- Landing Page Header -->
 <ion-header>
   <!-- Landing Page Navigation Bar -->
-  <navbar [title]=pageTitle [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
+  <navbar [title]="pageTitle" [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
   <!-- Landing Page Search Bar -->
   <search-bar [showBackButton]="false" (searched)="onSearched($event)"></search-bar>
 </ion-header>
@@ -44,16 +44,15 @@
         </ion-card-content>
       </ion-card>
     </div>
-
   </div>
 
-  <div class="order-track">
+  <div class="order-track" (click)="goToPage('routeTracking')">
     <img src="../../assets/imgs/iconfinder_truck.svg" />
-    <div class="card-tile">Track my Orgill order</div>
+    <div class="card-tile">{{"track_order" | translate}}</div>
     <ion-icon class="right-arrow" name="arrow-forward"></ion-icon>
   </div>
 
   <div class="homepage-footer">
-    <p>&copy; 2020 • Orgill </p>
+    <p>&copy; {{copyrightYear}} • Orgill</p>
   </div>
 </ion-content>
