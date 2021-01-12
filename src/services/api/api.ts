@@ -39,7 +39,7 @@ export class ApiService {
 
     if (requiresToken) {
       return this.secureActions.waitForAuth().flatMap(user => {
-        body.user_token = user.userToken;
+        body[useExternalAPI ? 'token' : 'user_token'] = user.userToken;
 
         return this.http
           .post(this.baseUrl + path, JSON.stringify(body), { headers: this.setHeaders() })
