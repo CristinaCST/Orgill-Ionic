@@ -132,7 +132,7 @@ export class GoogleMapsProvider {
   private calculateTotalDistanceAndTime(data: google.maps.DirectionsResult): any {
     let totalDistance: number = 0;
     let totalTime: number = 0;
-    const results = {
+    const results: { distance: string; duration: string } = {
       distance: '',
       duration: ''
     };
@@ -151,7 +151,7 @@ export class GoogleMapsProvider {
   /**
    * @param markers - array of coordinates to place markers at.
    */
-  public addMapMarkers(markers: any[], otherOptions): void {
+  public addMapMarkers(markers: any[], otherOptions: any): void {
     const markerOptions: google.maps.MarkerOptions = {
       map: this.map
     };

@@ -11,7 +11,7 @@ export interface Product {
   UPC_CODE: string;
   SUGGESTED_RETAIL: string;
   YOURCOST: string;
-  IMAGE: string;  // TODO: This still needed?
+  IMAGE: string; // TODO: This still needed?
   SHELF_PACK: string;
   VELOCITY_CODE: string;
   TOTAL_REC_COUNT: string;

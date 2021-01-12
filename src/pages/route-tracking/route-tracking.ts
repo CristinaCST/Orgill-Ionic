@@ -5,6 +5,7 @@ import { GoogleMapsProvider } from '../../providers/google-maps/google-maps';
 import { RouteTrackingProvider } from '../../providers/route-tracking/route-tracking';
 import { TranslateWrapperService } from '../../services/translate/translate';
 import { TRACK_ORDER_LOADER_TEXT } from '../../util/strings';
+import { MapDetails } from '../../interfaces/models/route-tracking';
 
 /**
  * Generated class for the RouteTrackingPage page.
@@ -24,7 +25,14 @@ export class RouteTrackingPage {
   public currentDeliveries: any[] = [];
   public showMap: boolean;
   public showMoreInfo: boolean;
-  public mapDetails = {};
+  public mapDetails: MapDetails = {
+    distance: '',
+    eta: '',
+    customerName: '',
+    shipToNo: '',
+    truckId: '',
+    invoices: []
+  };
 
   constructor(
     private readonly mapInstance: GoogleMapsProvider,
@@ -41,13 +49,13 @@ export class RouteTrackingPage {
     this.deliveryLoader.show();
 
     this.routeTrackingProvider.getCustomerLocations().subscribe(customerLocations => {
-      customerLocations.forEach(customerLocation => {
+      customerLocations.forEach((customerLocation: any) => {
         this.fetchCurrentRoute(customerLocation);
       });
     });
   }
 
-  private fetchCurrentRoute(customerLocation, refreshMap?: boolean): void {
+  private fetchCurrentRoute(customerLocation: { shipToNo: string }, refreshMap?: boolean): void {
     this.routeTrackingProvider
       .getStoreRouteAndStops(customerLocation.shipToNo)
       .subscribe((routesAndStops): void => {
@@ -65,7 +73,14 @@ export class RouteTrackingPage {
     if (!this.showMap || !data) {
       this.showMoreInfo = false;
       this.currentMapIndex = -1;
-      this.mapDetails = {};
+      this.mapDetails = {
+        distance: '',
+        eta: '',
+        customerName: '',
+        shipToNo: '',
+        truckId: '',
+        invoices: []
+      };
       return;
     }
 
@@ -95,16 +110,16 @@ export class RouteTrackingPage {
           .setMapRoute(
             { location: this.mapInstance.getLatLng(data.truck.latitude, data.truck.longitude) },
             this.mapInstance.getLatLng(data.end.latitude, data.end.longitude),
-            data.stops.map(stop => ({
+            data.stops.map((stop: { latitude: number; longitude: number }) => ({
               location: this.mapInstance.getLatLng(stop.latitude, stop.longitude),
               stopover: true
             }))
           )
           .subscribe({
-            next: data => {
+            next: info => {
               Object.assign(this.mapDetails, {
-                distance: data.distance,
-                eta: data.duration
+                distance: info.distance,
+                eta: info.duration
               });
             }
           });
@@ -118,8 +133,8 @@ export class RouteTrackingPage {
     });
   }
 
-  private updateDeliveriesList(customerLocation, routesAndStops, refreshMap?: boolean): void {
-    const data = {
+  private updateDeliveriesList(customerLocation: any, routesAndStops: any, refreshMap?: boolean): void {
+    const data: any = {
       customerLocation,
       ...routesAndStops
     };

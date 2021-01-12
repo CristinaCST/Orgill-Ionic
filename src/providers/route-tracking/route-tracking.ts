@@ -16,17 +16,10 @@ import {
 */
 @Injectable()
 export class RouteTrackingProvider {
-  constructor(
-    private readonly apiProvider: ApiService,
-    private readonly secureActions: SecureActionsService
-  ) {}
+  constructor(private readonly apiProvider: ApiService) {}
 
   public getCustomerLocations(): Observable<any> {
-    return this.secureActions.waitForAuth().flatMap(user => {
-      return this.apiProvider.get(GET_CUSTOMER_LOCATIONS, '', {
-        user_token: user.userToken
-      });
-    });
+    return this.apiProvider.post(GET_CUSTOMER_LOCATIONS, {}, true, true);
   }
 
   public getStoreRouteAndStops(ship_to_no: string): Observable<any> {

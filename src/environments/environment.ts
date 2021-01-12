@@ -1,4 +1,4 @@
-import { URL_BASE_PROD, URL_BASE_DEV } from '../util/constants-url';
+import { URL_BASE_PROD } from '../util/constants-url';
 
 export const environment: {
   production: boolean;

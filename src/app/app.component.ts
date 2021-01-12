@@ -1,9 +1,7 @@
-
 import { Component } from '@angular/core';
 import { Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { Catalog } from '../pages/catalog/catalog';
 import { Login } from '../pages/login/login';
 import { TranslateService } from '@ngx-translate/core';
 import { NetworkService } from '../services/network/network';
@@ -21,25 +19,25 @@ import { LandingPage } from '../pages/landing/landing';
   templateUrl: 'app.html'
 })
 export class MyApp {
-
   public rootPage: any;
   public isLoading: boolean = true;
 
-  constructor(public platform: Platform,
-              public statusBar: StatusBar,
-              private readonly splashScreen: SplashScreen,
-              private readonly translate: TranslateService,
-              private readonly networkService: NetworkService,
-              private readonly oneSignalService: OneSignalService,
-              private readonly navigatorService: NavigatorService,
-              private readonly popoverProvider: PopoversService,
-              private readonly events: Events,
-              private readonly authService: AuthService) {
-                this.setAppLanguage().then(() => {
-                  this.initializeApp();
-                });
-              }
-
+  constructor(
+    public platform: Platform,
+    public statusBar: StatusBar,
+    private readonly splashScreen: SplashScreen,
+    private readonly translate: TranslateService,
+    private readonly networkService: NetworkService,
+    private readonly oneSignalService: OneSignalService,
+    private readonly navigatorService: NavigatorService,
+    private readonly popoverProvider: PopoversService,
+    private readonly events: Events,
+    private readonly authService: AuthService
+  ) {
+    this.setAppLanguage().then(() => {
+      this.initializeApp();
+    });
+  }
 
   public scrollToElement(): void {
     document.activeElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'start' });
@@ -53,13 +51,20 @@ export class MyApp {
     this.platform.ready().then(() => {
       this.oneSignalService.init();
 
-
       // TODO: Make this better :/
       window.addEventListener('keyboardDidShow', (obj: Event & { keyboardHeight: number }) => {
         if (this.platform.is('android')) {
-          CSSInjector.addRawCSS('body.keyboard-is-open .scroll-content:not(.keyboard-immune){margin-bottom:' + obj.keyboardHeight + 'px!important;}');
+          CSSInjector.addRawCSS(
+            'body.keyboard-is-open .scroll-content:not(.keyboard-immune){margin-bottom:' +
+              obj.keyboardHeight +
+              'px!important;}'
+          );
         } else {
-          CSSInjector.addRawCSS('body.keyboard-is-open .scroll-content:not(.keyboard-immune){margin-bottom:' + obj.keyboardHeight + 'px!important; padding-bottom:0px!important;} body.keyboard-is-open .keyboard-immune{padding-bottom:0px!important;}');
+          CSSInjector.addRawCSS(
+            'body.keyboard-is-open .scroll-content:not(.keyboard-immune){margin-bottom:' +
+              obj.keyboardHeight +
+              'px!important; padding-bottom:0px!important;} body.keyboard-is-open .keyboard-immune{padding-bottom:0px!important;}'
+          );
         }
         CSSInjector.injectCSS();
         document.body.classList.add('keyboard-is-open');
@@ -75,10 +80,9 @@ export class MyApp {
           return;
         }
 
-
         // TODO: This could be moved
         if (PopoversService.activeItem) {
-         // PopoversService.dismissCurrent();
+          // PopoversService.dismissCurrent();
           return;
         }
 
@@ -96,7 +100,6 @@ export class MyApp {
               this.platform.exitApp();
             }
           });
-
         } else {
           this.navigatorService.pop();
         }
