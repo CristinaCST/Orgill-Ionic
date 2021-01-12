@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ApiService } from '../../services/api/api';
-import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import {
   GET_STORE_ROUTE_AND_STOPS,
   GET_CUSTOMER_LOCATIONS,
