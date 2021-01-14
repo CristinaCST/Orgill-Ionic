@@ -26,9 +26,13 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
   public totalNumberOfProducts: number = 0;
   private readonly loader: LoadingService;
 
-  constructor(public navParams: NavParams, private readonly navigatorService: NavigatorService,
-              public loadingService: LoadingService, private readonly catalogProvider: CatalogsProvider) {
-                this.loader = loadingService.createLoader();
+  constructor(
+    public navParams: NavParams,
+    private readonly navigatorService: NavigatorService,
+    public loadingService: LoadingService,
+    private readonly catalogProvider: CatalogsProvider
+  ) {
+    this.loader = loadingService.createLoader();
   }
 
   public ngOnInit(): void {
@@ -42,9 +46,11 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
   }
 
   public sortProducts(products: Product[]): Product[] {
-    return products.sort((product1, product2): number => {
-      return product1.NAME.localeCompare(product2.NAME);
-    });
+    return products
+      .sort((product1, product2): number => {
+        return product1.NAME.localeCompare(product2.NAME);
+      })
+      .filter(product => product.YOURCOST !== '-1.00');
   }
 
   public getProduct(data: Product[]): void {
@@ -57,33 +63,39 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
 
   public onSearched($event: string): void {
     this.loader.show();
-    this.catalogProvider.search($event, this.category ? this.category.CatID : '', this.programNumber).subscribe(data => {
-      const dataFound: Product[] = this.filterBadRequest(JSON.parse(data.d));
+    this.catalogProvider
+      .search($event, this.category ? this.category.CatID : '', this.programNumber)
+      .subscribe(
+        data => {
+          const dataFound: Product[] = this.filterBadRequest(JSON.parse(data.d));
 
-      const params: any = {
-        searchString: this.searchString,
-        searchData: dataFound,
-        programNumber: this.programNumber,
-        programName: this.programName,
-        category: this.category,
-        numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
-      };
-      this.navigatorService.push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions).then(
-        // () => console.log('%cTo product search page', 'color:blue')
-        );
-      this.loader.hide();
-    }, err => {
-      LoadingService.hideAll();
-    });
+          const params: any = {
+            searchString: this.searchString,
+            searchData: dataFound,
+            programNumber: this.programNumber,
+            programName: this.programName,
+            category: this.category,
+            numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
+          };
+          this.navigatorService.push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions);
+
+          this.loader.hide();
+        },
+        err => {
+          LoadingService.hideAll();
+        }
+      );
   }
 
   public goToProductPage(product: Product): void {
-    this.navigatorService.push(ProductPage, {
-      product,
-      programName: this.programName,
-      programNumber: this.programNumber,
-      subcategoryName: this.category ? this.category.CatName : ''
-    }).then(() => console.log('%cTo product details page', 'color:pink'));
+    this.navigatorService
+      .push(ProductPage, {
+        product,
+        programName: this.programName,
+        programNumber: this.programNumber,
+        subcategoryName: this.category ? this.category.CatName : ''
+      })
+      .then(() => console.log('%cTo product details page', 'color:pink'));
   }
 
   public next(): void {
@@ -92,17 +104,20 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
   }
 
   public setPaginationInfo(): void {
-    if (this.products.length > 0) {
-      this.totalNumberOfProducts = parseInt(this.products[0].TOTAL_REC_COUNT, 10);
-    }
+    this.totalNumberOfProducts =
+      this.products.length > 0 ? parseInt(this.products[0].TOTAL_REC_COUNT, 10) : 0;
+
     this.isPaginationEnabled = this.page * Constants.SEARCH_RESULTS_PER_PAGE < this.totalNumberOfProducts;
   }
 
   public loadNextProducts(): void {
     this.loader.show();
-    this.getProductSubscription = this.catalogProvider.search(this.searchString, this.category ? this.category.CatID : '', this.programNumber, this.page)
+    this.getProductSubscription = this.catalogProvider
+      .search(this.searchString, this.category ? this.category.CatID : '', this.programNumber, this.page)
       .subscribe(response => {
-        this.products = this.products.concat(this.sortProducts(this.filterBadRequest(JSON.parse(response.d))));
+        this.products = this.products.concat(
+          this.sortProducts(this.filterBadRequest(JSON.parse(response.d)))
+        );
         this.setPaginationInfo();
         this.loader.hide();
       });
@@ -113,5 +128,4 @@ export class ProductsSearchPage implements OnInit, OnDestroy {
       this.getProductSubscription.unsubscribe();
     }
   }
-
 }

@@ -38,7 +38,7 @@ export class ShoppingListPage {
     this._deleteMode = value;
     if (!value) {
       this.selectedItems = [];
-      this.shoppingListItems.forEach(item => item.isCheckedInShoppingList = false);
+      this.shoppingListItems.forEach(item => (item.isCheckedInShoppingList = false));
     }
   }
 
@@ -66,10 +66,13 @@ export class ShoppingListPage {
     private readonly scannerService: ScannerService,
     private readonly pricingService: PricingService,
     private readonly platform: Platform,
-    private readonly searchService: SearchService) {
-
+    private readonly searchService: SearchService
+  ) {
     this.loader = this.loading.createLoader();
-    this.menuCustomButtons = [{ action: () => this.getListDetails(), icon: 'information-circle' }, { action: () => this.scan(), icon: 'barcode' }];
+    this.menuCustomButtons = [
+      { action: () => this.getListDetails(), icon: 'information-circle' },
+      { action: () => this.scan(), icon: 'barcode' }
+    ];
   }
 
   public ngOnInit(): void {
@@ -84,14 +87,13 @@ export class ShoppingListPage {
     if (culprit === 'shopping list products' || !culprit) {
       this.fillList();
     }
-  }
+  };
 
   public ionViewWillLeave(): void {
     this.events.unsubscribe(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST);
   }
 
   public ionViewWillEnter(): void {
-
     this.events.subscribe(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST, () => {
       this.fillList();
     });
@@ -100,7 +102,9 @@ export class ShoppingListPage {
     this.isCheckout = getNavParam(this.navParams, 'isCheckout', 'boolean');
     this.fromSearch = getNavParam(this.navParams, 'fromSearch', 'boolean');
 
-    this.isCustomList = (this.shoppingList.ListType !== Constants.DEFAULT_LIST_TYPE) && (this.shoppingList.ListType !== Constants.MARKET_ONLY_LIST_TYPE);
+    this.isCustomList =
+      this.shoppingList.ListType !== Constants.DEFAULT_LIST_TYPE &&
+      this.shoppingList.ListType !== Constants.MARKET_ONLY_LIST_TYPE;
 
     if (this.isCustomList) {
       if (this.menuCustomButtons.map(button => button.identifier).indexOf('deleteList') === -1) {
@@ -112,26 +116,31 @@ export class ShoppingListPage {
       }
     }
 
-
     if (this.fromSearch) {
       this.fillFromSearch();
       this.updateTotalPrice();
     } else {
       this.fillList().then(() => {
         this.shoppingListItems.forEach(item => {
-          item.isCheckedInShoppingList = Boolean(this.selectedItems.find(searchItem => {
-            return searchItem.product.product.SKU === item.product.SKU;
-          }));
+          item.isCheckedInShoppingList = Boolean(
+            this.selectedItems.find(searchItem => {
+              return searchItem.product.product.SKU === item.product.SKU;
+            })
+          );
         });
-        this.shoppingListItems.length === this.selectedItems.length ? this.isSelectAll = true : this.isSelectAll = false;
-          this.updateTotalPrice();
+        this.shoppingListItems.length === this.selectedItems.length
+          ? (this.isSelectAll = true)
+          : (this.isSelectAll = false);
+        this.updateTotalPrice();
       });
     }
   }
 
-
   private updateTotalPrice(): void {
-    this.orderTotal = this.selectedItems.reduce((accumulator, element) => accumulator += Number(element.price), 0);
+    this.orderTotal = this.selectedItems.reduce(
+      (accumulator, element) => (accumulator += Number(element.price)),
+      0
+    );
   }
 
   // TODO: Sebastian: REFACTORING
@@ -139,7 +148,9 @@ export class ShoppingListPage {
     this.selectedItems = getNavParam(this.navParams, 'selectedItemsOnSearch', 'object');
     this.shoppingListItems = getNavParam(this.navParams, 'shoppingListItems', 'object');
     this.shoppingListItems.map(item => {
-      item.isCheckedInShoppingList = Boolean(this.selectedItems.find(itemSearch => itemSearch.product.product.SKU === item.product.SKU));
+      item.isCheckedInShoppingList = Boolean(
+        this.selectedItems.find(itemSearch => itemSearch.product.product.SKU === item.product.SKU)
+      );
     });
     this.orderTotal = getNavParam(this.navParams, 'orderTotalOnSearch', 'number');
     if (!this.shoppingListItems) {
@@ -154,55 +165,76 @@ export class ShoppingListPage {
 
     this.loader.show();
 
-    return this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: ShoppingListItem[]) => {
-      if (data) {
-        this.shoppingListItems = data.map(item => {
-          item.isCheckedInShoppingList = Boolean(this.selectedItems.find(findItem =>
-            findItem.product.product.SKU === item.product.SKU && findItem.isCheckedInShoppingList));
-          return item;
-        });
-        this.checkExpiredItems();
-        this.checkQuantityItems();
-        this.updateTotalPrice();
-        this.content.resize();
-      } else {
-        this.shoppingListItems = [];
-      }
+    return this.shoppingListProvider
+      .getAllProductsInShoppingList(this.shoppingList.ListID)
+      .then((data: ShoppingListItem[]) => {
+        if (data) {
+          this.shoppingListItems = data
+            .filter(item => item.item_price > 0)
+            .map(item => {
+              item.isCheckedInShoppingList = Boolean(
+                this.selectedItems.find(
+                  findItem =>
+                    findItem.product.product.SKU === item.product.SKU && findItem.isCheckedInShoppingList
+                )
+              );
+              return item;
+            });
+          this.checkExpiredItems();
+          this.checkQuantityItems();
+          this.updateTotalPrice();
+          this.content.resize();
+        } else {
+          this.shoppingListItems = [];
+        }
 
-      this.loader.hide();
-      this.isLoading = false;
-      return Promise.resolve();
-    }).catch(error => {
-      this.isLoading = false;
-      this.loader.hide();
-      // this.reloadService.paintDirty('shopping list products');
-      console.error(error);
-    });
+        this.loader.hide();
+        this.isLoading = false;
+        return Promise.resolve();
+      })
+      .catch(error => {
+        this.isLoading = false;
+        this.loader.hide();
+        // this.reloadService.paintDirty('shopping list products');
+        console.error(error);
+      });
   }
 
   private checkExpiredItems(): void {
     const isExpired: boolean = this.shoppingListItems.filter(item => item.isExpired).length > 0;
     if (isExpired) {
-      const content: PopoverContent = this.popoversService.setContent(Strings.POPOVER_EXPIRED_ITEMS_TITLE, Strings.POPOVER_EXPIRED_ITEMS_MESSAGE);
+      const content: PopoverContent = this.popoversService.setContent(
+        Strings.POPOVER_EXPIRED_ITEMS_TITLE,
+        Strings.POPOVER_EXPIRED_ITEMS_MESSAGE
+      );
       this.popoversService.show(content);
     }
   }
 
   private removeNoQuantityProducts(listOfProductsForRemove: ShoppingListItem[]): void {
     listOfProductsForRemove.forEach(elem => {
-      this.shoppingListProvider.deleteProductFromList(this.shoppingList.ListID, elem.product.SKU, elem.program_number).subscribe(
-        () => { },
-        error => {
-          console.error(error);
-        }
-      );
+      this.shoppingListProvider
+        .deleteProductFromList(this.shoppingList.ListID, elem.product.SKU, elem.program_number)
+        .subscribe(
+          () => {},
+          error => {
+            console.error(error);
+          }
+        );
     });
   }
 
   private checkQuantityItems(): void {
     if (this.shoppingListItems.length > 0) {
       const noQuantityProducts: ShoppingListItem[] = this.shoppingListItems.filter(item => item.quantity < 1);
-      const content: PopoverContent = this.popoversService.setContent(Strings.POPOVER_NOQUANTITY_ITEMS_TITLE, JSON.stringify(noQuantityProducts), undefined, undefined, undefined, 'notAvailable');
+      const content: PopoverContent = this.popoversService.setContent(
+        Strings.POPOVER_NOQUANTITY_ITEMS_TITLE,
+        JSON.stringify(noQuantityProducts),
+        undefined,
+        undefined,
+        undefined,
+        'notAvailable'
+      );
       if (noQuantityProducts.length > 0) {
         this.popoversService.show(content);
         this.removeNoQuantityProducts(noQuantityProducts);
@@ -216,7 +248,13 @@ export class ShoppingListPage {
   }
 
   public delete(): void {
-    const deletePopoverContent: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.DELETE_ITEM_PROMPT_MESSAGE, Strings.MODAL_BUTTON_YES, undefined, Strings.MODAL_BUTTON_CANCEL);
+    const deletePopoverContent: PopoverContent = this.popoversService.setContent(
+      Strings.GENERIC_MODAL_TITLE,
+      Strings.DELETE_ITEM_PROMPT_MESSAGE,
+      Strings.MODAL_BUTTON_YES,
+      undefined,
+      Strings.MODAL_BUTTON_CANCEL
+    );
     this.popoversService.show(deletePopoverContent).subscribe(res => {
       if (res.optionSelected === 'OK') {
         this.deleteItems();
@@ -229,21 +267,36 @@ export class ShoppingListPage {
 
     if (this.selectedItems.length > 0) {
       this.selectedItems.forEach(selectedItem => {
-        this.shoppingListProvider.deleteProductFromList(this.shoppingList.ListID, selectedItem.product.product.SKU, selectedItem.product.program_number).subscribe(
-          data => { },
-          error => {
-            ok = false;
-            console.error(error);
-          }
-        );
+        this.shoppingListProvider
+          .deleteProductFromList(
+            this.shoppingList.ListID,
+            selectedItem.product.product.SKU,
+            selectedItem.product.program_number
+          )
+          .subscribe(
+            data => {},
+            error => {
+              ok = false;
+              console.error(error);
+            }
+          );
       });
       if (ok) {
-
-        const checkedItems: ShoppingListItem[] = this.shoppingListItems.filter(item => item.isCheckedInShoppingList);  //  Workaround for the fact that setOrderTotal actually unselects items
+        const checkedItems: ShoppingListItem[] = this.shoppingListItems.filter(
+          item => item.isCheckedInShoppingList
+        ); //  Workaround for the fact that setOrderTotal actually unselects items
 
         for (const checkedItem of checkedItems) {
-          this.shoppingListItems.splice(this.shoppingListItems.findIndex(item => item.product.SKU === checkedItem.product.SKU), 1);
-          this.selectedItems.splice(this.selectedItems.findIndex(shoppingListItem => shoppingListItem.product.product.SKU === checkedItem.product.SKU), 1);
+          this.shoppingListItems.splice(
+            this.shoppingListItems.findIndex(item => item.product.SKU === checkedItem.product.SKU),
+            1
+          );
+          this.selectedItems.splice(
+            this.selectedItems.findIndex(
+              shoppingListItem => shoppingListItem.product.product.SKU === checkedItem.product.SKU
+            ),
+            1
+          );
           this.updateTotalPrice();
         }
 
@@ -260,7 +313,10 @@ export class ShoppingListPage {
   public checkout(): void {
     this.searchService.clearText();
     if (this.shoppingListItems.length === 0) {
-      const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_EMPTY_TITLE, Strings.SHOPPING_LIST_EMPTY_MESSAGE);
+      const content: PopoverContent = this.popoversService.setContent(
+        Strings.SHOPPING_LIST_EMPTY_TITLE,
+        Strings.SHOPPING_LIST_EMPTY_MESSAGE
+      );
       this.popoversService.show(content);
       return;
     }
@@ -272,19 +328,25 @@ export class ShoppingListPage {
     this.navigatorService.push(ShoppingListPage, params).catch(err => console.error(err));
   }
 
-
   // TODO: This system is overly complicated
   private setOrderTotal(event: SelectItemEvent): void {
     const item: any = event;
     switch (event.status) {
       case 'checkedItem':
-        const alreadySelected: boolean = this.selectedItems.filter(selectedItem => selectedItem.product.SKU === event.product.product.SKU).length > 0;
+        const alreadySelected: boolean =
+          this.selectedItems.filter(selectedItem => selectedItem.product.SKU === event.product.product.SKU)
+            .length > 0;
         if (!alreadySelected) {
           this.selectedItems.push(item);
         }
         break;
       case 'uncheckedItem':
-        this.selectedItems.splice(this.selectedItems.findIndex(shoppingListItem => shoppingListItem.product.product.SKU === item.product.product.SKU), 1);
+        this.selectedItems.splice(
+          this.selectedItems.findIndex(
+            shoppingListItem => shoppingListItem.product.product.SKU === item.product.product.SKU
+          ),
+          1
+        );
         break;
       default:
         console.warn('no op specified in setOrderTotal');
@@ -294,39 +356,48 @@ export class ShoppingListPage {
 
   public onChecked($event: any): void {
     this.setOrderTotal($event);
-    this.selectedItems.length === this.shoppingListItems.length ? this.isSelectAll = true : this.isSelectAll = false;
+    this.selectedItems.length === this.shoppingListItems.length
+      ? (this.isSelectAll = true)
+      : (this.isSelectAll = false);
   }
 
   public selectAll(): void {
     this.isSelectAll = !this.isSelectAll;
     this.shoppingListItems.forEach(item => {
-        if (!item.isCheckedInShoppingList) {
-          item.isCheckedInShoppingList = true;
-          const correctPrice: number = this.pricingService.getShoppingListPrice(item.quantity, item.product, item.item_price);
-          this.setOrderTotal({ status: 'checkedItem', price: String(correctPrice), product: item });
-        }
-        item.isCheckedInShoppingList = this.isSelectAll;
+      if (!item.isCheckedInShoppingList) {
+        item.isCheckedInShoppingList = true;
+        const correctPrice: number = this.pricingService.getShoppingListPrice(
+          item.quantity,
+          item.product,
+          item.item_price
+        );
+        this.setOrderTotal({ status: 'checkedItem', price: String(correctPrice), product: item });
+      }
+      item.isCheckedInShoppingList = this.isSelectAll;
+      this.updateTotalPrice();
+
+      if (!this.isSelectAll && this.fromSearch) {
+        this.shoppingListItems.map(shoppingListItem => {
+          this.selectedItems = this.selectedItems.filter(
+            shoppItem => shoppItem.product.product.SKU !== shoppingListItem.product.SKU
+          );
+        });
         this.updateTotalPrice();
+      }
 
-        if (!this.isSelectAll && this.fromSearch) {
-          this.shoppingListItems.map(shoppingListItem => {
-            this.selectedItems = this.selectedItems.filter(shoppItem => shoppItem.product.product.SKU !== shoppingListItem.product.SKU);
-          });
-          this.updateTotalPrice();
-        }
-
-        if (!this.isSelectAll && !this.fromSearch) {
-          this.selectedItems = [];
-          this.updateTotalPrice();
-        }
+      if (!this.isSelectAll && !this.fromSearch) {
+        this.selectedItems = [];
+        this.updateTotalPrice();
+      }
     });
-
-
   }
 
   public continue(): void {
     if (this.selectedItems.length === 0) {
-      const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_NO_ITEMS_TITLE, Strings.SHOPPING_LIST_NO_ITEMS_MESSAGE);
+      const content: PopoverContent = this.popoversService.setContent(
+        Strings.SHOPPING_LIST_NO_ITEMS_TITLE,
+        Strings.SHOPPING_LIST_NO_ITEMS_MESSAGE
+      );
       this.popoversService.show(content);
     } else {
       const params: any = {
@@ -340,33 +411,46 @@ export class ShoppingListPage {
 
   public onSearched(searchString: string): void {
     this.loader.show();
-    this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then((data: ShoppingListItem[]) => {
-      const params: any = {
-        list: this.shoppingList,
-        shoppingListItems: this.shoppingListProvider.search(data, searchString),
-        isCheckout: this.isCheckout,
-        fromSearch: true,
-        orderTotalOnSearch: this.orderTotal,
-        selectedItemsOnSearch: this.selectedItems
-      };
-      this.loader.hide();
-      this.navigatorService.push(ShoppingListPage, params, { paramsEquality: getNavParam(this.navParams, 'fromSearch', 'boolean') ? false : true } as NavOptions).catch(err => console.error(err));
-    }, err => {
-      LoadingService.hideAll();
-    });
+    this.shoppingListProvider.getAllProductsInShoppingList(this.shoppingList.ListID).then(
+      (data: ShoppingListItem[]) => {
+        const params: any = {
+          list: this.shoppingList,
+          shoppingListItems: this.shoppingListProvider.search(data, searchString),
+          isCheckout: this.isCheckout,
+          fromSearch: true,
+          orderTotalOnSearch: this.orderTotal,
+          selectedItemsOnSearch: this.selectedItems
+        };
+        this.loader.hide();
+        this.navigatorService
+          .push(ShoppingListPage, params, {
+            paramsEquality: getNavParam(this.navParams, 'fromSearch', 'boolean') ? false : true
+          } as NavOptions)
+          .catch(err => console.error(err));
+      },
+      err => {
+        LoadingService.hideAll();
+      }
+    );
   }
 
-  public onCheckedToDetails($event: { product: Product, program_number: string, id: number, quantity: number }): void {
-    this.navigatorService.push(ProductPage, {
-      product: $event.product,
-      programNumber: $event.program_number,
-      fromShoppingList: true,
-      shoppingListId: this.shoppingList.ListID,
-      id: $event.id,
-      quantity: $event.quantity
-    }).catch(err => console.error(err));
+  public onCheckedToDetails($event: {
+    product: Product;
+    program_number: string;
+    id: number;
+    quantity: number;
+  }): void {
+    this.navigatorService
+      .push(ProductPage, {
+        product: $event.product,
+        programNumber: $event.program_number,
+        fromShoppingList: true,
+        shoppingListId: this.shoppingList.ListID,
+        id: $event.id,
+        quantity: $event.quantity
+      })
+      .catch(err => console.error(err));
   }
-
 
   public buttonClicked($event: { type: string }): void {
     switch ($event.type) {
@@ -402,26 +486,37 @@ export class ShoppingListPage {
   }
 
   private removeList(): void {
-    const content: PopoverContent = this.popoversService.setContent(Strings.SHOPPING_LIST_DELETE_CONF_TITLE, Strings.SHOPPING_LIST_DELETE_CONF_MESSAGE,
-      Strings.MODAL_BUTTON_YES, Strings.MODAL_BUTTON_CANCEL, undefined, Constants.POPOVER_DELETE_LIST_CONFIRMATION);
+    const content: PopoverContent = this.popoversService.setContent(
+      Strings.SHOPPING_LIST_DELETE_CONF_TITLE,
+      Strings.SHOPPING_LIST_DELETE_CONF_MESSAGE,
+      Strings.MODAL_BUTTON_YES,
+      Strings.MODAL_BUTTON_CANCEL,
+      undefined,
+      Constants.POPOVER_DELETE_LIST_CONFIRMATION
+    );
 
     this.popoversService.show(content).subscribe((data: DefaultPopoverResult) => {
       if (data.optionSelected === 'OK') {
         this.loader.show();
         this.shoppingListProvider.removeShoppingList(this.shoppingList.ListID).subscribe(removedData => {
           this.events.publish('DeletedList', this.shoppingList.ListID);
-          this.navigatorService.setRoot(Catalog).then(() => this.loader.hide()).catch(err => console.error(err));
+          this.navigatorService
+            .setRoot(Catalog)
+            .then(() => this.loader.hide())
+            .catch(err => console.error(err));
         });
       }
     });
   }
 
   public doRefresh($event: any): void {
-    this.fillList().then(() => {
-      $event.complete();
-    }).catch(() => {
-      $event.complete();
-    });
+    this.fillList()
+      .then(() => {
+        $event.complete();
+      })
+      .catch(() => {
+        $event.complete();
+      });
   }
 
   public refreshPulling($event: any): void {
@@ -450,7 +545,6 @@ export class ShoppingListPage {
         this.holdCheckTimeout = true;
       }
     }, Constants.HOLD_TIME_TO_DELETE_MODE);
-
   }
 
   private touchend(): void {
