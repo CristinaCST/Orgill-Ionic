@@ -74,6 +74,9 @@ import { AllShoppingLists } from '../pages/all-shopping-lists/all-shopping-lists
 import { PromotionsPage } from '../pages/market-catalog/promotions-page';
 import { RouteTrackingPage } from '../pages/route-tracking/route-tracking';
 
+// Pipes
+import { PipesModule } from '../pipes/pipes.module';
+
 const pages: Page[] = [
   MyApp,
   Catalog,
@@ -123,7 +126,9 @@ import { RouteTrackingProvider } from '../providers/route-tracking/route-trackin
         useFactory: createTranslateLoader,
         deps: [HttpClient]
       }
-    })
+    }),
+
+    PipesModule
   ],
   bootstrap: [IonicApp],
   entryComponents: pages,

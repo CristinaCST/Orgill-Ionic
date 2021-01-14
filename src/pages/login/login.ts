@@ -12,21 +12,23 @@ import { LandingPage } from '../../pages/landing/landing';
   selector: 'page-login',
   templateUrl: 'login.html'
 })
-
 export class Login {
-
   public username: string;
   public password: string;
   public loginLoader: LoadingService;
+  private showPassword: boolean = false;
   @ViewChild('passInput') private readonly passInput: TextInput;
 
-  constructor(private readonly navigatorService: NavigatorService,
-              private readonly authService: AuthService,
-              private readonly loadingService: LoadingService,
-              private readonly translateProvider: TranslateWrapperService,
-              private readonly popoversService: PopoversService) {
-
-                this.loginLoader = this.loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_LOGIN));
+  constructor(
+    private readonly navigatorService: NavigatorService,
+    private readonly authService: AuthService,
+    private readonly loadingService: LoadingService,
+    private readonly translateProvider: TranslateWrapperService,
+    private readonly popoversService: PopoversService
+  ) {
+    this.loginLoader = this.loadingService.createLoader(
+      this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_LOGIN)
+    );
   }
 
   public login(): void {
@@ -36,30 +38,38 @@ export class Login {
 
     // TODO: Refactor the auth logic wtf.
     this.loginLoader.show();
-    const loginRequest: { username: string, password: string } = { username: this.username, password: this.password };
+    const loginRequest: { username: string; password: string } = {
+      username: this.username,
+      password: this.password
+    };
     this.authService.login(loginRequest).subscribe(
       () => {
         this.authService.getUserInfo().then(() => {
           this.navigatorService.setRoot(LandingPage);
           this.loginLoader.hide();
         });
-      }, error => {
+      },
+      error => {
         console.error(error);
         this.loginLoader.hide();
-        const content: PopoverContent = this.popoversService.setContent(Strings.LOGIN_ERROR_TITLE, Strings.LOGIN_ERROR_INVALID);
+        const content: PopoverContent = this.popoversService.setContent(
+          Strings.LOGIN_ERROR_TITLE,
+          Strings.LOGIN_ERROR_INVALID
+        );
         this.popoversService.show(content);
       }
     );
   }
 
-
   private isValidInput(): boolean {
-
     if (this.username && this.password) {
       return true;
     }
 
-    const content: PopoverContent = this.popoversService.setContent(Strings.LOGIN_ERROR_TITLE, Strings.LOGIN_ERROR_REQUIRED);
+    const content: PopoverContent = this.popoversService.setContent(
+      Strings.LOGIN_ERROR_TITLE,
+      Strings.LOGIN_ERROR_REQUIRED
+    );
     this.popoversService.show(content);
     return false;
   }
@@ -68,4 +78,10 @@ export class Login {
     this.passInput._jsSetFocus();
   }
 
+  public toggleShow(): void {
+    this.showPassword = !this.showPassword;
+    this.passInput.type = this.showPassword ? 'text' : 'password';
+
+    this.focusPass();
+  }
 }
