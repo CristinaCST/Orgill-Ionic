@@ -7,4 +7,5 @@ import * as VersionFile from '../../util/version';
 })
 export class AboutPage {
   public applicationVersion: String = VersionFile.VERSION;
+  public copyrightYear: number = new Date().getFullYear();
 }

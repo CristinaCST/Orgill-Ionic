@@ -1,11 +1,11 @@
-import { URL_BASE_DEV } from '../util/constants-url';
+import { URL_BASE_PROD } from '../util/constants-url';
 
 export const environment: {
   production: boolean;
   baseUrlEnglish: string;
   baseUrlFrench: string;
 } = {
-  production: false,
-  baseUrlEnglish: URL_BASE_DEV,
+  production: true,
+  baseUrlEnglish: URL_BASE_PROD,
   baseUrlFrench: 'http://dmwebservice-cafr.orgill.com/service.asmx/'
 };

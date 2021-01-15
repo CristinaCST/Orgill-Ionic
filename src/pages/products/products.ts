@@ -55,7 +55,7 @@ export class ProductsPage implements OnInit, OnDestroy {
     if (culprit === 'products' || !culprit) {
       this.init();
     }
-  };
+  }
 
   private init(): void {
     this.programNumber = getNavParam(this.navParams, 'programNumber', 'string');

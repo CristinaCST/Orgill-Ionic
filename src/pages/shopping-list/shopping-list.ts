@@ -87,7 +87,7 @@ export class ShoppingListPage {
     if (culprit === 'shopping list products' || !culprit) {
       this.fillList();
     }
-  };
+  }
 
   public ionViewWillLeave(): void {
     this.events.unsubscribe(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST);
