@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ItemProgram } from '../../interfaces/models/item-program';
@@ -43,19 +42,23 @@ export class ProgramProvider {
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_PROGRAMS, params, true);
   }
 
-
   public isMarketOnlyProgram(programNumber: string): Observable<boolean> {
-    return this.apiProvider.post(ConstantsUrl.URL_PROGRAMS, {}, true).take(1).map(receivedPrograms => {
-      const programs: Program[] = JSON.parse(receivedPrograms.d);
-      if (programs.length > 0) {
-        const wantedProgram: Program = programs.find(program => program.PROGRAMNO === programNumber && program.MARKETONLY === 'Y');
-        if (wantedProgram) {
-          return true;
+    return this.apiProvider
+      .post(ConstantsUrl.URL_PROGRAMS, {}, true)
+      .take(1)
+      .map(receivedPrograms => {
+        const programs: Program[] = JSON.parse(receivedPrograms.d);
+        if (programs.length > 0) {
+          const wantedProgram: Program = programs.find(
+            program =>
+              program.PROGRAMNO === programNumber && (program.MARKETONLY === 'Y' || program.OBEONLY === 'Y')
+          );
+          if (wantedProgram) {
+            return true;
+          }
+          return wantedProgram ? true : false;
         }
-        return wantedProgram ? true : false;
-      }
-      return false;
-    });
+        return false;
+      });
   }
-
 }

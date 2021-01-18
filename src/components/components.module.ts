@@ -21,32 +21,42 @@ import { PurchaseItemComponent } from './purchased-item/purchased-item';
 import { HotDealComponent } from './hot-deal/hot-deal';
 import { MoreOptionsComponent } from './more-options/more-options';
 
-const components: any[] = [AppMenuComponent,
-                    PopoverComponent,
-                    NavbarComponent,
-                    SearchBarComponent,
-                    CustomShoppingListMenuComponent,
-                    ProductComponent,
-                    ProductPricingComponent,
-                    ProductDetailsComponent,
-                    ProductQuantityComponent,
-                    ShoppingListProductComponent,
-                    OrderItemComponent,
-                    HotDealProductComponent,
-                    PurchaseItemComponent,
-                    HotDealComponent,
-                    MoreOptionsComponent];
+// Pipes
+import { PipesModule } from '../pipes/pipes.module';
+
+const components: any[] = [
+  AppMenuComponent,
+  PopoverComponent,
+  NavbarComponent,
+  SearchBarComponent,
+  CustomShoppingListMenuComponent,
+  ProductComponent,
+  ProductPricingComponent,
+  ProductDetailsComponent,
+  ProductQuantityComponent,
+  ShoppingListProductComponent,
+  OrderItemComponent,
+  HotDealProductComponent,
+  PurchaseItemComponent,
+  HotDealComponent,
+  MoreOptionsComponent
+];
 
 @NgModule({
   declarations: components,
-  imports: [IonicModule, IonicPageModule.forChild(components), TranslateModule.forRoot({
-    loader: {
-      provide: TranslateLoader,
-      useFactory: (createTranslateLoader),
-      deps: [HttpClient]
-    }
-  })],
+  imports: [
+    IonicModule,
+    IonicPageModule.forChild(components),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient]
+      }
+    }),
+
+    PipesModule
+  ],
   exports: components
 })
-
 export class ComponentsModule {} //tslint:disable-line

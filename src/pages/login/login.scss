@@ -1,9 +1,12 @@
-@import "../../theme/variables";
+@import '../../theme/variables';
 
 page-login {
-
   ion-content {
-    background: linear-gradient(to bottom, color($colors, OrgillWhiteGray) 0%, color($colors, OrgillLightGray) 100%);
+    background: linear-gradient(
+      to bottom,
+      color($colors, OrgillWhiteGray) 0%,
+      color($colors, OrgillLightGray) 100%
+    );
 
     .login-page-content {
       width: 100%;
@@ -17,9 +20,7 @@ page-login {
       .input-item {
         padding-left: 0;
         background-color: transparent;
-        .gray-icon {
-          color: color($colors, OrgillDarkGray);
-        }
+
         .item-inner {
           margin-left: 0;
         }
@@ -37,6 +38,26 @@ page-login {
         padding: 0;
         margin: 30px 0 10px;
       }
+    }
+  }
+
+  .gray-icon {
+    color: color($colors, OrgillDarkGray);
+  }
+
+  .password-container {
+    position: relative;
+  }
+
+  .type-toggle {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+
+    .gray-icon {
+      padding: 0 10px 0 0;
+      font-size: 2.8rem;
     }
   }
 }

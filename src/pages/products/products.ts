@@ -16,7 +16,6 @@ import { Events } from 'ionic-angular/util/events';
   selector: 'page-products',
   templateUrl: 'products.html'
 })
-
 export class ProductsPage implements OnInit, OnDestroy {
   private getProductSubscription: Subscription;
   private programName: string;
@@ -29,13 +28,14 @@ export class ProductsPage implements OnInit, OnDestroy {
   public isLoading: boolean = true;
   private readonly loader: LoadingService;
 
-  constructor(private readonly navParams: NavParams,
-              public loadingService: LoadingService,
-              private readonly catalogProvider: CatalogsProvider,
-              private readonly navigatorService: NavigatorService,
-              private readonly events: Events) {
-
-                this.loader = loadingService.createLoader();
+  constructor(
+    private readonly navParams: NavParams,
+    public loadingService: LoadingService,
+    private readonly catalogProvider: CatalogsProvider,
+    private readonly navigatorService: NavigatorService,
+    private readonly events: Events
+  ) {
+    this.loader = loadingService.createLoader();
   }
 
   public ngOnInit(): void {
@@ -68,31 +68,34 @@ export class ProductsPage implements OnInit, OnDestroy {
 
   public getProducts(): void {
     this.loader.show();
-    this.getProductSubscription = this.catalogProvider.getProducts(this.category ? this.category.CatID : '', this.programNumber, this.page).subscribe(response => {
-      this.products = this.sortProducts(JSON.parse(response.d));
-      this.loader.hide();
-      this.isLoading = false;
-      this.setPaginationInfo();
-    }, err => {
-      this.loader.hide();
-     // this.reloadService.paintDirty('products');
-    });
+    this.getProductSubscription = this.catalogProvider
+      .getProducts(this.category ? this.category.CatID : '', this.programNumber, this.page)
+      .subscribe(
+        response => {
+          this.products = this.sortProducts(JSON.parse(response.d));
+          this.loader.hide();
+          this.isLoading = false;
+          this.setPaginationInfo();
+        },
+        err => {
+          this.loader.hide();
+          // this.reloadService.paintDirty('products');
+        }
+      );
   }
 
   public sortProducts(products: Product[]): Product[] {
-    return products.sort((product1, product2): number =>
-      product1.NAME.localeCompare(product2.NAME)
-    );
+    return products
+      .sort((product1, product2): number => product1.NAME.localeCompare(product2.NAME))
+      .filter(product => product.YOURCOST !== '-1.00');
   }
 
   // TODO: Why this appears 2 times, now 3...?
   public goToProductPage(product: Product): void {
     this.navigatorService.push(ProductPage, {
-      'product': product,
-      'programName': this.programName,
-      'programNumber': this.programNumber
-    }).then(() => {
-      // console.log('%cTo product details page', 'color:pink');
+      product: product,
+      programName: this.programName,
+      programNumber: this.programNumber
     });
   }
 
@@ -102,22 +105,25 @@ export class ProductsPage implements OnInit, OnDestroy {
 
   public onSearched($event: string): void {
     this.loader.show();
-    this.catalogProvider.search($event, this.category ? this.category.CatID : '', this.programNumber).subscribe(data => {
-      const dataFound: Product[] = this.filterBadRequest(JSON.parse(data.d));
-      const params: any = {
-        searchData: dataFound,
-        programNumber: this.programNumber,
-        programName: this.programName,
-        category: this.category,
-        numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
-      };
-      this.loader.hide();
-      this.navigatorService.push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions).then(
-       // () => console.log('%cTo product search page', 'color:blue')
-        );
-    }, err => {
-      LoadingService.hideAll();
-    });
+    this.catalogProvider
+      .search($event, this.category ? this.category.CatID : '', this.programNumber)
+      .subscribe(
+        data => {
+          const dataFound: Product[] = this.filterBadRequest(JSON.parse(data.d));
+          const params: any = {
+            searchData: dataFound,
+            programNumber: this.programNumber,
+            programName: this.programName,
+            category: this.category,
+            numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
+          };
+          this.loader.hide();
+          this.navigatorService.push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions);
+        },
+        err => {
+          LoadingService.hideAll();
+        }
+      );
   }
 
   public next(): void {
@@ -127,7 +133,8 @@ export class ProductsPage implements OnInit, OnDestroy {
 
   public loadNextProducts(): void {
     this.loader.show();
-    this.getProductSubscription = this.catalogProvider.getProducts(this.category ? this.category.CatID : '', this.programNumber, this.page)
+    this.getProductSubscription = this.catalogProvider
+      .getProducts(this.category ? this.category.CatID : '', this.programNumber, this.page)
       .subscribe(response => {
         this.products = this.products.concat(this.sortProducts(JSON.parse(response.d)));
         this.setPaginationInfo();

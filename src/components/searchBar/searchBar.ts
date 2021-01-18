@@ -17,7 +17,11 @@ export class SearchBarComponent {
   public onInitSearchStringCopy: string;
 
   // TODO: Remove this contraption from the face of the digital world forever in the refactor.
-  constructor(private readonly popoversService: PopoversService, private readonly navigatorService: NavigatorService, private readonly searchService: SearchService) { }
+  constructor(
+    private readonly popoversService: PopoversService,
+    private readonly navigatorService: NavigatorService,
+    private readonly searchService: SearchService
+  ) {}
 
   public back(): void {
     this.navigatorService.backButtonAction();
@@ -34,18 +38,20 @@ export class SearchBarComponent {
   public getText(e: any): void {
     const elementValue: any = e.srcElement.value;
     if (elementValue) {
-      const regex: any = /^[0-9a-zA-Z]+$/;
-       const tempValue: any = elementValue.substring(0, elementValue.length - 1);
-       if (!regex.test(elementValue)) {
-         e.srcElement.value = tempValue;
-       }
+      const regex: any = /^[A-Za-z0-9 ]*[A-Za-z0-9][A-Za-z0-9 ]*$/;
+      const tempValue: any = elementValue.substring(0, elementValue.length - 1);
+      if (!regex.test(elementValue)) {
+        e.srcElement.value = tempValue;
+      }
     }
   }
 
   public search(): void {
-
     if (!this.searchString || this.searchString.length < 3) {
-      const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SEARCH_INVALID_INPUT);
+      const content: PopoverContent = this.popoversService.setContent(
+        Strings.GENERIC_MODAL_TITLE,
+        Strings.SEARCH_INVALID_INPUT
+      );
       this.popoversService.show(content);
       return;
     }
@@ -61,5 +67,4 @@ export class SearchBarComponent {
       }, 1.5 * 1000);
     }
   }
-
 }

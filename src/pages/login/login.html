@@ -2,23 +2,47 @@
   <div class="login-page-content">
     <div>
       <div id="logo">
-        <img class="centered_element" src="../../assets/imgs/orgill_logo.png">
+        <img class="centered_element" src="../../assets/imgs/orgill_logo.png" />
       </div>
 
       <ion-list>
         <ion-item class="input-item">
           <ion-icon class="gray-icon" name="contact" item-start></ion-icon>
-          <ion-input (keyup.enter)="focusPass()" type="text" class="input-element" placeholder="{{'username' | translate }}" name="username"
-                     [(ngModel)]="username" required></ion-input>
+          <ion-input
+            (keyup.enter)="focusPass()"
+            type="text"
+            class="input-element"
+            placeholder="{{'username' | translate }}"
+            name="username"
+            [(ngModel)]="username"
+            required
+          ></ion-input>
         </ion-item>
       </ion-list>
-      <ion-list>
-        <ion-item class="input-item">
-          <ion-icon class="gray-icon" name="lock" item-start></ion-icon>
-          <ion-input #passInput (keyup.enter)="login()" type="password" class="input-element" placeholder="{{'password' | translate }}" name="password"
-                     [(ngModel)]="password" required></ion-input>
-        </ion-item>
-      </ion-list>
+
+      <div class="password-container">
+        <ion-list>
+          <ion-item class="input-item">
+            <ion-icon class="gray-icon" name="lock" item-start></ion-icon>
+            <ion-input
+              #passInput
+              (keyup.enter)="login()"
+              type="password"
+              class="input-element"
+              placeholder="{{'password' | translate }}"
+              name="password"
+              [(ngModel)]="password"
+              required
+            ></ion-input>
+          </ion-item>
+        </ion-list>
+
+        <div class="type-toggle" (click)="toggleShow()">
+          <ion-icon class="gray-icon" [hidden]="showPassword" name="eye"></ion-icon>
+          <ion-icon class="gray-icon" [hidden]="!showPassword" name="eye-off"></ion-icon>
+        </div>
+      </div>
+
       <ion-row>
         <ion-col class="button-container">
           <button class="login-button" ion-button round (click)="login()">{{'login' | translate}}</button>
