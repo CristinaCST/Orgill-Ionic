@@ -2,105 +2,139 @@
 <ion-header>
   <!-- Customer Location Page Navigation Bar -->
   <navbar [title]="'customer_locations'" [isMenuEnabled]="false" [isBackEnabled]="true"></navbar>
-
 </ion-header>
 
 <ion-content [(ngSwitch)]="isHotDeal">
-
   <ion-item class="no-location" *ngIf="noLocation">
     {{"customer_locations_no_location" | translate}}
   </ion-item>
 
   <!-- Locations if not hot deal -->
   <ion-item-group *ngSwitchCase="false">
-  <ion-item-group *ngIf="!noLocation" padding class="post-container">
-    <ion-item class="customer-number">{{"customer_number" | translate | uppercase}}: {{selectedLocation?.CUSTOMERNO}}</ion-item>
-    <ion-item-divider no-lines>{{"customer_locations_po" | translate | uppercase}}:</ion-item-divider>
-    <ion-item>
-      <ion-input [(ngModel)]="postOffice" type="text"
-                 placeholder="{{'customer_locations_po_hint' | translate}}" (ionFocus)="onFocus()" (focusout)="PONumberValidation()" (keyup.enter)="$event.target.blur()"maxlength="15"></ion-input>
-    </ion-item>
-  </ion-item-group>
-  <ion-item-group *ngIf="!noLocation" [(ngModel)]="selectedLocation" padding radio-group class="locations-container">
-    <ion-item-divider no-lines>{{"customer_locations_list_header" | translate}}:</ion-item-divider>
-    <ion-item *ngFor="let userLocation of userLocations">
-      <ion-label>
-        <p [class]="selectedLocation===userLocation?'active':''"> {{userLocation.CUSTOMERNAME}} </p>
-        <p> {{userLocation.ADDRESS}}</p>
-      </ion-label>
-      <ion-radio [value]="userLocation"></ion-radio>
-    </ion-item>
-  </ion-item-group>
-</ion-item-group>
-
-<!-- Locations if it is hot deals -->
-<ion-item-group *ngSwitchCase="true">
-  <div *ngIf="!noLocation" class="button-container">
-    <button ion-button outline block color="OrgillDarkGray" (click)="selectAll()">
-      {{ fullSelection ? ("shopping_list_deselect_all" | translate) :
-              ("shopping_list_select_all" | translate) }}
-    </button>
-    <button ion-button outline block color="OrgillDarkGray" (click)="fillQuantity()">
-        Fill quantity
-      </button>
-  </div>
-  <ion-item-group [(ngModel)]="selectedLocation" padding radio-group class="locations-container">
-
-    <ion-item class="customer-number">{{"customer_number" | translate | uppercase}}: {{selectedLocation?.CUSTOMERNO}}</ion-item>
-    <ion-item-divider *ngIf="!noLocation" no-lines>{{"customer_locations_list_header" | translate}}:</ion-item-divider>
-    <ion-list *ngFor="let hotDealLocation of hotDealLocations;let i of index">
-
+    <ion-item-group *ngIf="!noLocation" padding class="post-container">
+      <ion-item class="customer-number"
+        >{{"customer_number" | translate | uppercase}}: {{selectedLocation?.CUSTOMERNO}}</ion-item
+      >
+      <ion-item-divider no-lines>{{"customer_locations_po" | translate | uppercase}}:</ion-item-divider>
       <ion-item>
-        <ion-checkbox (ionChange)="checkboxEvent($event,hotDealLocation)" [checked]="hotDealLocation.WANTED" class="checkbox-item" item-end></ion-checkbox>
-
-
-        <ion-label>
-          <p [class]="selectedLocation===hotDealLocation?'active':''"> {{hotDealLocation.LOCATION.CUSTOMERNAME}} </p>
-          <p> {{hotDealLocation.LOCATION.ADDRESS}}</p>
-        </ion-label>
+        <ion-input
+          [(ngModel)]="postOffice"
+          type="text"
+          placeholder="{{'customer_locations_po_hint' | translate}}"
+          (ionFocus)="onFocus()"
+          (focusout)="PONumberValidation()"
+          (keydown.enter)="$event.target.blur()"
+          maxlength="15"
+        ></ion-input>
       </ion-item>
+    </ion-item-group>
+    <ion-item-group
+      *ngIf="!noLocation"
+      [(ngModel)]="selectedLocation"
+      padding
+      radio-group
+      class="locations-container"
+    >
+      <ion-item-divider no-lines>{{"customer_locations_list_header" | translate}}:</ion-item-divider>
+      <ion-item *ngFor="let userLocation of userLocations">
+        <ion-label>
+          <p [class]="selectedLocation===userLocation?'active':''">{{userLocation.CUSTOMERNAME}}</p>
+          <p>{{userLocation.ADDRESS}}</p>
+        </ion-label>
+        <ion-radio [value]="userLocation"></ion-radio>
+      </ion-item>
+    </ion-item-group>
+  </ion-item-group>
 
+  <!-- Locations if it is hot deals -->
+  <ion-item-group *ngSwitchCase="true">
+    <div *ngIf="!noLocation" class="button-container">
+      <button ion-button outline block color="OrgillDarkGray" (click)="selectAll()">
+        {{ fullSelection ? ("shopping_list_deselect_all" | translate) : ("shopping_list_select_all" |
+        translate) }}
+      </button>
+      <button ion-button outline block color="OrgillDarkGray" (click)="fillQuantity()">Fill quantity</button>
+    </div>
+    <ion-item-group [(ngModel)]="selectedLocation" padding radio-group class="locations-container">
+      <ion-item class="customer-number"
+        >{{"customer_number" | translate | uppercase}}: {{selectedLocation?.CUSTOMERNO}}</ion-item
+      >
+      <ion-item-divider *ngIf="!noLocation" no-lines
+        >{{"customer_locations_list_header" | translate}}:</ion-item-divider
+      >
+      <ion-list *ngFor="let hotDealLocation of hotDealLocations;let i of index">
+        <ion-item>
+          <ion-checkbox
+            (ionChange)="checkboxEvent($event,hotDealLocation)"
+            [checked]="hotDealLocation.WANTED"
+            class="checkbox-item"
+            item-end
+          ></ion-checkbox>
 
-      <ion-row>
-        <ion-col col-5>
-          <ion-item class="po-label"> {{"customer_locations_po" | translate}}: </ion-item>
-        </ion-col>
-        <ion-col >
-          <ion-input class="po-input" [(ngModel)]="hotDealLocation.POSTOFFICE" (ionFocus)="onFocus()" (focusout)="PONumberValidation(hotDealLocation)" (keyup.enter)="$event.target.blur()" clearInput type="text"
-            placeholder="{{'customer_locations_po_hint' | translate}}" maxlength="15">
-          </ion-input>
-        </ion-col>
-      </ion-row>
+          <ion-label>
+            <p [class]="selectedLocation===hotDealLocation?'active':''">
+              {{hotDealLocation.LOCATION.CUSTOMERNAME}}
+            </p>
+            <p>{{hotDealLocation.LOCATION.ADDRESS}}</p>
+          </ion-label>
+        </ion-item>
 
-      <ion-row>
+        <ion-row>
+          <ion-col col-5>
+            <ion-item class="po-label"> {{"customer_locations_po" | translate}}: </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-input
+              class="po-input"
+              [(ngModel)]="hotDealLocation.POSTOFFICE"
+              (ionFocus)="onFocus()"
+              (focusout)="PONumberValidation(hotDealLocation)"
+              (keydown.enter)="$event.target.blur()"
+              clearInput
+              type="text"
+              placeholder="{{'customer_locations_po_hint' | translate}}"
+              maxlength="15"
+            >
+            </ion-input>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
           <ion-col col-5>
             <ion-item class="qt-label"> {{"customer_locations_qty" | translate}}: </ion-item>
           </ion-col>
           <ion-col col-1>
-              <button class="qtybutton" ion-button icon-only small clear (click)="remove(hotDealLocation)">
-                  <ion-icon name="remove" color="OrgillRed"></ion-icon>
-                </button>
+            <button class="qtybutton" ion-button icon-only small clear (click)="remove(hotDealLocation)">
+              <ion-icon name="remove" color="OrgillRed"></ion-icon>
+            </button>
           </ion-col>
 
           <ion-col col-5>
-            <ion-input clearInput (focusout)="handleQuantityChange(hotDealLocation)" (ionFocus)="onFocus()" (keyup.enter)="$event.target.blur()" class="po-input" [(ngModel)]="hotDealLocation.QUANTITY" min="1" maxlength="5" type="tel" inputmode="numeric" pattern="^[0-9]"
-              placeholder="{{'customer_locations_qty_hint' | translate}}">
-          </ion-input>
-
+            <ion-input
+              clearInput
+              (focusout)="handleQuantityChange(hotDealLocation)"
+              (ionFocus)="onFocus()"
+              (keydown.enter)="$event.target.blur()"
+              class="po-input"
+              [(ngModel)]="hotDealLocation.QUANTITY"
+              min="1"
+              maxlength="5"
+              type="tel"
+              inputmode="numeric"
+              pattern="^[0-9]"
+              placeholder="{{'customer_locations_qty_hint' | translate}}"
+            >
+            </ion-input>
           </ion-col>
           <ion-col col-1>
             <button class="qtybutton" ion-button icon-only small clear (click)="add(hotDealLocation)">
-                <ion-icon name="add" color="OrgillRed"></ion-icon>
-              </button>
+              <ion-icon name="add" color="OrgillRed"></ion-icon>
+            </button>
           </ion-col>
         </ion-row>
-
-
-    </ion-list>
-
+      </ion-list>
+    </ion-item-group>
   </ion-item-group>
-</ion-item-group>
-
 </ion-content>
 
 <ion-footer class="hide-on-keyboard-open" padding>
@@ -110,6 +144,4 @@
   <button ion-button block color="OrgillRed" (click)="checkout()">
     {{"shopping_list_checkout" | translate}}
   </button>
-
 </ion-footer>
-
