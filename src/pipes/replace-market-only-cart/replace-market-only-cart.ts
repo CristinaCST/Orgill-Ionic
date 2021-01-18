@@ -13,12 +13,6 @@ export class ReplaceMarketOnlyCartPipe implements PipeTransform {
    * Replaces 'Market Only Cart' with 'Buying Events Cart'.
    */
   public transform(value: string): string {
-    let transformedValue: string = value;
-
-    if (value === 'Market Only Cart') {
-      transformedValue = 'Buying Events Cart';
-    }
-
-    return transformedValue;
+    return value === 'Market Only Cart' ? 'Buying Events Cart' : value;
   }
 }

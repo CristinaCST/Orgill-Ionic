@@ -11,53 +11,54 @@
 
 <!-- show content in popup for different cases -->
 <ion-content #immuneElement *ngIf="data">
-      <div [ngSwitch]="data.type">
-        <div *ngSwitchCase="'catalogInfo'">
-              <p>
-                {{programInfo.NAME}}
-              </p>
-              <p>
-                {{'start_date' | translate}}: {{programInfo.STARTDATE}}
-              </p>
-              <p>
-                {{'end_date' | translate}}: {{programInfo.ENDDATE}}
-              </p>
-              <p>
-                {{'release_date' | translate}}: {{programInfo.SHIPDATE}}
-              </p>
-              <p>
-                {{'ship_date' | translate}}: {{programInfo.SHIPDATE}}
-              </p>
-              <p *ngIf="programInfo.TERMS">
-                  {{'terms' | translate}}: {{programInfo.TERMS}}
-              </p>
-        </div>
-        <div *ngSwitchCase="'notAvailable'" class="productNotAvailable">
-            <p>
-                The following items have been removed from your list. The product may no longer be available or the program has ended.
-            </p>
-            <div *ngFor="let product of productsNotAvailable">
-                  <ul id="products-na-p">
-                      <li><b>SKU:</b> {{product.product.SKU}} {{product.product.NAME}} <b>Quantity:</b> {{product.quantity}}</li>
-                  </ul>
-            </div>
-        </div>
-        <div *ngSwitchDefault>
-            <p *ngIf="data.message">
-                {{data.message | translate}}
-              </p>
-        </div>
+  <div [ngSwitch]="data.type">
+    <div *ngSwitchCase="'catalogInfo'">
+      <p>{{programInfo.NAME}}</p>
+      <p>{{'start_date' | translate}}: {{programInfo.STARTDATE}}</p>
+      <p>{{'end_date' | translate}}: {{programInfo.ENDDATE}}</p>
+      <p>{{'release_date' | translate}}: {{programInfo.SHIPDATE}}</p>
+      <p>{{'ship_date' | translate}}: {{programInfo.SHIPDATE}}</p>
+      <p *ngIf="programInfo.TERMS">{{'terms' | translate}}: {{programInfo.TERMS}}</p>
+    </div>
+    <div *ngSwitchCase="'notAvailable'" class="productNotAvailable">
+      <p>
+        The following items have been removed from your list. The product may no longer be available or the
+        program has ended.
+      </p>
+      <div *ngFor="let product of productsNotAvailable">
+        <ul id="products-na-p">
+          <li>
+            <b>SKU:</b> {{product.product.SKU}} {{product.product.NAME}} <b>Quantity:</b> {{product.quantity}}
+          </li>
+        </ul>
       </div>
+    </div>
+    <div *ngSwitchDefault>
+      <p *ngIf="data.message">{{data.message | translate}}</p>
+    </div>
+  </div>
 
   <div *ngIf="data.isNewListModal">
     <ion-list>
       <ion-item no-padding>
-        <ion-input #listNameInput [(ngModel)]="listName" type="text" maxlength="40" (focusout)="cleanInput()"
-          placeholder="{{'new_list_hint_name' | translate }}" (keyup.enter)="$event.target.blur()"></ion-input>
+        <ion-input
+          #listNameInput
+          [(ngModel)]="listName"
+          type="text"
+          maxlength="40"
+          (focusout)="cleanInput()"
+          placeholder="{{'new_list_hint_name' | translate }}"
+          (keydown.enter)="$event.target.blur()"
+        ></ion-input>
       </ion-item>
       <ion-item no-padding>
-        <ion-input [(ngModel)]="listDescription" type="text" maxlength="50"
-          placeholder="{{'new_list_hint_desc'| translate }}" (keyup.enter)="$event.target.blur()"></ion-input>
+        <ion-input
+          [(ngModel)]="listDescription"
+          type="text"
+          maxlength="50"
+          placeholder="{{'new_list_hint_desc'| translate }}"
+          (keydown.enter)="$event.target.blur()"
+        ></ion-input>
       </ion-item>
       <ion-item>
         <ion-label><ion-icon name="basket" class="basket-icon"></ion-icon>Is Market Only</ion-label>
@@ -70,8 +71,18 @@
     <button class="qtybutton" ion-button icon-only small clear (click)="substract()">
       <ion-icon name="remove" color="OrgillRed"></ion-icon>
     </button>
-    <ion-input clearInput (focusout)="focusout()" (keyup.enter)="$event.target.blur()" [(ngModel)]="quantity" min="1" maxlength="5" type="tel" inputmode="numeric"
-      pattern="^[0-9]" placeholder="{{'customer_locations_qty_hint' | translate}}"></ion-input>
+    <ion-input
+      clearInput
+      (focusout)="focusout()"
+      (keydown.enter)="$event.target.blur()"
+      [(ngModel)]="quantity"
+      min="1"
+      maxlength="5"
+      type="tel"
+      inputmode="numeric"
+      pattern="^[0-9]"
+      placeholder="{{'customer_locations_qty_hint' | translate}}"
+    ></ion-input>
     <button class="qtybutton" ion-button icon-only small clear (click)="add()">
       <ion-icon name="add" color="OrgillRed"></ion-icon>
     </button>
@@ -79,24 +90,52 @@
 
   <div class="supportModal" *ngIf="data.supportModal">
     <ion-item no-padding>
-      <ion-input #supportCodeInput [(ngModel)]="supportCode" type="tel" inputmode="numeric" maxlength="10" pattern="^[0-9]"
-        placeholder="{{'support_code_hint'| translate }}" (keyup.enter)="$event.target.blur()"></ion-input>
+      <ion-input
+        #supportCodeInput
+        [(ngModel)]="supportCode"
+        type="tel"
+        inputmode="numeric"
+        maxlength="10"
+        pattern="^[0-9]"
+        placeholder="{{'support_code_hint'| translate }}"
+        (keydown.enter)="$event.target.blur()"
+      ></ion-input>
     </ion-item>
   </div>
 
   <div class="supportModal" *ngIf="data.catalogDetails">
     <ion-item no-padding>
-      <ion-input #supportCodeInput [(ngModel)]="supportCode" type="tel" inputmode="numeric" maxlength="10" pattern="^[0-9]"
-        placeholder="{{'support_code_hint'| translate }}" (keyup.enter)="$event.target.blur()"></ion-input>
+      <ion-input
+        #supportCodeInput
+        [(ngModel)]="supportCode"
+        type="tel"
+        inputmode="numeric"
+        maxlength="10"
+        pattern="^[0-9]"
+        placeholder="{{'support_code_hint'| translate }}"
+        (keydown.enter)="$event.target.blur()"
+      ></ion-input>
     </ion-item>
   </div>
 
   <div class="modal-btn-container">
     <div class="modals-btn">
-      <button *ngIf="data.dismissButtonText" class="round bg-dark" ion-button outline (click)="dismiss('DISMISS')">
+      <button
+        *ngIf="data.dismissButtonText"
+        class="round bg-dark"
+        ion-button
+        outline
+        (click)="dismiss('DISMISS')"
+      >
         {{data.dismissButtonText | translate }}
       </button>
-      <button *ngIf="data.negativeButtonText" class="round bg-dark" ion-button outline (click)="dismiss('NO')">
+      <button
+        *ngIf="data.negativeButtonText"
+        class="round bg-dark"
+        ion-button
+        outline
+        (click)="dismiss('NO')"
+      >
         {{data.negativeButtonText | translate }}
       </button>
       <button *ngIf="data.positiveButtonText" class="round bg-light" ion-button (click)="dismiss('OK')">
@@ -104,5 +143,4 @@
       </button>
     </div>
   </div>
-
 </ion-content>

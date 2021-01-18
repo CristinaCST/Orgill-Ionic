@@ -9,7 +9,7 @@
         <ion-item class="input-item">
           <ion-icon class="gray-icon" name="contact" item-start></ion-icon>
           <ion-input
-            (keyup.enter)="focusPass()"
+            (keydown.enter)="focusPass()"
             type="text"
             class="input-element"
             placeholder="{{'username' | translate }}"
@@ -26,7 +26,7 @@
             <ion-icon class="gray-icon" name="lock" item-start></ion-icon>
             <ion-input
               #passInput
-              (keyup.enter)="login()"
+              (keydown.enter)="login()"
               type="password"
               class="input-element"
               placeholder="{{'password' | translate }}"
