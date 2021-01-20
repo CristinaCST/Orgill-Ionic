@@ -29,6 +29,7 @@ import { UserInfoService } from '../services/user-info/user-info';
 import { PurchasesProvider } from '../providers/purchases/purchases';
 import { ProductImageProvider } from '../providers/product-image/product-image';
 import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 // Helpers
 import { CSSInjector } from '../helpers/css-injector';
@@ -167,7 +168,8 @@ import { RouteTrackingProvider } from '../providers/route-tracking/route-trackin
     GoogleMapsProvider,
     { provide: ErrorHandler, useClass: CustomErrorHandler },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    RouteTrackingProvider
+    RouteTrackingProvider,
+    InAppBrowser
   ]
 })
 export class AppModule {}

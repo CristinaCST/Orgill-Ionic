@@ -13,6 +13,7 @@ import { DateTimeService } from '../../services/datetime/dateTimeService';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import * as Strings from '../../util/strings';
 import { PopoversService, PopoverContent, CustomListPopoverResult } from '../../services/popovers/popovers';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +25,8 @@ export class AuthService {
     private readonly apiProvider: ApiService,
     private readonly events: Events,
     private readonly secureActions: SecureActionsService,
-    private readonly popoverService: PopoversService
+    private readonly popoverService: PopoversService,
+    private readonly iab: InAppBrowser
   ) {
     this.secureActions.authState.subscribe(authOk => {
       if (authOk) {
@@ -66,13 +68,13 @@ export class AuthService {
           .show(content)
           .first()
           .subscribe({
-            next(info: CustomListPopoverResult): void {
+            next: (info: CustomListPopoverResult) => {
               if (info.optionSelected !== 'DISMISS') {
                 return;
               }
 
               // redirect to orgill site
-              window.open('https://www.orgill.com/index.aspx?tab=8', '_system');
+              this.iab.create('https://www.orgill.com/index.aspx?tab=8', '_system');
             },
             error(err: { message: string }): void {
               // handle error here
