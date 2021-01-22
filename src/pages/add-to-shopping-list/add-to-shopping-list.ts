@@ -34,7 +34,6 @@ export class AddToShoppingListPage implements OnInit {
   public isMarketOnlyProduct: boolean = false;
   public subscription: Subscription;
   public menuCustomButtons: NavbarCustomButton[] = [];
-  private readonly invalidatedLists: string[] = [];
   private firstValidListID: string;
   private loader: LoadingService;
   private lastValidList: ShoppingList;
@@ -116,7 +115,6 @@ export class AddToShoppingListPage implements OnInit {
               virtualLists[virtualListIndex].ListID ===
               productShoppingLists[productListIndex].shopping_list_id
             ) {
-              this.invalidatedLists.push(virtualLists[virtualListIndex].ListID.toString());
               virtualLists.splice(virtualListIndex, 1);
               virtualListIndex--;
               productShoppingLists.splice(productListIndex, 1);
@@ -304,16 +302,9 @@ export class AddToShoppingListPage implements OnInit {
     }
 
     const differentType: boolean = this.listIsNotSameType(selectedList);
-    const alreadyAdded: boolean =
-      typeof this.invalidatedLists.find(id => id === selectedList.ListID) !== 'undefined' ? true : false;
 
     // TODO: Switch
-    if (alreadyAdded) {
-      this.reset(
-        this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_EXISTING_PRODUCT)
-      );
-      this.seekValidList();
-    } else if (this.isMarketOnlyProduct && differentType) {
+    if (this.isMarketOnlyProduct && differentType) {
       this.reset(
         this.popoversService.setContent(
           Strings.GENERIC_MODAL_TITLE,
