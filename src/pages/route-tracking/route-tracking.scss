@@ -136,4 +136,13 @@ page-route-tracking {
       border: 2px solid color($colors, OrgillRed);
     }
   }
+
+  .input-container {
+    display: flex;
+    height: 50px;
+
+    input {
+      width: 100%;
+    }
+  }
 }

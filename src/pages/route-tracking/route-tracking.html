@@ -11,6 +11,11 @@
 </ion-header>
 
 <ion-content>
+  <div class="input-container" *ngIf="showCustomInput">
+    <input #customInput type="text" placeholder="customer number" />
+    <button (click)="customMethod()">See deliveries for</button>
+  </div>
+
   <div *ngIf="currentDeliveries.length; else noDeliveries">
     <div class="deliveries-header">
       <img class="truck-image" src="../../assets/imgs/truck-mobile.png" />
