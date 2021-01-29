@@ -37,7 +37,8 @@ ion-card-content {
 }
 
 .order-track {
-  display: flex;
+  display: none;
+  //   display: flex;
   width: calc(100% - 30px);
   margin: 0 auto;
   padding: 10px 0;

@@ -74,3 +74,8 @@ export const GET_CUSTOMER_LOCATIONS: string = TRACKING_API_BASE_URL + 'VendorAcc
  * size: integer
  */
 export const TEST_GET_TODAY_CUSTOMERS: string = TRACKING_API_BASE_URL + 'Test/GetTodayCustomers';
+
+/**
+ * customerNo
+ */
+export const ADMIN_GET_CUSTOMER_LOCATIONS: string = TRACKING_API_BASE_URL + 'Admin/GetCustomerLocations';

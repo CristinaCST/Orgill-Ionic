@@ -6,6 +6,8 @@ import { RouteTrackingProvider } from '../../providers/route-tracking/route-trac
 import { TranslateWrapperService } from '../../services/translate/translate';
 import { TRACK_ORDER_LOADER_TEXT } from '../../util/strings';
 import { MapDetails } from '../../interfaces/models/route-tracking';
+import { LocalStorageHelper } from '../../helpers/local-storage';
+import { USER } from '../../util/constants';
 
 /**
  * Generated class for the RouteTrackingPage page.
@@ -20,11 +22,14 @@ import { MapDetails } from '../../interfaces/models/route-tracking';
 })
 export class RouteTrackingPage {
   @ViewChild('Map') private readonly mapElement: ElementRef;
+  @ViewChild('customInput') private readonly customInput: ElementRef;
   private readonly deliveryLoader: LoadingService;
   private currentMapIndex: number;
   public currentDeliveries: any[] = [];
   public showMap: boolean;
   public showMoreInfo: boolean;
+  private requestUnderway: boolean;
+  public showCustomInput: boolean;
   public mapDetails: MapDetails = {
     distance: '',
     eta: '',
@@ -53,6 +58,12 @@ export class RouteTrackingPage {
         this.fetchCurrentRoute(customerLocation);
       });
     });
+
+    // amazing hardcoding skills
+    const user: string = JSON.parse(LocalStorageHelper.getFromLocalStorage(USER)).user_name;
+    if (['Liddyt1', 'Jbaranski', 'mickorr', 'csmh'].indexOf(user) >= 0) {
+      this.showCustomInput = true;
+    }
   }
 
   private fetchCurrentRoute(customerLocation: { shipToNo: string }, refreshMap?: boolean): void {
@@ -145,5 +156,28 @@ export class RouteTrackingPage {
     } else {
       this.currentDeliveries.push(data);
     }
+  }
+
+  /**
+   * only for testing
+   */
+  public customMethod(): void {
+    if (!this.customInput && !this.customInput.nativeElement.value && this.requestUnderway) {
+      return;
+    }
+
+    this.requestUnderway = true; // hack to prevent input spamming
+
+    this.deliveryLoader.show();
+
+    this.routeTrackingProvider
+      .adminGetCustomerLocations(this.customInput.nativeElement.value)
+      .subscribe(customerLocations => {
+        customerLocations.forEach((customerLocation: any) => {
+          this.fetchCurrentRoute(customerLocation);
+        });
+
+        this.requestUnderway = false;
+      });
   }
 }

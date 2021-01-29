@@ -32,4 +32,8 @@ export class RouteTrackingProvider {
       size: numberOfShipments
     });
   }
+
+  public adminGetCustomerLocations(customerNo: string): Observable<any> {
+    return this.apiProvider.post(GET_CUSTOMER_LOCATIONS, { customerNo }, true, true);
+  }
 }
