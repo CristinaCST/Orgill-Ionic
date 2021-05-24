@@ -29,6 +29,7 @@ export class RouteTrackingPage {
   public showMoreInfo: boolean;
   private requestUnderway: boolean;
   public showCustomInput: boolean;
+  public errorMessage = 'You do not have any deliveries for today.';
   public mapDetails: MapDetails = {
     distance: '',
     eta: '',
@@ -44,9 +45,7 @@ export class RouteTrackingPage {
     public loadingService: LoadingService,
     private readonly translateProvider: TranslateWrapperService
   ) {
-    this.deliveryLoader = loadingService.createLoader(
-      this.translateProvider.translate(TRACK_ORDER_LOADER_TEXT)
-    );
+    this.deliveryLoader = loadingService.createLoader(this.translateProvider.translate(TRACK_ORDER_LOADER_TEXT));
   }
 
   public ngOnInit(): void {
@@ -66,15 +65,15 @@ export class RouteTrackingPage {
   }
 
   private fetchCurrentRoute(customerLocation: { shipToNo: string }, refreshMap?: boolean): void {
-    this.routeTrackingProvider
-      .getStoreRouteAndStops(customerLocation.shipToNo)
-      .subscribe((routesAndStops): void => {
-        this.deliveryLoader.hide();
+    this.routeTrackingProvider.getStoreRouteAndStops(customerLocation.shipToNo).subscribe((routesAndStops): void => {
+      this.deliveryLoader.hide();
 
-        if (!routesAndStops.error) {
-          this.updateDeliveriesList(customerLocation, routesAndStops, refreshMap);
-        }
-      });
+      if (routesAndStops.error) {
+        this.errorMessage = routesAndStops.error;
+      } else {
+        this.updateDeliveriesList(customerLocation, routesAndStops, refreshMap);
+      }
+    });
   }
 
   public toggleMap(data: any): void {
