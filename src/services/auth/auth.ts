@@ -14,6 +14,7 @@ import { SecureActionsService } from '../../services/secure-actions/secure-actio
 import * as Strings from '../../util/strings';
 import { PopoversService, PopoverContent, CustomListPopoverResult } from '../../services/popovers/popovers';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { LoadingService } from '../../services/loading/loading';
 
 @Injectable()
 export class AuthService {
@@ -84,6 +85,8 @@ export class AuthService {
               this.complete().exhaust();
             }
           });
+
+        LoadingService.hideAll();
       }
     });
   }

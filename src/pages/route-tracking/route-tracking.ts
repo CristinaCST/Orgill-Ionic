@@ -1,5 +1,4 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage } from 'ionic-angular';
 import { LoadingService } from '../../services/loading/loading';
 import { GoogleMapsProvider } from '../../providers/google-maps/google-maps';
 import { RouteTrackingProvider } from '../../providers/route-tracking/route-tracking';
@@ -15,7 +14,7 @@ import { USER } from '../../util/constants';
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-@IonicPage()
+
 @Component({
   selector: 'page-route-tracking',
   templateUrl: 'route-tracking.html'
@@ -30,6 +29,7 @@ export class RouteTrackingPage {
   public showMoreInfo: boolean;
   private requestUnderway: boolean;
   public showCustomInput: boolean;
+  public errorMessage = 'You do not have any deliveries for today.';
   public mapDetails: MapDetails = {
     distance: '',
     eta: '',
@@ -45,9 +45,7 @@ export class RouteTrackingPage {
     public loadingService: LoadingService,
     private readonly translateProvider: TranslateWrapperService
   ) {
-    this.deliveryLoader = loadingService.createLoader(
-      this.translateProvider.translate(TRACK_ORDER_LOADER_TEXT)
-    );
+    this.deliveryLoader = loadingService.createLoader(this.translateProvider.translate(TRACK_ORDER_LOADER_TEXT));
   }
 
   public ngOnInit(): void {
@@ -67,15 +65,15 @@ export class RouteTrackingPage {
   }
 
   private fetchCurrentRoute(customerLocation: { shipToNo: string }, refreshMap?: boolean): void {
-    this.routeTrackingProvider
-      .getStoreRouteAndStops(customerLocation.shipToNo)
-      .subscribe((routesAndStops): void => {
-        this.deliveryLoader.hide();
+    this.routeTrackingProvider.getStoreRouteAndStops(customerLocation.shipToNo).subscribe((routesAndStops): void => {
+      this.deliveryLoader.hide();
 
-        if (!routesAndStops.error) {
-          this.updateDeliveriesList(customerLocation, routesAndStops, refreshMap);
-        }
-      });
+      if (routesAndStops.error) {
+        this.errorMessage = routesAndStops.error;
+      } else {
+        this.updateDeliveriesList(customerLocation, routesAndStops, refreshMap);
+      }
+    });
   }
 
   public toggleMap(data: any): void {

@@ -38,7 +38,7 @@ export class SearchBarComponent {
   public getText(e: any): void {
     const elementValue: any = e.srcElement.value;
     if (elementValue) {
-      const regex: any = /^[A-Za-z0-9 ]*[A-Za-z0-9][A-Za-z0-9 ]*$/;
+      const regex: any = /^[A-Za-z0-9 ]*[A-Za-z0-9][A-Za-z0-9 ]*[\\/]*$/;
       const tempValue: any = elementValue.substring(0, elementValue.length - 1);
       if (!regex.test(elementValue)) {
         e.srcElement.value = tempValue;

@@ -34,23 +34,17 @@
           <h4 class="order-title">{{order.customerLocation.shipToNo}}</h4>
         </div>
 
-        <button class="order-btn" (click)="toggleMap(order)">
-          {{"track_order_map_details" | translate}}
-        </button>
+        <button class="order-btn" (click)="toggleMap(order)">{{"track_order_map_details" | translate}}</button>
       </div>
     </div>
 
     <div class="map-container" *ngIf="showMap">
-      <button class="order-btn refresh-map" (click)="refreshMao()">
-        {{"track_order_refresh_map" | translate}}
-      </button>
+      <button class="order-btn refresh-map" (click)="refreshMao()">{{"track_order_refresh_map" | translate}}</button>
 
       <div #Map class="map"></div>
 
       <div class="map-details-container" *ngIf="mapDetails">
-        <h4 class="order-title">
-          {{"track_order_truck_on_road" | translate}}: <span>{{mapDetails.truckId}}</span>
-        </h4>
+        <h4 class="order-title">{{"track_order_truck_on_road" | translate}}: <span>{{mapDetails.truckId}}</span></h4>
 
         <div class="travel-wrapper">
           <div class="eta-time">
@@ -87,9 +81,7 @@
           <button class="order-btn" (click)="[showMoreInfo = !showMoreInfo]">
             {{"track_order_more_info" | translate}}
           </button>
-          <button class="order-btn empty" (click)="toggleMap()">
-            {{"track_order_other_locations" | translate}}
-          </button>
+          <button class="order-btn empty" (click)="toggleMap()">{{"track_order_other_locations" | translate}}</button>
         </div>
       </div>
 
@@ -99,6 +91,6 @@
 
   <ng-template #noDeliveries>
     <img class="map-not-found" src="../../assets/imgs/no-deliveries.png" />
-    <h2 class="map-warning-message">{{"track_order_no_deliveries" | translate}}</h2>
+    <h2 class="map-warning-message">{{errorMessage}}</h2>
   </ng-template>
 </ion-content>
