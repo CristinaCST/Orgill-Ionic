@@ -54,7 +54,7 @@ const TRACKING_API_BASE_URL: string = '//40.122.36.68/api/';
  * params
  * ship_to_no: string
  */
-export const GET_STORE_ROUTE_AND_STOPS: string = TRACKING_API_BASE_URL + 'Customer/GetStoreRouteAndStops';
+export const GET_STORE_ROUTE_AND_STOPS: string = TRACKING_API_BASE_URL + 'Admin/GetStoreRouteAndStops';
 
 /**
  * request body

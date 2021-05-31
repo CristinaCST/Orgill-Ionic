@@ -3,10 +3,11 @@ import { LoadingService } from '../../services/loading/loading';
 import { GoogleMapsProvider } from '../../providers/google-maps/google-maps';
 import { RouteTrackingProvider } from '../../providers/route-tracking/route-tracking';
 import { TranslateWrapperService } from '../../services/translate/translate';
-import { TRACK_ORDER_LOADER_TEXT } from '../../util/strings';
+import { GENERIC_MODAL_TITLE, MODAL_BUTTON_OK, TRACK_VALID_INPUT_VALUE, TRACK_ORDER_LOADER_TEXT } from '../../util/strings';
 import { MapDetails } from '../../interfaces/models/route-tracking';
 import { LocalStorageHelper } from '../../helpers/local-storage';
-import { USER } from '../../util/constants';
+import { USER, POPOVER_INFO } from '../../util/constants';
+import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
 
 /**
  * Generated class for the RouteTrackingPage page.
@@ -29,7 +30,7 @@ export class RouteTrackingPage {
   public showMoreInfo: boolean;
   private requestUnderway: boolean;
   public showCustomInput: boolean;
-  public errorMessage = 'You do not have any deliveries for today.';
+  public errorMessage: string = 'You do not have any deliveries for today.';
   public mapDetails: MapDetails = {
     distance: '',
     eta: '',
@@ -43,7 +44,8 @@ export class RouteTrackingPage {
     private readonly mapInstance: GoogleMapsProvider,
     public routeTrackingProvider: RouteTrackingProvider,
     public loadingService: LoadingService,
-    private readonly translateProvider: TranslateWrapperService
+    private readonly translateProvider: TranslateWrapperService,
+    private readonly popoversService: PopoversService
   ) {
     this.deliveryLoader = loadingService.createLoader(this.translateProvider.translate(TRACK_ORDER_LOADER_TEXT));
   }
@@ -59,7 +61,7 @@ export class RouteTrackingPage {
 
     // amazing hardcoding skills
     const user: string = JSON.parse(LocalStorageHelper.getFromLocalStorage(USER)).user_name;
-    if (['Liddyt1', 'Jbaranski', 'mickorr', 'csmh'].indexOf(user) >= 0) {
+    if (['denise225', 'cristierogers', 'psequeira', 'liddyt1', 'csmh'].indexOf(user) >= 0) {
       this.showCustomInput = true;
     }
   }
@@ -156,11 +158,22 @@ export class RouteTrackingPage {
     }
   }
 
+  private validateInput(value: string): boolean {
+    return Boolean(!isNaN(Number(value)) && value.length === 6);
+  }
+
   /**
    * only for testing
    */
   public customMethod(): void {
-    if (!this.customInput && !this.customInput.nativeElement.value && this.requestUnderway) {
+    if (!this.customInput || !this.validateInput(this.customInput.nativeElement.value) || this.requestUnderway) {
+      const content: PopoverContent = {
+        type: POPOVER_INFO,
+        title: GENERIC_MODAL_TITLE,
+        message: TRACK_VALID_INPUT_VALUE,
+        positiveButtonText: MODAL_BUTTON_OK
+      };
+      this.popoversService.show(content);
       return;
     }
 
@@ -168,14 +181,10 @@ export class RouteTrackingPage {
 
     this.deliveryLoader.show();
 
-    this.routeTrackingProvider
-      .adminGetCustomerLocations(this.customInput.nativeElement.value)
-      .subscribe(customerLocations => {
-        customerLocations.forEach((customerLocation: any) => {
-          this.fetchCurrentRoute(customerLocation);
-        });
+    this.routeTrackingProvider.adminGetCustomerLocations(this.customInput.nativeElement.value).subscribe(data => {
+      this.fetchCurrentRoute({ shipToNo: data.shipToNo });
 
-        this.requestUnderway = false;
-      });
+      this.requestUnderway = false;
+    });
   }
 }

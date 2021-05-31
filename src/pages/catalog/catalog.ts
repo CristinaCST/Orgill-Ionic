@@ -18,13 +18,11 @@ import { NavbarCustomButton } from '../../interfaces/models/navbar-custom-button
 import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
 import { Program } from 'interfaces/models/program';
 
-
 @Component({
   selector: 'page-catalog',
   templateUrl: 'catalog.html'
 })
 export class Catalog implements OnInit {
-
   private programs: Program[];
   private programNumber: string;
   public programName: string;
@@ -35,11 +33,23 @@ export class Catalog implements OnInit {
   private readonly categoriesLoader: LoadingService;
   private readonly simpleLoader: LoadingService;
 
-  constructor(public navigatorService: NavigatorService, public navParams: NavParams, public catalogProvider: CatalogsProvider,
-    public loadingService: LoadingService, public popoversService: PopoversService, public translateProvider: TranslateWrapperService, private readonly events: Events) {
-    this.menuCustomButtons.push({ action: () => this.getCatalogDetails(), icon: 'information-circle' }, { action: () => this.goToScanPage(), icon: 'barcode' });
+  constructor(
+    public navigatorService: NavigatorService,
+    public navParams: NavParams,
+    public catalogProvider: CatalogsProvider,
+    public loadingService: LoadingService,
+    public popoversService: PopoversService,
+    public translateProvider: TranslateWrapperService,
+    private readonly events: Events
+  ) {
+    this.menuCustomButtons.push(
+      { action: () => this.getCatalogDetails(), icon: 'information-circle', identifier: 'regular-catalog-info-btn' },
+      { action: () => this.goToScanPage(), icon: 'barcode' }
+    );
 
-    this.categoriesLoader = loadingService.createLoader(this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_CATEGORIES));
+    this.categoriesLoader = loadingService.createLoader(
+      this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_CATEGORIES)
+    );
     this.simpleLoader = loadingService.createLoader();
   }
 
@@ -56,7 +66,7 @@ export class Catalog implements OnInit {
     if (this.categories === undefined || this.categories.length === 0 || culprit === 'categories' || !culprit) {
       this.initCatalog();
     }
-  }
+  };
 
   private initCatalog(): void {
     this.programName = getNavParam(this.navParams, 'programName', 'string');
@@ -94,14 +104,17 @@ export class Catalog implements OnInit {
       last_modified: ''
     };
 
-    this.catalogProvider.getCategories(params).subscribe(response => {
-      const responseData: Category[] = JSON.parse(response.d);
-      this.categories = this.sortCategories(responseData);
-      this.categoriesLoader.hide();
-    }, err => {
-      //   this.reloadService.paintDirty('categories');
-      this.categoriesLoader.hide();
-    });
+    this.catalogProvider.getCategories(params).subscribe(
+      response => {
+        const responseData: Category[] = JSON.parse(response.d);
+        this.categories = this.sortCategories(responseData);
+        this.categoriesLoader.hide();
+      },
+      err => {
+        //   this.reloadService.paintDirty('categories');
+        this.categoriesLoader.hide();
+      }
+    );
   }
 
   public sortCategories(responseData: Category[]): Category[] {
@@ -120,41 +133,54 @@ export class Catalog implements OnInit {
       last_modified: ''
     };
 
-    this.catalogProvider.getSubcategories(params).subscribe(response => {
-      const responseData: Category[] = JSON.parse(response.d);
-      if (responseData.length > 0) {
-        const categories: Category[] = this.sortCategories(responseData);
-        this.navigatorService.push(Catalog, {
-          programName: category.CatName,
-          programNumber: this.programNumber,
-          categories,
-          currentSubCategory: category,
-          catalogIndex: (this.catalogIndex + 1)
-        }).catch(err => console.error(err));
-        this.categoriesLoader.hide();
-      } else {
-        const productsPageParams: any = {
-          programNumber: this.programNumber,
-          programName: category.CatName,
-          category
-        };
-        this.navigatorService.push(ProductsPage, productsPageParams, { paramEquality: false } as NavOptions).catch(err => console.error(err));
-        this.categoriesLoader.hide();
+    this.catalogProvider.getSubcategories(params).subscribe(
+      response => {
+        const responseData: Category[] = JSON.parse(response.d);
+        if (responseData.length > 0) {
+          const categories: Category[] = this.sortCategories(responseData);
+          this.navigatorService
+            .push(Catalog, {
+              programName: category.CatName,
+              programNumber: this.programNumber,
+              categories,
+              currentSubCategory: category,
+              catalogIndex: this.catalogIndex + 1
+            })
+            .catch(err => console.error(err));
+          this.categoriesLoader.hide();
+        } else {
+          const productsPageParams: any = {
+            programNumber: this.programNumber,
+            programName: category.CatName,
+            category
+          };
+          this.navigatorService
+            .push(ProductsPage, productsPageParams, { paramEquality: false } as NavOptions)
+            .catch(err => console.error(err));
+          this.categoriesLoader.hide();
+        }
+      },
+      err => {
+        // TODO: SOLVE THIS
       }
-    }, err => {
-      // TODO: SOLVE THIS
-    });
+    );
   }
 
   private getCatalogDetails(): void {
-
     const program: Program = this.programs.filter(singleProgram => {
       return singleProgram.PROGRAMNO === this.programNumber.toString();
     })[0];
 
     let content: PopoverContent;
     if (this.programNumber !== '' && program) {
-      content = this.popoversService.setContent(this.programName, JSON.stringify(program), undefined, undefined, undefined, 'catalogInfo');
+      content = this.popoversService.setContent(
+        this.programName,
+        JSON.stringify(program),
+        undefined,
+        undefined,
+        undefined,
+        'catalogInfo'
+      );
     } else {
       content = this.popoversService.setContent(this.programName, Strings.SHOPPING_LIST_DESCRIPTION_NOT_PROVIDED);
     }
@@ -168,30 +194,39 @@ export class Catalog implements OnInit {
 
   public onSearched($event: any): void {
     this.simpleLoader.show();
-    this.catalogProvider.search($event, this.currentSubCategory ? this.currentSubCategory.CatID : '', this.programNumber).subscribe(data => {
-      if (data) {
-        const dataFound: Product[] = this.filterBadRequest(JSON.parse(data.d));
-        const params: any = {
-          searchString: $event,
-          searchData: dataFound,
-          programNumber: this.programNumber,
-          programName: this.programName,
-          category: this.currentSubCategory,
-          numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
-        };
-        this.navigatorService.push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions).then(
-          // () => console.log('%cTo product search page', 'color:green')
-        );
-        this.simpleLoader.hide();
-      }
-    }, err => {
-      LoadingService.hideAll();
-    });
+    this.catalogProvider
+      .search($event, this.currentSubCategory ? this.currentSubCategory.CatID : '', this.programNumber)
+      .subscribe(
+        data => {
+          if (data) {
+            const dataFound: Product[] = this.filterBadRequest(JSON.parse(data.d));
+            const params: any = {
+              searchString: $event,
+              searchData: dataFound,
+              programNumber: this.programNumber,
+              programName: this.programName,
+              category: this.currentSubCategory,
+              numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
+            };
+            this.navigatorService
+              .push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions)
+              .then
+              // () => console.log('%cTo product search page', 'color:green')
+              ();
+            this.simpleLoader.hide();
+          }
+        },
+        err => {
+          LoadingService.hideAll();
+        }
+      );
   }
 
   public goToScanPage(): void {
-    this.navigatorService.push(ScannerPage, {
-      'type': 'scan_barcode_tab'
-    }).catch(err => console.error(err));
+    this.navigatorService
+      .push(ScannerPage, {
+        type: 'scan_barcode_tab'
+      })
+      .catch(err => console.error(err));
   }
 }

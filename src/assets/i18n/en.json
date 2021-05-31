@@ -257,5 +257,6 @@
   "track_order_no_deliveries": "You do not have any deliveries for today!",
   "modal_button_reset_password": "Reset password",
   "expired_password_title": "Password has expired!",
-  "expired_password_message": "Please go to orgill.com or orgill.ca to reset your password."
+  "expired_password_message": "Please go to orgill.com or orgill.ca to reset your password.",
+  "track_valid_input_value": "Please input a valid six digits customer number!"
 }

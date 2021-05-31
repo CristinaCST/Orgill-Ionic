@@ -255,5 +255,6 @@
   "track_order_no_deliveries": "Vous n'avez aucune livraison pour aujourd'hui!",
   "modal_button_reset_password": "Réinitialiser le mot de passe",
   "expired_password_title": "Le mot de passe a expiré!",
-  "expired_password_message": "Veuillez vous rendre sur orgill.com ou orgill.ca pour réinitialiser votre mot de passe."
+  "expired_password_message": "Veuillez vous rendre sur orgill.com ou orgill.ca pour réinitialiser votre mot de passe.",
+  "track_valid_input_value": "Veuillez saisir un numéro de client valide à six chiffres!"
 }
