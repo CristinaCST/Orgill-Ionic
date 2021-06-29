@@ -12,8 +12,13 @@
 
 <ion-content>
   <div class="input-container" *ngIf="showCustomInput">
-    <input #customInput type="text" placeholder="customer number" />
-    <button (click)="customMethod()">See deliveries for</button>
+    <div class="input-wrapper">
+      <ion-icon name="search"></ion-icon>
+      <input #customInput type="text" placeholder="Enter customer ID to find his deliverables" />
+    </div>
+    <button class="disable-hover button button-md button-default button-default-md button-md-OrgillRed" (click)="customMethod()">
+      Search
+    </button>
   </div>
 
   <div *ngIf="currentDeliveries.length; else noDeliveries">
