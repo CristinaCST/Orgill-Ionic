@@ -38,57 +38,55 @@ export class PricingService {
     product: Product,
     getDefaultMode: boolean = false
   ): number {
-    return Number(suggestedValue);
-    // const safeSuggestedValue: number =
-    //   typeof suggestedValue === 'string' ? Number(suggestedValue.replace(/[^0-9]/g, '')) : suggestedValue;
-    // let minQty: number = Math.max(1, Number(program.MINQTY));
-    // const maxQty: number = Number(program.MAXQTY);
-    // const shelfPack: number = Number(product.SHELF_PACK);
-    // if (product.QTY_ROUND_OPTION === 'X' && shelfPack > 1 && minQty < shelfPack) {
-    //   minQty = shelfPack;
-    // }
+    const safeSuggestedValue: number =
+      typeof suggestedValue === 'string' ? Number(suggestedValue.replace(/[^0-9]/g, '')) : suggestedValue;
+    let minQty: number = Math.max(1, Number(program.MINQTY));
+    const maxQty: number = Number(program.MAXQTY);
+    const shelfPack: number = Number(product.SHELF_PACK);
+    if (product.QTY_ROUND_OPTION === 'X' && shelfPack > 1 && minQty < shelfPack) {
+      minQty = shelfPack;
+    }
 
-    // if (maxQty > 0 && safeSuggestedValue > maxQty) {
-    //   if (!getDefaultMode) {
-    //     this.showPrompt(Strings.QUANTITY_ROUNDED_MAX);
-    //   }
+    if (maxQty > 0 && safeSuggestedValue > maxQty) {
+      if (!getDefaultMode) {
+        this.showPrompt(Strings.QUANTITY_ROUNDED_MAX);
+      }
 
-    //   return Number(program.MAXQTY);
-    // }
+      return Number(program.MAXQTY);
+    }
 
-    // if (safeSuggestedValue < minQty) {
-    //   if (!getDefaultMode) {
-    //     this.showPrompt(Strings.QUANTITY_ROUNDED_MIN);
-    //   }
-    //   return minQty;
-    // }
+    if (safeSuggestedValue < minQty) {
+      if (!getDefaultMode) {
+        this.showPrompt(Strings.QUANTITY_ROUNDED_MIN);
+      }
+      return minQty;
+    }
 
-    // if (product.QTY_ROUND_OPTION === 'X') {
-    //   if (safeSuggestedValue > shelfPack) {
-    //     if (safeSuggestedValue % shelfPack === 0) {
-    //       return this.maxCheck(safeSuggestedValue, program);
-    //     }
-    //     if (!getDefaultMode) {
-    //       this.showPrompt(Strings.QUANTITY_X_WARNING);
-    //     }
-    //     return this.maxCheck(shelfPack * Math.ceil(safeSuggestedValue / shelfPack), program);
-    //   }
-    //   return shelfPack;
-    // }
-    // if (product.QTY_ROUND_OPTION === 'Y') {
-    //   if (safeSuggestedValue < Number(product.SHELF_PACK) && safeSuggestedValue >= Number(product.SHELF_PACK) * 0.7) {
-    //     // this.showPrompt(Strings.QUANTITY_Y_UNDER_70_PERCENT)
-    //     return maxQty > 0 ? Math.min(maxQty, Number(product.SHELF_PACK)) : Number(product.SHELF_PACK);
-    //   }
-    //   return this.maxCheck(safeSuggestedValue, program);
-    // }
-    // return this.maxCheck(safeSuggestedValue, program);
+    if (product.QTY_ROUND_OPTION === 'X') {
+      if (safeSuggestedValue > shelfPack) {
+        if (safeSuggestedValue % shelfPack === 0) {
+          return this.maxCheck(safeSuggestedValue, program);
+        }
+        if (!getDefaultMode) {
+          this.showPrompt(Strings.QUANTITY_X_WARNING);
+        }
+        return this.maxCheck(shelfPack * Math.ceil(safeSuggestedValue / shelfPack), program);
+      }
+      return shelfPack;
+    }
+    if (product.QTY_ROUND_OPTION === 'Y') {
+      if (safeSuggestedValue < Number(product.SHELF_PACK) && safeSuggestedValue >= Number(product.SHELF_PACK) * 0.7) {
+        // this.showPrompt(Strings.QUANTITY_Y_UNDER_70_PERCENT)
+        return maxQty > 0 ? Math.min(maxQty, Number(product.SHELF_PACK)) : Number(product.SHELF_PACK);
+      }
+      return this.maxCheck(safeSuggestedValue, program);
+    }
+    return this.maxCheck(safeSuggestedValue, program);
   }
 
   public maxCheck(value: number, program: ItemProgram): number {
-    return value;
-    // const maxQty: number = Number(program.MAXQTY);
-    // return Math.min(value, maxQty > 0 ? maxQty : Constants.MAX_QUANTITY_HARDCAP);
+    const maxQty: number = Number(program.MAXQTY);
+    return Math.min(value, maxQty > 0 ? maxQty : Constants.MAX_QUANTITY_HARDCAP);
   }
 
   /**
