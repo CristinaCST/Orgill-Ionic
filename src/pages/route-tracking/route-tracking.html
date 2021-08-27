@@ -49,7 +49,10 @@
       <div #Map class="map"></div>
 
       <div class="map-details-container" *ngIf="mapDetails">
-        <h4 class="order-title">{{"track_order_truck_on_road" | translate}}: <span>{{mapDetails.truckId}}</span></h4>
+        <h4 class="order-title">
+          {{"track_order_truck_on_road" | translate}}:
+          <span>{{mapDetails.truckId}}</span>
+        </h4>
 
         <div class="travel-wrapper">
           <div class="eta-time">

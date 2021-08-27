@@ -8,6 +8,8 @@ import { MapDetails } from '../../interfaces/models/route-tracking';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import { USER, POPOVER_INFO } from '../../util/constants';
 import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
+import { Platform } from 'ionic-angular/platform/platform';
+import { NavigatorService } from '../../services/navigator/navigator';
 
 /**
  * Generated class for the RouteTrackingPage page.
@@ -45,9 +47,19 @@ export class RouteTrackingPage {
     public routeTrackingProvider: RouteTrackingProvider,
     public loadingService: LoadingService,
     private readonly translateProvider: TranslateWrapperService,
-    private readonly popoversService: PopoversService
+    private readonly popoversService: PopoversService,
+    private platform: Platform,
+    private readonly navigatorService: NavigatorService
   ) {
     this.deliveryLoader = loadingService.createLoader(this.translateProvider.translate(TRACK_ORDER_LOADER_TEXT));
+
+    this.platform.registerBackButtonAction(() => {
+      if (this.showMap) {
+        this.toggleMap();
+      } else {
+        this.navigatorService.pop();
+      }
+    });
   }
 
   public ngOnInit(): void {
@@ -87,7 +99,7 @@ export class RouteTrackingPage {
     });
   }
 
-  public toggleMap(data: any): void {
+  public toggleMap(data?: any): void {
     this.showMap = !this.showMap;
 
     if (!this.showMap || !data) {
@@ -128,7 +140,9 @@ export class RouteTrackingPage {
       .then(() => {
         this.mapInstance
           .setMapRoute(
-            { location: this.mapInstance.getLatLng(data.truck.latitude, data.truck.longitude) },
+            {
+              location: this.mapInstance.getLatLng(data.truck.latitude, data.truck.longitude)
+            },
             this.mapInstance.getLatLng(data.end.latitude, data.end.longitude),
             data.stops.map((stop: { latitude: number; longitude: number }) => ({
               location: this.mapInstance.getLatLng(stop.latitude, stop.longitude),
@@ -196,4 +210,9 @@ export class RouteTrackingPage {
       this.requestUnderway = false;
     });
   }
+
+  //   emulate hardware back btn
+  //   public fireBackBtnEvent(): void {
+  //     this.platform.runBackButtonAction();
+  //   }
 }
