@@ -266,5 +266,6 @@ export const MARKET_CATALOG: string = 'menu_header_market_catalog';
 /**
  * Track order page
  */
+export const TRACK_ORDER_PAGE_TITLE: string = 'track_order_page_title';
 export const TRACK_ORDER_LOADER_TEXT: string = 'track_order_loader_text';
 export const TRACK_VALID_INPUT_VALUE: string = 'track_valid_input_value';

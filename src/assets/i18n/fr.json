@@ -241,6 +241,7 @@
   "cancel": "Annuler",
   "ok": "Ok",
   "track_order": "Suivre ma commande Orgill",
+  "track_order_page_title": "Ordre de marche",
   "track_order_loader_text": "Vérification des livraisons en attente",
   "track_order_select_location": "Sélectionnez un emplacement",
   "track_order_customer_name": "Nom du client",
