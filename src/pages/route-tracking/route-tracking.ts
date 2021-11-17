@@ -3,7 +3,12 @@ import { LoadingService } from '../../services/loading/loading';
 import { GoogleMapsProvider } from '../../providers/google-maps/google-maps';
 import { RouteTrackingProvider } from '../../providers/route-tracking/route-tracking';
 import { TranslateWrapperService } from '../../services/translate/translate';
-import { GENERIC_MODAL_TITLE, MODAL_BUTTON_OK, TRACK_VALID_INPUT_VALUE, TRACK_ORDER_LOADER_TEXT } from '../../util/strings';
+import {
+  GENERIC_MODAL_TITLE,
+  MODAL_BUTTON_OK,
+  TRACK_VALID_INPUT_VALUE,
+  TRACK_ORDER_LOADER_TEXT
+} from '../../util/strings';
 import { MapDetails } from '../../interfaces/models/route-tracking';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import { USER, POPOVER_INFO } from '../../util/constants';
@@ -48,7 +53,7 @@ export class RouteTrackingPage {
     public loadingService: LoadingService,
     private readonly translateProvider: TranslateWrapperService,
     private readonly popoversService: PopoversService,
-    private platform: Platform,
+    private readonly platform: Platform,
     private readonly navigatorService: NavigatorService
   ) {
     this.deliveryLoader = loadingService.createLoader(this.translateProvider.translate(TRACK_ORDER_LOADER_TEXT));
@@ -160,7 +165,7 @@ export class RouteTrackingPage {
       });
 
     Object.assign(this.mapDetails, {
-      customerName: data.customerLocation.customerName,
+      customerName: data.customerName,
       shipToNo: data.customerLocation.shipToNo,
       truckId: data.customerLocation.customerNo,
       invoices: data.invoices

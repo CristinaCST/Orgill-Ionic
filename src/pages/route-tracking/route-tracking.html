@@ -14,17 +14,10 @@
   <div class="input-container" *ngIf="showCustomInput">
     <div class="input-wrapper">
       <ion-icon name="search"></ion-icon>
-      <input
-        #customInput
-        type="text"
-        placeholder="Enter customer ID to find his deliverables"
-      />
+      <input #customInput type="text" placeholder="Enter customer ID to find his deliverables" />
     </div>
     <button
-      class="
-        disable-hover
-        button button-md button-default button-default-md button-md-OrgillRed
-      "
+      class="disable-hover button button-md button-default button-default-md button-md-OrgillRed"
       (click)="customMethod()"
     >
       Search
@@ -33,18 +26,13 @@
 
   <div *ngIf="currentDeliveries.length; else noDeliveries">
     <div class="deliveries-header">
-      <img class="truck-image" src="../../assets/imgs/truck-mobile.png" />
-      <h4 class="deliveries-title">
-        {{"track_order_select_location" | translate}}
-      </h4>
+      <img class="truck-image" src="../../assets/imgs/Orgill-truck-locate.jpg" />
     </div>
 
     <div class="order-container" *ngFor="let order of currentDeliveries">
       <div class="order-header">
-        <h5 class="order-subtitle">
-          {{"track_order_customer_name" | translate}}
-        </h5>
-        <h4 class="order-title">{{order.customerLocation.customerName}}</h4>
+        <h5 class="order-subtitle">{{"track_order_customer_name" | translate}}</h5>
+        <h4 class="order-title">{{order.customerName}}</h4>
       </div>
 
       <div class="order-footer">
@@ -53,16 +41,12 @@
           <h4 class="order-title">{{order.customerLocation.shipToNo}}</h4>
         </div>
 
-        <button class="order-btn" (click)="toggleMap(order)">
-          {{"track_order_map_details" | translate}}
-        </button>
+        <button class="order-btn" (click)="toggleMap(order)">{{"track_order_map_details" | translate}}</button>
       </div>
     </div>
 
     <div class="map-container" *ngIf="showMap">
-      <button class="order-btn refresh-map" (click)="refreshMao()">
-        {{"track_order_refresh_map" | translate}}
-      </button>
+      <button class="order-btn refresh-map" (click)="refreshMao()">{{"track_order_refresh_map" | translate}}</button>
 
       <div #Map class="map"></div>
 
@@ -79,9 +63,7 @@
           </div>
 
           <div class="travel-distance">
-            <h5 class="order-subtitle">
-              {{"track_order_distance" | translate}}
-            </h5>
+            <h5 class="order-subtitle">{{"track_order_distance" | translate}}</h5>
             <h4 class="order-title">{{mapDetails.distance}}</h4>
           </div>
         </div>
@@ -89,37 +71,28 @@
         <div class="more-info-wrapper" *ngIf="showMoreInfo">
           <div class="info-customer-wrapper">
             <div class="info-customer">
-              <h5 class="order-subtitle">
-                {{"track_order_customer_name" | translate}}
-              </h5>
+              <h5 class="order-subtitle">{{"track_order_customer_name" | translate}}</h5>
               <h4 class="order-title">{{mapDetails.customerName}}</h4>
             </div>
 
             <div class="info-shipping">
-              <h5 class="order-subtitle">
-                {{"track_order_ship_no" | translate}}
-              </h5>
+              <h5 class="order-subtitle">{{"track_order_ship_no" | translate}}</h5>
               <h4 class="order-title">{{mapDetails.shipToNo}}</h4>
             </div>
           </div>
 
           <div class="info-invoices-wrapper">
-            <h5 class="order-subtitle">
-              {{"track_order_invoices" | translate}}
-            </h5>
-            <h4 class="order-title" *ngFor="let invoice of mapDetails.invoices">
-              {{invoice}}
-            </h4>
+            <h5 class="order-subtitle">{{"track_order_invoices" | translate}}</h5>
+            <h4 class="order-title" *ngFor="let invoice of mapDetails.invoices">{{invoice}}</h4>
           </div>
         </div>
 
         <div class="travel-btns">
           <button class="order-btn" (click)="[showMoreInfo = !showMoreInfo]">
-            {{"track_order_more_info" | translate}}
+            <span *ngIf="showMoreInfo">{{"track_order_less_info" | translate}}</span>
+            <span *ngIf="!showMoreInfo">{{"track_order_more_info" | translate}}</span>
           </button>
-          <button class="order-btn empty" (click)="toggleMap()">
-            {{"track_order_other_locations" | translate}}
-          </button>
+          <button class="order-btn empty" (click)="toggleMap()">{{"track_order_other_locations" | translate}}</button>
         </div>
       </div>
 
