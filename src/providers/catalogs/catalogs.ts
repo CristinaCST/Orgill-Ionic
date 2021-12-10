@@ -9,15 +9,20 @@ import { SearchProductRequest } from '../../interfaces/request-body/search-produ
 import { Observable } from 'rxjs/Observable';
 import { APIResponse } from '../../interfaces/response-body/response';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
+import { Program } from 'interfaces/models/program';
 
 @Injectable()
 export class CatalogsProvider {
+  public programs: Program[] = [];
 
-  constructor(private readonly apiProvider: ApiService,
-              private readonly secureActions: SecureActionsService) { }
+  constructor(private readonly apiProvider: ApiService, private readonly secureActions: SecureActionsService) {}
 
   public getPrograms(): Observable<APIResponse> {
-        return this.apiProvider.post(ConstantsUrl.URL_PROGRAMS, {}, true) as Observable<APIResponse>;
+    return this.apiProvider.post(ConstantsUrl.URL_PROGRAMS, {}, true) as Observable<APIResponse>;
+  }
+
+  public setPrograms(programs: Program[]): void {
+    this.programs = programs;
   }
 
   public getCategories(params: CategoriesRequest): Observable<APIResponse> {
@@ -28,7 +33,13 @@ export class CatalogsProvider {
     return this.apiProvider.post(ConstantsUrl.URL_SUBCATEGORIES, params, true);
   }
 
-  public getProducts(categoryId: string, programNumber: string, page: number = 0, rpp: number = Constants.PRODUCTS_PER_PAGE, lastModified: string = ''): Observable<APIResponse> {
+  public getProducts(
+    categoryId: string,
+    programNumber: string,
+    page: number = 0,
+    rpp: number = Constants.PRODUCTS_PER_PAGE,
+    lastModified: string = ''
+  ): Observable<APIResponse> {
     const params: ProductsRequest = {
       subcategory_id: categoryId,
       p: page + '',
@@ -46,7 +57,12 @@ export class CatalogsProvider {
     return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_DETAIL, params, true);
   }
 
-  public search(searchString: string, categoryId: string, programNumber: string, page: number = 1): Observable<APIResponse> {
+  public search(
+    searchString: string,
+    categoryId: string,
+    programNumber: string,
+    page: number = 1
+  ): Observable<APIResponse> {
     return this.secureActions.waitForAuth().flatMap(user => {
       const params: SearchProductRequest = {
         division: user.division,
@@ -60,6 +76,5 @@ export class CatalogsProvider {
       };
       return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params, true);
     });
-    
   }
 }

@@ -21,7 +21,7 @@ import { CatalogsProvider } from '../../providers/catalogs/catalogs';
 export class ScannerService {
   public selectedProduct: any;
   public programNumber: string = '';
-  public programs: Program[] = [];
+  //   public programs: Program[] = [];
   public isMarketOnly: boolean = false;
   public scanMessage: string = '';
   public searchString: string;
@@ -47,7 +47,7 @@ export class ScannerService {
     public catalogProvider: CatalogsProvider
   ) {
     this.searchingLoader = this.loadingService.createLoader();
-    this.getPrograms();
+    // this.getPrograms();
   }
 
   public scan(shoppingList: ShoppingList, products: ShoppingListItem[]): void {
@@ -93,11 +93,11 @@ export class ScannerService {
     );
   }
 
-  public getPrograms(): any {
-    this.catalogProvider.getPrograms().subscribe(getProgramsResult => {
-      this.programs = JSON.parse(getProgramsResult.d);
-    });
-  }
+  //   public getPrograms(): any {
+  //     this.catalogProvider.getPrograms().subscribe(getProgramsResult => {
+  //       this.programs = JSON.parse(getProgramsResult.d);
+  //     });
+  //   }
 
   private isValidScanResult(scanResult: string): boolean {
     return scanResult.length === 8 || scanResult.length === 10 || scanResult.length >= 12;
@@ -105,7 +105,9 @@ export class ScannerService {
 
   private setProgramFromScanResult(scanResult: string): void {
     this.programNumber = scanResult.length === 10 ? scanResult.substring(7, 10) : '';
-    const filteredPrograms: Program[] = this.programs.filter(elem => elem.PROGRAMNO === this.programNumber);
+    const filteredPrograms: Program[] = this.catalogProvider.programs.filter(
+      elem => elem.PROGRAMNO === this.programNumber
+    );
     this.isMarketOnly =
       filteredPrograms.length > 0 ? filteredPrograms[0].MARKETONLY === Constants.MARKET_ONLY_PROGRAM : false;
   }

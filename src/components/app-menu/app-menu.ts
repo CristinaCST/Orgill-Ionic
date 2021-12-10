@@ -84,18 +84,18 @@ export class AppMenuComponent implements OnInit {
 
   private readonly navigationHandler = (): void => {
     this.menuCtrl.close('main_menu');
-  }
+  };
 
   private readonly newShoppingListHandler = (): void => {
     this.getShoppingLists();
-  }
+  };
 
   private readonly loadingFailedHandler = (culprit: string): void => {
     // We can't know directly (without catching an error somewhere else) if custom lists are supposed to be or not empty, or some of the programs, so it's safer just to reload this in case of error.
     if (culprit === 'shopping lists' || culprit === 'programs' || !culprit) {
       this.initMenu();
     }
-  }
+  };
 
   private initMenu(): void {
     this.oneSignal.getRetailerType().then(retailer_type => {
@@ -176,12 +176,10 @@ export class AppMenuComponent implements OnInit {
             !shoppingLists.find(list => list.list_type === Constants.DEFAULT_LIST_TYPE) &&
             !shoppingLists.find(list => list.list_type === Constants.MARKET_ONLY_LIST_TYPE)
           ) {
-            this.shoppingListsProvider
-              .createDefaultShoppingLists()
-              .subscribe(defaultShoppingListsResponse => {
-                this.getShoppingLists();
-                return;
-              });
+            this.shoppingListsProvider.createDefaultShoppingLists().subscribe(defaultShoppingListsResponse => {
+              this.getShoppingLists();
+              return;
+            });
           } else {
             shoppingLists.map(shoppingList => {
               const temp: ShoppingList = {
@@ -198,15 +196,9 @@ export class AppMenuComponent implements OnInit {
                   this.defaultShoppingLists.push(temp);
                 }
                 if (shoppingList.list_type === Constants.DEFAULT_LIST_TYPE) {
-                  LocalStorageHelper.saveToLocalStorage(
-                    Constants.DEFAULT_LIST_ID,
-                    shoppingList.shopping_list_id
-                  );
+                  LocalStorageHelper.saveToLocalStorage(Constants.DEFAULT_LIST_ID, shoppingList.shopping_list_id);
                 } else {
-                  LocalStorageHelper.saveToLocalStorage(
-                    Constants.MARKET_ONLY_LIST_ID,
-                    shoppingList.shopping_list_id
-                  );
+                  LocalStorageHelper.saveToLocalStorage(Constants.MARKET_ONLY_LIST_ID, shoppingList.shopping_list_id);
                 }
               } else {
                 if (!this.isAlreadyInList(this.customShoppingLists, temp)) {
@@ -250,6 +242,8 @@ export class AppMenuComponent implements OnInit {
         }
 
         const programs: Program[] = JSON.parse(response.d) as Program[];
+
+        this.catalogsProvider.setPrograms(programs);
 
         this.addProgramsToDB(programs); // TODO: Refactor this, creates regular program
 
