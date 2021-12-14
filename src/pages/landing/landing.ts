@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { NavOptions } from 'ionic-angular';
 import { CatalogsProvider } from '../../providers/catalogs/catalogs';
@@ -14,15 +14,19 @@ import { PromotionsPage } from '../market-catalog/promotions-page';
 import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
 import { Catalog } from '../catalog/catalog';
 import { RouteTrackingPage } from '../../pages/route-tracking/route-tracking';
+import { Subject, Subscription } from 'rxjs';
+import { throttleTime } from 'rxjs/operators';
 
 @Component({
   selector: 'page-landing',
   templateUrl: 'landing.html'
 })
-export class LandingPage {
+export class LandingPage implements OnInit, OnDestroy {
   private readonly simpleLoader: LoadingService;
   public pageTitle: string = this.translateProvider.translate(LANDING_PAGE_TITLE);
   public copyrightYear: number = new Date().getFullYear();
+  private readonly scanClicks: Subject<any> = new Subject();
+  private scanSubscription: Subscription;
 
   constructor(
     public navigatorService: NavigatorService,
@@ -33,6 +37,26 @@ export class LandingPage {
     public scannerService: ScannerService
   ) {
     this.simpleLoader = loadingService.createLoader();
+  }
+
+  public ngOnInit(): void {
+    this.scanSubscription = this.scanClicks.pipe(throttleTime(1000)).subscribe(() => {
+      this.scannerService.scan(undefined, undefined);
+
+      this.navigatorService
+        .push(ScannerPage, {
+          type: 'scan_barcode_tab'
+        })
+        .catch(err => console.error(err));
+    });
+  }
+
+  public ngOnDestroy(): void {
+    this.scanSubscription.unsubscribe();
+  }
+
+  public clickCb(): void {
+    this.scanClicks.next();
   }
 
   public goToPage(page: any): any {
@@ -78,9 +102,7 @@ export class LandingPage {
             programName: this.translateProvider.translate(REGULAR_CATALOG).toUpperCase(),
             numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
           };
-          this.navigatorService
-            .push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions)
-            .then();
+          this.navigatorService.push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions).then();
           this.simpleLoader.hide();
         }
       },

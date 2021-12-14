@@ -87,7 +87,7 @@ export class ScannerService {
       err => {
         console.error(err);
         //   const content: PopoverContent = this.popoversService.setContent(Strings.POPOVER_CAMERA_PERMISSION_TITLE, Strings.POPOVER_CAMERA_PERMISSION_MESSAGE);
-        const content: PopoverContent = this.popoversService.setContent('Error message', err);
+        const content: PopoverContent = this.popoversService.setContent('Scan error', err);
         this.popoversService.show(content);
       }
     );

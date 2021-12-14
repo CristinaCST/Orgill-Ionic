@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { LoadingService } from '../../services/loading/loading';
 import { Product } from '../../interfaces/models/product';
@@ -10,13 +10,14 @@ import { ShoppingList } from '../../interfaces/models/shopping-list';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
 import { getNavParam } from '../../helpers/validatedNavParams';
 import { ProductPage } from '../../pages/product/product';
+import { Subject, Subscription } from 'rxjs';
+import { throttleTime } from 'rxjs/operators';
 
 @Component({
   selector: 'page-scanner',
   templateUrl: 'scanner.html'
 })
-export class ScannerPage implements OnInit {
-
+export class ScannerPage implements OnInit, OnDestroy {
   public selectedProduct: any;
   public programNumber: string = '';
   public programs: Program[] = [];
@@ -32,12 +33,16 @@ export class ScannerPage implements OnInit {
   public noProductFound: boolean = false;
   public fromSearch: boolean = false;
   private readonly simpleLoader: LoadingService;
+  private readonly scanClicks: Subject<any> = new Subject();
+  private scanSubscription: Subscription;
 
-  constructor(public navigatorService: NavigatorService,
-              public navParams: NavParams,
-              private readonly loadingService: LoadingService,
-              private readonly catalogsProvider: CatalogsProvider,
-              private readonly scannerService: ScannerService) {
+  constructor(
+    public navigatorService: NavigatorService,
+    public navParams: NavParams,
+    private readonly loadingService: LoadingService,
+    private readonly catalogsProvider: CatalogsProvider,
+    private readonly scannerService: ScannerService
+  ) {
     this.simpleLoader = this.loadingService.createLoader();
   }
 
@@ -58,24 +63,39 @@ export class ScannerPage implements OnInit {
         data.forEach(elem => this.programs.push(elem));
       }
     });
+
+    this.scanSubscription = this.scanClicks.pipe(throttleTime(1000)).subscribe(() => {
+      this.scannerService.scan(undefined, undefined);
+    });
+  }
+
+  public ngOnDestroy(): void {
+    this.scanSubscription.unsubscribe();
+  }
+
+  public clickCb(): void {
+    this.scanClicks.next();
   }
 
   public onSearched($event: any): void {
     this.simpleLoader.show();
-    this.catalogsProvider.search($event, '', this.programNumber).subscribe(data => {
-      if (data) {
-        this.simpleLoader.hide();
-        const params: any = {
-          type: this.searchTab,
-          shoppingList: this.shoppingList,
-          products: JSON.parse(data.d),
-          fromSearch: true
-        };
-        this.navigatorService.push(ScannerPage, params, { paramsEquality: false }).catch(err => console.error(err));
+    this.catalogsProvider.search($event, '', this.programNumber).subscribe(
+      data => {
+        if (data) {
+          this.simpleLoader.hide();
+          const params: any = {
+            type: this.searchTab,
+            shoppingList: this.shoppingList,
+            products: JSON.parse(data.d),
+            fromSearch: true
+          };
+          this.navigatorService.push(ScannerPage, params, { paramsEquality: false }).catch(err => console.error(err));
+        }
+      },
+      err => {
+        LoadingService.hideAll();
       }
-    }, err => {
-      LoadingService.hideAll();
-    });
+    );
   }
 
   public goToProductPage(product: Product): void {
@@ -86,6 +106,4 @@ export class ScannerPage implements OnInit {
       subcategoryName: ''
     });
   }
-
-
 }
