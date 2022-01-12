@@ -72,20 +72,17 @@ export class RouteTrackingPage {
     const user: string = JSON.parse(LocalStorageHelper.getFromLocalStorage(USER)).user_name;
     if (['denise225', 'cristierogers', 'psequeira', 'liddyt1', 'csmh'].indexOf(user) >= 0) {
       this.showCustomInput = true;
-    }
-
-    if (this.showCustomInput) {
       return;
     }
 
     this.deliveryLoader.show();
 
     this.routeTrackingProvider.getCustomerLocations().subscribe(customerLocations => {
-      customerLocations.forEach((customerLocation: any) => {
-        if (!customerLocation.hasDeliveriesToday) {
-          this.deliveryLoader.hide();
-          return;
-        }
+      customerLocations.forEach((customerLocation: any, index: number) => {
+        // if (!customerLocation.hasDeliveriesToday) {
+        //   this.deliveryLoader.hide();
+        //   return;
+        // }
 
         this.fetchCurrentRoute(customerLocation);
       });
@@ -215,9 +212,4 @@ export class RouteTrackingPage {
       this.requestUnderway = false;
     });
   }
-
-  //   emulate hardware back btn
-  //   public fireBackBtnEvent(): void {
-  //     this.platform.runBackButtonAction();
-  //   }
 }
