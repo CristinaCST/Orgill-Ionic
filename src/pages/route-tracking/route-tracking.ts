@@ -93,11 +93,11 @@ export class RouteTrackingPage {
     this.routeTrackingProvider.getStoreRouteAndStops(customerLocation.shipToNo).subscribe((routesAndStops): void => {
       this.deliveryLoader.hide();
 
-      if (routesAndStops.error) {
-        this.errorMessage = routesAndStops.error;
-      } else {
-        this.updateDeliveriesList(customerLocation, routesAndStops, refreshMap);
-      }
+      //   if (routesAndStops.error) {
+      //     this.errorMessage = routesAndStops.error;
+      //   } else {
+      this.updateDeliveriesList(customerLocation, routesAndStops, refreshMap);
+      //   }
     });
   }
 
