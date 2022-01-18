@@ -207,7 +207,8 @@ export class RouteTrackingPage {
     this.deliveryLoader.show();
 
     this.routeTrackingProvider.adminGetCustomerLocations(this.customInput.nativeElement.value).subscribe(data => {
-      this.fetchCurrentRoute({ shipToNo: data.shipToNo });
+      this.currentDeliveries = [];
+      this.fetchCurrentRoute(data);
 
       this.requestUnderway = false;
     });
