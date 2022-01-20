@@ -78,7 +78,7 @@ export class RouteTrackingPage {
     this.deliveryLoader.show();
 
     this.routeTrackingProvider.getCustomerLocations().subscribe(customerLocations => {
-      customerLocations.forEach((customerLocation: any, index: number) => {
+      customerLocations.forEach((customerLocation: any) => {
         // if (!customerLocation.hasDeliveriesToday) {
         //   this.deliveryLoader.hide();
         //   return;
@@ -206,9 +206,10 @@ export class RouteTrackingPage {
 
     this.deliveryLoader.show();
 
-    this.routeTrackingProvider.adminGetCustomerLocations(this.customInput.nativeElement.value).subscribe(data => {
+    this.routeTrackingProvider.adminGetCustomerLocations(this.customInput.nativeElement.value).subscribe(locations => {
       this.currentDeliveries = [];
-      this.fetchCurrentRoute(data);
+
+      locations.forEach(location => this.fetchCurrentRoute(location));
 
       this.requestUnderway = false;
     });
