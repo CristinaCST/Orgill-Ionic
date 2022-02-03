@@ -72,6 +72,9 @@ export class RouteTrackingPage {
     const user: string = JSON.parse(LocalStorageHelper.getFromLocalStorage(USER)).user_name;
     if (['denise225', 'cristierogers', 'psequeira', 'liddyt1', 'csmh'].indexOf(user) >= 0) {
       this.showCustomInput = true;
+    }
+
+    if (this.showCustomInput) {
       return;
     }
 
@@ -79,10 +82,10 @@ export class RouteTrackingPage {
 
     this.routeTrackingProvider.getCustomerLocations().subscribe(customerLocations => {
       customerLocations.forEach((customerLocation: any) => {
-        // if (!customerLocation.hasDeliveriesToday) {
-        //   this.deliveryLoader.hide();
-        //   return;
-        // }
+        if (!customerLocation.hasDeliveriesToday) {
+          this.deliveryLoader.hide();
+          return;
+        }
 
         this.fetchCurrentRoute(customerLocation);
       });
@@ -93,11 +96,11 @@ export class RouteTrackingPage {
     this.routeTrackingProvider.getStoreRouteAndStops(customerLocation.shipToNo).subscribe((routesAndStops): void => {
       this.deliveryLoader.hide();
 
-      //   if (routesAndStops.error) {
-      //     this.errorMessage = routesAndStops.error;
-      //   } else {
-      this.updateDeliveriesList(customerLocation, routesAndStops, refreshMap);
-      //   }
+      if (routesAndStops.error) {
+        this.errorMessage = routesAndStops.error;
+      } else {
+        this.updateDeliveriesList(customerLocation, routesAndStops, refreshMap);
+      }
     });
   }
 
@@ -206,12 +209,15 @@ export class RouteTrackingPage {
 
     this.deliveryLoader.show();
 
-    this.routeTrackingProvider.adminGetCustomerLocations(this.customInput.nativeElement.value).subscribe(locations => {
-      this.currentDeliveries = [];
-
-      locations.forEach(location => this.fetchCurrentRoute(location));
+    this.routeTrackingProvider.adminGetCustomerLocations(this.customInput.nativeElement.value).subscribe(data => {
+      this.fetchCurrentRoute({ shipToNo: data.shipToNo });
 
       this.requestUnderway = false;
     });
   }
+
+  //   emulate hardware back btn
+  //   public fireBackBtnEvent(): void {
+  //     this.platform.runBackButtonAction();
+  //   }
 }

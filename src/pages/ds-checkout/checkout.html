@@ -1,0 +1,31 @@
+<ion-header class="vendor-nav-header">
+  <ion-navbar>
+    <ion-title>Checkout</ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only>
+        <ion-icon name="barcode"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+  <search-bar [showBackButton]="false"></search-bar>
+</ion-header>
+
+<ion-content class="checkout-dropship-content">
+  <div class="continue-shopping" (click)="goBack()"><ion-icon name="arrow-back"></ion-icon> Continue shopping</div>
+
+  <checkbox-card
+    *ngFor="let item of checkoutItems"
+    [data]="item"
+    [isSelected]="true"
+    [isCheckout]="true"
+  ></checkbox-card>
+
+  <div *ngIf="!checkoutItems.length" class="empty-checkout">
+    <ion-icon name="cart"></ion-icon>
+    <h3>No items in the checkout cart!</h3>
+  </div>
+
+  <checkout-overlay [isCheckout]="true"></checkout-overlay>
+</ion-content>

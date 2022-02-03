@@ -1,0 +1,71 @@
+import { Component, Input, OnInit } from '@angular/core';
+import { NavController } from 'ionic-angular';
+import { ShopItemsPage } from '../../pages/ds-shop-items/shop-items';
+import { ItemDetailsPage } from '../../pages/ds-item-details/item-details';
+import { FormDetails } from '../../interfaces/response-body/dropship';
+import { DropshipService } from '../../services/dropship/dropship';
+
+@Component({
+  selector: 'checkbox-card',
+  templateUrl: 'checkbox-card.html'
+})
+export class CheckboxCardComponent implements OnInit {
+  @Input() public data: any;
+  @Input() public formDetails: FormDetails | undefined;
+  @Input() public isSelected: boolean;
+  @Input() public isDropship: boolean;
+  @Input() public isCheckout: boolean;
+  @Input() public selectedQuantity: number = 1;
+
+  constructor(public navController: NavController, private readonly dropshipService: DropshipService) {}
+
+  public ngOnInit(): void {
+    this.selectedQuantity = Number(this.data.selectedQuantity || this.data.order_qty || this.data.min_qty || 1);
+  }
+
+  public handleClick(): void {
+    if (this.isCheckout) {
+      return;
+    }
+
+    if (this.formDetails) {
+      this.navController.push(ItemDetailsPage, { data: this.data, formDetails: this.formDetails });
+    } else {
+      this.navController.push(ShopItemsPage, { data: this.data });
+    }
+  }
+
+  public handleCheckbox(): void {
+    const currentItem: any = this.data;
+
+    // tslint:disable-next-line: strict-boolean-expressions
+    if (this.formDetails && this.formDetails.special_minimum_order) {
+      currentItem.special_minimum_order = this.formDetails.special_minimum_order;
+    }
+
+    currentItem.selectedQuantity = Number(
+      currentItem.selectedQuantity || this.data.order_qty || this.data.min_qty || 1
+    );
+
+    this.dropshipService.updateCheckoutItems(currentItem);
+  }
+
+  public handleCounterAction(action: string): void {
+    if (action === 'add') {
+      this.selectedQuantity += 1;
+    } else if (this.selectedQuantity !== (this.data.min_qty || 1)) {
+      this.selectedQuantity -= 1;
+    }
+
+    this.dropshipService.updateItemQuantities(this.data, this.selectedQuantity);
+  }
+
+  public handleQuantityChange(value: number): void {
+    if (value >= (this.data.min_qty || 1)) {
+      this.selectedQuantity = value;
+      this.dropshipService.updateItemQuantities(this.data, this.selectedQuantity);
+    } else {
+      this.selectedQuantity = Number(this.data.selectedQuantity || this.data.order_qty || this.data.min_qty || 1);
+    }
+  }
+}

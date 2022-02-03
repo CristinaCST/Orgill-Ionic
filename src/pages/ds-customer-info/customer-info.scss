@@ -1,0 +1,86 @@
+.dropship-content.customer-info {
+  .scroll-content {
+    display: flex;
+    height: calc(100vh - 56px);
+    padding: 10px 10px 20px;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .dropship-header {
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  .form-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .btn-group {
+    display: flex;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+
+    .btn-save-draft {
+      margin: 0 5px 0 0;
+      color: color($colors, OrgillLightRed);
+      border: 1px solid color($colors, OrgillLightRed);
+      background: #fff;
+    }
+
+    .btn-next-step {
+      margin: 0;
+      background: color($colors, OrgillLightRed);
+    }
+
+    button {
+      padding: 10px;
+      font-size: 18px;
+      font-weight: 500;
+      border-radius: 5px;
+      text-transform: initial;
+      box-shadow: none;
+    }
+  }
+
+  .input-item-wrapper {
+    padding: 0;
+    border: none !important;
+    box-shadow: none !important;
+
+    .item-inner {
+      padding: 0;
+      border: none !important;
+      box-shadow: none !important;
+
+      .input-label {
+        color: #2c2c2c;
+        font-size: 15px;
+        font-weight: 500;
+
+        span {
+          color: color($colors, OrgillLightRed);
+        }
+      }
+    }
+
+    .input-item.input,
+    .input-item.select,
+    .input-item.datetime {
+      margin: 5px 0 0;
+      padding-left: 16px;
+      border-radius: 5px;
+      border: 1px solid #e6e6e6;
+    }
+
+    .input-item.datetime {
+      padding: 8px 16px;
+    }
+
+    .input-item.checkbox {
+      margin-right: 9px;
+    }
+  }
+}

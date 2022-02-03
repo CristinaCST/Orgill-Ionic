@@ -32,7 +32,7 @@
     <div class="order-container" *ngFor="let order of currentDeliveries">
       <div class="order-header">
         <h5 class="order-subtitle">{{"track_order_customer_name" | translate}}</h5>
-        <h4 class="order-title">{{order.customerLocation.customerName}}</h4>
+        <h4 class="order-title">{{order.customerName}}</h4>
       </div>
 
       <div class="order-footer">
@@ -41,10 +41,7 @@
           <h4 class="order-title">{{order.customerLocation.shipToNo}}</h4>
         </div>
 
-        <p *ngIf="order.error" class="order-error">{{order.error}}</p>
-        <button *ngIf="!order.error" class="order-btn" (click)="toggleMap(order)">
-          {{"track_order_map_details" | translate}}
-        </button>
+        <button class="order-btn" (click)="toggleMap(order)">{{"track_order_map_details" | translate}}</button>
       </div>
     </div>
 

@@ -222,3 +222,14 @@ export const EVENT_SCROLL_INTO_VIEW: string = 'scrollIntoView';
 
 // GMAPS API KEY
 export const GMAPS_API_KEY: string = 'AIzaSyA6sMWy-I9IiuHyI7EnkmsY-szFPFllKGE';
+
+// DROPSHIP
+export const DS_FORM_LIST_FORM_TYPE_DROPSHIP: string = 'dropship';
+export const DS_FORM_LIST_FORM_TYPE_PALLET: string = 'pallet';
+export const DS_FORM_LIST_FORM_TYPE_POG: string = 'pog';
+export const DS_FORM_LIST_TYPE_US: string = 'US';
+export const DS_FORM_LIST_TYPE_CA: string = 'CA';
+export const DS_FORM_LIST_TYPE_INT: string = 'INT';
+export const USER_TYPE_US: string[] = ['2', '3', '4', '5', '6', '7', '9'];
+export const USER_TYPE_CAD: string[] = ['8', '12'];
+export const USER_TYPE_INT: string = 'Y';

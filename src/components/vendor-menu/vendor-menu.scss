@@ -1,0 +1,12 @@
+@import '../app-menu/app-menu.scss';
+
+.content.vendor {
+  margin-top: 56px;
+
+  .item.item-block:not(:last-child) {
+    .label {
+      justify-content: space-between !important;
+      padding-right: 16px;
+    }
+  }
+}

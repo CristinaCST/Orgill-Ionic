@@ -1,0 +1,18 @@
+<ion-content class="vendor content">
+  <ion-item-group class="group">
+    <button ion-item detail-none menuClose (click)="checkOrders()">
+      <span>{{"dropship_menu_submitted_orders" | translate}}</span>
+      <img src="../../assets/vector/vendor-menu-vector.svg" />
+    </button>
+
+    <button ion-item detail-none menuClose (click)="goToSavedDrafts()">
+      <span> {{"dropship_menu_saved_drafts" | translate}} </span>
+      <img src="../../assets/vector/vendor-menu-vector.svg" />
+    </button>
+
+    <button ion-item detail-none menuClose (click)="logout()" icon-left>
+      <ion-icon class="menu-icon" name="log-out"></ion-icon>
+      {{"menu_account_logout"| translate }}
+    </button>
+  </ion-item-group>
+</ion-content>

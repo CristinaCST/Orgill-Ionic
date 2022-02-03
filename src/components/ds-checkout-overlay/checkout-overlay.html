@@ -1,0 +1,27 @@
+<div class="checkout-overlay" [ngClass]="{'hidden':!checkoutItems.length}">
+  <div class="checkout-wrapper">
+    <h4>Order Total ({{checkoutItems.length}})</h4>
+    <h4>{{totalCost | currency}}</h4>
+  </div>
+
+  <div class="checkout-wrapper" *ngIf="requiredMinimum">
+    <p>Required to meet minimum</p>
+    <p>{{requiredMinimum | currency}}</p>
+  </div>
+
+  <div class="checkout-wrapper">
+    <p>Customer number</p>
+    <p>{{currentUser.customer_number}}</p>
+  </div>
+
+  <div class="checkout-wrapper">
+    <button class="btn btn-primary save-draft" (click)="saveDraft()">Save draft</button>
+    <button
+      class="btn btn-primary checkout"
+      [ngClass]="{'disabled': totalCost < requiredMinimum}"
+      (click)="handleCheckout()"
+    >
+      {{isCheckout ? 'Submit order' : 'Checkout'}}
+    </button>
+  </div>
+</div>

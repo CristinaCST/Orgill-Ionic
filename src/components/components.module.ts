@@ -20,6 +20,10 @@ import { HotDealProductComponent } from './hot-deal-product/hot-deal-product';
 import { PurchaseItemComponent } from './purchased-item/purchased-item';
 import { HotDealComponent } from './hot-deal/hot-deal';
 import { MoreOptionsComponent } from './more-options/more-options';
+import { VendorMenuComponent } from './vendor-menu/vendor-menu';
+import { CardComponent } from './ds-card/card';
+import { CheckboxCardComponent } from './ds-checkbox-card/checkbox-card';
+import { CheckoutOverlayComponent } from './ds-checkout-overlay/checkout-overlay';
 
 // Pipes
 import { PipesModule } from '../pipes/pipes.module';
@@ -39,7 +43,11 @@ const components: any[] = [
   HotDealProductComponent,
   PurchaseItemComponent,
   HotDealComponent,
-  MoreOptionsComponent
+  MoreOptionsComponent,
+  VendorMenuComponent,
+  CardComponent,
+  CheckboxCardComponent,
+  CheckoutOverlayComponent
 ];
 
 @NgModule({

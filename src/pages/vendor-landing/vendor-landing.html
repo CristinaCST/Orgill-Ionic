@@ -1,0 +1,32 @@
+<ion-header class="vendor-nav-header">
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <ion-title>{{"dropship_page_landing_title" | translate}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="vendor-content">
+  <div>
+    <h1 class="vendor-main-header">{{"dropship_landing_header_greeting" | translate}}, {{vendorName}} 👋🏻</h1>
+    <h4 class="vendor-header">{{"dropship_landing_header" | translate}}</h4>
+
+    <div class="vendor-action-wrapper" (click)="goToPage('ordersSubmitted')">
+      <div class="bulina"></div>
+      <h4 class="vendor-action-header">{{"dropship_landing_orders_submitted" | translate}}</h4>
+      <img src="../../assets/vector/vendor-landing-vector.svg" />
+    </div>
+
+    <div class="vendor-action-wrapper" (click)="goToPage('savedDrafts')">
+      <div class="bulina"></div>
+      <h4 class="vendor-action-header">
+        {{"dropship_landing_saved_drafts" | translate}}: <span>{{savedDrafts}}</span>
+      </h4>
+      <img src="../../assets/vector/vendor-landing-vector.svg" />
+    </div>
+  </div>
+
+  <button class="vendor-new-order" (click)="goToPage('newOrder')">{{"dropship_landing_new_order" | translate}}</button>
+</ion-content>

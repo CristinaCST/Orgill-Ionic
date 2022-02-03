@@ -269,3 +269,17 @@ export const MARKET_CATALOG: string = 'menu_header_market_catalog';
 export const TRACK_ORDER_PAGE_TITLE: string = 'track_order_page_title';
 export const TRACK_ORDER_LOADER_TEXT: string = 'track_order_loader_text';
 export const TRACK_VALID_INPUT_VALUE: string = 'track_valid_input_value';
+
+/**
+ * Dropship
+ */
+export const dropship_select_specials_dropship: string = 'dropship_select_specials_dropship';
+export const dropship_select_special_header: string = 'dropship_select_special_header';
+export const dropship_select_specials_pallet: string = 'dropship_select_specials_pallet';
+export const dropship_pallet_specials_header: string = 'dropship_pallet_specials_header';
+export const dropship_select_specials_pog: string = 'dropship_select_specials_pog';
+export const dropship_pog_specials_header: string = 'dropship_pog_specials_header';
+export const dropship_order_submitted_successfully: string = 'dropship_order_submitted_successfully';
+export const dropship_order_saved_successfully: string = 'dropship_order_saved_successfully';
+export const dropship_confirm_delete_order: string = 'dropship_confirm_delete_order';
+export const dropship_order_deleted: string = 'dropship_order_deleted';

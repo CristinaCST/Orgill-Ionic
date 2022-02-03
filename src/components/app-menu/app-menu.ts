@@ -328,4 +328,8 @@ export class AppMenuComponent implements OnInit {
       }
     );
   }
+
+  public isUserTypeVendor(): boolean {
+    return this.authService.getCurrentUser().user_type === 'Vendor';
+  }
 }

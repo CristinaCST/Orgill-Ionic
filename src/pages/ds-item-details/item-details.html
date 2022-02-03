@@ -1,0 +1,48 @@
+<ion-header class="vendor-nav-header">
+  <ion-navbar>
+    <ion-title>{{pageTitle}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="item-details-content">
+  <div class="item-header-wrapper">
+    <div class="img-wrapper" *ngIf="formDetails.image">
+      <img class="item-img" [src]="formDetails.image" (click)="toggleOverlay()" />
+    </div>
+
+    <div class="item-price-details">
+      <p *ngIf="formDetails.hasOwnProperty('form_name')" class="item-header">{{data.description}}</p>
+      <p *ngIf="data.special_cost" class="cost">{{data.special_cost | currency}}</p>
+      <p *ngIf="data.savings" class="savings">{{(data.savings).toFixed(2)}}% Savings</p>
+      <span>Regular cost</span>
+      <p *ngIf="data.regular_cost">{{data.regular_cost | currency}}</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="item-details-wrapper">
+    <p><span>Item number:</span> {{data.factory_number}}</p>
+    <p><span>Minimum qty:</span> {{data.min_qty}}</p>
+    <p><span>UPC:</span> {{data.upc_code}}</p>
+    <p><span>Orgil Sku:</span> {{data.orgill_sku}}</p>
+    <p><span>Unit:</span> {{data.unit}}</p>
+
+    <div class="description">
+      <span>Relevant informations from vendor</span>
+      <p>{{data.description}}</p>
+    </div>
+  </div>
+
+  <checkout-overlay></checkout-overlay>
+</ion-content>
+
+<div class="img-overlay" [ngClass]="{'active':isOverlayActive}">
+  <button class="overlay-close" ion-button icon-only small clear (click)="toggleOverlay()">
+    <ion-icon name="close"></ion-icon>
+  </button>
+
+  <div class="img-wrapper">
+    <img [src]="formDetails.image" />
+  </div>
+</div>

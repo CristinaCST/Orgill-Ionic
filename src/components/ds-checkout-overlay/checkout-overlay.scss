@@ -1,0 +1,58 @@
+@import '../../theme/variables';
+
+.checkout-overlay {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 20px 10px;
+  border-radius: 20px 20px 0px 0px;
+  background: color($colors, OrgillLightRed);
+
+  &.hidden {
+    display: none;
+  }
+
+  .checkout-wrapper {
+    display: flex;
+    font-weight: 500;
+    justify-content: space-between;
+
+    h4 {
+      margin: 0;
+      color: #fff;
+      font-size: 18px;
+    }
+
+    p {
+      margin: 5px 0;
+      color: #ccc;
+      font-size: 12px;
+    }
+
+    button {
+      margin: 10px 0 0 0;
+      padding: 10px 0;
+      flex: 1;
+      font-size: 18px;
+      border-radius: 5px;
+    }
+
+    .btn.save-draft {
+      margin: 10px 10px 0 0;
+      color: #fff;
+      border: 1px solid #fff;
+      background: color($colors, OrgillLightRed);
+    }
+
+    .btn.checkout {
+      color: #000;
+      background: #fff;
+
+      &.disabled {
+        color: rgba(44, 44, 44, 0.5);
+        background: rgba(255, 255, 255, 0.5);
+      }
+    }
+  }
+}

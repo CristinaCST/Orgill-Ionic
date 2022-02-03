@@ -1,10 +1,4 @@
-<ion-menu
-  id="main_menu"
-  (ionOpen)="menuOpen()"
-  (ionClose)="menuClose()"
-  [content]="menuContent"
-  persistent="true"
->
+<ion-menu id="main_menu" (ionOpen)="menuOpen()" (ionClose)="menuClose()" [content]="menuContent" persistent="true">
   <!-- Menu Header-->
   <ion-header *ngIf="showShoppingListsMenu===false">
     <ion-toolbar>
@@ -15,7 +9,7 @@
   </ion-header>
 
   <!--Menu content -->
-  <ion-content *ngIf="showShoppingListsMenu===false" class="content">
+  <ion-content *ngIf="showShoppingListsMenu===false && !isUserTypeVendor()" class="content">
     <ion-item-group class="group">
       <!-- Every day catalog -->
 
@@ -116,27 +110,12 @@
       <!-- Ordering -->
       <ion-item-divider no-lines>{{"menu_header_ordering" | translate}}:</ion-item-divider>
 
-      <button
-        ion-item
-        class="item"
-        detail-none
-        menuClose
-        icon-left
-        *ngIf="hotDealNotification"
-        (click)="hotDealPage()"
-      >
+      <button ion-item class="item" detail-none menuClose icon-left *ngIf="hotDealNotification" (click)="hotDealPage()">
         <ion-icon class="flash_icon" name="flash"></ion-icon>
         {{"menu_hot_deal_button" | translate}}
       </button>
 
-      <button
-        ion-item
-        class="item"
-        detail-none
-        menuClose
-        icon-left
-        (click)="goToPage(menuPages.pastPurchases)"
-      >
+      <button ion-item class="item" detail-none menuClose icon-left (click)="goToPage(menuPages.pastPurchases)">
         <ion-icon name="archive"></ion-icon>
         {{"menu_ordering_history"| translate}}
       </button>
@@ -167,4 +146,6 @@
     (back)="onBack($event)"
     *ngIf="showShoppingListsMenu===true"
   ></custom-shopping-list-menu>
+
+  <vendor-menu *ngIf="isUserTypeVendor()"></vendor-menu>
 </ion-menu>

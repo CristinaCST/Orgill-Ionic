@@ -1,0 +1,69 @@
+<div class="card-wrapper" [ngClass]="{'selected': isSelected && (isDropship || !formDetails)}">
+  <div class="card-content-column" (click)="handleClick()">
+    <div class="checkbox-wrapper">
+      <ion-checkbox
+        *ngIf="isDropship || !formDetails"
+        [(ngModel)]="isSelected"
+        (click)="handleCheckbox()"
+      ></ion-checkbox>
+
+      <p *ngIf="data.hasOwnProperty('form_name')" class="card-header">{{data.form_name}}</p>
+      <p *ngIf="data.hasOwnProperty('description')" class="card-header">{{data.description}}</p>
+    </div>
+
+    <p *ngIf="data.hasOwnProperty('total_pallet_qty')"><span>Total Pallet Qty:</span> {{data.total_pallet_qty}}</p>
+    <p *ngIf="data.hasOwnProperty('shipment_terms')"><span>Shipment Terms:</span> {{data.shipment_terms}}</p>
+    <p *ngIf="data.hasOwnProperty('pallet_type')"><span>Pallet Type:</span> {{data.pallet_type}}</p>
+    <p *ngIf="data.hasOwnProperty('special_cash_terms')">
+      <span>Special Cash Terms: </span> {{data.special_cash_terms}}
+    </p>
+    <p *ngIf="data.hasOwnProperty('ships')"><span>Ships:</span> {{data.ships}}</p>
+
+    <p *ngIf="data.hasOwnProperty('factory_number')"><span>Item number:</span> {{data.factory_number}}</p>
+    <p *ngIf="data.hasOwnProperty('min_qty')"><span>Minimum qty:</span> {{data.min_qty}}</p>
+    <p *ngIf="data.hasOwnProperty('upc_code')"><span>UPC:</span> {{data.upc_code}}</p>
+    <p *ngIf="data.hasOwnProperty('unit')"><span>Unit:</span> {{data.unit}}</p>
+  </div>
+
+  <div class="card-details-column">
+    <div class="details-wrapper">
+      <p *ngIf="data.total_special_cost" class="card-header">{{data.total_special_cost | currency}}</p>
+      <p *ngIf="data.regular_cost" class="card-header">{{data.special_cost | currency}}</p>
+      <p *ngIf="data.savings" class="savings">{{(data.savings * 1).toFixed(2)}}% Savings</p>
+
+      <ng-container *ngIf="data.hasOwnProperty('item_market_cost')">
+        <p class="card-subtitle">Item market cost</p>
+        <p>{{data.item_market_cost | currency}}</p>
+      </ng-container>
+    </div>
+
+    <div class="card-counter-wrapper" *ngIf="isSelected && (isDropship || !formDetails)">
+      <button
+        ion-button
+        icon-only
+        small
+        clear
+        [ngClass]="{'disabled': selectedQuantity === ((data.min_qty * 1) || 1)}"
+        (click)="handleCounterAction()"
+      >
+        <ion-icon name="remove"></ion-icon>
+      </button>
+
+      <input
+        clearInput
+        min="1"
+        maxlength="5"
+        type="tel"
+        inputmode="numeric"
+        pattern="^[0-9]"
+        [(ngModel)]="selectedQuantity"
+        (focusout)="handleQuantityChange($event.target.value)"
+        (keydown.enter)="$event.target.blur()"
+      />
+
+      <button ion-button icon-only small clear (click)="handleCounterAction('add')">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </div>
+  </div>
+</div>

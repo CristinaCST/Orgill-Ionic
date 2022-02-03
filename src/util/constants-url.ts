@@ -79,3 +79,20 @@ export const TEST_GET_TODAY_CUSTOMERS: string = TRACKING_API_BASE_URL + 'Test/Ge
  * customerNo
  */
 export const ADMIN_GET_CUSTOMER_LOCATIONS: string = TRACKING_API_BASE_URL + 'Admin/GetCustomerLocations';
+
+// DROPSHIP
+export const ds_create_savedorder: string = 'ds_create_savedorder';
+export const ds_delete_savedorder: string = 'ds_delete_savedorder';
+export const ds_form_details: string = 'ds_form_details';
+export const ds_form_items: string = 'ds_form_items';
+export const ds_form_list: string = 'ds_form_list';
+export const ds_get_savedorder_details: string = 'ds_get_savedorder_details';
+export const ds_get_savedorder_list: string = 'ds_get_savedorder_list';
+export const ds_send_savedorder: string = 'ds_send_savedorder';
+export const ds_submit_savedorder: string = 'ds_submit_savedorder';
+export const ds_update_savedorder: string = 'ds_update_savedorder';
+export const get_usernames: string = 'get_usernames';
+
+// check submitted orders urls
+export const onlineDealerMarketUS: string = 'https://www.orgill.com/onlineDealerMarket.aspx?tab=6';
+export const onlineDealerMarketCAD: string = 'https://www.orgill.ca/onlineDealerMarket.aspx?tab=6';

@@ -1,0 +1,26 @@
+<ion-header class="vendor-nav-header">
+  <ion-navbar>
+    <ion-title>{{pageTitle}}</ion-title>
+
+    <ion-buttons end *ngIf="isDropship">
+      <button ion-button icon-only>
+        <ion-icon name="barcode"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+  <search-bar *ngIf="isDropship" [showBackButton]="false"></search-bar>
+</ion-header>
+
+<ion-content class="specials-dropship-content">
+  <div *ngIf="categoryList.length ">
+    <h3 class="dropship-header">{{pageHeader}}</h3>
+
+    <card *ngFor="let category of categoryList" [data]="category" (click)="goToShopItemsPage(category)"></card>
+  </div>
+
+  <div *ngIf="!categoryList.length" class="no-data-wrapper">
+    <ion-icon name="remove-circle"></ion-icon>
+    <h3 class="dropship-header">No data found.</h3>
+  </div>
+</ion-content>
