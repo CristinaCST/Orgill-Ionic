@@ -14,10 +14,12 @@
           <ion-label class="input-label" stacked>
             {{"dropship_customer_info_customer_number" | translate}}<span>*</span>:
             <span *ngIf="formControls.customer_number.errors?.required && formControls.customer_number.touched">
-              (Required)
+              ({{"required_text" | translate}})
             </span>
-            <span *ngIf="formControls.customer_number.errors?.pattern && formControls.customer_number.touched">
-              (Not a valid number)
+            <span
+              *ngIf="formControls.customer_number.touched && (formControls.customer_number.errors?.pattern || isInvalidNumber)"
+            >
+              ({{"not_valid_num_text" | translate}})
             </span>
           </ion-label>
           <ion-input
@@ -27,27 +29,33 @@
             inputmode="numeric"
             (focusout)="handleCustomerNumber($event.target.value)"
             (keydown.enter)="$event.target.blur()"
+            (ngModelChange)="handleCustomerNumberChange()"
           ></ion-input>
         </ion-item>
 
-        <ion-item class="input-item-wrapper">
-          <ion-label class="input-label" stacked> {{"dropship_customer_info_user_name" | translate}}: </ion-label>
-          <ion-select
-            class="input-item"
-            formControlName="selected_user"
-            (ngModelChange)="handleSelect($event)"
-            [disabled]="!usernames.length"
-          >
-            <ion-option value="">None</ion-option>
-            <ion-option *ngFor="let user of usernames" [value]="user">{{user.user_name}}</ion-option>
-          </ion-select>
-        </ion-item>
+        <div class="username-container">
+          <ion-item class="input-item-wrapper">
+            <ion-label class="input-label" stacked> {{"dropship_customer_info_user_name" | translate}}: </ion-label>
+
+            <ion-select
+              class="input-item"
+              formControlName="selected_user"
+              (ngModelChange)="handleSelect($event)"
+              [disabled]="!usernames.length"
+            >
+              <ion-option value="">{{"none_text" | translate}}</ion-option>
+              <ion-option *ngFor="let user of usernames" [value]="user">{{user.user_name}}</ion-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-spinner *ngIf="isUsernamesLoading" class="username-spinner"></ion-spinner>
+        </div>
 
         <ion-item class="input-item-wrapper">
           <ion-label class="input-label" stacked>
             {{"dropship_customer_info_first_name" | translate}}<span>*</span>:
             <span *ngIf="formControls.first_name.errors?.required && formControls.first_name.touched">
-              (Required)
+              ({{"required_text" | translate}})
             </span>
           </ion-label>
           <ion-input class="input-item" formControlName="first_name" type="text"></ion-input>
@@ -56,7 +64,9 @@
         <ion-item class="input-item-wrapper">
           <ion-label class="input-label" stacked>
             {{"dropship_customer_info_last_name" | translate}}<span>*</span>:
-            <span *ngIf="formControls.last_name.errors?.required && formControls.last_name.touched"> (Required) </span>
+            <span *ngIf="formControls.last_name.errors?.required && formControls.last_name.touched">
+              ({{"required_text" | translate}})
+            </span>
           </ion-label>
           <ion-input class="input-item" formControlName="last_name" type="text"></ion-input>
         </ion-item>
@@ -65,8 +75,8 @@
           <ion-label class="input-label" stacked
             >Email<span>*</span>:
             <ng-container *ngIf="formControls.email.touched">
-              <span *ngIf="formControls.email.errors?.required "> (Required) </span>
-              <span *ngIf="formControls.email.errors?.email  "> (Invalid email) </span>
+              <span *ngIf="formControls.email.errors?.required "> ({{"required_text" | translate}}) </span>
+              <span *ngIf="formControls.email.errors?.email  "> ({{"invalid_email_text" | translate}}) </span>
             </ng-container>
           </ion-label>
           <ion-input class="input-item" formControlName="email" type="email"></ion-input>
@@ -75,7 +85,9 @@
         <ion-item class="input-item-wrapper">
           <ion-label class="input-label" stacked>
             {{"dropship_customer_info_phone_number" | translate}}<span>*</span>:
-            <span *ngIf="formControls.phone.errors?.required && formControls.phone.touched"> (Required) </span>
+            <span *ngIf="formControls.phone.errors?.required && formControls.phone.touched">
+              ({{"required_text" | translate}})
+            </span>
           </ion-label>
           <ion-input class="input-item" formControlName="phone" type="tel"></ion-input>
         </ion-item>
@@ -83,7 +95,9 @@
         <ion-item class="input-item-wrapper">
           <ion-label class="input-label" stacked>
             {{"dropship_customer_info_ship_date" | translate}}<span>*</span>:
-            <span *ngIf="formControls.ship_date.errors?.required && formControls.ship_date.touched"> (Required) </span>
+            <span *ngIf="formControls.ship_date.errors?.required && formControls.ship_date.touched">
+              ({{"required_text" | translate}})
+            </span>
           </ion-label>
           <ion-datetime class="input-item" formControlName="ship_date" displayFormat="MM/DD/YYYY"></ion-datetime>
         </ion-item>

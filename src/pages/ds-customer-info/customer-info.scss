@@ -83,4 +83,15 @@
       margin-right: 9px;
     }
   }
+
+  .username-container {
+    position: relative;
+
+    .username-spinner {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      margin: 0 auto 5px 10px;
+    }
+  }
 }

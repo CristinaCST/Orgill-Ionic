@@ -1,6 +1,6 @@
 <ion-header class="vendor-nav-header">
   <ion-navbar>
-    <ion-title>Checkout</ion-title>
+    <ion-title>{{"dropship_checkout" | translate | uppercase}}</ion-title>
 
     <ion-buttons end>
       <button ion-button icon-only>
@@ -13,7 +13,9 @@
 </ion-header>
 
 <ion-content class="checkout-dropship-content">
-  <div class="continue-shopping" (click)="goBack()"><ion-icon name="arrow-back"></ion-icon> Continue shopping</div>
+  <div class="continue-shopping" (click)="goBack()">
+    <ion-icon name="arrow-back"></ion-icon> {{"dropship_checkout_continue_shopping" | translate}}
+  </div>
 
   <checkbox-card
     *ngFor="let item of checkoutItems"
@@ -24,7 +26,7 @@
 
   <div *ngIf="!checkoutItems.length" class="empty-checkout">
     <ion-icon name="cart"></ion-icon>
-    <h3>No items in the checkout cart!</h3>
+    <h3>{{"dropship_checkout_empty_cart" | translate}}</h3>
   </div>
 
   <checkout-overlay [isCheckout]="true"></checkout-overlay>

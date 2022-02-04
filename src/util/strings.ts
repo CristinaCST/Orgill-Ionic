@@ -283,3 +283,4 @@ export const dropship_order_submitted_successfully: string = 'dropship_order_sub
 export const dropship_order_saved_successfully: string = 'dropship_order_saved_successfully';
 export const dropship_confirm_delete_order: string = 'dropship_confirm_delete_order';
 export const dropship_order_deleted: string = 'dropship_order_deleted';
+export const loading_text: string = 'loading_text';

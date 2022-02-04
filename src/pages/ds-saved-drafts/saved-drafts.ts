@@ -10,6 +10,8 @@ import {
   DS_FORM_LIST_FORM_TYPE_PALLET,
   DS_FORM_LIST_FORM_TYPE_POG
 } from '../../util/constants';
+import { loading_text } from '../../util/strings';
+import { TranslateWrapperService } from '../../services/translate/translate';
 
 @Component({
   selector: 'page-saved-drafts',
@@ -25,9 +27,10 @@ export class SavedDraftsPage implements OnInit {
     public dropshipProvider: DropshipProvider,
     public loadingService: LoadingService,
     public navController: NavController,
-    public events: Events
+    public events: Events,
+    private readonly translateProvider: TranslateWrapperService
   ) {
-    this.dropshipLoader = loadingService.createLoader('Loading');
+    this.dropshipLoader = loadingService.createLoader(this.translateProvider.translate(loading_text));
 
     events.subscribe('savedOrderDeleted', order_id => {
       if (!order_id) {

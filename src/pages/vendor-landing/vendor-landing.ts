@@ -10,6 +10,8 @@ import { DS_FORM_LIST_TYPE_CA } from '../../util/constants';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { DropshipService } from '../../services/dropship/dropship';
 import { onlineDealerMarketCAD, onlineDealerMarketUS } from '../../util/constants-url';
+import { TranslateWrapperService } from '../../services/translate/translate';
+import { loading_text } from '../../util/strings';
 
 @Component({
   selector: 'page-vendor-landing',
@@ -27,9 +29,10 @@ export class VendorLandingPage implements OnInit {
     public navigatorService: NavigatorService,
     private readonly dropshipService: DropshipService,
     private readonly authService: AuthService,
-    private readonly iab: InAppBrowser
+    private readonly iab: InAppBrowser,
+    private readonly translateProvider: TranslateWrapperService
   ) {
-    this.dropshipLoader = loadingService.createLoader('Loading');
+    this.dropshipLoader = loadingService.createLoader(this.translateProvider.translate(loading_text));
   }
 
   public ngOnInit(): void {

@@ -11,28 +11,36 @@
       <p *ngIf="data.hasOwnProperty('description')" class="card-header">{{data.description}}</p>
     </div>
 
-    <p *ngIf="data.hasOwnProperty('total_pallet_qty')"><span>Total Pallet Qty:</span> {{data.total_pallet_qty}}</p>
-    <p *ngIf="data.hasOwnProperty('shipment_terms')"><span>Shipment Terms:</span> {{data.shipment_terms}}</p>
-    <p *ngIf="data.hasOwnProperty('pallet_type')"><span>Pallet Type:</span> {{data.pallet_type}}</p>
-    <p *ngIf="data.hasOwnProperty('special_cash_terms')">
-      <span>Special Cash Terms: </span> {{data.special_cash_terms}}
+    <p *ngIf="data.hasOwnProperty('total_pallet_qty')">
+      <span>{{"dropship_total_pallet_qty" | translate}}}}:</span> {{data.total_pallet_qty}}
     </p>
-    <p *ngIf="data.hasOwnProperty('ships')"><span>Ships:</span> {{data.ships}}</p>
+    <p *ngIf="data.hasOwnProperty('shipment_terms')">
+      <span>{{"dropship_shipment_terms" | translate}}:</span> {{data.shipment_terms}}
+    </p>
+    <p *ngIf="data.hasOwnProperty('pallet_type')">
+      <span>{{"dropship_pallet_type" | translate}}:</span> {{data.pallet_type}}
+    </p>
+    <p *ngIf="data.hasOwnProperty('special_cash_terms')">
+      <span>{{"dropship_special_cash_terms" | translate}}: </span> {{data.special_cash_terms}}
+    </p>
+    <p *ngIf="data.hasOwnProperty('ships')"><span>{{"ships_text" | translate}}:</span> {{data.ships}}</p>
 
-    <p *ngIf="data.hasOwnProperty('factory_number')"><span>Item number:</span> {{data.factory_number}}</p>
-    <p *ngIf="data.hasOwnProperty('min_qty')"><span>Minimum qty:</span> {{data.min_qty}}</p>
+    <p *ngIf="data.hasOwnProperty('factory_number')">
+      <span>{{"dropship_item_number" | translate}}:</span> {{data.factory_number}}
+    </p>
+    <p *ngIf="data.hasOwnProperty('min_qty')"><span>{{"minimum_qty_text" | translate}}:</span> {{data.min_qty}}</p>
     <p *ngIf="data.hasOwnProperty('upc_code')"><span>UPC:</span> {{data.upc_code}}</p>
-    <p *ngIf="data.hasOwnProperty('unit')"><span>Unit:</span> {{data.unit}}</p>
+    <p *ngIf="data.hasOwnProperty('unit')"><span>{{"unit_text" | translate}}:</span> {{data.unit}}</p>
   </div>
 
   <div class="card-details-column">
     <div class="details-wrapper">
       <p *ngIf="data.total_special_cost" class="card-header">{{data.total_special_cost | currency}}</p>
       <p *ngIf="data.regular_cost" class="card-header">{{data.special_cost | currency}}</p>
-      <p *ngIf="data.savings" class="savings">{{(data.savings * 1).toFixed(2)}}% Savings</p>
+      <p *ngIf="data.savings" class="savings">{{(data.savings * 1).toFixed(2)}}% {{"savings_text" | translate}}</p>
 
       <ng-container *ngIf="data.hasOwnProperty('item_market_cost')">
-        <p class="card-subtitle">Item market cost</p>
+        <p class="card-subtitle">{{"dropship_item_market_cost" | translate}}</p>
         <p>{{data.item_market_cost | currency}}</p>
       </ng-container>
     </div>

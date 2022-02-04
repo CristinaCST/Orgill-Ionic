@@ -32,7 +32,7 @@ export class SpecialsPage implements OnInit {
     private readonly dropshipProvider: DropshipProvider,
     private readonly translateProvider: TranslateWrapperService
   ) {
-    this.dropshipLoader = loadingService.createLoader('Loading');
+    this.dropshipLoader = loadingService.createLoader(this.translateProvider.translate(Strings.loading_text));
   }
 
   public ngOnInit(): void {

@@ -5,6 +5,8 @@ import { DropshipProvider } from '../../providers/dropship/dropship';
 import { FormDetails, SavedorderItems, SavedorderList } from '../../interfaces/response-body/dropship';
 import { LoadingService } from '../../services/loading/loading';
 import { DropshipService } from '../../services/dropship/dropship';
+import { TranslateWrapperService } from '../../services/translate/translate';
+import { loading_text } from '../../util/strings';
 
 @Component({
   selector: 'page-shop-items',
@@ -25,9 +27,10 @@ export class ShopItemsPage implements OnInit {
     public dropshipProvider: DropshipProvider,
     public loadingService: LoadingService,
     private readonly navParams: NavParams,
-    private readonly dropshipService: DropshipService
+    private readonly dropshipService: DropshipService,
+    private readonly translateProvider: TranslateWrapperService
   ) {
-    this.dropshipLoader = loadingService.createLoader('Loading');
+    this.dropshipLoader = loadingService.createLoader(this.translateProvider.translate(loading_text));
   }
 
   public ngOnInit(): void {

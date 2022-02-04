@@ -13,8 +13,8 @@
     <div class="item-price-details">
       <p *ngIf="formDetails.hasOwnProperty('form_name')" class="item-header">{{data.description}}</p>
       <p *ngIf="data.special_cost" class="cost">{{data.special_cost | currency}}</p>
-      <p *ngIf="data.savings" class="savings">{{(data.savings).toFixed(2)}}% Savings</p>
-      <span>Regular cost</span>
+      <p *ngIf="data.savings" class="savings">{{(data.savings).toFixed(2)}}% {{"savings_text" | translate}}</p>
+      <span>{{"regular_cost_text" | translate}}</span>
       <p *ngIf="data.regular_cost">{{data.regular_cost | currency}}</p>
     </div>
   </div>
@@ -22,14 +22,14 @@
   <div class="divider"></div>
 
   <div class="item-details-wrapper">
-    <p><span>Item number:</span> {{data.factory_number}}</p>
-    <p><span>Minimum qty:</span> {{data.min_qty}}</p>
+    <p><span>{{"item_number_text" | translate}}:</span> {{data.factory_number}}</p>
+    <p><span>{{"minimum_qty_text" | translate}}:</span> {{data.min_qty}}</p>
     <p><span>UPC:</span> {{data.upc_code}}</p>
     <p><span>Orgil Sku:</span> {{data.orgill_sku}}</p>
-    <p><span>Unit:</span> {{data.unit}}</p>
+    <p><span>{{"unit_text" | translate}}:</span> {{data.unit}}</p>
 
     <div class="description">
-      <span>Relevant informations from vendor</span>
+      <span>{{"relevant_info_text" | translate}}</span>
       <p>{{data.description}}</p>
     </div>
   </div>

@@ -28,7 +28,9 @@
       <p *ngIf="data.hasOwnProperty('special_cash_terms')">
         <span>{{"dropship_specials_special_cash_terms" | translate}}:</span> {{data.special_cash_terms}}
       </p>
-      <p *ngIf="data.hasOwnProperty('shipment_terms')"><span>Ships:</span> {{data.shipment_terms}}</p>
+      <p *ngIf="data.hasOwnProperty('shipment_terms')">
+        <span>{{"ships_text" | translate}}:</span> {{data.shipment_terms}}
+      </p>
     </div>
   </div>
 

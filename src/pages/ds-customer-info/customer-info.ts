@@ -16,6 +16,8 @@ export class CustomerInfoPage implements OnInit {
   public model: any = {};
   public formControls: any;
   public usernames: VendorUserName[] = [];
+  public isInvalidNumber: boolean = false;
+  public isUsernamesLoading: boolean = false;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -41,10 +43,19 @@ export class CustomerInfoPage implements OnInit {
 
   public handleCustomerNumber(value: string): void {
     if (!this.formControls.customer_number.errors) {
+      this.isUsernamesLoading = true;
+
       this.dropshipProvider.getUsernames({ customer_number: value }).subscribe(response => {
-        this.usernames = JSON.parse(response.d);
+        const usernames: VendorUserName[] = JSON.parse(response.d);
+        this.usernames = usernames;
+        this.isInvalidNumber = !Boolean(usernames.length);
+        this.isUsernamesLoading = false;
       });
     }
+  }
+
+  public handleCustomerNumberChange(): void {
+    this.usernames = [];
   }
 
   public handleSelect(user: VendorUserName): void {
@@ -59,8 +70,7 @@ export class CustomerInfoPage implements OnInit {
       return;
     }
 
-    const formData: any = this.formatDate(this.customerInfoForm.value);
-    this.dropshipService.updateCustomerInfoForm(formData);
+    this.dropshipService.updateCustomerInfoForm(this.formatDate(this.customerInfoForm.value));
     this.navigatorService.push(SelectSpecialsPage);
   }
 

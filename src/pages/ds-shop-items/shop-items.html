@@ -25,7 +25,9 @@
 
       <div class="list-price">
         <p *ngIf="formDetails.total_special_cost" class="cost">{{formDetails.total_special_cost | currency}}</p>
-        <p *ngIf="formDetails.savings" class="savings">{{(formDetails.savings).toFixed(2)}}% Savings</p>
+        <p *ngIf="formDetails.savings" class="savings">
+          {{(formDetails.savings).toFixed(2)}}% {{"savings_text" | translate}}
+        </p>
       </div>
 
       <div class="list-counter-wrapper" *ngIf="selectedItems.includes(formDetails.form_id)">

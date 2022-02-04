@@ -5,6 +5,7 @@ import { DropshipProvider } from '../../providers/dropship/dropship';
 import { LoadingService } from '../../services/loading/loading';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
+import { TranslateWrapperService } from '../../services/translate/translate';
 
 @Component({
   selector: 'card',
@@ -26,9 +27,10 @@ export class CardComponent {
     private readonly dropshipProvider: DropshipProvider,
     private readonly popoversService: PopoversService,
     public events: Events,
-    public loadingService: LoadingService
+    public loadingService: LoadingService,
+    private readonly translateProvider: TranslateWrapperService
   ) {
-    this.dropshipLoader = loadingService.createLoader('Loading');
+    this.dropshipLoader = loadingService.createLoader(this.translateProvider.translate(Strings.loading_text));
   }
 
   public deleteCurrentOrder(e: Event): void {
