@@ -3,13 +3,13 @@
     <ion-title>{{"dropship_checkout" | translate | uppercase}}</ion-title>
 
     <ion-buttons end>
-      <button ion-button icon-only>
+      <button ion-button icon-only (click)="handleScan()">
         <ion-icon name="barcode"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
 
-  <search-bar [showBackButton]="false"></search-bar>
+  <search-bar [showBackButton]="false" (searched)="handleSearch($event)"></search-bar>
 </ion-header>
 
 <ion-content class="checkout-dropship-content">

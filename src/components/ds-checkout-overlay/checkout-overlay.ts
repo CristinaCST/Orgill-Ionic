@@ -107,7 +107,6 @@ export class CheckoutOverlayComponent implements OnInit, OnDestroy {
 
       this.dropshipProvider.dsCreateSavedOrder(requestBody).subscribe(response => {
         const savedOrderDetails: any = JSON.parse(response.d);
-        this.dropshipService.updateSavedOrderDetails(savedOrderDetails);
 
         if (sendOrder) {
           this.dropshipProvider

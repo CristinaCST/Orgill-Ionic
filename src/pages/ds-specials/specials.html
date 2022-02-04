@@ -1,15 +1,7 @@
 <ion-header class="vendor-nav-header">
   <ion-navbar>
     <ion-title>{{pageTitle}}</ion-title>
-
-    <ion-buttons end *ngIf="isDropship">
-      <button ion-button icon-only>
-        <ion-icon name="barcode"></ion-icon>
-      </button>
-    </ion-buttons>
   </ion-navbar>
-
-  <search-bar *ngIf="isDropship" [showBackButton]="false"></search-bar>
 </ion-header>
 
 <ion-content class="specials-dropship-content">

@@ -1,18 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { NavParams } from 'ionic-angular';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Events, NavController, NavParams } from 'ionic-angular';
 import { take } from 'rxjs/operators';
 import { DropshipProvider } from '../../providers/dropship/dropship';
-import { FormDetails, SavedorderItems, SavedorderList } from '../../interfaces/response-body/dropship';
+import { FormDetails, FormItems, SavedorderItems, SavedorderList } from '../../interfaces/response-body/dropship';
 import { LoadingService } from '../../services/loading/loading';
 import { DropshipService } from '../../services/dropship/dropship';
 import { TranslateWrapperService } from '../../services/translate/translate';
 import { loading_text } from '../../util/strings';
+import { CheckoutPage } from '../../pages/ds-checkout/checkout';
 
 @Component({
   selector: 'page-shop-items',
   templateUrl: 'shop-items.html'
 })
-export class ShopItemsPage implements OnInit {
+export class ShopItemsPage implements OnInit, OnDestroy {
   public itemList: any;
   public formDetails: FormDetails;
   public isDropship: boolean = false;
@@ -24,6 +25,8 @@ export class ShopItemsPage implements OnInit {
   private readonly dropshipLoader: LoadingService;
 
   constructor(
+    public events: Events,
+    public navController: NavController,
     public dropshipProvider: DropshipProvider,
     public loadingService: LoadingService,
     private readonly navParams: NavParams,
@@ -31,6 +34,14 @@ export class ShopItemsPage implements OnInit {
     private readonly translateProvider: TranslateWrapperService
   ) {
     this.dropshipLoader = loadingService.createLoader(this.translateProvider.translate(loading_text));
+
+    events.subscribe('searchItems:shop', (searchItems: FormItems[]) => {
+      if (!searchItems && !Boolean(searchItems.length)) {
+        return;
+      }
+
+      navController.push(CheckoutPage, { searchItems, form_id: this.formDetails.form_id });
+    });
   }
 
   public ngOnInit(): void {
@@ -51,6 +62,10 @@ export class ShopItemsPage implements OnInit {
       data.form_order_quantity = Number(savedOrder.form_order_quantity);
       this.dropshipService.updateCheckoutItems(data);
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.events.unsubscribe('searchItems:shop');
   }
 
   public ionViewWillEnter(): void {
@@ -87,6 +102,14 @@ export class ShopItemsPage implements OnInit {
     }
   }
 
+  public handleSearch(keyword: string): void {
+    this.dropshipService.searchFormItem(keyword, this.formDetails.form_id);
+  }
+
+  public handleScan(): void {
+    this.dropshipService.scanFormItem(this.formDetails.form_id);
+  }
+
   private fetchFormItems(data: FormDetails, savedOrder?: SavedorderList): void {
     if (savedOrder && this.isDropship) {
       this.dropshipProvider.getSavedorderDetails({ order_id: savedOrder.order_id }).subscribe(response => {
@@ -118,7 +141,7 @@ export class ShopItemsPage implements OnInit {
       this.itemList = this.itemList.map(list => {
         checkoutItems.forEach(item => {
           const currentQuantity: number =
-            item.selectedQuantity || item.form_order_quantity || item.order_qty || item.order_qty || 1;
+            item.selectedQuantity || item.form_order_quantity || item.order_qty || item.min_qty || 1;
 
           if ('factory_number' in item) {
             if (list.factory_number === item.factory_number) {

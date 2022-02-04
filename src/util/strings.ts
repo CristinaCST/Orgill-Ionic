@@ -284,3 +284,5 @@ export const dropship_order_saved_successfully: string = 'dropship_order_saved_s
 export const dropship_confirm_delete_order: string = 'dropship_confirm_delete_order';
 export const dropship_order_deleted: string = 'dropship_order_deleted';
 export const loading_text: string = 'loading_text';
+export const no_results_text: string = 'no_results_text';
+export const item_already_in_cart_text: string = 'item_already_in_cart_text';

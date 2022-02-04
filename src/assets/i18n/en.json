@@ -325,5 +325,7 @@
   "dropship_checkout_overlay_order_total": "Order Total",
   "dropship_checkout_overlay_required_minimum": "Required to meet minimum",
   "dropship_submit_order": "Submit order",
-  "loading_text": "Loading"
+  "loading_text": "Loading",
+  "no_results_text": "No results found!",
+  "item_already_in_cart_text": "Item is already in cart!"
 }

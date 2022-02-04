@@ -3,13 +3,13 @@
     <ion-title>{{pageTitle}}</ion-title>
 
     <ion-buttons end *ngIf="isDropship">
-      <button ion-button icon-only>
+      <button ion-button icon-only (click)="handleScan()">
         <ion-icon name="barcode"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
 
-  <search-bar *ngIf="isDropship" [showBackButton]="false"></search-bar>
+  <search-bar *ngIf="isDropship" [showBackButton]="false" (searched)="handleSearch($event)"></search-bar>
 </ion-header>
 
 <ion-content class="shop-items-content">

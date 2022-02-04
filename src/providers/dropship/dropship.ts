@@ -6,6 +6,7 @@ import {
   ds_delete_savedorder,
   ds_form_details,
   ds_form_items,
+  ds_form_item_search,
   ds_form_list,
   ds_get_savedorder_details,
   ds_get_savedorder_list,
@@ -53,7 +54,7 @@ export class DropshipProvider {
    * returns saved order details
    */
   public dsCreateSavedOrder(body: {
-    form_id?: string;
+    form_id: string;
     customer_number: string;
     ship_date: string;
     po_number: string;
@@ -61,8 +62,8 @@ export class DropshipProvider {
     last_name: string;
     email: string;
     phone: string;
-    form_order_quantity?: number;
-    item_list?: { factory_number: string; order_quantity: number }[];
+    form_order_quantity: number;
+    item_list: { factory_number: string; order_quantity: number }[];
   }): Observable<{ d: string }> {
     return this.apiProvider.post(ds_create_savedorder, body, true);
   }
@@ -90,5 +91,9 @@ export class DropshipProvider {
    */
   public dsDeleteSavedorder(body: { order_id: number }): Observable<{ d: string }> {
     return this.apiProvider.post(ds_delete_savedorder, body, true);
+  }
+
+  public getFormItemSearch(body: { form_id: number; keyword: string }): Observable<{ d: string }> {
+    return this.apiProvider.post(ds_form_item_search, body, true);
   }
 }
