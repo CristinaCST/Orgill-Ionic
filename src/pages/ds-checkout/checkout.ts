@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Events, NavController, NavParams } from 'ionic-angular';
+import { DropshipProvider } from '../../providers/dropship/dropship';
 import { Subscription } from 'rxjs';
 import { FormDetails, FormItems } from '../../interfaces/response-body/dropship';
 import { DropshipService } from '../../services/dropship/dropship';
@@ -16,14 +17,15 @@ export class CheckoutPage implements OnInit, OnDestroy {
     public events: Events,
     public navController: NavController,
     private readonly navParams: NavParams,
-    private readonly dropshipService: DropshipService
+    private readonly dropshipService: DropshipService,
+    private readonly dropshipProvider: DropshipProvider
   ) {
     events.subscribe('searchItems:checkout', (searchItems: FormItems[]) => {
       if (!searchItems && !Boolean(searchItems.length)) {
         return;
       }
 
-      this.pushSearchItemsIntoCart(searchItems);
+      this.getSpecialMinimumOrder(searchItems);
     });
   }
 
@@ -38,7 +40,7 @@ export class CheckoutPage implements OnInit, OnDestroy {
 
     const searchItems: FormItems[] = this.navParams.get('searchItems');
     if (searchItems) {
-      this.pushSearchItemsIntoCart(searchItems);
+      this.getSpecialMinimumOrder(searchItems);
     }
   }
 
@@ -59,7 +61,22 @@ export class CheckoutPage implements OnInit, OnDestroy {
     this.dropshipService.scanFormItem(this.form_id, true);
   }
 
-  public pushSearchItemsIntoCart(searchItems: FormItems[]): void {
-    this.dropshipService.resetCart([...this.checkoutItems, ...searchItems]);
+  public pushSearchItemsIntoCart(cartItems: FormItems[]): void {
+    this.dropshipService.resetCart(cartItems);
+  }
+
+  public getSpecialMinimumOrder(searchItems: FormItems[]): void {
+    const cartItems: any = [...this.checkoutItems, ...searchItems];
+
+    this.dropshipProvider.getFormDetails({ form_id: this.form_id }).subscribe(response => {
+      const formDetails: FormDetails = JSON.parse(response.d);
+
+      this.pushSearchItemsIntoCart(
+        cartItems.map(item => {
+          item.special_minimum_order = formDetails.special_minimum_order;
+          return item;
+        })
+      );
+    });
   }
 }

@@ -54,6 +54,7 @@ export interface FormItems {
   savings: number;
   min_qty: number;
   selectedQuantity?: number;
+  special_minimum_order?: string;
 }
 
 export interface SavedorderItems extends FormItems {
