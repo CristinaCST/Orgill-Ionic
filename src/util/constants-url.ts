@@ -95,5 +95,7 @@ export const get_usernames: string = 'get_usernames';
 export const ds_form_item_search: string = 'ds_form_item_search';
 
 // check submitted orders urls
-export const onlineDealerMarketUS: string = 'https://www.orgill.com/onlineDealerMarket.aspx?tab=6';
-export const onlineDealerMarketCAD: string = 'https://www.orgill.ca/onlineDealerMarket.aspx?tab=6';
+export const onlineDealerMarketUS: string =
+  'https://www.orgill.com/login.aspx?redirecturl=/onlineDealerMarket.aspx?tab=6';
+export const onlineDealerMarketCAD: string =
+  'https://www.orgill.ca/login.aspx?redirecturl=/onlineDealerMarket.aspx?tab=6';

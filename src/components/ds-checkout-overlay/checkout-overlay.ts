@@ -1,13 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AuthService } from '../../services/auth/auth';
 import { DropshipService } from '../../services/dropship/dropship';
 import { DropshipProvider } from '../../providers/dropship/dropship';
 import { User } from '../../interfaces/models/user';
 import { CheckoutPage } from '../../pages/ds-checkout/checkout';
-import { PopoverContent, PopoversService } from '../../services/popovers/popovers';
+import { DefaultPopoverResult, PopoverContent, PopoversService } from '../../services/popovers/popovers';
 import { LoadingService } from '../../services/loading/loading';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
@@ -84,15 +84,19 @@ export class CheckoutOverlayComponent implements OnInit, OnDestroy {
     this.dropshipService.customerInfoFormObservable.pipe(take(1)).subscribe(customerInfo => {
       let form_id: number;
       let form_order_quantity: number;
+
       const item_list: any = this.checkoutItems
         .map(item => {
+          const currentQuantity: number =
+            item.selectedQuantity || item.form_order_quantity || item.order_qty || item.min_qty || 1;
+
           form_id = item.form_id;
-          form_order_quantity = item.selectedQuantity;
+          form_order_quantity = currentQuantity;
 
           if ('factory_number' in item) {
             return {
               factory_number: item.factory_number,
-              order_quantity: item.selectedQuantity
+              order_quantity: currentQuantity
             };
           }
         })
@@ -111,32 +115,51 @@ export class CheckoutOverlayComponent implements OnInit, OnDestroy {
         if (sendOrder) {
           this.dropshipProvider
             .dsSendSavedorder({
-              order_id: savedOrderDetails.order_id,
+              order_id: savedOrderDetails[0].order_id,
               user_name: customerInfo.selected_user.user_name || this.currentUser.user_name,
               customer_email: customerInfo.email
             })
-            .subscribe(result => {
-              console.log(result);
+            .subscribe(() => {
               this.popoverContent.message = Strings.dropship_order_submitted_successfully;
               this.dropshipLoader.hide();
-              this.popoversService.show(this.popoverContent);
+              this.returnHomePopover(this.popoversService.show(this.popoverContent));
             });
         } else {
           this.dropshipLoader.hide();
-          this.popoversService.show(this.popoverContent);
+          this.returnHomePopover(this.popoversService.show(this.popoverContent));
         }
       });
     });
   }
 
+  private returnHomePopover(observer: Observable<any>): void {
+    observer.subscribe((res: DefaultPopoverResult) => {
+      if (res.optionSelected === 'OK') {
+        Object.assign(this.popoverContent, {
+          message: Strings.dropship_return_home,
+          dismissButtonText: Strings.MODAL_BUTTON_NO,
+          positiveButtonText: Strings.MODAL_BUTTON_YES
+        });
+
+        this.popoversService.show(this.popoverContent).subscribe((data: DefaultPopoverResult) => {
+          if (data.optionSelected === 'OK') {
+            this.navController.popToRoot();
+          }
+        });
+      }
+    });
+  }
+
   private calculateRequiredMinimum(checkoutItems: any): void {
     checkoutItems.forEach(item => {
+      const special_minimum_order: number = Number(item.special_minimum_order);
+
       if (Boolean(this.requiredMinimum)) {
-        if (item.special_minimum_order && this.requiredMinimum < item.special_minimum_order) {
-          this.requiredMinimum = item.special_minimum_order;
+        if (Boolean(special_minimum_order) && this.requiredMinimum < special_minimum_order) {
+          this.requiredMinimum = special_minimum_order;
         }
-      } else if (item.special_minimum_order) {
-        this.requiredMinimum = item.special_minimum_order;
+      } else if (Boolean(special_minimum_order)) {
+        this.requiredMinimum = special_minimum_order;
       }
     });
   }

@@ -1,4 +1,4 @@
-<div class="card">
+<div class="dropship-card">
   <div class="bulina"></div>
 
   <div class="card-details">
@@ -6,14 +6,19 @@
     <p *ngIf="data.hasOwnProperty('customer_name')" class="card-name">
       {{data.customer_number}} - {{data.customer_name}}
     </p>
-    <p *ngIf="data.hasOwnProperty('order_total')" class="currency">{{data.order_total | currency}} USD</p>
+    <p *ngIf="data.hasOwnProperty('order_total') && data.order_total" class="currency">
+      {{data.order_total | currency}} USD
+    </p>
 
     <div class="custom-wrapper">
-      <p *ngIf="data.hasOwnProperty('po_number')">
-        <span>{{"dropship_saved_drafts_placing_order" | translate}}:</span> {{data.po_number}}
+      <p *ngIf="data.hasOwnProperty('user_name')">
+        <span>{{"dropship_saved_drafts_placing_order" | translate}}:</span> {{data.user_name}}
       </p>
-      <p *ngIf="data.hasOwnProperty('form_order_quantity')">
+      <p *ngIf="data.hasOwnProperty('form_order_quantity') && (data.form_order_quantity * 1)">
         <span>{{"dropship_saved_drafts_number_items" | translate}}:</span> {{data.form_order_quantity}}
+      </p>
+      <p *ngIf="data.hasOwnProperty('number_of_items') && (data.number_of_items * 1)">
+        <span>{{"dropship_saved_drafts_number_items" | translate}}:</span> {{data.number_of_items}}
       </p>
       <p *ngIf="data.hasOwnProperty('form_type')">
         <span>{{"dropship_saved_drafts_type" | translate}}:</span> {{data.form_type}}

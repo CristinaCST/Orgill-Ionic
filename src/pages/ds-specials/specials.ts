@@ -44,7 +44,9 @@ export class SpecialsPage implements OnInit {
     this.fetchFormItems(formtype);
 
     this.translateHeaders(formtype);
+  }
 
+  public ionViewWillEnter(): void {
     this.dropshipService.resetCart();
   }
 

@@ -13,6 +13,7 @@ export class ItemDetailsPage implements OnInit {
   public isDropship: boolean = false;
   public isOverlayActive: boolean = false;
   public pageTitle: string;
+  public imageError: boolean = false;
 
   constructor(private readonly navParams: NavParams) {}
 
@@ -26,5 +27,9 @@ export class ItemDetailsPage implements OnInit {
 
   public toggleOverlay(): void {
     this.isOverlayActive = !this.isOverlayActive;
+  }
+
+  public handleMissingImage(): void {
+    this.imageError = true;
   }
 }

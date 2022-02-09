@@ -22,6 +22,7 @@ export class ShopItemsPage implements OnInit, OnDestroy {
   public checkoutItems: FormDetails;
   public selectedItems: any = [];
   public selectedQuantity: number = 1;
+  public imageError: boolean = false;
   private readonly dropshipLoader: LoadingService;
 
   constructor(
@@ -41,6 +42,10 @@ export class ShopItemsPage implements OnInit, OnDestroy {
       }
 
       navController.push(CheckoutPage, { searchItems, form_id: this.formDetails.form_id });
+    });
+
+    events.subscribe('checkoutUpdate', () => {
+      this.fetchCheckoutItems();
     });
   }
 
@@ -66,6 +71,7 @@ export class ShopItemsPage implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.events.unsubscribe('searchItems:shop');
+    this.events.unsubscribe('checkoutUpdate');
   }
 
   public ionViewWillEnter(): void {
@@ -159,5 +165,9 @@ export class ShopItemsPage implements OnInit, OnDestroy {
         return list;
       });
     });
+  }
+
+  public handleMissingImage(): void {
+    this.imageError = true;
   }
 }

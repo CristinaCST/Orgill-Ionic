@@ -12,9 +12,15 @@
   <search-bar *ngIf="isDropship" [showBackButton]="false" (searched)="handleSearch($event)"></search-bar>
 </ion-header>
 
-<ion-content class="shop-items-content">
+<ion-content class="dropship-shop-items-content" [ngClass]="{'checkout-overlay-visible': (selectedItems.length > 0)}">
   <div *ngIf="!isDropship" class="list-header-wrapper">
-    <img *ngIf="formDetails.image" class="list-img" [src]="formDetails.image" (click)="toggleOverlay()" />
+    <img
+      *ngIf="formDetails.image && !imageError"
+      class="list-img"
+      [src]="formDetails.image"
+      (error)="handleMissingImage($event)"
+      (click)="toggleOverlay()"
+    />
 
     <div class="list-details">
       <div class="checkbox-wrapper">
@@ -29,6 +35,10 @@
           {{(formDetails.savings).toFixed(2)}}% {{"savings_text" | translate}}
         </p>
       </div>
+
+      <button class="order-btn" (click)="handleCheckbox()">
+        {{selectedItems.includes(formDetails.form_id) ? 'Remove From Order' : 'Add To Order'}}
+      </button>
 
       <div class="list-counter-wrapper" *ngIf="selectedItems.includes(formDetails.form_id)">
         <button
@@ -69,11 +79,11 @@
     [isSelected]="selectedItems.includes(item.factory_number)"
     [isDropship]="isDropship"
   ></checkbox-card>
-
-  <checkout-overlay [checkoutItems]="checkoutItems"></checkout-overlay>
 </ion-content>
 
-<div *ngIf="!isDropship" class="img-overlay" [ngClass]="{'active': isOverlayActive}">
+<checkout-overlay [checkoutItems]="checkoutItems"></checkout-overlay>
+
+<div *ngIf="!isDropship" class="dropship-img-overlay" [ngClass]="{'active': isOverlayActive}">
   <button class="overlay-close" ion-button icon-only small clear (click)="toggleOverlay()">
     <ion-icon name="close"></ion-icon>
   </button>

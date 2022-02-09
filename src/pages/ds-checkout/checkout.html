@@ -12,7 +12,7 @@
   <search-bar [showBackButton]="false" (searched)="handleSearch($event)"></search-bar>
 </ion-header>
 
-<ion-content class="checkout-dropship-content">
+<ion-content class="checkout-dropship-content checkout-overlay-visible">
   <div class="continue-shopping" (click)="goBack()">
     <ion-icon name="arrow-back"></ion-icon> {{"dropship_checkout_continue_shopping" | translate}}
   </div>
@@ -28,6 +28,6 @@
     <ion-icon name="cart"></ion-icon>
     <h3>{{"dropship_checkout_empty_cart" | translate}}</h3>
   </div>
-
-  <checkout-overlay [isCheckout]="true"></checkout-overlay>
 </ion-content>
+
+<checkout-overlay [isCheckout]="true"></checkout-overlay>

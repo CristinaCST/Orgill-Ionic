@@ -35,16 +35,23 @@
 
         <div class="username-container">
           <ion-item class="input-item-wrapper">
-            <ion-label class="input-label" stacked> {{"dropship_customer_info_user_name" | translate}}: </ion-label>
+            <ion-label class="input-label" stacked>
+              {{"dropship_customer_info_user_name" | translate}}<span>*</span>:
+              <span *ngIf="formControls.selected_user.errors?.required && formControls.selected_user.touched">
+                ({{"required_text" | translate}})
+              </span>
+            </ion-label>
 
             <ion-select
               class="input-item"
               formControlName="selected_user"
               (ngModelChange)="handleSelect($event)"
               [disabled]="!usernames.length"
+              interface="popover"
             >
-              <ion-option value="">{{"none_text" | translate}}</ion-option>
-              <ion-option *ngFor="let user of usernames" [value]="user">{{user.user_name}}</ion-option>
+              <ion-option *ngFor="let user of usernames" [value]="user">
+                {{user.full_name}} ({{user.user_name}})
+              </ion-option>
             </ion-select>
           </ion-item>
 
@@ -99,7 +106,12 @@
               ({{"required_text" | translate}})
             </span>
           </ion-label>
-          <ion-datetime class="input-item" formControlName="ship_date" displayFormat="MM/DD/YYYY"></ion-datetime>
+          <ion-datetime
+            class="input-item"
+            formControlName="ship_date"
+            displayFormat="MM/DD/YYYY"
+            [min]="minDatePickerValue"
+          ></ion-datetime>
         </ion-item>
 
         <ion-item class="input-item-wrapper">

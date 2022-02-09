@@ -4,16 +4,16 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content class="item-details-content">
+<ion-content class="dropship-item-details-content">
   <div class="item-header-wrapper">
-    <div class="img-wrapper" *ngIf="formDetails.image">
-      <img class="item-img" [src]="formDetails.image" (click)="toggleOverlay()" />
+    <div class="img-wrapper" *ngIf="formDetails.image && !imageError">
+      <img class="item-img" [src]="formDetails.image" (error)="handleMissingImage($event)" (click)="toggleOverlay()" />
     </div>
 
     <div class="item-price-details">
       <p *ngIf="formDetails.hasOwnProperty('form_name')" class="item-header">{{data.description}}</p>
       <p *ngIf="data.special_cost" class="cost">{{data.special_cost | currency}}</p>
-      <p *ngIf="data.savings" class="savings">{{(data.savings).toFixed(2)}}% {{"savings_text" | translate}}</p>
+      <p *ngIf="data.savings" class="savings">{{(data.savings * 1).toFixed(2)}}% {{"savings_text" | translate}}</p>
       <span>{{"regular_cost_text" | translate}}</span>
       <p *ngIf="data.regular_cost">{{data.regular_cost | currency}}</p>
     </div>
@@ -33,11 +33,11 @@
       <p>{{data.description}}</p>
     </div>
   </div>
-
-  <checkout-overlay></checkout-overlay>
 </ion-content>
 
-<div class="img-overlay" [ngClass]="{'active':isOverlayActive}">
+<checkout-overlay></checkout-overlay>
+
+<div class="dropship-img-overlay" [ngClass]="{'active':isOverlayActive}">
   <button class="overlay-close" ion-button icon-only small clear (click)="toggleOverlay()">
     <ion-icon name="close"></ion-icon>
   </button>

@@ -18,6 +18,7 @@ export class CustomerInfoPage implements OnInit {
   public usernames: VendorUserName[] = [];
   public isInvalidNumber: boolean = false;
   public isUsernamesLoading: boolean = false;
+  public minDatePickerValue: string = moment().add(1, 'day').format('YYYY-MM-DD');
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -29,7 +30,7 @@ export class CustomerInfoPage implements OnInit {
   public ngOnInit(): void {
     this.customerInfoForm = this.formBuilder.group({
       customer_number: [this.model.customer_number, [Validators.required, Validators.pattern(new RegExp('^\\d+$'))]],
-      selected_user: this.model.selected_user,
+      selected_user: [this.model.selected_user, Validators.required],
       first_name: [this.model.first_name, Validators.required],
       last_name: [this.model.last_name, Validators.required],
       email: [this.model.email, [Validators.required, Validators.email]],

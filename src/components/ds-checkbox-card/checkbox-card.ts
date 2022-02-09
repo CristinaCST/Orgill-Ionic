@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { Events, NavController } from 'ionic-angular';
 import { ShopItemsPage } from '../../pages/ds-shop-items/shop-items';
 import { ItemDetailsPage } from '../../pages/ds-item-details/item-details';
 import { FormDetails } from '../../interfaces/response-body/dropship';
@@ -17,7 +17,11 @@ export class CheckboxCardComponent implements OnInit {
   @Input() public isCheckout: boolean;
   @Input() public selectedQuantity: number = 1;
 
-  constructor(public navController: NavController, private readonly dropshipService: DropshipService) {}
+  constructor(
+    public navController: NavController,
+    public events: Events,
+    private readonly dropshipService: DropshipService
+  ) {}
 
   public ngOnInit(): void {
     this.selectedQuantity = Number(this.data.selectedQuantity || this.data.order_qty || this.data.min_qty || 1);
@@ -48,6 +52,8 @@ export class CheckboxCardComponent implements OnInit {
     );
 
     this.dropshipService.updateCheckoutItems(currentItem);
+
+    this.events.publish('checkoutUpdate', this.isSelected);
   }
 
   public handleCounterAction(action: string): void {

@@ -1,10 +1,11 @@
 @import '../../theme/variables';
 
-.checkout-overlay {
+.dropship-checkout-overlay {
   position: fixed;
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: 9;
   padding: 20px 10px;
   border-radius: 20px 20px 0px 0px;
   background: color($colors, OrgillLightRed);

@@ -37,7 +37,9 @@ export class VendorLandingPage implements OnInit {
 
   public ngOnInit(): void {
     this.vendorName = this.authService.getCurrentUser().user_name;
+  }
 
+  public ionViewWillEnter(): void {
     this.dropshipLoader.show();
 
     this.dropshipProvider.getSavedorderList().subscribe(savedorderListString => {
