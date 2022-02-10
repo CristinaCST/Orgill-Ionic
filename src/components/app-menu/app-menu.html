@@ -9,7 +9,8 @@
   </ion-header>
 
   <!--Menu content -->
-  <ion-content *ngIf="showShoppingListsMenu===false && !isUserTypeVendor()" class="content">
+  <ion-content  class="content">
+    <ng-container *ngIf="showShoppingListsMenu===false && !isUserTypeVendor()">
     <ion-item-group class="group">
       <!-- Every day catalog -->
 
@@ -138,14 +139,17 @@
         {{"menu_account_logout"| translate }}
       </button>
     </ion-item-group>
+    </ng-container>
+
+    <!-- Secondary Menu With Custom Shopping Lists -->
+    <custom-shopping-list-menu
+      [customShoppingLists]="customShoppingLists"
+      (back)="onBack($event)"
+      *ngIf="showShoppingListsMenu===true"
+    ></custom-shopping-list-menu>
+
+    <vendor-menu *ngIf="isUserTypeVendor()"></vendor-menu>
   </ion-content>
 
-  <!-- Secondary Menu With Custom Shopping Lists -->
-  <custom-shopping-list-menu
-    [customShoppingLists]="customShoppingLists"
-    (back)="onBack($event)"
-    *ngIf="showShoppingListsMenu===true"
-  ></custom-shopping-list-menu>
 
-  <vendor-menu *ngIf="isUserTypeVendor()"></vendor-menu>
 </ion-menu>

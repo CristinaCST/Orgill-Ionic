@@ -14,7 +14,7 @@ version = '7.0.2'
 version_code = '702'
 build_type = "prod" #"prod"
 #########################################################
-app_name = "Orgill Test" if build_type == "test" else "Orgill O Zone"
+app_name = "Orgill Test" if build_type == "test" else "OrgillOZone"
 oneSignalAppID = "be33b136-2960-435a-b22f-b12ade07e393" if build_type == "test" else "a11b3e10-bce2-41e9-a6d0-746042798d7e"
 oneSignalFirebaseName = "orgill-test" if build_type == "test" else "orgill-5a5ba"
 
