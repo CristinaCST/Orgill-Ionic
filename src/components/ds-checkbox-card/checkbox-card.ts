@@ -42,7 +42,6 @@ export class CheckboxCardComponent implements OnInit {
   public handleCheckbox(): void {
     const currentItem: any = this.data;
 
-    // tslint:disable-next-line: strict-boolean-expressions
     if (this.formDetails && this.formDetails.special_minimum_order) {
       currentItem.special_minimum_order = this.formDetails.special_minimum_order;
     }
@@ -57,13 +56,17 @@ export class CheckboxCardComponent implements OnInit {
   }
 
   public handleCounterAction(action: string): void {
+    let currentQuantity: number = this.selectedQuantity;
+
     if (action === 'add') {
-      this.selectedQuantity += 1;
-    } else if (this.selectedQuantity !== (this.data.min_qty || 1)) {
-      this.selectedQuantity -= 1;
+      currentQuantity += 1;
+    } else if (currentQuantity > (this.data.min_qty || 1)) {
+      currentQuantity -= 1;
     }
 
-    this.dropshipService.updateItemQuantities(this.data, this.selectedQuantity);
+    if (currentQuantity !== this.selectedQuantity) {
+      this.dropshipService.updateItemQuantities(this.data, currentQuantity);
+    }
   }
 
   public handleQuantityChange(value: number): void {

@@ -14,6 +14,7 @@ import { TranslateWrapperService } from '../../services/translate/translate';
 export class CardComponent {
   @Input() public data: any;
   @Input() public isSaveDrafts: boolean;
+  @Input() public isDropship: boolean;
   public popoverContent: PopoverContent = {
     type: Constants.POPOVER_INFO,
     title: Strings.GENERIC_MODAL_TITLE,

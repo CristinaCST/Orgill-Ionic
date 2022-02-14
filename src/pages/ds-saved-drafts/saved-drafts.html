@@ -7,5 +7,11 @@
 <ion-content class="dropship-saved-drafts-content">
   <h3 class="dropship-header">{{"dropship_saved_drafts_header" | translate}}: <span>{{savedDrafts}}</span></h3>
 
-  <card *ngFor="let order of savedorderList" [data]="order" [isSaveDrafts]="true" (click)="goToShopPage(order)"></card>
+  <card
+    *ngFor="let order of savedorderList"
+    [data]="order"
+    [isSaveDrafts]="true"
+    [isDropship]="isDropship"
+    (click)="goToShopPage(order)"
+  ></card>
 </ion-content>

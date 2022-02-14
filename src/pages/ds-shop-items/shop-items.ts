@@ -58,14 +58,17 @@ export class ShopItemsPage implements OnInit, OnDestroy {
     this.isDropship = this.navParams.get('isDropship');
     this.pageTitle = data.form_name;
 
-    // tslint:disable-next-line: strict-boolean-expressions
     this.selectedQuantity = this.formDetails.selectedQuantity || 1;
 
     this.fetchFormItems(data, savedOrder);
 
-    if (savedOrder && !this.isDropship) {
-      data.form_order_quantity = Number(savedOrder.form_order_quantity);
-      this.dropshipService.updateCheckoutItems(data);
+    if (savedOrder) {
+      if (!this.isDropship) {
+        data.form_order_quantity = Number(savedOrder.form_order_quantity);
+        this.dropshipService.updateCheckoutItems(data);
+      }
+
+      this.dropshipService.updateSavedOrder(savedOrder);
     }
   }
 
@@ -103,7 +106,6 @@ export class ShopItemsPage implements OnInit, OnDestroy {
       this.selectedQuantity = value;
       this.dropshipService.updateItemQuantities(this.formDetails, this.selectedQuantity);
     } else {
-      // tslint:disable-next-line: strict-boolean-expressions
       this.selectedQuantity = this.formDetails.selectedQuantity || 1;
     }
   }
@@ -120,19 +122,19 @@ export class ShopItemsPage implements OnInit, OnDestroy {
     if (savedOrder && this.isDropship) {
       this.dropshipProvider.getSavedorderDetails({ order_id: savedOrder.order_id }).subscribe(response => {
         const savedOrderItems: SavedorderItems[] = JSON.parse(response.d);
-        this.itemList = savedOrderItems;
 
         this.dropshipService.resetCart(savedOrderItems);
         this.fetchCheckoutItems();
-
-        this.dropshipLoader.hide();
       });
-
-      return;
     }
 
     this.dropshipProvider.getFormItems({ form_id: data.form_id }).subscribe(response => {
-      this.itemList = JSON.parse(response.d);
+      const item_list: any = JSON.parse(response.d);
+      this.itemList = item_list;
+
+      if (!this.isDropship) {
+        this.formDetails.item_list = item_list;
+      }
 
       this.fetchCheckoutItems();
 
@@ -149,6 +151,8 @@ export class ShopItemsPage implements OnInit, OnDestroy {
           const currentQuantity: number =
             item.selectedQuantity || item.form_order_quantity || item.order_qty || item.min_qty || 1;
 
+          this.selectedItems.push(this.formDetails.form_id);
+
           if ('factory_number' in item) {
             if (list.factory_number === item.factory_number) {
               this.selectedItems.push(list.factory_number);
@@ -156,7 +160,6 @@ export class ShopItemsPage implements OnInit, OnDestroy {
             }
           } else {
             if (item.form_id === this.formDetails.form_id) {
-              this.selectedItems.push(this.formDetails.form_id);
               this.selectedQuantity = currentQuantity;
             }
           }

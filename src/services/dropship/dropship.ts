@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Events } from 'ionic-angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { CustomerInfoForm, FormItems } from '../../interfaces/response-body/dropship';
+import { CustomerInfoForm, FormItems, SavedorderList } from '../../interfaces/response-body/dropship';
 import { AuthService } from '../auth/auth';
 import { DropshipProvider } from '../../providers/dropship/dropship';
 import { LoadingService } from '../loading/loading';
@@ -22,12 +22,14 @@ import * as Strings from '../../util/strings';
 @Injectable()
 export class DropshipService {
   private readonly checkoutItemsSource: BehaviorSubject<any> = new BehaviorSubject([]);
+  private readonly savedOrderSource: BehaviorSubject<SavedorderList> = new BehaviorSubject({} as SavedorderList);
   private readonly customerInfoFormSource: BehaviorSubject<CustomerInfoForm> = new BehaviorSubject(
     {} as CustomerInfoForm
   );
 
   public checkoutItemsObservable: Observable<any> = this.checkoutItemsSource.asObservable();
   public customerInfoFormObservable: Observable<CustomerInfoForm> = this.customerInfoFormSource.asObservable();
+  public savedOrderObservable: Observable<SavedorderList> = this.savedOrderSource.asObservable();
 
   private readonly dropshipLoader: LoadingService;
   public popoverContent: PopoverContent = {
@@ -97,6 +99,10 @@ export class DropshipService {
     this.customerInfoFormSource.next(data);
   }
 
+  public updateSavedOrder(data: SavedorderList): void {
+    this.savedOrderSource.next(data);
+  }
+
   public getUserDivision(): string {
     const currentUser: any = this.customerInfoForm.selected_user
       ? this.customerInfoForm.selected_user
@@ -145,8 +151,8 @@ export class DropshipService {
       },
       error => {
         console.error(error);
-        Object.assign(this.popoverContent, { message: error });
-        this.popoversService.show(this.popoverContent);
+        // Object.assign(this.popoverContent, { message: error });
+        // this.popoversService.show(this.popoverContent);
       }
     );
   }

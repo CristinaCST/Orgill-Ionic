@@ -12,6 +12,7 @@ import { LoadingService } from '../../services/loading/loading';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { TranslateWrapperService } from '../../services/translate/translate';
+import { SavedorderList } from '../../interfaces/response-body/dropship';
 
 @Component({
   selector: 'checkout-overlay',
@@ -22,6 +23,7 @@ export class CheckoutOverlayComponent implements OnInit, OnDestroy {
   @Input() public isCheckout: boolean;
   public requiredMinimum: number;
   public currentUser: User;
+  public savedOrder: SavedorderList;
   public subscription: Subscription;
   public dsCreateSavedOrderSubscription: Subscription;
   public popoverContent: PopoverContent = {
@@ -33,12 +35,12 @@ export class CheckoutOverlayComponent implements OnInit, OnDestroy {
   private readonly dropshipLoader: LoadingService;
 
   constructor(
+    public loadingService: LoadingService,
     private readonly authService: AuthService,
     private readonly navController: NavController,
     private readonly dropshipService: DropshipService,
     private readonly dropshipProvider: DropshipProvider,
     private readonly popoversService: PopoversService,
-    public loadingService: LoadingService,
     private readonly translateProvider: TranslateWrapperService
   ) {
     this.dropshipLoader = loadingService.createLoader(this.translateProvider.translate(Strings.loading_text));
@@ -59,6 +61,10 @@ export class CheckoutOverlayComponent implements OnInit, OnDestroy {
       this.checkoutItems = result;
 
       this.calculateRequiredMinimum(result);
+    });
+
+    this.dropshipService.savedOrderObservable.pipe(take(1)).subscribe(savedOrder => {
+      this.savedOrder = savedOrder;
     });
   }
 
@@ -84,6 +90,7 @@ export class CheckoutOverlayComponent implements OnInit, OnDestroy {
     this.dropshipService.customerInfoFormObservable.pipe(take(1)).subscribe(customerInfo => {
       let form_id: number;
       let form_order_quantity: number;
+      let form_item_list: any = [];
 
       const item_list: any = this.checkoutItems
         .map(item => {
@@ -92,6 +99,13 @@ export class CheckoutOverlayComponent implements OnInit, OnDestroy {
 
           form_id = item.form_id;
           form_order_quantity = currentQuantity;
+
+          if ('item_list' in item) {
+            form_item_list = item.item_list.map(currentItem => {
+              currentItem.order_quantity = currentItem.min_qty || 0;
+              return currentItem;
+            });
+          }
 
           if ('factory_number' in item) {
             return {
@@ -105,31 +119,49 @@ export class CheckoutOverlayComponent implements OnInit, OnDestroy {
       const requestBody: any = {
         ...customerInfo,
         form_id,
+        user_name: customerInfo.selected_user && customerInfo.selected_user.user_name,
         form_order_quantity: item_list.length ? 0 : form_order_quantity,
-        item_list
+        item_list: item_list.length ? item_list : form_item_list
       };
+
+      if (this.savedOrder && Object.keys(this.savedOrder).length) {
+        const [first_name, last_name] = this.savedOrder.full_name.split(' ');
+        Object.assign(requestBody, { first_name, last_name, ...this.savedOrder });
+
+        if (sendOrder) {
+          this.sendSavedorder(this.savedOrder);
+          return;
+        }
+      }
 
       this.dropshipProvider.dsCreateSavedOrder(requestBody).subscribe(response => {
         const savedOrderDetails: any = JSON.parse(response.d);
 
         if (sendOrder) {
-          this.dropshipProvider
-            .dsSendSavedorder({
-              order_id: savedOrderDetails[0].order_id,
-              user_name: customerInfo.selected_user.user_name || this.currentUser.user_name,
-              customer_email: customerInfo.email
-            })
-            .subscribe(() => {
-              this.popoverContent.message = Strings.dropship_order_submitted_successfully;
-              this.dropshipLoader.hide();
-              this.returnHomePopover(this.popoversService.show(this.popoverContent));
-            });
+          this.sendSavedorder(savedOrderDetails, customerInfo);
         } else {
           this.dropshipLoader.hide();
           this.returnHomePopover(this.popoversService.show(this.popoverContent));
         }
       });
     });
+  }
+
+  private sendSavedorder(savedOrderDetails: any, customerInfo?: any): void {
+    this.dropshipProvider
+      .dsSendSavedorder({
+        order_id: savedOrderDetails.order_id || savedOrderDetails[0].order_id,
+        user_name:
+          (customerInfo && customerInfo.selected_user.user_name) ||
+          savedOrderDetails.user_name ||
+          this.currentUser.user_name,
+        customer_email: (customerInfo && customerInfo.email) || savedOrderDetails.email
+      })
+      .subscribe(() => {
+        this.popoverContent.message = Strings.dropship_order_submitted_successfully;
+        this.dropshipLoader.hide();
+        this.returnHomePopover(this.popoversService.show(this.popoverContent));
+      });
   }
 
   private returnHomePopover(observer: Observable<any>): void {

@@ -327,5 +327,6 @@
   "loading_text": "Loading",
   "no_results_text": "No results found!",
   "item_already_in_cart_text": "Item is already in cart!",
-  "dropship_return_home": "Return to Welcome Screen?"
+  "dropship_return_home": "Return to Welcome Screen?",
+  "dropship_item_added": "Item added to order"
 }

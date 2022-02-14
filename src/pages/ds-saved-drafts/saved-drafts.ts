@@ -20,6 +20,7 @@ import { TranslateWrapperService } from '../../services/translate/translate';
 export class SavedDraftsPage implements OnInit {
   public savedorderList: SavedorderList[] = [];
   public savedDrafts: number = 0;
+  public isDropship: boolean;
   private readonly dropshipLoader: LoadingService;
 
   constructor(

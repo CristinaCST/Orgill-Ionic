@@ -11,6 +11,7 @@ import {
   ds_get_savedorder_details,
   ds_get_savedorder_list,
   ds_send_savedorder,
+  ds_update_savedorder,
   get_usernames
 } from '../../util/constants-url';
 
@@ -54,6 +55,7 @@ export class DropshipProvider {
    * returns saved order details
    */
   public dsCreateSavedOrder(body: {
+    user_name: string;
     form_id: string;
     customer_number: string;
     ship_date: string;
@@ -66,6 +68,22 @@ export class DropshipProvider {
     item_list: { factory_number: string; order_quantity: number }[];
   }): Observable<{ d: string }> {
     return this.apiProvider.post(ds_create_savedorder, body, true);
+  }
+
+  /*
+   * Updates a saved order for a customer and form
+   * returns saved order details
+   */
+  public dsUpdateSavedOrder(body: {
+    order_id: string;
+    form_id: string;
+    customer_number: string;
+    ship_date: string;
+    po_number: string;
+    form_order_quantity: number;
+    item_list: { factory_number: string; order_quantity: number }[];
+  }): Observable<{ d: string }> {
+    return this.apiProvider.post(ds_update_savedorder, body, true);
   }
 
   /*

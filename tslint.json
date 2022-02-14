@@ -19,7 +19,14 @@
     "only-arrow-functions": false,
     "prefer-for-of": true,
     "promise-function-async": false,
-    "typedef": [true, "call-signature", "parameter", "property-declaration", "variable-declaration", "member-variable-declaration"],
+    "typedef": [
+      true,
+      "call-signature",
+      "parameter",
+      "property-declaration",
+      "variable-declaration",
+      "member-variable-declaration"
+    ],
     "unified-signatures": false,
     "await-promise": true,
     "ban-comma-operator": true,
@@ -51,7 +58,7 @@
     "no-object-literal-type-assertion": false,
     "no-restricted-globals": true,
     "no-return-await": true,
-    "no-shadowed-variable":true,
+    "no-shadowed-variable": true,
     "no-sparse-arrays": true,
     "no-string-literal": true,
     "no-string-throw": true,
@@ -73,7 +80,7 @@
     "radix": true,
     "restrict-plus-operands": false,
     "static-this": true,
-    "strict-boolean-expressions": [true, "allow-string", "allow-null-union", "allow-undefined-union", "allow-boolean-or-undefined"],
+    "strict-boolean-expressions": false,
     "strict-type-predicates": true,
     "switch-default": true,
     "triple-equals": [true, "allow-null-check", "allow-undefined-check"],
@@ -111,17 +118,29 @@
     "type-literal-delimiter": false,
     "unnecessary-bind": true,
     "unnecessary-else": true,
-    "variable-name": {"options": ["ban-keywords"]},
+    "variable-name": { "options": ["ban-keywords"] },
     "align": [false, "parameters", "statemets"],
     "max-classes-per-file": false,
     "max-line-length": false,
-    "indent": {"options": ["spaces", 2]},
+    "indent": { "options": ["spaces", 2] },
     "interface-name": false,
     "jsdoc-format": [true, "check-multiline-start"],
     "object-literal-key-quotes": false,
     "object-literal-sort-keys": false,
-    "quotemark": {"options": ["single", "jsx-double"]},
-    "whitespace": { "options": ["check-branch", "check-decl", "check-operator", "check-module", "check-separator", "check-rest-spread", "check-type", "check-type-operator", "check-preblock"]},
+    "quotemark": { "options": ["single", "jsx-double"] },
+    "whitespace": {
+      "options": [
+        "check-branch",
+        "check-decl",
+        "check-operator",
+        "check-module",
+        "check-separator",
+        "check-rest-spread",
+        "check-type",
+        "check-type-operator",
+        "check-preblock"
+      ]
+    },
     "encoding": true,
     "linebreak-style": [false, "LF"],
     "no-duplicate-imports": true,
@@ -168,13 +187,9 @@
     ],
     "semicolon": [true, "always"]
   },
-  "rulesDirectory": [
-    "node_modules/tslint-eslint-rules/dist/rules"
-  ],
+  "rulesDirectory": ["node_modules/tslint-eslint-rules/dist/rules"],
   "baseUrl": "./src",
   "paths": {
-    "@app/env": [
-      "environments/environment"
-    ]
+    "@app/env": ["environments/environment"]
   }
 }

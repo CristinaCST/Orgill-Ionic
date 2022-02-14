@@ -12,12 +12,12 @@
 
     <div class="custom-wrapper">
       <p *ngIf="data.hasOwnProperty('user_name')">
-        <span>{{"dropship_saved_drafts_placing_order" | translate}}:</span> {{data.user_name}}
+        <span>{{"dropship_saved_drafts_placing_order" | translate}}:</span> {{data.full_name}}
       </p>
       <p *ngIf="data.hasOwnProperty('form_order_quantity') && (data.form_order_quantity * 1)">
         <span>{{"dropship_saved_drafts_number_items" | translate}}:</span> {{data.form_order_quantity}}
       </p>
-      <p *ngIf="data.hasOwnProperty('number_of_items') && (data.number_of_items * 1)">
+      <p *ngIf="data.hasOwnProperty('number_of_items') && (data.number_of_items * 1) && isDropship">
         <span>{{"dropship_saved_drafts_number_items" | translate}}:</span> {{data.number_of_items}}
       </p>
       <p *ngIf="data.hasOwnProperty('form_type')">

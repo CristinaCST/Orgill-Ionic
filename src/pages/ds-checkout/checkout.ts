@@ -4,6 +4,9 @@ import { DropshipProvider } from '../../providers/dropship/dropship';
 import { Subscription } from 'rxjs';
 import { FormDetails, FormItems } from '../../interfaces/response-body/dropship';
 import { DropshipService } from '../../services/dropship/dropship';
+import { PopoverContent, PopoversService } from '../../services/popovers/popovers';
+import * as Constants from '../../util/constants';
+import * as Strings from '../../util/strings';
 
 @Component({
   selector: 'page-checkout',
@@ -12,13 +15,20 @@ import { DropshipService } from '../../services/dropship/dropship';
 export class CheckoutPage implements OnInit, OnDestroy {
   public checkoutItems: FormDetails[] | FormItems[];
   private subscription: Subscription;
+  public popoverContent: PopoverContent = {
+    type: Constants.POPOVER_INFO,
+    title: Strings.GENERIC_MODAL_TITLE,
+    message: Strings.dropship_item_added,
+    positiveButtonText: Strings.MODAL_BUTTON_OK
+  };
 
   constructor(
     public events: Events,
     public navController: NavController,
     private readonly navParams: NavParams,
     private readonly dropshipService: DropshipService,
-    private readonly dropshipProvider: DropshipProvider
+    private readonly dropshipProvider: DropshipProvider,
+    private readonly popoversService: PopoversService
   ) {
     events.subscribe('searchItems:checkout', (searchItems: FormItems[]) => {
       if (!searchItems && !Boolean(searchItems.length)) {
@@ -30,7 +40,11 @@ export class CheckoutPage implements OnInit, OnDestroy {
   }
 
   get form_id(): number {
-    return this.navParams.get('form_id') || this.checkoutItems[0].form_id;
+    if (this.navParams.get('form_id')) {
+      return this.navParams.get('form_id');
+    }
+
+    return this.checkoutItems[0].form_id;
   }
 
   public ngOnInit(): void {
@@ -63,6 +77,7 @@ export class CheckoutPage implements OnInit, OnDestroy {
 
   public pushSearchItemsIntoCart(cartItems: FormItems[]): void {
     this.dropshipService.resetCart(cartItems);
+    this.popoversService.show(this.popoverContent);
   }
 
   public getSpecialMinimumOrder(searchItems: FormItems[]): void {

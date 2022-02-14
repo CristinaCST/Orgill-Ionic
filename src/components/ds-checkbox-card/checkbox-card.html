@@ -12,7 +12,7 @@
     </div>
 
     <p *ngIf="data.hasOwnProperty('total_pallet_qty')">
-      <span>{{"dropship_total_pallet_qty" | translate}}}}:</span> {{data.total_pallet_qty}}
+      <span>{{"dropship_total_pallet_qty" | translate}}:</span> {{data.total_pallet_qty}}
     </p>
     <p *ngIf="data.hasOwnProperty('shipment_terms')">
       <span>{{"dropship_shipment_terms" | translate}}:</span> {{data.shipment_terms}}
@@ -65,6 +65,7 @@
         inputmode="numeric"
         pattern="^[0-9]"
         [(ngModel)]="selectedQuantity"
+        (change)="handleQuantityChange($event.target.value)"
         (focusout)="handleQuantityChange($event.target.value)"
         (keydown.enter)="$event.target.blur()"
       />
