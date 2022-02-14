@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Events } from 'ionic-angular';
 import { PopoverContent, PopoversService, DefaultPopoverResult } from '../../services/popovers/popovers';
 import { DropshipProvider } from '../../providers/dropship/dropship';
@@ -11,10 +11,10 @@ import { TranslateWrapperService } from '../../services/translate/translate';
   selector: 'card',
   templateUrl: 'card.html'
 })
-export class CardComponent {
+export class CardComponent implements OnInit {
   @Input() public data: any;
   @Input() public isSaveDrafts: boolean;
-  @Input() public isDropship: boolean;
+  public isDropship: boolean;
   public popoverContent: PopoverContent = {
     type: Constants.POPOVER_INFO,
     title: Strings.GENERIC_MODAL_TITLE,
@@ -32,6 +32,11 @@ export class CardComponent {
     private readonly translateProvider: TranslateWrapperService
   ) {
     this.dropshipLoader = loadingService.createLoader(this.translateProvider.translate(Strings.loading_text));
+  }
+
+  public ngOnInit(): void {
+    this.isDropship =
+      this.fetchFormType(this.data.form_type.toLowerCase()) === Constants.DS_FORM_LIST_FORM_TYPE_DROPSHIP;
   }
 
   public deleteCurrentOrder(e: Event): void {
@@ -57,5 +62,16 @@ export class CardComponent {
         });
       }
     });
+  }
+
+  private fetchFormType(formtype: string): string {
+    if (formtype.includes('planogram')) {
+      return Constants.DS_FORM_LIST_FORM_TYPE_POG;
+    }
+    if (formtype.includes('pallet')) {
+      return Constants.DS_FORM_LIST_FORM_TYPE_PALLET;
+    }
+
+    return Constants.DS_FORM_LIST_FORM_TYPE_DROPSHIP;
   }
 }

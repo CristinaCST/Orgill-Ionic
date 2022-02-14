@@ -124,7 +124,9 @@ export class CheckoutOverlayComponent implements OnInit, OnDestroy {
         item_list: item_list.length ? item_list : form_item_list
       };
 
-      if (this.savedOrder && Object.keys(this.savedOrder).length) {
+      const hasSavedOrder: boolean = Boolean(this.savedOrder && Object.keys(this.savedOrder).length);
+
+      if (hasSavedOrder) {
         const [first_name, last_name] = this.savedOrder.full_name.split(' ');
         Object.assign(requestBody, { first_name, last_name, ...this.savedOrder });
 
@@ -134,7 +136,10 @@ export class CheckoutOverlayComponent implements OnInit, OnDestroy {
         }
       }
 
-      this.dropshipProvider.dsCreateSavedOrder(requestBody).subscribe(response => {
+      (hasSavedOrder
+        ? this.dropshipProvider.dsUpdateSavedOrder(requestBody)
+        : this.dropshipProvider.dsCreateSavedOrder(requestBody)
+      ).subscribe(response => {
         const savedOrderDetails: any = JSON.parse(response.d);
 
         if (sendOrder) {
