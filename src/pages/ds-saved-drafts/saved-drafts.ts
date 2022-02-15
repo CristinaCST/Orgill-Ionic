@@ -12,6 +12,7 @@ import {
 } from '../../util/constants';
 import { loading_text } from '../../util/strings';
 import { TranslateWrapperService } from '../../services/translate/translate';
+import { DropshipService } from '../../services/dropship/dropship';
 
 @Component({
   selector: 'page-saved-drafts',
@@ -28,6 +29,7 @@ export class SavedDraftsPage implements OnInit {
     public loadingService: LoadingService,
     public navController: NavController,
     public events: Events,
+    private readonly dropshipService: DropshipService,
     private readonly translateProvider: TranslateWrapperService
   ) {
     this.dropshipLoader = loadingService.createLoader(this.translateProvider.translate(loading_text));
@@ -58,6 +60,10 @@ export class SavedDraftsPage implements OnInit {
         this.dropshipLoader.hide();
       });
     }
+  }
+
+  public ionViewWillEnter(): void {
+    this.dropshipService.resetCart();
   }
 
   public goToShopPage(order: SavedorderList): void {

@@ -128,7 +128,8 @@ export class CheckoutOverlayComponent implements OnInit, OnDestroy {
 
       if (hasSavedOrder) {
         const [first_name, last_name] = this.savedOrder.full_name.split(' ');
-        Object.assign(requestBody, { first_name, last_name, ...this.savedOrder });
+        const { order_id, customer_number, ship_date, po_number } = this.savedOrder;
+        Object.assign(requestBody, { order_id, customer_number, ship_date, po_number, first_name, last_name });
 
         if (sendOrder) {
           this.sendSavedorder(this.savedOrder);

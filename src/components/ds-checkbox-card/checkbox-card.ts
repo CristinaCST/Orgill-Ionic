@@ -66,6 +66,7 @@ export class CheckboxCardComponent implements OnInit {
 
     if (currentQuantity !== this.selectedQuantity) {
       this.dropshipService.updateItemQuantities(this.data, currentQuantity);
+      this.events.publish('checkoutUpdate', this.isSelected);
     }
   }
 

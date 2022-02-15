@@ -62,10 +62,13 @@ export class ShopItemsPage implements OnInit, OnDestroy {
 
     this.fetchFormItems(data, savedOrder);
 
+    this.dropshipService.updateSavedOrder({} as SavedorderList);
     if (savedOrder) {
       if (!this.isDropship) {
         data.form_order_quantity = Number(savedOrder.form_order_quantity);
         this.dropshipService.updateCheckoutItems(data);
+        this.selectedItems.push(savedOrder.form_id);
+        this.selectedQuantity = data.form_order_quantity;
       }
 
       this.dropshipService.updateSavedOrder(savedOrder);
@@ -86,6 +89,7 @@ export class ShopItemsPage implements OnInit, OnDestroy {
   }
 
   public handleCheckbox(): void {
+    this.formDetails.selectedQuantity = this.selectedQuantity;
     this.dropshipService.updateCheckoutItems(this.formDetails);
 
     this.fetchCheckoutItems();
@@ -119,26 +123,43 @@ export class ShopItemsPage implements OnInit, OnDestroy {
   }
 
   private fetchFormItems(data: FormDetails, savedOrder?: SavedorderList): void {
-    if (savedOrder && this.isDropship) {
-      this.dropshipProvider.getSavedorderDetails({ order_id: savedOrder.order_id }).subscribe(response => {
-        const savedOrderItems: SavedorderItems[] = JSON.parse(response.d);
-
-        this.dropshipService.resetCart(savedOrderItems);
-        this.fetchCheckoutItems();
-      });
-    }
-
     this.dropshipProvider.getFormItems({ form_id: data.form_id }).subscribe(response => {
       const item_list: any = JSON.parse(response.d);
       this.itemList = item_list;
 
       if (!this.isDropship) {
         this.formDetails.item_list = item_list;
+      } else if (savedOrder) {
+        this.handleSavedOrders(savedOrder, item_list);
       }
 
       this.fetchCheckoutItems();
 
       this.dropshipLoader.hide();
+    });
+  }
+
+  private handleSavedOrders(savedOrder: SavedorderList, item_list: any): void {
+    this.dropshipProvider.getSavedorderDetails({ order_id: savedOrder.order_id }).subscribe(response => {
+      const savedOrderItems: SavedorderItems[] = JSON.parse(response.d);
+
+      item_list.forEach(item => {
+        savedOrderItems.forEach(order => {
+          if ('factory_number' in item && item.factory_number === order.factory_number) {
+            if (this.formDetails && this.formDetails.special_minimum_order) {
+              item.special_minimum_order = this.formDetails.special_minimum_order;
+            }
+
+            item.selectedQuantity = Number(order.order_qty || item.min_qty || 1);
+
+            if (!this.selectedItems.includes(item.factory_number)) {
+              this.dropshipService.updateCheckoutItems(item);
+            }
+          }
+        });
+      });
+
+      this.fetchCheckoutItems();
     });
   }
 
