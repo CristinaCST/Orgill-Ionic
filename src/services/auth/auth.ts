@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-// import { Md5 } from 'ts-md5';
+import { Md5 } from 'ts-md5';
 import { LoginRequest } from '../../interfaces/request-body/login';
 import { ApiService } from '../api/api';
 import * as ConstantsURL from '../../util/constants-url';
@@ -40,9 +40,9 @@ export class AuthService {
     }
   }
 
-  //   private static encryption(password: string): string {
-  //     return Md5.hashStr(password.toLowerCase()).toString();
-  //   }
+  private static encryption(password: string): string {
+    return Md5.hashStr(password.toLowerCase()).toString();
+  }
 
   private get User(): User {
     return this.user;
@@ -50,7 +50,7 @@ export class AuthService {
 
   public login(credentials: LoginRequest): Observable<void> {
     credentials.username = credentials.username.toLowerCase();
-    credentials.password = credentials.password;
+    credentials.password = AuthService.encryption(credentials.password);
 
     return this.apiProvider.post(ConstantsURL.URL_LOGIN, credentials).map(response => {
       const data: { ErrCode: string; User_Token: string } = JSON.parse(response.d);
