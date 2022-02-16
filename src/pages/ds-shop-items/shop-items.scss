@@ -96,6 +96,13 @@
       background: color($colors, OrgillLightRed);
     }
   }
+
+  .cancel-search {
+    margin: 0 0 15px;
+    color: #999;
+    font-size: 20px;
+    font-weight: 400;
+  }
 }
 
 .dropship-img-overlay {

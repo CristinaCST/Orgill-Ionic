@@ -67,10 +67,6 @@ export class CheckoutPage implements OnInit, OnDestroy {
     this.navController.pop();
   }
 
-  public handleSearch(keyword: string): void {
-    this.dropshipService.searchFormItem(keyword, this.form_id, true);
-  }
-
   public handleScan(): void {
     this.dropshipService.scanFormItem(this.form_id, true);
   }

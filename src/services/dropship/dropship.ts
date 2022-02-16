@@ -121,7 +121,7 @@ export class DropshipService {
     }
   }
 
-  public searchFormItem(keyword: string, form_id: number, isCheckout?: boolean): void {
+  public searchFormItem(keyword: string, form_id: number, isCheckout?: boolean, isActiveSearch?: boolean): void {
     this.dropshipLoader.show();
 
     this.dropshipProvider.getFormItemSearch({ keyword, form_id }).subscribe(response => {
@@ -130,11 +130,12 @@ export class DropshipService {
       const searchItems: FormItems[] = JSON.parse(response.d);
 
       if (!Boolean(searchItems.length)) {
+        Object.assign(this.popoverContent, { message: Strings.no_results_text });
         this.popoversService.show(this.popoverContent);
         return;
       }
 
-      if (this.checkIfItemIsInCart(searchItems)) {
+      if (!isActiveSearch && this.checkIfItemIsInCart(searchItems)) {
         Object.assign(this.popoverContent, { message: Strings.item_already_in_cart_text });
         this.popoversService.show(this.popoverContent);
         return;

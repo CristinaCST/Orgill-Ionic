@@ -23,6 +23,8 @@ export class ShopItemsPage implements OnInit, OnDestroy {
   public selectedItems: any = [];
   public selectedQuantity: number = 1;
   public imageError: boolean = false;
+  public isActiveSearch: boolean = false;
+  public isScanActive: boolean = false;
   private readonly dropshipLoader: LoadingService;
 
   constructor(
@@ -41,7 +43,12 @@ export class ShopItemsPage implements OnInit, OnDestroy {
         return;
       }
 
-      navController.push(CheckoutPage, { searchItems, form_id: this.formDetails.form_id });
+      if (this.isScanActive) {
+        this.isScanActive = false;
+        navController.push(CheckoutPage, { searchItems, form_id: this.formDetails.form_id });
+      } else {
+        this.handleSearchItems(searchItems);
+      }
     });
 
     events.subscribe('checkoutUpdate', () => {
@@ -115,10 +122,13 @@ export class ShopItemsPage implements OnInit, OnDestroy {
   }
 
   public handleSearch(keyword: string): void {
-    this.dropshipService.searchFormItem(keyword, this.formDetails.form_id);
+    this.isScanActive = false;
+    this.pageTitle = `Search: ${keyword}`;
+    this.dropshipService.searchFormItem(keyword, this.formDetails.form_id, false, true);
   }
 
   public handleScan(): void {
+    this.isScanActive = true;
     this.dropshipService.scanFormItem(this.formDetails.form_id);
   }
 
@@ -137,6 +147,13 @@ export class ShopItemsPage implements OnInit, OnDestroy {
 
       this.dropshipLoader.hide();
     });
+  }
+
+  public cancelSearch(): void {
+    this.isActiveSearch = false;
+    this.pageTitle = this.formDetails.form_name;
+    this.dropshipLoader.show();
+    this.fetchFormItems(this.formDetails, this.navParams.get('savedOrder'));
   }
 
   private handleSavedOrders(savedOrder: SavedorderList, item_list: any): void {
@@ -163,11 +180,11 @@ export class ShopItemsPage implements OnInit, OnDestroy {
     });
   }
 
-  private fetchCheckoutItems(): void {
+  private fetchCheckoutItems(searchItems?: FormItems[]): void {
     this.dropshipService.checkoutItemsObservable.pipe(take(1)).subscribe(checkoutItems => {
       this.checkoutItems = checkoutItems;
       this.selectedItems = [];
-      this.itemList = this.itemList.map(list => {
+      this.itemList = (searchItems || this.itemList).map(list => {
         checkoutItems.forEach(item => {
           const currentQuantity: number =
             item.selectedQuantity || item.form_order_quantity || item.order_qty || item.min_qty || 1;
@@ -189,6 +206,11 @@ export class ShopItemsPage implements OnInit, OnDestroy {
         return list;
       });
     });
+  }
+
+  private handleSearchItems(searchItems: FormItems[]): void {
+    this.isActiveSearch = true;
+    this.fetchCheckoutItems(searchItems);
   }
 
   public handleMissingImage(): void {
