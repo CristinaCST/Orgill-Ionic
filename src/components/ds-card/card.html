@@ -24,10 +24,10 @@
         <span>{{"dropship_saved_drafts_type" | translate}}:</span> {{data.form_type}}
       </p>
 
-      <p *ngIf="data.hasOwnProperty('special_minimum_order')">
+      <p *ngIf="data.hasOwnProperty('special_minimum_order') && isDropship">
         <span>{{"dropship_specials_minimum_order" | translate}}:</span> {{data.special_minimum_order | currency}}
       </p>
-      <p *ngIf="data.hasOwnProperty('prepaid_freight_minimum')">
+      <p *ngIf="data.hasOwnProperty('prepaid_freight_minimum') && !isDropship">
         <span>{{"dropship_specials_prepaid_minimum" | translate}}:</span> {{data.prepaid_freight_minimum | currency}}
       </p>
       <p *ngIf="data.hasOwnProperty('special_cash_terms')">

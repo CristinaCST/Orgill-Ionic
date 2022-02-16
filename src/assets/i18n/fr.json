@@ -290,7 +290,7 @@
   "dropship_select_special_title": "SÉLECTIONNER DES OFFRES SPÉCIALES",
   "dropship_select_special_header": "Formulaire de livraison directe pour un événement d'achat",
   "dropship_specials_minimum_order": "Commande minimale",
-  "dropship_specials_prepaid_minimum": "Minimum prépayé",
+  "dropship_specials_prepaid_minimum": "Fret prépayé minimum",
   "dropship_specials_special_cash_terms": "Conditions spéciales en espèces",
   "dropship_pallet_specials_title": "SPÉCIALES PALETTES",
   "dropship_pallet_specials_header": "Formulaire d'achat de palettes pour les événements",
@@ -325,6 +325,6 @@
   "loading_text": "Chargement",
   "no_results_text": "Aucun résultat trouvé!",
   "item_already_in_cart_text": "L'article est déjà dans le panier!",
-  "dropship_return_home": "Retour à l'écran de bienvenue?",
+  "dropship_return_home": "Retour à l'écran d'accueil?",
   "dropship_item_added": "Article ajouté à la commande"
 }

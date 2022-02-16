@@ -292,7 +292,7 @@
   "dropship_select_special_title": "SELECT SPECIALS",
   "dropship_select_special_header": "Buying Event Drop Ship Form",
   "dropship_specials_minimum_order": "Minimum Order",
-  "dropship_specials_prepaid_minimum": "Prepaid Minimum",
+  "dropship_specials_prepaid_minimum": "Prepaid Freight Minimum",
   "dropship_specials_special_cash_terms": "Special Cash Terms",
   "dropship_pallet_specials_title": "PALLET SPECIALS",
   "dropship_pallet_specials_header": "Buying Event Pallet Form",
@@ -307,7 +307,7 @@
   "item_number_text": "Item number",
   "minimum_qty_text": "Minimum qty",
   "unit_text": "Unit",
-  "relevant_info_text": "Relevant informations from vendor",
+  "relevant_info_text": "Relevant information from vendor",
   "required_text": "Required",
   "not_valid_num_text": "Not a valid number",
   "invalid_email_text": "Invalid email",
@@ -327,6 +327,6 @@
   "loading_text": "Loading",
   "no_results_text": "No results found!",
   "item_already_in_cart_text": "Item is already in cart!",
-  "dropship_return_home": "Return to Welcome Screen?",
+  "dropship_return_home": "Return to Home Screen?",
   "dropship_item_added": "Item added to order"
 }

@@ -8,7 +8,12 @@
   <div *ngIf="categoryList.length ">
     <h3 class="dropship-header">{{pageHeader}}</h3>
 
-    <card *ngFor="let category of categoryList" [data]="category" (click)="goToShopItemsPage(category)"></card>
+    <card
+      *ngFor="let category of categoryList"
+      [data]="category"
+      [isDropship]="isDropship"
+      (click)="goToShopItemsPage(category)"
+    ></card>
   </div>
 
   <div *ngIf="!categoryList.length" class="no-data-wrapper">

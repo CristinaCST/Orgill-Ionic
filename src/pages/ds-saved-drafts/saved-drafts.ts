@@ -21,6 +21,7 @@ import { DropshipService } from '../../services/dropship/dropship';
 export class SavedDraftsPage implements OnInit {
   public savedorderList: SavedorderList[] = [];
   public savedDrafts: number = 0;
+  public isDropship: boolean = false;
   private readonly dropshipLoader: LoadingService;
 
   constructor(
@@ -68,14 +69,14 @@ export class SavedDraftsPage implements OnInit {
 
   public goToShopPage(order: SavedorderList): void {
     this.dropshipLoader.show();
-    const isDropship: boolean = this.fetchFormType(order.form_type.toLowerCase()) === DS_FORM_LIST_FORM_TYPE_DROPSHIP;
+    this.isDropship = this.fetchFormType(order.form_type.toLowerCase()) === DS_FORM_LIST_FORM_TYPE_DROPSHIP;
 
     this.dropshipProvider.getFormDetails({ form_id: order.form_id }).subscribe(response => {
       this.dropshipLoader.hide();
 
       const categoryList: FormDetails = JSON.parse(response.d);
 
-      this.navController.push(ShopItemsPage, { data: categoryList, savedOrder: order, isDropship });
+      this.navController.push(ShopItemsPage, { data: categoryList, savedOrder: order, isDropship: this.isDropship });
     });
   }
 

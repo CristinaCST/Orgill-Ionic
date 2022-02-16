@@ -149,6 +149,16 @@ export class CheckoutOverlayComponent implements OnInit, OnDestroy {
           this.dropshipLoader.hide();
           this.returnHomePopover(this.popoversService.show(this.popoverContent));
         }
+
+        if (!hasSavedOrder) {
+          const currentSavedOrder: any = {
+            ...requestBody,
+            order_id: savedOrderDetails.order_id || savedOrderDetails[0].order_id,
+            full_name: `${requestBody.first_name} ${requestBody.last_name}`
+          };
+          this.savedOrder = currentSavedOrder;
+          this.dropshipService.updateSavedOrder(currentSavedOrder);
+        }
       });
     });
   }
@@ -164,7 +174,12 @@ export class CheckoutOverlayComponent implements OnInit, OnDestroy {
         customer_email: (customerInfo && customerInfo.email) || savedOrderDetails.email
       })
       .subscribe(() => {
-        this.popoverContent.message = Strings.dropship_order_submitted_successfully;
+        Object.assign(this.popoverContent, {
+          message: Strings.dropship_order_submitted_successfully,
+          dismissButtonText: undefined,
+          positiveButtonText: Strings.MODAL_BUTTON_OK
+        });
+
         this.dropshipLoader.hide();
         this.returnHomePopover(this.popoversService.show(this.popoverContent));
       });
@@ -182,6 +197,12 @@ export class CheckoutOverlayComponent implements OnInit, OnDestroy {
         this.popoversService.show(this.popoverContent).subscribe((data: DefaultPopoverResult) => {
           if (data.optionSelected === 'OK') {
             this.navController.popToRoot();
+          } else {
+            Object.assign(this.popoverContent, {
+              message: Strings.dropship_order_saved_successfully,
+              dismissButtonText: undefined,
+              positiveButtonText: Strings.MODAL_BUTTON_OK
+            });
           }
         });
       }
