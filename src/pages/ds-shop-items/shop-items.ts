@@ -25,6 +25,7 @@ export class ShopItemsPage implements OnInit, OnDestroy {
   public imageError: boolean = false;
   public isActiveSearch: boolean = false;
   public isScanActive: boolean = false;
+  public currentSearchedKeyword: string = '';
   private readonly dropshipLoader: LoadingService;
 
   constructor(
@@ -123,7 +124,7 @@ export class ShopItemsPage implements OnInit, OnDestroy {
 
   public handleSearch(keyword: string): void {
     this.isScanActive = false;
-    this.pageTitle = `Search: ${keyword}`;
+    this.currentSearchedKeyword = keyword;
     this.dropshipService.searchFormItem(keyword, this.formDetails.form_id, false, true);
   }
 
@@ -211,6 +212,7 @@ export class ShopItemsPage implements OnInit, OnDestroy {
   private handleSearchItems(searchItems: FormItems[]): void {
     this.isActiveSearch = true;
     this.fetchCheckoutItems(searchItems);
+    this.pageTitle = `Search: ${this.currentSearchedKeyword}`;
   }
 
   public handleMissingImage(): void {
