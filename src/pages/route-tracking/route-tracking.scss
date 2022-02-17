@@ -29,12 +29,18 @@ page-route-tracking {
     .order-footer {
       display: flex;
       margin: 40px 0 0;
+      align-items: center;
       justify-content: space-between;
+
+      .order-error {
+        width: 70%;
+        text-align: center;
+      }
     }
   }
 
   .map-container {
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
