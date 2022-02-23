@@ -122,7 +122,6 @@
         </config-file>
     </platform>
     <allow-navigation href="*" />
-    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="~2.1.3" />
