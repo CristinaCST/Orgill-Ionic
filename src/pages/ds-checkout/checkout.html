@@ -1,18 +1,13 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>{{"dropship_checkout" | translate | uppercase}}</ion-title>
-
-    <ion-buttons end>
-      <button ion-button icon-only (click)="handleScan()">
-        <ion-icon name="barcode"></ion-icon>
-      </button>
-    </ion-buttons>
-  </ion-navbar>
-</ion-header>
+<vendor-header
+  pageTitle="dropship_checkout"
+  [hasScanBtn]="true"
+  (onScan)="handleScan()"
+></vendor-header>
 
 <ion-content class="checkout-dropship-content checkout-overlay-visible">
   <div class="continue-shopping" (click)="goBack()">
-    <ion-icon name="arrow-back"></ion-icon> {{"dropship_checkout_continue_shopping" | translate}}
+    <ion-icon name="arrow-back"></ion-icon>
+    {{"dropship_checkout_continue_shopping" | translate}}
   </div>
 
   <checkbox-card

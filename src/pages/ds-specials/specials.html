@@ -1,8 +1,4 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>{{pageTitle}}</ion-title>
-  </ion-navbar>
-</ion-header>
+<vendor-header [pageTitle]="pageTitle"></vendor-header>
 
 <ion-content class="specials-dropship-content">
   <div *ngIf="categoryList.length ">

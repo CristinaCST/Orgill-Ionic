@@ -1,11 +1,18 @@
 .dropship-shop-items-content {
   .scroll-content {
+    margin: 56px 0 0;
     padding: 20px 10px;
   }
 
   &.checkout-overlay-visible {
     .scroll-content {
       margin-bottom: 140px;
+    }
+  }
+
+  &.header-margin {
+    .scroll-content {
+      margin-top: 90px;
     }
   }
 

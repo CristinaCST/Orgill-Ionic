@@ -106,5 +106,9 @@
   },
   "volta": {
     "node": "12.22.7"
+  },
+  "prettier": {
+    "trailingComma": "none",
+    "singleQuote": true
   }
 }

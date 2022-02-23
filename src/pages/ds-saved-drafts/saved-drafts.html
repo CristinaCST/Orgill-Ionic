@@ -1,11 +1,9 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>{{"dropship_page_saved_drafts_title" | translate}}</ion-title>
-  </ion-navbar>
-</ion-header>
+<vendor-header pageTitle="dropship_page_saved_drafts_title"></vendor-header>
 
 <ion-content class="dropship-saved-drafts-content">
-  <h3 class="dropship-header">{{"dropship_saved_drafts_header" | translate}}: <span>{{savedDrafts}}</span></h3>
+  <h3 class="dropship-header">
+    {{"dropship_saved_drafts_header" | translate}}: <span>{{savedDrafts}}</span>
+  </h3>
 
   <card
     *ngFor="let order of savedorderList"

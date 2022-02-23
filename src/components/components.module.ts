@@ -24,6 +24,7 @@ import { VendorMenuComponent } from './vendor-menu/vendor-menu';
 import { CardComponent } from './ds-card/card';
 import { CheckboxCardComponent } from './ds-checkbox-card/checkbox-card';
 import { CheckoutOverlayComponent } from './ds-checkout-overlay/checkout-overlay';
+import { VendorHeaderComponent } from './vendor-header/vendor-header';
 
 // Pipes
 import { PipesModule } from '../pipes/pipes.module';
@@ -47,7 +48,8 @@ const components: any[] = [
   VendorMenuComponent,
   CardComponent,
   CheckboxCardComponent,
-  CheckoutOverlayComponent
+  CheckoutOverlayComponent,
+  VendorHeaderComponent
 ];
 
 @NgModule({
