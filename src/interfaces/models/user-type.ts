@@ -1,6 +1,6 @@
-export class UserType {
-  public dealer: string = 'Dealer';
-  public sales: string = 'Sales Rep';
-  public employee: string = 'Employee';
-  public vendor: string = 'Vendor';
+export enum UserType {
+  dealer = 'Dealer',
+  sales = 'Sales Rep',
+  employee = 'Employee',
+  vendor = 'Vendor'
 }

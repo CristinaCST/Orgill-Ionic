@@ -15,6 +15,7 @@ import { USER, POPOVER_INFO } from '../../util/constants';
 import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
 import { Platform } from 'ionic-angular/platform/platform';
 import { NavigatorService } from '../../services/navigator/navigator';
+import { UserType } from '../../interfaces/models/user-type';
 
 /**
  * Generated class for the RouteTrackingPage page.
@@ -68,9 +69,9 @@ export class RouteTrackingPage {
   }
 
   public ngOnInit(): void {
-    // amazing hardcoding skills
-    const user: string = JSON.parse(LocalStorageHelper.getFromLocalStorage(USER)).user_name;
-    if (['denise225', 'cristierogers', 'psequeira', 'liddyt1', 'csmh'].indexOf(user) >= 0) {
+    const user_type: string = JSON.parse(LocalStorageHelper.getFromLocalStorage(USER)).user_type;
+
+    if (user_type === UserType.sales) {
       this.showCustomInput = true;
       return;
     }
