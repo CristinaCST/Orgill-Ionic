@@ -1,0 +1,151 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>DRIVERS</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="dashboard drivers">
+  <div class="filters-wrapper">
+    <div class="search-box-wrapper">
+      <div class="search-box" [hidden]="!hasSearch">
+        <div class="input-container">
+          <ion-item>
+            <ion-icon name="search" item-start></ion-icon>
+            <input
+              clearInput
+              type="tel"
+              inputmode="numeric"
+              pattern="^[0-9]"
+              (focusout)="handleRouteSearch($event.target.value)"
+              (keydown.enter)="$event.target.blur()"
+              placeholder="Search by route"
+            />
+          </ion-item>
+        </div>
+
+        <div class="input-container">
+          <ion-item>
+            <ion-icon name="search" item-start></ion-icon>
+            <input
+              clearInput
+              type="tel"
+              inputmode="numeric"
+              pattern="^[0-9]"
+              (focusout)="handleDCSearch($event.target.value)"
+              (keydown.enter)="$event.target.blur()"
+              placeholder="Search by DC"
+            />
+          </ion-item>
+        </div>
+      </div>
+
+      <button class="btn-date-picker dashboard-btn" (click)="handleDate($event)">
+        <ion-icon name="calendar"></ion-icon> <span>Last 30 days</span>
+      </button>
+
+      <button class="dashboard-btn search" (click)="toggleSearch()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </div>
+
+    <button class="dashboard-btn download" (click)="downloadExcel()">
+      <div class="loader-wrapper" [hidden]="!isPreparingExcel">
+        <ion-spinner class="loader"></ion-spinner>
+      </div>
+      Download filtered data
+    </button>
+  </div>
+
+  <div class="statistics-wrapper">
+    <div class="loader-wrapper" [hidden]="!isLoading">
+      <ion-spinner class="loader"></ion-spinner>
+    </div>
+
+    <div class="statistics-header" [hidden]="isLoading">
+      <div class="totals">
+        <div class="statistics-box grey"><span></span></div>
+        <h3>Total number of drivers: {{numberOfDeliveries}}</h3>
+      </div>
+
+      <div class="pills-wrapper">
+        <div class="pill grey" [ngClass]="{'selected' : currentSelected === 0}" (click)="handlePill(0)">
+          <span>{{numberOfDeliveries}}</span>
+        </div>
+        <div class="pill green" [ngClass]="{'selected' : currentSelected === 3}" (click)="handlePill(3)">
+          <span>{{allUpdates}}</span>
+        </div>
+        <div class="pill yellow" [ngClass]="{'selected' : currentSelected === 4}" (click)="handlePill(4)">
+          <span>{{routeOrLocationsUpdates}}</span>
+        </div>
+        <div class="pill blue" [ngClass]="{'selected' : currentSelected === 2}" (click)="handlePill(2)">
+          <span>{{routeAndPartialLocationsUpdates}}</span>
+        </div>
+        <div class="pill red" [ngClass]="{'selected' : currentSelected === 1}" (click)="handlePill(1)">
+          <span>{{noUpdates}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div [hidden]="isLoading">
+      <div class="statistic">
+        <div class="label">
+          <div class="statistics-box green"><span></span></div>
+          <h4>DRIVERS THAT SENT ALL MESSAGES</h4>
+        </div>
+        <div class="value">
+          <span>{{(allUpdates/numberOfDeliveries*100).toFixed(2)}}%</span><span>{{allUpdates}}</span>
+        </div>
+      </div>
+
+      <div class="statistic">
+        <div class="label">
+          <div class="statistics-box yellow"><span></span></div>
+          <h4>DRIVERS THAT SENT ONLY ROUTE MESSAGE OR ONLY LOCATION UPDATES</h4>
+        </div>
+        <div class="value">
+          <span>{{(routeOrLocationsUpdates/numberOfDeliveries*100).toFixed(2)}}%</span
+          ><span>{{routeOrLocationsUpdates}}</span>
+        </div>
+      </div>
+
+      <div class="statistic">
+        <div class="label">
+          <div class="statistics-box blue"><span></span></div>
+          <h4>DRIVERS THAT SENT ROUTE MESSAGE AND NOT ALL DELIVERY UPDATES</h4>
+        </div>
+        <div class="value">
+          <span>{{(routeAndPartialLocationsUpdates/numberOfDeliveries*100).toFixed(2)}}%</span
+          ><span>{{routeAndPartialLocationsUpdates}}</span>
+        </div>
+      </div>
+
+      <div class="statistic">
+        <div class="label">
+          <div class="statistics-box red"><span></span></div>
+          <h4>NO MESSAGE OR LOCATION UPDATE</h4>
+        </div>
+        <div class="value">
+          <span>{{(noUpdates/numberOfDeliveries*100).toFixed(2)}}%</span><span>{{noUpdates}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <div class="loader-wrapper" [hidden]="!isLoading">
+      <ion-spinner class="loader"></ion-spinner>
+    </div>
+
+    <dashboard-table
+      [hidden]="isLoading"
+      [stickyColumn]="stickyColumn"
+      [tableHeaders]="tableHeaders"
+      [tableData]="tableData"
+    ></dashboard-table>
+  </div>
+
+  <div class="table-controls-btns" [hidden]="isLoading">
+    <button class="table-btn" (click)="handleTablePage()">Previous page</button>
+    <button class="table-btn" (click)="handleTablePage(true)">Next page</button>
+  </div>
+</ion-content>

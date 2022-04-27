@@ -4,29 +4,45 @@ import { Observable } from 'rxjs/Observable';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import { environment } from '../../environments/environment';
 import { TranslateService } from '@ngx-translate/core';
+import { User } from '../../interfaces/models/user';
 
 @Injectable()
 export class ApiService {
   public baseUrl: string;
+  private userToken: string;
 
   constructor(
     private readonly http: HttpClient,
-    private readonly secureActions: SecureActionsService,
+    public readonly secureActions: SecureActionsService,
     public translate: TranslateService
   ) {
     this.baseUrl = this.getServiceBaseURL();
+
+    secureActions.waitForAuth().subscribe((user: User) => {
+      this.userToken = user.userToken;
+    });
   }
 
-  private setHeaders(): any {
+  private setHeaders(setDashboardAuthorization?: boolean): any {
     const headers: any = {};
     headers['Content-Type'] = 'application/json';
+
+    if (setDashboardAuthorization) {
+      headers.Authorization = this.userToken;
+    }
+
     return headers;
   }
 
-  public get(baseUrl: string = this.baseUrl, path: string, params: any = {}): Observable<any> {
+  public get(
+    baseUrl: string = this.baseUrl,
+    path: string,
+    params: any = {},
+    setDashboardAuthorization?: boolean
+  ): Observable<any> {
     this.baseUrl = this.getServiceBaseURL();
 
-    return this.http.get(baseUrl + path, { headers: this.setHeaders(), params });
+    return this.http.get(baseUrl + path, { headers: this.setHeaders(setDashboardAuthorization), params });
   }
 
   public post(
@@ -38,13 +54,11 @@ export class ApiService {
     this.baseUrl = useExternalAPI ? '' : this.getServiceBaseURL();
 
     if (requiresToken) {
-      return this.secureActions.waitForAuth().flatMap(user => {
-        body[useExternalAPI ? 'token' : 'user_token'] = user.userToken;
+      body[useExternalAPI ? 'token' : 'user_token'] = this.userToken;
 
-        return this.http
-          .post(this.baseUrl + path, JSON.stringify(body), { headers: this.setHeaders() })
-          .take(1);
-      });
+      return this.http
+        .post(this.baseUrl + path, JSON.stringify(body), { headers: this.setHeaders(useExternalAPI) })
+        .take(1);
     }
 
     return this.http.post(this.baseUrl + path, JSON.stringify(body), { headers: this.setHeaders() }).take(1);

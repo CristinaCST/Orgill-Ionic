@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>STOPS</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="dashboard stops">
+  <h1>Stops Dashboard</h1>
+
+  <div class="stops-filters-wrapper">
+    <div class="stops-filters">
+      <div class="ship-no-input" [hidden]="!hasSearch">
+        <ion-item>
+          <ion-icon name="search" item-start></ion-icon>
+          <ion-input
+            clearInput
+            min="6"
+            maxlength="6"
+            type="tel"
+            inputmode="numeric"
+            pattern="^[0-9]"
+            [(ngModel)]="customerNo"
+            (change)="handleCustomerNoChange($event.target.value)"
+            (focusout)="handleCustomerNoChange($event.target.value)"
+            (keydown.enter)="$event.target.blur()"
+            placeholder="Search by ship or bill number."
+          ></ion-input>
+        </ion-item>
+      </div>
+
+      <dashboard-stops-select
+        [options]="filterByOptions"
+        [isFilter]="true"
+        btnText="Filter by"
+        btnImg="../../assets/vector/funnel.svg"
+        (onSelect)="handleStopsSortSelect($event)"
+        (onFilter)="handleFilters($event)"
+      ></dashboard-stops-select>
+
+      <dashboard-stops-select
+        [options]="stopsSortOptions"
+        [currentSelectedOption]="stopsSortCurrentSelected"
+        btnText="Sort by"
+        btnImg="../../assets/vector/swap-vertical.svg"
+        (onSelect)="handleStopsSortSelect($event)"
+      ></dashboard-stops-select>
+    </div>
+
+    <div class="stops-search" (click)="toggleSearch()"><ion-icon name="search"></ion-icon></div>
+  </div>
+
+  <div class="dashboard-stops-table">
+    <div class="loader-wrapper" *ngIf="isStopsStatisticsLoading">
+      <ion-spinner class="loader"></ion-spinner>
+    </div>
+
+    <dashboard-table
+      [hidden]="isStopsStatisticsLoading"
+      [stickyColumn]="stickyColumn"
+      [tableHeaders]="tableHeaders"
+      [tableData]="tableData"
+    ></dashboard-table>
+  </div>
+
+  <div class="table-controls-btns" [hidden]="isStopsStatisticsLoading">
+    <button class="table-btn" (click)="handleTablePage()">Previous page</button>
+    <button class="table-btn" (click)="handleTablePage(true)">Next page</button>
+  </div>
+</ion-content>

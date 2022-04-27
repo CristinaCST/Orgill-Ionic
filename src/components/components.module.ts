@@ -6,6 +6,9 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { createTranslateLoader } from '../app/app.module';
 
+// Pipes
+import { PipesModule } from '../pipes/pipes.module';
+
 // Components
 import { NavbarComponent } from './navbar/navbar';
 import { CustomShoppingListMenuComponent } from './custom-shopping-list-menu/custom-shopping-list-menu';
@@ -25,9 +28,13 @@ import { CardComponent } from './ds-card/card';
 import { CheckboxCardComponent } from './ds-checkbox-card/checkbox-card';
 import { CheckoutOverlayComponent } from './ds-checkout-overlay/checkout-overlay';
 import { VendorHeaderComponent } from './vendor-header/vendor-header';
-
-// Pipes
-import { PipesModule } from '../pipes/pipes.module';
+import { DashboardHeaderComponent } from './dashboard-header/dashboard-header';
+import { DashboardChartComponent } from './dashboard-chart/dashboard-chart';
+import { DashboardTableComponent } from './dashboard-table/dashboard-table';
+import { DashboardTrafficStatisticsComponent } from './dashboard-traffic-statistics/dashboard-traffic-statistics';
+import { DashboardCalendarComponent } from './dashboard-calendar/dashboard-calendar';
+import { DashboardSelectComponent } from './dashboard-select/dashboard-select';
+import { DashboardStopsSelectComponent } from './dashboard-stops-select/dashboard-stops-select';
 
 const components: any[] = [
   AppMenuComponent,
@@ -49,7 +56,14 @@ const components: any[] = [
   CardComponent,
   CheckboxCardComponent,
   CheckoutOverlayComponent,
-  VendorHeaderComponent
+  VendorHeaderComponent,
+  DashboardHeaderComponent,
+  DashboardChartComponent,
+  DashboardTableComponent,
+  DashboardTrafficStatisticsComponent,
+  DashboardCalendarComponent,
+  DashboardSelectComponent,
+  DashboardStopsSelectComponent
 ];
 
 @NgModule({

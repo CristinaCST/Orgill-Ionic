@@ -31,6 +31,7 @@ import { ProductImageProvider } from '../providers/product-image/product-image';
 import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { DropshipProvider } from '../providers/dropship/dropship';
+import { DashboardProvider } from '../providers/dashboard/dashboard';
 
 // Helpers
 import { CSSInjector } from '../helpers/css-injector';
@@ -50,6 +51,7 @@ import { SearchService } from '../services/search/search';
 import { ReloadService } from '../services/reload/reload';
 import { ErrorScheduler } from '../services/error-scheduler/error-scheduler';
 import { DropshipService } from '../services/dropship/dropship';
+import { CalendarService } from '../services/dashboard/calendar';
 
 // Pages
 import { MyApp } from './app.component';
@@ -84,6 +86,13 @@ import { SpecialsPage } from '../pages/ds-specials/specials';
 import { ShopItemsPage } from '../pages/ds-shop-items/shop-items';
 import { ItemDetailsPage } from '../pages/ds-item-details/item-details';
 import { CheckoutPage } from '../pages/ds-checkout/checkout';
+import { Dashboard } from '../pages/dashboard/dashboard';
+import { DashboardOverview } from '../pages/dashboard-overview/dashboard-overview';
+import { DashboardStops } from '../pages/dashboard-stops/dashboard-stops';
+import { DashboardTraffic } from '../pages/dashboard-traffic/dashboard-traffic';
+import { DashboardDeliveries } from '../pages/dashboard-deliveries/dashboard-deliveries';
+import { DashboardDrivers } from '../pages/dashboard-drivers/dashboard-drivers';
+import { DashboardRoutes } from '../pages/dashboard-routes/dashboard-routes';
 
 // Pipes
 import { PipesModule } from '../pipes/pipes.module';
@@ -118,7 +127,14 @@ const pages: Page[] = [
   SpecialsPage,
   ShopItemsPage,
   ItemDetailsPage,
-  CheckoutPage
+  CheckoutPage,
+  Dashboard,
+  DashboardOverview,
+  DashboardStops,
+  DashboardTraffic,
+  DashboardDeliveries,
+  DashboardDrivers,
+  DashboardRoutes
 ];
 
 // Error Handlers
@@ -189,7 +205,9 @@ import { RouteTrackingProvider } from '../providers/route-tracking/route-trackin
     RouteTrackingProvider,
     InAppBrowser,
     DropshipProvider,
-    DropshipService
+    DropshipService,
+    DashboardProvider,
+    CalendarService
   ]
 })
 export class AppModule {}

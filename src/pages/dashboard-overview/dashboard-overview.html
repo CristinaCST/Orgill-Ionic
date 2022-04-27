@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>OVERVIEW</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="dashboard overview">
+  <div class="filters-wrapper">
+    <div class="ship-no-input" [hidden]="!hasSearch">
+      <ion-item>
+        <ion-icon name="search" item-start></ion-icon>
+        <ion-input
+          clearInput
+          min="6"
+          maxlength="6"
+          type="tel"
+          inputmode="numeric"
+          pattern="^[0-9]"
+          (change)="handleShipNoChange($event.target.value)"
+          (focusout)="handleShipNoChange($event.target.value)"
+          (keydown.enter)="$event.target.blur()"
+          placeholder="Enter ship number."
+        ></ion-input>
+      </ion-item>
+    </div>
+
+    <button class="btn-date-picker dashboard-btn" (click)="handleDate($event)">
+      <ion-icon name="calendar"></ion-icon> <span>Last 30 days</span>
+    </button>
+
+    <button class="dashboard-btn search" (click)="toggleSearch()">
+      <ion-icon name="search"></ion-icon>
+    </button>
+  </div>
+
+  <div class="compared-to-date">
+    <span>compared to {{comparedToDate}}</span>
+  </div>
+
+  <div>
+    <dashboard-chart
+      [isLoading]="isGeneralStatisticsLoading"
+      title="TOTAL ORDERS"
+      [data]="orderStatistics"
+      index="0"
+    ></dashboard-chart>
+
+    <dashboard-chart
+      [isLoading]="isGeneralStatisticsLoading"
+      title="TOTAL VISITED"
+      [data]="visitedStatistics"
+      index="1"
+    ></dashboard-chart>
+
+    <dashboard-chart
+      [isLoading]="isGeneralStatisticsLoading"
+      title="TOTAL KEYED IN"
+      [data]="keyedInStatistics"
+      index="2"
+    ></dashboard-chart>
+
+    <dashboard-chart
+      [isLoading]="isGeneralStatisticsLoading"
+      title="TOTAL SEARCHES"
+      [data]="searchesStatistics"
+    ></dashboard-chart>
+  </div>
+
+  <dashboard-traffic-statistics></dashboard-traffic-statistics>
+
+  <div class="table-controls-btns">
+    <button class="table-btn" (click)="handleTableRecords()">See all records</button>
+  </div>
+</ion-content>

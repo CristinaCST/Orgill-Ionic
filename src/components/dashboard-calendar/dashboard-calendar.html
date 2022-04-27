@@ -1,0 +1,42 @@
+<div class="dashboard-calendar-wrapper">
+  <div>
+    <h4 class="dashboard-label">Date range</h4>
+    <dashboard-select
+      [options]="dateRangeOptions"
+      [currentSelectedOption]="currentSelectedRange"
+      (onSelect)="handleDateRangeSelect($event)"
+    ></dashboard-select>
+  </div>
+
+  <div>
+    <h4 class="dashboard-label">Starting</h4>
+    <input class="date-input" #StartDate readonly />
+  </div>
+
+  <div>
+    <h4 class="dashboard-label">Ending</h4>
+    <input class="date-input" #EndDate readonly />
+  </div>
+
+  <div class="dashboard-calendar-container start">
+    <div #DateStart></div>
+  </div>
+
+  <div class="dashboard-calendar-container end">
+    <div #DateEnd></div>
+  </div>
+
+  <div>
+    <h4 class="dashboard-label">Compare to</h4>
+    <dashboard-select
+      [options]="compareOptions"
+      [currentSelectedOption]="currentComparedRange"
+      (onSelect)="handleCompareSelect($event)"
+    ></dashboard-select>
+  </div>
+
+  <div class="calendar-modal-controls">
+    <button class="modal-btn cancel" (click)="dismiss()">Cancel</button>
+    <button class="modal-btn apply" [ngClass]="{'disabled': isDisabled}" (click)="dismiss('apply')">Apply</button>
+  </div>
+</div>

@@ -1,0 +1,262 @@
+.dashboard.drivers {
+  .search-box-wrapper {
+    position: relative;
+    display: flex;
+    margin: 0 0 10px;
+    justify-content: space-between;
+
+    .search-box {
+      position: absolute;
+      top: 50%;
+      z-index: 99999;
+      display: flex;
+      width: calc(100% - 45px);
+      height: 100%;
+      background: #fff;
+      overflow: hidden;
+      transform: translateY(-50%);
+
+      .input-container {
+        height: 100%;
+        margin: 0 5px 0 0;
+        overflow: hidden;
+        border: 1px solid #c9c9c9;
+      }
+
+      .item {
+        padding: 0;
+      }
+
+      .item-inner {
+        min-height: initial;
+        height: 35px;
+        margin: 0;
+        border: none;
+      }
+
+      .icon {
+        margin: 0;
+        color: #c9c9c9;
+        font-size: 18px;
+      }
+
+      .label {
+        margin: 0;
+      }
+
+      input {
+        border: none;
+        font-size: 12px;
+      }
+    }
+  }
+
+  .dashboard-btn {
+    display: flex;
+    padding: 10px 20px;
+    color: #fff;
+    align-items: center;
+    background: #9a040c;
+
+    &.search {
+      padding: 0 9px;
+      font-size: 20px;
+    }
+
+    span {
+      margin: 0 0 0 5px;
+    }
+
+    &.download {
+      color: #9a040c;
+      background: #fff;
+      border: 2px solid #9a040c;
+    }
+
+    .loader-wrapper {
+      margin: 0 5px 0 0;
+
+      .loader {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+
+  .statistics-wrapper {
+    margin: 10px 0 0;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #c9c9c9;
+
+    .statistics-header {
+      margin: 0 0 20px;
+
+      .totals {
+        display: flex;
+        align-items: center;
+      }
+
+      h3 {
+        margin: 0 0 0 5px;
+        color: #000;
+        font-size: 18px;
+        font-weight: bold;
+      }
+    }
+
+    .statistics-box {
+      display: flex;
+      width: 15px;
+      height: 15px;
+      border-radius: 3px;
+      align-items: center;
+      justify-content: center;
+
+      span {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+      }
+
+      &.grey {
+        background: #c9c9c9;
+
+        span {
+          background: #727272;
+        }
+      }
+
+      &.green {
+        background: #acffac;
+
+        span {
+          background: #00a000;
+        }
+      }
+
+      &.yellow {
+        background: #ffecc7;
+
+        span {
+          background: #ffbc39;
+        }
+      }
+
+      &.blue {
+        background: #d2ddfc;
+
+        span {
+          background: #2f67ff;
+        }
+      }
+
+      &.red {
+        background: #ffb4b7;
+
+        span {
+          background: #ff1925;
+        }
+      }
+    }
+
+    .pills-wrapper {
+      display: flex;
+      margin: 5px 0 0;
+      color: #fff;
+
+      .pill {
+        padding: 5px 0;
+        flex: 1;
+        text-align: center;
+
+        &.grey {
+          background: #727272;
+        }
+
+        &.green {
+          background: #00a000;
+
+          span {
+            background: #00a000;
+          }
+        }
+
+        &.yellow {
+          background: #ffbc39;
+        }
+
+        &.blue {
+          background: #2f67ff;
+        }
+
+        &.red {
+          background: #ff1925;
+        }
+
+        &:first-child {
+          border-top-left-radius: 15px;
+          border-bottom-left-radius: 15px;
+        }
+
+        &:last-child {
+          border-top-right-radius: 15px;
+          border-bottom-right-radius: 15px;
+        }
+
+        &.selected {
+          transform: scale(1.2);
+        }
+      }
+    }
+
+    .statistic {
+      margin: 10px 0;
+
+      .label {
+        display: flex;
+
+        h4 {
+          width: fit-content;
+          margin: 0 0 0 5px;
+          color: #727272;
+          font-size: 12px;
+          text-align: initial;
+        }
+      }
+
+      .value {
+        display: flex;
+
+        span {
+          margin: 0 0 0 20px;
+          color: #000;
+          font-size: 15px;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .table-wrapper {
+    margin: 10px 0 0;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #c9c9c9;
+  }
+
+  .table-controls-btns {
+    display: flex;
+    margin: 10px 0;
+    justify-content: space-between;
+
+    .table-btn {
+      padding: 0;
+      color: #000;
+      font-size: 12px;
+      background: none;
+      border: none;
+      border-bottom: 1px solid #000;
+    }
+  }
+}

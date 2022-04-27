@@ -16,6 +16,7 @@ import { Catalog } from '../catalog/catalog';
 import { RouteTrackingPage } from '../../pages/route-tracking/route-tracking';
 import { Subject, Subscription } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
+import { Dashboard } from '../../pages/dashboard/dashboard';
 
 @Component({
   selector: 'page-landing',
@@ -78,6 +79,8 @@ export class LandingPage implements OnInit, OnDestroy {
         return this.navigatorService.push(PromotionsPage).catch(err => console.error(err));
       case 'routeTracking':
         return this.navigatorService.push(RouteTrackingPage).catch(err => console.error(err));
+      case 'dashboard':
+        return this.navigatorService.push(Dashboard).catch(err => console.error(err));
 
       default:
         this.navigatorService.push(Catalog).catch(err => console.error(err));

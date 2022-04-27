@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>ROUTES</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="dashboard routes">
+  <h3 class="title">Select DC and Route</h3>
+
+  <div class="routes-select-wrapper">
+    <dashboard-select
+      [options]="dcOptions"
+      [currentSelectedOption]="0"
+      (onSelect)="handleDcSelect($event)"
+    ></dashboard-select>
+
+    <dashboard-select
+      [options]="routeOptions"
+      [currentSelectedOption]="0"
+      (onSelect)="handleRouteSelect($event)"
+    ></dashboard-select>
+  </div>
+
+  <div class="map-wrapper">
+    <ion-spinner class="map-loader" [hidden]="!isLoading"></ion-spinner>
+
+    <div class="map-details-wrapper" [ngClass]="{'no-visibility': !showMap, 'show-details-table': showDetailsTable}">
+      <div class="details-header">
+        <div>
+          <span>DC: {{currentDc}}</span>
+          <span>Route: {{currentRoute}}</span>
+        </div>
+        <span class="header-action" [hidden]="!showDetailsTable" (click)="toggleDetailsTable(false)">View map</span>
+      </div>
+
+      <div [hidden]="showDetailsTable">
+        <div class="details-overview">
+          <div class="details-wrapper">
+            <div class="details-label">Customers found</div>
+            <div class="details-value">{{customersFound}} Customers</div>
+          </div>
+
+          <div class="details-wrapper">
+            <div class="details-label">Deliveries found</div>
+            <div class="details-value">{{deliveriesFound}} Deliveries</div>
+          </div>
+        </div>
+
+        <button class="details-btn" (click)="toggleDetailsTable(true)">View customers and deliveries</button>
+      </div>
+
+      <div class="details-table" [hidden]="!showDetailsTable">
+        <div class="table-header">
+          <span>Customer Name</span>
+          <span>Address</span>
+          <span>Deliveries</span>
+        </div>
+
+        <div class="table-row" *ngFor="let location of locations">
+          <span>{{location.customerName}}</span>
+          <span>{{location.address}}</span>
+          <span>{{location.deliveries}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="map-container" #MapContainer [hidden]="isLoading" [ngClass]="{'no-visibility': !showMap}"></div>
+  </div>
+</ion-content>

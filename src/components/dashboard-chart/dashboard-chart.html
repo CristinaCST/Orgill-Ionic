@@ -1,0 +1,39 @@
+<div class="chart-container">
+  <div class="loader-wrapper" *ngIf="isLoading">
+    <ion-spinner class="loader"></ion-spinner>
+  </div>
+
+  <div [hidden]="isLoading">
+    <div class="growth" [ngClass]="growth ? 'positive-growth' : 'negative-growth'">
+      <ion-icon *ngIf="growth" name="arrow-up"></ion-icon>
+      <ion-icon *ngIf="!growth" name="arrow-down"></ion-icon>
+
+      <span> {{ growth }}% </span>
+    </div>
+
+    <div class="title">{{ title }}</div>
+
+    <div class="total-number">{{ selectedTotalRecords }}</div>
+
+    <div class="canvas-wrapper">
+      <canvas #CanvasContainer></canvas>
+    </div>
+
+    <!-- The custom tooltip -->
+    <div id="tooltips">
+      <!-- First dataset label and value -->
+      <div id="label-data0" class="tooltip-label"></div>
+      <div id="value-data0">
+        <span class="color-square orgill-color"></span>
+        <span class="value"></span>
+      </div>
+
+      <!-- Second dataset label and value -->
+      <div id="label-data1" class="tooltip-label"></div>
+      <div id="value-data1">
+        <span class="color-square grey-color"></span>
+        <span class="value"></span>
+      </div>
+    </div>
+  </div>
+</div>

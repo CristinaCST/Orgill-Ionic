@@ -99,3 +99,13 @@ export const onlineDealerMarketUS: string =
   'https://www.orgill.com/login.aspx?redirecturl=/onlineDealerMarket.aspx?tab=6';
 export const onlineDealerMarketCAD: string =
   'https://www.orgill.ca/login.aspx?redirecturl=/onlineDealerMarket.aspx?tab=6';
+
+// DASHBOARD
+export const GetGeneralStatistics: string = TRACKING_API_BASE_URL + 'Admin/GetGeneralStatistics';
+export const GetTrafficStatistics: string = TRACKING_API_BASE_URL + 'Admin/GetTrafficStatistics';
+export const GetStopsStatistics: string = TRACKING_API_BASE_URL + 'Admin/GetStopsStatistics';
+export const GetStoreRouteAndStops: string = TRACKING_API_BASE_URL + 'Admin/GetStoreRouteAndStops';
+export const GetDcAndRoutes: string = TRACKING_API_BASE_URL + 'Admin/GetDcAndRoutes';
+export const GetCustomersByDcAndRoute: string = TRACKING_API_BASE_URL + 'Admin/GetCustomersByDcAndRoute';
+export const GetDeliveriesDashboard: string = TRACKING_API_BASE_URL + 'Admin/GetDeliveriesDashboard';
+export const GetDeliveriesDashboardExcel: string = TRACKING_API_BASE_URL + 'Admin/GetDeliveriesDashboardExcel';
