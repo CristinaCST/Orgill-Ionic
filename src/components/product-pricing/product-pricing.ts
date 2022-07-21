@@ -8,7 +8,7 @@ import { ProgramProvider } from '../../providers/program/program';
   templateUrl: 'product-pricing.html'
 })
 export class ProductPricingComponent implements OnInit {
-  @Input() public isInShoppingList: boolean = false;  // If the product is viewed from within a shopping list
+  @Input() public isInShoppingList: boolean = false; // If the product is viewed from within a shopping list
   @Input() public product: Product;
   @Input() public productPrograms: ItemProgram[]; // Available programs of the product
   @Input() public selectedProgram: ItemProgram; // Current program
@@ -17,16 +17,16 @@ export class ProductPricingComponent implements OnInit {
   constructor(private readonly programProvider: ProgramProvider) {}
 
   public ngOnInit(): void {
-    this.selectedProgramNumber = this.selectedProgram.PROGRAM_NO;
+    this.selectedProgramNumber = this.selectedProgram.program_no;
     this.programProvider.getSelectedProgram().subscribe(selectedProgram => {
-      this.selectedProgramNumber = selectedProgram.PROGRAM_NO;
+      this.selectedProgramNumber = selectedProgram.program_no;
     });
   }
 
   public selectProgram(program: ItemProgram): void {
-    if (this.selectedProgram.PROGRAM_NO !== program.PROGRAM_NO) { // Only try to change the program if it's different than the current one
+    if (this.selectedProgram.program_no !== program.program_no) {
+      // Only try to change the program if it's different than the current one
       this.programProvider.selectProgram(program);
     }
   }
-
 }

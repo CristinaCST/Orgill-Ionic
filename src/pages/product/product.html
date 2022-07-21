@@ -1,41 +1,52 @@
 <!-- Product Page Header -->
 <ion-header>
   <!-- Product Page Navigation Bar -->
-  <navbar [title]="programName ? programName: 'product_item_details'" [isMenuEnabled]="false"
-          [isBackEnabled]="true"></navbar>
-
-  <!-- Product Page SubHeader -->
-  <!--<ion-toolbar id="subcategory" padding-left padding-right>
-   < <ion-buttons left>
-      <button ion-button large (click)="close()">
-        <ion-icon name="ios-arrow-back"></ion-icon>
-      </button>
-    </ion-buttons>
-    <ion-title>{{ subCategoryName? subCategoryName : product.NAME }}</ion-title>
-  </ion-toolbar>-->
+  <navbar
+    [title]="programName ? programName: 'product_item_details'"
+    [isMenuEnabled]="false"
+    [isBackEnabled]="true"
+  ></navbar>
 
   <!-- Product Page Tabs-->
   <ion-segment *ngIf="!isHotDeal" [(ngModel)]="activeTab">
-    <ion-segment-button value="summary_tab"> {{"summary_tab" | translate}}
-    </ion-segment-button>
-    <ion-segment-button  value="pricing_tab"> {{"pricing_tab" | translate}}
-    </ion-segment-button>
+    <ion-segment-button value="summary_tab"> {{"summary_tab" | translate}} </ion-segment-button>
+    <ion-segment-button value="pricing_tab"> {{"pricing_tab" | translate}} </ion-segment-button>
   </ion-segment>
 </ion-header>
 
 <ion-content>
   <div class="content">
     <div class="tabs" [(ngSwitch)]="activeTab">
-      <product-details *ngSwitchCase="'summary_tab'" [product]="product"></product-details>
-      <product-pricing [isInShoppingList]="fromShoppingList" *ngSwitchCase="'pricing_tab'" [product]="product"
-                       [productPrograms]="productPrograms" [selectedProgram]="selectedProgram"></product-pricing>
+      <product-details
+        *ngSwitchCase="'summary_tab'"
+        [product]="product"
+        [orderhistory]="orderhistory"
+        [inventoryonhand]="inventoryonhand"
+      ></product-details>
+      <product-pricing
+        [isInShoppingList]="fromShoppingList"
+        *ngSwitchCase="'pricing_tab'"
+        [product]="product"
+        [productPrograms]="productPrograms"
+        [selectedProgram]="selectedProgram"
+      ></product-pricing>
     </div>
-    <product-quantity [hotDeal]="isHotDeal" (quantityChange)="onQuantityChange($event)"
-      [quantityFromList]="quantityFromList" [regularPrice]="regularPrice" [product]="product"></product-quantity>
+    <product-quantity
+      [hotDeal]="isHotDeal"
+      (quantityChange)="onQuantityChange($event)"
+      [quantityFromList]="quantityFromList"
+      [regularPrice]="regularPrice"
+      [retailPrice]="retailPrice"
+      [product]="product"
+    ></product-quantity>
   </div>
 </ion-content>
 
 <ion-footer class="hide-on-keyboard-open" *ngIf="!fromShoppingList" [(ngSwitch)]="isHotDeal">
-  <button id="add-shopping" *ngSwitchCase="false" (click)="addToShoppingList()">{{"button_add_to_list" | translate}}</button>
-  <button id="add-shopping" *ngSwitchCase="true" (click)="buyNow()">{{(isAvailable?"button_buy_now":"sold_out_button") | translate}}</button>
+  <button id="add-shopping" *ngSwitchCase="false" (click)="addToShoppingList()">
+    {{"button_add_to_list" | translate}}
+  </button>
+  <button id="add-shopping" *ngSwitchCase="true" (click)="buyNow()">
+    {{(isAvailable?"button_buy_now":"sold_out_button") | translate}}
+  </button>
 </ion-footer>

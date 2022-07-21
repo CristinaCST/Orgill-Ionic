@@ -1,10 +1,9 @@
 <!-- Products Page Header -->
 <ion-header>
   <!-- Products Navigation Bar -->
-  <navbar [title]="category ? category.CatName : programName" [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
+  <navbar [title]="category ? category.catName : programName" [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
   <!-- Products Search Results Search Bar -->
-  <search-bar [showBackButton]="true"
-              (searched)="onSearched($event)"></search-bar>
+  <search-bar [showBackButton]="true" (searched)="onSearched($event)"></search-bar>
 </ion-header>
 <!-- Products  Content-->
 <ion-content>
@@ -16,14 +15,10 @@
     </div>
   </ion-list>
   <!-- Products Page error message -->
-  <div *ngIf="!products.length && !isLoading" class="no-products">
-    {{"no_products_found" | translate}}
-  </div>
+  <div *ngIf="!products.length && !isLoading" class="no-products">{{"no_products_found" | translate}}</div>
   <!--Products Pagination -->
   <div class="show-more">
-    <button ion-button clear block class="show-more"
-            *ngIf="isPaginationEnabled"
-            (click)="next()">
+    <button ion-button clear block class="show-more" *ngIf="isPaginationEnabled" (click)="next()">
       <p>{{"load_more_results" | translate}}</p>
     </button>
   </div>

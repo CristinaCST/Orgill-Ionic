@@ -1,30 +1,46 @@
 import { AfterViewInit, Component, Input } from '@angular/core';
-import { Product } from '../../interfaces/models/product';
+import { InventoryOnHand, OrderHistory, Product } from '../../interfaces/models/product';
 import { ProductDescriptionPage } from '../../pages/product-description/product-description';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { ProductImageProvider } from '../../providers/product-image/product-image';
+import { Modal, ModalController } from 'ionic-angular';
+import { ProductPastPurchases } from '../../components/product-past-purchases/product-past-purchases';
 
 @Component({
   selector: 'product-details',
   templateUrl: 'product-details.html'
 })
 export class ProductDetailsComponent implements AfterViewInit {
-
   @Input() public product: Product;
+  @Input() public orderhistory: OrderHistory[];
+  @Input() public inventoryonhand: InventoryOnHand;
   public imageIsLoading: boolean = true;
   public imageURL: string = '';
 
-  constructor(private readonly navigatorService: NavigatorService,
-              private readonly imageProvider: ProductImageProvider) {}
+  constructor(
+    private readonly navigatorService: NavigatorService,
+    private readonly imageProvider: ProductImageProvider,
+    public modalCtrl: ModalController
+  ) {}
 
   public showProductDescription(): void {
-    this.navigatorService.push(ProductDescriptionPage, { 'product': this.product }).catch(err => console.error(err));
+    this.navigatorService.push(ProductDescriptionPage, { product: this.product }).catch(err => console.error(err));
   }
 
   public ngAfterViewInit(): void {
-    this.imageProvider.getImageURL(this.product.SKU).then(data => {
+    this.imageProvider.getImageURL(this.product.sku).then(data => {
       this.imageURL = data;
       this.imageIsLoading = false;
     });
+  }
+
+  public handlePastPurchasesModal(): void {
+    const modal: Modal = this.modalCtrl.create(
+      ProductPastPurchases,
+      { orderhistory: this.orderhistory },
+      { cssClass: 'product-past-purchases-modal' }
+    );
+
+    modal.present();
   }
 }

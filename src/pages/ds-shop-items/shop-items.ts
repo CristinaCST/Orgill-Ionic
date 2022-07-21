@@ -134,8 +134,8 @@ export class ShopItemsPage implements OnInit, OnDestroy {
   }
 
   private fetchFormItems(data: FormDetails, savedOrder?: SavedorderList): void {
-    this.dropshipProvider.getFormItems({ form_id: data.form_id }).subscribe(response => {
-      const item_list: any = JSON.parse(response.d);
+    this.dropshipProvider.getFormItems(data.form_id).subscribe(response => {
+      const item_list: any = response;
       this.itemList = item_list;
 
       if (!this.isDropship) {
@@ -158,8 +158,8 @@ export class ShopItemsPage implements OnInit, OnDestroy {
   }
 
   private handleSavedOrders(savedOrder: SavedorderList, item_list: any): void {
-    this.dropshipProvider.getSavedorderDetails({ order_id: savedOrder.order_id }).subscribe(response => {
-      const savedOrderItems: SavedorderItems[] = JSON.parse(response.d);
+    this.dropshipProvider.getSavedorderDetails(savedOrder.order_id).subscribe((response: any) => {
+      const savedOrderItems: SavedorderItems[] = response;
 
       item_list.forEach(item => {
         savedOrderItems.forEach(order => {

@@ -32,26 +32,22 @@ export class ProgramProvider {
   }
 
   public getPrograms(): Observable<APIResponse> {
-    return this.apiProvider.post(ConstantsUrl.URL_PROGRAMS, true);
+    return this.apiProvider.get(ConstantsUrl.URL_PROGRAMS);
   }
 
   public getProductPrograms(productSku: string): Observable<APIResponse> {
-    const params: any = {
-      sku: productSku
-    };
-    return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_PROGRAMS, params, true);
+    return this.apiProvider.get(`${ConstantsUrl.URL_PRODUCT_PROGRAMS}/${productSku}`);
   }
 
   public isMarketOnlyProgram(programNumber: string): Observable<boolean> {
     return this.apiProvider
-      .post(ConstantsUrl.URL_PROGRAMS, {}, true)
+      .get(ConstantsUrl.URL_PROGRAMS)
       .take(1)
-      .map(receivedPrograms => {
-        const programs: Program[] = JSON.parse(receivedPrograms.d);
+      .map((receivedPrograms: any) => {
+        const programs: Program[] = receivedPrograms;
         if (programs.length > 0) {
           const wantedProgram: Program = programs.find(
-            program =>
-              program.PROGRAMNO === programNumber && (program.MARKETONLY === 'Y' || program.OBEONLY === 'Y')
+            program => program.programno === programNumber && (program.marketonly === 'Y' || program.obeonly === 'Y')
           );
           if (wantedProgram) {
             return true;
@@ -60,5 +56,17 @@ export class ProgramProvider {
         }
         return false;
       });
+  }
+
+  public getPastPurchases(productSku: string, customer_number: string): Observable<APIResponse> {
+    return this.apiProvider.get(`${ConstantsUrl.URL_PAST_PURCHASES}/${productSku}`, { customer_number });
+  }
+
+  public getProductDetails(productSku: string): Observable<APIResponse> {
+    return this.apiProvider.get(`${ConstantsUrl.URL_INVENTORY_DETAILS}/${productSku}`);
+  }
+
+  public getRetailPrice(productSku: string): Observable<APIResponse> {
+    return this.apiProvider.get(`${ConstantsUrl.URL_RETAIL_PRICE}/${productSku}`);
   }
 }

@@ -1,0 +1,12 @@
+<div class="past-purchases-container">
+  <button class="modal-dismiss" ion-button block (click)="dismiss()">Go Back</button>
+
+  <h3 class="title">Past Purchases</h3>
+
+  <div>
+    <div class="past-purchases-wrapper" *ngFor="let order of orderhistory">
+      <span>{{order.monthname}}, {{order.year}}</span>
+      <span>{{order.quantity || "None"}}</span>
+    </div>
+  </div>
+</div>

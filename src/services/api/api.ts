@@ -18,14 +18,21 @@ export class ApiService {
   ) {
     this.baseUrl = this.getServiceBaseURL();
 
-    secureActions.waitForAuth().subscribe((user: User) => {
-      this.userToken = user.userToken;
-    });
+    secureActions
+      .waitForAuth()
+      .first()
+      .subscribe((user: User) => {
+        this.userToken = user.user_Token;
+      });
   }
 
   private setHeaders(setDashboardAuthorization?: boolean): any {
     const headers: any = {};
     headers['Content-Type'] = 'application/json';
+
+    if (this.userToken) {
+      headers.user_token = this.userToken;
+    }
 
     if (setDashboardAuthorization) {
       headers.Authorization = this.userToken;
@@ -35,13 +42,11 @@ export class ApiService {
   }
 
   public get(
-    baseUrl: string = this.baseUrl,
     path: string,
     params: any = {},
+    baseUrl: string = this.baseUrl,
     setDashboardAuthorization?: boolean
   ): Observable<any> {
-    this.baseUrl = this.getServiceBaseURL();
-
     return this.http.get(baseUrl + path, { headers: this.setHeaders(setDashboardAuthorization), params });
   }
 
@@ -64,13 +69,21 @@ export class ApiService {
     return this.http.post(this.baseUrl + path, JSON.stringify(body), { headers: this.setHeaders() }).take(1);
   }
 
+  public fetch(path: string, token: string): Observable<any> {
+    const headers: any = this.setHeaders();
+    headers.user_token = token;
+    return this.http.get(this.baseUrl + path, { headers });
+  }
+
+  public put(path: string, body: any): Observable<any> {
+    return this.http.put(this.baseUrl + path, body, { headers: this.setHeaders() });
+  }
+
+  public delete(path: string, params: any = {}): Observable<any> {
+    return this.http.delete(this.baseUrl + path, { headers: this.setHeaders(), params });
+  }
+
   private getServiceBaseURL(): string {
-    // if (!LocalStorageHelper.hasKey(Constants.DEVICE_LANGUAGE)) {
-    //   return ConstantsURL.URL_BASE_EN;
-    // }
-    // if (LocalStorageHelper.getFromLocalStorage(Constants.DEVICE_LANGUAGE).toLowerCase().includes(Constants.LANG_FR)) {
-    //   return ConstantsURL.URL_BASE_FR;
-    // }
     if (this.translate.currentLang === 'fr') {
       return environment.baseUrlFrench;
     }

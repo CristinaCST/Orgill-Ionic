@@ -79,8 +79,8 @@ export class CheckoutPage implements OnInit, OnDestroy {
   public getSpecialMinimumOrder(searchItems: FormItems[]): void {
     const cartItems: any = [...this.checkoutItems, ...searchItems];
 
-    this.dropshipProvider.getFormDetails({ form_id: this.form_id }).subscribe(response => {
-      const formDetails: FormDetails = JSON.parse(response.d);
+    this.dropshipProvider.getFormDetails(this.form_id).subscribe((response: any) => {
+      const formDetails: FormDetails = response;
 
       this.pushSearchItemsIntoCart(
         cartItems.map(item => {

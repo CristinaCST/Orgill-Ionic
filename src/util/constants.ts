@@ -172,10 +172,10 @@ export const SEARCH_RESULTS_PER_PAGE: number = 20;
 export const DEFAULT_LIST_ID: string = 'default_list_id';
 export const MARKET_ONLY_LIST_ID: string = 'market_only_list_id';
 
-export const CUSTOM_LIST_DEFAULT_TYPE: string = '0';
-export const DEFAULT_LIST_TYPE: string = '1';
-export const MARKET_ONLY_LIST_TYPE: string = '2';
-export const CUSTOM_LIST_MARKET_TYPE: string = '3';
+export const CUSTOM_LIST_DEFAULT_TYPE: number = 0;
+export const DEFAULT_LIST_TYPE: number = 1;
+export const MARKET_ONLY_LIST_TYPE: number = 2;
+export const CUSTOM_LIST_MARKET_TYPE: number = 3;
 
 // ONE SIGNAL SETUP /// PROD
 export const ONE_SIGNAL_API_KEY: string = 'a11b3e10-bce2-41e9-a6d0-746042798d7e';

@@ -27,6 +27,7 @@ import { HotDealsPage } from '../../pages/hot-deals/hot-deals';
 import { OneSignalService } from '../../services/onesignal/onesignal';
 import { LoadingService } from '../../services/loading/loading';
 import { LandingPage } from '../../pages/landing/landing';
+import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 
 @Component({
   selector: 'app-menu',
@@ -64,7 +65,8 @@ export class AppMenuComponent implements OnInit {
     private readonly navigatorService: NavigatorService,
     private readonly menuCtrl: MenuController,
     private readonly oneSignal: OneSignalService,
-    private readonly loadingService: LoadingService
+    private readonly loadingService: LoadingService,
+    public readonly secureActions: SecureActionsService
   ) {
     this.loader = this.loadingService.createLoader();
   }
@@ -103,8 +105,13 @@ export class AppMenuComponent implements OnInit {
       this.hotDealNotification = retailer_type === 'US';
     });
 
-    this.getPrograms();
-    this.getShoppingLists();
+    this.secureActions
+      .waitForAuth()
+      .first()
+      .subscribe(() => {
+        this.getPrograms();
+        this.getShoppingLists();
+      });
   }
 
   public menuOpen(): void {
@@ -170,14 +177,16 @@ export class AppMenuComponent implements OnInit {
       .getAllShoppingLists()
       .take(1)
       .subscribe(
-        shoppingListsResponse => {
-          const shoppingLists: ShoppingListResponse[] = JSON.parse(shoppingListsResponse.d);
+        (shoppingListsResponse: any) => {
+          const shoppingLists: ShoppingListResponse[] = shoppingListsResponse;
+          // FIXME: this thing goes into infinite loop...
           if (
             !shoppingLists.find(list => list.list_type === Constants.DEFAULT_LIST_TYPE) &&
             !shoppingLists.find(list => list.list_type === Constants.MARKET_ONLY_LIST_TYPE)
           ) {
             this.shoppingListsProvider.createDefaultShoppingLists().subscribe(defaultShoppingListsResponse => {
-              this.getShoppingLists();
+              // this.getShoppingLists(); // WHY?
+              this.loader.hide();
               return;
             });
           } else {
@@ -214,7 +223,7 @@ export class AppMenuComponent implements OnInit {
 
             this.loader.hide();
           }
-          this.events.subscribe('DeletedList', (listId: string) => {
+          this.events.subscribe('DeletedList', (listId: number) => {
             this.customShoppingLists = this.customShoppingLists.filter(list => list.ListID !== listId);
           });
         },
@@ -226,7 +235,7 @@ export class AppMenuComponent implements OnInit {
   }
 
   private repeatingInProgramList(list: Program[], tested: Program): boolean {
-    return list.findIndex(program => program.PROGRAMNO === tested.PROGRAMNO) > -1;
+    return list.findIndex(program => program.programno === tested.programno) > -1;
   }
 
   public getPrograms(): void {
@@ -234,24 +243,22 @@ export class AppMenuComponent implements OnInit {
     this.marketOnlyPrograms = [];
     this.everyDayPrograms = [];
 
-    // TODO: Refactor this
     this.catalogsProvider.getPrograms().subscribe(
-      response => {
+      (response: any) => {
         if (!response) {
           return;
         }
 
-        const programs: Program[] = JSON.parse(response.d) as Program[];
+        const programs: Program[] = response;
 
         this.catalogsProvider.setPrograms(programs);
 
-        this.addProgramsToDB(programs); // TODO: Refactor this, creates regular program
+        this.addProgramsToDB(programs);
 
         programs.forEach(program => {
-          if (program.MARKETONLY.toUpperCase().includes('Y')) {
-            if (program.NAME.toUpperCase().includes('DOOR BUSTER BOOKING')) {
-              // TODO: Fix this
-              program.NAME = program.NAME.replace('DOOR BUSTER BOOKING', '');
+          if (program.marketonly.toUpperCase().includes('Y')) {
+            if (program.name.toUpperCase().includes('DOOR BUSTER BOOKING')) {
+              program.name = program.name.replace('DOOR BUSTER BOOKING', '');
 
               if (!this.repeatingInProgramList(this.doorBusterPrograms, program)) {
                 this.doorBusterPrograms.push(program);
@@ -259,13 +266,13 @@ export class AppMenuComponent implements OnInit {
             } else if (!this.repeatingInProgramList(this.marketOnlyPrograms, program)) {
               this.marketOnlyPrograms.push(program);
             }
-          } else if (program.OBEONLY === 'Y' && !this.repeatingInProgramList(this.obeOnlyPrograms, program)) {
+          } else if (program.obeonly === 'Y' && !this.repeatingInProgramList(this.obeOnlyPrograms, program)) {
             this.obeOnlyPrograms.push(program);
           } else if (!this.repeatingInProgramList(this.everyDayPrograms, program)) {
             this.everyDayPrograms.push(program);
             const promotionsPrograms: Program[] = this.everyDayPrograms.filter(
               everyProgram =>
-                everyProgram.NAME.toUpperCase() !==
+                everyProgram.name.toUpperCase() !==
                 this.translateProvider.translate(Strings.REGULAR_CATALOG).toUpperCase()
             );
             this.promotionsService.setPromotionsOnlyPrograms(promotionsPrograms);
@@ -278,14 +285,14 @@ export class AppMenuComponent implements OnInit {
 
   public addProgramsToDB(programs: Program[]): void {
     const regularProgram: Program = {
-      NAME: this.translateProvider.translate(Strings.REGULAR_CATALOG).toUpperCase(),
-      PROGRAMNO: '',
-      MARKETONLY: 'N',
-      OBEONLY: 'N',
-      STARTDATE: '01/01/2014',
-      ENDDATE: '01/01/2024',
-      SHIPDATE: '01/01/2014',
-      TERMS: ''
+      name: this.translateProvider.translate(Strings.REGULAR_CATALOG).toUpperCase(),
+      programno: '',
+      marketonly: 'N',
+      obeonly: 'N',
+      startdate: '01/01/2014',
+      enddate: '01/01/2024',
+      shipdate: '01/01/2014',
+      terms: ''
     };
     programs.unshift(regularProgram);
     // this.databaseProvider.addPrograms(programs);
@@ -304,8 +311,8 @@ export class AppMenuComponent implements OnInit {
 
   public showCategories(program: Program): void {
     const params: any = {
-      programName: program.NAME,
-      programNumber: program.PROGRAMNO
+      programName: program.name,
+      programNumber: program.programno
     };
 
     this.navigatorService.setRoot(Catalog, params).catch(err => console.error(err));

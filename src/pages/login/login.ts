@@ -39,8 +39,8 @@ export class Login {
 
     // TODO: Refactor the auth logic wtf.
     this.loginLoader.show();
-    const loginRequest: { username: string; password: string } = {
-      username: this.username,
+    const loginRequest: { user_name: string; password: string } = {
+      user_name: this.username,
       password: this.password
     };
     this.authService.login(loginRequest).subscribe(

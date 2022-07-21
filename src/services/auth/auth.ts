@@ -49,15 +49,15 @@ export class AuthService {
   }
 
   public login(credentials: LoginRequest): Observable<void> {
-    credentials.username = credentials.username.toLowerCase();
+    credentials.user_name = credentials.user_name.toLowerCase();
     credentials.password = AuthService.encryption(credentials.password);
 
-    return this.apiProvider.post(ConstantsURL.URL_LOGIN, credentials).map(response => {
-      const data: { ErrCode: string; User_Token: string } = JSON.parse(response.d);
+    return this.apiProvider.get(ConstantsURL.URL_LOGIN, credentials).map(response => {
+      const data: { errCode: string; user_Token: string } = response;
 
-      this.user = { userToken: data.User_Token };
+      this.user = { user_Token: data.user_Token };
 
-      if (data.ErrCode && data.ErrCode === 'Password has expired!') {
+      if (data.errCode && data.errCode === 'Password has expired!') {
         const content: PopoverContent = this.popoverService.setContent(
           Strings.POPOVER_PASSWORD_EXPIRED_TITLE,
           Strings.POPOVER_PASSWORD_EXPIRED_MESSAGE,
@@ -101,19 +101,19 @@ export class AuthService {
    * Gets user info from the server
    */
   public getUserInfo(): Promise<User> {
-    if (this.user && this.user.userToken) {
+    if (this.user && this.user.user_Token) {
       return new Promise((resolve, reject) => {
-        const params: any = { user_token: this.user.userToken };
-        this.apiProvider.post(ConstantsURL.URL_USER_INFO, params).subscribe(
-          response => {
-            this.user = JSON.parse(response.d);
-            this.user.userToken = params.user_token;
-            this.allowSwitch = JSON.parse(response.d).division;
+        const params: any = { user_token: this.user.user_Token };
+        this.apiProvider.fetch(ConstantsURL.URL_USER_INFO, this.user.user_Token).subscribe(
+          (response: any) => {
+            this.user = response;
+            this.user.user_Token = params.user_token;
+            this.allowSwitch = response.division;
             this.allowLanguageSwitchListener.next(this.allowSwitch === '8');
             this.secureActions.setAuthState(true, this.user);
             this.events.publish(Constants.EVENT_AUTH);
             LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
-            resolve(JSON.parse(response.d));
+            resolve(response);
           },
           error => {
             console.error(error);

@@ -1,39 +1,37 @@
 <div>
   <div class="main" ion-item no-lines (click)="showProductDescription()">
     <div id="image-container">
-      <img *ngIf="!imageIsLoading" [src]="imageURL">
+      <img *ngIf="!imageIsLoading" [src]="imageURL" />
       <ion-spinner *ngIf="imageIsLoading===true"></ion-spinner>
     </div>
     <div id="product-main-info">
-      <p>{{product.NAME}}</p>
-      <p>{{product.VENDOR_NAME}}</p>
-      <p>{{"product_SKU" | translate}}: {{product.SKU}} {{product.QTY_ROUND_OPTION}}</p>
+      <p>{{product.name}}</p>
+      <p>{{product.vendoR_NAME}}</p>
+      <p>{{"product_SKU" | translate}}: {{product.sku}} {{product.qtY_ROUND_OPTION}}</p>
     </div>
     <ion-icon name="ios-arrow-forward"></ion-icon>
   </div>
   <ion-item class="product-info-container">
-    <!--
-      <div class="info">
-      <span>{{"product_SKU" | translate}}:</span>
-      <span>{{product.SKU}} {{product.QTY_ROUND_OPTION}}</span>
-    </div>
-    -->
     <div class="info">
       <span>{{"product_retail_upc" | translate}}:</span>
-      <span>{{product.UPC_CODE}}</span>
+      <span>{{product.upC_CODE}}</span>
     </div>
-  <!--  <div class="info">
-      <span>{{"product_vendor" | translate}}:</span>
-      <span>{{product.VENDOR_NAME}}</span>
-    </div>
-  -->
+
     <div class="info">
       <span>{{"product_model_number" | translate}}:</span>
-      <span>{{product.MODEL}}</span>
+      <span>{{product.model}}</span>
     </div>
     <div class="info">
       <span>{{"product_shelf_pack" | translate}}:</span>
-      <span>{{product.SHELF_PACK}}</span>
+      <span>{{product.shelF_PACK}}</span>
+    </div>
+    <div class="info">
+      <span>Available in {{inventoryonhand?.division}}:</span>
+      <span>{{inventoryonhand?.inventory}}</span>
+    </div>
+    <div class="info">
+      <span>{{"product_past_purchases" | translate}}:</span>
+      <button class="past-purchases-btn" ion-button (click)="handlePastPurchasesModal()">Details</button>
     </div>
   </ion-item>
 </div>

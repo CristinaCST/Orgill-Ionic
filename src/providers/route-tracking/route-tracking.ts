@@ -23,13 +23,13 @@ export class RouteTrackingProvider {
   }
 
   public getStoreRouteAndStops(ship_to_no: string): Observable<any> {
-    return this.apiProvider.get(GET_STORE_ROUTE_AND_STOPS, '', {
+    return this.apiProvider.get(GET_STORE_ROUTE_AND_STOPS, {
       ship_to_no
     });
   }
 
   public testGetTodayCustomers(numberOfShipments: number = 1): Observable<any> {
-    return this.apiProvider.get(TEST_GET_TODAY_CUSTOMERS, '', {
+    return this.apiProvider.get(TEST_GET_TODAY_CUSTOMERS, {
       size: numberOfShipments
     });
   }

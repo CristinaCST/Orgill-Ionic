@@ -18,9 +18,11 @@ export class HotDealsPage {
   @ViewChild(Content) private readonly content: Content;
   @ViewChild(InfiniteScroll) private readonly infiniteScroll: InfiniteScroll;
 
-  constructor(private readonly hotDealsService: HotDealsService,
+  constructor(
+    private readonly hotDealsService: HotDealsService,
     private readonly loadingService: LoadingService,
-    private readonly events: Events) {
+    private readonly events: Events
+  ) {
     this.simpleLoader = this.loadingService.createLoader();
   }
 
@@ -35,7 +37,7 @@ export class HotDealsPage {
       this.initHotDeals();
       // this.navigatorService.performRefresh();
     }
-  }
+  };
 
   private initHotDeals(): void {
     this.isLoading = true;
@@ -45,30 +47,32 @@ export class HotDealsPage {
 
     this.infiniteScroll.enable(true);
     this.simpleLoader.show();
-    this.hotDealsService.getHotDealNotifications().then(res => {
-      this.hotDealsBuffer.push(...res);
-      this.hotDeals.push(...this.hotDealsBuffer.splice(0, Constants.INFINITE_LOADER_INITIAL_ELEMENTS));
-      this.content.resize();
+    this.hotDealsService
+      .getHotDealNotifications()
+      .then(res => {
+        this.hotDealsBuffer.push(...res);
+        this.hotDeals.push(...this.hotDealsBuffer.splice(0, Constants.INFINITE_LOADER_INITIAL_ELEMENTS));
+        this.content.resize();
 
-       // HACK: Infinite loader was buggy and didn't update sizes properly
-      // To fix the issues, we manually check for scroll area size and load enough items
-      // The timeout is needed to allow this.content. sizes to update.
-      const loadInterval: number = setInterval(() => {
-        if (this.content.contentHeight * 2 <= this.content.scrollHeight || this.hotDealsBuffer.length === 0) {
-          this.simpleLoader.hide();
-          clearInterval(loadInterval);
-          this.isLoading = false;
-          return;
-        }
-        this.infiniteScroll.ionInfinite.emit(this.infiniteScroll);
-      }, 20);
-
-    }).catch(err => {
-      this.isLoading = false;
-      console.error(err);
-      LoadingService.hideAll();
-     // this.reloadService.paintDirty('hotdeals');
-    });
+        // HACK: Infinite loader was buggy and didn't update sizes properly
+        // To fix the issues, we manually check for scroll area size and load enough items
+        // The timeout is needed to allow this.content. sizes to update.
+        const loadInterval: number = setInterval(() => {
+          if (this.content.contentHeight * 2 <= this.content.scrollHeight || this.hotDealsBuffer.length === 0) {
+            this.simpleLoader.hide();
+            clearInterval(loadInterval);
+            this.isLoading = false;
+            return;
+          }
+          this.infiniteScroll.ionInfinite.emit(this.infiniteScroll);
+        }, 20);
+      })
+      .catch(err => {
+        this.isLoading = false;
+        console.error(err);
+        LoadingService.hideAll();
+        // this.reloadService.paintDirty('hotdeals');
+      });
   }
 
   public doRefresh($event: any): void {
@@ -79,7 +83,7 @@ export class HotDealsPage {
   public clickOnDeal(notification: HotDealNotification): void {
     if (notification.SKU) {
       this.simpleLoader.show();
-      this.hotDealsService.navigateToHotDeal(notification.SKU.replace('\'', ''));
+      this.hotDealsService.navigateToHotDeal(notification.SKU.replace("'", ''));
     }
   }
 
@@ -92,5 +96,4 @@ export class HotDealsPage {
       infiniteLoader.enabled = false;
     }
   }
-
 }

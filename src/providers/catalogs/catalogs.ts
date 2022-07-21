@@ -3,7 +3,6 @@ import * as ConstantsUrl from '../../util/constants-url';
 import * as Constants from '../../util/constants';
 import { ApiService } from '../../services/api/api';
 import { SubcategoriesRequest } from '../../interfaces/request-body/subcategories';
-import { CategoriesRequest } from '../../interfaces/request-body/categories';
 import { ProductsRequest } from '../../interfaces/request-body/products';
 import { SearchProductRequest } from '../../interfaces/request-body/search-product';
 import { Observable } from 'rxjs/Observable';
@@ -18,19 +17,19 @@ export class CatalogsProvider {
   constructor(private readonly apiProvider: ApiService, private readonly secureActions: SecureActionsService) {}
 
   public getPrograms(): Observable<APIResponse> {
-    return this.apiProvider.post(ConstantsUrl.URL_PROGRAMS, {}, true) as Observable<APIResponse>;
+    return this.apiProvider.get(ConstantsUrl.URL_PROGRAMS) as Observable<APIResponse>;
   }
 
   public setPrograms(programs: Program[]): void {
     this.programs = programs;
   }
 
-  public getCategories(params: CategoriesRequest): Observable<APIResponse> {
-    return this.apiProvider.post(ConstantsUrl.URL_CATEGORIES, params, true);
+  public getCategories(program_no: string): Observable<APIResponse> {
+    return this.apiProvider.get(ConstantsUrl.URL_CATEGORIES, { program_no });
   }
 
-  public getSubcategories(params: SubcategoriesRequest): Observable<APIResponse> {
-    return this.apiProvider.post(ConstantsUrl.URL_SUBCATEGORIES, params, true);
+  public getSubcategories(program_no: string, category_id: string): Observable<APIResponse> {
+    return this.apiProvider.get(`${ConstantsUrl.URL_SUBCATEGORIES}/${category_id}`, { program_no });
   }
 
   public getProducts(
@@ -47,14 +46,11 @@ export class CatalogsProvider {
       program_number: programNumber ? programNumber : '',
       last_modified: lastModified
     };
-    return this.apiProvider.post(ConstantsUrl.URL_PRODUCTS, params, true);
+    return this.apiProvider.get(ConstantsUrl.URL_PRODUCTS, params);
   }
 
   public getProductDetails(productSku: string): Observable<APIResponse> {
-    const params: any = {
-      sku: productSku
-    };
-    return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_DETAIL, params, true);
+    return this.apiProvider.get(`${ConstantsUrl.URL_PRODUCT_DETAIL}/${productSku}`);
   }
 
   public search(
@@ -74,7 +70,7 @@ export class CatalogsProvider {
         rpp: String(Constants.SEARCH_RESULTS_PER_PAGE),
         last_modified: ''
       };
-      return this.apiProvider.post(ConstantsUrl.URL_PRODUCT_SEARCH, params, true);
+      return this.apiProvider.get(ConstantsUrl.URL_PRODUCT_SEARCH, params);
     });
   }
 }

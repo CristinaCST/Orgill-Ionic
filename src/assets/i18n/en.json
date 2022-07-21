@@ -329,5 +329,6 @@
   "item_already_in_cart_text": "Item is already in cart!",
   "dropship_return_home": "Return to Home Screen?",
   "dropship_item_added": "Item added to order",
-  "dropship_cancel_search": "Cancel Search"
+  "dropship_cancel_search": "Cancel Search",
+  "product_past_purchases": "Past Purchases"
 }

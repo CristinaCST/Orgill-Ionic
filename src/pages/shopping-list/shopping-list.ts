@@ -87,7 +87,7 @@ export class ShoppingListPage {
     if (culprit === 'shopping list products' || !culprit) {
       this.fillList();
     }
-  }
+  };
 
   public ionViewWillLeave(): void {
     this.events.unsubscribe(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST);
@@ -124,7 +124,7 @@ export class ShoppingListPage {
         this.shoppingListItems.forEach(item => {
           item.isCheckedInShoppingList = Boolean(
             this.selectedItems.find(searchItem => {
-              return searchItem.product.product.SKU === item.product.SKU;
+              return searchItem.product.product.sku === item.product.sku;
             })
           );
         });
@@ -137,10 +137,7 @@ export class ShoppingListPage {
   }
 
   private updateTotalPrice(): void {
-    this.orderTotal = this.selectedItems.reduce(
-      (accumulator, element) => (accumulator += Number(element.price)),
-      0
-    );
+    this.orderTotal = this.selectedItems.reduce((accumulator, element) => (accumulator += Number(element.price)), 0);
   }
 
   // TODO: Sebastian: REFACTORING
@@ -149,7 +146,7 @@ export class ShoppingListPage {
     this.shoppingListItems = getNavParam(this.navParams, 'shoppingListItems', 'object');
     this.shoppingListItems.map(item => {
       item.isCheckedInShoppingList = Boolean(
-        this.selectedItems.find(itemSearch => itemSearch.product.product.SKU === item.product.SKU)
+        this.selectedItems.find(itemSearch => itemSearch.product.product.sku === item.product.sku)
       );
     });
     this.orderTotal = getNavParam(this.navParams, 'orderTotalOnSearch', 'number');
@@ -174,8 +171,7 @@ export class ShoppingListPage {
             .map(item => {
               item.isCheckedInShoppingList = Boolean(
                 this.selectedItems.find(
-                  findItem =>
-                    findItem.product.product.SKU === item.product.SKU && findItem.isCheckedInShoppingList
+                  findItem => findItem.product.product.sku === item.product.sku && findItem.isCheckedInShoppingList
                 )
               );
               return item;
@@ -214,7 +210,7 @@ export class ShoppingListPage {
   private removeNoQuantityProducts(listOfProductsForRemove: ShoppingListItem[]): void {
     listOfProductsForRemove.forEach(elem => {
       this.shoppingListProvider
-        .deleteProductFromList(this.shoppingList.ListID, elem.product.SKU, elem.program_number)
+        .deleteProductFromList(this.shoppingList.ListID, elem.product.sku, elem.program_number)
         .subscribe(
           () => {},
           error => {
@@ -270,7 +266,7 @@ export class ShoppingListPage {
         this.shoppingListProvider
           .deleteProductFromList(
             this.shoppingList.ListID,
-            selectedItem.product.product.SKU,
+            selectedItem.product.product.sku,
             selectedItem.product.program_number
           )
           .subscribe(
@@ -282,18 +278,16 @@ export class ShoppingListPage {
           );
       });
       if (ok) {
-        const checkedItems: ShoppingListItem[] = this.shoppingListItems.filter(
-          item => item.isCheckedInShoppingList
-        ); //  Workaround for the fact that setOrderTotal actually unselects items
+        const checkedItems: ShoppingListItem[] = this.shoppingListItems.filter(item => item.isCheckedInShoppingList); //  Workaround for the fact that setOrderTotal actually unselects items
 
         for (const checkedItem of checkedItems) {
           this.shoppingListItems.splice(
-            this.shoppingListItems.findIndex(item => item.product.SKU === checkedItem.product.SKU),
+            this.shoppingListItems.findIndex(item => item.product.sku === checkedItem.product.sku),
             1
           );
           this.selectedItems.splice(
             this.selectedItems.findIndex(
-              shoppingListItem => shoppingListItem.product.product.SKU === checkedItem.product.SKU
+              shoppingListItem => shoppingListItem.product.product.sku === checkedItem.product.sku
             ),
             1
           );
@@ -334,8 +328,7 @@ export class ShoppingListPage {
     switch (event.status) {
       case 'checkedItem':
         const alreadySelected: boolean =
-          this.selectedItems.filter(selectedItem => selectedItem.product.SKU === event.product.product.SKU)
-            .length > 0;
+          this.selectedItems.filter(selectedItem => selectedItem.product.sku === event.product.product.sku).length > 0;
         if (!alreadySelected) {
           this.selectedItems.push(item);
         }
@@ -343,7 +336,7 @@ export class ShoppingListPage {
       case 'uncheckedItem':
         this.selectedItems.splice(
           this.selectedItems.findIndex(
-            shoppingListItem => shoppingListItem.product.product.SKU === item.product.product.SKU
+            shoppingListItem => shoppingListItem.product.product.sku === item.product.product.sku
           ),
           1
         );
@@ -379,7 +372,7 @@ export class ShoppingListPage {
       if (!this.isSelectAll && this.fromSearch) {
         this.shoppingListItems.map(shoppingListItem => {
           this.selectedItems = this.selectedItems.filter(
-            shoppItem => shoppItem.product.product.SKU !== shoppingListItem.product.SKU
+            shoppItem => shoppItem.product.product.sku !== shoppingListItem.product.sku
           );
         });
         this.updateTotalPrice();
@@ -434,12 +427,7 @@ export class ShoppingListPage {
     );
   }
 
-  public onCheckedToDetails($event: {
-    product: Product;
-    program_number: string;
-    id: number;
-    quantity: number;
-  }): void {
+  public onCheckedToDetails($event: { product: Product; program_number: string; id: number; quantity: number }): void {
     this.navigatorService
       .push(ProductPage, {
         product: $event.product,

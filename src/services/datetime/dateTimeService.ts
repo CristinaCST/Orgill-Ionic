@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import moment, { Moment } from 'moment';
 
-
 @Injectable()
 export class DateTimeService {
-
   public static formatWithTime: string = 'MM/DD/YYYY hh:mm:ss';
   public static formatWithMonthYearDay: string = 'MM/DD/YYYY';
 
@@ -27,5 +25,4 @@ export class DateTimeService {
   public static getTimeAfter4Days(date: string): Moment {
     return moment(date, DateTimeService.formatWithTime).add(4, 'days');
   }
-
 }

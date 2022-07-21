@@ -27,7 +27,7 @@ export class ScannerService {
   public searchString: string;
   public foundProduct: Product;
   public shoppingList: ShoppingList;
-  public shoppingListId: string;
+  public shoppingListId: number;
   public productAlreadyInList: boolean = false;
   public searchTab: any;
   public products: ShoppingListItem[] = [];
@@ -106,10 +106,10 @@ export class ScannerService {
   private setProgramFromScanResult(scanResult: string): void {
     this.programNumber = scanResult.length === 10 ? scanResult.substring(7, 10) : '';
     const filteredPrograms: Program[] = this.catalogProvider.programs.filter(
-      elem => elem.PROGRAMNO === this.programNumber
+      elem => elem.programno === this.programNumber
     );
     this.isMarketOnly =
-      filteredPrograms.length > 0 ? filteredPrograms[0].MARKETONLY === Constants.MARKET_ONLY_PROGRAM : false;
+      filteredPrograms.length > 0 ? filteredPrograms[0].marketonly === Constants.MARKET_ONLY_PROGRAM : false;
   }
 
   private setSearchStringFromScanResult(scanResult: string): void {
@@ -125,7 +125,7 @@ export class ScannerService {
   public searchProduct(): void {
     this.searchingLoader.show();
     this.productProvider.searchProduct(this.searchString, this.programNumber).subscribe(
-      response => {
+      (response: any) => {
         const content: PopoverContent = {
           type: Constants.POPOVER_INFO,
           title: Strings.GENERIC_MODAL_TITLE,
@@ -135,7 +135,7 @@ export class ScannerService {
 
         // this.searchingLoader.hide();
 
-        const responseData: Product[] = JSON.parse(response.d);
+        const responseData: Product[] = response;
         if (responseData.length > 0) {
           this.foundProduct = responseData[0];
           if (!this.shoppingListId) {
@@ -165,12 +165,12 @@ export class ScannerService {
             } else {
               this.isProductInList().subscribe(
                 resp => {
-                  const data: boolean = JSON.parse(resp.d).Status === 'True'; // TODO: Wtf?
+                  const data: boolean = resp;
                   if (!data) {
                     const newItem: ShoppingListItem = {
                       product: this.foundProduct,
                       program_number: this.programNumber,
-                      item_price: Number(this.foundProduct.YOURCOST),
+                      item_price: Number(this.foundProduct.yourcost),
                       quantity: this.getInitialQuantity()
                     };
                     this.shoppingListProvider
@@ -179,12 +179,9 @@ export class ScannerService {
                         res => {
                           this.productAlreadyInList = false;
                           this.searchingLoader.hide();
-                          // TODO: Change to constants_strings
-                          content.message = 'Added ' + newItem.product.NAME + ' to list';
 
-                          // WIP
-                          // const itemName = newItem.product.NAME;
-                          // content.message = Strings.ADDED_ITEM_TO_LIST;
+                          content.message = 'Added ' + newItem.product.name + ' to list';
+
                           this.events.publish(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST);
                           this.popoversService.show(content).subscribe(() => {});
                         },
@@ -232,7 +229,7 @@ export class ScannerService {
   }
 
   private isProductInList(): Observable<any> {
-    return this.shoppingListProvider.checkProductInList(this.foundProduct.SKU, this.shoppingListId, this.programNumber);
+    return this.shoppingListProvider.checkProductInList(this.foundProduct.sku, this.shoppingListId, this.programNumber);
   }
 
   private isPermissionError(scannerError: string): boolean {
@@ -247,8 +244,8 @@ export class ScannerService {
 
   // HACK: This method does not account for MINQTY in a program,
   public getInitialQuantity(): number {
-    if (this.foundProduct.QTY_ROUND_OPTION === 'X') {
-      return Number(this.foundProduct.SHELF_PACK);
+    if (this.foundProduct.qtY_ROUND_OPTION === 'X') {
+      return Number(this.foundProduct.shelF_PACK);
     }
     return 1;
   }

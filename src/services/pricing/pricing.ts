@@ -42,7 +42,7 @@ export class PricingService {
       typeof suggestedValue === 'string' ? Number(suggestedValue.replace(/[^0-9]/g, '')) : suggestedValue;
     // let minQty: number = Math.max(1, Number(program.MINQTY));
     // const maxQty: number = Number(program.MAXQTY);
-    const shelfPack: number = Number(product.SHELF_PACK);
+    const shelfPack: number = Number(product.shelF_PACK);
 
     // if (product.QTY_ROUND_OPTION === 'X' && shelfPack > 1 && minQty < shelfPack) {
     //   minQty = shelfPack;
@@ -63,7 +63,7 @@ export class PricingService {
     //   return minQty;
     // }
 
-    if (product.QTY_ROUND_OPTION === 'X') {
+    if (product.qtY_ROUND_OPTION === 'X') {
       if (safeSuggestedValue > shelfPack) {
         if (safeSuggestedValue % shelfPack === 0) {
           return this.maxCheck(safeSuggestedValue, program);
@@ -76,10 +76,10 @@ export class PricingService {
       return shelfPack;
     }
 
-    if (product.QTY_ROUND_OPTION === 'Y') {
-      if (safeSuggestedValue < Number(product.SHELF_PACK) && safeSuggestedValue >= Number(product.SHELF_PACK) * 0.7) {
+    if (product.qtY_ROUND_OPTION === 'Y') {
+      if (safeSuggestedValue < Number(product.shelF_PACK) && safeSuggestedValue >= Number(product.shelF_PACK) * 0.7) {
         this.showPrompt(Strings.QUANTITY_Y_UNDER_70_PERCENT);
-        return Number(product.SHELF_PACK); //maxQty > 0 ? Math.min(maxQty, Number(product.SHELF_PACK)) : Number(product.SHELF_PACK);
+        return Number(product.shelF_PACK); // maxQty > 0 ? Math.min(maxQty, Number(product.SHELF_PACK)) : Number(product.SHELF_PACK);
       }
       return this.maxCheck(safeSuggestedValue, program);
     }
@@ -99,9 +99,9 @@ export class PricingService {
    * @param product - Product
    */
   public getPrice(quantity: number, product: Product, program: ItemProgram): number {
-    const shelfPack: number = Number(product.SHELF_PACK);
-    const price: number = Number(program.PRICE);
-    return this.getCorrectedPrice(shelfPack, quantity, price, product.QTY_ROUND_OPTION);
+    const shelfPack: number = Number(product.shelF_PACK);
+    const price: number = Number(program.price);
+    return this.getCorrectedPrice(shelfPack, quantity, price, product.qtY_ROUND_OPTION);
   }
 
   /**
@@ -112,8 +112,8 @@ export class PricingService {
    * @param price - Unitary price.
    */
   public getShoppingListPrice(quantity: number, product: Product, price: number): number {
-    const shelfPack: number = Number(product.SHELF_PACK);
-    return this.getCorrectedPrice(shelfPack, quantity, price, product.QTY_ROUND_OPTION);
+    const shelfPack: number = Number(product.shelF_PACK);
+    return this.getCorrectedPrice(shelfPack, quantity, price, product.qtY_ROUND_OPTION);
   }
 
   /**

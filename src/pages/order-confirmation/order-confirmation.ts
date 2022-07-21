@@ -15,9 +15,7 @@ import { PricingService } from '../../services/pricing/pricing';
   selector: 'page-order-confirmation',
   templateUrl: 'order-confirmation.html'
 })
-
 export class OrderConfirmationPage implements OnInit {
-
   public confirmationNumbers: string[];
   public orderTotal: number;
   public orderMethod: number;
@@ -34,15 +32,16 @@ export class OrderConfirmationPage implements OnInit {
     private readonly navParams: NavParams,
     private readonly shoppingListsProvider: ShoppingListsProvider,
     private readonly navigatorService: NavigatorService,
-    private readonly pricingService: PricingService) {
-  }
+    private readonly pricingService: PricingService
+  ) {}
 
   public ngOnInit(): void {
     this.confirmationNumbers = getNavParam(this.navParams, 'confirmationNumbers', 'object');
     this.orderTotal = getNavParam(this.navParams, 'orderTotal', 'number');
     this.orderMethod = getNavParam(this.navParams, 'orderMethod', 'number');
     this.pageTitle = this.orderMethod === Constants.CHECKOUT_METHOD ? Strings.ORDER_CONFIRMATION : Strings.ORDER_SENT;
-    this.orderMethodString = this.orderMethod === Constants.CHECKOUT_METHOD ? Strings.ORDER_CONFIRMATION_METHOD : Strings.ORDER_SENT_METHOD;
+    this.orderMethodString =
+      this.orderMethod === Constants.CHECKOUT_METHOD ? Strings.ORDER_CONFIRMATION_METHOD : Strings.ORDER_SENT_METHOD;
     this.hotDealPurchase = getNavParam(this.navParams, 'hotDealPurchase', 'boolean');
     this.hotDealItem = getNavParam(this.navParams, 'hotDealItem', 'object');
     if (this.hotDealPurchase) {
@@ -50,7 +49,9 @@ export class OrderConfirmationPage implements OnInit {
       this.hotDealConfirmations = getNavParam(this.navParams, 'hotDealConfirmations', 'object');
     }
     this.getOrderConfirmation();
-    this.navigatorService.oneTimeBackButtonOverride(() => {this.navigatorService.setRoot(Catalog); });
+    this.navigatorService.oneTimeBackButtonOverride(() => {
+      this.navigatorService.setRoot(Catalog);
+    });
   }
 
   private getConfirmationNumbersQuery(): string {
@@ -63,10 +64,10 @@ export class OrderConfirmationPage implements OnInit {
 
   public getOrderConfirmation(): void {
     if (!this.hotDealPurchase) {
-      this.shoppingListsProvider.getOrderConfirmation(this.getConfirmationNumbersQuery()).subscribe(data => {
+      this.shoppingListsProvider.getOrderConfirmation(this.getConfirmationNumbersQuery()).subscribe((data: any) => {
         if (data) {
-          if (JSON.parse(data.d).order_confirmation.match(/\d+/g) !== null) {
-            this.confirmation = JSON.parse(data.d).order_confirmation;
+          if (data.order_confirmation.match(/\d+/g) !== null) {
+            this.confirmation = data.order_confirmation;
           }
         }
       });
@@ -75,7 +76,9 @@ export class OrderConfirmationPage implements OnInit {
         this.orderTotal = 0;
         let finalQty: number = 0;
         this.hotDealConfirmations.forEach((confirmation, index) => {
-          const pairingLocation: LocationElement = this.hotDealLocations.find(location => location.LOCATION.SHIPTONO === confirmation.customer_number);
+          const pairingLocation: LocationElement = this.hotDealLocations.find(
+            location => location.LOCATION.SHIPTONO === confirmation.customer_number
+          );
           this.hotDealConfirmations[index].fullLocation = pairingLocation;
           finalQty += confirmation.quantity;
         });
@@ -84,8 +87,15 @@ export class OrderConfirmationPage implements OnInit {
 
         this.confirmation = '';
         this.hotDealConfirmations.forEach(confirmation => {
-
-          this.confirmation += 'Confirmation for location ' + confirmation.fullLocation.LOCATION.ADDRESS + ' with confirmation number (' + confirmation.confirmation + ') and quantity (' + confirmation.quantity.toString() + ') ' + '<br>';
+          this.confirmation +=
+            'Confirmation for location ' +
+            confirmation.fullLocation.LOCATION.ADDRESS +
+            ' with confirmation number (' +
+            confirmation.confirmation +
+            ') and quantity (' +
+            confirmation.quantity.toString() +
+            ') ' +
+            '<br>';
         });
       }
       this.hotDealConfirmations.filter(hotdeal => {
@@ -94,6 +104,6 @@ export class OrderConfirmationPage implements OnInit {
           this.hotDealNoQuantity = true;
         }
       });
-  }
+    }
   }
 }

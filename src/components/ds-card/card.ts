@@ -40,7 +40,7 @@ export class CardComponent {
     this.popoversService.show(this.popoverContent).subscribe((response: DefaultPopoverResult) => {
       if (response.optionSelected === 'OK') {
         this.dropshipLoader.show();
-        this.dropshipProvider.dsDeleteSavedorder({ order_id: this.data.order_id }).subscribe(() => {
+        this.dropshipProvider.dsDeleteSavedorder(this.data.order_id).subscribe(() => {
           this.dropshipLoader.hide();
 
           Object.assign(this.popoverContent, {

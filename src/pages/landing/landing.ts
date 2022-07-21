@@ -89,21 +89,21 @@ export class LandingPage implements OnInit, OnDestroy {
   }
 
   private filterBadRequest(data: Product[]): Product[] {
-    return data.length === 0 || data[0].CatID === 'Bad Request' ? [] : data;
+    return data.length === 0 || data[0].catID === 'Bad Request' ? [] : data;
   }
 
   public onSearched($event: any): void {
     this.simpleLoader.show();
     this.catalogProvider.search($event, '', '').subscribe(
-      data => {
+      (data: any) => {
         if (data) {
-          const dataFound: Product[] = this.filterBadRequest(JSON.parse(data.d));
+          const dataFound: Product[] = this.filterBadRequest(data);
           const params: any = {
             searchString: $event,
             searchData: dataFound,
             programNumber: '',
             programName: this.translateProvider.translate(REGULAR_CATALOG).toUpperCase(),
-            numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
+            numberOfProductsFound: dataFound[0] ? dataFound[0].totaL_REC_COUNT : 0
           };
           this.navigatorService.push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions).then();
           this.simpleLoader.hide();

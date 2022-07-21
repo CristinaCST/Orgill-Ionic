@@ -3,27 +3,25 @@
   <!-- Product Component Image Container-->
   <div id="image-container">
     <!-- Product Component Image-->
-    <img *ngIf="!imageIsLoading" [src]="imageURL">
+    <img *ngIf="!imageIsLoading" [src]="imageURL" />
     <!-- Product Component Image Loading Spinner-->
     <ion-spinner *ngIf="imageIsLoading===true"></ion-spinner>
-   
   </div>
   <!-- Product Component Information Container-->
   <div id="product-info-container">
     <!-- Product Component Details-->
     <div id="product-info">
-      <p> {{product.NAME}}</p>
-      <p><b> {{product.VENDOR_NAME}} </b></p>
-      <p> {{"product_SKU" | translate}} {{product.SKU}}
-        {{product.QTY_ROUND_OPTION}}</p>
+      <p>{{product.name}}</p>
+      <p><b> {{product.vendoR_NAME}} </b></p>
+      <p>{{"product_SKU" | translate}} {{product.sku}} {{product.qtY_ROUND_OPTION}}</p>
     </div>
     <!-- Product Component Price-->
     <div id="price-container">
       <div>
         <p>
-          <b>{{"product_currency" | translate}}{{product.YOURCOST}}</b>
+          <b>{{"product_currency" | translate}}{{product.yourcost}}</b>
         </p>
-        <p>/{{product.SELLING_UNIT}}</p>
+        <p>/{{product.sellinG_UNIT}}</p>
       </div>
     </div>
   </div>

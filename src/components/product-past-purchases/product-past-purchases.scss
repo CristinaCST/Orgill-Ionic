@@ -1,0 +1,25 @@
+.product-past-purchases-modal {
+  background: #fff;
+
+  .past-purchases-container {
+    display: flex;
+    padding: 20px 10px;
+    flex-direction: column;
+  }
+
+  .modal-dismiss {
+    font-size: 18px;
+    background: #9a0000;
+  }
+
+  .title {
+    text-align: center;
+  }
+
+  .past-purchases-wrapper {
+    display: flex;
+    padding: 5px 30px;
+    font-size: 18px;
+    justify-content: space-between;
+  }
+}

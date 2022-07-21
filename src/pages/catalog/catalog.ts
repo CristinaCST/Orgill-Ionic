@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NavParams, NavOptions, Events } from 'ionic-angular';
 import { Category } from '../../interfaces/models/category';
-import { CategoriesRequest } from '../../interfaces/request-body/categories';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { CatalogsProvider } from '../../providers/catalogs/catalogs';
-import { SubcategoriesRequest } from '../../interfaces/request-body/subcategories';
 import { ProductsPage } from '../products/products';
 import { LoadingService } from '../../services/loading/loading';
 import { TranslateWrapperService } from '../../services/translate/translate';
@@ -62,11 +60,11 @@ export class Catalog implements OnInit {
     this.events.unsubscribe(Constants.EVENT_LOADING_FAILED, this.reloadMethodHandler);
   }
 
-  private readonly reloadMethodHandler = (culprit?: string): void => {
+  private reloadMethodHandler(culprit?: string): void {
     if (this.categories === undefined || this.categories.length === 0 || culprit === 'categories' || !culprit) {
       this.initCatalog();
     }
-  };
+  }
 
   private initCatalog(): void {
     this.programName = getNavParam(this.navParams, 'programName', 'string');
@@ -90,23 +88,16 @@ export class Catalog implements OnInit {
   }
 
   private getPrograms(): void {
-    this.catalogProvider.getPrograms().subscribe(response => {
-      this.programs = JSON.parse(response.d);
+    this.catalogProvider.getPrograms().subscribe((response: any) => {
+      this.programs = response;
     });
   }
 
   private getCategories(): void {
     this.categoriesLoader.show();
-    const params: CategoriesRequest = {
-      p: '1',
-      rpp: String(Constants.CATEGORIES_PER_PAGE),
-      program_number: this.programNumber,
-      last_modified: ''
-    };
-
-    this.catalogProvider.getCategories(params).subscribe(
-      response => {
-        const responseData: Category[] = JSON.parse(response.d);
+    this.catalogProvider.getCategories(this.programNumber).subscribe(
+      (response: any) => {
+        const responseData: Category[] = response;
         this.categories = this.sortCategories(responseData);
         this.categoriesLoader.hide();
       },
@@ -119,28 +110,20 @@ export class Catalog implements OnInit {
 
   public sortCategories(responseData: Category[]): Category[] {
     return responseData.sort((category1, category2): number => {
-      return category1.CatName.localeCompare(category2.CatName);
+      return category1.catName.localeCompare(category2.catName);
     });
   }
 
   public selectCategory(category: Category): void {
     this.categoriesLoader.show();
-    const params: SubcategoriesRequest = {
-      category_id: category.CatID,
-      p: '1',
-      rpp: String(Constants.CATEGORIES_PER_PAGE),
-      program_number: this.programNumber,
-      last_modified: ''
-    };
-
-    this.catalogProvider.getSubcategories(params).subscribe(
-      response => {
-        const responseData: Category[] = JSON.parse(response.d);
+    this.catalogProvider.getSubcategories(this.programNumber, category.catID).subscribe(
+      (response: any) => {
+        const responseData: Category[] = response;
         if (responseData.length > 0) {
           const categories: Category[] = this.sortCategories(responseData);
           this.navigatorService
             .push(Catalog, {
-              programName: category.CatName,
+              programName: category.catName,
               programNumber: this.programNumber,
               categories,
               currentSubCategory: category,
@@ -151,7 +134,7 @@ export class Catalog implements OnInit {
         } else {
           const productsPageParams: any = {
             programNumber: this.programNumber,
-            programName: category.CatName,
+            programName: category.catName,
             category
           };
           this.navigatorService
@@ -168,7 +151,7 @@ export class Catalog implements OnInit {
 
   private getCatalogDetails(): void {
     const program: Program = this.programs.filter(singleProgram => {
-      return singleProgram.PROGRAMNO === this.programNumber.toString();
+      return singleProgram.programno === this.programNumber.toString();
     })[0];
 
     let content: PopoverContent;
@@ -189,30 +172,26 @@ export class Catalog implements OnInit {
   }
 
   private filterBadRequest(data: Product[]): Product[] {
-    return data.length === 0 || data[0].CatID === 'Bad Request' ? [] : data;
+    return data.length === 0 || data[0].catID === 'Bad Request' ? [] : data;
   }
 
   public onSearched($event: any): void {
     this.simpleLoader.show();
     this.catalogProvider
-      .search($event, this.currentSubCategory ? this.currentSubCategory.CatID : '', this.programNumber)
+      .search($event, this.currentSubCategory ? this.currentSubCategory.catID : '', this.programNumber)
       .subscribe(
-        data => {
+        (data: any) => {
           if (data) {
-            const dataFound: Product[] = this.filterBadRequest(JSON.parse(data.d));
+            const dataFound: Product[] = this.filterBadRequest(data);
             const params: any = {
               searchString: $event,
               searchData: dataFound,
               programNumber: this.programNumber,
               programName: this.programName,
               category: this.currentSubCategory,
-              numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
+              numberOfProductsFound: dataFound[0] ? dataFound[0].totaL_REC_COUNT : 0
             };
-            this.navigatorService
-              .push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions)
-              .then
-              // () => console.log('%cTo product search page', 'color:green')
-              ();
+            this.navigatorService.push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions).then();
             this.simpleLoader.hide();
           }
         },

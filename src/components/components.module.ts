@@ -35,6 +35,7 @@ import { DashboardTrafficStatisticsComponent } from './dashboard-traffic-statist
 import { DashboardCalendarComponent } from './dashboard-calendar/dashboard-calendar';
 import { DashboardSelectComponent } from './dashboard-select/dashboard-select';
 import { DashboardStopsSelectComponent } from './dashboard-stops-select/dashboard-stops-select';
+import { ProductPastPurchases } from './product-past-purchases/product-past-purchases';
 
 const components: any[] = [
   AppMenuComponent,
@@ -63,7 +64,8 @@ const components: any[] = [
   DashboardTrafficStatisticsComponent,
   DashboardCalendarComponent,
   DashboardSelectComponent,
-  DashboardStopsSelectComponent
+  DashboardStopsSelectComponent,
+  ProductPastPurchases
 ];
 
 @NgModule({

@@ -42,12 +42,12 @@ export class CustomerInfoPage implements OnInit {
     this.formControls = this.customerInfoForm.controls;
   }
 
-  public handleCustomerNumber(value: string): void {
+  public handleCustomerNumber(customer_number: string): void {
     if (!this.formControls.customer_number.errors) {
       this.isUsernamesLoading = true;
 
-      this.dropshipProvider.getUsernames({ customer_number: value }).subscribe(response => {
-        const usernames: VendorUserName[] = JSON.parse(response.d);
+      this.dropshipProvider.getUsernames(customer_number).subscribe((response: any) => {
+        const usernames: VendorUserName[] = response;
         this.usernames = usernames;
         this.isInvalidNumber = !Boolean(usernames.length);
         this.isUsernamesLoading = false;

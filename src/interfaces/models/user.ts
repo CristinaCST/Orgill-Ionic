@@ -1,5 +1,5 @@
 export class User {
-  public userToken: string;
+  public user_Token: string;
   public customer_number?: string;
   public division?: string;
   public international?: string;
@@ -8,4 +8,5 @@ export class User {
   public user_type?: string;
   public time_stamp?: string;
   public password?: string;
+  public vendor_number?: string;
 }

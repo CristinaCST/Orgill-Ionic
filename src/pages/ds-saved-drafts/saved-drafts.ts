@@ -54,8 +54,8 @@ export class SavedDraftsPage implements OnInit {
     } else {
       this.dropshipLoader.show();
 
-      this.dropshipProvider.getSavedorderList().subscribe(response => {
-        const data: SavedorderList[] = JSON.parse(response.d);
+      this.dropshipProvider.getSavedorderList().subscribe((response: any) => {
+        const data: SavedorderList[] = response;
         this.savedorderList = data;
         this.savedDrafts = data.length;
         this.dropshipLoader.hide();
@@ -71,10 +71,10 @@ export class SavedDraftsPage implements OnInit {
     this.dropshipLoader.show();
     this.isDropship = this.fetchFormType(order.form_type.toLowerCase()) === DS_FORM_LIST_FORM_TYPE_DROPSHIP;
 
-    this.dropshipProvider.getFormDetails({ form_id: order.form_id }).subscribe(response => {
+    this.dropshipProvider.getFormDetails(order.form_id).subscribe((response: any) => {
       this.dropshipLoader.hide();
 
-      const categoryList: FormDetails = JSON.parse(response.d);
+      const categoryList: FormDetails = response;
 
       this.navController.push(ShopItemsPage, { data: categoryList, savedOrder: order, isDropship: this.isDropship });
     });

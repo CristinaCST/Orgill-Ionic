@@ -27,27 +27,27 @@ export class DropshipProvider {
 
   /* returns an array of saved orders */
   public getSavedorderList(): Observable<{ d: string }> {
-    return this.apiProvider.post(ds_get_savedorder_list, {}, true);
+    return this.apiProvider.get(ds_get_savedorder_list);
   }
 
   /* returns an array of forms for the vendor */
   public getFormList(body: { formtype: string; type: string }): Observable<{ d: string }> {
-    return this.apiProvider.post(ds_form_list, body, true);
+    return this.apiProvider.get(ds_form_list, body);
   }
 
   /* returns form details for the vendor form */
-  public getFormDetails(body: { form_id: number }): Observable<{ d: string }> {
-    return this.apiProvider.post(ds_form_details, body, true);
+  public getFormDetails(form_id: number): Observable<{ d: string }> {
+    return this.apiProvider.get(`${ds_form_details}/${form_id}`);
   }
 
   /* returns array of form items for the vendor */
-  public getFormItems(body: { form_id: number }): Observable<{ d: string }> {
-    return this.apiProvider.post(ds_form_items, body, true);
+  public getFormItems(form_id: number): Observable<{ d: string }> {
+    return this.apiProvider.get(`${ds_form_items}/${form_id}`);
   }
 
   /* Returns an array of usernames, Names and emails for a customer number */
-  public getUsernames(body: { customer_number: string }): Observable<{ d: string }> {
-    return this.apiProvider.post(get_usernames, body, true);
+  public getUsernames(customer_number: string): Observable<{ d: string }> {
+    return this.apiProvider.get(`${get_usernames}/${customer_number}`);
   }
 
   /*
@@ -83,7 +83,7 @@ export class DropshipProvider {
     form_order_quantity: number;
     item_list: { factory_number: string; order_quantity: number }[];
   }): Observable<{ d: string }> {
-    return this.apiProvider.post(ds_update_savedorder, body, true);
+    return this.apiProvider.put(`${ds_update_savedorder}/${body.order_id}`, body);
   }
 
   /*
@@ -95,23 +95,23 @@ export class DropshipProvider {
     user_name: string;
     customer_email: string;
   }): Observable<{ d: string }> {
-    return this.apiProvider.post(ds_send_savedorder, body, true);
+    return this.apiProvider.post(ds_send_savedorder, body);
   }
 
   /* returns saved order details */
-  public getSavedorderDetails(body: { order_id: number }): Observable<{ d: string }> {
-    return this.apiProvider.post(ds_get_savedorder_details, body, true);
+  public getSavedorderDetails(order_id: number): Observable<{ d: string }> {
+    return this.apiProvider.get(`${ds_get_savedorder_details}/${order_id}`);
   }
 
   /*
    * Deletes a saved order for a customer and form
    * returns (true/false – in case of errors)
    */
-  public dsDeleteSavedorder(body: { order_id: number }): Observable<{ d: string }> {
-    return this.apiProvider.post(ds_delete_savedorder, body, true);
+  public dsDeleteSavedorder(order_id: number): Observable<{ d: string }> {
+    return this.apiProvider.delete(`${ds_delete_savedorder}/${order_id}`);
   }
 
   public getFormItemSearch(body: { form_id: number; keyword: string }): Observable<{ d: string }> {
-    return this.apiProvider.post(ds_form_item_search, body, true);
+    return this.apiProvider.get(ds_form_item_search, body);
   }
 }

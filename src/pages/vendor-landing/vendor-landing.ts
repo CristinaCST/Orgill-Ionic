@@ -42,8 +42,8 @@ export class VendorLandingPage implements OnInit {
   public ionViewWillEnter(): void {
     this.dropshipLoader.show();
 
-    this.dropshipProvider.getSavedorderList().subscribe(savedorderListString => {
-      this.savedorderList = JSON.parse(savedorderListString.d);
+    this.dropshipProvider.getSavedorderList().subscribe((savedorderListString: any) => {
+      this.savedorderList = savedorderListString;
 
       this.savedDrafts = this.savedorderList.length;
 

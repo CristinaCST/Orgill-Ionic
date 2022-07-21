@@ -57,16 +57,16 @@ export class SpecialsPage implements OnInit {
   private fetchFormItems(formtype: string): void {
     this.dropshipProvider
       .getFormList({ formtype, type: this.dropshipService.getUserDivision() })
-      .subscribe(response => {
-        const data: FormList[] = JSON.parse(response.d);
+      .subscribe((response: any) => {
+        const data: FormList[] = response;
 
         if (!Boolean(data.length)) {
           this.dropshipLoader.hide();
         }
 
         data.forEach(form => {
-          this.dropshipProvider.getFormDetails({ form_id: form.form_id }).subscribe(result => {
-            this.categoryList.push(JSON.parse(result.d));
+          this.dropshipProvider.getFormDetails(form.form_id).subscribe((result: any) => {
+            this.categoryList.push(result);
 
             this.dropshipLoader.hide();
           });

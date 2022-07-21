@@ -1,24 +1,24 @@
 <!-- Catalog Page Header -->
 <ion-header>
   <!-- Catalog Page Navigation Bar -->
-  <navbar [title]="programName"
-          [isMenuEnabled]="true"
-          [isBackEnabled]="false"
-          [customButtons]='menuCustomButtons'></navbar>
+  <navbar
+    [title]="programName"
+    [isMenuEnabled]="true"
+    [isBackEnabled]="false"
+    [customButtons]="menuCustomButtons"
+  ></navbar>
   <!-- Catalog Page Search Bar -->
-  <search-bar [showBackButton]="catalogIndex!==0"
-              (searched)="onSearched($event)"></search-bar>
+  <search-bar [showBackButton]="catalogIndex!==0" (searched)="onSearched($event)"></search-bar>
 </ion-header>
 
 <!-- Catalog Page Content -->
-<ion-content >
+<ion-content>
   <ng-container *ngIf="categories && categories.length">
     <button class="red-arrow" ion-item *ngFor="let category of categories" (click)="selectCategory(category)">
-      {{category.CatName}}
+      {{category.catName}}
     </button>
   </ng-container>
   <ng-container *ngIf="categories && categories.length < 1">
     <p class="no-products">{{"no_products_found" | translate}}</p>
   </ng-container>
 </ion-content>
-

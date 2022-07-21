@@ -63,13 +63,13 @@ export class DashboardProvider {
   }
 
   public getStoreRouteAndStops(ship_to_no: string): Observable<any> {
-    return this.apiProvider.get(GetStoreRouteAndStops, '', {
+    return this.apiProvider.get(GetStoreRouteAndStops, {
       ship_to_no
     });
   }
 
   public getDcAndRoutes(): Observable<any> {
-    return this.apiProvider.get(GetDcAndRoutes, '', {}, true);
+    return this.apiProvider.get(GetDcAndRoutes, {}, '', true);
   }
 
   public getCustomersByDcAndRoute(body: { dc: string; route: string }): Observable<any> {

@@ -104,9 +104,7 @@ export class DropshipService {
   }
 
   public getUserDivision(): string {
-    const currentUser: any = this.customerInfoForm.selected_user
-      ? this.customerInfoForm.selected_user
-      : this.authService.getCurrentUser();
+    const currentUser: any = this.authService.getCurrentUser();
 
     if (USER_TYPE_INT === currentUser.international) {
       return DS_FORM_LIST_TYPE_INT;
@@ -124,10 +122,10 @@ export class DropshipService {
   public searchFormItem(keyword: string, form_id: number, isCheckout?: boolean, isActiveSearch?: boolean): void {
     this.dropshipLoader.show();
 
-    this.dropshipProvider.getFormItemSearch({ keyword, form_id }).subscribe(response => {
+    this.dropshipProvider.getFormItemSearch({ keyword, form_id }).subscribe((response: any) => {
       this.dropshipLoader.hide();
 
-      const searchItems: FormItems[] = JSON.parse(response.d);
+      const searchItems: FormItems[] = response;
 
       if (!Boolean(searchItems.length)) {
         Object.assign(this.popoverContent, { message: Strings.no_results_text });
