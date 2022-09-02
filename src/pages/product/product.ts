@@ -74,11 +74,11 @@ export class ProductPage implements OnInit {
     this.events.unsubscribe(Constants.EVENT_LOADING_FAILED, this.loadingFailedHandler);
   }
 
-  private readonly loadingFailedHandler = (culprit?: string): void => {
+  private loadingFailedHandler(culprit?: string): void {
     if (culprit === 'hot deal program' || !culprit || culprit === 'product program') {
       this.initProduct();
     }
-  };
+  }
 
   public initProduct(): void {
     this.loader.show();

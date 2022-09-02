@@ -65,21 +65,23 @@ export class CustomerLocationPage implements OnInit {
       .getUserLocations()
       .take(1)
       .subscribe((locations: any) => {
-        if (!locations) {
+        if (!locations.length) {
           this.noLocation = true;
           return;
         }
 
-        this.userLocations = this.sortLocations(locations);
-        if (this.userLocations.length > 0) {
-          this.selectedLocation = this.userLocations[0];
+        const userLocations: CustomerLocation[] = this.sortLocations(locations);
+        this.userLocations = userLocations;
+
+        if (userLocations.length > 0) {
+          this.selectedLocation = userLocations[0];
         }
 
         const min_value: number = this.isHotDeal
           ? this.pricingService.validateQuantity(1, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM, true)
           : 1;
 
-        this.userLocations.forEach(element => {
+        userLocations.forEach(element => {
           const locElement: LocationElement = {
             LOCATION: element,
             POSTOFFICE: undefined,
@@ -102,7 +104,7 @@ export class CustomerLocationPage implements OnInit {
 
   public sortLocations(locations: CustomerLocation[]): CustomerLocation[] {
     return locations.sort((location1, location2): number => {
-      return location1.CUSTOMERNAME.toLowerCase().localeCompare(location2.CUSTOMERNAME.toLowerCase());
+      return location1.customername.toLowerCase().localeCompare(location2.customername.toLowerCase());
     });
   }
 
@@ -133,7 +135,7 @@ export class CustomerLocationPage implements OnInit {
         orderTotal: this.orderTotal
       };
 
-      if (!this.postOffice && this.selectedLocation.PO_REQUIRED === 'Y') {
+      if (!this.postOffice && this.selectedLocation.po_required === 'Y') {
         const content: PopoverContent = {
           type: Constants.POPOVER_INFO,
           title: Strings.GENERIC_MODAL_TITLE,
@@ -159,7 +161,7 @@ export class CustomerLocationPage implements OnInit {
             validQty = false;
           }
 
-          if (element.LOCATION.PO_REQUIRED === 'Y' && !element.POSTOFFICE) {
+          if (element.LOCATION.po_required === 'Y' && !element.POSTOFFICE) {
             validPO = false;
           }
           selectedLocations.push(element);

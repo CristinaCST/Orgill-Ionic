@@ -165,31 +165,22 @@ export class ShoppingListsProvider {
     return this.apiProvider.delete(ConstantsUrl.REMOVE_SHOPPING_LIST_ITEM, {
       shopping_list_id: listId,
       sku: productSku,
-      program_no: programNo
+      program_number: programNo || '0'
     });
   }
 
-  // TODO: take a look at this promise hell
-  public orderProducts(
-    productInfoList: ProductListInfo,
-    insertToDBInfo: DatabaseOrder,
-    itemsIdsArr: number[],
-    shoppingListId: number
-  ): Promise<OrderResult> {
+  public orderProducts(data: any): Promise<OrderResult> {
     return new Promise((resolve, reject) => {
       try {
-        this.apiProvider
-          .post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_PRODUCTS, productInfoList, true)
-          .subscribe((response: any) => {
-            if (response) {
-              insertToDBInfo.confirmation_number = response;
+        this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_PRODUCTS, data, true).subscribe((response: any) => {
+          if (response) {
+            const confirmation_number: string = response;
 
-              // TODO: Should change this to promise-like and get rid of await, of all awaits for that matter.
-              resolve({ confirmationNumber: insertToDBInfo.confirmation_number } as OrderResult);
-            } else {
-              reject(response);
-            }
-          });
+            resolve({ confirmationNumber: confirmation_number } as OrderResult);
+          } else {
+            reject(response);
+          }
+        });
       } catch (e) {
         reject(e);
       }
@@ -226,7 +217,7 @@ export class ShoppingListsProvider {
     return this.apiProvider.put(ConstantsUrl.UPDATE_SHOPPING_LIST_ITEM, {
       shopping_list_id: shoppingListId,
       sku: product.sku,
-      program_no: programNumber ? programNumber : '',
+      program_no: programNumber || '0',
       quantity: quantity,
       price: price
     });
@@ -236,7 +227,7 @@ export class ShoppingListsProvider {
     return this.apiProvider.get(ConstantsUrl.CHECK_PRODUCT_SHOPPING_LIST, {
       sku: productSKU,
       shopping_list_id: listId,
-      program_no: programNo
+      program_number: programNo || '0'
     });
   }
 }

@@ -1,7 +1,12 @@
-<button ion-item [disabled]="label? 'true': null" [ngClass]="label?'details':''"
-  [attr.detail-none]="label? 'true': null" [attr.no-lines]="label ? 'true': null">
+<button
+  ion-item
+  [disabled]="label? 'true': null"
+  [ngClass]="label?'details':''"
+  [attr.detail-none]="label? 'true': null"
+  [attr.no-lines]="label ? 'true': null"
+>
   <div class="header container">
-    <p>{{"orders_history_program" | translate}}: </p>
+    <p>{{"orders_history_program" | translate}}:</p>
     <p class="program-name">{{purchase.program_name}}</p>
     <p>{{purchase.program_no ? ' (' + purchase.program_no + ')': '' }}</p>
   </div>
@@ -9,12 +14,12 @@
   <div class="info container">
     <div class="purchase-row">
       <div class="info-cel">
-        <p>{{"orders_history_order" | translate}}: </p>
+        <p>{{"orders_history_order" | translate}}:</p>
         <p>{{purchase.confirmation}}</p>
       </div>
       <div class="info-cel">
         <p>{{"orders_history_date" | translate}}:</p>
-        <p>{{purchase.purchase_date}}</p>
+        <p>{{purchase.purchase_date | date:'MM/dd/yyyy'}}</p>
       </div>
     </div>
 

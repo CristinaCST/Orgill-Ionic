@@ -77,7 +77,7 @@ export class OrderConfirmationPage implements OnInit {
         let finalQty: number = 0;
         this.hotDealConfirmations.forEach((confirmation, index) => {
           const pairingLocation: LocationElement = this.hotDealLocations.find(
-            location => location.LOCATION.SHIPTONO === confirmation.customer_number
+            location => location.LOCATION.shiptono === confirmation.customer_number
           );
           this.hotDealConfirmations[index].fullLocation = pairingLocation;
           finalQty += confirmation.quantity;
@@ -89,7 +89,7 @@ export class OrderConfirmationPage implements OnInit {
         this.hotDealConfirmations.forEach(confirmation => {
           this.confirmation +=
             'Confirmation for location ' +
-            confirmation.fullLocation.LOCATION.ADDRESS +
+            confirmation.fullLocation.LOCATION.address +
             ' with confirmation number (' +
             confirmation.confirmation +
             ') and quantity (' +

@@ -3,14 +3,14 @@ import { NavParams, PopoverController, Popover } from 'ionic-angular';
 import { CustomerLocation } from '../../interfaces/models/customer-location';
 import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
-import moment from 'moment';
+// import moment from 'moment';
 import { OrderConfirmationPage } from '../order-confirmation/order-confirmation';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { LocationElement } from '../../interfaces/models/location-element';
 import { Product } from '../../interfaces/models/product';
 import { ProductProvider } from '../../providers/product/product';
-import { DatabaseOrder } from '../../interfaces/models/database-order';
-import { ProductListInfo } from '../../interfaces/models/product-list-info';
+// import { DatabaseOrder } from '../../interfaces/models/database-order';
+// import { ProductListInfo } from '../../interfaces/models/product-list-info';
 import { getNavParam } from '../../helpers/validatedNavParams';
 import { HotDealItem } from '../../interfaces/models/hot-deal-item';
 import { HotDealConfirmation } from '../../interfaces/models/hot-deal-confirmation';
@@ -37,11 +37,11 @@ export class OrderReviewPage implements OnInit {
   private readonly confirmationNumbers: string[] = [];
   public isHotDeal: boolean = false;
   public hotLocations: LocationElement[];
-  private hotDealItem: HotDealItem;
+  public hotDealItem: HotDealItem;
   public readonly sendToOrgillMethod: number = Constants.SEND_TO_ORGILL_METHOD;
   public forwardButtonText: string;
   private readonly simpleLoader: LoadingService;
-  private readonly customButtons: NavbarCustomButton[] = [];
+  public customButtons: NavbarCustomButton[] = [];
   private supportButtonPopover: Popover;
 
   constructor(
@@ -90,9 +90,9 @@ export class OrderReviewPage implements OnInit {
     }
   }
 
-  private getOrderQuery(programNumber: string, items: ShoppingListItem[]): string {
+  public getOrderQuery(programNumber: string, items: ShoppingListItem[]): string {
     let query: string =
-      this.location.SHIPTONO + ':' + (this.postOffice ? this.postOffice : '') + ':' + programNumber + ':';
+      this.location.shiptono + ':' + (this.postOffice ? this.postOffice : '') + ':' + programNumber + ':';
     items.forEach((item, index) => {
       query += item.product.sku + '|' + item.quantity.toString() + (index < items.length - 1 ? ':' : '');
     });
@@ -104,7 +104,7 @@ export class OrderReviewPage implements OnInit {
     locations.forEach(location => {
       query.push({
         order:
-          location.LOCATION.SHIPTONO +
+          location.LOCATION.shiptono +
           ':' +
           (location.POSTOFFICE ? location.POSTOFFICE : '') +
           ':' +
@@ -152,22 +152,29 @@ export class OrderReviewPage implements OnInit {
       const orderItems: ShoppingListItem[] = this.shoppingListItems.filter(
         item => item.program_number === programNumber
       );
-      const itemsIds: number[] = orderItems.reduce((arr, item) => arr.concat(item.id), []);
-      const productListInfo: ProductListInfo = {
-        order_method: this.orderMethod,
-        order_query: this.getOrderQuery(programNumber, orderItems)
-      };
-      const insertToDBInfo: DatabaseOrder = {
-        // TODO: Get rid of this
-        PO: this.postOffice,
-        date: moment().format('MM/DD/YYYY'),
-        location: this.location.SHIPTONO,
-        type: this.orderMethod,
-        total: this.orderTotal,
-        program_number: programNumber
-      };
+
+      const itemsIds: any = orderItems.map(item => ({ sku: item.product.sku, order_quantity: `${item.quantity}` }));
+      // const productListInfo: ProductListInfo = {
+      //   order_method: `${this.orderMethod}`,
+      //   order_query: this.getOrderQuery(programNumber, orderItems)
+      // };
+      // const insertToDBInfo: DatabaseOrder = {
+      //   PO: this.postOffice,
+      //   date: moment().format('MM/DD/YYYY'),
+      //   location: this.location.shiptono,
+      //   type: this.orderMethod,
+      //   total: this.orderTotal,
+      //   program_number: programNumber
+      // };
+
       this.shoppingListsProvider
-        .orderProducts(productListInfo, insertToDBInfo, itemsIds, this.shoppingListId)
+        .orderProducts({
+          customer_number: this.location.customerno,
+          po_number: this.postOffice,
+          program_number: programNumber || '0',
+          order_method: `${this.orderMethod}`,
+          item_list: itemsIds
+        })
         .then(data => {
           this.removeItemsFromList(orderItems);
           if (data.confirmationNumber) {

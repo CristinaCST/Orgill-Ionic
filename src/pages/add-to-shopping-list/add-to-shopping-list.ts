@@ -239,7 +239,7 @@ export class AddToShoppingListPage implements OnInit {
   public saveItemToList(): void {
     const listItem: ShoppingListItem = {
       product: this.product,
-      program_number: this.selectedProgram.program_no,
+      program_number: this.selectedProgram.program_no || '0',
       item_price: parseFloat(this.selectedProgram.price),
       quantity: this.quantity
     };
@@ -256,7 +256,7 @@ export class AddToShoppingListPage implements OnInit {
   public checkProductInList(listId: number): void {
     this.shoppingListsProvider
       .checkProductInList(this.product.sku, listId, this.selectedProgram.program_no)
-      .subscribe((status: boolean) => {
+      .subscribe(({ status }: any) => {
         if (status) {
           this.isAddBtnDisabled = true;
           this.reset(

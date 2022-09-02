@@ -104,7 +104,7 @@
           ion-item
           *ngFor="let list of defaultShoppingLists"
         >
-          <ion-icon class="menu-icon" [name]="list.ListType === '1' ? 'cart' : 'basket'"></ion-icon>
+          <ion-icon class="menu-icon" [name]="list.ListType === 1 ? 'cart' : 'basket'"></ion-icon>
           {{list.ListName | replaceMarketOnlyCart}}
         </button>
 

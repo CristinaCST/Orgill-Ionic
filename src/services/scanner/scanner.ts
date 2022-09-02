@@ -165,7 +165,7 @@ export class ScannerService {
             } else {
               this.isProductInList().subscribe(
                 resp => {
-                  const data: boolean = resp;
+                  const data: boolean = resp.status;
                   if (!data) {
                     const newItem: ShoppingListItem = {
                       product: this.foundProduct,

@@ -25,7 +25,7 @@
             </div>
             <div>
               <span>{{"order_review_location" | translate}}:</span><br />
-              <span>{{location.SHIPTONO}}</span>
+              <span>{{location.shiptono}}</span>
             </div>
           </div>
           <div class="right-info">
@@ -39,8 +39,8 @@
 
       <ion-item-divider class="ship-header" no-lines>{{"order_review_ship_to" | translate}}: </ion-item-divider>
       <ion-item class="ship-container">
-        <p>{{location.CUSTOMERNAME}}</p>
-        <p>{{location.ADDRESS}}</p>
+        <p>{{location.customername}}</p>
+        <p>{{location.address}}</p>
       </ion-item>
     </div>
 
@@ -74,8 +74,8 @@
 
     <ion-item *ngFor="let hotLocation of hotLocations" class="info-container">
       <ion-item class="ship-container">
-        <p>{{hotLocation.LOCATION.CUSTOMERNAME}}</p>
-        <p>{{hotLocation.LOCATION.ADDRESS}}</p>
+        <p>{{hotLocation.LOCATION.customername}}</p>
+        <p>{{hotLocation.LOCATION.address}}</p>
         <p>PO#: {{hotLocation.POSTOFFICE}}</p>
         <p>QUANTITY: {{hotLocation.QUANTITY}}</p>
       </ion-item>
