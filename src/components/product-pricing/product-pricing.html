@@ -11,7 +11,7 @@
         </div>
         <div class="price-info">
           <p>
-            {{"product_currency" | translate}}{{program.price}}
+            {{"product_currency" | translate}}{{program.price | number: '1.2-2'}}
             <br />
             /{{product.sellinG_UNIT}}
           </p>

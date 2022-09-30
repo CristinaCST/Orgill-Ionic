@@ -7,8 +7,8 @@ import * as Constants from '../../util/constants';
 import { Product } from '../../interfaces/models/product';
 import { APIResponse } from '../../interfaces/response-body/response';
 import { Observable } from 'rxjs';
-import { DatabaseOrder } from '../../interfaces/models/database-order';
-import { ProductListInfo } from '../../interfaces/models/product-list-info';
+// import { DatabaseOrder } from '../../interfaces/models/database-order';
+// import { ProductListInfo } from '../../interfaces/models/product-list-info';
 import { OrderResult } from '../../interfaces/response-body/order-result';
 import { Moment } from 'moment';
 import { ShoppingListResponse } from '../../interfaces/response-body/shopping-list';
@@ -36,7 +36,7 @@ export class ShoppingListsProvider {
       {
         shopping_list_id: listId,
         sku: shoppingListItem.product.sku,
-        program_no: shoppingListItem.program_number,
+        program_no: shoppingListItem.program_number || '0',
         quantity: shoppingListItem.quantity,
         price: shoppingListItem.item_price
       },

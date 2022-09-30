@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as ConstantsUrl from '../../util/constants-url';
 import * as Constants from '../../util/constants';
 import { ApiService } from '../../services/api/api';
-import { SubcategoriesRequest } from '../../interfaces/request-body/subcategories';
+// import { SubcategoriesRequest } from '../../interfaces/request-body/subcategories';
 import { ProductsRequest } from '../../interfaces/request-body/products';
 import { SearchProductRequest } from '../../interfaces/request-body/search-product';
 import { Observable } from 'rxjs/Observable';
@@ -24,12 +24,12 @@ export class CatalogsProvider {
     this.programs = programs;
   }
 
-  public getCategories(program_no: string): Observable<APIResponse> {
-    return this.apiProvider.get(ConstantsUrl.URL_CATEGORIES, { program_no });
+  public getCategories(program_number: string): Observable<APIResponse> {
+    return this.apiProvider.get(ConstantsUrl.URL_CATEGORIES, { program_number });
   }
 
-  public getSubcategories(program_no: string, category_id: string): Observable<APIResponse> {
-    return this.apiProvider.get(`${ConstantsUrl.URL_SUBCATEGORIES}/${category_id}`, { program_no });
+  public getSubcategories(program_number: string, category_id: string): Observable<APIResponse> {
+    return this.apiProvider.get(`${ConstantsUrl.URL_SUBCATEGORIES}/${category_id}`, { program_number });
   }
 
   public getProducts(

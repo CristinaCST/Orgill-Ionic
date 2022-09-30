@@ -68,8 +68,8 @@ export class OrderReviewPage implements OnInit {
     this.orderTotal = getNavParam(this.navParams, 'orderTotal', 'number');
     this.isHotDeal = getNavParam(this.navParams, 'isHotDeal', 'boolean');
     this.hotDealItem = getNavParam(this.navParams, 'hotDealItem', 'object');
+    console.log('this.shoppingListItems', this.shoppingListItems);
 
-    // TODO: Why 2 isHotDeal checks?
     if (this.hotDealItem) {
       this.isHotDeal = true;
 

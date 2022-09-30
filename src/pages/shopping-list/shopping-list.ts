@@ -43,7 +43,7 @@ export class ShoppingListPage {
   }
 
   private shoppingList: ShoppingList;
-  public selectedItems: ShoppingListItem[] = [];
+  public selectedItems: any = [];
   private shoppingListItems: ShoppingListItem[] = [];
   private isCustomList: boolean = false;
   private orderTotal: number = 0;
@@ -83,11 +83,11 @@ export class ShoppingListPage {
     this.events.unsubscribe(Constants.EVENT_LOADING_FAILED, this.loadingFailedHandler);
   }
 
-  private readonly loadingFailedHandler = (culprit?: string): void => {
+  private loadingFailedHandler(culprit?: string): void {
     if (culprit === 'shopping list products' || !culprit) {
       this.fillList();
     }
-  };
+  }
 
   public ionViewWillLeave(): void {
     this.events.unsubscribe(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST);
@@ -140,7 +140,6 @@ export class ShoppingListPage {
     this.orderTotal = this.selectedItems.reduce((accumulator, element) => (accumulator += Number(element.price)), 0);
   }
 
-  // TODO: Sebastian: REFACTORING
   private fillFromSearch(): void {
     this.selectedItems = getNavParam(this.navParams, 'selectedItemsOnSearch', 'object');
     this.shoppingListItems = getNavParam(this.navParams, 'shoppingListItems', 'object');
@@ -260,7 +259,8 @@ export class ShoppingListPage {
 
   private deleteItems(): void {
     let ok: boolean = true;
-
+    console.log('this.selectedItems', this.selectedItems);
+    console.log('this.shoppingList', this.shoppingList);
     if (this.selectedItems.length > 0) {
       this.selectedItems.forEach(selectedItem => {
         this.shoppingListProvider
@@ -322,7 +322,6 @@ export class ShoppingListPage {
     this.navigatorService.push(ShoppingListPage, params).catch(err => console.error(err));
   }
 
-  // TODO: This system is overly complicated
   private setOrderTotal(event: SelectItemEvent): void {
     const item: any = event;
     switch (event.status) {
@@ -356,33 +355,19 @@ export class ShoppingListPage {
 
   public selectAll(): void {
     this.isSelectAll = !this.isSelectAll;
+
     this.shoppingListItems.forEach(item => {
-      if (!item.isCheckedInShoppingList) {
-        item.isCheckedInShoppingList = true;
-        const correctPrice: number = this.pricingService.getShoppingListPrice(
-          item.quantity,
-          item.product,
-          item.item_price
-        );
-        this.setOrderTotal({ status: 'checkedItem', price: String(correctPrice), product: item });
-      }
       item.isCheckedInShoppingList = this.isSelectAll;
-      this.updateTotalPrice();
-
-      if (!this.isSelectAll && this.fromSearch) {
-        this.shoppingListItems.map(shoppingListItem => {
-          this.selectedItems = this.selectedItems.filter(
-            shoppItem => shoppItem.product.product.sku !== shoppingListItem.product.sku
-          );
-        });
-        this.updateTotalPrice();
-      }
-
-      if (!this.isSelectAll && !this.fromSearch) {
-        this.selectedItems = [];
-        this.updateTotalPrice();
-      }
     });
+
+    this.selectedItems = this.isSelectAll
+      ? this.shoppingListItems.map(item => ({
+          product: item,
+          price: this.pricingService.getShoppingListPrice(item.quantity, item.product, item.item_price)
+        }))
+      : [];
+
+    this.updateTotalPrice();
   }
 
   public continue(): void {
@@ -521,7 +506,11 @@ export class ShoppingListPage {
 
       if (!this.platform.is('ios')) {
         item.isCheckedInShoppingList = true;
-        this.setOrderTotal({ status: 'checkedItem' });
+        // this.setOrderTotal({ status: 'checkedItem' });
+        this.selectedItems.push({
+          product: item,
+          price: this.pricingService.getShoppingListPrice(item.quantity, item.product, item.item_price)
+        });
       }
 
       this.isDeleteMode = true;

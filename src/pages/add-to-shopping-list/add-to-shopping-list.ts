@@ -174,7 +174,6 @@ export class AddToShoppingListPage implements OnInit {
     return Promise.resolve();
   }
 
-  // TODO: Why are there 2 methods that do the same thing?
   public newShoppingList(): void {
     const content: PopoverContent = this.popoversService.setContent(
       Strings.SHOPPING_LIST_NEW_DIALOG_TITLE,
@@ -196,12 +195,11 @@ export class AddToShoppingListPage implements OnInit {
               this.shoppingListsProvider
                 .createNewShoppingList(data.listName, data.listDescription, data.type)
                 .subscribe((resp: any) => {
-                  const addedList: ShoppingListResponse = resp[0];
                   const list: ShoppingList = {
-                    ListID: addedList.shopping_list_id,
-                    ListName: addedList.list_name,
-                    ListDescription: addedList.list_description,
-                    ListType: addedList.list_type
+                    ListID: resp.shopping_list_id,
+                    ListName: resp.list_name,
+                    ListDescription: resp.list_description,
+                    ListType: resp.list_type
                   };
                   this.shoppingLists.push(list);
                   this.selectList(list);
@@ -282,7 +280,6 @@ export class AddToShoppingListPage implements OnInit {
 
     const differentType: boolean = this.listIsNotSameType(selectedList);
 
-    // TODO: Switch
     if (this.isMarketOnlyProduct && differentType) {
       this.reset(
         this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_MARKET_ONLY_PRODUCT)
@@ -299,7 +296,6 @@ export class AddToShoppingListPage implements OnInit {
     }
   }
 
-  // TODO: Hacky, but it works.
   private scrollToList(id: number): void {
     const element: any = document.getElementById(`${id}`);
     if (!element) {
