@@ -34,7 +34,7 @@ export class OrderReviewPage implements OnInit {
   public shoppingListItems: ShoppingListItem[];
   public orderTotal: number;
   private readonly shoppingListProgramNumbers: string[] = [];
-  private readonly confirmationNumbers: string[] = [];
+  private readonly confirmationNumbers: number[] = [];
   public isHotDeal: boolean = false;
   public hotLocations: LocationElement[];
   public hotDealItem: HotDealItem;
@@ -68,7 +68,6 @@ export class OrderReviewPage implements OnInit {
     this.orderTotal = getNavParam(this.navParams, 'orderTotal', 'number');
     this.isHotDeal = getNavParam(this.navParams, 'isHotDeal', 'boolean');
     this.hotDealItem = getNavParam(this.navParams, 'hotDealItem', 'object');
-    console.log('this.shoppingListItems', this.shoppingListItems);
 
     if (this.hotDealItem) {
       this.isHotDeal = true;
@@ -171,13 +170,13 @@ export class OrderReviewPage implements OnInit {
         .orderProducts({
           customer_number: this.location.customerno,
           po_number: this.postOffice,
-          program_number: programNumber || '0',
+          program_number: programNumber,
           order_method: `${this.orderMethod}`,
           item_list: itemsIds
         })
         .then(data => {
           this.removeItemsFromList(orderItems);
-          if (data.confirmationNumber) {
+          if (data.confirmationNumber > 0) {
             this.confirmationNumbers.push(data.confirmationNumber);
             if (index === Object.keys(this.shoppingListProgramNumbers).length - 1) {
               const navigationParams: any = {

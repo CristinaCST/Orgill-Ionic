@@ -94,7 +94,8 @@ export class AuthService {
   public logout(expired: boolean = false): void {
     this.secureActions.setAuthState(false);
     this.user = undefined;
-    LocalStorageHelper.removeFromLocalStorage(Constants.USER);
+    LocalStorageHelper.clearLocalStorage();
+    // LocalStorageHelper.removeFromLocalStorage(Constants.USER);
   }
 
   /**

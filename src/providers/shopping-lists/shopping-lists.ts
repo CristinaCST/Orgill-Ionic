@@ -165,7 +165,7 @@ export class ShoppingListsProvider {
     return this.apiProvider.delete(ConstantsUrl.REMOVE_SHOPPING_LIST_ITEM, {
       shopping_list_id: listId,
       sku: productSku,
-      program_number: programNo || '0'
+      program_number: programNo
     });
   }
 
@@ -173,10 +173,8 @@ export class ShoppingListsProvider {
     return new Promise((resolve, reject) => {
       try {
         this.apiProvider.post(ConstantsUrl.URL_SHOPPING_LISTS_ORDER_PRODUCTS, data, true).subscribe((response: any) => {
-          if (response) {
-            const confirmation_number: string = response;
-
-            resolve({ confirmationNumber: confirmation_number } as OrderResult);
+          if (response > 0) {
+            resolve({ confirmationNumber: response } as OrderResult);
           } else {
             reject(response);
           }
@@ -217,7 +215,7 @@ export class ShoppingListsProvider {
     return this.apiProvider.put(ConstantsUrl.UPDATE_SHOPPING_LIST_ITEM, {
       shopping_list_id: shoppingListId,
       sku: product.sku,
-      program_no: programNumber || '0',
+      program_no: programNumber,
       quantity: quantity,
       price: price
     });
@@ -227,7 +225,7 @@ export class ShoppingListsProvider {
     return this.apiProvider.get(ConstantsUrl.CHECK_PRODUCT_SHOPPING_LIST, {
       sku: productSKU,
       shopping_list_id: listId,
-      program_number: programNo || '0'
+      program_number: programNo
     });
   }
 }
