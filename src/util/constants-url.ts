@@ -54,36 +54,37 @@ export const PRODUCT_IMAGE_BASE_URL: string = 'http://images.orgill.com/200x200/
 
 // ROUTE TRACKING API?
 const TRACKING_API_BASE_URL: string = '//40.122.36.68/api/';
+const TRACKING_API_BASE_URL_PROD: string = '//168.61.170.88/api/';
 
 /**
  * params
  * ship_to_no: string
  */
-export const GET_STORE_ROUTE_AND_STOPS: string = TRACKING_API_BASE_URL + 'Admin/GetStoreRouteAndStops';
+export const GET_STORE_ROUTE_AND_STOPS: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetStoreRouteAndStops';
 
 /**
  * request body
  * username: string
  * password: string
  */
-export const VENDOR_ACCOUNT_LOGIN: string = TRACKING_API_BASE_URL + 'VendorAccount/Login';
+export const VENDOR_ACCOUNT_LOGIN: string = TRACKING_API_BASE_URL_PROD + 'VendorAccount/Login';
 
 /**
  * params
  * user_token: string
  */
-export const GET_CUSTOMER_LOCATIONS: string = TRACKING_API_BASE_URL + 'VendorAccount/GetCustomerLocations';
+export const GET_CUSTOMER_LOCATIONS: string = TRACKING_API_BASE_URL_PROD + 'VendorAccount/GetCustomerLocations';
 
 /**
  * params
  * size: integer
  */
-export const TEST_GET_TODAY_CUSTOMERS: string = TRACKING_API_BASE_URL + 'Test/GetTodayCustomers';
+export const TEST_GET_TODAY_CUSTOMERS: string = TRACKING_API_BASE_URL_PROD + 'Test/GetTodayCustomers';
 
 /**
  * customerNo
  */
-export const ADMIN_GET_CUSTOMER_LOCATIONS: string = TRACKING_API_BASE_URL + 'Admin/GetCustomerLocations';
+export const ADMIN_GET_CUSTOMER_LOCATIONS: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetCustomerLocations';
 
 // DROPSHIP
 export const ds_create_savedorder: string = 'dssavedorders';
@@ -105,11 +106,11 @@ export const onlineDealerMarketCAD: string =
   'https://www.orgill.ca/login.aspx?redirecturl=/onlineDealerMarket.aspx?tab=6';
 
 // DASHBOARD
-export const GetGeneralStatistics: string = TRACKING_API_BASE_URL + 'Admin/GetGeneralStatistics';
-export const GetTrafficStatistics: string = TRACKING_API_BASE_URL + 'Admin/GetTrafficStatistics';
-export const GetStopsStatistics: string = TRACKING_API_BASE_URL + 'Admin/GetStopsStatistics';
-export const GetStoreRouteAndStops: string = TRACKING_API_BASE_URL + 'Admin/GetStoreRouteAndStops';
-export const GetDcAndRoutes: string = TRACKING_API_BASE_URL + 'Admin/GetDcAndRoutes';
-export const GetCustomersByDcAndRoute: string = TRACKING_API_BASE_URL + 'Admin/GetCustomersByDcAndRoute';
-export const GetDeliveriesDashboard: string = TRACKING_API_BASE_URL + 'Admin/GetDeliveriesDashboard';
-export const GetDeliveriesDashboardExcel: string = TRACKING_API_BASE_URL + 'Admin/GetDeliveriesDashboardExcel';
+export const GetGeneralStatistics: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetGeneralStatistics';
+export const GetTrafficStatistics: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetTrafficStatistics';
+export const GetStopsStatistics: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetStopsStatistics';
+export const GetStoreRouteAndStops: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetStoreRouteAndStops';
+export const GetDcAndRoutes: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetDcAndRoutes';
+export const GetCustomersByDcAndRoute: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetCustomersByDcAndRoute';
+export const GetDeliveriesDashboard: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetDeliveriesDashboard';
+export const GetDeliveriesDashboardExcel: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetDeliveriesDashboardExcel';
