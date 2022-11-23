@@ -8,7 +8,7 @@ import * as Constants from '../../util/constants';
 import { User } from '../../interfaces/models/user';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Events } from 'ionic-angular';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import { DateTimeService } from '../../services/datetime/dateTimeService';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import * as Strings from '../../util/strings';
@@ -91,7 +91,7 @@ export class AuthService {
     });
   }
 
-  public logout(expired: boolean = false): void {
+  public logout(): void {
     this.secureActions.setAuthState(false);
     this.user = undefined;
     LocalStorageHelper.clearLocalStorage();
@@ -131,10 +131,10 @@ export class AuthService {
     if (!this.User) {
       return false;
     }
-    const now: Moment = DateTimeService.getCurrentDateTime();
-    const receivedTimestamp: string = this.User.time_stamp;
-    const sessionTimestampWith4Days: Moment = DateTimeService.getTimeAfter4Days(receivedTimestamp);
 
+    const now: Moment = DateTimeService.getCurrentDateTime();
+    const receivedTimestamp: Moment = moment(this.User.time_stamp);
+    const sessionTimestampWith4Days: Moment = DateTimeService.getTimeAfter4Days(receivedTimestamp);
     const status: boolean = sessionTimestampWith4Days.isSameOrAfter(now);
 
     if (status) {
@@ -148,7 +148,7 @@ export class AuthService {
     );
     this.popoverService.show(content);
 
-    this.logout(true);
+    this.logout();
   }
 
   public getCurrentUser(): User {
