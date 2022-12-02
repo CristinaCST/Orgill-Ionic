@@ -309,6 +309,7 @@
   "required_text": "Requis",
   "not_valid_num_text": "Pas un numéro valide",
   "invalid_email_text": "Courriel non valide",
+  "phone_invalid_length": "10 chiffres seulement",
   "dropship_checkout": "Checkout",
   "dropship_checkout_continue_shopping": "Poursuivre les achats",
   "dropship_checkout_empty_cart": "Aucun article dans le panier de commande!",

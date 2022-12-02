@@ -34,7 +34,7 @@ export class CustomerInfoPage implements OnInit {
       first_name: [this.model.first_name, Validators.required],
       last_name: [this.model.last_name, Validators.required],
       email: [this.model.email, [Validators.required, Validators.email]],
-      phone: [this.model.phone, Validators.required],
+      phone: [this.model.phone, [Validators.required, Validators.maxLength(10), Validators.minLength(10)]],
       ship_date: [this.model.ship_date, Validators.required],
       po_number: this.model.po_number
     });

@@ -311,6 +311,7 @@
   "required_text": "Required",
   "not_valid_num_text": "Not a valid number",
   "invalid_email_text": "Invalid email",
+  "phone_invalid_length": "10 digits only",
   "dropship_checkout": "Checkout",
   "dropship_checkout_continue_shopping": "Continue shopping",
   "dropship_checkout_empty_cart": "No items in the checkout cart!",

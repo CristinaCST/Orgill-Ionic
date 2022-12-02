@@ -153,6 +153,7 @@ export class ShoppingListPage {
       this.shoppingListItems = [];
     }
     this.content.resize();
+    this.isLoading = false;
   }
 
   private fillList(): Promise<void> {
@@ -259,8 +260,7 @@ export class ShoppingListPage {
 
   private deleteItems(): void {
     let ok: boolean = true;
-    console.log('this.selectedItems', this.selectedItems);
-    console.log('this.shoppingList', this.shoppingList);
+
     if (this.selectedItems.length > 0) {
       this.selectedItems.forEach(selectedItem => {
         this.shoppingListProvider
