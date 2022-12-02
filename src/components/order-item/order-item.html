@@ -32,16 +32,10 @@
         <p>{{"order_review_location" | translate}}:</p>
         <p>{{purchase.location}}</p>
       </div>
-      <!--
-       <div class="info-cel">
-        <p>{{"order_confirmation_total" | translate}}:
-        <p>{{purchase.total | number: '1.1-2'}}</p>
-      </div>
-      -->
     </div>
   </div>
   <div class="footer container">
     <p>{{"orders_history_po" | translate}}:</p>
-    <p>{{purchase.po ? purchase.po : 'N/A' }}</p>
+    <p>{{purchase.po_number ? purchase.po_number : 'N/A' }}</p>
   </div>
 </button>
