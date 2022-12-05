@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as Strings from '../../util/strings';
 import { Purchase } from '../../interfaces/models/purchase';
+import { NavigatorService } from '../../services/navigator/navigator';
+import { LandingPage } from '../../pages/landing/landing';
 
 @Component({
   selector: 'order-item',
@@ -17,11 +19,19 @@ export class OrderItemComponent implements OnInit {
 
   public purchaseType: string = '';
 
+  constructor(private readonly navigatorService: NavigatorService) {}
+
   public ngOnInit(): void {
     if (this.purchase.type === this.ORDER_METHOD_SEND_TO_ORGILL) {
       this.purchaseType = Strings.ORDER_ORGILL;
     } else if (this.purchase.type === this.ORDER_METHOD_CHECKOUT) {
       this.purchaseType = Strings.ORDER_CHECKOUT;
     }
+
+    // HACK
+    // fix for https://orgill.atlassian.net/browse/OZONEAPP-106
+    this.navigatorService.oneTimeBackButtonOverride(() => {
+      this.navigatorService.setRoot(LandingPage);
+    });
   }
 }

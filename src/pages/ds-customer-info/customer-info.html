@@ -107,7 +107,12 @@
               ({{"required_text" | translate}})
             </span>
           </ion-label>
-          <ion-datetime class="input-item" formControlName="ship_date" displayFormat="MM/DD/YYYY"></ion-datetime>
+          <ion-datetime
+            class="input-item"
+            formControlName="ship_date"
+            displayFormat="MM/DD/YYYY"
+            [min]="minDatePickerValue"
+          ></ion-datetime>
         </ion-item>
 
         <ion-item class="input-item-wrapper">

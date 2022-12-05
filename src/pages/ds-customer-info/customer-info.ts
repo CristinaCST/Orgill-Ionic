@@ -40,6 +40,19 @@ export class CustomerInfoPage implements OnInit {
     });
 
     this.formControls = this.customerInfoForm.controls;
+
+    // HACK
+    // stupid fix for https://orgill.atlassian.net/browse/OZONEAPP-109
+    // project is too ancient and the documentation doesn't help...
+    this.navigatorService.oneTimeBackButtonOverride(() => {
+      const pickerBtn: Element = document.getElementsByClassName('picker-toolbar-cancel')[0];
+
+      if (pickerBtn) {
+        pickerBtn.getElementsByTagName('button')[0].dispatchEvent(new Event('click'));
+      }
+
+      this.navigatorService.pop();
+    });
   }
 
   public handleCustomerNumber(customer_number: string): void {

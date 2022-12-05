@@ -441,6 +441,10 @@ export class ShoppingListPage {
   }
   private scan(): void {
     this.scannerService.scan(this.shoppingList, this.shoppingListItems);
+
+    // HACK
+    // fix for https://orgill.atlassian.net/browse/OZONEAPP-104
+    this.navigatorService.oneTimeBackButtonOverride(() => {});
   }
 
   private getListDetails(): void {
