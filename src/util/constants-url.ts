@@ -4,6 +4,7 @@ export const URL_BASE_FR: string = 'http://dmwebservice-cafr.orgill.com/service.
 export const URL_BASE_DEV: string = 'http://reststage.orgill.com/service.asmx/';
 export const URL_BASE_DEV_NEW: string = 'http://reststage.orgill.com/api/v1/';
 export const URL_BASE_PROD: string = 'http://dmwebservice.orgill.com/service.asmx/';
+export const URL_BASE_PROD_NEW: string = 'http://ozoneapi.orgill.com/api/v1/';
 
 export const URL_LOGIN: string = 'authenticate';
 export const URL_USER_INFO: string = 'user';
