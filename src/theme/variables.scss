@@ -1,11 +1,10 @@
-$font-path: "../assets/fonts";
+$font-path: '../assets/fonts';
 $app-direction: ltr;
 
-@import "ionic.globals";
-@import "ionic.theme.default";
-@import "ionic.ionicons";
-@import "./mixins.scss";
-
+@import 'ionic.globals';
+@import 'ionic.theme.default';
+@import 'ionic.ionicons';
+@import './mixins.scss';
 
 $item-md-detail-push-show: true;
 $item-wp-detail-push-show: true;
@@ -17,11 +16,12 @@ $colors: (
   danger: #f53d3d,
   light: #f4f4f4,
   dark: #222,
-  OrgillRed: #9A0000,
-  OrgillWhiteGray: #CCCCCC,
+  OrgillRed: #9a0000,
+  OrgillLightRed: #a50000,
+  OrgillWhiteGray: #cccccc,
   OrgillLightGray: #999999,
   OrgillMediumGray: #666666,
-  OrgillDarkGray: #4D4D4D,
+  OrgillDarkGray: #4d4d4d,
   OrgillBlackGray: #404040,
   OrgillGradientLeft: #ffffff,
   OrgillGradientRight: #e5e5e5,
@@ -29,8 +29,7 @@ $colors: (
   OrgillMenuGradientRight: #0c0c0c
 );
 
-
-$text-input-placeholder-color: #3F3E3F;
+$text-input-placeholder-color: #3f3e3f;
 
 $font-size-small-extra: 11px;
 $font-size-small: 14px;

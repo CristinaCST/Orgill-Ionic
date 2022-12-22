@@ -1,14 +1,14 @@
-@import "../theme/variables";
+@import '../theme/variables';
 
 ion-header {
-  ion-navbar, ion-toolbar {
+  ion-navbar,
+  ion-toolbar {
     div.toolbar-background {
       background: color($colors, OrgillRed) url('../assets/imgs/navbar_background.jpg') no-repeat;
       background-size: cover;
       text-align: center;
-      .toolbar-content{
+      .toolbar-content {
         vertical-align: bottom;
-
       }
     }
     //padding-top:env(safe-area-inset-top)!important;
@@ -17,25 +17,29 @@ ion-header {
       margin-left: -15px;
     }
   }
+
+  [ng-reflect-title='REGULAR CATALOG'] .regular-catalog-info-btn {
+    display: none;
+  }
 }
 
-ion-app.platform-ios{
-  .ion-page{
-    ion-header:not(popover){
+ion-app.platform-ios {
+  .ion-page {
+    ion-header:not(popover) {
       ion-navbar {
-        padding-top:env(safe-area-inset-top)!important;
+        padding-top: env(safe-area-inset-top) !important;
       }
     }
   }
-  .menu-inner{
-    ion-toolbar{
-      padding-top:env(safe-area-inset-top)!important;
+  .menu-inner {
+    ion-toolbar {
+      padding-top: env(safe-area-inset-top) !important;
     }
   }
 }
 
-body.keyboard-is-open .hide-on-keyboard-open{
-  display: none!important;
+body.keyboard-is-open .hide-on-keyboard-open {
+  display: none !important;
 }
 
 ion-menu {
@@ -52,7 +56,6 @@ ion-backdrop {
   opacity: 0.6;
 }
 
-.scroll-content{
-  overflow-y:auto!important;
+.scroll-content {
+  overflow-y: auto !important;
 }
-

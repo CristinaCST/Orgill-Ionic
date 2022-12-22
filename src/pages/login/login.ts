@@ -7,6 +7,7 @@ import { PopoversService, PopoverContent } from '../../services/popovers/popover
 import { NavigatorService } from '../../services/navigator/navigator';
 import { TextInput } from 'ionic-angular';
 import { LandingPage } from '../../pages/landing/landing';
+import { VendorLandingPage } from '../vendor-landing/vendor-landing';
 
 @Component({
   selector: 'page-login',
@@ -38,14 +39,16 @@ export class Login {
 
     // TODO: Refactor the auth logic wtf.
     this.loginLoader.show();
-    const loginRequest: { username: string; password: string } = {
-      username: this.username,
+    const loginRequest: { user_name: string; password: string } = {
+      user_name: this.username,
       password: this.password
     };
     this.authService.login(loginRequest).subscribe(
       () => {
-        this.authService.getUserInfo().then(() => {
-          this.navigatorService.setRoot(LandingPage);
+        this.authService.getUserInfo().then(user => {
+          const { user_type } = user;
+
+          this.navigatorService.setRoot(user_type === 'Vendor' ? VendorLandingPage : LandingPage);
           this.loginLoader.hide();
         });
       },

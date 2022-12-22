@@ -1,0 +1,53 @@
+<div class="dashboard-traffic-statistics-table">
+  <div class="table-filters">
+    <div class="filter-wrapper">
+      <h4 class="table-title" [ngClass]="{'hidden': isSearch}">TRAFFIC DASHBOARD OVERVIEW</h4>
+      <input
+        class="table-search"
+        [ngClass]="{'hidden': !isSearch}"
+        type="text"
+        #tableSearch
+        (keyup)="handleSearch($event.target.value)"
+      />
+
+      <ion-icon class="search-icon" [ngClass]="{'active': isSearch}" name="search" (click)="toggleSearch()"></ion-icon>
+    </div>
+
+    <div class="filter-wrapper time">
+      <span (click)="handleTime('Daily')" [ngClass]="{'active': selectedTime === 'Daily'}">Daily</span>
+      <span (click)="handleTime('Weekly')" [ngClass]="{'active': selectedTime === 'Weekly'}">Weekly</span>
+      <span (click)="handleTime('Monthly')" [ngClass]="{'active': selectedTime === 'Monthly'}">Monthly</span>
+      <span (click)="handleTime('Yearly')" [ngClass]="{'active': selectedTime === 'Yearly'}">Yearly</span>
+    </div>
+
+    <div class="filter-wrapper controls">
+      <div (click)="handleTimeControls('Previous')">
+        <ion-icon name="arrow-round-back"></ion-icon>
+        <span>Previous 8 {{timeOptions[selectedTime][0]}}</span>
+      </div>
+
+      <div (click)="handleTimeControls()" [ngClass]="{'latest': isLatestTimeFrame}">
+        <span>Next 8 {{timeOptions[selectedTime][0]}}</span>
+        <ion-icon name="arrow-round-forward"></ion-icon>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="loader-wrapper" *ngIf="isLoadingTrafficStats">
+      <ion-spinner class="loader"></ion-spinner>
+    </div>
+
+    <dashboard-table
+      [hidden]="isLoadingTrafficStats"
+      [stickyColumn]="stickyColumn"
+      [tableHeaders]="tableHeaders"
+      [tableData]="tableData"
+    ></dashboard-table>
+  </div>
+
+  <div class="table-controls-btns" *ngIf="isFullPage" [hidden]="isLoadingTrafficStats">
+    <button class="table-btn" (click)="handleTablePage()">Previous page</button>
+    <button class="table-btn" (click)="handleTablePage(true)">Next page</button>
+  </div>
+</div>

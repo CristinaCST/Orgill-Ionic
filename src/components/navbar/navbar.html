@@ -13,6 +13,7 @@
   <ion-buttons end *ngIf="customButtons">
     <button
       *ngFor="let button of customButtons"
+      class="{{button.identifier === 'regular-catalog-info-btn' ? 'regular-catalog-info-btn':''}}"
       ion-button
       icon-only
       (click)="buttonActions(button.action, $event)"

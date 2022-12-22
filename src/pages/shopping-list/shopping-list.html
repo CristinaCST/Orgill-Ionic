@@ -1,57 +1,73 @@
 <!-- Shopping Lists Page Header -->
 <ion-header>
   <!-- Shopping Lists Navigation Bar -->
-  <navbar [customButtons]='menuCustomButtons' [title]="shoppingList ? shoppingList.ListName: ''" [isMenuEnabled]="true"
-    [isBackEnabled]="false" (buttonClicked)="buttonClicked($event)"></navbar>
+  <navbar
+    [customButtons]="menuCustomButtons"
+    [title]="shoppingList ? shoppingList.ListName: ''"
+    [isMenuEnabled]="true"
+    [isBackEnabled]="false"
+    (buttonClicked)="buttonClicked($event)"
+  ></navbar>
   <!-- Shopping Lists Search Bar -->
-  <search-bar [showBackButton]="isCheckout || isDeleteMode || !navigatorService.isRootLevel" (searched)="onSearched($event)"></search-bar>
+  <search-bar
+    [showBackButton]="isCheckout || isDeleteMode || !navigatorService.isRootLevel"
+    (searched)="onSearched($event)"
+  ></search-bar>
 </ion-header>
 
 <ion-content (ionScrollStart)="scrollStart()">
-  <ion-refresher *ngIf="!fromSearch && !isCheckout && !isDeleteMode" slot="fixed" (ionRefresh)="doRefresh($event)" (ionStart)="refreshPulling($event)">
-    <ion-refresher-content>
-    </ion-refresher-content>
+  <ion-refresher
+    *ngIf="!fromSearch && !isCheckout && !isDeleteMode"
+    slot="fixed"
+    (ionRefresh)="doRefresh($event)"
+    (ionStart)="refreshPulling($event)"
+  >
+    <ion-refresher-content> </ion-refresher-content>
   </ion-refresher>
 
-
   <ion-item-group *ngIf="shoppingListItems.length">
-      <ion-item-divider no-lines>
-        <span> {{"shopping_list_items_label" | translate}}: </span>
-        <span> {{"product_quantity" | translate}}: </span>
-      </ion-item-divider>
-      <shopping-list-product (touchstart)="touchstart(i)" (touchend)="touchend()" *ngFor="let shoppingListItem of shoppingListItems; index as i" [isDisabled]="!isCheckout&&!isDeleteMode&&!holdCheckTimeout"
-        (checked)="onChecked($event,i)" (goToDetails)="onCheckedToDetails($event)"
-        [shoppingListItem]="shoppingListItem">
-      </shopping-list-product>
-    </ion-item-group>
+    <ion-item-divider no-lines>
+      <span> {{"shopping_list_items_label" | translate}}: </span>
+      <span> {{"product_quantity" | translate}}: </span>
+    </ion-item-divider>
+    <shopping-list-product
+      (touchstart)="touchstart(i)"
+      (touchend)="touchend()"
+      *ngFor="let shoppingListItem of shoppingListItems; index as i"
+      [isDisabled]="!isCheckout&&!isDeleteMode&&!holdCheckTimeout"
+      (checked)="onChecked($event,i)"
+      (goToDetails)="onCheckedToDetails($event)"
+      [shoppingListItem]="shoppingListItem"
+    >
+    </shopping-list-product>
+  </ion-item-group>
 
-    <p *ngIf="!shoppingListItems.length && !isLoading">{{"shopping_list_no_items_added" | translate}}</p>
-
+  <p *ngIf="!shoppingListItems.length && !isLoading" class="no-products">{{"no_products_found" | translate}}</p>
 </ion-content>
 
 <ion-footer class="footer" padding>
   <div *ngIf="isCheckout || isDeleteMode">
-    <button *ngIf="!fromSearch" ion-button outline block color="OrgillRed" [disabled]="!selectedItems.length" (click)="delete()">
+    <button
+      *ngIf="!fromSearch"
+      ion-button
+      outline
+      block
+      color="OrgillRed"
+      [disabled]="!selectedItems.length"
+      (click)="delete()"
+    >
       {{"modal_button_delete" | translate}}
     </button>
     <button *ngIf="!fromSearch" ion-button outline block color="OrgillDarkGray" (click)="selectAll()">
-      {{ isSelectAll ? ("shopping_list_deselect_all" | translate) :
-      ("shopping_list_select_all" | translate) }}
+      {{ isSelectAll ? ("shopping_list_deselect_all" | translate) : ("shopping_list_select_all" | translate) }}
     </button>
   </div>
   <div *ngIf="isCheckout">
-    <div>
-      {{"order_review_total" | translate}}:
-    </div>
-    <div>
-      {{"product_currency" | translate}} {{orderTotal| number: '1.2-2'}}
-    </div>
+    <div>{{"order_review_total" | translate}}:</div>
+    <div>{{"product_currency" | translate}} {{orderTotal| number: '1.2-2'}}</div>
   </div>
-  <button *ngIf="isCheckout" ion-button block (click)="continue()" color="OrgillRed">
-    {{"continue"| translate}}
-  </button>
+  <button *ngIf="isCheckout" ion-button block (click)="continue()" color="OrgillRed">{{"continue"| translate}}</button>
   <button *ngIf="!isCheckout&&!isDeleteMode" ion-button block (click)="checkout()" color="OrgillRed">
     {{"shopping_list_checkout" | translate}}
   </button>
-
 </ion-footer>

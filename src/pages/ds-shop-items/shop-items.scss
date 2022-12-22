@@ -1,0 +1,151 @@
+.dropship-shop-items-content {
+  .scroll-content {
+    margin: 56px 0 0;
+    padding: 20px 10px;
+  }
+
+  &.checkout-overlay-visible {
+    .scroll-content {
+      margin-bottom: 140px;
+    }
+  }
+
+  &.header-margin {
+    .scroll-content {
+      margin-top: 90px;
+    }
+  }
+
+  .list-header-wrapper {
+    display: flex;
+
+    .list-img {
+      max-width: 105px;
+      width: 100%;
+      height: 105px;
+      margin: 0 10px 0 0;
+      object-fit: contain;
+    }
+
+    .list-header {
+      font-size: 18px;
+    }
+
+    .checkbox-wrapper {
+      display: flex;
+      margin: 0 0 10px;
+
+      .checkbox {
+        margin: 2px 10px 0 0;
+      }
+    }
+
+    .list-price {
+      display: flex;
+      margin: 0 0 10px 30px;
+      align-items: center;
+
+      .cost {
+        margin: 0 10px 0 0;
+        font-size: 18px;
+      }
+
+      .savings {
+        color: color($colors, OrgillLightRed);
+      }
+    }
+
+    .list-counter-wrapper {
+      display: flex;
+      margin: 0 0 0 30px;
+      align-items: center;
+      justify-content: flex-start;
+
+      input {
+        width: 50px;
+        height: 25px;
+        margin: 0 5px;
+        font-size: 15px;
+        text-align: center;
+        border-radius: 4px;
+        border: 1px solid #e6e6e6;
+      }
+
+      button {
+        width: 20px;
+        height: 20px;
+        background: color($colors, OrgillLightRed);
+
+        span {
+          color: #fff;
+        }
+
+        &.disabled {
+          background: #fff;
+          border: 1px solid #e6e6e6;
+
+          span {
+            color: #e6e6e6;
+          }
+        }
+      }
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .order-btn {
+      margin: 0 0 10px 30px;
+      padding: 5px 10px;
+      color: #fff;
+      border-radius: 5px;
+      background: color($colors, OrgillLightRed);
+    }
+  }
+
+  .cancel-search {
+    margin: 0 0 15px;
+    color: #999;
+    font-size: 20px;
+    font-weight: 400;
+  }
+}
+
+.dropship-img-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  display: none;
+  background: rgba(44, 44, 44, 0.8);
+
+  &.active {
+    display: block;
+  }
+
+  .overlay-close {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    color: #fff;
+    font-size: 20px;
+  }
+
+  .img-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    padding: 0 10px;
+    transform: translate(-50%, -50%);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+}

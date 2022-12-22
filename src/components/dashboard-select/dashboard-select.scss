@@ -1,0 +1,51 @@
+.dashboard-select {
+  position: relative;
+  z-index: 9999;
+
+  .current-selected-option {
+    display: flex;
+    padding: 5px 10px;
+    border: 1px solid #c9c9c9;
+    justify-content: space-between;
+  }
+
+  .select-options {
+    position: absolute;
+    width: 100%;
+    max-height: 300px;
+    padding: 5px 10px;
+    background: #fff;
+    overflow: auto;
+    border: 1px solid #c9c9c9;
+
+    .select-option {
+      display: flex;
+      margin: 10px 0 10px 15px;
+      font-size: 12px;
+      align-items: center;
+
+      &.selected {
+        margin: 10px 0;
+        font-weight: bold;
+
+        span {
+          margin: 0 0 0 3px;
+        }
+      }
+    }
+
+    &.hidden {
+      display: none;
+    }
+  }
+
+  &.active {
+    .current-selected-option {
+      border-bottom: none;
+    }
+
+    .select-options {
+      border-top: none;
+    }
+  }
+}

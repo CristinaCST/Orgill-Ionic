@@ -8,8 +8,7 @@ import { Product } from '../../interfaces/models/product';
   templateUrl: 'hot-deal-product.html'
 })
 export class HotDealProductComponent implements AfterViewInit {
-
-  constructor(private readonly imageProvider: ProductImageProvider) { }
+  constructor(private readonly imageProvider: ProductImageProvider) {}
 
   @Input('hotDealItem') public hotDealItem: Product;
   @Input('orderTotal') public orderTotal: number;
@@ -19,7 +18,7 @@ export class HotDealProductComponent implements AfterViewInit {
   public imageIsLoading: boolean = true;
 
   public ngAfterViewInit(): void {
-    this.imageProvider.getImageURL(this.hotDealItem.SKU).then(data => {
+    this.imageProvider.getImageURL(this.hotDealItem.sku).then(data => {
       this.imageURL = data;
       this.imageIsLoading = false;
     });

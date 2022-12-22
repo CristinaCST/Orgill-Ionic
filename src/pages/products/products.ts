@@ -55,7 +55,7 @@ export class ProductsPage implements OnInit, OnDestroy {
     if (culprit === 'products' || !culprit) {
       this.init();
     }
-  }
+  };
 
   private init(): void {
     this.programNumber = getNavParam(this.navParams, 'programNumber', 'string');
@@ -69,10 +69,10 @@ export class ProductsPage implements OnInit, OnDestroy {
   public getProducts(): void {
     this.loader.show();
     this.getProductSubscription = this.catalogProvider
-      .getProducts(this.category ? this.category.CatID : '', this.programNumber, this.page)
+      .getProducts(this.category ? this.category.catID : '', this.programNumber, this.page)
       .subscribe(
-        response => {
-          this.products = this.sortProducts(JSON.parse(response.d));
+        (response: any) => {
+          this.products = this.sortProducts(response);
           this.loader.hide();
           this.isLoading = false;
           this.setPaginationInfo();
@@ -86,8 +86,8 @@ export class ProductsPage implements OnInit, OnDestroy {
 
   public sortProducts(products: Product[]): Product[] {
     return products
-      .sort((product1, product2): number => product1.NAME.localeCompare(product2.NAME))
-      .filter(product => product.YOURCOST !== '-1.00');
+      .sort((product1, product2): number => product1.name.localeCompare(product2.name))
+      .filter(product => product.yourcost !== '-1.00');
   }
 
   // TODO: Why this appears 2 times, now 3...?
@@ -100,30 +100,28 @@ export class ProductsPage implements OnInit, OnDestroy {
   }
 
   private filterBadRequest(data: Product[]): Product[] {
-    return data.length === 0 || data[0].CatID === 'Bad Request' ? [] : data;
+    return data.length === 0 || data[0].catID === 'Bad Request' ? [] : data;
   }
 
   public onSearched($event: string): void {
     this.loader.show();
-    this.catalogProvider
-      .search($event, this.category ? this.category.CatID : '', this.programNumber)
-      .subscribe(
-        data => {
-          const dataFound: Product[] = this.filterBadRequest(JSON.parse(data.d));
-          const params: any = {
-            searchData: dataFound,
-            programNumber: this.programNumber,
-            programName: this.programName,
-            category: this.category,
-            numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
-          };
-          this.loader.hide();
-          this.navigatorService.push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions);
-        },
-        err => {
-          LoadingService.hideAll();
-        }
-      );
+    this.catalogProvider.search($event, this.category ? this.category.catID : '', this.programNumber).subscribe(
+      (data: any) => {
+        const dataFound: Product[] = this.filterBadRequest(data);
+        const params: any = {
+          searchData: dataFound,
+          programNumber: this.programNumber,
+          programName: this.programName,
+          category: this.category,
+          numberOfProductsFound: dataFound[0] ? dataFound[0].totaL_REC_COUNT : 0
+        };
+        this.loader.hide();
+        this.navigatorService.push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions);
+      },
+      err => {
+        LoadingService.hideAll();
+      }
+    );
   }
 
   public next(): void {
@@ -134,9 +132,9 @@ export class ProductsPage implements OnInit, OnDestroy {
   public loadNextProducts(): void {
     this.loader.show();
     this.getProductSubscription = this.catalogProvider
-      .getProducts(this.category ? this.category.CatID : '', this.programNumber, this.page)
-      .subscribe(response => {
-        this.products = this.products.concat(this.sortProducts(JSON.parse(response.d)));
+      .getProducts(this.category ? this.category.catID : '', this.programNumber, this.page)
+      .subscribe((response: any) => {
+        this.products = this.products.concat(this.sortProducts(response));
         this.setPaginationInfo();
         this.loader.hide();
       });
@@ -144,7 +142,7 @@ export class ProductsPage implements OnInit, OnDestroy {
 
   public setPaginationInfo(): void {
     if (this.products.length > 0) {
-      this.totalNumberOfProducts = parseInt(this.products[0].TOTAL_REC_COUNT, 10);
+      this.totalNumberOfProducts = parseInt(this.products[0].totaL_REC_COUNT, 10);
     }
     this.isPaginationEnabled = this.page * Constants.PRODUCTS_PER_PAGE < this.totalNumberOfProducts;
   }

@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 
 // TODO: Move these outside
 
-export interface PopoverContent{
+export interface PopoverContent {
   type?: string;
   title?: string;
   message?: string | HTMLElement;
@@ -23,7 +23,7 @@ export interface DefaultPopoverResult {
 
 export interface CustomListPopoverResult extends DefaultPopoverResult {
   listName?: string;
-  type?: string;
+  type?: string | number;
   listDescription?: string;
 }
 
@@ -44,7 +44,6 @@ interface QueueItem {
 
 @Injectable()
 export class PopoversService {
-
   // private close = new Subject<any>();
   private isOpened: boolean = false;
   public type: string = undefined;
@@ -60,7 +59,12 @@ export class PopoversService {
    * @param continuous should the modal complete after 1 input? true if so
    * @param subjectReference pass a subject if you want a specific observable to be changed
    */
-  public show(content: PopoverContent, continuous: boolean = false, opts?: PopoverOptions, subjectReference?: Subject<any>): Observable<DefaultPopoverResult | CustomListPopoverResult | QuantityPopoverResult | SupportPopoverResult> {
+  public show(
+    content: PopoverContent,
+    continuous: boolean = false,
+    opts?: PopoverOptions,
+    subjectReference?: Subject<any>
+  ): Observable<DefaultPopoverResult | CustomListPopoverResult | QuantityPopoverResult | SupportPopoverResult> {
     if (this.isOpened) {
       const aux: Subject<any> = new Subject<any>();
       aux.next(content);
@@ -95,7 +99,6 @@ export class PopoversService {
     if (subjectReference == undefined) {
       return close.asObservable();
     }
-
   }
 
   private nextInQueue(): void {
@@ -127,8 +130,15 @@ export class PopoversService {
     }
   }
 
-  public setContent(title: string = Strings.GENERIC_MODAL_TITLE, message: string | HTMLElement, positiveButtonText: string = Strings.MODAL_BUTTON_OK,
-    dismissButtonText?: string, negativeButtonText?: string, type?: string, additionalData?: any): PopoverContent {
+  public setContent(
+    title: string = Strings.GENERIC_MODAL_TITLE,
+    message: string | HTMLElement,
+    positiveButtonText: string = Strings.MODAL_BUTTON_OK,
+    dismissButtonText?: string,
+    negativeButtonText?: string,
+    type?: string,
+    additionalData?: any
+  ): PopoverContent {
     return {
       type,
       title,

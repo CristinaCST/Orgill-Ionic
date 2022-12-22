@@ -1,10 +1,10 @@
 export interface Program {
-  PROGRAMNO: string;
-  NAME: string;
-  STARTDATE: string;
-  ENDDATE: string;
-  SHIPDATE: string;
-  MARKETONLY: string;
-  TERMS: string;
-  OBEONLY: string;
+  programno: string;
+  name: string;
+  startdate: string;
+  enddate: string;
+  shipdate: string;
+  marketonly: string;
+  terms: string;
+  obeonly: string;
 }

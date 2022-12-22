@@ -1,18 +1,29 @@
 export interface Product {
   program_number?: string;
   product: Product;
-  CatID: string;
-  SKU: string;
-  QTY_ROUND_OPTION: string;
-  MODEL: string;
-  NAME: string;
-  VENDOR_NAME: string;
-  SELLING_UNIT: string;
-  UPC_CODE: string;
-  SUGGESTED_RETAIL: string;
-  YOURCOST: string;
-  IMAGE: string; // TODO: This still needed?
-  SHELF_PACK: string;
-  VELOCITY_CODE: string;
-  TOTAL_REC_COUNT: string;
+  catID: string;
+  sku: string;
+  qtY_ROUND_OPTION: string;
+  model: string;
+  name: string;
+  vendoR_NAME: string;
+  sellinG_UNIT: string;
+  upC_CODE: string;
+  suggesteD_RETAIL: string;
+  yourcost: string;
+  image: string;
+  shelF_PACK: string;
+  velocitY_CODE: string;
+  totaL_REC_COUNT: string;
+}
+
+export interface OrderHistory {
+  monthname: string;
+  year: number;
+  quantity: number;
+}
+
+export interface InventoryOnHand {
+  division: string;
+  inventory: number;
 }

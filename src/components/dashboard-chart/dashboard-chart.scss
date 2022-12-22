@@ -1,0 +1,102 @@
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  margin: 15px auto;
+  border: 0.5px solid #c9c9c9;
+
+  .title {
+    padding: 0.5rem 0 0 0.5rem;
+    color: #727272;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .growth {
+    padding: 0.5rem 0.5rem 0 0;
+    float: right;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .positive-growth {
+    color: #00a000;
+  }
+
+  .negative-growth {
+    color: #9a040c;
+  }
+
+  .total-number {
+    padding-left: 0.5rem;
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+  .canvas-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: calc(100% + 9px);
+    height: 130px;
+  }
+
+  canvas {
+    position: absolute;
+    bottom: 0;
+    left: -9.5px;
+  }
+
+  #tooltips {
+    position: absolute;
+    z-index: 3;
+    display: none;
+    margin-left: 10px;
+    padding: 0.5rem;
+    width: fit-content;
+    text-align: left;
+    background: black;
+    border-radius: 2px;
+    color: #fff;
+
+    .tooltip-label {
+      font-size: 10px;
+      color: #fff;
+    }
+
+    .color-square {
+      display: inline-block;
+      width: 13px;
+      height: 10px;
+      margin-right: 0.25rem;
+      border-radius: 2px;
+    }
+
+    .orgill-color {
+      background-color: #9a0000;
+    }
+
+    .grey-color {
+      background-color: #727272;
+    }
+
+    .value {
+      font-size: 12px;
+      font-weight: bold;
+    }
+  }
+
+  .loader-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    .loader {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}

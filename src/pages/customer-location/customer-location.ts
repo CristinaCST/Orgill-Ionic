@@ -15,14 +15,11 @@ import { PONumberValidator } from '../../validators/PONumber';
 import { HotDealItem } from '../../interfaces/models/hot-deal-item';
 import { LoadingService } from '../../services/loading/loading';
 
-
 @Component({
   selector: 'page-customer-location',
   templateUrl: 'customer-location.html'
 })
 export class CustomerLocationPage implements OnInit {
-
-
   @ViewChildren('QTYinput') public QuantityInput: string;
 
   public readonly sendToOrgillMethod: number = Constants.SEND_TO_ORGILL_METHOD;
@@ -35,7 +32,6 @@ export class CustomerLocationPage implements OnInit {
   public postOffices: number[];
   public fullSelection: boolean = false;
 
-
   private shoppingListId: number;
   private shoppingListItems: ShoppingListItem[] = [];
   private orderTotal: number;
@@ -44,15 +40,17 @@ export class CustomerLocationPage implements OnInit {
   private hotDealItem: HotDealItem;
   private readonly loader: LoadingService;
 
-  constructor(private readonly navigatorService: NavigatorService,
-              private readonly navParams: NavParams,
-              private readonly userInfoProvider: UserInfoService,
-              private readonly popoversService: PopoversService,
-              private readonly pricingService: PricingService,
-              private readonly keyboard: Keyboard,
-              private readonly events: Events,
-              private readonly loadingService: LoadingService) {
-                this.loader = this.loadingService.createLoader();
+  constructor(
+    private readonly navigatorService: NavigatorService,
+    private readonly navParams: NavParams,
+    private readonly userInfoProvider: UserInfoService,
+    private readonly popoversService: PopoversService,
+    private readonly pricingService: PricingService,
+    private readonly keyboard: Keyboard,
+    private readonly events: Events,
+    private readonly loadingService: LoadingService
+  ) {
+    this.loader = this.loadingService.createLoader();
   }
 
   public ngOnInit(): void {
@@ -63,33 +61,39 @@ export class CustomerLocationPage implements OnInit {
     this.hotDealItem = getNavParam(this.navParams, 'hotDeal', 'object');
     this.isHotDeal = this.hotDealItem ? true : false;
 
-    this.userInfoProvider.getUserLocations().take(1).subscribe(locations => {
-      if (!locations) {
-        this.noLocation = true;
-        return;
-      }
+    this.userInfoProvider
+      .getUserLocations()
+      .take(1)
+      .subscribe((locations: any) => {
+        if (!locations.length) {
+          this.noLocation = true;
+          return;
+        }
 
-      this.userLocations = this.sortLocations(JSON.parse(locations.d));
-      if (this.userLocations.length > 0) {
-        this.selectedLocation = this.userLocations[0];
-      }
+        const userLocations: CustomerLocation[] = this.sortLocations(locations);
+        this.userLocations = userLocations;
 
-      const min_value: number = this.isHotDeal ? this.pricingService.validateQuantity(1, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM, true) : 1;
+        if (userLocations.length > 0) {
+          this.selectedLocation = userLocations[0];
+        }
 
-      this.userLocations.forEach(element => {
+        const min_value: number = this.isHotDeal
+          ? this.pricingService.validateQuantity(1, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM, true)
+          : 1;
 
-        const locElement: LocationElement = {
-          LOCATION: element,
-          POSTOFFICE: undefined,
-          QUANTITY: min_value,
-          WANTED: false
-        };
+        userLocations.forEach(element => {
+          const locElement: LocationElement = {
+            LOCATION: element,
+            POSTOFFICE: undefined,
+            QUANTITY: min_value,
+            WANTED: false
+          };
 
-        this.hotDealLocations.push(locElement);
+          this.hotDealLocations.push(locElement);
+        });
+
+        this.loader.hide();
       });
-
-      this.loader.hide();
-    });
   }
 
   public onFocus(): void {
@@ -100,7 +104,7 @@ export class CustomerLocationPage implements OnInit {
 
   public sortLocations(locations: CustomerLocation[]): CustomerLocation[] {
     return locations.sort((location1, location2): number => {
-      return location1.CUSTOMERNAME.toLowerCase().localeCompare(location2.CUSTOMERNAME.toLowerCase());
+      return location1.customername.toLowerCase().localeCompare(location2.customername.toLowerCase());
     });
   }
 
@@ -112,7 +116,10 @@ export class CustomerLocationPage implements OnInit {
     if (!this.noLocation) {
       this.redirectToOrderReview(this.checkoutMethod);
     } else {
-      const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.NO_CUSTOMER_LOCATION);
+      const content: PopoverContent = this.popoversService.setContent(
+        Strings.GENERIC_MODAL_TITLE,
+        Strings.NO_CUSTOMER_LOCATION
+      );
       this.popoversService.show(content);
     }
   }
@@ -127,8 +134,8 @@ export class CustomerLocationPage implements OnInit {
         shoppingListItems: this.shoppingListItems,
         orderTotal: this.orderTotal
       };
-      
-      if (!this.postOffice && this.selectedLocation.PO_REQUIRED === 'Y') {
+
+      if (!this.postOffice && this.selectedLocation.po_required === 'Y') {
         const content: PopoverContent = {
           type: Constants.POPOVER_INFO,
           title: Strings.GENERIC_MODAL_TITLE,
@@ -150,13 +157,11 @@ export class CustomerLocationPage implements OnInit {
 
       this.hotDealLocations.forEach(element => {
         if (element.WANTED) {
-
           if (element.QUANTITY == undefined || element.QUANTITY === 0) {
             validQty = false;
           }
 
-          if (element.LOCATION.PO_REQUIRED === 'Y' && !element.POSTOFFICE)
-          {
+          if (element.LOCATION.po_required === 'Y' && !element.POSTOFFICE) {
             validPO = false;
           }
           selectedLocations.push(element);
@@ -198,14 +203,16 @@ export class CustomerLocationPage implements OnInit {
         return;
       }
 
-
       this.hotDealItem.LOCATIONS = selectedLocations;
       this.setHotDealTotalPrice();
-      this.navigatorService.push(OrderReviewPage, { orderMethod, hotDealItem: this.hotDealItem, orderTotal: this.orderTotal });
-
+      this.navigatorService.push(OrderReviewPage, {
+        orderMethod,
+        hotDealItem: this.hotDealItem,
+        orderTotal: this.orderTotal
+      });
     }
   }
-  
+
   public setHotDealTotalPrice(): void {
     let qty: number = 0;
     this.hotDealItem.LOCATIONS.forEach(location => {
@@ -225,22 +232,25 @@ export class CustomerLocationPage implements OnInit {
   // }
 
   public add(location: LocationElement): void {
-    if (this.hotDealItem.ITEM.QTY_ROUND_OPTION === 'X') {
+    if (this.hotDealItem.ITEM.qtY_ROUND_OPTION === 'X') {
       this.setPackQuantity(location, 'ADD');
     } else {
       location.QUANTITY++;
     }
     this.handleQuantityChange(location);
-
   }
 
   public remove(location: LocationElement): void {
-    if (this.hotDealItem.ITEM.QTY_ROUND_OPTION === 'X') {
-      if (location.QUANTITY > Number(this.hotDealItem.ITEM.SHELF_PACK)) {
+    if (this.hotDealItem.ITEM.qtY_ROUND_OPTION === 'X') {
+      if (location.QUANTITY > Number(this.hotDealItem.ITEM.shelF_PACK)) {
         this.setPackQuantity(location, 'REMOVE');
       }
-    } else if (this.hotDealItem.ITEM.QTY_ROUND_OPTION === 'Y' && location.QUANTITY <= Number(this.hotDealItem.ITEM.SHELF_PACK) && location.QUANTITY >= Number(this.hotDealItem.ITEM.SHELF_PACK) * 0.7) {
-      location.QUANTITY = Math.floor(Number(this.hotDealItem.ITEM.SHELF_PACK) * 0.7);
+    } else if (
+      this.hotDealItem.ITEM.qtY_ROUND_OPTION === 'Y' &&
+      location.QUANTITY <= Number(this.hotDealItem.ITEM.shelF_PACK) &&
+      location.QUANTITY >= Number(this.hotDealItem.ITEM.shelF_PACK) * 0.7
+    ) {
+      location.QUANTITY = Math.floor(Number(this.hotDealItem.ITEM.shelF_PACK) * 0.7);
     } else {
       if (location.QUANTITY > 1) {
         location.QUANTITY--;
@@ -251,14 +261,14 @@ export class CustomerLocationPage implements OnInit {
 
   // TODO: Move all this quantity logic in a better service :/
   public setPackQuantity(location: LocationElement, actionType: string): void {
-    const selfPackQuantity: number = Number(this.hotDealItem.ITEM.SHELF_PACK);
+    const selfPackQuantity: number = Number(this.hotDealItem.ITEM.shelF_PACK);
     const newQuantity: number = this.validateQuantity(location.QUANTITY);
     switch (actionType) {
       case 'ADD':
-        location.QUANTITY = newQuantity + ((this.hotDealItem.ITEM.QTY_ROUND_OPTION === 'X') ? selfPackQuantity : 1);
+        location.QUANTITY = newQuantity + (this.hotDealItem.ITEM.qtY_ROUND_OPTION === 'X' ? selfPackQuantity : 1);
         break;
       case 'REMOVE':
-        location.QUANTITY = newQuantity - ((this.hotDealItem.ITEM.QTY_ROUND_OPTION === 'X') ? selfPackQuantity : 1);
+        location.QUANTITY = newQuantity - (this.hotDealItem.ITEM.qtY_ROUND_OPTION === 'X' ? selfPackQuantity : 1);
         break;
       default:
         location.QUANTITY = newQuantity;
@@ -272,7 +282,11 @@ export class CustomerLocationPage implements OnInit {
   }
 
   public handleQuantityChange(location: LocationElement): void {
-    location.QUANTITY = this.pricingService.validateQuantity(location.QUANTITY, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM);
+    location.QUANTITY = this.pricingService.validateQuantity(
+      location.QUANTITY,
+      this.hotDealItem.PROGRAM,
+      this.hotDealItem.ITEM
+    );
   }
 
   public PONumberValidation(location?: LocationElement): void {
@@ -295,15 +309,31 @@ export class CustomerLocationPage implements OnInit {
   }
 
   public fillQuantity(): void {
-    const additionalData: any = { minqty: this.hotDealItem.PROGRAM.MINQTY, maxqty: this.hotDealItem.PROGRAM.MAXQTY, shelfpack: this.hotDealItem.ITEM.QTY_ROUND_OPTION === 'X' ? this.hotDealItem.ITEM.SHELF_PACK : 1 };
+    const additionalData: any = {
+      minqty: this.hotDealItem.PROGRAM.min_qty,
+      maxqty: this.hotDealItem.PROGRAM.max_qty,
+      shelfpack: this.hotDealItem.ITEM.qtY_ROUND_OPTION === 'X' ? this.hotDealItem.ITEM.shelF_PACK : 1
+    };
 
-    const content: PopoverContent = this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.LOCATIONS_QUANTITY_MODAL_DESCRIPTION, Strings.MODAL_BUTTON_OK, Strings.MODAL_BUTTON_CANCEL, undefined, Constants.POPOVER_FILL_QUANTITY, additionalData);
+    const content: PopoverContent = this.popoversService.setContent(
+      Strings.GENERIC_MODAL_TITLE,
+      Strings.LOCATIONS_QUANTITY_MODAL_DESCRIPTION,
+      Strings.MODAL_BUTTON_OK,
+      Strings.MODAL_BUTTON_CANCEL,
+      undefined,
+      Constants.POPOVER_FILL_QUANTITY,
+      additionalData
+    );
     this.popoversService.show(content).subscribe((result: QuantityPopoverResult) => {
       if (result.optionSelected !== 'OK') {
         return;
       }
       this.hotDealLocations.forEach(location => {
-        location.QUANTITY = this.pricingService.validateQuantity(result.quantity, this.hotDealItem.PROGRAM, this.hotDealItem.ITEM);
+        location.QUANTITY = this.pricingService.validateQuantity(
+          result.quantity,
+          this.hotDealItem.PROGRAM,
+          this.hotDealItem.ITEM
+        );
       });
     });
   }
@@ -322,5 +352,4 @@ export class CustomerLocationPage implements OnInit {
       this.fullSelection = full;
     }
   }
-  
 }

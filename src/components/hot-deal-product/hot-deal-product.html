@@ -1,31 +1,31 @@
 <div class="product-title-container" [ngClass]="hotDealItem.isCheckedInShoppingList&&!isDisabled?'checked':''">
-  <p>{{hotDealItem.NAME}}</p>
-  <p>{{hotDealItem.VENDOR_NAME}}</p>
+  <p>{{hotDealItem.name}}</p>
+  <p>{{hotDealItem.vendoR_NAME}}</p>
 </div>
 
-<ion-item class='ion-item-border' [ngClass]="hotDealItem.isExpired?'expired':'active'">
-
+<ion-item class="ion-item-border" [ngClass]="hotDealItem.isExpired?'expired':'active'">
   <ion-label>
     <button ion-item no-lines detail-none>
       <div class="shopping-list-container">
         <div class="img-container">
-          <img *ngIf="!imageIsLoading" [src]="imageURL">
+          <img *ngIf="!imageIsLoading" [src]="imageURL" />
           <ion-spinner *ngIf="imageIsLoading===true"></ion-spinner>
         </div>
         <div class="info">
           <div>
             <span>{{"product_SKU" | translate}}:</span>
-            <span>{{hotDealItem.SKU}} {{hotDealItem.QTY_ROUND_OPTION}}</span>
+            <span>{{hotDealItem.sku}} {{hotDealItem.qtY_ROUND_OPTION}}</span>
           </div>
           <div>
             <span>{{"product_item_price" | translate}}:</span>
-            <span>{{"product_currency" | translate}}{{priceHotDealItem |
-              number:'1.2-2'}}/{{hotDealItem.SELLING_UNIT}}</span>
+            <span
+              >{{"product_currency" | translate}}{{priceHotDealItem |
+              number:'1.2-2'}}/{{hotDealItem.sellinG_UNIT}}</span
+            >
           </div>
           <div>
             <span>{{"product_total_price" | translate}}:</span>
-            <span>{{"product_currency" | translate}}{{ orderTotal |
-              number:'1.2-2'}}</span>
+            <span>{{"product_currency" | translate}}{{ orderTotal | number:'1.2-2'}}</span>
           </div>
         </div>
       </div>

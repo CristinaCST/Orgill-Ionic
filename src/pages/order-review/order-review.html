@@ -5,7 +5,8 @@
   </navbar>
   <!-- Order Review SubHeader -->
   <ion-toolbar id="order-review-sub-header" padding-left padding-right *ngIf="orderMethod">
-    <ion-title> {{orderMethod===sendToOrgillMethod?("order_review_orgill_message"| translate):(
+    <ion-title>
+      {{orderMethod===sendToOrgillMethod?("order_review_orgill_message"| translate):(
       "order_review_checkout_message"|translate)}}
     </ion-title>
   </ion-toolbar>
@@ -19,12 +20,12 @@
         <div class="info">
           <div class="left-info">
             <div>
-              <span>{{"customer_locations_po" | translate}}:</span><br>
+              <span>{{"customer_locations_po" | translate}}:</span><br />
               <span class="po-number">{{postOffice?postOffice: 'N/A'}}</span>
             </div>
             <div>
-              <span>{{"order_review_location" | translate}}:</span><br>
-              <span>{{location.SHIPTONO}}</span>
+              <span>{{"order_review_location" | translate}}:</span><br />
+              <span>{{location.shiptono}}</span>
             </div>
           </div>
           <div class="right-info">
@@ -36,47 +37,47 @@
         </div>
       </ion-item>
 
-      <ion-item-divider class="ship-header" no-lines>{{"order_review_ship_to" | translate}}:
-      </ion-item-divider>
+      <ion-item-divider class="ship-header" no-lines>{{"order_review_ship_to" | translate}}: </ion-item-divider>
       <ion-item class="ship-container">
-        <p> {{location.CUSTOMERNAME}} </p>
-        <p> {{location.ADDRESS}} </p>
+        <p>{{location.customername}}</p>
+        <p>{{location.address}}</p>
       </ion-item>
     </div>
 
-    <shopping-list-product *ngFor="let shoppingListItem of shoppingListItems" [isDisabled]="true"
-      [shoppingListItem]="shoppingListItem">
+    <shopping-list-product
+      *ngFor="let shoppingListItem of shoppingListItems"
+      [isDisabled]="true"
+      [shoppingListItem]="shoppingListItem"
+    >
     </shopping-list-product>
   </ion-item-group>
 </ion-content>
 
-
 <!-- Order review main content when it's hot deal-->
 <ion-content *ngIf="isHotDeal">
-
-  <hot-deal-product [hotDealItem]="hotDealItem.ITEM" [priceHotDealItem]="hotDealItem.PROGRAM.PRICE" [orderTotal]="orderTotal">
+  <hot-deal-product
+    [hotDealItem]="hotDealItem.ITEM"
+    [priceHotDealItem]="hotDealItem.PROGRAM.price"
+    [orderTotal]="orderTotal"
+  >
   </hot-deal-product>
 
   <ion-item-group>
     <div *ngIf="location" class="location-container">
-
       <ion-item-divider no-lines class="location-headers">
         <p>{{"customer_locations" | translate}}:</p>
         <p>{{"order_review_total" | translate}}:</p>
       </ion-item-divider>
 
-
-      <ion-item-divider class="ship-header" no-lines>{{"order_review_ship_to" | translate}}:
-      </ion-item-divider>
+      <ion-item-divider class="ship-header" no-lines>{{"order_review_ship_to" | translate}}: </ion-item-divider>
     </div>
 
     <ion-item *ngFor="let hotLocation of hotLocations" class="info-container">
-
       <ion-item class="ship-container">
-        <p> {{hotLocation.LOCATION.CUSTOMERNAME}} </p>
-        <p> {{hotLocation.LOCATION.ADDRESS}} </p>
-        <p> PO#: {{hotLocation.POSTOFFICE}} </p>
-        <p> QUANTITY: {{hotLocation.QUANTITY}} </p>
+        <p>{{hotLocation.LOCATION.customername}}</p>
+        <p>{{hotLocation.LOCATION.address}}</p>
+        <p>PO#: {{hotLocation.POSTOFFICE}}</p>
+        <p>QUANTITY: {{hotLocation.QUANTITY}}</p>
       </ion-item>
     </ion-item>
   </ion-item-group>
@@ -86,10 +87,8 @@
 <ion-footer padding>
   <p>{{"four_percent_note" | translate}}</p>
   <div>
-    <button ion-button outline block color="OrgillDarkGray" (click)="cancel()">
-      {{"cancel" | translate}}
-    </button>
-    <button ion-button *ngIf="!isHotDeal"  block color="OrgillRed" (click)="purchase()">
+    <button ion-button outline block color="OrgillDarkGray" (click)="cancel()">{{"cancel" | translate}}</button>
+    <button ion-button *ngIf="!isHotDeal" block color="OrgillRed" (click)="purchase()">
       {{forwardButtonText | translate}}
     </button>
     <button ion-button *ngIf="isHotDeal" block color="OrgillRed" (click)="purchaseHotDeal()">

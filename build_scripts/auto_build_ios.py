@@ -9,6 +9,7 @@ os.system("echo Building iOS '" + app_name + "' with version=" + version + " ver
 os.system("echo \************************************************")
 
 os.system("cordova platform rm ios")
+os.system("cordova platform add ios@5.1.1")
 os.system("ionic cordova run ios --release -- --prod")
 os.chdir("./platforms/ios")
 os.system("sudo gem install cocoapods")

@@ -1,0 +1,22 @@
+<vendor-header pageTitle="dropship_page_select_specials_title"></vendor-header>
+
+<ion-content class="dropship-select-specials-content">
+  <h3 class="dropship-header">
+    {{"dropship_select_specials_header" | translate}}
+  </h3>
+
+  <div class="dropship-special dropship" (click)="goToSpecialsPage(DROPSHIP)">
+    <img src="../../assets/vector/Dropship.svg" />
+    <h3>{{"dropship_select_specials_dropship" | translate}}</h3>
+  </div>
+
+  <div class="dropship-special pallet" (click)="goToSpecialsPage(PALLET)">
+    <img src="../../assets/vector/Pallet.svg" />
+    <h3>{{"dropship_select_specials_pallet" | translate}}</h3>
+  </div>
+
+  <div class="dropship-special planogram" (click)="goToSpecialsPage(POG)">
+    <img src="../../assets/vector/Planogram.svg" />
+    <h3>{{"dropship_select_specials_pog" | translate}}</h3>
+  </div>
+</ion-content>

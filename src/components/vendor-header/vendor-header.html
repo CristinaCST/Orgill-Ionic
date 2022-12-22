@@ -1,0 +1,21 @@
+<ion-header class="vendor-nav-header">
+  <ion-navbar>
+    <button *ngIf="hasMenuBtn" ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <ion-title>{{pageTitle | translate | uppercase}}</ion-title>
+
+    <ion-buttons end *ngIf="hasScanBtn">
+      <button ion-button icon-only (click)="handleScan()">
+        <ion-icon name="barcode"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+  <search-bar
+    *ngIf="hasSearchBar"
+    [showBackButton]="false"
+    (searched)="handleSearch($event)"
+  ></search-bar>
+</ion-header>

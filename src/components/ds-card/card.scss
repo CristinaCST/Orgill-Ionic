@@ -1,0 +1,74 @@
+@import '../../theme/variables';
+
+.dropship-card {
+  position: relative;
+  display: flex;
+  margin: 20px 0;
+  padding: 10px 0;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 5px;
+  border: 1px solid #e6e6e6;
+
+  .bulina {
+    position: absolute;
+    left: 0;
+    width: 5px;
+    height: 90%;
+    background: color($colors, OrgillLightRed);
+    border-radius: 10px 0px 0px 10px;
+    transform: matrix(-1, 0, 0, 1, 0, 0);
+  }
+
+  .card-details {
+    width: calc(100% - 50px);
+    padding: 0 0 0 15px;
+    font-size: 18px;
+    font-weight: 500;
+
+    .card-name {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .currency {
+      color: color($colors, OrgillLightRed);
+    }
+
+    .custom-wrapper {
+      margin: 15px 0 0;
+      font-size: 15px;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    span {
+      color: #999;
+    }
+  }
+
+  .card-vector {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    width: 50px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+    border-radius: 0px 4px 4px 0px;
+    background: linear-gradient(90deg, #ffffff 0%, #e6e6e6 100%);
+
+    .delete-order-btn {
+      margin: 0;
+      color: #fff;
+      font-size: 10px;
+      border-radius: 5px;
+      background: color($colors, OrgillLightRed);
+    }
+  }
+}

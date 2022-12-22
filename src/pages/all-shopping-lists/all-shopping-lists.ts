@@ -31,19 +31,17 @@ export class AllShoppingLists implements OnInit {
 
   public getShoppingLists(): void {
     this.loader.show();
-    this.shoppingListsProvider.getAllShoppingLists().subscribe((data: APIResponse) => {
-      const shoppingLists: ShoppingListResponse[] = JSON.parse(data.d);
-      this.mainList = shoppingLists.map(
-        (shoppingList: ShoppingListResponse): ShoppingList => {
-          const temp: ShoppingList = {
-            ListID: shoppingList.shopping_list_id,
-            ListDescription: shoppingList.list_description,
-            ListName: shoppingList.list_name,
-            ListType: shoppingList.list_type
-          };
-          return temp;
-        }
-      );
+    this.shoppingListsProvider.getAllShoppingLists().subscribe((data: any) => {
+      const shoppingLists: ShoppingListResponse[] = data;
+      this.mainList = shoppingLists.map((shoppingList: ShoppingListResponse): ShoppingList => {
+        const temp: ShoppingList = {
+          ListID: shoppingList.shopping_list_id,
+          ListDescription: shoppingList.list_description,
+          ListName: shoppingList.list_name,
+          ListType: shoppingList.list_type
+        };
+        return temp;
+      });
       this.loader.hide();
     });
   }

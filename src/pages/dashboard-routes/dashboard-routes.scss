@@ -1,0 +1,133 @@
+.dashboard.routes {
+  .title {
+    margin: 0px 0 20px;
+    font-size: 18px;
+  }
+
+  .routes-select-wrapper {
+    display: flex;
+
+    dashboard-select {
+      width: 100%;
+      margin: 0 5px;
+    }
+  }
+
+  .map-wrapper {
+    position: relative;
+    display: flex;
+    height: 500px;
+    margin: 20px auto;
+    overflow: hidden;
+    border-radius: 11px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+
+    .map-container {
+      width: 100%;
+      height: inherit;
+    }
+
+    .map-details-wrapper {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 9;
+      margin: 10px;
+      padding: 10px;
+      overflow: hidden;
+      background: #fff;
+      border-radius: 11px;
+
+      .details-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        span {
+          margin: 0 20px 0 0;
+          font-size: 15px;
+          font-weight: bold;
+
+          &.header-action {
+            margin: 0;
+            color: #9a040c;
+          }
+        }
+      }
+
+      .details-overview {
+        display: flex;
+        margin: 10px 0;
+
+        .details-wrapper {
+          width: 100%;
+
+          .details-label {
+            margin: 0 0 5px;
+            color: #727272;
+            font-size: 13px;
+          }
+
+          .details-value {
+            font-size: 16px;
+            font-weight: bold;
+          }
+        }
+      }
+
+      .details-btn {
+        width: 100%;
+        margin: 10px 0 0;
+        padding: 10px;
+        color: #fff;
+        font-size: 12px;
+        background: #9a040c;
+      }
+
+      .details-table {
+        height: 100%;
+        margin: 10px 0;
+        padding: 0 0 30px;
+        display: flex;
+        font-size: 12px;
+        overflow: auto;
+        flex-direction: column;
+
+        .table-header {
+          display: flex;
+          margin: 0 0 10px;
+          color: #727272;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .table-row {
+          display: flex;
+          padding: 10px 0;
+          border-top: 1px dashed #707070;
+          border-bottom: 1px dashed #707070;
+
+          span {
+            width: 100%;
+
+            &:last-child {
+              width: 10%;
+              margin: 0 0 0 30px;
+            }
+          }
+        }
+      }
+
+      &.show-details-table {
+        top: 0;
+      }
+    }
+
+    .no-visibility {
+      visibility: hidden;
+    }
+  }
+}

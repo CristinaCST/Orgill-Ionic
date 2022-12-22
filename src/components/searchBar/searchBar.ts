@@ -16,7 +16,6 @@ export class SearchBarComponent {
   public searchString: string;
   public onInitSearchStringCopy: string;
 
-  // TODO: Remove this contraption from the face of the digital world forever in the refactor.
   constructor(
     private readonly popoversService: PopoversService,
     private readonly navigatorService: NavigatorService,

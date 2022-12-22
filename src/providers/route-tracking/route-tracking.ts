@@ -4,7 +4,8 @@ import { ApiService } from '../../services/api/api';
 import {
   GET_STORE_ROUTE_AND_STOPS,
   GET_CUSTOMER_LOCATIONS,
-  TEST_GET_TODAY_CUSTOMERS
+  TEST_GET_TODAY_CUSTOMERS,
+  ADMIN_GET_CUSTOMER_LOCATIONS
 } from '../../util/constants-url';
 
 /*
@@ -22,18 +23,18 @@ export class RouteTrackingProvider {
   }
 
   public getStoreRouteAndStops(ship_to_no: string): Observable<any> {
-    return this.apiProvider.get(GET_STORE_ROUTE_AND_STOPS, '', {
+    return this.apiProvider.get(GET_STORE_ROUTE_AND_STOPS, {
       ship_to_no
     });
   }
 
   public testGetTodayCustomers(numberOfShipments: number = 1): Observable<any> {
-    return this.apiProvider.get(TEST_GET_TODAY_CUSTOMERS, '', {
+    return this.apiProvider.get(TEST_GET_TODAY_CUSTOMERS, {
       size: numberOfShipments
     });
   }
 
   public adminGetCustomerLocations(customerNo: string): Observable<any> {
-    return this.apiProvider.post(GET_CUSTOMER_LOCATIONS, { customerNo }, true, true);
+    return this.apiProvider.post(ADMIN_GET_CUSTOMER_LOCATIONS, { customerNo }, true, true);
   }
 }

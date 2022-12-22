@@ -1,0 +1,84 @@
+<div class="dashboard-stops-select">
+  <button class="select-btn" (click)="toggleSelectActive()">
+    <img class="select-vector" [src]="btnImg" />
+    <span>{{btnText}}</span>
+  </button>
+
+  <div class="select-wrapper" [ngClass]="{'active': isActive}">
+    <div class="select-options" [hidden]="!isActive">
+      <div *ngIf="!isFilter; else filterTemplate">
+        <div
+          class="select-option"
+          *ngFor="let option of options; let i = index"
+          [ngClass]="{'selected': i === currentSelectedOption}"
+          (click)="handleSelect(i)"
+        >
+          <ion-icon *ngIf="i === currentSelectedOption" name="checkmark"></ion-icon>
+          <span>{{option}}</span>
+        </div>
+      </div>
+
+      <ng-template #filterTemplate>
+        <div class="select-option filter" *ngFor="let option of options; let i = index">
+          <div *ngIf="option.type === 'checkbox'">
+            <ion-item>
+              <ion-label>{{ option.label }}</ion-label>
+              <ion-checkbox [checked]="option.key === 'keyedin' ? keyedin : visited" disabled="true"></ion-checkbox>
+            </ion-item>
+
+            <div class="multiple-options-wrapper">
+              <ion-item *ngFor="let value of option.values">
+                <ion-label>{{ value }}</ion-label>
+                <ion-checkbox
+                  [checked]="option.key === 'keyedin' ? (value === 'True' ? keyedinTrueSelected : keyedinFalseSelected) : value === 'True' ? visitedTrueSelected : visitedFalseSelected"
+                  (click)="handleCheckbox(option.key, value)"
+                ></ion-checkbox>
+              </ion-item>
+            </div>
+          </div>
+
+          <div *ngIf="option.type === 'daterange'" style="width: 100%">
+            <ion-item>
+              <ion-label>{{ option.label }}</ion-label>
+              <ion-checkbox
+                [checked]="option.key === 'invoicedate' ? invoicedate : orderdate"
+                disabled="true"
+              ></ion-checkbox>
+            </ion-item>
+
+            <div class="daterange-wrapper">
+              <ion-datetime
+                displayFormat="MM/DD/YYYY"
+                placeholder="Start"
+                (ionChange)="handleDate($event, option.key, true)"
+              ></ion-datetime>
+
+              <ion-datetime
+                displayFormat="MM/DD/YYYY"
+                placeholder="End"
+                (ionChange)="handleDate($event, option.key)"
+              ></ion-datetime>
+            </div>
+          </div>
+
+          <div *ngIf="option.type === 'input'" style="width: 100%">
+            <ion-item>
+              <ion-label>{{ option.label }}</ion-label>
+              <ion-checkbox [checked]="route" disabled="true"></ion-checkbox>
+            </ion-item>
+
+            <div class="route-input-wrapper">
+              <input
+                clearInput
+                placeholder="Search by route"
+                (change)="handleRouteInput($event.target.value)"
+                (focusout)="handleRouteInput($event.target.value)"
+                (keydown.enter)="$event.target.blur()"
+              />
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

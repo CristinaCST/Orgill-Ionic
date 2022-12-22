@@ -1,0 +1,105 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>DELIVERY</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="dashboard deliveries">
+  <h3 class="title">Search an ID to find its deliverables</h3>
+
+  <div class="search-wrapper">
+    <div class="search-input">
+      <ion-item>
+        <ion-spinner item-start [hidden]="!isLoading"></ion-spinner>
+        <ion-icon name="search" item-start [hidden]="isLoading"></ion-icon>
+        <ion-input
+          clearInput
+          min="6"
+          maxlength="6"
+          type="tel"
+          inputmode="numeric"
+          pattern="^[0-9]"
+          (focusout)="handleShipNoChange($event.target.value)"
+          (keydown.enter)="$event.target.blur()"
+          placeholder="Enter ship number."
+        ></ion-input>
+      </ion-item>
+    </div>
+
+    <button class="search-btn">
+      <ion-icon name="search"></ion-icon>
+    </button>
+  </div>
+
+  <div class="customer-location-wrapper" [hidden]="!hasInfo">
+    <div class="map-wrapper" [hidden]="!showMap">
+      <div class="details-wrapper map-details">
+        <div class="details-block">
+          <h4 class="details-info">
+            Truck in Route:
+            <span>{{truckNumber}}</span>
+          </h4>
+        </div>
+
+        <div class="details-block-wrapper">
+          <div style="flex: 1">
+            <div class="details-block">
+              <span class="details-label">ETA</span>
+              <h4 class="details-info">{{eta}}</h4>
+            </div>
+
+            <div class="details-block" [hidden]="!showDetails">
+              <span class="details-label">Customer name</span>
+              <h4 class="details-info">{{customerName}}</h4>
+            </div>
+
+            <div class="details-block" [hidden]="!showDetails">
+              <span class="details-label">Ship to no</span>
+              <h4 class="details-info">{{shipNo}}</h4>
+            </div>
+          </div>
+
+          <div>
+            <div class="details-block">
+              <span class="details-label">Distance</span>
+              <h4 class="details-info">{{distance}}</h4>
+            </div>
+
+            <div class="details-block" [hidden]="!showDetails">
+              <span class="details-label">Invoices</span>
+              <h4 class="details-info" *ngFor="let invoice of invoices">{{invoice}}</h4>
+            </div>
+          </div>
+        </div>
+
+        <div class="details-block btn-wrap">
+          <button class="details-btn" (click)="toggleDetails()">View {{showDetails ? 'less': 'more'}} info</button>
+          <button class="details-btn inversed" (click)="toggleMap(false)">Close map</button>
+        </div>
+      </div>
+
+      <div class="map-container" #MapContainer></div>
+    </div>
+
+    <div class="details-wrapper customer-location-details">
+      <div class="details-block">
+        <span class="details-label">Customer name</span>
+        <h4 class="details-info">{{customerName}}</h4>
+      </div>
+
+      <div class="details-block btn-wrap">
+        <div>
+          <span class="details-label">Ship to no</span>
+          <h4 class="details-info">{{shipNo}}</h4>
+        </div>
+
+        <button class="details-btn" (click)="toggleMap(true)">View map details</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="error-wrapper" [hidden]="!errorMsg">
+    <img class="error-img" src="../../assets/imgs/no-deliveries.png" />
+    <h2 class="error-msg">{{errorMsg}}</h2>
+  </div>
+</ion-content>

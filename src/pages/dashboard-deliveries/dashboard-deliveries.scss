@@ -1,0 +1,153 @@
+.dashboard.deliveries {
+  .title {
+    margin: 0px 0 20px;
+    font-size: 18px;
+  }
+
+  .search-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+
+    .search-input {
+      width: calc(100% - 60px);
+      background: #fff;
+      border: 1px solid #9a040c;
+
+      .item {
+        padding: 0 0 0 8px;
+      }
+
+      .item-inner {
+        min-height: initial;
+        margin: 0 0 0 5px;
+        border: none;
+      }
+
+      .icon {
+        min-height: initial;
+        margin: 0;
+        color: #c9c9c9;
+        font-size: 18px;
+      }
+
+      .text-input {
+        margin: 0;
+        padding: 0;
+      }
+    }
+
+    .search-btn {
+      display: flex;
+      padding: 0 15px;
+      color: #fff;
+      align-items: center;
+      font-size: 24px;
+      background: #9a040c;
+
+      &.search {
+        padding: 0 9px;
+        font-size: 20px;
+      }
+
+      span {
+        margin: 0 0 0 5px;
+      }
+    }
+  }
+
+  .customer-location-wrapper {
+    margin: 20px 0 0;
+
+    .map-wrapper {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      margin: 15px;
+      border-radius: 11px;
+      overflow: hidden;
+
+      .map-details {
+        position: absolute;
+        right: 15px;
+        bottom: 15px;
+        left: 15px;
+        background: #fff;
+        border-radius: 11px;
+      }
+
+      .map-container {
+        height: 100%;
+      }
+    }
+
+    .details-wrapper {
+      padding: 0 15px;
+      border: 1px solid #c9c9c9;
+      border-radius: 11px;
+
+      &.map-details {
+        z-index: 9;
+      }
+
+      .details-block-wrapper {
+        display: flex;
+      }
+
+      .details-block {
+        margin: 15px 0;
+
+        .details-label {
+          color: #727272;
+          font-size: 12px;
+        }
+
+        .details-info {
+          margin: 0;
+          color: #000;
+          font-size: 15px;
+          font-weight: bold;
+        }
+      }
+
+      .btn-wrap {
+        display: flex;
+        justify-content: space-between;
+
+        .details-btn {
+          padding: 10px 15px;
+          color: #fff;
+          font-size: 12px;
+          background: #9a040c;
+
+          &.inversed {
+            color: #9a040c;
+            background: #fff;
+            border: 1px solid #9a040c;
+          }
+        }
+      }
+    }
+  }
+
+  .error-wrapper {
+    display: flex;
+    margin: 20px auto;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+
+    .error-msg {
+      color: #000;
+      font-size: 22px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .error-img {
+      max-width: 70%;
+    }
+  }
+}

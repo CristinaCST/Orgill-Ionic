@@ -6,20 +6,27 @@
 -->
 <ion-header>
   <ion-navbar>
-    <ion-title>Track order</ion-title>
+    <ion-title>{{"track_order_page_title" | translate}}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
   <div class="input-container" *ngIf="showCustomInput">
-    <input #customInput type="text" placeholder="customer number" />
-    <button (click)="customMethod()">See deliveries for</button>
+    <div class="input-wrapper">
+      <ion-icon name="search"></ion-icon>
+      <input #customInput type="text" placeholder="Enter customer ID to find his deliverables" />
+    </div>
+    <button
+      class="disable-hover button button-md button-default button-default-md button-md-OrgillRed"
+      (click)="customMethod()"
+    >
+      Search
+    </button>
   </div>
 
   <div *ngIf="currentDeliveries.length; else noDeliveries">
     <div class="deliveries-header">
-      <img class="truck-image" src="../../assets/imgs/truck-mobile.png" />
-      <h4 class="deliveries-title">{{"track_order_select_location" | translate}}</h4>
+      <img class="truck-image" src="../../assets/imgs/Orgill-truck-locate.jpg" />
     </div>
 
     <div class="order-container" *ngFor="let order of currentDeliveries">
@@ -34,7 +41,10 @@
           <h4 class="order-title">{{order.customerLocation.shipToNo}}</h4>
         </div>
 
-        <button class="order-btn" (click)="toggleMap(order)">{{"track_order_map_details" | translate}}</button>
+        <p *ngIf="order.error" class="order-error">{{order.error}}</p>
+        <button *ngIf="!order.error" class="order-btn" (click)="toggleMap(order)">
+          {{"track_order_map_details" | translate}}
+        </button>
       </div>
     </div>
 
@@ -44,7 +54,10 @@
       <div #Map class="map"></div>
 
       <div class="map-details-container" *ngIf="mapDetails">
-        <h4 class="order-title">{{"track_order_truck_on_road" | translate}}: <span>{{mapDetails.truckId}}</span></h4>
+        <h4 class="order-title">
+          {{"track_order_truck_on_road" | translate}}:
+          <span>{{mapDetails.truckId}}</span>
+        </h4>
 
         <div class="travel-wrapper">
           <div class="eta-time">
@@ -79,7 +92,8 @@
 
         <div class="travel-btns">
           <button class="order-btn" (click)="[showMoreInfo = !showMoreInfo]">
-            {{"track_order_more_info" | translate}}
+            <span *ngIf="showMoreInfo">{{"track_order_less_info" | translate}}</span>
+            <span *ngIf="!showMoreInfo">{{"track_order_more_info" | translate}}</span>
           </button>
           <button class="order-btn empty" (click)="toggleMap()">{{"track_order_other_locations" | translate}}</button>
         </div>

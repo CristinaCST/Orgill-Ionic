@@ -1,0 +1,79 @@
+.dashboard.stops {
+  .stops-filters-wrapper {
+    position: relative;
+    display: flex;
+    margin: 25px 0;
+    align-items: center;
+    justify-content: space-between;
+
+    .stops-filters {
+      display: flex;
+      align-items: center;
+    }
+
+    .ship-no-input {
+      position: absolute;
+      top: 50%;
+      z-index: 99999;
+      width: calc(100% - 45px);
+      height: 100%;
+      background: #fff;
+      overflow: hidden;
+      border: 1px solid #9a040c;
+      transform: translateY(-50%);
+
+      .item {
+        padding: 0 0 0 8px;
+      }
+
+      .item-inner {
+        min-height: initial;
+        height: 35px;
+        margin: 0 0 0 5px;
+        border: none;
+      }
+
+      .icon {
+        margin: 0;
+        color: #c9c9c9;
+        font-size: 18px;
+      }
+
+      .text-input {
+        margin: 0;
+        padding: 0;
+      }
+    }
+
+    .stops-search {
+      padding: 5px 10px;
+      color: #fff;
+      font-size: 20px;
+      background: #9a040c;
+    }
+  }
+
+  .dashboard-stops-table {
+    padding: 10px;
+    border: 1px solid #c9c9c9;
+  }
+
+  .loader-wrapper {
+    text-align: center;
+  }
+
+  .table-controls-btns {
+    display: flex;
+    margin: 10px 0;
+    justify-content: space-between;
+
+    .table-btn {
+      padding: 0;
+      color: #000;
+      font-size: 12px;
+      background: none;
+      border: none;
+      border-bottom: 1px solid #000;
+    }
+  }
+}

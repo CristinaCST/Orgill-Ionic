@@ -5,16 +5,11 @@
 </ion-header>
 
 <ion-content>
-
-
   <order-item *ngFor="let purchase of purchases" [purchase]="purchase" (click)="openOrderDetails(purchase)">
   </order-item>
-  <p class="no-items" *ngIf="purchases.length === 0 && !isLoading">
-    {{"orders_history_no_purchase" | translate}}</p>
+  <p class="no-items" *ngIf="purchases.length === 0 && !isLoading">{{"orders_history_no_purchase" | translate}}</p>
 
   <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
-    <ion-infinite-scroll-content>
-    </ion-infinite-scroll-content>
+    <ion-infinite-scroll-content> </ion-infinite-scroll-content>
   </ion-infinite-scroll>
-
 </ion-content>

@@ -17,15 +17,14 @@ export class ShoppingListProductComponent implements AfterViewInit {
   public imageURL: string = '';
   public imageIsLoading: boolean = true;
 
-  constructor(private readonly pricingService: PricingService,
-              private readonly imageProvider: ProductImageProvider) {}
+  constructor(private readonly pricingService: PricingService, private readonly imageProvider: ProductImageProvider) {}
 
   public ngOnInit(): void {
     this.realPrice = this.realPrice ? this.realPrice : this.getRealPrice().toFixed(Constants.DECIMAL_NUMBER);
   }
 
   public updateCheckedItems(): void {
-    const data: { status: string, price: string, product: ShoppingListItem } = {
+    const data: { status: string; price: string; product: ShoppingListItem } = {
       status: this.shoppingListItem.isCheckedInShoppingList ? 'checkedItem' : 'uncheckedItem',
       price: this.realPrice,
       product: this.shoppingListItem
@@ -41,11 +40,15 @@ export class ShoppingListProductComponent implements AfterViewInit {
   }
 
   public getRealPrice(): number {
-    return this.pricingService.getShoppingListPrice(this.shoppingListItem.quantity, this.shoppingListItem.product, this.shoppingListItem.item_price);
+    return this.pricingService.getShoppingListPrice(
+      this.shoppingListItem.quantity,
+      this.shoppingListItem.product,
+      this.shoppingListItem.item_price
+    );
   }
 
   public ngAfterViewInit(): void {
-    this.imageProvider.getImageURL(this.shoppingListItem.product.SKU).then(data => {
+    this.imageProvider.getImageURL(this.shoppingListItem.product.sku).then(data => {
       this.imageURL = data;
       this.imageIsLoading = false;
     });

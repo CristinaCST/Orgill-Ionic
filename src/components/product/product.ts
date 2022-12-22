@@ -7,18 +7,16 @@ import { ProductImageProvider } from '../../providers/product-image/product-imag
   templateUrl: 'product.html'
 })
 export class ProductComponent implements AfterViewInit {
-
-  constructor(private readonly imageProvider: ProductImageProvider) { }
+  constructor(private readonly imageProvider: ProductImageProvider) {}
 
   @Input('product') public product: Product;
   public imageURL: string = '';
   public imageIsLoading: boolean = true;
 
   public ngAfterViewInit(): void {
-    this.imageProvider.getImageURL(this.product.SKU).then(data => {
+    this.imageProvider.getImageURL(this.product.sku).then(data => {
       this.imageURL = data;
       this.imageIsLoading = false;
     });
   }
-
 }

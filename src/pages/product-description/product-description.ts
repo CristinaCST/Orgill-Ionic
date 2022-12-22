@@ -18,12 +18,14 @@ export class ProductDescriptionPage implements OnInit, AfterViewInit {
   public imageIsLoading: boolean = true;
   public loader: LoadingService;
 
-  constructor(private readonly navParams: NavParams,
-              private readonly catalogProvider: CatalogsProvider,
-              public loadingService: LoadingService,
-              private readonly events: Events,
-              private readonly imageProvider: ProductImageProvider) {
-                this.loader = this.loadingService.createLoader();
+  constructor(
+    private readonly navParams: NavParams,
+    private readonly catalogProvider: CatalogsProvider,
+    public loadingService: LoadingService,
+    private readonly events: Events,
+    private readonly imageProvider: ProductImageProvider
+  ) {
+    this.loader = this.loadingService.createLoader();
   }
 
   public ngOnInit(): void {
@@ -39,24 +41,26 @@ export class ProductDescriptionPage implements OnInit, AfterViewInit {
     if (culprit === 'product description' || !culprit) {
       this.initDescription();
     }
-  }
+  };
 
   private initDescription(): void {
     this.product = getNavParam(this.navParams, 'product', 'object');
     this.loader.show();
-    this.catalogProvider.getProductDetails(this.product.SKU).subscribe(description => {
-      this.description = JSON.parse(description.d).description;
-      this.loader.hide();
-    }, err => {
-     // this.reloadService.paintDirty('product description');
-    });
+    this.catalogProvider.getProductDetails(this.product.sku).subscribe(
+      (description: any) => {
+        this.description = description.description;
+        this.loader.hide();
+      },
+      err => {
+        // this.reloadService.paintDirty('product description');
+      }
+    );
   }
 
   public ngAfterViewInit(): void {
-    this.imageProvider.getImageURL(this.product.SKU).then(data => {
+    this.imageProvider.getImageURL(this.product.sku).then(data => {
       this.imageURL = data;
       this.imageIsLoading = false;
     });
   }
-
 }

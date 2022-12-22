@@ -65,18 +65,15 @@ export class GoogleMapsProvider {
     this.drawMarkers(origin.location, destination, true);
 
     return Observable.create(observer => {
-      directionsService.route(
-        { origin: origin.location, destination, waypoints, travelMode },
-        (result, status) => {
-          if (status === 'OK') {
-            directionsRenderer.setDirections(result);
+      directionsService.route({ origin: origin.location, destination, waypoints, travelMode }, (result, status) => {
+        if (status === 'OK') {
+          directionsRenderer.setDirections(result);
 
-            observer.next(this.calculateTotalDistanceAndTime(result));
-          } else {
-            console.warn('Error: ' + status);
-          }
+          observer.next(this.calculateTotalDistanceAndTime(result));
+        } else {
+          console.warn('Error: ' + status);
         }
-      );
+      });
     });
   }
 
@@ -170,7 +167,15 @@ export class GoogleMapsProvider {
   /**
    * @param markerIndex - the index of the marker to be removed.
    */
-  public removeMapMarkers(markerIndex: number): void {
+  public removeMapMarkers(markerIndex: number, clearAll?: boolean): void {
+    if (clearAll) {
+      if (this.mapMarkers.length) {
+        this.mapMarkers.map((_, index) => this.removeMapMarkers(index));
+      }
+
+      return;
+    }
+
     this.mapMarkers.splice(markerIndex, 1)[0].setMap(undefined);
   }
 

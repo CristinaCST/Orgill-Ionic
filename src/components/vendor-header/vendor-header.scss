@@ -1,0 +1,27 @@
+.vendor-nav-header {
+  .toolbar {
+    position: relative;
+
+    .toolbar-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: calc(100vw - 110px);
+      transform: translate(-50%, -50%);
+
+      .title {
+        margin-left: 0;
+
+        .toolbar-title {
+          padding: 0;
+          font-size: 18px;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+
+  .toolbar-background {
+    background: color($colors, OrgillLightRed) !important;
+  }
+}

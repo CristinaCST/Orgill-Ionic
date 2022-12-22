@@ -172,14 +172,14 @@ export const SEARCH_RESULTS_PER_PAGE: number = 20;
 export const DEFAULT_LIST_ID: string = 'default_list_id';
 export const MARKET_ONLY_LIST_ID: string = 'market_only_list_id';
 
-export const CUSTOM_LIST_DEFAULT_TYPE: string = '0';
-export const DEFAULT_LIST_TYPE: string = '1';
-export const MARKET_ONLY_LIST_TYPE: string = '2';
-export const CUSTOM_LIST_MARKET_TYPE: string = '3';
+export const CUSTOM_LIST_DEFAULT_TYPE: number = 0;
+export const DEFAULT_LIST_TYPE: number = 1;
+export const MARKET_ONLY_LIST_TYPE: number = 2;
+export const CUSTOM_LIST_MARKET_TYPE: number = 3;
 
 // ONE SIGNAL SETUP /// PROD
-// export const ONE_SIGNAL_API_KEY: string = 'a11b3e10-bce2-41e9-a6d0-746042798d7e';
-// export const ONE_SIGNAL_ANDROID_PROJECT_TITLE: string = 'orgill-5a5ba';
+export const ONE_SIGNAL_API_KEY: string = 'a11b3e10-bce2-41e9-a6d0-746042798d7e';
+export const ONE_SIGNAL_ANDROID_PROJECT_TITLE: string = 'orgill-5a5ba';
 
 // ONE SIGNAL SETUP /// TEST
 // export const ONE_SIGNAL_API_KEY: string = 'be33b136-2960-435a-b22f-b12ade07e393';
@@ -222,3 +222,14 @@ export const EVENT_SCROLL_INTO_VIEW: string = 'scrollIntoView';
 
 // GMAPS API KEY
 export const GMAPS_API_KEY: string = 'AIzaSyA6sMWy-I9IiuHyI7EnkmsY-szFPFllKGE';
+
+// DROPSHIP
+export const DS_FORM_LIST_FORM_TYPE_DROPSHIP: string = 'dropship';
+export const DS_FORM_LIST_FORM_TYPE_PALLET: string = 'pallet';
+export const DS_FORM_LIST_FORM_TYPE_POG: string = 'pog';
+export const DS_FORM_LIST_TYPE_US: string = 'US';
+export const DS_FORM_LIST_TYPE_CA: string = 'CA';
+export const DS_FORM_LIST_TYPE_INT: string = 'INT';
+export const USER_TYPE_US: string[] = ['2', '3', '4', '5', '6', '7', '9'];
+export const USER_TYPE_CAD: string[] = ['8', '12'];
+export const USER_TYPE_INT: string = 'Y';

@@ -1,20 +1,18 @@
 <!-- Scanner Page Header -->
 <ion-header>
   <!-- Scanner Page Navigation Bar -->
-  <navbar title="{{'menu_search_scan' | translate}}" [isMenuEnabled]="true"
-          [isBackEnabled]="false"></navbar>
+  <navbar title="{{'menu_search_scan' | translate}}" [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
   <!-- Scanner Page Tabs-->
-  <ion-segment *ngIf="!shoppingList"  [(ngModel)]="searchTab">
-    <ion-segment-button value="scan_barcode_tab">
-      {{"scan_barcode_tab" | translate}}
-    </ion-segment-button>
-    <ion-segment-button value="search_code_tab">
-      {{"search_code_tab" | translate}}
-    </ion-segment-button>
+  <ion-segment *ngIf="!shoppingList" [(ngModel)]="searchTab">
+    <ion-segment-button value="scan_barcode_tab"> {{"scan_barcode_tab" | translate}} </ion-segment-button>
+    <ion-segment-button value="search_code_tab"> {{"search_code_tab" | translate}} </ion-segment-button>
   </ion-segment>
   <!-- Scanner Page Search Bar -->
-  <search-bar *ngIf="searchTab==='search_code_tab'" [showBackButton]="!navigatorService.isRootLevel"
-              (searched)="onSearched($event)"></search-bar>
+  <search-bar
+    *ngIf="searchTab==='search_code_tab'"
+    [showBackButton]="!navigatorService.isRootLevel"
+    (searched)="onSearched($event)"
+  ></search-bar>
 </ion-header>
 
 <!-- Scanner Page Content -->
@@ -23,7 +21,7 @@
   <!--<p *ngIf="productAlreadyInList && searchTab==='scan_barcode_tab'"> Product is already in list</p>-->
   <!--<p *ngIf="noProductFound">{{"no_products_found" | translate}}</p-->
   <!-- Scanner Page scan button -->
-  <button *ngIf="searchTab==='scan_barcode_tab'" ion-button color="OrgillRed" full round (click)="scannerService.scan(undefined, undefined)">
+  <button *ngIf="searchTab==='scan_barcode_tab'" ion-button color="OrgillRed" full round (click)="clickCb()">
     {{'start_scan' | translate}}
   </button>
   <ion-list *ngIf="products&& searchTab==='search_code_tab'">

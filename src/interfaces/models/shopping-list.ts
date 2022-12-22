@@ -1,6 +1,6 @@
 export interface ShoppingList {
-  ListID: string;
+  ListID: number;
   ListName: string;
   ListDescription: string;
-  ListType: string;
+  ListType: number;
 }

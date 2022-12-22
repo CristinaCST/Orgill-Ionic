@@ -1,11 +1,11 @@
 export interface ItemProgram {
-  SKU: string;
-  PROGRAM_NO: string;
-  PROGRAMNAME: string;
-  RELEASEDATE: string;
-  PRICE: string;
-  MINQTY: string;
-  MAXQTY: string;
+  sku: string;
+  program_no: string;
+  program_name: string;
+  release_date: string;
+  price: string;
+  min_qty: string;
+  max_qty: number;
   REGPRICE?: string;
   AVAILQTY?: string;
 }

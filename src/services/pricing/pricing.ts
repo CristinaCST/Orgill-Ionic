@@ -7,10 +7,7 @@ import * as Constants from '../../util/constants';
 
 @Injectable()
 export class PricingService {
-
-  constructor(private readonly popoversService: PopoversService) {
-
-  }
+  constructor(private readonly popoversService: PopoversService) {}
 
   /**
    * Shows a generic prompt with an OK button and custom message.
@@ -35,33 +32,38 @@ export class PricingService {
    * @param product - The product
    * @returns number - a validated quantity or the same if it's ok.
    */
-  public validateQuantity(suggestedValue: number | string, program: ItemProgram, product: Product, getDefaultMode: boolean = false): number {
-    const safeSuggestedValue: number = typeof suggestedValue === 'string' ? Number(suggestedValue.replace(/[^0-9]/g, '')) : suggestedValue;
-    let minQty: number = Math.max(1, Number(program.MINQTY));
-    const maxQty: number = Number(program.MAXQTY);
-    const shelfPack: number = Number(product.SHELF_PACK);
-    if (product.QTY_ROUND_OPTION === 'X' && shelfPack > 1 && minQty < shelfPack) {
-      minQty = shelfPack;
-    }
+  public validateQuantity(
+    suggestedValue: number | string,
+    program: ItemProgram,
+    product: Product,
+    getDefaultMode: boolean = false
+  ): number {
+    const safeSuggestedValue: number =
+      typeof suggestedValue === 'string' ? Number(suggestedValue.replace(/[^0-9]/g, '')) : suggestedValue;
+    // let minQty: number = Math.max(1, Number(program.MINQTY));
+    // const maxQty: number = Number(program.MAXQTY);
+    const shelfPack: number = Number(product.shelF_PACK);
 
-    if (maxQty > 0 && safeSuggestedValue > maxQty) {
+    // if (product.QTY_ROUND_OPTION === 'X' && shelfPack > 1 && minQty < shelfPack) {
+    //   minQty = shelfPack;
+    // }
 
-      if (!getDefaultMode) {
-        this.showPrompt(Strings.QUANTITY_ROUNDED_MAX);
-      }
+    // if (maxQty > 0 && safeSuggestedValue > maxQty) {
+    //   if (!getDefaultMode) {
+    //     this.showPrompt(Strings.QUANTITY_ROUNDED_MAX);
+    //   }
 
-      return Number(program.MAXQTY);
-    }
+    //   return Number(program.MAXQTY);
+    // }
 
-    if (safeSuggestedValue < minQty) {
-      if (!getDefaultMode) {
-        this.showPrompt(Strings.QUANTITY_ROUNDED_MIN);
-      }
-      return minQty;
-    }
+    // if (safeSuggestedValue < minQty) {
+    //   if (!getDefaultMode) {
+    //     this.showPrompt(Strings.QUANTITY_ROUNDED_MIN);
+    //   }
+    //   return minQty;
+    // }
 
-    if (product.QTY_ROUND_OPTION === 'X') {
-
+    if (product.qtY_ROUND_OPTION === 'X') {
       if (safeSuggestedValue > shelfPack) {
         if (safeSuggestedValue % shelfPack === 0) {
           return this.maxCheck(safeSuggestedValue, program);
@@ -70,25 +72,24 @@ export class PricingService {
           this.showPrompt(Strings.QUANTITY_X_WARNING);
         }
         return this.maxCheck(shelfPack * Math.ceil(safeSuggestedValue / shelfPack), program);
-
       }
       return shelfPack;
-
     }
-    if (product.QTY_ROUND_OPTION === 'Y') {
-      if (safeSuggestedValue < Number(product.SHELF_PACK) && safeSuggestedValue >= (Number(product.SHELF_PACK) * 0.7)) {
-        // this.showPrompt(Strings.QUANTITY_Y_UNDER_70_PERCENT)
-        return maxQty > 0 ? Math.min(maxQty, Number(product.SHELF_PACK)) : Number(product.SHELF_PACK);
+
+    if (product.qtY_ROUND_OPTION === 'Y') {
+      if (safeSuggestedValue < Number(product.shelF_PACK) && safeSuggestedValue >= Number(product.shelF_PACK) * 0.7) {
+        this.showPrompt(Strings.QUANTITY_Y_UNDER_70_PERCENT);
+        return Number(product.shelF_PACK); // maxQty > 0 ? Math.min(maxQty, Number(product.SHELF_PACK)) : Number(product.SHELF_PACK);
       }
       return this.maxCheck(safeSuggestedValue, program);
     }
     return this.maxCheck(safeSuggestedValue, program);
-
   }
 
   public maxCheck(value: number, program: ItemProgram): number {
-    const maxQty: number = Number(program.MAXQTY);
-    return Math.min(value, maxQty > 0 ? maxQty : Constants.MAX_QUANTITY_HARDCAP);
+    return value;
+    // const maxQty: number = Number(program.MAXQTY);
+    // return Math.min(value, maxQty > 0 ? maxQty : Constants.MAX_QUANTITY_HARDCAP);
   }
 
   /**
@@ -98,9 +99,9 @@ export class PricingService {
    * @param product - Product
    */
   public getPrice(quantity: number, product: Product, program: ItemProgram): number {
-    const shelfPack: number = Number(product.SHELF_PACK);
-    const price: number = Number(program.PRICE);
-    return this.getCorrectedPrice(shelfPack, quantity, price, product.QTY_ROUND_OPTION);
+    const shelfPack: number = Number(product.shelF_PACK);
+    const price: number = Number(program.price);
+    return this.getCorrectedPrice(shelfPack, quantity, price, product.qtY_ROUND_OPTION);
   }
 
   /**
@@ -111,8 +112,8 @@ export class PricingService {
    * @param price - Unitary price.
    */
   public getShoppingListPrice(quantity: number, product: Product, price: number): number {
-    const shelfPack: number = Number(product.SHELF_PACK);
-    return this.getCorrectedPrice(shelfPack, quantity, price, product.QTY_ROUND_OPTION);
+    const shelfPack: number = Number(product.shelF_PACK);
+    return this.getCorrectedPrice(shelfPack, quantity, price, product.qtY_ROUND_OPTION);
   }
 
   /**
@@ -123,6 +124,6 @@ export class PricingService {
    * @param roundOption - The rounding option
    */
   private getCorrectedPrice(shelfPack: number, quantity: number, price: number, roundOption: string = ''): number {
-    return (quantity < shelfPack && roundOption === 'Y') ? price * quantity + price * 0.04 * quantity : price * quantity;
+    return quantity < shelfPack && roundOption === 'Y' ? price * quantity + price * 0.04 * quantity : price * quantity;
   }
 }

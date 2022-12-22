@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { NavOptions } from 'ionic-angular';
 import { CatalogsProvider } from '../../providers/catalogs/catalogs';
@@ -14,15 +14,20 @@ import { PromotionsPage } from '../market-catalog/promotions-page';
 import { ShoppingListsProvider } from '../../providers/shopping-lists/shopping-lists';
 import { Catalog } from '../catalog/catalog';
 import { RouteTrackingPage } from '../../pages/route-tracking/route-tracking';
+import { Subject, Subscription } from 'rxjs';
+import { throttleTime } from 'rxjs/operators';
+import { Dashboard } from '../../pages/dashboard/dashboard';
 
 @Component({
   selector: 'page-landing',
   templateUrl: 'landing.html'
 })
-export class LandingPage {
+export class LandingPage implements OnInit, OnDestroy {
   private readonly simpleLoader: LoadingService;
   public pageTitle: string = this.translateProvider.translate(LANDING_PAGE_TITLE);
   public copyrightYear: number = new Date().getFullYear();
+  private readonly scanClicks: Subject<any> = new Subject();
+  private scanSubscription: Subscription;
 
   constructor(
     public navigatorService: NavigatorService,
@@ -33,6 +38,26 @@ export class LandingPage {
     public scannerService: ScannerService
   ) {
     this.simpleLoader = loadingService.createLoader();
+  }
+
+  public ngOnInit(): void {
+    this.scanSubscription = this.scanClicks.pipe(throttleTime(1000)).subscribe(() => {
+      this.scannerService.scan(undefined, undefined);
+
+      this.navigatorService
+        .push(ScannerPage, {
+          type: 'scan_barcode_tab'
+        })
+        .catch(err => console.error(err));
+    });
+  }
+
+  public ngOnDestroy(): void {
+    this.scanSubscription.unsubscribe();
+  }
+
+  public clickCb(): void {
+    this.scanClicks.next();
   }
 
   public goToPage(page: any): any {
@@ -54,6 +79,8 @@ export class LandingPage {
         return this.navigatorService.push(PromotionsPage).catch(err => console.error(err));
       case 'routeTracking':
         return this.navigatorService.push(RouteTrackingPage).catch(err => console.error(err));
+      case 'dashboard':
+        return this.navigatorService.push(Dashboard).catch(err => console.error(err));
 
       default:
         this.navigatorService.push(Catalog).catch(err => console.error(err));
@@ -62,25 +89,23 @@ export class LandingPage {
   }
 
   private filterBadRequest(data: Product[]): Product[] {
-    return data.length === 0 || data[0].CatID === 'Bad Request' ? [] : data;
+    return data.length === 0 || data[0].catID === 'Bad Request' ? [] : data;
   }
 
   public onSearched($event: any): void {
     this.simpleLoader.show();
     this.catalogProvider.search($event, '', '').subscribe(
-      data => {
+      (data: any) => {
         if (data) {
-          const dataFound: Product[] = this.filterBadRequest(JSON.parse(data.d));
+          const dataFound: Product[] = this.filterBadRequest(data);
           const params: any = {
             searchString: $event,
             searchData: dataFound,
             programNumber: '',
             programName: this.translateProvider.translate(REGULAR_CATALOG).toUpperCase(),
-            numberOfProductsFound: dataFound[0] ? dataFound[0].TOTAL_REC_COUNT : 0
+            numberOfProductsFound: dataFound[0] ? dataFound[0].totaL_REC_COUNT : 0
           };
-          this.navigatorService
-            .push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions)
-            .then();
+          this.navigatorService.push(ProductsSearchPage, params, { paramsEquality: false } as NavOptions).then();
           this.simpleLoader.hide();
         }
       },

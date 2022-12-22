@@ -1,15 +1,19 @@
 <ion-header>
-  <navbar [title]=pageTitle [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
+  <navbar [title]="pageTitle" [isMenuEnabled]="true" [isBackEnabled]="false"></navbar>
 </ion-header>
 
 <!-- All market catalog programs -->
 <ion-content>
   <ion-list>
     <ng-container>
-      <button ion-item class="item" *ngFor="let program of promotionsOnlyPrograms" (click)="showPromotionsPrograms(program)">
-        {{program.NAME}}
+      <button
+        ion-item
+        class="item"
+        *ngFor="let program of promotionsOnlyPrograms"
+        (click)="showPromotionsPrograms(program)"
+      >
+        {{program.name}}
       </button>
     </ng-container>
   </ion-list>
 </ion-content>
-

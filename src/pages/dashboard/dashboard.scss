@@ -1,0 +1,24 @@
+.dashboard {
+  .scroll-content {
+    padding: 20px 18px;
+  }
+}
+
+.dashboard-tabs-container {
+  .tabbar {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .tab-button {
+    min-width: 100px;
+    font-weight: bold;
+
+    &[aria-selected='true'] {
+      margin: 0 0 4px;
+      color: #9a040c;
+      background: #e8d0d0;
+      border-bottom: 2px solid #9a040c;
+    }
+  }
+}

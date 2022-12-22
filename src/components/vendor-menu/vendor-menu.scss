@@ -1,0 +1,10 @@
+@import '../app-menu/app-menu.scss';
+
+.content.vendor {
+  .item.item-block:not(:last-child) {
+    .label {
+      justify-content: space-between !important;
+      padding-right: 16px;
+    }
+  }
+}

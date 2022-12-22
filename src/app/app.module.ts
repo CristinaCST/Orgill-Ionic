@@ -30,6 +30,8 @@ import { PurchasesProvider } from '../providers/purchases/purchases';
 import { ProductImageProvider } from '../providers/product-image/product-image';
 import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { DropshipProvider } from '../providers/dropship/dropship';
+import { DashboardProvider } from '../providers/dashboard/dashboard';
 
 // Helpers
 import { CSSInjector } from '../helpers/css-injector';
@@ -48,6 +50,8 @@ import { PricingService } from '../services/pricing/pricing';
 import { SearchService } from '../services/search/search';
 import { ReloadService } from '../services/reload/reload';
 import { ErrorScheduler } from '../services/error-scheduler/error-scheduler';
+import { DropshipService } from '../services/dropship/dropship';
+import { CalendarService } from '../services/dashboard/calendar';
 
 // Pages
 import { MyApp } from './app.component';
@@ -74,6 +78,21 @@ import { LandingPage } from '../pages/landing/landing';
 import { AllShoppingLists } from '../pages/all-shopping-lists/all-shopping-lists';
 import { PromotionsPage } from '../pages/market-catalog/promotions-page';
 import { RouteTrackingPage } from '../pages/route-tracking/route-tracking';
+import { VendorLandingPage } from '../pages/vendor-landing/vendor-landing';
+import { SavedDraftsPage } from '../pages/ds-saved-drafts/saved-drafts';
+import { CustomerInfoPage } from '../pages/ds-customer-info/customer-info';
+import { SelectSpecialsPage } from '../pages/ds-select-specials/select-specials';
+import { SpecialsPage } from '../pages/ds-specials/specials';
+import { ShopItemsPage } from '../pages/ds-shop-items/shop-items';
+import { ItemDetailsPage } from '../pages/ds-item-details/item-details';
+import { CheckoutPage } from '../pages/ds-checkout/checkout';
+import { Dashboard } from '../pages/dashboard/dashboard';
+import { DashboardOverview } from '../pages/dashboard-overview/dashboard-overview';
+import { DashboardStops } from '../pages/dashboard-stops/dashboard-stops';
+import { DashboardTraffic } from '../pages/dashboard-traffic/dashboard-traffic';
+import { DashboardDeliveries } from '../pages/dashboard-deliveries/dashboard-deliveries';
+import { DashboardDrivers } from '../pages/dashboard-drivers/dashboard-drivers';
+import { DashboardRoutes } from '../pages/dashboard-routes/dashboard-routes';
 
 // Pipes
 import { PipesModule } from '../pipes/pipes.module';
@@ -100,7 +119,22 @@ const pages: Page[] = [
   AllShoppingLists,
   PromotionsPage,
   HotDealsPage,
-  RouteTrackingPage
+  RouteTrackingPage,
+  VendorLandingPage,
+  SavedDraftsPage,
+  CustomerInfoPage,
+  SelectSpecialsPage,
+  SpecialsPage,
+  ShopItemsPage,
+  ItemDetailsPage,
+  CheckoutPage,
+  Dashboard,
+  DashboardOverview,
+  DashboardStops,
+  DashboardTraffic,
+  DashboardDeliveries,
+  DashboardDrivers,
+  DashboardRoutes
 ];
 
 // Error Handlers
@@ -169,7 +203,11 @@ import { RouteTrackingProvider } from '../providers/route-tracking/route-trackin
     { provide: ErrorHandler, useClass: CustomErrorHandler },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     RouteTrackingProvider,
-    InAppBrowser
+    InAppBrowser,
+    DropshipProvider,
+    DropshipService,
+    DashboardProvider,
+    CalendarService
   ]
 })
 export class AppModule {}

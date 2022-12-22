@@ -1,26 +1,26 @@
 <div>
   <ion-item>
     <div class="info">
+      <span>{{"product_retail_price" | translate}}:</span>
+      <span>{{"product_currency" | translate}}{{retailPrice | number: '1.2-2'}}</span>
+    </div>
+    <div class="info">
       <span>{{"product_item_price" | translate }}:</span>
-      <span>{{"product_currency" | translate}}{{program.PRICE}}</span>
+      <span>{{"product_currency" | translate}}{{program.price | number: '1.2-2'}}</span>
     </div>
     <div *ngIf="hotDeal" class="info">
       <span>{{"regular_catalog_price" | translate}}:</span>
-      <span>{{"product_currency" | translate}}{{regularPrice}}</span>
+      <span>{{"product_currency" | translate}}{{regularPrice | number: '1.2-2'}}</span>
     </div>
-    <!-- <div class="info">
-      <span>{{"product_retail_price" | translate}}:</span>
-      <span>{{"product_currency" | translate}}{{product.SUGGESTED_RETAIL}}</span>
-    </div> -->
 
-    <div *ngIf="savings && this.program.PROGRAM_NO" class="info green">
+    <div *ngIf="savings && this.program.program_no" class="info green">
       <span>{{"savings_text" | translate}}:</span>
       <span>{{savings}}</span>
     </div>
 
-    <div *ngIf="hotDeal && program.MAXQTY > 0 " class="info red">
+    <div *ngIf="hotDeal && program.max_qty > 0 " class="info red">
       <span>{{"max_quantity_location_text" | translate}}:</span>
-      <span>{{program.MAXQTY}}</span>
+      <span>{{program.max_qty}}</span>
     </div>
   </ion-item>
 
@@ -56,5 +56,5 @@
     <span #totalLabel>{{"product_total_price" | translate}}:</span>
     <span>{{"product_currency" | translate}}{{total | number: '1.2-2'}}</span>
   </ion-item>
-  <p *ngIf="product.QTY_ROUND_OPTION === 'Y'" class="percent-Note">{{"four_percent_note" | translate}}</p>
+  <p *ngIf="product.qtY_ROUND_OPTION === 'Y'" class="percent-Note">{{"four_percent_note" | translate}}</p>
 </div>

@@ -10,7 +10,7 @@
 <ion-content class="main-container">
   <div class="main-wrapper">
     <div class="landing-big-button">
-      <ion-card href class="button-background" (click)="goToPage('scannerPage')">
+      <ion-card href class="button-background" (click)="clickCb()">
         <ion-card-content>
           <div class="card-title">{{"start_ordering" | translate}}</div>
           <img src="../../assets/imgs/landing_page_scan.svg" />
@@ -52,6 +52,12 @@
       <div class="card-tile">{{"track_order" | translate}}</div>
       <ion-icon class="right-arrow" name="arrow-forward"></ion-icon>
     </div>
+    <!--
+    <div class="order-track" (click)="goToPage('dashboard')">
+      <img src="../../assets/imgs/iconfinder_truck.svg" />
+      <div class="card-tile">Go To Dashboard</div>
+      <ion-icon class="right-arrow" name="arrow-forward"></ion-icon>
+    </div> -->
     <p>&copy; {{copyrightYear}} • Orgill</p>
   </div>
 </ion-content>

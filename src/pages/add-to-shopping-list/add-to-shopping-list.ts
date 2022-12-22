@@ -15,7 +15,6 @@ import { Subscription } from 'rxjs';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { ShoppingListResponse } from '../../interfaces/response-body/shopping-list';
-import { APIResponse } from '../../interfaces/response-body/response';
 import { getNavParam } from '../../helpers/validatedNavParams';
 import { NavbarCustomButton } from '../../interfaces/models/navbar-custom-button';
 
@@ -34,7 +33,7 @@ export class AddToShoppingListPage implements OnInit {
   public isMarketOnlyProduct: boolean = false;
   public subscription: Subscription;
   public menuCustomButtons: NavbarCustomButton[] = [];
-  private firstValidListID: string;
+  private firstValidListID: number;
   private loader: LoadingService;
   private lastValidList: ShoppingList;
 
@@ -84,37 +83,30 @@ export class AddToShoppingListPage implements OnInit {
 
   public initShoppingListInformation(): void {
     this.programProvider
-      .isMarketOnlyProgram(this.selectedProgram.PROGRAM_NO)
+      .isMarketOnlyProgram(this.selectedProgram.program_no)
       .toPromise()
       .then(isMarketOnly => {
         this.isMarketOnlyProduct = isMarketOnly;
         this.checkMarketOnlyProduct(isMarketOnly);
         return this.shoppingListsProvider.getAllShoppingLists().toPromise();
       })
-      .then(shoppingListsResponse => {
-        const shoppingLists: ShoppingListResponse[] = JSON.parse(shoppingListsResponse.d);
+      .then((shoppingListsResponse: any) => {
+        const shoppingLists: ShoppingListResponse[] = shoppingListsResponse;
         return this.setAllShoppingList(shoppingLists);
       })
       .then(() => {
         return this.shoppingListsProvider
-          .getShoppingListsForProduct(this.product.SKU, this.selectedProgram.PROGRAM_NO)
+          .getShoppingListsForProduct(this.product.sku, this.selectedProgram.program_no)
           .toPromise();
       })
-      .then(productShoppingListsResponse => {
-        const productShoppingLists: ShoppingListResponse[] = JSON.parse(productShoppingListsResponse.d);
+      .then((productShoppingListsResponse: any) => {
+        const productShoppingLists: ShoppingListResponse[] = productShoppingListsResponse;
         const virtualLists: ShoppingList[] = [...this.shoppingLists];
 
         for (let virtualListIndex: number = 0; virtualListIndex < virtualLists.length; virtualListIndex++) {
           let removed: boolean = false;
-          for (
-            let productListIndex: number = 0;
-            productListIndex < productShoppingLists.length;
-            productListIndex++
-          ) {
-            if (
-              virtualLists[virtualListIndex].ListID ===
-              productShoppingLists[productListIndex].shopping_list_id
-            ) {
+          for (let productListIndex: number = 0; productListIndex < productShoppingLists.length; productListIndex++) {
+            if (virtualLists[virtualListIndex].ListID === productShoppingLists[productListIndex].shopping_list_id) {
               virtualLists.splice(virtualListIndex, 1);
               virtualListIndex--;
               productShoppingLists.splice(productListIndex, 1);
@@ -139,9 +131,7 @@ export class AddToShoppingListPage implements OnInit {
           this.isAddBtnDisabled = true;
           const content: PopoverContent = this.popoversService.setContent(
             Strings.GENERIC_MODAL_TITLE,
-            this.isMarketOnlyProduct
-              ? Strings.NO_LISTS_FOR_MARKET_ONLY_PRODUCT
-              : Strings.NO_LISTS_FOR_REGULAR_PRODUCT
+            this.isMarketOnlyProduct ? Strings.NO_LISTS_FOR_MARKET_ONLY_PRODUCT : Strings.NO_LISTS_FOR_REGULAR_PRODUCT
           );
           this.popoversService.show(content);
         }
@@ -167,7 +157,7 @@ export class AddToShoppingListPage implements OnInit {
           ListDescription: sList.list_description,
           ListType: sList.list_type
         };
-        if (list.ListType === '1' || list.ListType === '2') {
+        if (list.ListType === 1 || list.ListType === 2) {
           specialLists.push(list);
         } else {
           this.shoppingLists.push(list);
@@ -184,7 +174,6 @@ export class AddToShoppingListPage implements OnInit {
     return Promise.resolve();
   }
 
-  // TODO: Why are there 2 methods that do the same thing?
   public newShoppingList(): void {
     const content: PopoverContent = this.popoversService.setContent(
       Strings.SHOPPING_LIST_NEW_DIALOG_TITLE,
@@ -201,19 +190,16 @@ export class AddToShoppingListPage implements OnInit {
         if (data && data.listName) {
           this.shoppingListsProvider.checkNameAvailability(data.listName).then(status => {
             data.type =
-              data.type === 'default'
-                ? Constants.CUSTOM_LIST_DEFAULT_TYPE
-                : Constants.CUSTOM_LIST_MARKET_TYPE;
+              data.type === 'default' ? Constants.CUSTOM_LIST_DEFAULT_TYPE : Constants.CUSTOM_LIST_MARKET_TYPE;
             if (status === 'available') {
               this.shoppingListsProvider
                 .createNewShoppingList(data.listName, data.listDescription, data.type)
-                .subscribe(resp => {
-                  const addedList: ShoppingListResponse = JSON.parse(resp.d)[0];
+                .subscribe((resp: any) => {
                   const list: ShoppingList = {
-                    ListID: addedList.shopping_list_id,
-                    ListName: addedList.list_name,
-                    ListDescription: addedList.list_description,
-                    ListType: addedList.list_type
+                    ListID: resp.shopping_list_id,
+                    ListName: resp.list_name,
+                    ListDescription: resp.list_description,
+                    ListType: resp.list_type
                   };
                   this.shoppingLists.push(list);
                   this.selectList(list);
@@ -251,37 +237,28 @@ export class AddToShoppingListPage implements OnInit {
   public saveItemToList(): void {
     const listItem: ShoppingListItem = {
       product: this.product,
-      program_number: this.selectedProgram.PROGRAM_NO,
-      item_price: parseFloat(this.selectedProgram.PRICE),
+      program_number: this.selectedProgram.program_no || '0',
+      item_price: parseFloat(this.selectedProgram.price),
       quantity: this.quantity
     };
 
     this.loader.show();
     this.shoppingListsProvider
-      .addItemToShoppingList(
-        this.listForm.value.listOptions,
-        listItem,
-        this.listForm.value.listOptions.isMarketOnly
-      )
+      .addItemToShoppingList(this.listForm.value.listOptions, listItem, this.listForm.value.listOptions.isMarketOnly)
       .subscribe(() => {
         this.loader.hide();
         this.cancel();
       });
   }
 
-  public checkProductInList(listId: string): void {
+  public checkProductInList(listId: number): void {
     this.shoppingListsProvider
-      .checkProductInList(this.product.SKU, listId, this.selectedProgram.PROGRAM_NO)
-      .subscribe((data: APIResponse) => {
-        const temp: string = JSON.parse(data.d).Status;
-        const response: boolean = temp.toLowerCase() === 'true';
-        if (response) {
+      .checkProductInList(this.product.sku, listId, this.selectedProgram.program_no)
+      .subscribe(({ status }: any) => {
+        if (status) {
           this.isAddBtnDisabled = true;
           this.reset(
-            this.popoversService.setContent(
-              Strings.GENERIC_MODAL_TITLE,
-              Strings.SHOPPING_LIST_EXISTING_PRODUCT
-            )
+            this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_EXISTING_PRODUCT)
           );
         } else {
           this.listForm.value.listOptions = listId;
@@ -303,20 +280,14 @@ export class AddToShoppingListPage implements OnInit {
 
     const differentType: boolean = this.listIsNotSameType(selectedList);
 
-    // TODO: Switch
     if (this.isMarketOnlyProduct && differentType) {
       this.reset(
-        this.popoversService.setContent(
-          Strings.GENERIC_MODAL_TITLE,
-          Strings.SHOPPING_LIST_MARKET_ONLY_PRODUCT
-        )
+        this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_MARKET_ONLY_PRODUCT)
       );
       this.seekValidList();
     } else if (!this.isMarketOnlyProduct && differentType) {
       this.seekValidList();
-      this.reset(
-        this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_DEFAULT_PRODUCT)
-      );
+      this.reset(this.popoversService.setContent(Strings.GENERIC_MODAL_TITLE, Strings.SHOPPING_LIST_DEFAULT_PRODUCT));
     } else {
       this.scrollToList(selectedList.ListID);
       this.lastValidList = selectedList;
@@ -325,9 +296,8 @@ export class AddToShoppingListPage implements OnInit {
     }
   }
 
-  // TODO: Hacky, but it works.
-  private scrollToList(id: string): void {
-    const element: any = document.getElementById(id);
+  private scrollToList(id: number): void {
+    const element: any = document.getElementById(`${id}`);
     if (!element) {
       this.content.scrollToBottom();
     } else {

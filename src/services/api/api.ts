@@ -4,29 +4,50 @@ import { Observable } from 'rxjs/Observable';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import { environment } from '../../environments/environment';
 import { TranslateService } from '@ngx-translate/core';
+import { User } from '../../interfaces/models/user';
 
 @Injectable()
 export class ApiService {
   public baseUrl: string;
+  private userToken: string;
 
   constructor(
     private readonly http: HttpClient,
-    private readonly secureActions: SecureActionsService,
+    public readonly secureActions: SecureActionsService,
     public translate: TranslateService
   ) {
     this.baseUrl = this.getServiceBaseURL();
+
+    secureActions
+      .waitForAuth()
+      .first()
+      .subscribe((user: User) => {
+        this.userToken = user.user_Token;
+      });
   }
 
-  private setHeaders(): any {
+  private setHeaders(setDashboardAuthorization?: boolean): any {
     const headers: any = {};
     headers['Content-Type'] = 'application/json';
+
+    if (this.userToken) {
+      headers.user_token = this.userToken;
+    }
+
+    if (setDashboardAuthorization) {
+      headers.Authorization = this.userToken;
+    }
+
     return headers;
   }
 
-  public get(baseUrl: string = this.baseUrl, path: string, params: any = {}): Observable<any> {
-    this.baseUrl = this.getServiceBaseURL();
-
-    return this.http.get(baseUrl + path, { headers: this.setHeaders(), params });
+  public get(
+    path: string,
+    params: any = {},
+    baseUrl: string = this.baseUrl,
+    setDashboardAuthorization?: boolean
+  ): Observable<any> {
+    return this.http.get(baseUrl + path, { headers: this.setHeaders(setDashboardAuthorization), params });
   }
 
   public post(
@@ -38,25 +59,31 @@ export class ApiService {
     this.baseUrl = useExternalAPI ? '' : this.getServiceBaseURL();
 
     if (requiresToken) {
-      return this.secureActions.waitForAuth().flatMap(user => {
-        body[useExternalAPI ? 'token' : 'user_token'] = user.userToken;
+      body[useExternalAPI ? 'token' : 'user_token'] = this.userToken;
 
-        return this.http
-          .post(this.baseUrl + path, JSON.stringify(body), { headers: this.setHeaders() })
-          .take(1);
-      });
+      return this.http
+        .post(this.baseUrl + path, JSON.stringify(body), { headers: this.setHeaders(useExternalAPI) })
+        .take(1);
     }
 
     return this.http.post(this.baseUrl + path, JSON.stringify(body), { headers: this.setHeaders() }).take(1);
   }
 
+  public fetch(path: string, token: string): Observable<any> {
+    const headers: any = this.setHeaders();
+    headers.user_token = token;
+    return this.http.get(this.baseUrl + path, { headers });
+  }
+
+  public put(path: string, body: any): Observable<any> {
+    return this.http.put(this.baseUrl + path, body, { headers: this.setHeaders() });
+  }
+
+  public delete(path: string, params: any = {}): Observable<any> {
+    return this.http.delete(this.baseUrl + path, { headers: this.setHeaders(), params });
+  }
+
   private getServiceBaseURL(): string {
-    // if (!LocalStorageHelper.hasKey(Constants.DEVICE_LANGUAGE)) {
-    //   return ConstantsURL.URL_BASE_EN;
-    // }
-    // if (LocalStorageHelper.getFromLocalStorage(Constants.DEVICE_LANGUAGE).toLowerCase().includes(Constants.LANG_FR)) {
-    //   return ConstantsURL.URL_BASE_FR;
-    // }
     if (this.translate.currentLang === 'fr') {
       return environment.baseUrlFrench;
     }

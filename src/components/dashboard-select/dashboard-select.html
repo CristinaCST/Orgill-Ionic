@@ -1,0 +1,18 @@
+<div class="dashboard-select" [ngClass]="{'active': isActive}">
+  <div class="current-selected-option" (click)="toggleSelectActive()">
+    <span>{{options[currentSelectedOption]}}</span> <ion-icon *ngIf="isActive" name="arrow-dropup"></ion-icon
+    ><ion-icon *ngIf="!isActive" name="arrow-dropdown"></ion-icon>
+  </div>
+
+  <div class="select-options" [hidden]="!isActive">
+    <div
+      class="select-option"
+      *ngFor="let option of options; let i = index"
+      [ngClass]="{'selected': i === currentSelectedOption}"
+      (click)="handleSelect(i)"
+    >
+      <ion-icon *ngIf="i === currentSelectedOption" name="checkmark"></ion-icon>
+      <span>{{option}}</span>
+    </div>
+  </div>
+</div>

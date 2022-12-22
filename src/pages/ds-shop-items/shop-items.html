@@ -1,0 +1,124 @@
+<vendor-header
+  [pageTitle]="pageTitle"
+  [hasScanBtn]="isDropship"
+  [hasSearchBar]="isDropship"
+  (onScan)="handleScan()"
+  (onSearch)="handleSearch($event)"
+></vendor-header>
+
+<ion-content
+  class="dropship-shop-items-content"
+  [ngClass]="{'checkout-overlay-visible': (selectedItems.length > 0), 'header-margin': isDropship}"
+>
+  <div *ngIf="isActiveSearch" class="cancel-search" (click)="cancelSearch()">
+    <ion-icon name="arrow-back"></ion-icon> {{"dropship_cancel_search" |
+    translate}}
+  </div>
+
+  <div *ngIf="!isDropship" class="list-header-wrapper">
+    <img
+      *ngIf="formDetails.image && !imageError"
+      class="list-img"
+      [src]="formDetails.image"
+      (error)="handleMissingImage($event)"
+      (click)="toggleOverlay()"
+    />
+
+    <div class="list-details">
+      <div class="checkbox-wrapper">
+        <ion-checkbox
+          [checked]="selectedItems.includes(formDetails.form_id)"
+          (click)="handleCheckbox()"
+        ></ion-checkbox>
+
+        <p *ngIf="formDetails.hasOwnProperty('form_name')" class="list-header">
+          {{formDetails.form_name}}
+        </p>
+      </div>
+
+      <div class="list-price">
+        <p *ngIf="formDetails.total_special_cost" class="cost">
+          {{formDetails.total_special_cost | currency}}
+        </p>
+        <p *ngIf="formDetails.savings" class="savings">
+          {{(formDetails.savings).toFixed(2)}}% {{"savings_text" | translate}}
+        </p>
+      </div>
+
+      <button class="order-btn" (click)="handleCheckbox()">
+        {{selectedItems.includes(formDetails.form_id) ? 'Remove From Order' :
+        'Add To Order'}}
+      </button>
+
+      <div
+        class="list-counter-wrapper"
+        *ngIf="selectedItems.includes(formDetails.form_id)"
+      >
+        <button
+          ion-button
+          icon-only
+          small
+          clear
+          [ngClass]="{'disabled': selectedQuantity === 1}"
+          (click)="handleCounterAction()"
+        >
+          <ion-icon name="remove"></ion-icon>
+        </button>
+
+        <input
+          clearInput
+          min="1"
+          maxlength="5"
+          type="tel"
+          inputmode="numeric"
+          pattern="^[0-9]"
+          [(ngModel)]="selectedQuantity"
+          (focusout)="handleQuantityChange($event.target.value)"
+          (keydown.enter)="$event.target.blur()"
+        />
+
+        <button
+          ion-button
+          icon-only
+          small
+          clear
+          (click)="handleCounterAction('add')"
+        >
+          <ion-icon name="add"></ion-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <checkbox-card
+    *ngFor="let item of itemList"
+    [data]="item"
+    [formDetails]="formDetails"
+    [selectedQuantity]="item.selectedQuantity"
+    [isSelected]="selectedItems.includes(item.factory_number)"
+    [isDropship]="isDropship"
+  ></checkbox-card>
+</ion-content>
+
+<checkout-overlay [checkoutItems]="checkoutItems"></checkout-overlay>
+
+<div
+  *ngIf="!isDropship"
+  class="dropship-img-overlay"
+  [ngClass]="{'active': isOverlayActive}"
+>
+  <button
+    class="overlay-close"
+    ion-button
+    icon-only
+    small
+    clear
+    (click)="toggleOverlay()"
+  >
+    <ion-icon name="close"></ion-icon>
+  </button>
+
+  <div class="img-wrapper">
+    <img [src]="formDetails.image" />
+  </div>
+</div>

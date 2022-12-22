@@ -14,6 +14,8 @@ import { LoadingService } from '../services/loading/loading';
 import { CSSInjector } from '../helpers/css-injector';
 import { AuthService } from '../services/auth/auth';
 import { LandingPage } from '../pages/landing/landing';
+import { VendorLandingPage } from '../pages/vendor-landing/vendor-landing';
+import { User } from 'interfaces/models/user';
 
 @Component({
   templateUrl: 'app.html'
@@ -129,7 +131,17 @@ export class MyApp {
 
   private checkSession(): void {
     this.stopLoading();
-    this.rootPage = this.authService.isValidSession() ? LandingPage : Login;
+
+    if (!this.authService.isValidSession()) {
+      this.rootPage = Login;
+      this.navigatorService.initialRootPage(Login);
+      return;
+    }
+
+    const user: User = this.authService.getCurrentUser();
+    const { user_type } = user;
+
+    this.rootPage = user_type === 'Vendor' ? VendorLandingPage : LandingPage;
     this.navigatorService.initialRootPage(this.rootPage);
   }
 }

@@ -1,0 +1,38 @@
+<div class="table">
+  <div class="sticky-column">
+    <div class="column-cell" *ngFor="let item of stickyColumn">{{item}}</div>
+  </div>
+
+  <div class="table-data-wrapper">
+    <div class="table-headers">
+      <div
+        class="table-header"
+        *ngFor="let item of tableHeaders"
+        [ngStyle]="{'width': item === 'Driver case' ? '200px':''}"
+      >
+        {{item}}
+      </div>
+    </div>
+
+    <div class="table-data">
+      <div class="table-row" *ngFor="let data of tableData">
+        <div class="table-cell" *ngFor="let item of data" [ngStyle]="{'width': item.isDriverCase ? '200px':''}">
+          <img
+            class="stops-icons"
+            *ngIf="item.isStops"
+            [src]="item.value ? '../../assets/imgs/icon-true.png' : '../../assets/imgs/icon-false.png'"
+          />
+
+          <div *ngIf="item.isDriverEmail">
+            <span *ngIf="item.noDriver">{{item.value}}</span>
+            <span *ngIf="!item.noDriver" style="color: #ff1925">NO DRIVER FOUND</span>
+          </div>
+
+          <span *ngIf="item.isDriverCase" [ngStyle]="{'color': item.textColor}">{{item.value}}</span>
+
+          <span *ngIf="!item.isDriverCase && !item.isDriverEmail && !item.isStops">{{item}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

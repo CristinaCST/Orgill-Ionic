@@ -26,8 +26,8 @@ export class PromotionsPage implements OnInit {
 
   public showPromotionsPrograms(program: Program): void {
     const params: any = {
-      programName: program.NAME,
-      programNumber: program.PROGRAMNO
+      programName: program.name,
+      programNumber: program.programno
     };
 
     this.navigatorService.setRoot(Catalog, params).catch(err => console.error(err));

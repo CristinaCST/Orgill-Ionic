@@ -1,0 +1,26 @@
+<vendor-header
+  pageTitle="dropship_checkout"
+  [hasScanBtn]="true"
+  (onScan)="handleScan()"
+></vendor-header>
+
+<ion-content class="checkout-dropship-content checkout-overlay-visible">
+  <div class="continue-shopping" (click)="goBack()">
+    <ion-icon name="arrow-back"></ion-icon>
+    {{"dropship_checkout_continue_shopping" | translate}}
+  </div>
+
+  <checkbox-card
+    *ngFor="let item of checkoutItems"
+    [data]="item"
+    [isSelected]="true"
+    [isCheckout]="true"
+  ></checkbox-card>
+
+  <div *ngIf="!checkoutItems.length" class="empty-checkout">
+    <ion-icon name="cart"></ion-icon>
+    <h3>{{"dropship_checkout_empty_cart" | translate}}</h3>
+  </div>
+</ion-content>
+
+<checkout-overlay [isCheckout]="true"></checkout-overlay>
