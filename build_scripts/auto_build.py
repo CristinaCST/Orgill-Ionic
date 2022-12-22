@@ -10,8 +10,8 @@ ET.register_namespace('cdv', "http://cordova.apache.org/ns/1.0")
 
 #########################################################
 # This area MUST be edited, to set the version of the app
-version = '7.0.2'
-version_code = '702'
+version = '9.4.2'
+version_code = '942'
 build_type = "prod" #"prod"
 #########################################################
 app_name = "Orgill Test" if build_type == "test" else "OrgillOZone"
