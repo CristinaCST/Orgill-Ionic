@@ -48,7 +48,10 @@ export class VendorMenuComponent {
     this.popoversService.show(content).subscribe((data: DefaultPopoverResult) => {
       if (data.optionSelected === 'OK') {
         this.authService.logout();
-        this.navigatorService.setRoot(Login).catch(err => console.error(err));
+        this.navigatorService
+          .setRoot(Login)
+          .then(() => location.reload())
+          .catch(err => console.error(err));
       }
     });
   }

@@ -127,7 +127,7 @@
     <!-- <button class="btn-save-draft" ion-button block [disabled]="!customerInfoForm.valid" (click)="saveForm()">
     {{"dropship_save_draft" | translate}}
   </button> -->
-    <button class="btn-next-step" ion-button block [disabled]="customerInfoForm.valid" (click)="saveForm()">
+    <button class="btn-next-step" ion-button block [disabled]="!customerInfoForm.valid" (click)="saveForm()">
       {{"dropship_next_step" | translate}}
     </button>
   </div>
