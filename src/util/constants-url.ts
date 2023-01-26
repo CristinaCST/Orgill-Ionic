@@ -89,7 +89,7 @@ export const ADMIN_GET_CUSTOMER_LOCATIONS: string = TRACKING_API_BASE_URL_PROD +
 
 // DROPSHIP
 export const ds_create_savedorder: string = 'dssavedorders';
-export const ds_delete_savedorder: string = 'dssavedorders/items';
+export const ds_delete_savedorder: string = 'dssavedorders';
 export const ds_form_details: string = 'dsforms';
 export const ds_form_items: string = 'dsforms/items';
 export const ds_form_list: string = 'dsforms';
