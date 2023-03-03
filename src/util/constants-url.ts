@@ -55,7 +55,8 @@ export const PRODUCT_IMAGE_BASE_URL: string = 'http://images.orgill.com/200x200/
 
 // ROUTE TRACKING API?
 const TRACKING_API_BASE_URL: string = '//40.122.36.68/api/';
-const TRACKING_API_BASE_URL_PROD: string = '//168.61.170.88/api/';
+// const TRACKING_API_BASE_URL_PROD: string = '//168.61.170.88/api/';
+const TRACKING_API_BASE_URL_PROD: string = '//ozonetransportation.orgill.com/api/';
 
 /**
  * params
