@@ -1,10 +1,10 @@
-export const URL_BASE_EN: string = 'http://reststage.orgill.com/service.asmx/';
-export const URL_BASE_FR: string = 'http://dmwebservice-cafr.orgill.com/service.asmx/';
+export const URL_BASE_EN: string = 'https://reststage.orgill.com/service.asmx/';
+export const URL_BASE_FR: string = 'https://dmwebservice-cafr.orgill.com/service.asmx/';
 
-export const URL_BASE_DEV: string = 'http://reststage.orgill.com/service.asmx/';
-export const URL_BASE_DEV_NEW: string = 'http://reststage.orgill.com/api/v1/';
-export const URL_BASE_PROD: string = 'http://dmwebservice.orgill.com/service.asmx/';
-export const URL_BASE_PROD_NEW: string = 'http://ozoneapi.orgill.com/api/v1/';
+export const URL_BASE_DEV: string = 'https://reststage.orgill.com/service.asmx/';
+export const URL_BASE_DEV_NEW: string = 'https://reststage.orgill.com/api/v1/';
+export const URL_BASE_PROD: string = 'https://dmwebservice.orgill.com/service.asmx/';
+export const URL_BASE_PROD_NEW: string = 'https://ozoneapi.orgill.com/api/v1/';
 
 export const URL_LOGIN: string = 'authenticate';
 export const URL_USER_INFO: string = 'user';
@@ -51,7 +51,7 @@ export const USER_PAST_PURCHASES: string = 'pastpurchase';
 export const PURCHASE_ITEMS: string = 'pastpurchase';
 
 export const URL_ORDER_HOT_DEAL_PRODUCTS: string = 'order/flashproducts';
-export const PRODUCT_IMAGE_BASE_URL: string = 'http://images.orgill.com/200x200/';
+export const PRODUCT_IMAGE_BASE_URL: string = 'https://images.orgill.com/200x200/';
 
 // ROUTE TRACKING API?
 const TRACKING_API_BASE_URL: string = '//40.122.36.68/api/';
