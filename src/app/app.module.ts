@@ -29,7 +29,7 @@ import { UserInfoService } from '../services/user-info/user-info';
 import { PurchasesProvider } from '../providers/purchases/purchases';
 import { ProductImageProvider } from '../providers/product-image/product-image';
 import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { DropshipProvider } from '../providers/dropship/dropship';
 import { DashboardProvider } from '../providers/dashboard/dashboard';
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { SavedDraftsPage } from '../../pages/ds-saved-drafts/saved-drafts';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { DropshipService } from '../../services/dropship/dropship';

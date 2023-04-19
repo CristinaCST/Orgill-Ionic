@@ -13,7 +13,7 @@
     <allow-intent href="geo:*" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="22" />
-    <preference name="android-targetSdkVersion" value="31" />
+    <preference name="android-targetSdkVersion" value="32" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
@@ -27,29 +27,31 @@
     <preference name="WKWebViewOnly" value="true" />
     <hook src="src/hooks/required_gps.js" type="after_platform_add" />
     <hook src="src/hooks/gradle_upgrade.js" type="after_platform_add" />
-    <hook src="src/hooks/ios_build_hook.js" type="after_platform_add" />
     <platform name="android">
         <allow-intent href="market:*" />
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application android:usesCleartextTraffic="true" />
+            <application android:exported="true" />
         </edit-config>
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
         <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
         <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
         <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon.png" />
         <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
-        <splash density="land-ldpi" src="resources/android/splash/drawable-land-ldpi-screen.png" />
-        <splash density="land-mdpi" src="resources/android/splash/drawable-land-mdpi-screen.png" />
-        <splash density="land-hdpi" src="resources/android/splash/drawable-land-hdpi-screen.png" />
-        <splash density="land-xhdpi" src="resources/android/splash/drawable-land-xhdpi-screen.png" />
-        <splash density="land-xxhdpi" src="resources/android/splash/drawable-land-xxhdpi-screen.png" />
-        <splash density="land-xxxhdpi" src="resources/android/splash/drawable-land-xxxhdpi-screen.png" />
-        <splash density="port-ldpi" src="resources/android/splash/drawable-port-ldpi-screen.png" />
-        <splash density="port-mdpi" src="resources/android/splash/drawable-port-mdpi-screen.png" />
-        <splash density="port-hdpi" src="resources/android/splash/drawable-port-hdpi-screen.png" />
-        <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
-        <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
-        <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
+        <preference name="AndroidXEnabled" value="true" />
+        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="resources/android/splash.png" />
+        <preference density="land-ldpi" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/android/splash/drawable-land-ldpi-screen.png" />
+        <preference density="land-mdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/android/splash/drawable-land-mdpi-screen.png" />
+        <preference density="land-hdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/android/splash/drawable-land-hdpi-screen.png" />
+        <preference density="land-xhdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/android/splash/drawable-land-xhdpi-screen.png" />
+        <preference density="land-xxhdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/android/splash/drawable-land-xxhdpi-screen.png" />
+        <preference density="land-xxxhdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/android/splash/drawable-land-xxxhdpi-screen.png" />
+        <preference density="port-ldpi" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/android/splash/drawable-port-ldpi-screen.png" />
+        <preference density="port-mdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/android/splash/drawable-port-mdpi-screen.png" />
+        <preference density="port-hdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/android/splash/drawable-port-hdpi-screen.png" />
+        <preference density="port-xhdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/android/splash/drawable-port-xhdpi-screen.png" />
+        <preference density="port-xxhdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/android/splash/drawable-port-xxhdpi-screen.png" />
+        <preference density="port-xxxhdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
         <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
         <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
@@ -59,6 +61,7 @@
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
     </platform>
     <platform name="ios">
+        <hook src="src/hooks/ios_build_hook.js" type="after_platform_add" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
@@ -80,19 +83,19 @@
         <icon height="58" src="resources/ios/icon/icon-small@2x.png" width="58" />
         <icon height="87" src="resources/ios/icon/icon-small@3x.png" width="87" />
         <icon height="1024" src="resources/ios/icon/icon-1024.png" width="1024" />
-        <splash height="1136" src="resources/ios/splash/Default-568h@2x~iphone.png" width="640" />
-        <splash height="1334" src="resources/ios/splash/Default-667h.png" width="750" />
-        <splash height="2208" src="resources/ios/splash/Default-736h.png" width="1242" />
-        <splash height="1242" src="resources/ios/splash/Default-Landscape-736h.png" width="2208" />
-        <splash height="1536" src="resources/ios/splash/Default-Landscape@2x~ipad.png" width="2048" />
-        <splash height="2048" src="resources/ios/splash/Default-Landscape@~ipadpro.png" width="2732" />
-        <splash height="768" src="resources/ios/splash/Default-Landscape~ipad.png" width="1024" />
-        <splash height="2048" src="resources/ios/splash/Default-Portrait@2x~ipad.png" width="1536" />
-        <splash height="2732" src="resources/ios/splash/Default-Portrait@~ipadpro.png" width="2048" />
-        <splash height="1024" src="resources/ios/splash/Default-Portrait~ipad.png" width="768" />
-        <splash height="960" src="resources/ios/splash/Default@2x~iphone.png" width="640" />
-        <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
-        <splash height="2732" src="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
+        <preference height="1136" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/ios/splash/Default-568h@2x~iphone.png" width="640" />
+        <preference height="1334" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/ios/splash/Default-667h.png" width="750" />
+        <preference height="2208" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/ios/splash/Default-736h.png" width="1242" />
+        <preference height="1242" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/ios/splash/Default-Landscape-736h.png" width="2208" />
+        <preference height="1536" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/ios/splash/Default-Landscape@2x~ipad.png" width="2048" />
+        <preference height="2048" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/ios/splash/Default-Landscape@~ipadpro.png" width="2732" />
+        <preference height="768" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/ios/splash/Default-Landscape~ipad.png" width="1024" />
+        <preference height="2048" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/ios/splash/Default-Portrait@2x~ipad.png" width="1536" />
+        <preference height="2732" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/ios/splash/Default-Portrait@~ipadpro.png" width="2048" />
+        <preference height="1024" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/ios/splash/Default-Portrait~ipad.png" width="768" />
+        <preference height="960" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/ios/splash/Default@2x~iphone.png" width="640" />
+        <preference height="480" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/ios/splash/Default~iphone.png" width="320" />
+        <preference height="2732" name="AndroidWindowSplashScreenAnimatedIcon" value="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
         <config-file parent="NSLocationAlwaysAndWhenInUseUsageDescription" target="*-Info.plist">
             <string>O-Zone needs to use location to send geolocation notifications</string>
         </config-file>

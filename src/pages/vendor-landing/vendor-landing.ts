@@ -7,7 +7,7 @@ import { SavedorderList } from '../../interfaces/response-body/dropship';
 import { SavedDraftsPage } from '../../pages/ds-saved-drafts/saved-drafts';
 import { CustomerInfoPage } from '../../pages/ds-customer-info/customer-info';
 import { DS_FORM_LIST_TYPE_CA } from '../../util/constants';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { DropshipService } from '../../services/dropship/dropship';
 import { onlineDealerMarketCAD, onlineDealerMarketUS } from '../../util/constants-url';
 import { TranslateWrapperService } from '../../services/translate/translate';
