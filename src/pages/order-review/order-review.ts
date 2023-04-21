@@ -207,64 +207,59 @@ export class OrderReviewPage implements OnInit {
   }
 
   public purchaseHotDeal(): void {
-    this.simpleLoader.show();
-    this.hotDealsService
-      .checkGeofence()
-      .then(
-        isInRange => {
-          if (!isInRange && !this.hotDealsService.dealHasValidOverride(this.hotDealItem.ITEM.sku)) {
-            return Promise.reject('range');
-          }
-          return Promise.resolve();
-        },
-        err => {
-          this.simpleLoader.hide();
-        }
-      )
-      .then(
-        () => {
-          const programNumber: string = this.hotDealItem.PROGRAM.program_no;
-          const orderItem: Product = this.hotDealItem.ITEM;
-
-          const productListInfo: any = {
-            order_method: 2,
-            order_query: this.getHotDealQuery(programNumber, orderItem, this.hotDealItem.LOCATIONS)
-          };
-
-          this.productProvider
-            .orderHotDeal(productListInfo)
-            .then((data: any) => {
-              const confirmations: HotDealConfirmation[] = [];
-
-              data.forEach((result: HotDealConfirmation) => {
-                confirmations.push(result);
-              });
-
-              const navigationParams: any = {
-                orderMethod: this.orderMethod,
-                hotDealConfirmations: confirmations,
-                hotDealLocations: this.hotDealItem.LOCATIONS,
-                hotDealPurchase: true,
-                hotDealItem: this.hotDealItem
-              };
-              this.simpleLoader.hide();
-              this.navigatorService.push(OrderConfirmationPage, navigationParams).catch(err => console.error(err));
-            })
-            .catch(err => console.error(err));
-        },
-        rej => {
-          const popoverContent: PopoverContent = {
-            type: Constants.PERMISSION_MODAL,
-            title: Strings.GENERIC_MODAL_TITLE,
-            message: Strings.LOCATION_TOO_FAR,
-            positiveButtonText: Strings.MODAL_BUTTON_OK
-          };
-
-          LoadingService.hideAll();
-          // Return the popover observable
-          this.popoversService.show(popoverContent).subscribe((result: DefaultPopoverResult) => {});
-        }
-      );
+    // this.simpleLoader.show();
+    // this.hotDealsService
+    //   .checkGeofence()
+    //   .then(
+    //     isInRange => {
+    //       if (!isInRange && !this.hotDealsService.dealHasValidOverride(this.hotDealItem.ITEM.sku)) {
+    //         return Promise.reject('range');
+    //       }
+    //       return Promise.resolve();
+    //     },
+    //     err => {
+    //       this.simpleLoader.hide();
+    //     }
+    //   )
+    //   .then(
+    //     () => {
+    //       const programNumber: string = this.hotDealItem.PROGRAM.program_no;
+    //       const orderItem: Product = this.hotDealItem.ITEM;
+    //       const productListInfo: any = {
+    //         order_method: 2,
+    //         order_query: this.getHotDealQuery(programNumber, orderItem, this.hotDealItem.LOCATIONS)
+    //       };
+    //       this.productProvider
+    //         .orderHotDeal(productListInfo)
+    //         .then((data: any) => {
+    //           const confirmations: HotDealConfirmation[] = [];
+    //           data.forEach((result: HotDealConfirmation) => {
+    //             confirmations.push(result);
+    //           });
+    //           const navigationParams: any = {
+    //             orderMethod: this.orderMethod,
+    //             hotDealConfirmations: confirmations,
+    //             hotDealLocations: this.hotDealItem.LOCATIONS,
+    //             hotDealPurchase: true,
+    //             hotDealItem: this.hotDealItem
+    //           };
+    //           this.simpleLoader.hide();
+    //           this.navigatorService.push(OrderConfirmationPage, navigationParams).catch(err => console.error(err));
+    //         })
+    //         .catch(err => console.error(err));
+    //     },
+    //     rej => {
+    //       const popoverContent: PopoverContent = {
+    //         type: Constants.PERMISSION_MODAL,
+    //         title: Strings.GENERIC_MODAL_TITLE,
+    //         message: Strings.LOCATION_TOO_FAR,
+    //         positiveButtonText: Strings.MODAL_BUTTON_OK
+    //       };
+    //       LoadingService.hideAll();
+    //       // Return the popover observable
+    //       this.popoversService.show(popoverContent).subscribe((result: DefaultPopoverResult) => {});
+    //     }
+    //   );
   }
 
   public cancel(): void {

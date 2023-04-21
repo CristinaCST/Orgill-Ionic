@@ -5,7 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Login } from '../pages/login/login';
 import { TranslateService } from '@ngx-translate/core';
 import { NetworkService } from '../services/network/network';
-import { OneSignalService } from '../services/onesignal/onesignal';
+// import { OneSignalService } from '../services/onesignal/onesignal';
 import { NavigatorService } from '../services/navigator/navigator';
 import * as Constants from '../util/constants';
 import * as Strings from '../util/strings';
@@ -30,7 +30,7 @@ export class MyApp {
     private readonly splashScreen: SplashScreen,
     private readonly translate: TranslateService,
     private readonly networkService: NetworkService,
-    private readonly oneSignalService: OneSignalService,
+    // private readonly oneSignalService: OneSignalService,
     private readonly navigatorService: NavigatorService,
     private readonly popoverProvider: PopoversService,
     private readonly events: Events,
@@ -51,7 +51,7 @@ export class MyApp {
     this.events.subscribe(Constants.EVENT_SCROLL_INTO_VIEW, this.scrollToElement);
 
     this.platform.ready().then(() => {
-      this.oneSignalService.init();
+      // this.oneSignalService.init();
 
       // TODO: Make this better :/
       window.addEventListener('keyboardDidShow', (obj: Event & { keyboardHeight: number }) => {

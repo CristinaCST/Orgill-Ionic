@@ -7,10 +7,10 @@ import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
-import { OneSignal } from '@ionic-native/onesignal';
+// import { OneSignal } from '@ionic-native/onesignal';
 import { Network } from '@ionic-native/network';
 import { Badge } from '@ionic-native/badge';
-import { Geolocation } from '@ionic-native/geolocation';
+// import { Geolocation } from '@ionic-native/geolocation';
 import { Page } from 'ionic-angular/navigation/nav-util';
 
 // Modules
@@ -41,7 +41,7 @@ import { ErrorInterceptor } from '../interceptors/error-interceptor';
 
 // Services
 import { NetworkService } from '../services/network/network';
-import { OneSignalService } from '../services/onesignal/onesignal';
+// import { OneSignalService } from '../services/onesignal/onesignal';
 import { HotDealsService } from '../services/hotdeals/hotdeals';
 import { NavigatorService } from '../services/navigator/navigator';
 import { LoadingService } from '../services/loading/loading';
@@ -184,8 +184,8 @@ import { RouteTrackingProvider } from '../providers/route-tracking/route-trackin
     UserInfoService,
     PurchasesProvider,
     NetworkService,
-    OneSignalService,
-    OneSignal,
+    // OneSignalService,
+    // OneSignal,
     Badge,
     HotDealsService,
     NavigatorService,
@@ -194,7 +194,7 @@ import { RouteTrackingProvider } from '../providers/route-tracking/route-trackin
     SearchService,
     ReloadService,
     ErrorScheduler,
-    Geolocation,
+    // Geolocation,
     CSSInjector,
     ProductImageProvider,
     SecureActionsService,

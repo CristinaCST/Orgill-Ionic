@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import * as ConstantsUrl from '../../util/constants-url';
 import * as Constants from '../../util/constants';
-import * as Strings from '../../util/strings';
+// import * as Strings from '../../util/strings';
 import { ApiService } from '../api/api';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import { NavOptions } from 'ionic-angular';
@@ -10,12 +10,12 @@ import { NavigatorService } from '../navigator/navigator';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../../interfaces/response-body/response';
 import { Product } from '../../interfaces/models/product';
-import { Geolocation, Geoposition, PositionError } from '@ionic-native/geolocation';
+// import { Geolocation, Geoposition, PositionError } from '@ionic-native/geolocation';
 import { HotDealNotification } from 'interfaces/models/hot-deal-notification';
 import { NotificationResponse } from 'interfaces/response-body/notification-response';
 import { TranslateService } from '@ngx-translate/core';
-import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
-import { LoadingService } from '../../services/loading/loading';
+// import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
+// import { LoadingService } from '../../services/loading/loading';
 
 export interface GeofenceLocation {
   lat: number;
@@ -30,9 +30,8 @@ export class HotDealsService {
     private readonly navigatorService: NavigatorService,
     private readonly apiService: ApiService,
     private readonly ngZone: NgZone,
-    private readonly geolocation: Geolocation,
-    private readonly translation: TranslateService,
-    private readonly popoversService: PopoversService
+    // private readonly geolocation: Geolocation,
+    private readonly translation: TranslateService // private readonly popoversService: PopoversService
   ) {}
 
   private getHotDealsProduct(sku: string): Observable<APIResponse> {
@@ -81,60 +80,58 @@ export class HotDealsService {
     return this.apiService.get(`${ConstantsUrl.GET_HOTDEALS_PROGRAM}/${sku}`);
   }
 
-  public checkGeofence(): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      Promise.all([
-        this.apiService.get(ConstantsUrl.GET_HOTDEALS_GEOFENCE).toPromise(),
-        this.geolocation.getCurrentPosition({
-          enableHighAccuracy: true,
-          maximumAge: Constants.LOCATION_MAXIMUM_AGE,
-          timeout: Constants.LOCATION_TIMEOUT
-        })
-      ]).then(
-        (result: any) => {
-          const geofenceLocation: GeofenceLocation = result[0];
-          const currentLocation: Geoposition = result[1];
-          const distance: number = this.distanceBetweenPoints(
-            Number(geofenceLocation.lat),
-            Number(geofenceLocation.lng),
-            currentLocation.coords.latitude,
-            currentLocation.coords.longitude
-          );
-          if (distance <= Number(geofenceLocation.radius) + currentLocation.coords.accuracy) {
-            resolve(true);
-          }
-          resolve(false);
-        },
-        (err: PositionError) => {
-          console.error(err);
-          // Code 3 = Timeout expired => No location signal or location is off.
-          const message: string = err.code === 3 ? Strings.LOCATION_ERROR : Strings.LOCATION_PERMISSIONS_MESSAGE;
-
-          const popoverContent: PopoverContent = {
-            type: Constants.PERMISSION_MODAL,
-            title: Strings.GENERIC_MODAL_TITLE,
-            message,
-            positiveButtonText: Strings.MODAL_BUTTON_OK
-          };
-
-          LoadingService.hideAll();
-          this.popoversService.show(popoverContent);
-        }
-      );
-    });
+  public checkGeofence(): void {
+    // return new Promise((resolve, reject) => {
+    //   Promise.all([
+    //     this.apiService.get(ConstantsUrl.GET_HOTDEALS_GEOFENCE).toPromise()
+    //     this.geolocation.getCurrentPosition({
+    //       enableHighAccuracy: true,
+    //       maximumAge: Constants.LOCATION_MAXIMUM_AGE,
+    //       timeout: Constants.LOCATION_TIMEOUT
+    //     })
+    //   ]).then(
+    //     (result: any) => {
+    //       const geofenceLocation: GeofenceLocation = result[0];
+    //       const currentLocation: Geoposition = result[1];
+    //       const distance: number = this.distanceBetweenPoints(
+    //         Number(geofenceLocation.lat),
+    //         Number(geofenceLocation.lng),
+    //         currentLocation.coords.latitude,
+    //         currentLocation.coords.longitude
+    //       );
+    //       if (distance <= Number(geofenceLocation.radius) + currentLocation.coords.accuracy) {
+    //         resolve(true);
+    //       }
+    //       resolve(false);
+    //     },
+    //     (err: PositionError) => {
+    //       console.error(err);
+    //       // Code 3 = Timeout expired => No location signal or location is off.
+    //       const message: string = err.code === 3 ? Strings.LOCATION_ERROR : Strings.LOCATION_PERMISSIONS_MESSAGE;
+    //       const popoverContent: PopoverContent = {
+    //         type: Constants.PERMISSION_MODAL,
+    //         title: Strings.GENERIC_MODAL_TITLE,
+    //         message,
+    //         positiveButtonText: Strings.MODAL_BUTTON_OK
+    //       };
+    //       LoadingService.hideAll();
+    //       this.popoversService.show(popoverContent);
+    //     }
+    //   );
+    // });
   }
 
-  private distanceBetweenPoints(lat1: number, lon1: number, lat2: number, lon2: number): number {
-    const R: number = 6378.137;
-    const dLat: number = (lat2 * Math.PI) / 180 - (lat1 * Math.PI) / 180;
-    const dLon: number = (lon2 * Math.PI) / 180 - (lon1 * Math.PI) / 180;
-    const a: number =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c: number = Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * 2;
-    const d: number = R * c;
-    return d * 1000;
-  }
+  // private distanceBetweenPoints(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  //   const R: number = 6378.137;
+  //   const dLat: number = (lat2 * Math.PI) / 180 - (lat1 * Math.PI) / 180;
+  //   const dLon: number = (lon2 * Math.PI) / 180 - (lon1 * Math.PI) / 180;
+  //   const a: number =
+  //     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+  //     Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  //   const c: number = Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * 2;
+  //   const d: number = R * c;
+  //   return d * 1000;
+  // }
 
   public getHotDealNotifications(): Promise<HotDealNotification[]> {
     return new Promise(resolve => {
