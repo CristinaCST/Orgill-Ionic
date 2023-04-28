@@ -168,7 +168,7 @@ export class OrderReviewPage implements OnInit {
 
       this.shoppingListsProvider
         .orderProducts({
-          customer_number: this.location.customerno,
+          customer_number: this.location.shiptono,
           po_number: this.postOffice,
           program_number: programNumber,
           order_method: `${this.orderMethod}`,
