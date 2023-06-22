@@ -54,7 +54,6 @@
     "moment": "latest",
     "phonegap-plugin-barcodescanner": "^8.0.1",
     "rxjs": "5.5.12",
-    "sass": "^1.62.1",
     "sw-toolbox": "3.6.0",
     "ts-md5": "^1.2.4",
     "zone.js": "0.8.29"
@@ -67,7 +66,7 @@
     "cordova-ios": "^5.1.1",
     "cordova-plugin-inappbrowser": "^4.1.0",
     "i18next-json-sync": "^2.3.1",
-    "node-sass": "8.0.0",
+    "node-sass": "4.12",
     "typescript": "~2.6.0"
   },
   "description": "An Ionic project",
@@ -89,8 +88,7 @@
     },
     "platforms": [
       "browser",
-      "android",
-      "ios"
+      "android"
     ]
   },
   "config": {

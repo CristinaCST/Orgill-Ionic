@@ -56,37 +56,37 @@ export const PRODUCT_IMAGE_BASE_URL: string = 'https://images.orgill.com/200x200
 // ROUTE TRACKING API?
 const TRACKING_API_BASE_URL: string = '//40.122.36.68/api/';
 // const TRACKING_API_BASE_URL_PROD: string = '//168.61.170.88/api/';
-const TRACKING_API_BASE_URL_PROD: string = '//ozonetransportation.orgill.com/api/';
+export const TRACKING_API_BASE_URL_PROD: string = '//ozonetransportation.orgill.com/api/';
 
 /**
  * params
  * ship_to_no: string
  */
-export const GET_STORE_ROUTE_AND_STOPS: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetStoreRouteAndStops';
+export const GET_STORE_ROUTE_AND_STOPS: string = 'Admin/GetStoreRouteAndStops';
 
 /**
  * request body
  * username: string
  * password: string
  */
-export const VENDOR_ACCOUNT_LOGIN: string = TRACKING_API_BASE_URL_PROD + 'VendorAccount/Login';
+export const VENDOR_ACCOUNT_LOGIN: string = 'VendorAccount/Login';
 
 /**
  * params
  * user_token: string
  */
-export const GET_CUSTOMER_LOCATIONS: string = TRACKING_API_BASE_URL_PROD + 'VendorAccount/GetCustomerLocations';
+export const GET_CUSTOMER_LOCATIONS: string = 'VendorAccount/GetCustomerLocations';
 
 /**
  * params
  * size: integer
  */
-export const TEST_GET_TODAY_CUSTOMERS: string = TRACKING_API_BASE_URL_PROD + 'Test/GetTodayCustomers';
+export const TEST_GET_TODAY_CUSTOMERS: string = 'Test/GetTodayCustomers';
 
 /**
  * customerNo
  */
-export const ADMIN_GET_CUSTOMER_LOCATIONS: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetCustomerLocations';
+export const ADMIN_GET_CUSTOMER_LOCATIONS: string = 'Admin/GetCustomerLocations';
 
 // DROPSHIP
 export const ds_create_savedorder: string = 'dssavedorders';

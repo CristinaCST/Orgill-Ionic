@@ -5,7 +5,8 @@ import {
   GET_STORE_ROUTE_AND_STOPS,
   GET_CUSTOMER_LOCATIONS,
   TEST_GET_TODAY_CUSTOMERS,
-  ADMIN_GET_CUSTOMER_LOCATIONS
+  ADMIN_GET_CUSTOMER_LOCATIONS,
+  TRACKING_API_BASE_URL_PROD
 } from '../../util/constants-url';
 
 /*
@@ -19,22 +20,30 @@ export class RouteTrackingProvider {
   constructor(private readonly apiProvider: ApiService) {}
 
   public getCustomerLocations(): Observable<any> {
-    return this.apiProvider.post(GET_CUSTOMER_LOCATIONS, {}, true, true);
+    return this.apiProvider.post(GET_CUSTOMER_LOCATIONS, {}, true, true, TRACKING_API_BASE_URL_PROD);
   }
 
   public getStoreRouteAndStops(ship_to_no: string): Observable<any> {
-    return this.apiProvider.get(GET_STORE_ROUTE_AND_STOPS, {
-      ship_to_no
-    });
+    return this.apiProvider.get(
+      GET_STORE_ROUTE_AND_STOPS,
+      {
+        ship_to_no
+      },
+      TRACKING_API_BASE_URL_PROD
+    );
   }
 
   public testGetTodayCustomers(numberOfShipments: number = 1): Observable<any> {
-    return this.apiProvider.get(TEST_GET_TODAY_CUSTOMERS, {
-      size: numberOfShipments
-    });
+    return this.apiProvider.get(
+      TEST_GET_TODAY_CUSTOMERS,
+      {
+        size: numberOfShipments
+      },
+      TRACKING_API_BASE_URL_PROD
+    );
   }
 
   public adminGetCustomerLocations(customerNo: string): Observable<any> {
-    return this.apiProvider.post(ADMIN_GET_CUSTOMER_LOCATIONS, { customerNo }, true, true);
+    return this.apiProvider.post(ADMIN_GET_CUSTOMER_LOCATIONS, { customerNo }, true, true, TRACKING_API_BASE_URL_PROD);
   }
 }

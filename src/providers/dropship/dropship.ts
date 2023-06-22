@@ -14,6 +14,7 @@ import {
   ds_update_savedorder,
   get_usernames
 } from '../../util/constants-url';
+import { environment } from '../../environments/environment';
 
 /*
   Generated class for the RouteTrackingProvider provider.
@@ -27,27 +28,27 @@ export class DropshipProvider {
 
   /* returns an array of saved orders */
   public getSavedorderList(): Observable<{ d: string }> {
-    return this.apiProvider.get(ds_get_savedorder_list);
+    return this.apiProvider.get(ds_get_savedorder_list, {}, environment.baseUrlEnglish);
   }
 
   /* returns an array of forms for the vendor */
   public getFormList(body: { formtype: string; type: string }): Observable<{ d: string }> {
-    return this.apiProvider.get(ds_form_list, body);
+    return this.apiProvider.get(ds_form_list, body, environment.baseUrlEnglish);
   }
 
   /* returns form details for the vendor form */
   public getFormDetails(form_id: number): Observable<{ d: string }> {
-    return this.apiProvider.get(`${ds_form_details}/${form_id}`);
+    return this.apiProvider.get(`${ds_form_details}/${form_id}`, {}, environment.baseUrlEnglish);
   }
 
   /* returns array of form items for the vendor */
   public getFormItems(form_id: number): Observable<{ d: string }> {
-    return this.apiProvider.get(`${ds_form_items}/${form_id}`);
+    return this.apiProvider.get(`${ds_form_items}/${form_id}`, {}, environment.baseUrlEnglish);
   }
 
   /* Returns an array of usernames, Names and emails for a customer number */
   public getUsernames(customer_number: string): Observable<{ d: string }> {
-    return this.apiProvider.get(`${get_usernames}/${customer_number}`);
+    return this.apiProvider.get(`${get_usernames}/${customer_number}`, {}, environment.baseUrlEnglish);
   }
 
   /*
@@ -67,7 +68,7 @@ export class DropshipProvider {
     form_order_quantity: number;
     item_list: { factory_number: string; order_quantity: number }[];
   }): Observable<{ d: string }> {
-    return this.apiProvider.post(ds_create_savedorder, body, true);
+    return this.apiProvider.post(ds_create_savedorder, body, true, false, environment.baseUrlEnglish);
   }
 
   /*
@@ -83,7 +84,7 @@ export class DropshipProvider {
     form_order_quantity: number;
     item_list: { factory_number: string; order_quantity: number }[];
   }): Observable<{ d: string }> {
-    return this.apiProvider.put(`${ds_update_savedorder}/${body.order_id}`, body);
+    return this.apiProvider.put(`${ds_update_savedorder}/${body.order_id}`, body, environment.baseUrlEnglish);
   }
 
   /*
@@ -95,12 +96,12 @@ export class DropshipProvider {
     user_name: string;
     customer_email: string;
   }): Observable<{ d: string }> {
-    return this.apiProvider.post(ds_send_savedorder, body);
+    return this.apiProvider.post(ds_send_savedorder, body, false, false, environment.baseUrlEnglish);
   }
 
   /* returns saved order details */
   public getSavedorderDetails(order_id: number): Observable<{ d: string }> {
-    return this.apiProvider.get(`${ds_get_savedorder_details}/${order_id}`);
+    return this.apiProvider.get(`${ds_get_savedorder_details}/${order_id}`, {}, environment.baseUrlEnglish);
   }
 
   /*
@@ -108,10 +109,10 @@ export class DropshipProvider {
    * returns (true/false – in case of errors)
    */
   public dsDeleteSavedorder(order_id: number): Observable<{ d: string }> {
-    return this.apiProvider.delete(`${ds_delete_savedorder}/${order_id}`);
+    return this.apiProvider.delete(`${ds_delete_savedorder}/${order_id}`, {}, environment.baseUrlEnglish);
   }
 
   public getFormItemSearch(body: { form_id: number; keyword: string }): Observable<{ d: string }> {
-    return this.apiProvider.get(ds_form_item_search, body);
+    return this.apiProvider.get(ds_form_item_search, body, environment.baseUrlEnglish);
   }
 }
