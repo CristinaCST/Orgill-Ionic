@@ -16,7 +16,9 @@ export class ApiService {
     public readonly secureActions: SecureActionsService,
     public translate: TranslateService
   ) {
-    this.baseUrl = this.getServiceBaseURL();
+    translate.onLangChange.subscribe(() => {
+      this.baseUrl = this.getServiceBaseURL();
+    });
 
     secureActions
       .waitForAuth()

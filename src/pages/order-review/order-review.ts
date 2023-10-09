@@ -192,6 +192,8 @@ export class OrderReviewPage implements OnInit {
         .catch(err => {
           LoadingService.hideAll();
           console.error(err);
+          const content: PopoverContent = { title: Strings.GENERIC_ERROR, message: Strings.SOMETHING_WENT_WRONG };
+          this.popoversService.show(content);
         });
     });
   }

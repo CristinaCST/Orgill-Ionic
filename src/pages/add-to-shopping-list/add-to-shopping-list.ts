@@ -253,7 +253,7 @@ export class AddToShoppingListPage implements OnInit {
 
   public checkProductInList(listId: number): void {
     this.shoppingListsProvider
-      .checkProductInList(this.product.sku, listId, this.selectedProgram.program_no)
+      .checkProductInList(this.product.sku, listId, this.selectedProgram.program_no || '0')
       .subscribe(({ status }: any) => {
         if (status) {
           this.isAddBtnDisabled = true;

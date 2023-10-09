@@ -54,9 +54,9 @@ export const URL_ORDER_HOT_DEAL_PRODUCTS: string = 'order/flashproducts';
 export const PRODUCT_IMAGE_BASE_URL: string = 'https://images.orgill.com/200x200/';
 
 // ROUTE TRACKING API?
-const TRACKING_API_BASE_URL: string = '//40.122.36.68/api/';
-// const TRACKING_API_BASE_URL_PROD: string = '//168.61.170.88/api/';
-export const TRACKING_API_BASE_URL_PROD: string = '//ozonetransportation.orgill.com/api/';
+const TRACKING_API_BASE_URL: string = 'https://40.122.36.68/api/';
+// const TRACKING_API_BASE_URL_PROD: string = 'https://168.61.170.88/api/';
+export const TRACKING_API_BASE_URL_PROD: string = 'https://ozonetransportation.orgill.com/api/';
 
 /**
  * params

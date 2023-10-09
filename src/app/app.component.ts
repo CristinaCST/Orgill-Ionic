@@ -37,7 +37,12 @@ export class MyApp {
     private readonly authService: AuthService
   ) {
     this.setAppLanguage().then(() => {
-      this.initializeApp();
+      const currentLang = localStorage.getItem('currentLang');
+      if (!currentLang) {
+        localStorage.setItem('currentLang', translate.currentLang);
+      }
+
+      this.initializeApp(currentLang);
     });
   }
 
@@ -45,7 +50,7 @@ export class MyApp {
     document.activeElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'start' });
   }
 
-  public initializeApp(): void {
+  public initializeApp(currentLang): void {
     this.isLoading = true;
 
     this.events.subscribe(Constants.EVENT_SCROLL_INTO_VIEW, this.scrollToElement);
@@ -111,7 +116,7 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.statusBar.overlaysWebView(false);
       this.statusBar.hide();
-      this.checkSession();
+      this.checkSession(currentLang);
     });
   }
 
@@ -129,8 +134,15 @@ export class MyApp {
     this.isLoading = false;
   }
 
-  private checkSession(): void {
+  private checkSession(currentLang): void {
     this.stopLoading();
+
+    if (currentLang && this.translate.currentLang !== currentLang) {
+      this.authService.logout();
+      this.rootPage = Login;
+      this.navigatorService.initialRootPage(Login);
+      return;
+    }
 
     if (!this.authService.isValidSession()) {
       this.rootPage = Login;
