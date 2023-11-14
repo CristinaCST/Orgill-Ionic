@@ -57,6 +57,7 @@ export const PRODUCT_IMAGE_BASE_URL: string = 'https://images.orgill.com/200x200
 const TRACKING_API_BASE_URL: string = 'https://40.122.36.68/api/';
 // const TRACKING_API_BASE_URL_PROD: string = 'https://168.61.170.88/api/';
 export const TRACKING_API_BASE_URL_PROD: string = 'https://ozonetransportation.orgill.com/api/';
+export const TRACKING_API_BASE_URL_DEV: string = 'https://dev-ozonetransportation.orgill.com/api/';
 
 /**
  * params
@@ -87,6 +88,17 @@ export const TEST_GET_TODAY_CUSTOMERS: string = 'Test/GetTodayCustomers';
  * customerNo
  */
 export const ADMIN_GET_CUSTOMER_LOCATIONS: string = 'Admin/GetCustomerLocations';
+
+/**
+{
+  "errorType": "string",
+  "comments": "string",
+  "email": "string",
+  "errorDate": "Date",
+  "shipToNumber": "string"
+}
+ */
+export const SEND_BUG_REPORT = 'customer/SendBugReport';
 
 // DROPSHIP
 export const ds_create_savedorder: string = 'dssavedorders';

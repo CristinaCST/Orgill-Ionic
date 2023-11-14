@@ -332,5 +332,12 @@
   "track_order_truck_on_road": "Camion sur route",
   "track_valid_input_value": "Veuillez saisir un numéro de client valide à six chiffres!",
   "unit_text": "Unité",
-  "username": "Nom d'utilisateur"
+  "username": "Nom d'utilisateur",
+  "report_form_title": "Signaler un bug",
+  "report_form_issue_type": "Type de problème",
+  "report_form_email": "Email",
+  "report_form_ship_to_no": "Numéro d'envoi",
+  "report_form_details": "Détails du problème",
+  "report_form_date": "Date",
+  "report_form_send_form": "Envoyer le rapport"
 }

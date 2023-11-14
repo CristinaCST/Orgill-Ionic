@@ -5,10 +5,10 @@
 <!-- About Page Content -->
 <ion-content>
   <div class="settings-page-container">
-    <div class="settingsList">
+    <!-- <div class="settingsList">
       <p>{{"push_notifications_setting" | translate}}</p>
       <ion-toggle [checked]="notificationsAllowed" (ionChange)="pushNotificationsSwitch($event)"></ion-toggle>
-    </div>
+    </div> -->
     <div *ngIf="allowLanguageSwitch" class="settingsList">
       <p>{{"languages" | translate}}</p>
 

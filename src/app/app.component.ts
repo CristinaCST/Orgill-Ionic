@@ -37,12 +37,7 @@ export class MyApp {
     private readonly authService: AuthService
   ) {
     this.setAppLanguage().then(() => {
-      const currentLang = localStorage.getItem('currentLang');
-      if (!currentLang) {
-        localStorage.setItem('currentLang', translate.currentLang);
-      }
-
-      this.initializeApp(currentLang);
+      this.initializeApp();
     });
   }
 
@@ -50,7 +45,7 @@ export class MyApp {
     document.activeElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'start' });
   }
 
-  public initializeApp(currentLang): void {
+  public initializeApp(): void {
     this.isLoading = true;
 
     this.events.subscribe(Constants.EVENT_SCROLL_INTO_VIEW, this.scrollToElement);
@@ -116,16 +111,16 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.statusBar.overlaysWebView(false);
       this.statusBar.hide();
-      this.checkSession(currentLang);
+      this.checkSession();
     });
   }
 
   private setAppLanguage(): Promise<void> {
-    const language: string = navigator.language;
+    // const language: string = navigator.language;
     this.translate.setDefaultLang('en');
-    if (language.includes('fr')) {
-      return this.translate.use('fr').toPromise();
-    }
+    // if (language.includes('fr')) {
+    //   return this.translate.use('fr').toPromise();
+    // }
     return this.translate.use('en').toPromise();
   }
 
@@ -134,15 +129,8 @@ export class MyApp {
     this.isLoading = false;
   }
 
-  private checkSession(currentLang): void {
+  private checkSession(): void {
     this.stopLoading();
-
-    if (currentLang && this.translate.currentLang !== currentLang) {
-      this.authService.logout();
-      this.rootPage = Login;
-      this.navigatorService.initialRootPage(Login);
-      return;
-    }
 
     if (!this.authService.isValidSession()) {
       this.rootPage = Login;

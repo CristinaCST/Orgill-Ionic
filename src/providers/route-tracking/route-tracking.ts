@@ -6,8 +6,11 @@ import {
   GET_CUSTOMER_LOCATIONS,
   TEST_GET_TODAY_CUSTOMERS,
   ADMIN_GET_CUSTOMER_LOCATIONS,
-  TRACKING_API_BASE_URL_PROD
+  TRACKING_API_BASE_URL_PROD,
+  SEND_BUG_REPORT,
+  TRACKING_API_BASE_URL_DEV
 } from '../../util/constants-url';
+import { ReportFormData } from '../../interfaces/models/route-tracking';
 
 /*
   Generated class for the RouteTrackingProvider provider.
@@ -45,5 +48,9 @@ export class RouteTrackingProvider {
 
   public adminGetCustomerLocations(customerNo: string): Observable<any> {
     return this.apiProvider.post(ADMIN_GET_CUSTOMER_LOCATIONS, { customerNo }, true, true, TRACKING_API_BASE_URL_PROD);
+  }
+
+  public sendBugReport(formData: ReportFormData): Observable<any> {
+    return this.apiProvider.post(SEND_BUG_REPORT, formData, true, true, TRACKING_API_BASE_URL_PROD);
   }
 }

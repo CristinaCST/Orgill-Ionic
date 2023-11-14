@@ -6,3 +6,11 @@ export type MapDetails = {
   truckId: string;
   invoices: number[];
 };
+
+export type ReportFormData = {
+  comments?: string;
+  email: string;
+  errorDate: string;
+  errorType: string;
+  shipToNumber?: string;
+};

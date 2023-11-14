@@ -332,5 +332,12 @@
   "track_order_truck_on_road": "Truck in Route",
   "track_valid_input_value": "Please input a valid six digits customer number!",
   "unit_text": "Unit",
-  "username": "Username"
+  "username": "Username",
+  "report_form_title": "Report bug",
+  "report_form_issue_type": "Issue type",
+  "report_form_email": "Email",
+  "report_form_ship_to_no": "Ship to number",
+  "report_form_details": "Issue details",
+  "report_form_date": "Date",
+  "report_form_send_form": "Send report"
 }

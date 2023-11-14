@@ -2,7 +2,7 @@
   <div class="login-page-content">
     <div>
       <div id="logo">
-        <img class="centered_element" src="../../assets/imgs/Orgill-Logo.png" />
+        <img class="centered_element" src="../../assets/imgs/Orgill-Logo.png" alt="logo" />
       </div>
 
       <ion-list>
@@ -47,6 +47,12 @@
       <ion-row>
         <ion-col class="button-container">
           <button class="login-button" ion-button round (click)="login()">{{'login' | translate}}</button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col class="button-container">
+          <button class="login-button" ion-button round (click)="openModal()">{{'languages' | translate}}</button>
         </ion-col>
       </ion-row>
     </div>
