@@ -116,11 +116,11 @@ export class MyApp {
   }
 
   private setAppLanguage(): Promise<void> {
-    // const language: string = navigator.language;
+    const language: string = localStorage.getItem('language') || navigator.language;
     this.translate.setDefaultLang('en');
-    // if (language.includes('fr')) {
-    //   return this.translate.use('fr').toPromise();
-    // }
+    if (language.includes('fr')) {
+      return this.translate.use('fr').toPromise();
+    }
     return this.translate.use('en').toPromise();
   }
 
