@@ -294,6 +294,7 @@
   "shopping_list_empty_message": "Shopping list is empty.",
   "shopping_list_empty_title": "Empty list",
   "shopping_list_existing_product": "The product is already added in this list.",
+  "shopping_list_item_in_orgill_cart": "Items already exist in the Orgill.com Shopping Cart",
   "shopping_list_expired_items_message": "You have items in your cart on expired programs.  \n\nPlease review these items.",
   "shopping_list_expired_items_title": "Updated Prices",
   "shopping_list_items_label": "Items",

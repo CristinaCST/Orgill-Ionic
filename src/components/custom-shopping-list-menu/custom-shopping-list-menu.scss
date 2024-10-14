@@ -1,4 +1,4 @@
-@import "../app-menu/app-menu";
+@import '../app-menu/app-menu';
 
 custom-shopping-list-menu {
   ion-header {
@@ -23,5 +23,8 @@ custom-shopping-list-menu {
       color: white;
     }
   }
+}
 
+app-menu #main_menu.isSecondaryMenuVisible custom-shopping-list-menu .scroll-content {
+  margin-top: 56px !important;
 }
