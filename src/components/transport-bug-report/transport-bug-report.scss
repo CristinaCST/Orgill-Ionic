@@ -1,0 +1,128 @@
+@import '../../theme/variables.scss';
+
+.open-report-btn {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  z-index: 9;
+  display: flex;
+  width: 50px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  background: #9a040c;
+  border-radius: 11px;
+
+  .bug-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.report-form-wrapper {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  z-index: 10;
+  max-width: 260px;
+  width: 70%;
+  height: 0px;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 11px;
+
+  &.active {
+    height: auto;
+    border: 1px solid #c9c9c9;
+    box-shadow: 0px 0px 2px #00000029;
+  }
+
+  .report-header {
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    justify-content: space-between;
+    background: color($colors, OrgillRed);
+
+    .report-title-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .bug-img {
+        width: 30px;
+        height: 30px;
+      }
+
+      .bug-title {
+        margin: 0 0 0 5px;
+        color: #fff;
+        font-size: 12px;
+      }
+    }
+
+    .close-report-btn {
+      margin: 0 10px;
+      padding: 0;
+      background: none;
+
+      .close-icon {
+        color: #fff;
+      }
+    }
+  }
+
+  .report-form {
+    padding: 10px;
+  }
+
+  .report-list-wrapper {
+    margin: 0 0 5px;
+  }
+
+  .report-item-wrapper {
+    padding: 0;
+    margin: 0 0 10px;
+    font-size: 13px;
+
+    .report-select {
+      max-width: 100%;
+      width: 100%;
+    }
+
+    .item-inner {
+      border-radius: 2px;
+      border: 1px solid #c9c9c9 !important;
+    }
+
+    &.item-md.item-input.ng-invalid.ng-touched:not(.input-has-focus):not(.item-input-has-focus) .item-inner {
+      box-shadow: inset 0 0 0 1px #f53d3d;
+    }
+
+    &.item-md.item-input.item-input-has-focus .item-inner,
+    .item-md.item-input.input-has-focus .item-inner {
+      border: 1px solid #c9c9c9 !important;
+    }
+  }
+
+  .report-submit-wrapper {
+    padding: 0;
+
+    .item-inner {
+      padding: 0;
+
+      .label.label-md {
+        margin: 0;
+      }
+    }
+
+    .report-submit-btn {
+      height: 40px;
+      margin: 0;
+      color: #fff;
+      font-size: 13px;
+      background: color($colors, OrgillRed);
+    }
+  }
+}

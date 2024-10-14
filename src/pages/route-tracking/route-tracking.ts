@@ -34,11 +34,14 @@ export class RouteTrackingPage {
   private readonly deliveryLoader: LoadingService;
   private currentMapIndex: number;
   public currentDeliveries: any[] = [];
+  public filteredDeliveries: any[] = [];
   public showMap: boolean;
   public showMoreInfo: boolean;
   private requestUnderway: boolean;
   public showCustomInput: boolean;
   public errorMessage: string = 'You do not have any deliveries for today.';
+  public customerNumValue: string;
+  public isFilterActive: boolean;
   public mapDetails: MapDetails = {
     distance: '',
     eta: '',
@@ -76,6 +79,10 @@ export class RouteTrackingPage {
       return;
     }
 
+    this.fetchCustomerLocations();
+  }
+
+  private fetchCustomerLocations() {
     this.deliveryLoader.show();
 
     this.routeTrackingProvider.getCustomerLocations().subscribe(customerLocations => {
@@ -123,10 +130,11 @@ export class RouteTrackingPage {
 
     setTimeout(() => {
       this.populateMapWindow(data);
+      this.mapElement.nativeElement.scrollIntoView();
     }, 0); // this was shown as an example on the angular docs
   }
 
-  public refreshMao(): void {
+  public refreshMap(): void {
     if (this.currentMapIndex < 0) {
       return;
     }
@@ -186,6 +194,26 @@ export class RouteTrackingPage {
 
   private validateInput(value: string): boolean {
     return Boolean(!isNaN(Number(value)) && value.length === 6);
+  }
+
+  public onCustomerNumValueChange(value) {
+    if (isNaN(parseFloat(value))) {
+      if (!this.customerNumValue) {
+        this.cancelFilter();
+      }
+      return;
+    }
+
+    this.isFilterActive = true;
+    this.filteredDeliveries = this.currentDeliveries.filter(el => el.customerLocation.shipToNo.startsWith(value));
+  }
+
+  public cancelFilter() {
+    if (this.isFilterActive) {
+      this.isFilterActive = false;
+      this.customerNumValue = null;
+      this.filteredDeliveries = [];
+    }
   }
 
   /**

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { SavedDraftsPage } from '../../pages/ds-saved-drafts/saved-drafts';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { DropshipService } from '../../services/dropship/dropship';
@@ -48,7 +48,10 @@ export class VendorMenuComponent {
     this.popoversService.show(content).subscribe((data: DefaultPopoverResult) => {
       if (data.optionSelected === 'OK') {
         this.authService.logout();
-        this.navigatorService.setRoot(Login).catch(err => console.error(err));
+        this.navigatorService
+          .setRoot(Login)
+          .then(() => location.reload())
+          .catch(err => console.error(err));
       }
     });
   }

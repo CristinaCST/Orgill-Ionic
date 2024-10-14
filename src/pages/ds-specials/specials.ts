@@ -60,7 +60,7 @@ export class SpecialsPage implements OnInit {
       .subscribe((response: any) => {
         const data: FormList[] = response;
 
-        if (!Boolean(data.length)) {
+        if (!data.length) {
           this.dropshipLoader.hide();
         }
 

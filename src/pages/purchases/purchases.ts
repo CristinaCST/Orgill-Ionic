@@ -14,7 +14,6 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: 'purchases.html'
 })
 export class PurchasesPage {
-
   protected isLoading: boolean = true;
   private purchasesBuffer: Purchase[] = [];
   public purchases: Purchase[] = [];
@@ -23,12 +22,14 @@ export class PurchasesPage {
   @ViewChild(Content) private readonly content: Content;
   @ViewChild(InfiniteScroll) private readonly infiniteScroll: InfiniteScroll;
 
-  constructor(private readonly navigatorService: NavigatorService,
-              private readonly purchasesProvider: PurchasesProvider,
-              private readonly loadingService: LoadingService,
-              private readonly translateService: TranslateService,
-              private readonly events: Events) {
-                this.loader = this.loadingService.createLoader();
+  constructor(
+    private readonly navigatorService: NavigatorService,
+    private readonly purchasesProvider: PurchasesProvider,
+    private readonly loadingService: LoadingService,
+    private readonly translateService: TranslateService,
+    private readonly events: Events
+  ) {
+    this.loader = this.loadingService.createLoader();
   }
 
   public ngOnInit(): void {
@@ -42,61 +43,60 @@ export class PurchasesPage {
       this.initPurchases();
       // this.navigatorService.performRefresh();
     }
-  }
-  
+  };
+
   private initPurchases(): void {
     this.loader.show();
     this.isLoading = true;
     this.purchases = [];
     this.purchasesBuffer = [];
     this.content.resize();
-    
-   this.infiniteScroll.enable(true);
-    this.purchasesProvider.getPurchases().then(purchases => {
-      purchases.map(purchase => {
-        if (!purchase.program_name) {
-          purchase.program_name = (this.translateService.instant(Strings.REGULAR_CATALOG) as String).toUpperCase();
-        }
+
+    this.infiniteScroll.enable(true);
+    this.purchasesProvider
+      .getPurchases()
+      .then(purchases => {
+        purchases.map(purchase => {
+          if (!purchase.program_name) {
+            purchase.program_name = (this.translateService.instant(Strings.REGULAR_CATALOG) as String).toUpperCase();
+          }
+        });
+
+        this.purchasesBuffer.push(...purchases);
+        this.purchases.push(...this.purchasesBuffer.splice(0, Constants.INFINITE_LOADER_INITIAL_ELEMENTS));
+        this.content.resize();
+
+        // HACK: Infinite loader was buggy and didn't update sizes properly
+        // To fix the issues, we manually check for scroll area size and load enough items
+        // The timeout is needed to allow this.content. sizes to update.
+        const loadInterval: number = setInterval(() => {
+          if (this.content.contentHeight * 2 <= this.content.scrollHeight || this.purchasesBuffer.length === 0) {
+            this.loader.hide();
+            clearInterval(loadInterval);
+            this.isLoading = false;
+            return;
+          }
+          this.infiniteScroll.ionInfinite.emit(this.infiniteScroll);
+        }, 20);
+      })
+      .catch(err => {
+        this.isLoading = false;
+        LoadingService.hideAll();
+        // this.reloadService.paintDirty('purchases');
       });
-
-      
-      this.purchasesBuffer.push(...purchases);
-      this.purchases.push(...this.purchasesBuffer.splice(0, Constants.INFINITE_LOADER_INITIAL_ELEMENTS));
-      this.content.resize();
-      
-
-      // HACK: Infinite loader was buggy and didn't update sizes properly
-      // To fix the issues, we manually check for scroll area size and load enough items
-      // The timeout is needed to allow this.content. sizes to update.
-      const loadInterval: number = setInterval(() => {
-        if (this.content.contentHeight * 2 <= this.content.scrollHeight || this.purchasesBuffer.length === 0) {
-          this.loader.hide();
-          clearInterval(loadInterval);
-          this.isLoading = false;
-          return;
-        }
-        this.infiniteScroll.ionInfinite.emit(this.infiniteScroll);
-      }, 20);
-              
-    }).catch(err => {
-      this.isLoading = false;
-      LoadingService.hideAll();
-     // this.reloadService.paintDirty('purchases');
-    });
-
   }
 
   public openOrderDetails(purchase: Purchase): void {
-    this.navigatorService.push(PurchaseDetailsPage, { 'purchase': purchase }).catch(err => console.error(err));
+    this.navigatorService.push(PurchaseDetailsPage, { purchase: purchase }).catch(err => console.error(err));
   }
 
   public loadData(infiniteLoader: InfiniteScroll): void {
-      this.purchases.push(...this.purchasesBuffer.splice(0, Constants.INFINITE_LOADER_LOAD_COUNT));
-      this.content.resize();
-      infiniteLoader.complete();
+    this.purchases.push(...this.purchasesBuffer.splice(0, Constants.INFINITE_LOADER_LOAD_COUNT));
+    this.content.resize();
+    infiniteLoader.complete();
 
-      if (this.purchasesBuffer.length === 0) {
-        infiniteLoader.enabled = false;
-      }
+    if (this.purchasesBuffer.length === 0) {
+      infiniteLoader.enabled = false;
+    }
   }
 }

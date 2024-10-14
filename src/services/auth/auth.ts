@@ -13,7 +13,7 @@ import { DateTimeService } from '../../services/datetime/dateTimeService';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import * as Strings from '../../util/strings';
 import { PopoversService, PopoverContent, CustomListPopoverResult } from '../../services/popovers/popovers';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { LoadingService } from '../../services/loading/loading';
 
 @Injectable()

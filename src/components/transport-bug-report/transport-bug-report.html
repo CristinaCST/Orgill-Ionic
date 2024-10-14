@@ -1,0 +1,77 @@
+<button class="open-report-btn" (click)="openReportForm()" [hidden]="isHidden">
+  <img class="bug-img" src="../../assets/imgs/noun-bug-3233681.png" alt="bug" />
+</button>
+
+<div class="report-form-wrapper" [ngClass]="{'active': isReportFormActive}" [hidden]="isHidden">
+  <div class="report-header">
+    <div class="report-title-wrapper">
+      <img class="bug-img" src="../../assets/imgs/noun-bug-3233681.png" alt="bug" />
+      <h6 class="bug-title">{{"report_form_title" | translate}}</h6>
+    </div>
+
+    <button class="close-report-btn" (click)="closeReportForm()">
+      <ion-icon class="close-icon" name="close"></ion-icon>
+    </button>
+  </div>
+
+  <form class="report-form" [formGroup]="reportForm" (ngSubmit)="handleOnSubmit(reportForm.value)">
+    <ion-list class="report-list-wrapper">
+      <ion-item class="report-item-wrapper">
+        <ion-select
+          class="report-select"
+          placeholder="{{'report_form_issue_type' | translate}}*"
+          formControlName="errorType"
+          interface="action-sheet"
+        >
+          <ion-option *ngFor="let issue of issueTypes" [value]="issue">{{issue}}</ion-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item class="report-item-wrapper">
+        <ion-input
+          type="email"
+          inputmode="email"
+          class="report-input"
+          formControlName="email"
+          placeholder="{{'report_form_email' | translate}}*"
+          (keydown.enter)="$event.target.blur()"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item class="report-item-wrapper">
+        <ion-input
+          inputmode="numeric"
+          class="report-input"
+          formControlName="shipToNumber"
+          placeholder="{{'report_form_ship_to_no' | translate}}"
+          (keydown.enter)="$event.target.blur()"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item class="report-item-wrapper">
+        <ion-textarea
+          rows="3"
+          class="report-textarea"
+          formControlName="comments"
+          placeholder="{{'report_form_details' | translate}}"
+          (keydown.enter)="$event.target.blur()"
+        ></ion-textarea>
+      </ion-item>
+
+      <ion-item class="report-item-wrapper">
+        <ion-datetime
+          class="report-date"
+          formControlName="errorDate"
+          displayFormat="MM/DD/YYYY"
+          placeholder="{{'report_form_date' | translate}}*"
+        ></ion-datetime>
+      </ion-item>
+
+      <ion-item class="report-submit-wrapper">
+        <button class="report-submit-btn" type="submit" ion-button block [disabled]="!reportForm.valid">
+          {{'report_form_send_form' | translate}}
+        </button>
+      </ion-item>
+    </ion-list>
+  </form>
+</div>

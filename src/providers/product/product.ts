@@ -37,7 +37,6 @@ export class ProductProvider {
         rpp: String(Constants.SEARCH_RESULTS_PER_PAGE),
         last_modified: ''
       };
-
       return this.apiProvider.get(ConstantsUrl.URL_PRODUCT_SEARCH, params);
     });
   }

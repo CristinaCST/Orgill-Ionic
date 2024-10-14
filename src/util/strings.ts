@@ -10,7 +10,7 @@ export const GENERIC_MODAL_TITLE: string = 'generic_modal_title';
  *  =============================================================================================
  */
 
-export const GENERIC_ERROR: string = 'generic_error';
+export const GENERIC_ERROR: string = 'error';
 export const APPLICATION_QUIT_MESSAGE: string = 'application_quit_message';
 
 /**

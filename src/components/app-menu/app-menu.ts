@@ -24,7 +24,7 @@ import { NavigatorService } from '../../services/navigator/navigator';
 import { Page } from 'ionic-angular/navigation/nav-util';
 import { ShoppingListResponse } from '../../interfaces/response-body/shopping-list';
 import { HotDealsPage } from '../../pages/hot-deals/hot-deals';
-import { OneSignalService } from '../../services/onesignal/onesignal';
+// import { OneSignalService } from '../../services/onesignal/onesignal';
 import { LoadingService } from '../../services/loading/loading';
 import { LandingPage } from '../../pages/landing/landing';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
@@ -64,7 +64,7 @@ export class AppMenuComponent implements OnInit {
     private readonly shoppingListsProvider: ShoppingListsProvider,
     private readonly navigatorService: NavigatorService,
     private readonly menuCtrl: MenuController,
-    private readonly oneSignal: OneSignalService,
+    // private readonly oneSignal: OneSignalService,
     private readonly loadingService: LoadingService,
     public readonly secureActions: SecureActionsService
   ) {
@@ -100,10 +100,10 @@ export class AppMenuComponent implements OnInit {
   };
 
   private initMenu(): void {
-    this.oneSignal.getRetailerType().then(retailer_type => {
-      // Temporary disable hot deals for CA;
-      this.hotDealNotification = retailer_type === 'US';
-    });
+    // this.oneSignal.getRetailerType().then(retailer_type => {
+    //   // Temporary disable hot deals for CA;
+    //   this.hotDealNotification = retailer_type === 'US';
+    // });
 
     this.secureActions
       .waitForAuth()
@@ -142,8 +142,8 @@ export class AppMenuComponent implements OnInit {
         this.authService.logout();
         this.navigatorService
           .setRoot(Login)
-          .then(() => location.reload())
-          .catch(err => console.error(err));
+          // .then(() => location.reload())
+          // .catch(err => console.error(err));
       }
     });
   }
