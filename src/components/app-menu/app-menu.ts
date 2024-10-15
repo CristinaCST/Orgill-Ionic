@@ -142,8 +142,8 @@ export class AppMenuComponent implements OnInit {
         this.authService.logout();
         this.navigatorService
           .setRoot(Login)
-          .then(() => location.reload())
-          .catch(err => console.error(err));
+          // .then(() => location.reload())
+          // .catch(err => console.error(err));
       }
     });
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NavigatorService } from '../../services/navigator/navigator';
-import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+// import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { LoadingService } from '../../services/loading/loading';
 import { TranslateWrapperService } from '../translate/translate';
 import { Product } from '../../interfaces/models/product';
@@ -36,7 +36,7 @@ export class ScannerService {
 
   constructor(
     private readonly navigatorService: NavigatorService,
-    private readonly barcodeScanner: BarcodeScanner,
+    // private readonly barcodeScanner: BarcodeScanner,
     private readonly translateProvider: TranslateWrapperService,
     private readonly productProvider: ProductProvider,
     private readonly shoppingListProvider: ShoppingListsProvider,
@@ -51,10 +51,6 @@ export class ScannerService {
   }
 
   public scan(shoppingList: ShoppingList, products: ShoppingListItem[]): void {
-    const buttonOverride: number = this.navigatorService.oneTimeBackButtonOverride(() => {
-      // Exiting scanner
-    });
-
     if (shoppingList) {
       this.shoppingList = shoppingList;
       this.shoppingListId = this.shoppingList.ListID;
@@ -63,34 +59,35 @@ export class ScannerService {
       this.shoppingListId = undefined;
     }
     this.products = products;
-
     this.selectedProduct = {};
-    this.barcodeScanner.scan({ disableAnimations: true, resultDisplayDuration: 0 }).then(
-      barcodeData => {
-        this.navigatorService.removeOverride(buttonOverride);
 
-        if (barcodeData === undefined) {
-          return undefined;
-        }
+    //Commented below code (Don't remove it ) due to right now we are doing scanning stuff from native side
 
-        const scanResult: string = barcodeData.text;
-        if (this.isValidScanResult(scanResult)) {
-          //  this.searchingLoader.show();
-          this.setProgramFromScanResult(scanResult);
-          this.setSearchStringFromScanResult(scanResult);
-          this.searchProduct();
-        } else {
-          // TODO: check if string is ok
-          this.scanMessage = this.translateProvider.translate(Constants.SCAN_INVALID_BARCODE);
-        }
-      },
-      err => {
-        console.error(err);
-        //   const content: PopoverContent = this.popoversService.setContent(Strings.POPOVER_CAMERA_PERMISSION_TITLE, Strings.POPOVER_CAMERA_PERMISSION_MESSAGE);
-        // const content: PopoverContent = this.popoversService.setContent('Scan error', err);
-        // this.popoversService.show(content);
-      }
-    );
+    // this.barcodeScanner.scan({ disableAnimations: true, resultDisplayDuration: 0 }).then(
+    //   barcodeData => {
+    //     if (barcodeData === undefined) {
+    //       return undefined;
+    //     }
+    //     this.onBarcodeScan(barcodeData.text,true);
+    //   });
+
+  }
+
+  public onBarcodeScan(scanResult: string) {
+    const buttonOverride: number = this.navigatorService.oneTimeBackButtonOverride(() => {
+      // If this block will not exist then unable to move back (navigation) from native side 
+      // Exiting scanner
+    });
+    this.navigatorService.removeOverride(buttonOverride);
+    if (this.isValidScanResult(scanResult)) {
+      //  this.searchingLoader.show();
+      this.setProgramFromScanResult(scanResult);
+      this.setSearchStringFromScanResult(scanResult);
+      this.searchProduct();
+    } else {
+      // TODO: check if string is ok
+      this.scanMessage = this.translateProvider.translate(Constants.SCAN_INVALID_BARCODE);
+    }
   }
 
   //   public getPrograms(): any {
@@ -103,6 +100,7 @@ export class ScannerService {
     return scanResult.length === 8 || scanResult.length === 10 || scanResult.length >= 12;
   }
 
+  //This method will set program number based on detected barcode number
   private setProgramFromScanResult(scanResult: string): void {
     this.programNumber = scanResult.length === 10 ? scanResult.substring(7, 10) : '';
     const filteredPrograms: Program[] = this.catalogProvider.programs.filter(
@@ -124,7 +122,11 @@ export class ScannerService {
 
   public searchProduct(): void {
     this.searchingLoader.show();
-    this.productProvider.searchProduct(this.searchString, this.programNumber).subscribe(
+    //****
+    //Set empty program number cause its not searching properly with programnumber from api side
+    //program number is already attached with detected barcode 
+    //****
+    this.productProvider.searchProduct(this.searchString, '').subscribe(
       (response: any) => {
         const content: PopoverContent = {
           type: Constants.POPOVER_INFO,
@@ -132,8 +134,6 @@ export class ScannerService {
           message: Strings.POPOVER_PLACEHOLDER_MESSAGE,
           positiveButtonText: Strings.MODAL_BUTTON_OK
         };
-
-        // this.searchingLoader.hide();
 
         const responseData: Product[] = response;
         if (responseData.length > 0) {
@@ -183,7 +183,7 @@ export class ScannerService {
                           content.message = 'Added ' + newItem.product.name + ' to list';
 
                           this.events.publish(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST);
-                          this.popoversService.show(content).subscribe(() => {});
+                          this.popoversService.show(content).subscribe(() => { });
                         },
                         err => {
                           this.searchingLoader.hide();
@@ -209,7 +209,7 @@ export class ScannerService {
           content.message = this.translateProvider.translate(Constants.SCAN_NOT_FOUND);
           this.popoversService.show(content);
           this.noProductFound = true;
-          // his.scan();
+          // this.scan();
         }
       },
       errorResponse => {

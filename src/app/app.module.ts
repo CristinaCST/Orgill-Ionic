@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicModule } from 'ionic-angular';
+import { IonicApp, IonicModule, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -207,10 +207,13 @@ import { RouteTrackingProvider } from '../providers/route-tracking/route-trackin
     DropshipProvider,
     DropshipService,
     DashboardProvider,
-    CalendarService
+    CalendarService,
+    AlertController
   ]
 })
-export class AppModule {}
+
+export class AppModule{}
+
 
 export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');

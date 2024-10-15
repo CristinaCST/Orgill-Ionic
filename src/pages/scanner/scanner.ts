@@ -74,7 +74,11 @@ export class ScannerPage implements OnInit, OnDestroy {
   }
 
   public clickCb(): void {
-    this.scanClicks.next();
+    // this.scanClicks.next();
+    // this.scannerService.onBarcodeScan("3284601671",false)
+    //at first pass undefined 
+    this.scannerService.scan(undefined, undefined);
+    window.ozone.openScanner();
   }
 
   public onSearched($event: any): void {

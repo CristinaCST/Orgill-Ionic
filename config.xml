@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="947" id="com.orgill.ionic" version="9.4.7" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android">
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" android-versionCode="947" id="com.orgill.ionic" version="9.4.7">
     <name>OrgillOZone</name>
     <description>The OZone</description>
     <author email="cristina.nicolae@cst-us.com" href="http://cst-us.com/">CST Team</author>

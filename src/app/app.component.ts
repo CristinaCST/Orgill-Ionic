@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -16,6 +16,32 @@ import { AuthService } from '../services/auth/auth';
 import { LandingPage } from '../pages/landing/landing';
 import { VendorLandingPage } from '../pages/vendor-landing/vendor-landing';
 import { User } from 'interfaces/models/user';
+import { ScannerService } from '../services/scanner/scanner';
+
+//Global js function interface for bind with native app 
+//through these function native side's webview will call these js functions
+//to execute function's stuff 
+declare global {
+  interface Window {
+    ozone: {
+      openScanner: () => void;//For open scanner view at native side from ionic app 
+
+      showRequestCameraPermissionPopUp: () => void;//For show permission request view at ionic app from native side 
+
+      onCameraPermissionAllow: () => void;//This will call after request pop-up will dismiss
+
+      navigateBack: () => void;//To manage ionic app's navigation from native side
+
+      closeApp: () => void;//This will call after navigation will finished
+
+      fetchProductInfo: (value: any) => void;//For getting product info on code scan
+
+      nativeLog: (value: any) => any;//For debugging log from native side
+
+      // Add other functions as needed
+    };
+  }
+}
 
 @Component({
   templateUrl: 'app.html'
@@ -34,11 +60,66 @@ export class MyApp {
     private readonly navigatorService: NavigatorService,
     private readonly popoverProvider: PopoversService,
     private readonly events: Events,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    public scannerService: ScannerService,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly ngZone: NgZone,
   ) {
     this.setAppLanguage().then(() => {
       this.initializeApp();
     });
+
+    //Initialize global js functions
+    window.ozone = {
+
+      openScanner: () => {
+        //TEST code
+        // window.ozone.fetchProductInfo("3284601671");
+      },
+
+      showRequestCameraPermissionPopUp: () => {
+        this.ngZone.run(() => {
+          const content: PopoverContent = {
+            // type: Constants.POPOVER_ERROR,
+            title: Strings.POPOVER_CAMERA_PERMISSION_TITLE,
+            message: Strings.POPOVER_CAMERA_PERMISSION_MESSAGE,
+            negativeButtonText: Strings.MODAL_BUTTON_DECLINE,
+            positiveButtonText: Strings.MODAL_BUTTON_ALLOW
+          };
+          this.popoverProvider.show(content).subscribe((result: DefaultPopoverResult) => {
+            if (result.optionSelected === 'OK') {
+              window.ozone.onCameraPermissionAllow();
+            }
+          });
+        });
+      },
+
+      onCameraPermissionAllow: () => {
+        //TODO Blank cause was define at native side
+      },
+
+      nativeLog: (value) => {
+        console.log(value);
+        return value;
+      },
+
+      closeApp: () => {
+        //TODO Blank cause was define at native side
+      },
+
+      navigateBack: () => {
+        this.navigateBack(true);
+      },
+
+      fetchProductInfo: (value) => {
+        // this.scannerService.onBarcodeScan(value);
+        this.ngZone.run(() => {
+          //NgZone run require cause onBarcode scan stuff will call from outside of the webview
+          this.scannerService.onBarcodeScan(value);
+        });
+      }
+    };
+
   }
 
   public scrollToElement(): void {
@@ -58,14 +139,14 @@ export class MyApp {
         if (this.platform.is('android')) {
           CSSInjector.addRawCSS(
             'body.keyboard-is-open .scroll-content:not(.keyboard-immune){margin-bottom:' +
-              obj.keyboardHeight +
-              'px!important;}'
+            obj.keyboardHeight +
+            'px!important;}'
           );
         } else {
           CSSInjector.addRawCSS(
             'body.keyboard-is-open .scroll-content:not(.keyboard-immune){margin-bottom:' +
-              obj.keyboardHeight +
-              'px!important; padding-bottom:0px!important;} body.keyboard-is-open .keyboard-immune{padding-bottom:0px!important;}'
+            obj.keyboardHeight +
+            'px!important; padding-bottom:0px!important;} body.keyboard-is-open .keyboard-immune{padding-bottom:0px!important;}'
           );
         }
         CSSInjector.injectCSS();
@@ -78,41 +159,47 @@ export class MyApp {
       });
 
       this.navigatorService.initializeBackButton(() => {
-        if (LoadingService.activeLoading) {
-          return;
-        }
-
-        // TODO: This could be moved
-        if (PopoversService.activeItem) {
-          // PopoversService.dismissCurrent();
-          return;
-        }
-
-        if (this.platform.is('android') && !this.navigatorService.canGoBack) {
-          const content: PopoverContent = {
-            type: Constants.POPOVER_QUIT,
-            title: Strings.GENERIC_MODAL_TITLE,
-            message: Strings.APPLICATION_QUIT_MESSAGE,
-            negativeButtonText: Strings.MODAL_BUTTON_NO,
-            positiveButtonText: Strings.MODAL_BUTTON_YES
-          };
-
-          this.popoverProvider.show(content).subscribe((result: DefaultPopoverResult) => {
-            if (result.optionSelected === 'OK') {
-              this.platform.exitApp();
-            }
-          });
-        } else {
-          this.navigatorService.pop();
-        }
+        this.navigateBack(this.platform.is('android'));
       });
 
-      this.networkService.listenForNetworkEvents();
+      //Disable network listener for now for native web container 
+      // this.networkService.listenForNetworkEvents();
+
       this.statusBar.styleDefault();
       this.statusBar.overlaysWebView(false);
       this.statusBar.hide();
       this.checkSession();
     });
+  }
+
+  //Common navigate back function re-coded from old code 
+  //to manage navigation using global navigateBack function from native side
+  private navigateBack(isForAndroid: boolean) {
+    if (LoadingService.activeLoading) {
+      return;
+    }
+    if (PopoversService.activeItem) {
+      // PopoversService.dismissCurrent();
+      return;
+    }
+    if (isForAndroid && !this.navigatorService.canGoBack) {
+      const content: PopoverContent = {
+        type: Constants.POPOVER_QUIT,
+        title: Strings.GENERIC_MODAL_TITLE,
+        message: Strings.APPLICATION_QUIT_MESSAGE,
+        negativeButtonText: Strings.MODAL_BUTTON_NO,
+        positiveButtonText: Strings.MODAL_BUTTON_YES
+      };
+
+      this.popoverProvider.show(content).subscribe((result: DefaultPopoverResult) => {
+        if (result.optionSelected === 'OK') {
+          this.platform.exitApp();
+          window.ozone.closeApp();//Once app reached at it's max back then needs android app close
+        }
+      });
+    } else {
+      this.navigatorService.pop();
+    }
   }
 
   private setAppLanguage(): Promise<void> {

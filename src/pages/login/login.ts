@@ -28,16 +28,16 @@ export class Login {
     private readonly popoversService: PopoversService,
     private readonly modal: ModalController
   ) {
-    this.loginLoader = this.loadingService.createLoader(
-      this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_LOGIN)
-    );
+    
   }
 
   public login(): void {
     if (!this.isValidInput()) {
       return;
     }
-
+    this.loginLoader = this.loadingService.createLoader(
+      this.translateProvider.translate(Strings.LOADING_ALERT_CONTENT_LOGIN)
+    );
     // TODO: Refactor the auth logic wtf.
     this.loginLoader.show();
     const loginRequest: { user_name: string; password: string } = {
