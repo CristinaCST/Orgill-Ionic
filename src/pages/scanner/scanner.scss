@@ -4,4 +4,10 @@ page-scanner {
     font-size: $font-size-large;
     font-weight: bold;
   }
+
+  .device-info {
+    text-align: center;
+    font-size: $font-size-small;
+    margin-bottom: 30px;
+  }
 }

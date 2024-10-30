@@ -55,7 +55,8 @@ export class AuthService {
     return this.apiProvider.get(ConstantsURL.URL_LOGIN, credentials).map(response => {
       const data: { errCode: string; user_Token: string } = response;
 
-      this.user = { user_Token: data.user_Token };
+      this.user = new User();
+      this.user.user_Token = data.user_Token;
 
       if (data.errCode && data.errCode === 'Password has expired!') {
         const content: PopoverContent = this.popoverService.setContent(
@@ -93,9 +94,11 @@ export class AuthService {
 
   public logout(): void {
     this.secureActions.setAuthState(false);
-    this.user = undefined;
+    this.user = new User();
     LocalStorageHelper.clearLocalStorage();
     // LocalStorageHelper.removeFromLocalStorage(Constants.USER);
+    (window as any).Android.clearWebViewDataOnLogout();
+
   }
 
   /**

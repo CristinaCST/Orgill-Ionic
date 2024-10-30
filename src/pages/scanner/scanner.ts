@@ -13,6 +13,7 @@ import { ProductPage } from '../../pages/product/product';
 import { Subject, Subscription } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
 
+
 @Component({
   selector: 'page-scanner',
   templateUrl: 'scanner.html'
@@ -32,6 +33,7 @@ export class ScannerPage implements OnInit, OnDestroy {
   public products: ShoppingListItem[] = [];
   public noProductFound: boolean = false;
   public fromSearch: boolean = false;
+  public isZebraDevice: boolean = false;
   private readonly simpleLoader: LoadingService;
   private readonly scanClicks: Subject<any> = new Subject();
   private scanSubscription: Subscription;
@@ -44,6 +46,16 @@ export class ScannerPage implements OnInit, OnDestroy {
     private readonly scannerService: ScannerService
   ) {
     this.simpleLoader = this.loadingService.createLoader();
+    this.checkDeviceType();
+  }
+
+  private checkDeviceType(): void {
+    try {
+      this.isZebraDevice = (window as any).Android.isRunningOnZebraDevice() || false;
+    } catch (error) {
+      console.error('Error checking device type:', error);
+      this.isZebraDevice = false;
+    }
   }
 
   public ngOnInit(): void {
@@ -76,7 +88,7 @@ export class ScannerPage implements OnInit, OnDestroy {
   public clickCb(): void {
     // this.scanClicks.next();
     // this.scannerService.onBarcodeScan("3284601671",false)
-    //at first pass undefined 
+    //at first pass undefined
     this.scannerService.scan(undefined, undefined);
     window.ozone.openScanner();
   }

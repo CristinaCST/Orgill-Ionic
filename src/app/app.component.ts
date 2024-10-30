@@ -18,15 +18,15 @@ import { VendorLandingPage } from '../pages/vendor-landing/vendor-landing';
 import { User } from 'interfaces/models/user';
 import { ScannerService } from '../services/scanner/scanner';
 
-//Global js function interface for bind with native app 
+//Global js function interface for bind with native app
 //through these function native side's webview will call these js functions
-//to execute function's stuff 
+//to execute function's stuff
 declare global {
   interface Window {
     ozone: {
-      openScanner: () => void;//For open scanner view at native side from ionic app 
+      openScanner: () => void;//For open scanner view at native side from ionic app
 
-      showRequestCameraPermissionPopUp: () => void;//For show permission request view at ionic app from native side 
+      showRequestCameraPermissionPopUp: () => void;//For show permission request view at ionic app from native side
 
       onCameraPermissionAllow: () => void;//This will call after request pop-up will dismiss
 
@@ -162,7 +162,7 @@ export class MyApp {
         this.navigateBack(this.platform.is('android'));
       });
 
-      //Disable network listener for now for native web container 
+      //Disable network listener for now for native web container
       // this.networkService.listenForNetworkEvents();
 
       this.statusBar.styleDefault();
@@ -172,7 +172,7 @@ export class MyApp {
     });
   }
 
-  //Common navigate back function re-coded from old code 
+  //Common navigate back function re-coded from old code
   //to manage navigation using global navigateBack function from native side
   private navigateBack(isForAndroid: boolean) {
     if (LoadingService.activeLoading) {
