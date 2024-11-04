@@ -83,31 +83,28 @@ export class POGandPalletCheckoutPage {
   private handlePOGcheckout(): void {
     this.marketProvider
       .checkoutPOGtoMarketShoppingList(this.selectedList.groupNumber, {
-        customerPO: this.customerPO,
-        releaseDate: this.releaseDate,
+        customer_po: this.customerPO,
+        release_date: this.releaseDate,
         customer_number: this.selectedList.customer_number
       })
-      .then(() => {
-        this.handleCheckoutSuccsess();
-      })
-      .catch(err => {
-        this.handleCheckoutError(err);
-      });
+      .subscribe(
+        () => this.handleCheckoutSuccsess(),
+        err => this.handleCheckoutError(err),
+        () => this.handleCheckoutSuccsess()
+      );
   }
 
   private handlePalletCheckout(): void {
     this.marketProvider
       .chekcoutPalletToMarketShoppingList(this.selectedList.palletID, {
-        customerPO: this.customerPO,
-        releaseDate: this.releaseDate,
+        customer_po: this.customerPO,
+        release_date: this.releaseDate,
         customer_number: this.selectedList.customer_number
       })
-      .then(() => {
-        this.handleCheckoutSuccsess();
-      })
-      .catch(err => {
-        this.handleCheckoutError(err);
-      });
+      .subscribe(
+        () => this.handleCheckoutSuccsess(),
+        err => this.handleCheckoutError(err)
+      );
   }
 
   public handleCheckout(): void {
