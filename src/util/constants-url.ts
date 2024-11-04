@@ -62,8 +62,8 @@ export const ADD_POG_TO_MARKET_SHOPPING_LIST: string = 'MarketPlanograms/shoppin
 export const ADD_PALLET_TO_MARKET_SHOPPING_LIST: string = 'pallets/shoppinglist';
 export const DELETE_POG_TO_MARKET_SHOPPING_LIST: string = 'MarketPlanograms/shoppinglist';
 export const DELETE_PALLET_TO_MARKET_SHOPPING_LIST: string = 'pallets/shoppinglist';
-export const CHECKOUT_POG_TO_MARKET_SHOPPING_LIST: string = 'MarketPlanograms/shoppinglist';
-export const CHECKOUT_PALLET_TO_MARKET_SHOPPING_LIST: string = 'pallets/shoppinglist';
+export const CHECKOUT_POG_TO_MARKET_SHOPPING_LIST: string = 'MarketPlanograms/shoppinglist/Checkout';
+export const CHECKOUT_PALLET_TO_MARKET_SHOPPING_LIST: string = 'pallets/shoppinglist/Checkout';
 
 // ROUTE TRACKING API?
 const TRACKING_API_BASE_URL: string = 'https://40.122.36.68/api/';

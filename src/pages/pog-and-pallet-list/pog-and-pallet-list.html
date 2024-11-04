@@ -3,7 +3,7 @@
 </ion-header>
 
 <ion-content>
-  <h3 *ngIf="!listItems.length">No items in cart</h3>
+  <h3 *ngIf="!listItems.length" class="no-items">No items in cart</h3>
 
   <ion-list radio-group [(ngModel)]="selectedList">
     <ng-container *ngIf="isPOG; else palletTemplate">
@@ -21,7 +21,7 @@
   </ion-list>
 </ion-content>
 
-<ion-footer class="list-footer">
+<ion-footer class="list-footer" *ngIf="listItems.length">
   <div class="action-wrapper">
     <button (click)="removeList()" ion-button outline color="danger" icon-start>
       <ion-icon name="trash"></ion-icon> Delete
