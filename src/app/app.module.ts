@@ -32,6 +32,7 @@ import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { DropshipProvider } from '../providers/dropship/dropship';
 import { DashboardProvider } from '../providers/dashboard/dashboard';
+import { MarketProvider } from '../providers/market/market';
 
 // Helpers
 import { CSSInjector } from '../helpers/css-injector';
@@ -93,6 +94,9 @@ import { DashboardTraffic } from '../pages/dashboard-traffic/dashboard-traffic';
 import { DashboardDeliveries } from '../pages/dashboard-deliveries/dashboard-deliveries';
 import { DashboardDrivers } from '../pages/dashboard-drivers/dashboard-drivers';
 import { DashboardRoutes } from '../pages/dashboard-routes/dashboard-routes';
+import { POGandPalletListPage } from '../pages/pog-and-pallet-list/pog-and-pallet-list';
+import { POGandPalletSearchPage } from '../pages/pog-and-pallet-search/pog-and-pallet-search';
+import { POGandPalletCheckoutPage } from '../pages/pog-and-pallet-checkout/pog-and-pallet-checkout';
 
 // Pipes
 import { PipesModule } from '../pipes/pipes.module';
@@ -134,7 +138,10 @@ const pages: Page[] = [
   DashboardTraffic,
   DashboardDeliveries,
   DashboardDrivers,
-  DashboardRoutes
+  DashboardRoutes,
+  POGandPalletListPage,
+  POGandPalletSearchPage,
+  POGandPalletCheckoutPage
 ];
 
 // Error Handlers
@@ -208,12 +215,11 @@ import { RouteTrackingProvider } from '../providers/route-tracking/route-trackin
     DropshipService,
     DashboardProvider,
     CalendarService,
-    AlertController
+    AlertController,
+    MarketProvider
   ]
 })
-
-export class AppModule{}
-
+export class AppModule {}
 
 export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');

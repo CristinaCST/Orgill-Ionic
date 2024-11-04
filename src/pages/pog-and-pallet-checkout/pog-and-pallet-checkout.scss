@@ -1,0 +1,41 @@
+@import '../../theme/variables';
+
+page-pog-and-pallet-checkout {
+  .details-wrapper {
+    .item {
+      padding-left: 0;
+
+      .item-inner {
+        padding-left: 8px;
+      }
+    }
+  }
+
+  h3 {
+    margin: 0 10px;
+  }
+
+  .list-wrapper {
+    margin: 10px;
+
+    p {
+      margin: 5px 0;
+    }
+  }
+
+  .footer-container {
+    button {
+      width: 100%;
+      color: white;
+      height: 60px;
+      position: fixed;
+      bottom: 0;
+      font-size: $font-size-medium;
+      background-color: color($colors, OrgillRed);
+      font-weight: bold;
+      border-top-right-radius: 10px;
+      border-top-left-radius: 10px;
+      text-transform: uppercase;
+    }
+  }
+}

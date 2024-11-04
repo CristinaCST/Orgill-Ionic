@@ -28,6 +28,7 @@ import { HotDealsPage } from '../../pages/hot-deals/hot-deals';
 import { LoadingService } from '../../services/loading/loading';
 import { LandingPage } from '../../pages/landing/landing';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
+import { POGandPalletListPage } from '../../pages/pog-and-pallet-list/pog-and-pallet-list';
 
 @Component({
   selector: 'app-menu',
@@ -140,10 +141,9 @@ export class AppMenuComponent implements OnInit {
     this.popoversService.show(content).subscribe((data: DefaultPopoverResult) => {
       if (data.optionSelected === 'OK') {
         this.authService.logout();
-        this.navigatorService
-          .setRoot(Login)
-          // .then(() => location.reload())
-          // .catch(err => console.error(err));
+        this.navigatorService.setRoot(Login);
+        // .then(() => location.reload())
+        // .catch(err => console.error(err));
       }
     });
   }
@@ -340,5 +340,14 @@ export class AppMenuComponent implements OnInit {
 
   public isUserTypeVendor(): boolean {
     return this.authService.getCurrentUser().user_type === 'Vendor';
+  }
+
+  public goToPOGandPalletListPage(isPOG: boolean): void {
+    this.navigatorService.setRoot(POGandPalletListPage, { isPOG }).then(
+      () => {},
+      err => {
+        console.error(err);
+      }
+    );
   }
 }

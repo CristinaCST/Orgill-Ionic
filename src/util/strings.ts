@@ -91,6 +91,8 @@ export const MENU_ACCOUNT_OFFLINE: string = 'menu_account_offline';
 export const MENU_ABOUT: string = 'menu_about';
 export const MENU_SETTINGS: string = 'menu_settings';
 export const MENU_ACCOUNT_LOGOUT: string = 'menu_account_logout';
+export const PLANOGRAMS_SHOPPING_CART: string = 'planograms_shopping_cart';
+export const PALLETS_SHOPPING_CART: string = 'pallets_shopping_cart';
 
 /**
  * Marker : Programs strings

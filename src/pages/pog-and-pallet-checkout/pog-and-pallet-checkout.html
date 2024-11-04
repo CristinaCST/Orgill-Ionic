@@ -1,0 +1,51 @@
+<ion-header>
+  <navbar title="Market Checkout" [isMenuEnabled]="true"></navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list class="details-wrapper">
+    <ion-item>
+      <ion-label fixed>Customer PO</ion-label>
+      <ion-input type="text" [(ngModel)]="customerPO"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label fixed>Release Date</ion-label>
+      <ion-datetime
+        displayFormat="MM/DD/YYYY"
+        pickerFormat="MM/DD/YYYY"
+        [(ngModel)]="releaseDate"
+        [min]="minDate"
+        [max]="maxDate"
+      ></ion-datetime>
+    </ion-item>
+  </ion-list>
+
+  <h3>Selected List:</h3>
+  <ng-container *ngIf="isPOG; else palletTemplate">
+    <div class="list-wrapper">
+      <p><b>Customer number:</b> {{selectedList?.customer_number}}</p>
+      <p><b>Group number:</b> {{selectedList?.groupNumber}}</p>
+      <p><b>List id:</b> {{selectedList?.list_id}}</p>
+      <p><b>Quanity:</b> {{selectedList?.qty}}</p>
+      <p><b>Username:</b> {{selectedList?.user_name}}</p>
+    </div>
+  </ng-container>
+</ion-content>
+
+<ion-footer class="footer-container">
+  <button (click)="handleCheckout()">{{"shopping_list_checkout" | translate}}</button>
+</ion-footer>
+
+<ng-template #palletTemplate>
+  <div class="list-wrapper">
+    <p><b>Customer number:</b> {{selectedList?.customer_number}}</p>
+    <p><b>Form name:</b> {{selectedList?.formname}}</p>
+    <p><b>List id:</b> {{selectedList?.list_id}}</p>
+    <p><b>Pallet id:</b> {{selectedList?.palletID}}</p>
+    <p><b>Quanity:</b> {{selectedList?.qty}}</p>
+    <p><b>SPL price:</b> {{selectedList?.splprice}}</p>
+    <p><b>Total pallet quantity:</b> {{selectedList?.totalpalletqty}}</p>
+    <p><b>Username:</b> {{selectedList?.user_name}}</p>
+  </div>
+</ng-template>

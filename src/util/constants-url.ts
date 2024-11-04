@@ -53,6 +53,18 @@ export const PURCHASE_ITEMS: string = 'pastpurchase';
 export const URL_ORDER_HOT_DEAL_PRODUCTS: string = 'order/flashproducts';
 export const PRODUCT_IMAGE_BASE_URL: string = 'https://images.orgill.com/200x200/';
 
+// MARKET
+export const GET_POG_SHOPPING_LISTS: string = 'MarketPlanograms/shoppinglist';
+export const GET_PALLETS_SHOPPING_LISTS: string = 'pallets/shoppinglist';
+export const GET_POG_BY_ID: string = 'MarketPlanograms';
+export const GET_PALLETS_BY_ID: string = 'pallets';
+export const ADD_POG_TO_MARKET_SHOPPING_LIST: string = 'MarketPlanograms/shoppinglist';
+export const ADD_PALLET_TO_MARKET_SHOPPING_LIST: string = 'pallets/shoppinglist';
+export const DELETE_POG_TO_MARKET_SHOPPING_LIST: string = 'MarketPlanograms/shoppinglist';
+export const DELETE_PALLET_TO_MARKET_SHOPPING_LIST: string = 'pallets/shoppinglist';
+export const CHECKOUT_POG_TO_MARKET_SHOPPING_LIST: string = 'MarketPlanograms/shoppinglist';
+export const CHECKOUT_PALLET_TO_MARKET_SHOPPING_LIST: string = 'pallets/shoppinglist';
+
 // ROUTE TRACKING API?
 const TRACKING_API_BASE_URL: string = 'https://40.122.36.68/api/';
 // const TRACKING_API_BASE_URL_PROD: string = 'https://168.61.170.88/api/';

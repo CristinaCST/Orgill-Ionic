@@ -94,13 +94,13 @@ export class ShoppingListPage {
   }
 
   public ionViewWillEnter(): void {
-    this.events.subscribe(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST, () => {
-      this.fillList();
-    });
-
     this.shoppingList = getNavParam(this.navParams, 'list', 'object');
     this.isCheckout = getNavParam(this.navParams, 'isCheckout', 'boolean');
     this.fromSearch = getNavParam(this.navParams, 'fromSearch', 'boolean');
+
+    this.events.subscribe(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST, () => {
+      this.fillList();
+    });
 
     this.isCustomList =
       this.shoppingList.ListType !== Constants.DEFAULT_LIST_TYPE &&

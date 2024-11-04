@@ -16,6 +16,7 @@ import { Observable } from 'rxjs/Observable';
 import { ShoppingListItem } from '../../interfaces/models/shopping-list-item';
 import { ShoppingList } from '../../interfaces/models/shopping-list';
 import { CatalogsProvider } from '../../providers/catalogs/catalogs';
+import { POGandPalletSearchPage } from '../../pages/pog-and-pallet-search/pog-and-pallet-search';
 
 @Injectable()
 export class ScannerService {
@@ -70,17 +71,21 @@ export class ScannerService {
     //     }
     //     this.onBarcodeScan(barcodeData.text,true);
     //   });
-
   }
 
   public onBarcodeScan(scanResult: string) {
     const buttonOverride: number = this.navigatorService.oneTimeBackButtonOverride(() => {
-      // If this block will not exist then unable to move back (navigation) from native side 
+      // If this block will not exist then unable to move back (navigation) from native side
       // Exiting scanner
     });
     this.navigatorService.removeOverride(buttonOverride);
     if (this.isValidScanResult(scanResult)) {
       //  this.searchingLoader.show();
+      const { isMarketCode, isPOG } = this.isMarketCode(scanResult);
+      if (isMarketCode) {
+        this.navigatorService.push(POGandPalletSearchPage, { isPOG, searchString: scanResult });
+        return;
+      }
       this.setProgramFromScanResult(scanResult);
       this.setSearchStringFromScanResult(scanResult);
       this.searchProduct();
@@ -124,7 +129,7 @@ export class ScannerService {
     this.searchingLoader.show();
     //****
     //Set empty program number cause its not searching properly with programnumber from api side
-    //program number is already attached with detected barcode 
+    //program number is already attached with detected barcode
     //****
     this.productProvider.searchProduct(this.searchString, '').subscribe(
       (response: any) => {
@@ -183,7 +188,7 @@ export class ScannerService {
                           content.message = 'Added ' + newItem.product.name + ' to list';
 
                           this.events.publish(Constants.EVENT_PRODUCT_ADDED_TO_SHOPPING_LIST);
-                          this.popoversService.show(content).subscribe(() => { });
+                          this.popoversService.show(content).subscribe(() => {});
                         },
                         err => {
                           this.searchingLoader.hide();
@@ -248,5 +253,26 @@ export class ScannerService {
       return Number(this.foundProduct.shelF_PACK);
     }
     return 1;
+  }
+
+  public isMarketCode(searchString: string): any {
+    const planogramEndings: string[] = ['886', '686', '352', '362', '834'];
+    const palletEnding: string = '210';
+    const planograms: string[] = [];
+    const pallets: string[] = [];
+
+    planogramEndings.forEach(ending => {
+      if (searchString.endsWith(ending)) {
+        planograms.push(searchString);
+      }
+    });
+
+    const isPOG = !!planograms.length;
+
+    if (searchString.endsWith(palletEnding)) {
+      pallets.push(searchString);
+    }
+
+    return { isMarketCode: planograms.length > 0 || pallets.length > 0, isPOG };
   }
 }

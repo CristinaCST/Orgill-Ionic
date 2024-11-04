@@ -340,5 +340,7 @@
   "report_form_ship_to_no": "Numéro d'envoi",
   "report_form_details": "Détails du problème",
   "report_form_date": "Date",
-  "report_form_send_form": "Envoyer le rapport"
+  "report_form_send_form": "Envoyer le rapport",
+  "planograms_shopping_cart": "Panier d'achat des planogrammes",
+  "pallets_shopping_cart": "Panier à palettes"
 }

@@ -1,0 +1,32 @@
+<div class="container">
+  <h3>Planogram Details:</h3>
+  <div class="details-wrapper">
+    <div>
+      <p><b>Booth id:</b> {{data?.booth_id}}</p>
+      <p><b>Booth name:</b> {{data?.booth_name}}</p>
+      <p><b>Division:</b> {{data?.division}}</p>
+      <p><b>Group Number:</b> {{data?.groupNumber}}</p>
+    </div>
+
+    <div>
+      <p><b>Refference number:</b> {{data?.pog_xref_num}}</p>
+      <p><b>Pricing region:</b> {{data?.pricing_region}}</p>
+      <p><b>Program number:</b> {{data?.program_number}}</p>
+    </div>
+  </div>
+
+  <h3>Planogram Items:</h3>
+  <div class="items-wrapper">
+    <div class="item" *ngFor="let item of data?.items">
+      <div>
+        <p><b>Group Number:</b> {{item?.groupNumber}}</p>
+        <p><b>Line Sequence:</b> {{item?.line_seq}}</p>
+      </div>
+
+      <div>
+        <p><b>Quantity:</b> {{item?.quantity}}</p>
+        <p><b>SKU:</b> {{item?.sku}}</p>
+      </div>
+    </div>
+  </div>
+</div>

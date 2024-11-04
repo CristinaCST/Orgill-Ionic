@@ -1,0 +1,50 @@
+<ion-header>
+  <navbar [title]="pageTitle" [isMenuEnabled]="true"></navbar>
+</ion-header>
+
+<ion-content>
+  <h3 *ngIf="!listItems.length">No items in cart</h3>
+
+  <ion-list radio-group [(ngModel)]="selectedList">
+    <ng-container *ngIf="isPOG; else palletTemplate">
+      <ion-item class="list-wrapper" *ngFor="let item of listItems">
+        <ion-label>
+          <p><b>Customer number:</b> {{item?.customer_number}}</p>
+          <p><b>Group number:</b> {{item?.groupNumber}}</p>
+          <p><b>List id:</b> {{item?.list_id}}</p>
+          <p><b>Quanity:</b> {{item?.qty}}</p>
+          <p><b>Username:</b> {{item?.user_name}}</p>
+        </ion-label>
+        <ion-radio [value]="item?.groupNumber"></ion-radio>
+      </ion-item>
+    </ng-container>
+  </ion-list>
+</ion-content>
+
+<ion-footer class="list-footer">
+  <div class="action-wrapper">
+    <button (click)="removeList()" ion-button outline color="danger" icon-start>
+      <ion-icon name="trash"></ion-icon> Delete
+    </button>
+    <button (click)="editList()" ion-button outline color="OrgillRed" icon-start>
+      <ion-icon name="create"></ion-icon> Edit
+    </button>
+  </div>
+  <button (click)="goToCheckout()" ion-button full color="OrgillRed">Continue to checkout</button>
+</ion-footer>
+
+<ng-template #palletTemplate>
+  <ion-item class="list-wrapper" *ngFor="let item of listItems">
+    <ion-label>
+      <p><b>Customer number:</b> {{item?.customer_number}}</p>
+      <p><b>Form name:</b> {{item?.formname}}</p>
+      <p><b>List id:</b> {{item?.list_id}}</p>
+      <p><b>Pallet id:</b> {{item?.palletID}}</p>
+      <p><b>Quanity:</b> {{item?.qty}}</p>
+      <p><b>SPL price:</b> {{item?.splprice}}</p>
+      <p><b>Total pallet quantity:</b> {{item?.totalpalletqty}}</p>
+      <p><b>Username:</b> {{item?.user_name}}</p>
+    </ion-label>
+    <ion-radio [value]="item?.palletID"></ion-radio>
+  </ion-item>
+</ng-template>

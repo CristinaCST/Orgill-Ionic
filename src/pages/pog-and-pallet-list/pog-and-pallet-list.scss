@@ -1,0 +1,23 @@
+page-pog-and-pallet-list {
+  .list-wrapper {
+    padding-left: 0;
+
+    .item-inner {
+      padding-left: 8px;
+    }
+
+    p {
+      margin: 5px 0;
+    }
+  }
+
+  .list-footer {
+    .action-wrapper {
+      display: flex;
+
+      button {
+        flex: 1;
+      }
+    }
+  }
+}

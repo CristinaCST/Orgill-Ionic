@@ -13,7 +13,6 @@ import { ProductPage } from '../../pages/product/product';
 import { Subject, Subscription } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
 
-
 @Component({
   selector: 'page-scanner',
   templateUrl: 'scanner.html'
@@ -51,7 +50,10 @@ export class ScannerPage implements OnInit, OnDestroy {
 
   private checkDeviceType(): void {
     try {
-      this.isZebraDevice = (window as any).Android.isRunningOnZebraDevice() || false;
+      // @ts-ignore
+      if (window.Android) {
+        this.isZebraDevice = (window as any).Android.isRunningOnZebraDevice();
+      }
     } catch (error) {
       console.error('Error checking device type:', error);
       this.isZebraDevice = false;

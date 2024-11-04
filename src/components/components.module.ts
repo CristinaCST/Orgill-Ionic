@@ -37,6 +37,8 @@ import { DashboardSelectComponent } from './dashboard-select/dashboard-select';
 import { DashboardStopsSelectComponent } from './dashboard-stops-select/dashboard-stops-select';
 import { ProductPastPurchases } from './product-past-purchases/product-past-purchases';
 import { TransportBugReport } from './transport-bug-report/transport-bug-report';
+import { POGlistComponent } from './pog-list/pog-list';
+import { PalletListComponent } from './pallet-list/pallet-list';
 
 const components: any[] = [
   AppMenuComponent,
@@ -67,7 +69,9 @@ const components: any[] = [
   DashboardSelectComponent,
   DashboardStopsSelectComponent,
   ProductPastPurchases,
-  TransportBugReport
+  TransportBugReport,
+  POGlistComponent,
+  PalletListComponent
 ];
 
 @NgModule({
