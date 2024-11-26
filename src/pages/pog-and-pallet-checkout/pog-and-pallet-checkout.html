@@ -19,6 +19,23 @@
         [max]="maxDate"
       ></ion-datetime>
     </ion-item>
+
+    <ion-item-group
+      *ngIf="customerLocations.length > 0"
+      [(ngModel)]="selectedLocation"
+      padding
+      radio-group
+      class="locations-container"
+    >
+      <ion-item-divider no-lines>{{"customer_locations_list_header" | translate}}:</ion-item-divider>
+      <ion-item *ngFor="let userLocation of customerLocations">
+        <ion-label>
+          <p [class]="selectedLocation===userLocation?'active':''">{{userLocation.customername}}</p>
+          <p>{{userLocation.address}}</p>
+        </ion-label>
+        <ion-radio [value]="userLocation"></ion-radio>
+      </ion-item>
+    </ion-item-group>
   </ion-list>
 
   <h3>Selected List:</h3>
@@ -27,8 +44,8 @@
       <p><b>Customer number:</b> {{selectedList?.customer_number}}</p>
       <p><b>Group number:</b> {{selectedList?.groupNumber}}</p>
       <p><b>List id:</b> {{selectedList?.list_id}}</p>
-      <p><b>Quantity:</b> {{selectedList?.qty}}</p>
-      <p><b>Username:</b> {{selectedList?.user_name}}</p>
+      <p><b>Quanity:</b> {{selectedList?.qty}}</p>
+      <!-- <p><b>Username:</b> {{selectedList?.user_name}}</p> -->
     </div>
   </ng-container>
 </ion-content>
@@ -43,9 +60,9 @@
     <p><b>Form name:</b> {{selectedList?.formname}}</p>
     <p><b>List id:</b> {{selectedList?.list_id}}</p>
     <p><b>Pallet id:</b> {{selectedList?.palletID}}</p>
-    <p><b>Quantity:</b> {{selectedList?.qty}}</p>
+    <p><b>Quanity:</b> {{selectedList?.qty}}</p>
     <p><b>SPL price:</b> {{selectedList?.splprice}}</p>
     <p><b>Total pallet quantity:</b> {{selectedList?.totalpalletqty}}</p>
-    <p><b>Username:</b> {{selectedList?.user_name}}</p>
+    <!-- <p><b>Username:</b> {{selectedList?.user_name}}</p> -->
   </div>
 </ng-template>

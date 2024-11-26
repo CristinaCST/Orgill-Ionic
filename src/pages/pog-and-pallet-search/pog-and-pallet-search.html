@@ -34,6 +34,18 @@
       </div>
     </div>
   </ion-item>
+
+  <!-- <ion-item class="total-price" no-lines>
+    <p>{{"order_confirmation_total" | translate}}:</p>
+    <p>{{(isPOG ? searchData?.special_price : searchData?.regprice) * quantity}}</p>
+  </ion-item> -->
+  <ion-item class="total-price">
+    <span #totalLabel>{{"product_total_price" | translate}}:</span>
+    <span
+      >{{"product_currency" | translate}}{{(isPOG ? searchData?.special_price : searchData?.regprice) * quantity |
+      number: '1.2-2'}}</span
+    >
+  </ion-item>
 </ion-content>
 
 <ion-footer class="footer-container">

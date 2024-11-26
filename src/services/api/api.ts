@@ -9,7 +9,7 @@ import { User } from '../../interfaces/models/user';
 @Injectable()
 export class ApiService {
   public baseUrl: string;
-  private userToken: string;
+  public userToken: string;
 
   constructor(
     private readonly http: HttpClient,

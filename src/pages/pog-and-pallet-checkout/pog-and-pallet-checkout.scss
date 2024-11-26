@@ -38,4 +38,31 @@ page-pog-and-pallet-checkout {
       text-transform: uppercase;
     }
   }
+
+  .locations-container {
+    padding-top: 2px !important;
+
+    ion-item,
+    ion-item-divider {
+      padding: 0 !important;
+    }
+    ion-item-divider {
+      text-transform: uppercase;
+    }
+
+    ion-label {
+      p {
+        white-space: pre-line;
+        text-align: left;
+        color: black;
+      }
+      p:nth-child(1) {
+        font-size: $font-size-medium;
+        font-weight: bold;
+        &.active {
+          color: color($colors, OrgillRed);
+        }
+      }
+    }
+  }
 }

@@ -7,6 +7,7 @@ import { LoadingService } from '../../services/loading/loading';
 import { MarketProvider } from '../../providers/market/market';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { LandingPage } from '../../pages/landing/landing';
+import { UserInfoService } from '../../services/user-info/user-info';
 
 @Component({
   selector: 'page-pog-and-pallet-checkout',
@@ -19,6 +20,8 @@ export class POGandPalletCheckoutPage {
   public releaseDate: string;
   public minDate: string;
   public maxDate: string;
+  public customerLocations = [];
+  public selectedLocation: any;
   private readonly loader: LoadingService;
   public popoverContent: PopoverContent = {
     type: Constants.POPOVER_INFO,
@@ -32,7 +35,8 @@ export class POGandPalletCheckoutPage {
     private readonly popoversService: PopoversService,
     private readonly loading: LoadingService,
     private readonly marketProvider: MarketProvider,
-    public navigatorService: NavigatorService
+    public navigatorService: NavigatorService,
+    private readonly userInfoProvider: UserInfoService
   ) {
     this.loader = this.loading.createLoader();
   }
@@ -45,6 +49,23 @@ export class POGandPalletCheckoutPage {
     this.selectedList = selectedList;
 
     this.setDateTimeLimits();
+    this.getCustomerLocations();
+  }
+
+  public getCustomerLocations(): void {
+    this.userInfoProvider
+      .getUserLocations()
+      .take(1)
+      .subscribe((locations: any) => {
+        if (!locations.length) {
+          return;
+        }
+
+        this.customerLocations = locations;
+        this.selectedLocation = locations[0];
+
+        this.loader.hide();
+      });
   }
 
   public setDateTimeLimits(): void {
@@ -85,13 +106,14 @@ export class POGandPalletCheckoutPage {
       .checkoutPOGtoMarketShoppingList(this.selectedList.groupNumber, {
         customer_po: this.customerPO,
         release_date: this.releaseDate,
-        customer_number: this.selectedList.customer_number
+        customer_number: this.selectedLocation.shiptono
       })
-      .subscribe(
-        () => this.handleCheckoutSuccsess(),
-        err => this.handleCheckoutError(err),
-        () => this.handleCheckoutSuccsess()
-      );
+      .then(() => {
+        this.handleCheckoutSuccsess();
+      })
+      .catch(error => {
+        this.handleCheckoutError(error);
+      });
   }
 
   private handlePalletCheckout(): void {
@@ -99,12 +121,14 @@ export class POGandPalletCheckoutPage {
       .chekcoutPalletToMarketShoppingList(this.selectedList.palletID, {
         customer_po: this.customerPO,
         release_date: this.releaseDate,
-        customer_number: this.selectedList.customer_number
+        customer_number: this.selectedLocation.shiptono
       })
-      .subscribe(
-        () => this.handleCheckoutSuccsess(),
-        err => this.handleCheckoutError(err)
-      );
+      .then(() => {
+        this.handleCheckoutSuccsess();
+      })
+      .catch(error => {
+        this.handleCheckoutError(error);
+      });
   }
 
   public handleCheckout(): void {

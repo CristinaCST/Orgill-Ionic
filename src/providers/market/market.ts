@@ -47,11 +47,35 @@ export class MarketProvider {
     return this.apiProvider.delete(`${ConstantsUrl.DELETE_PALLET_TO_MARKET_SHOPPING_LIST}/${palletID}`, {}).toPromise();
   }
 
-  public checkoutPOGtoMarketShoppingList(groupNumber: string, body: any): Observable<string> {
-    return this.apiProvider.post(`${ConstantsUrl.CHECKOUT_POG_TO_MARKET_SHOPPING_LIST}/${groupNumber}`, body);
+  public checkoutPOGtoMarketShoppingList(groupNumber: string, data: any): Promise<any> {
+    return fetch(`${this.apiProvider.baseUrl}${ConstantsUrl.CHECKOUT_POG_TO_MARKET_SHOPPING_LIST}/${groupNumber}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        user_Token: this.apiProvider.userToken
+      },
+      body: JSON.stringify(data)
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.text();
+    });
   }
 
-  public chekcoutPalletToMarketShoppingList(palletID: string, body: any): Observable<string> {
-    return this.apiProvider.post(`${ConstantsUrl.CHECKOUT_PALLET_TO_MARKET_SHOPPING_LIST}/${palletID}`, body);
+  public chekcoutPalletToMarketShoppingList(palletID: string, data: any): Promise<any> {
+    return fetch(`${this.apiProvider.baseUrl}${ConstantsUrl.CHECKOUT_PALLET_TO_MARKET_SHOPPING_LIST}/${palletID}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        user_Token: this.apiProvider.userToken
+      },
+      body: JSON.stringify(data)
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.text();
+    });
   }
 }
