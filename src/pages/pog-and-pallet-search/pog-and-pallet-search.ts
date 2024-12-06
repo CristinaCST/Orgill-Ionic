@@ -5,6 +5,7 @@ import { MarketProvider } from '../../providers/market/market';
 import { PopoverContent, PopoversService } from '../../services/popovers/popovers';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
+import { NavigatorService } from '../../services/navigator/navigator';
 
 @Component({
   selector: 'page-pog-and-pallet-search',
@@ -27,12 +28,13 @@ export class POGandPalletSearchPage {
     private readonly navParams: NavParams,
     private readonly loading: LoadingService,
     private readonly marketProvider: MarketProvider,
-    private readonly popoversService: PopoversService
+    private readonly popoversService: PopoversService,
+    private readonly navigatorService: NavigatorService
   ) {
     this.loader = this.loading.createLoader();
   }
 
-  public ionViewWillEnter(): void {
+  public ionViewDidEnter(): void {
     const isPOG = this.navParams.get('isPOG');
     const searchString = this.navParams.get('searchString');
     const isEdit = this.navParams.get('isEdit');
@@ -153,6 +155,14 @@ export class POGandPalletSearchPage {
     }
   }
 
+  private handleFetchItemError(error): void {
+    this.loader.hide();
+    console.error('error', error);
+    // this.popoverContent.message = 'Could not fetch item';
+    // this.popoversService.show(this.popoverContent);
+    this.navigatorService.pop();
+  }
+
   private fetchPOGitems(groupNumber) {
     this.marketProvider
       .getPOGbyID(groupNumber)
@@ -161,8 +171,7 @@ export class POGandPalletSearchPage {
         this.loader.hide();
       })
       .catch(error => {
-        this.loader.hide();
-        console.error('error', error);
+        this.handleFetchItemError(error);
       });
   }
 
@@ -174,8 +183,7 @@ export class POGandPalletSearchPage {
         this.loader.hide();
       })
       .catch(error => {
-        console.error('error', error);
-        this.loader.hide();
+        this.handleFetchItemError(error);
       });
   }
 }
