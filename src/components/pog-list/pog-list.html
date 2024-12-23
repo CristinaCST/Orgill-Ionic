@@ -2,22 +2,31 @@
   <h3>Planogram Details:</h3>
   <div class="details-wrapper">
     <div>
-      <p><b>Planogram id:</b> {{data?.booth_id}}</p>
       <p><b>Planogram name:</b> {{data?.booth_name}}</p>
-      <p><b>Group Number:</b> {{data?.groupNumber}}</p>
       <p><b>Program number:</b> {{data?.program_number}}</p>
       <p><b>Price:</b> {{data?.special_price | number: '1.2-2'}}</p>
+      <p><b>Planogram id:</b> {{data?.booth_id}}</p>
+      <p><b>Group Number:</b> {{data?.groupNumber}}</p>
     </div>
   </div>
 
   <h3>Planogram Items:</h3>
   <div class="items-wrapper">
+    <ion-grid>
     <div class="item" *ngFor="let item of data?.items">
-      <div>
-        <p><b>Line Sequence:</b> {{item?.line_seq}}</p>
-        <p><b>Quantity:</b> {{item?.quantity}}</p>
-        <p><b>SKU:</b> {{item?.sku}}</p>
+        <ion-row>
+          <ion-col>
+            <div>
+              <b>SKU:</b> {{item?.sku}}
+            </div>
+          </ion-col>
+          <ion-col>
+            <div class="qtyColumn">
+              x{{item?.quantity}}
+            </div>
+          </ion-col>
+        </ion-row>
       </div>
-    </div>
+    </ion-grid>
   </div>
 </div>
