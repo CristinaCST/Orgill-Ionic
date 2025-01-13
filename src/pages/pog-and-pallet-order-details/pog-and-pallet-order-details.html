@@ -1,0 +1,32 @@
+<ion-header>
+  <navbar title="Order Details" [isBackEnabled]="true"></navbar>
+</ion-header>
+
+<ion-content>
+  <h3 *ngIf="!orderDetails" class="no-items">Could not fetch order details</h3>
+
+  <ion-list>
+    <ion-item class="list-wrapper">
+      <ion-label>
+        <p><b>Customer number:</b> {{orderDetails?.customer_number}}</p>
+        <p><b>Display number:</b> {{orderDetails?.display_number}}</p>
+        <p><b>Order date:</b> {{orderDetails?.order_date}}</p>
+        <p><b>PO number:</b> {{orderDetails?.po_number}}</p>
+        <p><b>Quantity:</b> {{orderDetails?.quantity}}</p>
+        <p><b>Type:</b> {{orderDetails?.type}}</p>
+        <p><b>Vendor number:</b> {{orderDetails?.vendor_number}}</p>
+      </ion-label>
+    </ion-item>
+
+    <p class="list-title"><b>Order items:</b></p>
+
+    <ion-item class="list-wrapper" *ngFor="let item of orderDetails?.orderitems">
+      <ion-label>
+        <p><b>Line:</b> {{item?.line_seq}}</p>
+        <p><b>Price:</b> {{item?.price | number: '1.2-2'}}$</p>
+        <p><b>Quantity:</b> {{item?.quantity}}</p>
+        <p><b>SKU:</b> {{item?.sku}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

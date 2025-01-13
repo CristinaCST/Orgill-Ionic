@@ -1,0 +1,51 @@
+<ion-header>
+  <navbar [title]="pageTitle" [isMenuEnabled]="true"></navbar>
+</ion-header>
+
+<ion-content>
+  <h3 *ngIf="!pastPurchases.length" class="no-items">No past purchases found</h3>
+
+  <ion-list>
+    <ng-container *ngIf="isPOG; else palletTemplate">
+      <ion-item class="list-wrapper" *ngFor="let purchase of pastPurchases" (click)="goToOrderDetailsPage(purchase)">
+        <ion-label>
+          <p><b>Order date:</b> {{purchase?.order_date}}</p>
+          <p><b>Vendor number:</b> {{purchase?.vendor_number}}</p>
+          <p><b>Customer number:</b> {{purchase?.customer_number}}</p>
+          <p><b>Type:</b> {{purchase?.type}}</p>
+          <p><b>Display number:</b> {{purchase?.display_number}}</p>
+          <p><b>PO number:</b> {{purchase?.po_number}}</p>
+          <p><b>Quantity:</b> {{purchase?.quantity}}</p>
+        </ion-label>
+      </ion-item>
+    </ng-container>
+  </ion-list>
+</ion-content>
+
+<ng-template #palletTemplate>
+  <ion-item class="list-wrapper" *ngFor="let purchase of pastPurchases" (click)="goToOrderDetailsPage(purchase)">
+    <ion-label>
+      <p><b>Order date:</b> {{purchase?.order_date}}</p>
+      <p><b>Username:</b> {{purchase?.user_name}}</p>
+      <p><b>Customer number:</b> {{purchase?.customer_number}}</p>
+      <p><b>Pallet id:</b> {{purchase?.palletid}}</p>
+      <p><b>Quanity:</b> {{purchase?.qty}}</p>
+      <p><b>Customer PO:</b> {{purchase?.customer_po}}</p>
+      <p><b>Release date:</b> {{purchase?.release_date}}</p>
+      <p><b>Status:</b> {{purchase?.status}}</p>
+      <p><b>Vendor number:</b> {{purchase?.orgillvendorno}}</p>
+      <p><b>Booth:</b> {{purchase?.booth}}</p>
+      <p><b>SPL price:</b> {{purchase?.splprice | number: '1.2-2'}}$</p>
+      <p><b>Total pallet quantity:</b> {{purchase?.totalpalletqty}}</p>
+      <p><b>Register cash terms:</b> {{purchase?.regcashterms}}</p>
+      <p><b>Register freight terms:</b> {{purchase?.regfreightterms}}</p>
+      <p><b>Department name:</b> {{purchase?.deptname}}</p>
+      <p><b>Buyer name:</b> {{purchase?.buyername}}</p>
+      <p><b>Currency:</b> {{purchase?.currency}}</p>
+      <p><b>Register shipment terms:</b> {{purchase?.regshipmentterms}}</p>
+      <p><b>Register price:</b> {{purchase?.regprice | number: '1.2-2'}}$</p>
+      <p><b>Pallet name:</b> {{purchase?.formname}}</p>
+      <p><b>Prepaid shipment:</b> {{purchase?.shipmentoptions === 'N' ? 'No' : 'Yes'}}</p>
+    </ion-label>
+  </ion-item>
+</ng-template>

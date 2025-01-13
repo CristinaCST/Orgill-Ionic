@@ -342,5 +342,7 @@
   "report_form_date": "Date",
   "report_form_send_form": "Envoyer le rapport",
   "planograms_shopping_cart": "Panier d'achat des planogrammes",
-  "pallets_shopping_cart": "Panier à palettes"
+  "pallets_shopping_cart": "Panier à palettes",
+  "planograms_past_purchases": "Achats antérieurs Commandes POG",
+  "pallets_past_purchases": "Achats antérieurs Commandes de palettes"
 }
