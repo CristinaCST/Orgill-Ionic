@@ -40,7 +40,7 @@ export class POGandPalletListPage {
     this.loader = this.loading.createLoader();
   }
 
-  public ionViewWillEnter(): void {
+  public ionViewDidEnter(): void {
     const isPOG = this.navParams.get('isPOG');
     this.isPOG = isPOG;
     this.pageTitle = this.translateProvider.translate(isPOG ? PLANOGRAMS_SHOPPING_CART : PALLETS_SHOPPING_CART);

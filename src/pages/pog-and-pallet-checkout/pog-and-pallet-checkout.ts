@@ -41,7 +41,7 @@ export class POGandPalletCheckoutPage {
     this.loader = this.loading.createLoader();
   }
 
-  ionViewDidLoad() {
+  ionViewDidEnter() {
     const isPOG = this.navParams.get('isPOG');
     const selectedList = this.navParams.get('selectedList');
 

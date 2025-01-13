@@ -14,6 +14,7 @@ page-pog-and-pallet-list {
   .list-footer {
     .action-wrapper {
       display: flex;
+      margin: 0 10px;
 
       button {
         flex: 1;
@@ -21,6 +22,10 @@ page-pog-and-pallet-list {
     }
     background: white;
     padding: 5px;
+
+    .checkout-button {
+      margin: 0 10px 10px;
+    }
   }
 
   .no-items {

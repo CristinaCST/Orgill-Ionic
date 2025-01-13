@@ -27,9 +27,7 @@ export class Login {
     private readonly translateProvider: TranslateWrapperService,
     private readonly popoversService: PopoversService,
     private readonly modal: ModalController
-  ) {
-    
-  }
+  ) {}
 
   public login(): void {
     if (!this.isValidInput()) {
