@@ -103,7 +103,7 @@ export class POGandPalletCheckoutPage {
 
   private handlePOGcheckout(): void {
     this.marketProvider
-      .checkoutPOGtoMarketShoppingList(this.selectedList.groupNumber, {
+      .checkoutPOGtoMarketShoppingList(this.selectedList.group_number, {
         customer_po: this.customerPO,
         release_date: this.releaseDate,
         customer_number: this.selectedLocation.shiptono

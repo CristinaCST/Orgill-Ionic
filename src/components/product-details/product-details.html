@@ -9,6 +9,7 @@
       <p>{{product.vendoR_NAME}}</p>
       <p>{{"product_SKU" | translate}}: {{product.sku}} {{product.qtY_ROUND_OPTION}}</p>
     </div>
+
     <ion-icon name="ios-arrow-forward"></ion-icon>
   </div>
   <ion-item class="product-info-container">
@@ -32,6 +33,16 @@
     <div class="info">
       <span>{{"product_past_purchases" | translate}}:</span>
       <button class="past-purchases-btn" ion-button (click)="handlePastPurchasesModal()">Details</button>
+    </div>
+  </ion-item>
+  <ion-item class="product-info-container" *ngIf="discontinuedItem">
+    <div class="info" style="display: flex; align-items: center; gap: 8px;">
+      <ion-icon name="alert"></ion-icon>
+      <div>
+        <div class="info">{{"product_discontinued_label" | translate}}</div>
+        <div class="info"><span>{{"product_discontinued_reason" | translate}} {{product.discontinueD_REASON}}</span></div>
+        <div class="info"><span>{{"product_replacement_item" | translate}} {{product.replacemenT_ITEM}}</span></div>
+      </div>
     </div>
   </ion-item>
 </div>

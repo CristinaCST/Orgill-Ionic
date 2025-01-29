@@ -13,6 +13,7 @@ import { ProductImageProvider } from '../../providers/product-image/product-imag
 })
 export class ProductDescriptionPage implements OnInit, AfterViewInit {
   public description: string = '';
+  public discontinuedItem: boolean = false;
   public product: Product;
   public imageURL: string = '';
   public imageIsLoading: boolean = true;
@@ -49,6 +50,7 @@ export class ProductDescriptionPage implements OnInit, AfterViewInit {
     this.catalogProvider.getProductDetails(this.product.sku).subscribe(
       (description: any) => {
         this.description = description.description;
+        this.discontinuedItem = this.product.discontinueD_REASON_CODE.length > 0;
         this.loader.hide();
       },
       err => {

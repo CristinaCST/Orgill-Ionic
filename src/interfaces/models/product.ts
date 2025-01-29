@@ -15,6 +15,9 @@ export interface Product {
   shelF_PACK: string;
   velocitY_CODE: string;
   totaL_REC_COUNT: string;
+  discontinueD_REASON_CODE: string;
+  discontinueD_REASON: string;
+  replacemenT_ITEM: string;
 }
 
 export interface OrderHistory {

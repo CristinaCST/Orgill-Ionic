@@ -262,14 +262,14 @@ export class ScannerService {
     const pallets: string[] = [];
 
     planogramEndings.forEach(ending => {
-      if (searchString.endsWith(ending)) {
+      if (searchString.endsWith(ending) && searchString.length == 10) {
         planograms.push(searchString);
       }
     });
 
     const isPOG = !!planograms.length;
 
-    if (searchString.endsWith(palletEnding)) {
+    if (searchString.endsWith(palletEnding) && searchString.length == 10) {
       pallets.push(searchString);
     }
 

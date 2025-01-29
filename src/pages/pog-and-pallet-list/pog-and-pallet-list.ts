@@ -65,7 +65,8 @@ export class POGandPalletListPage {
         this.loader.hide();
         if (data.length) {
           const [firstItem] = data;
-          this.selectedList = firstItem.groupNumber;
+          console.log(data);
+          this.selectedList = firstItem.group_number;
         }
       })
       .catch(err => {
@@ -101,7 +102,7 @@ export class POGandPalletListPage {
     this.popoversService.show(this.popoverContent);
     this.loader.hide();
     this.listItems = this.listItems.filter(
-      item => (this.isPOG ? item.groupNumber : item.palletID) !== this.selectedList
+      item => (this.isPOG ? item.group_number : item.palletID) !== this.selectedList
     );
   }
 
@@ -162,7 +163,7 @@ export class POGandPalletListPage {
   }
 
   private getSelectedList(): any {
-    return this.listItems.find(item => (this.isPOG ? item.groupNumber : item.palletID) === this.selectedList);
+    return this.listItems.find(item => (this.isPOG ? item.group_number : item.palletID) === this.selectedList);
   }
 
   public goToCheckout(): void {

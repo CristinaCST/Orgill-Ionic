@@ -1,5 +1,5 @@
 <div class="container">
-  <h3>Pallet Details:</h3>
+  <h3>PALLET DETAILS</h3>
   <div class="details-wrapper">
     <div>
       <!-- <p><b>Booth:</b> {{data?.booth}}</p> -->
@@ -9,11 +9,11 @@
       <p><b>Pallet id:</b> {{data?.palletID}}</p>
       <p><b>Register cash terms:</b> {{data?.regcashterms}}</p>
       <p><b>Register freight terms:</b> {{data?.regfreightterms}}</p>
-      <p><b>Register price:</b> {{data?.regprice}}</p>
+      <p><b>Register price:</b> {{data?.currency == 'USD' ? "$" : "C$"}} {{data?.regprice}}</p>
       <p><b>Register shipment terms:</b> {{data?.regshipmentterms}}</p>
       <p><b>Prepaid Shipment:</b> {{data?.shipmentoptions === 'N' ? 'No' : 'Yes'}}</p>
-      <p><b>SPL price:</b> {{data?.splprice | number: '1.2-2'}}</p>
-      <p><b>Price:</b> {{data?.regprice | number: '1.2-2'}}</p>
+      <p><b>SPL price:</b> {{data?.currency == 'USD' ? "$" : "C$"}}{{data?.splprice | number: '1.2-2'}}</p>
+      <p><b>Price:</b> {{data?.currency == 'USD' ? "$" : "C$"}} {{data?.regprice | number: '1.2-2'}}</p>
       <p><b>Total pallet quantity:</b> {{data?.totalpalletqty}}</p>
       <p><b>Vendor number:</b> {{data?.vendorno}}</p>
       <p><b>Vendor name:</b> {{data?.vendorname }}</p>

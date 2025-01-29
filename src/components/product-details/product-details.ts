@@ -16,6 +16,7 @@ export class ProductDetailsComponent implements AfterViewInit {
   @Input() public inventoryonhand: InventoryOnHand;
   public imageIsLoading: boolean = true;
   public imageURL: string = '';
+  public discontinuedItem: boolean = false;
 
   constructor(
     private readonly navigatorService: NavigatorService,
@@ -28,9 +29,11 @@ export class ProductDetailsComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
+    console.log("product", this.product);
     this.imageProvider.getImageURL(this.product.sku).then(data => {
       this.imageURL = data;
       this.imageIsLoading = false;
+      this.discontinuedItem = this.product.discontinueD_REASON.length > 1;
     });
   }
 

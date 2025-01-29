@@ -10,12 +10,12 @@
       <ion-item class="list-wrapper" *ngFor="let item of listItems">
         <ion-label>
           <p><b>Customer number:</b> {{item?.customer_number}}</p>
-          <p><b>Group number:</b> {{item?.groupNumber}}</p>
+          <p><b>Group number:</b> {{item?.group_number}}</p>
           <p><b>List id:</b> {{item?.list_id}}</p>
           <p><b>Quantity:</b> {{item?.qty}}</p>
           <!-- <p><b>Username:</b> {{item?.user_name}}</p> -->
         </ion-label>
-        <ion-radio [value]="item?.groupNumber"></ion-radio>
+        <ion-radio [value]="item?.group_number"></ion-radio>
       </ion-item>
     </ng-container>
   </ion-list>

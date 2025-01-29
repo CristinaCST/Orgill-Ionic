@@ -88,7 +88,7 @@ export class POGandPalletSearchPage {
     if (this.isPOG) {
       this.marketProvider
         .addPOGtoMarketShoppingList(
-          this.isPOG ? `${this.searchData.groupNumber}` : `${this.searchData.palletID}`,
+          this.isPOG ? `${this.searchData.group_number}` : `${this.searchData.palletID}`,
           this.quantity
         )
         .then(() => {
@@ -100,7 +100,7 @@ export class POGandPalletSearchPage {
     } else {
       this.marketProvider
         .addPalletToMarketShoppingList(
-          this.isPOG ? `${this.searchData.groupNumber}` : `${this.searchData.palletID}`,
+          this.isPOG ? `${this.searchData.group_number}` : `${this.searchData.palletID}`,
           this.quantity
         )
         .then(() => {
@@ -131,7 +131,7 @@ export class POGandPalletSearchPage {
     if (this.isPOG) {
       this.marketProvider
         .editPOGtoMarketShoppingList(
-          this.isPOG ? `${this.searchData.groupNumber}` : `${this.searchData.palletID}`,
+          this.isPOG ? `${this.searchData.group_number}` : `${this.searchData.palletID}`,
           this.quantity
         )
         .then(() => {
@@ -143,7 +143,7 @@ export class POGandPalletSearchPage {
     } else {
       this.marketProvider
         .editPalletToMarketShoppingList(
-          this.isPOG ? `${this.searchData.groupNumber}` : `${this.searchData.palletID}`,
+          this.isPOG ? `${this.searchData.group_number}` : `${this.searchData.palletID}`,
           this.quantity
         )
         .then(() => {
@@ -163,9 +163,9 @@ export class POGandPalletSearchPage {
     this.navigatorService.pop();
   }
 
-  private fetchPOGitems(groupNumber) {
+  private fetchPOGitems(group_number) {
     this.marketProvider
-      .getPOGbyID(groupNumber)
+      .getPOGbyID(group_number)
       .then(response => {
         this.searchData = response;
         this.loader.hide();
