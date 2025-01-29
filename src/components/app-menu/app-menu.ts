@@ -29,6 +29,7 @@ import { LoadingService } from '../../services/loading/loading';
 import { LandingPage } from '../../pages/landing/landing';
 import { SecureActionsService } from '../../services/secure-actions/secure-actions';
 import { POGandPalletListPage } from '../../pages/pog-and-pallet-list/pog-and-pallet-list';
+import { POGandPalletPastPurchasesPage } from '../../pages/pog-and-pallet-past-purchases/pog-and-pallet-past-purchases';
 
 @Component({
   selector: 'app-menu',
@@ -344,6 +345,15 @@ export class AppMenuComponent implements OnInit {
 
   public goToPOGandPalletListPage(isPOG: boolean): void {
     this.navigatorService.setRoot(POGandPalletListPage, { isPOG }).then(
+      () => {},
+      err => {
+        console.error(err);
+      }
+    );
+  }
+
+  public goToPOGandPalletPastPurchases(isPOG: boolean): void {
+    this.navigatorService.setRoot(POGandPalletPastPurchasesPage, { isPOG }).then(
       () => {},
       err => {
         console.error(err);

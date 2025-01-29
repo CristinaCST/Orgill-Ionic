@@ -97,6 +97,8 @@ import { DashboardRoutes } from '../pages/dashboard-routes/dashboard-routes';
 import { POGandPalletListPage } from '../pages/pog-and-pallet-list/pog-and-pallet-list';
 import { POGandPalletSearchPage } from '../pages/pog-and-pallet-search/pog-and-pallet-search';
 import { POGandPalletCheckoutPage } from '../pages/pog-and-pallet-checkout/pog-and-pallet-checkout';
+import { POGandPalletPastPurchasesPage } from '../pages/pog-and-pallet-past-purchases/pog-and-pallet-past-purchases';
+import { POGandPalletOrderDetailsPage } from '../pages/pog-and-pallet-order-details/pog-and-pallet-order-details';
 
 // Pipes
 import { PipesModule } from '../pipes/pipes.module';
@@ -141,7 +143,9 @@ const pages: Page[] = [
   DashboardRoutes,
   POGandPalletListPage,
   POGandPalletSearchPage,
-  POGandPalletCheckoutPage
+  POGandPalletCheckoutPage,
+  POGandPalletPastPurchasesPage,
+  POGandPalletOrderDetailsPage
 ];
 
 // Error Handlers

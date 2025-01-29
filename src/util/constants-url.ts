@@ -64,6 +64,8 @@ export const DELETE_POG_TO_MARKET_SHOPPING_LIST: string = 'MarketPlanograms/shop
 export const DELETE_PALLET_TO_MARKET_SHOPPING_LIST: string = 'pallets/shoppinglist';
 export const CHECKOUT_POG_TO_MARKET_SHOPPING_LIST: string = 'MarketPlanograms/shoppinglist/Checkout';
 export const CHECKOUT_PALLET_TO_MARKET_SHOPPING_LIST: string = 'pallets/shoppinglist/Checkout';
+export const GET_PALLETS_PAST_PURCHASES: string = 'pallets/pastpurchase';
+export const GET_POG_PAST_PURCHASES: string = 'marketplanograms/pastpurchase';
 
 // ROUTE TRACKING API?
 const TRACKING_API_BASE_URL: string = 'https://40.122.36.68/api/';

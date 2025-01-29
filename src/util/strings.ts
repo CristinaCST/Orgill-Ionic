@@ -93,6 +93,8 @@ export const MENU_SETTINGS: string = 'menu_settings';
 export const MENU_ACCOUNT_LOGOUT: string = 'menu_account_logout';
 export const PLANOGRAMS_SHOPPING_CART: string = 'planograms_shopping_cart';
 export const PALLETS_SHOPPING_CART: string = 'pallets_shopping_cart';
+export const PLANOGRAMS_PAST_PURCHASES: string = 'planograms_past_purchases';
+export const PALLETS_PAST_PURCHASES: string = 'pallets_past_purchases';
 
 /**
  * Marker : Programs strings

@@ -78,4 +78,20 @@ export class MarketProvider {
       return response.text();
     });
   }
+
+  public getPOGPastPurchases(): Promise<any> {
+    return this.apiProvider.get(ConstantsUrl.GET_POG_PAST_PURCHASES).toPromise();
+  }
+
+  public getPOGSingleOrder(id: string): Promise<any> {
+    return this.apiProvider.get(`${ConstantsUrl.GET_POG_PAST_PURCHASES}/${id}`).toPromise();
+  }
+
+  public getPalletsPastPurchases(): Promise<any> {
+    return this.apiProvider.get(ConstantsUrl.GET_PALLETS_PAST_PURCHASES).toPromise();
+  }
+
+  public getPalletSingleOrder(id: string): Promise<any> {
+    return this.apiProvider.get(`${ConstantsUrl.GET_POG_PAST_PURCHASES}/${id}`).toPromise();
+  }
 }
