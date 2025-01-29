@@ -7,11 +7,12 @@
       <p><b>Department Name:</b> {{data?.deptname}}</p>
       <p><b>Pallet Name:</b> {{data?.formname}}</p>
       <p><b>Pallet id:</b> {{data?.palletID}}</p>
+      <p><b>Pallet Type: </b>{{data?.pallettype}}</p>
       <p><b>Register cash terms:</b> {{data?.regcashterms}}</p>
       <p><b>Register freight terms:</b> {{data?.regfreightterms}}</p>
       <p><b>Register price:</b> {{data?.currency == 'USD' ? "$" : "C$"}} {{data?.regprice}}</p>
       <p><b>Register shipment terms:</b> {{data?.regshipmentterms}}</p>
-      <p><b>Prepaid Shipment:</b> {{data?.shipmentoptions === 'N' ? 'No' : 'Yes'}}</p>
+      <p><b>Prepaid Shipment:</b> Yes </p>
       <p><b>SPL price:</b> {{data?.currency == 'USD' ? "$" : "C$"}}{{data?.splprice | number: '1.2-2'}}</p>
       <p><b>Price:</b> {{data?.currency == 'USD' ? "$" : "C$"}} {{data?.regprice | number: '1.2-2'}}</p>
       <p><b>Total pallet quantity:</b> {{data?.totalpalletqty}}</p>

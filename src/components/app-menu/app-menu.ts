@@ -140,10 +140,10 @@ export class AppMenuComponent implements OnInit {
 
     this.popoversService.show(content).subscribe((data: DefaultPopoverResult) => {
       if (data.optionSelected === 'OK') {
+        this.navigatorService.setRoot(Login)
+        .then(() => location.reload())
+        .catch(err => console.error(err));
         this.authService.logout();
-        this.navigatorService.setRoot(Login);
-        // .then(() => location.reload())
-        // .catch(err => console.error(err));
       }
     });
   }

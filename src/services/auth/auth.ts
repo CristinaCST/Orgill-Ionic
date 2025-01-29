@@ -15,6 +15,7 @@ import * as Strings from '../../util/strings';
 import { PopoversService, PopoverContent, CustomListPopoverResult } from '../../services/popovers/popovers';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { LoadingService } from '../../services/loading/loading';
+import {Login} from "../../pages/login/login";
 
 @Injectable()
 export class AuthService {
@@ -96,8 +97,8 @@ export class AuthService {
     this.secureActions.setAuthState(false);
     this.user = new User();
     LocalStorageHelper.clearLocalStorage();
-    // LocalStorageHelper.removeFromLocalStorage(Constants.USER);
     (window as any).Android.clearWebViewDataOnLogout();
+    (window as any).ios.clearWebViewDataOnLogout();
 
   }
 

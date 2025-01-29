@@ -4,7 +4,7 @@
     <div>
       <p><b>Planogram name:</b> {{data?.booth_name}}</p>
       <p><b>Program number:</b> {{data?.program_number}}</p>
-      <p><b>Price:</b> {{data?.currency == 'USD' ? "$" : "C$"}} {{data?.special_price | number: '1.2-2'}}</p>
+      <p><b>Price:</b> $ {{data?.special_price | number: '1.2-2'}}</p>
       <p><b>Planogram id:</b> {{data?.booth_id}}</p>
       <p><b>Group Number:</b> {{data?.group_number}}</p>
     </div>

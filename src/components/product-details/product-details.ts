@@ -33,7 +33,7 @@ export class ProductDetailsComponent implements AfterViewInit {
     this.imageProvider.getImageURL(this.product.sku).then(data => {
       this.imageURL = data;
       this.imageIsLoading = false;
-      this.discontinuedItem = this.product.discontinueD_REASON.length > 1;
+      this.discontinuedItem = this.product.discontinueD_REASON_CODE.length > 0;
     });
   }
 

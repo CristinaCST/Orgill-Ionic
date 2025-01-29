@@ -83,7 +83,7 @@ export class POGandPalletListPage {
         this.loader.hide();
         if (data.length) {
           const [firstItem] = data;
-          this.selectedList = firstItem.palletID;
+          this.selectedList = firstItem.palletid;
         }
       })
       .catch(err => {
@@ -102,7 +102,7 @@ export class POGandPalletListPage {
     this.popoversService.show(this.popoverContent);
     this.loader.hide();
     this.listItems = this.listItems.filter(
-      item => (this.isPOG ? item.group_number : item.palletID) !== this.selectedList
+      item => (this.isPOG ? item.groupnumber : item.palletid) !== this.selectedList
     );
   }
 
@@ -163,7 +163,7 @@ export class POGandPalletListPage {
   }
 
   private getSelectedList(): any {
-    return this.listItems.find(item => (this.isPOG ? item.group_number : item.palletID) === this.selectedList);
+    return this.listItems.find(item => (this.isPOG ? item.group_number : item.palletid) === this.selectedList);
   }
 
   public goToCheckout(): void {
