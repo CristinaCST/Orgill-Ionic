@@ -5,8 +5,8 @@
 <ion-content>
   <h3 *ngIf="!listItems.length" class="no-items">No items in cart</h3>
 
-  <ion-list radio-group [(ngModel)]="selectedList">
-    <ng-container *ngIf="isPOG; else palletTemplate">
+  <ng-container *ngIf="isPOG; else palletTemplate">
+    <ion-list radio-group [(ngModel)]="selectedList">
       <ion-item class="list-wrapper" *ngFor="let item of listItems">
         <ion-label>
           <p><b>Customer number:</b> {{item?.customer_number}}</p>
@@ -17,8 +17,8 @@
         </ion-label>
         <ion-radio [value]="item?.group_number"></ion-radio>
       </ion-item>
-    </ng-container>
-  </ion-list>
+    </ion-list>
+  </ng-container>
 </ion-content>
 
 <ion-footer class="list-footer" *ngIf="listItems.length">
@@ -36,17 +36,18 @@
 </ion-footer>
 
 <ng-template #palletTemplate>
-  <ion-item class="list-wrapper" *ngFor="let item of listItems">
-    <ion-label>
-      <p><b>Customer number:</b> {{item?.customer_number}}</p>
-      <p><b>Pallet name:</b> {{item?.formname}}</p>
-      <p><b>List id:</b> {{item?.list_id}}</p>
-      <p><b>Pallet id:</b> {{item?.palletid}}</p>
-      <p><b>Quantity:</b> {{item?.qty}}</p>
-      <p><b>SPL price:</b> {{item?.splprice}}</p>
-      <p><b>Total pallet quantity:</b> {{item?.totalpalletqty}}</p>
-      <!-- <p><b>Username:</b> {{item?.user_name}}</p> -->
-    </ion-label>
-    <ion-radio [value]="item?.palletid"></ion-radio>
-  </ion-item>
+  <ion-list radio-group [(ngModel)]="selectedList">
+    <ion-item class="list-wrapper" *ngFor="let item of listItems">
+      <ion-label>
+        <p><b>Customer number:</b> {{item?.customer_number}}</p>
+        <p><b>Pallet name:</b> {{item?.formname}}</p>
+        <p><b>List id:</b> {{item?.list_id}}</p>
+        <p><b>Pallet id:</b> {{item?.palletid}}</p>
+        <p><b>Quantity:</b> {{item?.qty}}</p>
+        <p><b>SPL price:</b> {{item?.splprice}}</p>
+        <p><b>Total pallet quantity:</b> {{item?.totalpalletqty}}</p>
+        <!-- <p><b>Username:</b> {{item?.user_name}}</p> -->
+      </ion-label>
+      <ion-radio [value]="item?.palletid"></ion-radio> </ion-item
+  ></ion-list>
 </ng-template>
