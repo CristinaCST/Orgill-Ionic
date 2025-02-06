@@ -9,9 +9,11 @@
     <ion-list radio-group [(ngModel)]="selectedList">
       <ion-item class="list-wrapper" *ngFor="let item of listItems">
         <ion-label>
-          <p><b>Customer number:</b> {{item?.customer_number}}</p>
-          <p><b>Group number:</b> {{item?.group_number}}</p>
-          <p><b>List id:</b> {{item?.list_id}}</p>
+<!--          <p><b>Customer number:</b> {{item?.customer_number}}</p>-->
+          <p><b>Planogram name:</b> {{item?.booth_name}} </p>
+          <p><b>Planogram number:</b> {{item?.group_number}}</p>
+          <p><b> Price:</b> $ {{item?.special_price}} </p>
+<!--          <p><b>List id:</b> {{item?.list_id}}</p>-->
           <p><b>Quantity:</b> {{item?.qty}}</p>
           <!-- <p><b>Username:</b> {{item?.user_name}}</p> -->
         </ion-label>
@@ -39,12 +41,14 @@
   <ion-list radio-group [(ngModel)]="selectedList">
     <ion-item class="list-wrapper" *ngFor="let item of listItems">
       <ion-label>
-        <p><b>Customer number:</b> {{item?.customer_number}}</p>
+<!--        <p><b>Customer number:</b> {{item?.customer_number}}</p>-->
         <p><b>Pallet name:</b> {{item?.formname}}</p>
-        <p><b>List id:</b> {{item?.list_id}}</p>
+<!--        <p><b>List id:</b> {{item?.list_id}}</p>-->
         <p><b>Pallet id:</b> {{item?.palletid}}</p>
-        <p><b>Quantity:</b> {{item?.qty}}</p>
-        <p><b>SPL price:</b> {{item?.splprice}}</p>
+        <p><b>Pallet Type:</b> {{item.pallettype}}</p>
+        <p><b>Vendor name:</b> {{item.vendorname}}</p>
+        <p><b>Special price: </b>$ {{item?.splprice}}</p>
+<!--        <p><b>Quantity:</b> {{item?.qty}}</p>-->
         <p><b>Total pallet quantity:</b> {{item?.totalpalletqty}}</p>
         <!-- <p><b>Username:</b> {{item?.user_name}}</p> -->
       </ion-label>

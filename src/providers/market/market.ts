@@ -63,7 +63,7 @@ export class MarketProvider {
     });
   }
 
-  public chekcoutPalletToMarketShoppingList(palletID: string, data: any): Promise<any> {
+  public checkoutPalletToMarketShoppingList(palletID: string, data: any): Promise<any> {
     return fetch(`${this.apiProvider.baseUrl}${ConstantsUrl.CHECKOUT_PALLET_TO_MARKET_SHOPPING_LIST}/${palletID}`, {
       method: 'POST',
       headers: {

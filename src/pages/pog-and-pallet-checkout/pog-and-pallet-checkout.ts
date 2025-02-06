@@ -104,7 +104,7 @@ export class POGandPalletCheckoutPage {
   private handlePOGcheckout(): void {
     this.marketProvider
       .checkoutPOGtoMarketShoppingList(this.selectedList.group_number, {
-        customer_po: this.customerPO,
+        customer_po: this.customerPO ? this.customerPO : "",
         release_date: this.releaseDate,
         customer_number: this.selectedLocation.shiptono
       })
@@ -118,8 +118,8 @@ export class POGandPalletCheckoutPage {
 
   private handlePalletCheckout(): void {
     this.marketProvider
-      .chekcoutPalletToMarketShoppingList(this.selectedList.palletID, {
-        customer_po: this.customerPO,
+      .checkoutPalletToMarketShoppingList(this.selectedList.palletid, {
+        customer_po: this.customerPO ? this.customerPO : "",
         release_date: this.releaseDate,
         customer_number: this.selectedLocation.shiptono
       })
@@ -132,7 +132,7 @@ export class POGandPalletCheckoutPage {
   }
 
   public handleCheckout(): void {
-    if (!this.customerPO) {
+    if (!this.customerPO && this.selectedLocation.po_required == "Y") {
       this.handleCustomerPOError();
       return;
     }

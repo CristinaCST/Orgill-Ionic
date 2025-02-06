@@ -42,7 +42,7 @@
   <ion-item class="total-price">
     <span #totalLabel>{{"product_total_price" | translate}}:</span>
     <span
-      >{{"product_currency" | translate}}{{(isPOG ? searchData?.special_price : searchData?.regprice) * quantity |
+      >{{"product_currency" | translate}}{{(isPOG ? searchData?.special_price : searchData?.splprice) * quantity |
       number: '1.2-2'}}</span
     >
   </ion-item>
