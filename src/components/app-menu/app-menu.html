@@ -146,15 +146,17 @@
           {{"menu_ordering_history"| translate}}
         </button>
 
+        <button ion-item class="item" detail-none menuClose icon-left (click)="goToPOGandPalletPastPurchases(true)">
+          <ion-icon name="archive"></ion-icon>
+          {{"planograms_past_purchases" | translate}}
+        </button>
+
         <button ion-item class="item" detail-none menuClose icon-left (click)="goToPOGandPalletPastPurchases()">
           <ion-icon name="archive"></ion-icon>
           {{"pallets_past_purchases" | translate}}
         </button>
 
-        <button ion-item class="item" detail-none menuClose icon-left (click)="goToPOGandPalletPastPurchases(true)">
-          <ion-icon name="archive"></ion-icon>
-          {{"planograms_past_purchases" | translate}}
-        </button>
+
 
         <!-- Account -->
         <ion-item-divider no-lines>{{"menu_header_account" | translate}}:</ion-item-divider>

@@ -105,7 +105,7 @@ export class POGandPalletCheckoutPage {
     this.marketProvider
       .checkoutPOGtoMarketShoppingList(this.selectedList.group_number, {
         customer_po: this.customerPO ? this.customerPO : "",
-        release_date: this.releaseDate,
+        release_date: new Date().toISOString().split('T')[0],
         customer_number: this.selectedLocation.shiptono
       })
       .then(() => {
@@ -136,7 +136,7 @@ export class POGandPalletCheckoutPage {
       this.handleCustomerPOError();
       return;
     }
-    if (!this.releaseDate) {
+    if (!this.isPOG && !this.releaseDate) {
       this.handleDateError();
       return;
     }

@@ -102,7 +102,7 @@ export class POGandPalletListPage {
     this.popoversService.show(this.popoverContent);
     this.loader.hide();
     this.listItems = this.listItems.filter(
-      item => (this.isPOG ? item.groupnumber : item.palletid) !== this.selectedList
+      item => (this.isPOG ? item.group_number : item.palletid) !== this.selectedList
     );
   }
 

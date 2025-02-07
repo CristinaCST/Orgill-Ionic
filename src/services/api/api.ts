@@ -49,6 +49,7 @@ export class ApiService {
     baseUrl: string = this.baseUrl,
     setDashboardAuthorization?: boolean
   ): Observable<any> {
+    console.log("params", this.userToken);
     return this.http.get(baseUrl + path, { headers: this.setHeaders(setDashboardAuthorization), params });
   }
 
@@ -61,10 +62,11 @@ export class ApiService {
   ): Observable<any> {
     if (requiresToken) {
       body[useExternalAPI ? 'token' : 'user_token'] = this.userToken;
+      console.log("body", this.userToken);
 
       return this.http.post(baseUrl + path, JSON.stringify(body), { headers: this.setHeaders(useExternalAPI) }).take(1);
     }
-
+    console.log("body", this.userToken);
     return this.http.post(this.baseUrl + path, JSON.stringify(body), { headers: this.setHeaders() }).take(1);
   }
 

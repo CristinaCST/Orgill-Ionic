@@ -9,7 +9,7 @@
       <ion-input type="text" [(ngModel)]="customerPO"></ion-input>
     </ion-item>
 
-    <ion-item>
+    <ion-item *ngIf="!isPOG">
       <ion-label fixed>Release Date</ion-label>
       <ion-datetime
         displayFormat="MM/DD/YYYY"

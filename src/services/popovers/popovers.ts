@@ -133,7 +133,7 @@ export class PopoversService {
   public setContent(
     title: string = Strings.GENERIC_MODAL_TITLE,
     message: string | HTMLElement,
-    positiveButtonText: string = Strings.MODAL_BUTTON_OK,
+    positiveButtonText: string = "OK",
     dismissButtonText?: string,
     negativeButtonText?: string,
     type?: string,

@@ -95,11 +95,10 @@ export class AuthService {
 
   public logout(): void {
     this.secureActions.setAuthState(false);
-    this.user = new User();
     LocalStorageHelper.clearLocalStorage();
+    LocalStorageHelper.removeFromLocalStorage(Constants.USER);
     (window as any).Android.clearWebViewDataOnLogout();
     (window as any).ios.clearWebViewDataOnLogout();
-
   }
 
   /**
@@ -147,8 +146,8 @@ export class AuthService {
     }
 
     const content: PopoverContent = this.popoverService.setContent(
-      Strings.GENERIC_MODAL_TITLE,
-      Strings.SESSION_EXPIRED
+      "The O ZONE",
+      "Session expired"
     );
     this.popoverService.show(content);
 
