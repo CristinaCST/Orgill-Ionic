@@ -5,6 +5,9 @@ import { SecureActionsService } from '../../services/secure-actions/secure-actio
 import { environment } from '../../environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 import { User } from '../../interfaces/models/user';
+import {LocalStorageHelper} from "../../helpers/local-storage";
+import * as Constants from '../../util/constants';
+
 
 @Injectable()
 export class ApiService {

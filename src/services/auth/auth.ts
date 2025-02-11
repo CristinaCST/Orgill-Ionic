@@ -97,8 +97,9 @@ export class AuthService {
     this.secureActions.setAuthState(false);
     LocalStorageHelper.clearLocalStorage();
     LocalStorageHelper.removeFromLocalStorage(Constants.USER);
-    (window as any).Android.clearWebViewDataOnLogout();
-    (window as any).ios.clearWebViewDataOnLogout();
+    // (window as any).Android.clearWebViewDataOnLogout();
+    // (window as any).ios.clearWebViewDataOnLogout();
+    window.ozone.clearWebViewDataOnLogout();
   }
 
   /**
@@ -116,7 +117,7 @@ export class AuthService {
             this.allowLanguageSwitchListener.next(this.allowSwitch === '8');
             this.secureActions.setAuthState(true, this.user);
             this.events.publish(Constants.EVENT_AUTH);
-            LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
+            // LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
             resolve(response);
           },
           error => {

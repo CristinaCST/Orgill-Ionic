@@ -141,10 +141,10 @@ export class AppMenuComponent implements OnInit {
 
     this.popoversService.show(content).subscribe((data: DefaultPopoverResult) => {
       if (data.optionSelected === 'OK') {
+        LocalStorageHelper.clearLocalStorage();
         this.navigatorService.setRoot(Login)
-        .then()
+        .then(() => this.authService.logout())
         .catch(err => console.error(err));
-        this.authService.logout();
       }
     });
   }

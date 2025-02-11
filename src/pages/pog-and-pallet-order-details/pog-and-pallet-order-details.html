@@ -20,13 +20,22 @@
 
     <p class="list-title"><b>Order items:</b></p>
 
-    <ion-item class="list-wrapper" *ngFor="let item of orderDetails?.orderitems">
-      <ion-label>
-        <p><b>Line:</b> {{item?.line_seq}}</p>
-        <p><b>Price:</b> {{item?.price | number: '1.2-2'}}$</p>
-        <p><b>Quantity:</b> {{item?.quantity}}</p>
-        <p><b>SKU:</b> {{item?.sku}}</p>
-      </ion-label>
-    </ion-item>
+    <ion-grid>
+      <div class="item" *ngFor="let item of orderDetails?.order_items">
+        <ion-row>
+          <ion-col>
+            <div>
+              <b>SKU:</b> {{item?.sku}}
+            </div>
+          </ion-col>
+          <ion-col>
+            <div *ngIf="isPOG" class="qtyColumn">
+              x{{item?.quantity}}
+            </div>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-grid>
+
   </ion-list>
 </ion-content>

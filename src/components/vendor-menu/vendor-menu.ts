@@ -9,6 +9,7 @@ import { Login } from '../../pages/login/login';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { onlineDealerMarketCAD, onlineDealerMarketUS } from '../../util/constants-url';
+import {LocalStorageHelper} from "../../helpers/local-storage";
 
 @Component({
   selector: 'vendor-menu',
@@ -47,10 +48,9 @@ export class VendorMenuComponent {
 
     this.popoversService.show(content).subscribe((data: DefaultPopoverResult) => {
       if (data.optionSelected === 'OK') {
-        this.authService.logout();
-        this.navigatorService
-          .setRoot(Login)
-          .then(() => location.reload())
+        LocalStorageHelper.clearLocalStorage();
+        this.navigatorService.setRoot(Login)
+          .then(() =>  this.authService.logout())
           .catch(err => console.error(err));
       }
     });

@@ -38,6 +38,8 @@ declare global {
 
       nativeLog: (value: any) => any;//For debugging log from native side
 
+      clearWebViewDataOnLogout: () => any;
+
       // Add other functions as needed
     };
   }
@@ -105,6 +107,10 @@ export class MyApp {
 
       closeApp: () => {
         //TODO Blank cause was define at native side
+      },
+
+      clearWebViewDataOnLogout: () => {
+        // blank for native side
       },
 
       navigateBack: () => {
