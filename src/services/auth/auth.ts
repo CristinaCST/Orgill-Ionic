@@ -97,9 +97,10 @@ export class AuthService {
     this.secureActions.setAuthState(false);
     LocalStorageHelper.clearLocalStorage();
     LocalStorageHelper.removeFromLocalStorage(Constants.USER);
-    // (window as any).Android.clearWebViewDataOnLogout();
+     (window as any).Android.clearWebViewDataOnLogout();
     // (window as any).ios.clearWebViewDataOnLogout();
     window.ozone.clearWebViewDataOnLogout();
+
   }
 
   /**

@@ -41,7 +41,7 @@
       <div>
         <div class="info">{{"product_discontinued_label" | translate}}</div>
         <div class="info"><span>{{"product_discontinued_reason" | translate}} {{product.discontinueD_REASON}}</span></div>
-        <div class="info" (click)="goToProductPage(product.replacemenT_ITEM)"><span>{{"product_replacement_item" | translate}} {{product.replacemenT_ITEM}}</span></div>
+        <div *ngIf="product.replacemenT_ITEM" class="info" (click)="goToProductPage(product.replacemenT_ITEM)"><span>{{"product_replacement_item" | translate}} {{product.replacemenT_ITEM}}</span></div>
       </div>
     </div>
   </ion-item>
