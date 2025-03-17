@@ -72,6 +72,7 @@ export class RouteTrackingPage {
   }
 
   public ngOnInit(): void {
+    console.log("USER", JSON.parse(LocalStorageHelper.getFromLocalStorage(USER)));
     const user_type: UserType = JSON.parse(LocalStorageHelper.getFromLocalStorage(USER)).user_type;
 
     if ([UserType.sales, UserType.manager, UserType.bdm, UserType.employee].includes(user_type)) {

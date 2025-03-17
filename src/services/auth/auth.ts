@@ -15,7 +15,6 @@ import * as Strings from '../../util/strings';
 import { PopoversService, PopoverContent, CustomListPopoverResult } from '../../services/popovers/popovers';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { LoadingService } from '../../services/loading/loading';
-import {Login} from "../../pages/login/login";
 
 @Injectable()
 export class AuthService {
@@ -111,14 +110,15 @@ export class AuthService {
       return new Promise((resolve, reject) => {
         const params: any = { user_token: this.user.user_Token };
         this.apiProvider.fetch(ConstantsURL.URL_USER_INFO, this.user.user_Token).subscribe(
-          (response: any) => {
+          async (response: any) => {
             this.user = response;
             this.user.user_Token = params.user_token;
             this.allowSwitch = response.division;
             this.allowLanguageSwitchListener.next(this.allowSwitch === '8');
             this.secureActions.setAuthState(true, this.user);
             this.events.publish(Constants.EVENT_AUTH);
-            // LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
+            LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
+            LocalStorageHelper.saveToLocalStorage(Constants.USER_TOKEN, params.user_token);
             resolve(response);
           },
           error => {
@@ -133,14 +133,29 @@ export class AuthService {
   }
 
   public isValidSession(): boolean {
-    if (!this.User) {
+    const token = LocalStorageHelper.getFromLocalStorage(Constants.USER_TOKEN);
+    console.log('Session token check:', token ? 'Token found' : 'No token found');
+
+    if (!token) {
+      console.log('No valid session token found');
+
+      // Extra check - try localStorage directly as a fallback
+      const directToken = localStorage.getItem(Constants.USER_TOKEN);
+      if (directToken) {
+        console.log('Found token directly in localStorage, helper may have issues');
+        return true;
+      }
+
       return false;
     }
 
+    const timeStamp = JSON.parse(LocalStorageHelper.getFromLocalStorage(Constants.USER)).time_stamp;
+    console.log("timestamp", timeStamp);
+
     const now: Moment = DateTimeService.getCurrentDateTime();
-    const receivedTimestamp: Moment = moment(this.User.time_stamp);
-    const sessionTimestampWith4Days: Moment = DateTimeService.getTimeAfter4Days(receivedTimestamp);
-    const status: boolean = sessionTimestampWith4Days.isSameOrAfter(now);
+    const receivedTimestamp: Moment = moment(timeStamp);
+    const sessionTimestampWith7Days: Moment = DateTimeService.getTimeAfter7Days(receivedTimestamp);
+    const status: boolean = sessionTimestampWith7Days.isSameOrAfter(now);
 
     if (status) {
       // this.executeQueue();
@@ -159,4 +174,5 @@ export class AuthService {
   public getCurrentUser(): User {
     return this.User;
   }
+
 }

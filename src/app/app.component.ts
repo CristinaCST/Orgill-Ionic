@@ -17,6 +17,7 @@ import { LandingPage } from '../pages/landing/landing';
 import { VendorLandingPage } from '../pages/vendor-landing/vendor-landing';
 import { User } from 'interfaces/models/user';
 import { ScannerService } from '../services/scanner/scanner';
+import {LocalStorageHelper} from "../helpers/local-storage";
 
 //Global js function interface for bind with native app
 //through these function native side's webview will call these js functions
@@ -65,11 +66,11 @@ export class MyApp {
     private readonly authService: AuthService,
     public scannerService: ScannerService,
     private readonly cdr: ChangeDetectorRef,
-    private readonly ngZone: NgZone,
-  ) {
+    private readonly ngZone: NgZone) {
     this.setAppLanguage().then(() => {
       this.initializeApp();
     });
+
 
     //Initialize global js functions
     window.ozone = {
@@ -178,6 +179,21 @@ export class MyApp {
     });
   }
 
+
+
+  //   this.platform.resume.subscribe(() => {
+  //     console.log('App resumed from background');
+  //     this.validateSessionOnResume();
+  //   });
+  // }
+  //
+  // async validateSessionOnResume() {
+  //   // Perform a token validation that's more robust
+  //   // than just checking if token exists
+  //   const token = LocalStorageHelper.getFromLocalStorage(Constants.USER_TOKEN);
+  //   this.checkSession();
+  // }
+
   //Common navigate back function re-coded from old code
   //to manage navigation using global navigateBack function from native side
   private navigateBack(isForAndroid: boolean) {
@@ -226,6 +242,7 @@ export class MyApp {
     this.stopLoading();
 
     if (!this.authService.isValidSession()) {
+      console.log("it is not valid session");
       this.rootPage = Login;
       this.navigatorService.initialRootPage(Login);
       return;

@@ -151,6 +151,7 @@ const pages: Page[] = [
 // Error Handlers
 import { CustomErrorHandler } from '../services/error-handler/error-handler';
 import { RouteTrackingProvider } from '../providers/route-tracking/route-tracking';
+import {IonicStorageModule} from "@ionic/storage";
 
 @NgModule({
   declarations: pages,
@@ -163,6 +164,7 @@ import { RouteTrackingProvider } from '../providers/route-tracking/route-trackin
       autoFocusAssist: false,
       statusbarPadding: false
     }),
+    IonicStorageModule.forRoot(),
     HttpClientModule,
     ComponentsModule,
 
