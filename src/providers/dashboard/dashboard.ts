@@ -62,9 +62,9 @@ export class DashboardProvider {
     return this.apiProvider.post(GetStopsStatistics, body, true, true);
   }
 
-  public getStoreRouteAndStops(ship_to_no: string): Observable<any> {
+  public getStoreRouteAndStops(shipToNo: string): Observable<any> {
     return this.apiProvider.get(GetStoreRouteAndStops, {
-      ship_to_no
+      shipToNo
     });
   }
 

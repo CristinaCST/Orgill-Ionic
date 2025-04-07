@@ -13,7 +13,7 @@
           <p><b>Planogram name:</b> {{item?.booth_name}} </p>
           <p><b>Planogram number:</b> {{item?.group_number}}</p>
           <p><b>Program number:</b> {{item.program_number}}</p>
-          <p><b> Price:</b> $ {{item?.special_price}} </p>
+          <p><b> Price:</b> $ {{Number(item?.special_price * item?.qty)}}  </p>
 <!--          <p><b>List id:</b> {{item?.list_id}}</p>-->
           <p><b>Quantity:</b> {{item?.qty}}</p>
           <!-- <p><b>Username:</b> {{item?.user_name}}</p> -->

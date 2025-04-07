@@ -26,13 +26,13 @@ export class RouteTrackingProvider {
     return this.apiProvider.post(GET_CUSTOMER_LOCATIONS, {}, true, true, TRACKING_API_BASE_URL_PROD);
   }
 
-  public getStoreRouteAndStops(ship_to_no: string): Observable<any> {
+  public getStoreRouteAndStops(shipToNo: string): Observable<any> {
     return this.apiProvider.get(
       GET_STORE_ROUTE_AND_STOPS,
       {
-        ship_to_no
+        shipToNo
       },
-      TRACKING_API_BASE_URL_PROD
+      TRACKING_API_BASE_URL_PROD, true
     );
   }
 

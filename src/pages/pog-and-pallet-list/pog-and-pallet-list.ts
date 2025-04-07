@@ -177,4 +177,6 @@ export class POGandPalletListPage {
       selectedList: this.getSelectedList()
     });
   }
+
+  protected readonly Number = Number;
 }

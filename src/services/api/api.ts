@@ -7,18 +7,23 @@ import { TranslateService } from '@ngx-translate/core';
 import { User } from '../../interfaces/models/user';
 import {LocalStorageHelper} from "../../helpers/local-storage";
 import * as Constants from '../../util/constants';
+import {TRANSPORTATION_TOKEN} from "../../util/constants";
+import {hammer} from "ionicons/icons";
+import {RequestOptions} from "@angular/http";
 
 
 @Injectable()
 export class ApiService {
   public baseUrl: string;
   public userToken: string;
+  public transportationToken: string;
 
   constructor(
     private readonly http: HttpClient,
     public readonly secureActions: SecureActionsService,
     public translate: TranslateService
   ) {
+    console.log("use", this.transportationToken);
     translate.onLangChange.subscribe(() => {
       this.baseUrl = this.getServiceBaseURL();
     });
@@ -40,7 +45,9 @@ export class ApiService {
     }
 
     if (setDashboardAuthorization) {
-      headers.Authorization = this.userToken;
+      this.transportationToken = LocalStorageHelper.getFromLocalStorage(TRANSPORTATION_TOKEN);
+      headers.Authorization = this.transportationToken;
+      headers.user_token = this.transportationToken;
     }
 
     return headers;
@@ -50,9 +57,8 @@ export class ApiService {
     path: string,
     params: any = {},
     baseUrl: string = this.baseUrl,
-    setDashboardAuthorization?: boolean
+    setDashboardAuthorization?: boolean,
   ): Observable<any> {
-    console.log("params", this.userToken);
     return this.http.get(baseUrl + path, { headers: this.setHeaders(setDashboardAuthorization), params });
   }
 
@@ -65,11 +71,8 @@ export class ApiService {
   ): Observable<any> {
     if (requiresToken) {
       body[useExternalAPI ? 'token' : 'user_token'] = this.userToken;
-      console.log("body", this.userToken);
-
       return this.http.post(baseUrl + path, JSON.stringify(body), { headers: this.setHeaders(useExternalAPI) }).take(1);
     }
-    console.log("body", this.userToken);
     return this.http.post(this.baseUrl + path, JSON.stringify(body), { headers: this.setHeaders() }).take(1);
   }
 

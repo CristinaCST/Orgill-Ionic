@@ -123,6 +123,7 @@ export const NOTIFICATION_SUBSCRIPTION_ANDROID_PATH: string = 'notficationSubscr
 
 export const USER: string = 'user';
 export const USER_TOKEN: string = 'UserToken';
+export const TRANSPORTATION_TOKEN: string ='TransportationToken';
 export const USER_SESSION_TIMESTAMP: string = 'sessionTimestamp';
 
 /*

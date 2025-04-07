@@ -71,14 +71,15 @@ export const GET_POG_PAST_PURCHASES: string = 'marketplanograms/pastpurchase';
 // ROUTE TRACKING API?
 const TRACKING_API_BASE_URL: string = 'https://40.122.36.68/api/';
 // const TRACKING_API_BASE_URL_PROD: string = 'https://168.61.170.88/api/';
-export const TRACKING_API_BASE_URL_PROD: string = 'https://ozonetransportation.orgill.com/api/';
+//export const TRACKING_API_BASE_URL_PROD: string = 'https://ozonetransportation.orgill.com/api/';
+export const TRACKING_API_BASE_URL_PROD: string = 'https://dev-ozonetransportation.orgill.com/api/';
 export const TRACKING_API_BASE_URL_DEV: string = 'https://dev-ozonetransportation.orgill.com/api/';
 
 /**
  * params
- * ship_to_no: string
+ * shipToNo: string
  */
-export const GET_STORE_ROUTE_AND_STOPS: string = 'Admin/GetStoreRouteAndStops';
+export const GET_STORE_ROUTE_AND_STOPS: string = 'Admin/GetStoreRouteAndStopsWeb';
 
 /**
  * request body
@@ -88,10 +89,15 @@ export const GET_STORE_ROUTE_AND_STOPS: string = 'Admin/GetStoreRouteAndStops';
 export const VENDOR_ACCOUNT_LOGIN: string = 'VendorAccount/Login';
 
 /**
+ * token from main service
+ */
+export const GET_TRANSPORTATION_TOKEN: string = 'VendorAccount/NewGetCustomToken';
+
+/**
  * params
  * user_token: string
  */
-export const GET_CUSTOMER_LOCATIONS: string = 'VendorAccount/GetCustomerLocations';
+export const GET_CUSTOMER_LOCATIONS: string = 'VendorAccount/NewGetCustomerLocations';
 
 /**
  * params
@@ -138,7 +144,7 @@ export const onlineDealerMarketCAD: string =
 export const GetGeneralStatistics: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetGeneralStatistics';
 export const GetTrafficStatistics: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetTrafficStatistics';
 export const GetStopsStatistics: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetStopsStatistics';
-export const GetStoreRouteAndStops: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetStoreRouteAndStops';
+export const GetStoreRouteAndStops: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetStoreRouteAndStopsWeb';
 export const GetDcAndRoutes: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetDcAndRoutes';
 export const GetCustomersByDcAndRoute: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetCustomersByDcAndRoute';
 export const GetDeliveriesDashboard: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetDeliveriesDashboard';

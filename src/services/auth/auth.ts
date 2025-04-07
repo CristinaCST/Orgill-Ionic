@@ -15,6 +15,8 @@ import * as Strings from '../../util/strings';
 import { PopoversService, PopoverContent, CustomListPopoverResult } from '../../services/popovers/popovers';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { LoadingService } from '../../services/loading/loading';
+import {GET_TRANSPORTATION_TOKEN, GetDcAndRoutes, TRACKING_API_BASE_URL_PROD} from "../../util/constants-url";
+import {TRANSPORTATION_TOKEN} from "../../util/constants";
 
 @Injectable()
 export class AuthService {
@@ -57,6 +59,9 @@ export class AuthService {
 
       this.user = new User();
       this.user.user_Token = data.user_Token;
+      this.user.transportation_token = data.user_Token;
+      LocalStorageHelper.saveToLocalStorage(TRANSPORTATION_TOKEN, data.user_Token.toString());
+
 
       if (data.errCode && data.errCode === 'Password has expired!') {
         const content: PopoverContent = this.popoverService.setContent(
@@ -100,6 +105,17 @@ export class AuthService {
     // (window as any).ios.clearWebViewDataOnLogout();
     window.ozone.clearWebViewDataOnLogout();
 
+  }
+
+  public getTransportationToken(): void {
+     this.apiProvider.get(GET_TRANSPORTATION_TOKEN, {}, TRACKING_API_BASE_URL_PROD, true).subscribe(
+       async (response: any) => {
+         this.user.transportation_token = response.token;
+         console.log("response.token", response.token);
+         LocalStorageHelper.saveToLocalStorage(Constants.USER, JSON.stringify(this.user));
+         LocalStorageHelper.saveToLocalStorage(Constants.TRANSPORTATION_TOKEN, response.token);
+       }
+     );
   }
 
   /**

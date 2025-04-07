@@ -49,6 +49,7 @@ export class Login {
 
           this.navigatorService.setRoot(user_type === 'Vendor' ? VendorLandingPage : LandingPage);
           this.loginLoader.hide();
+          this.authService.getTransportationToken();
         });
       },
       error => {
