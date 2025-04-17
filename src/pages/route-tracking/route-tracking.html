@@ -1,9 +1,3 @@
-<!--
-  Generated template for the RouteTrackingPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
   <ion-navbar>
     <ion-title>{{"track_order_page_title" | translate}}</ion-title>
@@ -24,30 +18,40 @@
     </button>
   </div>
 
-  <div *ngIf="currentDeliveries.length; else noDeliveries">
+  <div *ngIf="currentDeliveries.length || isLoadingPage || (searchQuery.length >= minSearchLength)">
     <div class="deliveries-header">
       <img class="truck-image" src="../../assets/imgs/Orgill-truck-locate.jpg" />
     </div>
 
-    <div class="input-container">
+    <div class="search-container">
       <div class="input-wrapper">
         <ion-icon name="search"></ion-icon>
         <input
           type="text"
-          placeholder="Filter by ship to number"
-          [(ngModel)]="customerNumValue"
-          (ngModelChange)="onCustomerNumValueChange($event)"
+          placeholder="Search by ship to number (min 2 characters)"
+          [(ngModel)]="searchQuery"
         />
+        <ion-icon
+          *ngIf="searchQuery.length > 0"
+          name="close-circle"
+          class="clear-icon"
+          (click)="clearSearch()"
+        ></ion-icon>
       </div>
       <button
         class="disable-hover button button-md button-default button-default-md button-md-OrgillRed"
-        (click)="cancelFilter()"
+        (click)="executeSearch()"
+        [disabled]="searchQuery.length < minSearchLength"
       >
-        {{isFilterActive ? "Cancel":"Filter"}}
+        Search
       </button>
     </div>
 
-    <div class="order-container" *ngFor="let order of (isFilterActive ? filteredDeliveries : currentDeliveries)">
+    <div *ngIf="(searchQuery.length >= minSearchLength && currentDeliveries.length === 0 && !isLoadingPage)" class="loader-container">
+      <p>No locations found with ship to number containing "{{searchQuery}}"</p>
+    </div>
+
+    <div class="order-container" *ngFor="let order of currentDeliveries">
       <div class="order-header">
         <h5 class="order-subtitle">{{"track_order_customer_name" | translate}}</h5>
         <h4 class="order-title">{{order.customerLocation.customerName}}</h4>
@@ -74,6 +78,27 @@
           {{"track_order_map_details" | translate}}
         </button>
       </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination-container" *ngIf="totalPages > 1">
+      <button
+        class="pagination-btn"
+        [disabled]="currentPage === 1 || isLoadingPage"
+        (click)="prevPage()"
+      >
+        <ion-icon name="arrow-back"></ion-icon> Prev
+      </button>
+      <div class="pagination-info">
+        <span>Page {{currentPage}} of {{totalPages}}</span>
+      </div>
+      <button
+        class="pagination-btn"
+        [disabled]="currentPage === totalPages || isLoadingPage"
+        (click)="nextPage()"
+      >
+        Next <ion-icon name="arrow-forward"></ion-icon>
+      </button>
     </div>
 
     <div class="map-container" *ngIf="showMap">

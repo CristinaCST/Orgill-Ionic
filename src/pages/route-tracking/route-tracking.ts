@@ -17,13 +17,6 @@ import { Platform } from 'ionic-angular/platform/platform';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { UserType } from '../../interfaces/models/user-type';
 
-/**
- * Generated class for the RouteTrackingPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @Component({
   selector: 'page-route-tracking',
   templateUrl: 'route-tracking.html'
@@ -33,6 +26,18 @@ export class RouteTrackingPage {
   @ViewChild('customInput') private readonly customInput: ElementRef;
   private readonly deliveryLoader: LoadingService;
   private currentMapIndex: number;
+
+  // All locations
+  private allCustomerLocations: any[] = [];
+
+  // Search properties
+  public searchQuery: string = '';
+  public minSearchLength: number = 2;
+  public currentPage: number = 1;
+  public locationsPerPage: number = 5;
+  public totalPages: number = 1;
+  public isLoadingPage: boolean = false;
+
   public currentDeliveries: any[] = [];
   public filteredDeliveries: any[] = [];
   public showMap: boolean;
@@ -87,26 +92,101 @@ export class RouteTrackingPage {
     this.deliveryLoader.show();
 
     this.routeTrackingProvider.getCustomerLocations().subscribe(customerLocations => {
-      customerLocations.forEach((customerLocation: any) => {
-        // if (!customerLocation.hasDeliveriesToday) {
-        //   this.deliveryLoader.hide();
-        //   return;
-        // }
+      if (!customerLocations.length) {
+        this.deliveryLoader.hide();
+        return;
+      }
 
-        this.fetchCurrentRoute(customerLocation);
+      this.allCustomerLocations = customerLocations;
+      this.updatePagination();
+
+      // Load the first page
+      this.loadLocationPage(1);
+    });
+  }
+
+  private updatePagination() {
+    // If filtering by search, use filtered locations to calculate pages
+    const locationsToUse = this.searchQuery && this.searchQuery.length >= this.minSearchLength
+      ? this.allCustomerLocations.filter(loc =>
+        loc.shipToNo.toLowerCase().includes(this.searchQuery.toLowerCase()))
+      : this.allCustomerLocations;
+
+    this.totalPages = Math.ceil(locationsToUse.length / this.locationsPerPage);
+    this.totalPages = this.totalPages === 0 ? 1 : this.totalPages; // At least one page
+  }
+
+  public loadLocationPage(page: number) {
+    this.currentPage = page;
+    this.currentDeliveries = [];
+    this.isLoadingPage = true;
+
+    // Get locations - either filtered by search or all
+    let locationsToUse = this.allCustomerLocations;
+
+    if (this.searchQuery && this.searchQuery.length >= this.minSearchLength) {
+      locationsToUse = this.allCustomerLocations.filter(loc =>
+        loc.shipToNo.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    }
+
+    const startIndex = (page - 1) * this.locationsPerPage;
+    const endIndex = Math.min(startIndex + this.locationsPerPage, locationsToUse.length);
+
+    // Get subset of locations for current page
+    const pageLocations = locationsToUse.slice(startIndex, endIndex);
+
+    // Show loader
+    this.deliveryLoader.show();
+
+    // Process each location for the current page
+    let processedCount = 0;
+
+    if (pageLocations.length === 0) {
+      this.isLoadingPage = false;
+      this.deliveryLoader.hide();
+      return;
+    }
+
+    pageLocations.forEach(customerLocation => {
+      this.fetchCurrentRoute(customerLocation, false, () => {
+        processedCount++;
+        // Hide loader when all locations are processed
+        if (processedCount === pageLocations.length) {
+          this.isLoadingPage = false;
+          this.deliveryLoader.hide();
+        }
       });
     });
   }
 
-  private fetchCurrentRoute(customerLocation: { shipToNo: string }, refreshMap?: boolean): void {
-    this.routeTrackingProvider.getStoreRouteAndStops(customerLocation.shipToNo).subscribe((routesAndStops): void => {
-      this.deliveryLoader.hide();
+  public nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.loadLocationPage(this.currentPage + 1);
+    }
+  }
 
-      //   if (routesAndStops.error) {
-      //     this.errorMessage = routesAndStops.error;
-      //   } else {
-      this.updateDeliveriesList(customerLocation, routesAndStops, refreshMap);
-      //   }
+  public prevPage() {
+    if (this.currentPage > 1) {
+      this.loadLocationPage(this.currentPage - 1);
+    }
+  }
+
+  private fetchCurrentRoute(customerLocation: { shipToNo: string }, refreshMap?: boolean, onComplete?: () => void): void {
+    // We don't need to show additional loader since we're using the main one
+    this.routeTrackingProvider.getStoreRouteAndStops(customerLocation.shipToNo).subscribe({
+      next: (routesAndStops): void => {
+        this.updateDeliveriesList(customerLocation, routesAndStops, refreshMap);
+        if (onComplete) {
+          onComplete();
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching route:', error);
+        if (onComplete) {
+          onComplete();
+        }
+      }
     });
   }
 
@@ -132,7 +212,7 @@ export class RouteTrackingPage {
     setTimeout(() => {
       this.populateMapWindow(data);
       this.mapElement.nativeElement.scrollIntoView();
-    }, 0); // this was shown as an example on the angular docs
+    }, 0);
   }
 
   public refreshMap(): void {
@@ -197,29 +277,19 @@ export class RouteTrackingPage {
     return Boolean(!isNaN(Number(value)) && value.length === 6);
   }
 
-  public onCustomerNumValueChange(value) {
-    if (isNaN(parseFloat(value))) {
-      if (!this.customerNumValue) {
-        this.cancelFilter();
-      }
-      return;
-    }
-
-    this.isFilterActive = true;
-    this.filteredDeliveries = this.currentDeliveries.filter(el => el.customerLocation.shipToNo.startsWith(value));
-  }
-
-  public cancelFilter() {
-    if (this.isFilterActive) {
-      this.isFilterActive = false;
-      this.customerNumValue = null;
-      this.filteredDeliveries = [];
+  public executeSearch(): void {
+    if (this.searchQuery.length >= this.minSearchLength) {
+      this.updatePagination();
+      this.loadLocationPage(1); // Reset to first page with new search results
     }
   }
 
-  /**
-   * only for testing
-   */
+  public clearSearch(): void {
+    this.searchQuery = '';
+    this.updatePagination();
+    this.loadLocationPage(1);
+  }
+
   public customMethod(): void {
     if (!this.customInput || !this.validateInput(this.customInput.nativeElement.value) || this.requestUnderway) {
       const content: PopoverContent = {
@@ -238,10 +308,11 @@ export class RouteTrackingPage {
 
     this.routeTrackingProvider.adminGetCustomerLocations(this.customInput.nativeElement.value).subscribe(locations => {
       this.currentDeliveries = [];
+      this.allCustomerLocations = [locations];
+      this.totalPages = 1;
+      this.currentPage = 1;
 
       this.fetchCurrentRoute(locations);
-      //   locations.forEach(location => this.fetchCurrentRoute(location));
-
       this.requestUnderway = false;
     });
   }
