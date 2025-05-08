@@ -23,7 +23,8 @@ export class RouteTrackingProvider {
   constructor(private readonly apiProvider: ApiService) {}
 
   public getCustomerLocations(): Observable<any> {
-    return this.apiProvider.post(GET_CUSTOMER_LOCATIONS, {}, true, true, TRACKING_API_BASE_URL_PROD);
+    return this.apiProvider.get(GET_CUSTOMER_LOCATIONS, {}, TRACKING_API_BASE_URL_PROD, true);
+    //return this.apiProvider.post(GET_CUSTOMER_LOCATIONS, {}, true, true, TRACKING_API_BASE_URL_PROD);
   }
 
   public getStoreRouteAndStops(shipToNo: string): Observable<any> {

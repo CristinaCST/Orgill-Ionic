@@ -126,6 +126,7 @@ const pages: Page[] = [
   PromotionsPage,
   HotDealsPage,
   RouteTrackingPage,
+  MapDetailsPage,
   VendorLandingPage,
   SavedDraftsPage,
   CustomerInfoPage,
@@ -152,6 +153,7 @@ const pages: Page[] = [
 import { CustomErrorHandler } from '../services/error-handler/error-handler';
 import { RouteTrackingProvider } from '../providers/route-tracking/route-tracking';
 import {IonicStorageModule} from "@ionic/storage";
+import {MapDetailsPage} from "../components/map-details/map-details";
 
 @NgModule({
   declarations: pages,

@@ -1,6 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { LoadingService } from '../../services/loading/loading';
-import { GoogleMapsProvider } from '../../providers/google-maps/google-maps';
 import { RouteTrackingProvider } from '../../providers/route-tracking/route-tracking';
 import { TranslateWrapperService } from '../../services/translate/translate';
 import {
@@ -9,23 +8,21 @@ import {
   TRACK_VALID_INPUT_VALUE,
   TRACK_ORDER_LOADER_TEXT
 } from '../../util/strings';
-import { MapDetails } from '../../interfaces/models/route-tracking';
 import { LocalStorageHelper } from '../../helpers/local-storage';
 import { USER, POPOVER_INFO } from '../../util/constants';
 import { PopoversService, PopoverContent } from '../../services/popovers/popovers';
 import { Platform } from 'ionic-angular/platform/platform';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { UserType } from '../../interfaces/models/user-type';
+import {MapDetailsPage} from "../../components/map-details/map-details";
 
 @Component({
   selector: 'page-route-tracking',
   templateUrl: 'route-tracking.html'
 })
 export class RouteTrackingPage {
-  @ViewChild('Map') private readonly mapElement: ElementRef;
   @ViewChild('customInput') private readonly customInput: ElementRef;
   private readonly deliveryLoader: LoadingService;
-  private currentMapIndex: number;
 
   // All locations
   private allCustomerLocations: any[] = [];
@@ -34,30 +31,19 @@ export class RouteTrackingPage {
   public searchQuery: string = '';
   public minSearchLength: number = 2;
   public currentPage: number = 1;
-  public locationsPerPage: number = 5;
+  public locationsPerPage: number = 10;
   public totalPages: number = 1;
   public isLoadingPage: boolean = false;
 
   public currentDeliveries: any[] = [];
   public filteredDeliveries: any[] = [];
-  public showMap: boolean;
-  public showMoreInfo: boolean;
-  private requestUnderway: boolean;
   public showCustomInput: boolean;
+  private requestUnderway: boolean;
   public errorMessage: string = 'You do not have any deliveries for today.';
   public customerNumValue: string;
   public isFilterActive: boolean;
-  public mapDetails: MapDetails = {
-    distance: '',
-    eta: '',
-    customerName: '',
-    shipToNo: '',
-    truckId: '',
-    invoices: []
-  };
 
   constructor(
-    private readonly mapInstance: GoogleMapsProvider,
     public routeTrackingProvider: RouteTrackingProvider,
     public loadingService: LoadingService,
     private readonly translateProvider: TranslateWrapperService,
@@ -68,11 +54,7 @@ export class RouteTrackingPage {
     this.deliveryLoader = loadingService.createLoader(this.translateProvider.translate(TRACK_ORDER_LOADER_TEXT));
 
     this.platform.registerBackButtonAction(() => {
-      if (this.showMap) {
-        this.toggleMap();
-      } else {
-        this.navigatorService.pop();
-      }
+      this.navigatorService.pop();
     });
   }
 
@@ -149,7 +131,7 @@ export class RouteTrackingPage {
     }
 
     pageLocations.forEach(customerLocation => {
-      this.fetchCurrentRoute(customerLocation, false, () => {
+      this.fetchCurrentRoute(customerLocation, () => {
         processedCount++;
         // Hide loader when all locations are processed
         if (processedCount === pageLocations.length) {
@@ -172,17 +154,26 @@ export class RouteTrackingPage {
     }
   }
 
-  private fetchCurrentRoute(customerLocation: { shipToNo: string }, refreshMap?: boolean, onComplete?: () => void): void {
+  private fetchCurrentRoute(customerLocation: { shipToNo: string }, onComplete?: () => void): void {
     // We don't need to show additional loader since we're using the main one
     this.routeTrackingProvider.getStoreRouteAndStops(customerLocation.shipToNo).subscribe({
       next: (routesAndStops): void => {
-        this.updateDeliveriesList(customerLocation, routesAndStops, refreshMap);
+        this.updateDeliveriesList(customerLocation, routesAndStops);
         if (onComplete) {
           onComplete();
         }
       },
       error: (error) => {
         console.error('Error fetching route:', error);
+
+        // Create a delivery entry with error message
+        const errorData = {
+          customerLocation,
+          error: 'Unable to fetch delivery information. Please try again later.'
+        };
+
+        this.currentDeliveries.push(errorData);
+
         if (onComplete) {
           onComplete();
         }
@@ -191,86 +182,64 @@ export class RouteTrackingPage {
   }
 
   public toggleMap(data?: any): void {
-    this.showMap = !this.showMap;
-
-    if (!this.showMap || !data) {
-      this.showMoreInfo = false;
-      this.currentMapIndex = -1;
-      this.mapDetails = {
-        distance: '',
-        eta: '',
-        customerName: '',
-        shipToNo: '',
-        truckId: '',
-        invoices: []
+    // If data contains an error, show popup instead of opening map
+    if (data && data.error) {
+      const content: PopoverContent = {
+        type: POPOVER_INFO,
+        title: GENERIC_MODAL_TITLE,
+        message: data.error,
+        positiveButtonText: MODAL_BUTTON_OK
       };
+      this.popoversService.show(content);
       return;
     }
 
-    this.currentMapIndex = this.currentDeliveries.indexOf(data);
-
-    setTimeout(() => {
-      this.populateMapWindow(data);
-      this.mapElement.nativeElement.scrollIntoView();
-    }, 0);
-  }
-
-  public refreshMap(): void {
-    if (this.currentMapIndex < 0) {
-      return;
-    }
-    this.showMoreInfo = false;
-    this.fetchCurrentRoute(this.currentDeliveries[this.currentMapIndex].customerLocation, true);
-  }
-
-  private populateMapWindow(data: any): any {
-    this.mapInstance
-      .initMap(this.mapElement.nativeElement, {
-        disableDefaultUI: true,
-        zoom: 10
-      })
-      .then(() => {
-        this.mapInstance
-          .setMapRoute(
-            {
-              location: this.mapInstance.getLatLng(data.truck.latitude, data.truck.longitude)
-            },
-            this.mapInstance.getLatLng(data.end.latitude, data.end.longitude),
-            data.stops.map((stop: { latitude: number; longitude: number }) => ({
-              location: this.mapInstance.getLatLng(stop.latitude, stop.longitude),
-              stopover: true
-            }))
-          )
-          .subscribe({
-            next: info => {
-              Object.assign(this.mapDetails, {
-                distance: info.distance,
-                eta: info.duration
-              });
-            }
-          });
-      });
-
-    Object.assign(this.mapDetails, {
-      customerName: data.customerName,
-      shipToNo: data.customerLocation.shipToNo,
-      truckId: data.customerLocation.customerNo,
-      invoices: data.invoices
+    // Navigate to the map details page with the necessary data
+    this.navigatorService.push(MapDetailsPage, {
+      customerData: data
     });
   }
 
-  private updateDeliveriesList(customerLocation: any, routesAndStops: any, refreshMap?: boolean): void {
-    const data: any = {
+  private updateDeliveriesList(customerLocation: any, routesAndStops: any): void {
+    // Handle potential error response
+    let data: any = {
       customerLocation,
       ...routesAndStops
     };
 
-    if (refreshMap && this.currentMapIndex >= 0) {
-      this.currentDeliveries[this.currentMapIndex] = data;
-      this.populateMapWindow(data);
-    } else {
-      this.currentDeliveries.push(data);
+    // If the response contains an error message, make sure it's included
+    if (routesAndStops.data && routesAndStops.data.error) {
+      data = {
+        customerLocation,
+        ...routesAndStops.data
+      };
+    } else if (routesAndStops.status && routesAndStops.status !== 'SUCCESS') {
+      // Handle various error types
+      switch (routesAndStops.status) {
+        case 'NO_DELIVERIES_FOUND':
+          data.error = 'No deliveries found for this location today.';
+          break;
+        case 'NOT_STARTED_TRIP':
+          data.error = 'The truck has not started its trip yet.';
+          break;
+        case 'LOCATING_ERROR':
+          data.error = 'There was an error locating the truck.';
+          break;
+        case 'DIRECTIONS_ERROR':
+          data.error = 'There was an error getting directions to your location.';
+          break;
+        case 'ALREADY_VISITED':
+          data.error = 'The truck has already visited your location.';
+          break;
+        case 'NO_SHIP_TO_FOUND':
+          data.error = 'No shipping information found for this location.';
+          break;
+        default:
+          data.error = routesAndStops.message || 'An error occurred while tracking the delivery.';
+      }
     }
+
+    this.currentDeliveries.push(data);
   }
 
   private validateInput(value: string): boolean {

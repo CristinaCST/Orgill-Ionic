@@ -8,6 +8,17 @@ page-route-tracking {
       width: 100%;
     }
 
+    .order-error {
+      width: 70%;
+      text-align: center;
+      color: color($colors, OrgillRed);
+      font-weight: 500;
+      margin: 0;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: rgba(color($colors, OrgillRed), 0.1);
+    }
+
     .deliveries-title {
       position: absolute;
       top: 50%;

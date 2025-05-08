@@ -4,7 +4,9 @@ export const URL_BASE_FR: string = 'https://dmwebservice-cafr.orgill.com/service
 export const URL_BASE_DEV: string = 'https://reststage.orgill.com/service.asmx/';
 export const URL_BASE_DEV_NEW: string = 'https://reststage.orgill.com/api/v1/';
 export const URL_BASE_PROD: string = 'https://dmwebservice.orgill.com/service.asmx/';
-export const URL_BASE_PROD_NEW: string = 'https://ozoneapi.orgill.com/api/v1/';
+ export const URL_BASE_PROD_NEW: string = 'https://ozoneapi.orgill.com/api/v1/';
+//export const URL_BASE_PROD_NEW: string = 'https://reststage.orgill.com/api/v1/';
+
 export const URL_BASE_PROD_NEW_FR: string =  "https://ozoneapi-cafr.orgill.com/api/v1/";
 
 export const URL_LOGIN: string = 'authenticate';
@@ -71,8 +73,8 @@ export const GET_POG_PAST_PURCHASES: string = 'marketplanograms/pastpurchase';
 // ROUTE TRACKING API?
 const TRACKING_API_BASE_URL: string = 'https://40.122.36.68/api/';
 // const TRACKING_API_BASE_URL_PROD: string = 'https://168.61.170.88/api/';
-//export const TRACKING_API_BASE_URL_PROD: string = 'https://ozonetransportation.orgill.com/api/';
-export const TRACKING_API_BASE_URL_PROD: string = 'https://dev-ozonetransportation.orgill.com/api/';
+export const TRACKING_API_BASE_URL_PROD: string = 'https://ozonetransportation.orgill.com/api/';
+//export const TRACKING_API_BASE_URL_PROD: string = 'https://dev-ozonetransportation.orgill.com/api/';
 export const TRACKING_API_BASE_URL_DEV: string = 'https://dev-ozonetransportation.orgill.com/api/';
 
 /**
