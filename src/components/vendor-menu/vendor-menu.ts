@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { SavedDraftsPage } from '../../pages/ds-saved-drafts/saved-drafts';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { DropshipService } from '../../services/dropship/dropship';
@@ -9,6 +9,7 @@ import { Login } from '../../pages/login/login';
 import * as Constants from '../../util/constants';
 import * as Strings from '../../util/strings';
 import { onlineDealerMarketCAD, onlineDealerMarketUS } from '../../util/constants-url';
+import {LocalStorageHelper} from "../../helpers/local-storage";
 
 @Component({
   selector: 'vendor-menu',
@@ -47,8 +48,10 @@ export class VendorMenuComponent {
 
     this.popoversService.show(content).subscribe((data: DefaultPopoverResult) => {
       if (data.optionSelected === 'OK') {
-        this.authService.logout();
-        this.navigatorService.setRoot(Login).catch(err => console.error(err));
+        LocalStorageHelper.clearLocalStorage();
+        this.navigatorService.setRoot(Login)
+          .then(() =>  this.authService.logout())
+          .catch(err => console.error(err));
       }
     });
   }

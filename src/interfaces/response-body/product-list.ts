@@ -10,4 +10,6 @@ export interface ProductListResponse{
     program_no: string;
     quantity: number;
     end_date: string;
+    discontinued_reason_code: string;
+    discontinued_reason: string;
 }

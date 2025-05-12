@@ -1,16 +1,16 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicModule } from 'ionic-angular';
+import { IonicApp, IonicModule, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
-import { OneSignal } from '@ionic-native/onesignal';
+// import { OneSignal } from '@ionic-native/onesignal';
 import { Network } from '@ionic-native/network';
 import { Badge } from '@ionic-native/badge';
-import { Geolocation } from '@ionic-native/geolocation';
+// import { Geolocation } from '@ionic-native/geolocation';
 import { Page } from 'ionic-angular/navigation/nav-util';
 
 // Modules
@@ -29,9 +29,10 @@ import { UserInfoService } from '../services/user-info/user-info';
 import { PurchasesProvider } from '../providers/purchases/purchases';
 import { ProductImageProvider } from '../providers/product-image/product-image';
 import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { DropshipProvider } from '../providers/dropship/dropship';
 import { DashboardProvider } from '../providers/dashboard/dashboard';
+import { MarketProvider } from '../providers/market/market';
 
 // Helpers
 import { CSSInjector } from '../helpers/css-injector';
@@ -41,7 +42,7 @@ import { ErrorInterceptor } from '../interceptors/error-interceptor';
 
 // Services
 import { NetworkService } from '../services/network/network';
-import { OneSignalService } from '../services/onesignal/onesignal';
+// import { OneSignalService } from '../services/onesignal/onesignal';
 import { HotDealsService } from '../services/hotdeals/hotdeals';
 import { NavigatorService } from '../services/navigator/navigator';
 import { LoadingService } from '../services/loading/loading';
@@ -93,6 +94,11 @@ import { DashboardTraffic } from '../pages/dashboard-traffic/dashboard-traffic';
 import { DashboardDeliveries } from '../pages/dashboard-deliveries/dashboard-deliveries';
 import { DashboardDrivers } from '../pages/dashboard-drivers/dashboard-drivers';
 import { DashboardRoutes } from '../pages/dashboard-routes/dashboard-routes';
+import { POGandPalletListPage } from '../pages/pog-and-pallet-list/pog-and-pallet-list';
+import { POGandPalletSearchPage } from '../pages/pog-and-pallet-search/pog-and-pallet-search';
+import { POGandPalletCheckoutPage } from '../pages/pog-and-pallet-checkout/pog-and-pallet-checkout';
+import { POGandPalletPastPurchasesPage } from '../pages/pog-and-pallet-past-purchases/pog-and-pallet-past-purchases';
+import { POGandPalletOrderDetailsPage } from '../pages/pog-and-pallet-order-details/pog-and-pallet-order-details';
 
 // Pipes
 import { PipesModule } from '../pipes/pipes.module';
@@ -120,6 +126,7 @@ const pages: Page[] = [
   PromotionsPage,
   HotDealsPage,
   RouteTrackingPage,
+  MapDetailsPage,
   VendorLandingPage,
   SavedDraftsPage,
   CustomerInfoPage,
@@ -134,12 +141,19 @@ const pages: Page[] = [
   DashboardTraffic,
   DashboardDeliveries,
   DashboardDrivers,
-  DashboardRoutes
+  DashboardRoutes,
+  POGandPalletListPage,
+  POGandPalletSearchPage,
+  POGandPalletCheckoutPage,
+  POGandPalletPastPurchasesPage,
+  POGandPalletOrderDetailsPage
 ];
 
 // Error Handlers
 import { CustomErrorHandler } from '../services/error-handler/error-handler';
 import { RouteTrackingProvider } from '../providers/route-tracking/route-tracking';
+import {IonicStorageModule} from "@ionic/storage";
+import {MapDetailsPage} from "../components/map-details/map-details";
 
 @NgModule({
   declarations: pages,
@@ -152,6 +166,7 @@ import { RouteTrackingProvider } from '../providers/route-tracking/route-trackin
       autoFocusAssist: false,
       statusbarPadding: false
     }),
+    IonicStorageModule.forRoot(),
     HttpClientModule,
     ComponentsModule,
 
@@ -184,8 +199,8 @@ import { RouteTrackingProvider } from '../providers/route-tracking/route-trackin
     UserInfoService,
     PurchasesProvider,
     NetworkService,
-    OneSignalService,
-    OneSignal,
+    // OneSignalService,
+    // OneSignal,
     Badge,
     HotDealsService,
     NavigatorService,
@@ -194,7 +209,7 @@ import { RouteTrackingProvider } from '../providers/route-tracking/route-trackin
     SearchService,
     ReloadService,
     ErrorScheduler,
-    Geolocation,
+    // Geolocation,
     CSSInjector,
     ProductImageProvider,
     SecureActionsService,
@@ -207,7 +222,9 @@ import { RouteTrackingProvider } from '../providers/route-tracking/route-trackin
     DropshipProvider,
     DropshipService,
     DashboardProvider,
-    CalendarService
+    CalendarService,
+    AlertController,
+    MarketProvider
   ]
 })
 export class AppModule {}

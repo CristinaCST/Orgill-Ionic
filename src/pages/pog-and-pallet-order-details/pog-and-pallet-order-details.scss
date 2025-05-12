@@ -1,0 +1,22 @@
+page-pog-and-pallet-order-details {
+  .list-wrapper {
+    padding-left: 0;
+
+    .item-inner {
+      padding-left: 8px;
+    }
+
+    p {
+      margin: 5px 0;
+    }
+  }
+
+  .no-items {
+    margin: 10px;
+    text-align: center;
+  }
+
+  .list-title {
+    margin: 10px 0 0 5px;
+  }
+}

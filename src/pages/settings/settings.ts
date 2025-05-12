@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as VersionFile from '../../util/version';
-import { OneSignalService } from '../../services/onesignal/onesignal';
+// import { OneSignalService } from '../../services/onesignal/onesignal';
 import { ModalController, Modal } from 'ionic-angular';
 import { AuthService } from '../../services/auth/auth';
 
@@ -14,11 +14,11 @@ export class SettingsPage implements OnInit {
   public allowLanguageSwitch: boolean;
 
   constructor(
-    private readonly oneSignalService: OneSignalService,
+    // private readonly oneSignalService: OneSignalService,
     private readonly modal: ModalController,
     private readonly authService: AuthService
   ) {
-    this.oneSignalService.isSubscriptionOn().then(state => this.notificationsAllowed = state);
+    // this.oneSignalService.isSubscriptionOn().then(state => (this.notificationsAllowed = state));
   }
 
   public ngOnInit(): void {
@@ -27,12 +27,12 @@ export class SettingsPage implements OnInit {
     });
   }
 
-  public pushNotificationsSwitch(event: { checked: any; }): void {
-      if (event.checked) {
-          this.oneSignalService.androidSubscriptionSwitchOn();
-      } else {
-          this.oneSignalService.androidSubscriptionSwitchOff();
-      }
+  public pushNotificationsSwitch(event: { checked: any }): void {
+    // if (event.checked) {
+    //   this.oneSignalService.androidSubscriptionSwitchOn();
+    // } else {
+    //   this.oneSignalService.androidSubscriptionSwitchOff();
+    // }
   }
 
   public openModal(): void {

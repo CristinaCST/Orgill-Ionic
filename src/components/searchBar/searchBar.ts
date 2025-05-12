@@ -3,6 +3,8 @@ import { PopoversService, PopoverContent } from '../../services/popovers/popover
 import * as Strings from '../../util/strings';
 import { NavigatorService } from '../../services/navigator/navigator';
 import { SearchService } from '../../services/search/search';
+import { POGandPalletSearchPage } from '../../pages/pog-and-pallet-search/pog-and-pallet-search';
+import { ScannerService } from '../../services/scanner/scanner';
 
 @Component({
   selector: 'search-bar',
@@ -15,11 +17,13 @@ export class SearchBarComponent {
 
   public searchString: string;
   public onInitSearchStringCopy: string;
+  private isPOG: boolean;
 
   constructor(
     private readonly popoversService: PopoversService,
     private readonly navigatorService: NavigatorService,
-    private readonly searchService: SearchService
+    private readonly searchService: SearchService,
+    private readonly scannerService: ScannerService
   ) {}
 
   public back(): void {
@@ -52,6 +56,11 @@ export class SearchBarComponent {
         Strings.SEARCH_INVALID_INPUT
       );
       this.popoversService.show(content);
+      return;
+    }
+    const { isMarketCode, isPOG } = this.scannerService.isMarketCode(this.searchString);
+    if (isMarketCode) {
+      this.navigatorService.push(POGandPalletSearchPage, { isPOG, searchString: this.searchString });
       return;
     }
     this.searchService.lastSearchString = this.searchString;

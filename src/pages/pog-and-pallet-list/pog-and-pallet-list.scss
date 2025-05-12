@@ -1,0 +1,36 @@
+page-pog-and-pallet-list {
+  .list-wrapper {
+    padding-left: 0;
+
+    .item-inner {
+      padding-left: 8px;
+    }
+
+    p {
+      margin: 5px 0;
+    }
+  }
+
+  .list-footer {
+    .action-wrapper {
+      display: flex;
+      margin: 0 10px;
+
+      button {
+        flex: 1;
+      }
+    }
+    background: white;
+    padding: 5px;
+
+    .checkout-button {
+      margin: 0 10px 10px;
+    }
+  }
+
+  .no-items {
+    margin: 10px;
+    text-align: center;
+  }
+
+}

@@ -1,4 +1,11 @@
-<ion-menu id="main_menu" (ionOpen)="menuOpen()" (ionClose)="menuClose()" [content]="menuContent" persistent="true">
+<ion-menu
+  id="main_menu"
+  [ngClass]="{'isSecondaryMenuVisible': showShoppingListsMenu}"
+  (ionOpen)="menuOpen()"
+  (ionClose)="menuClose()"
+  [content]="menuContent"
+  persistent="true"
+>
   <!-- Menu Header-->
   <ion-header *ngIf="showShoppingListsMenu===false">
     <ion-toolbar>
@@ -108,10 +115,20 @@
           {{list.ListName | replaceMarketOnlyCart}}
         </button>
 
+        <!-- POG & Pallets Planograms-->
+        <button menuClose icon-left detail-none ion-item (click)="goToPOGandPalletListPage(true)">
+          <ion-icon class="menu-icon" name="list-box"></ion-icon>
+          {{"planograms_shopping_cart" | translate}}
+        </button>
+        <button menuClose icon-left detail-none ion-item (click)="goToPOGandPalletListPage()">
+          <ion-icon class="menu-icon" name="list-box"></ion-icon>
+          {{"pallets_shopping_cart" | translate}}
+        </button>
+
         <!-- Ordering -->
         <ion-item-divider no-lines>{{"menu_header_ordering" | translate}}:</ion-item-divider>
 
-        <button
+        <!-- <button
           ion-item
           class="item"
           detail-none
@@ -122,20 +139,32 @@
         >
           <ion-icon class="flash_icon" name="flash"></ion-icon>
           {{"menu_hot_deal_button" | translate}}
-        </button>
+        </button> -->
 
         <button ion-item class="item" detail-none menuClose icon-left (click)="goToPage(menuPages.pastPurchases)">
           <ion-icon name="archive"></ion-icon>
           {{"menu_ordering_history"| translate}}
         </button>
 
+        <button ion-item class="item" detail-none menuClose icon-left (click)="goToPOGandPalletPastPurchases(true)">
+          <ion-icon name="archive"></ion-icon>
+          {{"planograms_past_purchases" | translate}}
+        </button>
+
+        <button ion-item class="item" detail-none menuClose icon-left (click)="goToPOGandPalletPastPurchases()">
+          <ion-icon name="archive"></ion-icon>
+          {{"pallets_past_purchases" | translate}}
+        </button>
+
+
+
         <!-- Account -->
         <ion-item-divider no-lines>{{"menu_header_account" | translate}}:</ion-item-divider>
         <!-- Button for Settings page -->
-        <button ion-item detail-none menuClose icon-left (click)="goToPage(menuPages.settingsPage)">
+        <!-- <button ion-item detail-none menuClose icon-left (click)="goToPage(menuPages.settingsPage)">
           <ion-icon class="menu-icon" name="settings"></ion-icon>
           {{"menu_settings" | translate}}
-        </button>
+        </button> -->
         <!-- Button for About Page-->
         <button ion-item detail-none menuClose icon-left (click)="goToPage(menuPages.aboutPage)">
           <ion-icon class="menu-icon" name="information-circle"></ion-icon>

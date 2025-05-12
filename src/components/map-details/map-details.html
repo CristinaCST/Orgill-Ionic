@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{"track_order_map_details" | translate}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div class="map-container">
+    <button class="order-btn refresh-map" (click)="refreshMap()">{{"track_order_refresh_map" | translate}}</button>
+    <div #Map class="map"></div>
+
+    <div class="map-details-container" *ngIf="mapDetails">
+      <h4 class="order-title">
+        {{"track_order_truck_on_road" | translate}}:
+        <span>{{mapDetails.truckId}}</span>
+      </h4>
+
+      <div class="travel-wrapper">
+        <div class="eta-time">
+          <h5 class="order-subtitle">ETA</h5>
+          <h4 class="order-title">{{mapDetails.eta}}</h4>
+        </div>
+
+        <div class="travel-distance">
+          <h5 class="order-subtitle">{{"track_order_distance" | translate}}</h5>
+          <h4 class="order-title">{{mapDetails.distance}}</h4>
+        </div>
+      </div>
+
+      <div class="more-info-wrapper" *ngIf="showMoreInfo">
+        <div class="info-customer-wrapper">
+          <div class="info-customer">
+            <h5 class="order-subtitle">{{"track_order_customer_name" | translate}}</h5>
+            <h4 class="order-title">{{mapDetails.customerName}}</h4>
+          </div>
+
+          <div class="info-shipping">
+            <h5 class="order-subtitle">{{"track_order_ship_no" | translate}}</h5>
+            <h4 class="order-title">{{mapDetails.shipToNo}}</h4>
+          </div>
+        </div>
+
+        <div class="info-invoices-wrapper">
+          <h5 class="order-subtitle">{{"track_order_invoices" | translate}}</h5>
+          <h4 class="order-title" *ngFor="let invoice of mapDetails.invoices">{{invoice}}</h4>
+        </div>
+      </div>
+
+      <div class="travel-btns">
+        <button class="order-btn" (click)="toggleMoreInfo()">
+          <span *ngIf="showMoreInfo">{{"track_order_less_info" | translate}}</span>
+          <span *ngIf="!showMoreInfo">{{"track_order_more_info" | translate}}</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="map-overlay" *ngIf="showMoreInfo"></div>
+  </div>
+</ion-content>
+
+<transport-bug-report></transport-bug-report>

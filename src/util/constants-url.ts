@@ -1,10 +1,13 @@
-export const URL_BASE_EN: string = 'http://reststage.orgill.com/service.asmx/';
-export const URL_BASE_FR: string = 'http://dmwebservice-cafr.orgill.com/service.asmx/';
+export const URL_BASE_EN: string = 'https://reststage.orgill.com/service.asmx/';
+export const URL_BASE_FR: string = 'https://dmwebservice-cafr.orgill.com/service.asmx/';
 
-export const URL_BASE_DEV: string = 'http://reststage.orgill.com/service.asmx/';
-export const URL_BASE_DEV_NEW: string = 'http://reststage.orgill.com/api/v1/';
-export const URL_BASE_PROD: string = 'http://dmwebservice.orgill.com/service.asmx/';
-export const URL_BASE_PROD_NEW: string = 'http://ozoneapi.orgill.com/api/v1/';
+export const URL_BASE_DEV: string = 'https://reststage.orgill.com/service.asmx/';
+export const URL_BASE_DEV_NEW: string = 'https://reststage.orgill.com/api/v1/';
+export const URL_BASE_PROD: string = 'https://dmwebservice.orgill.com/service.asmx/';
+ export const URL_BASE_PROD_NEW: string = 'https://ozoneapi.orgill.com/api/v1/';
+//export const URL_BASE_PROD_NEW: string = 'https://reststage.orgill.com/api/v1/';
+
+export const URL_BASE_PROD_NEW_FR: string =  "https://ozoneapi-cafr.orgill.com/api/v1/";
 
 export const URL_LOGIN: string = 'authenticate';
 export const URL_USER_INFO: string = 'user';
@@ -51,45 +54,78 @@ export const USER_PAST_PURCHASES: string = 'pastpurchase';
 export const PURCHASE_ITEMS: string = 'pastpurchase';
 
 export const URL_ORDER_HOT_DEAL_PRODUCTS: string = 'order/flashproducts';
-export const PRODUCT_IMAGE_BASE_URL: string = 'http://images.orgill.com/200x200/';
+export const PRODUCT_IMAGE_BASE_URL: string = 'https://images.orgill.com/200x200/';
+
+// MARKET
+export const GET_POG_SHOPPING_LISTS: string = 'MarketPlanograms/shoppinglist';
+export const GET_PALLETS_SHOPPING_LISTS: string = 'pallets/shoppinglist';
+export const GET_POG_BY_ID: string = 'MarketPlanograms';
+export const GET_PALLETS_BY_ID: string = 'pallets';
+export const ADD_POG_TO_MARKET_SHOPPING_LIST: string = 'MarketPlanograms/shoppinglist';
+export const ADD_PALLET_TO_MARKET_SHOPPING_LIST: string = 'pallets/shoppinglist';
+export const DELETE_POG_TO_MARKET_SHOPPING_LIST: string = 'MarketPlanograms/shoppinglist';
+export const DELETE_PALLET_TO_MARKET_SHOPPING_LIST: string = 'pallets/shoppinglist';
+export const CHECKOUT_POG_TO_MARKET_SHOPPING_LIST: string = 'MarketPlanograms/shoppinglist/Checkout';
+export const CHECKOUT_PALLET_TO_MARKET_SHOPPING_LIST: string = 'pallets/shoppinglist/Checkout';
+export const GET_PALLETS_PAST_PURCHASES: string = 'pallets/pastpurchase';
+export const GET_POG_PAST_PURCHASES: string = 'marketplanograms/pastpurchase';
 
 // ROUTE TRACKING API?
-const TRACKING_API_BASE_URL: string = '//40.122.36.68/api/';
-const TRACKING_API_BASE_URL_PROD: string = '//168.61.170.88/api/';
+const TRACKING_API_BASE_URL: string = 'https://40.122.36.68/api/';
+// const TRACKING_API_BASE_URL_PROD: string = 'https://168.61.170.88/api/';
+export const TRACKING_API_BASE_URL_PROD: string = 'https://ozonetransportation.orgill.com/api/';
+//export const TRACKING_API_BASE_URL_PROD: string = 'https://dev-ozonetransportation.orgill.com/api/';
+export const TRACKING_API_BASE_URL_DEV: string = 'https://dev-ozonetransportation.orgill.com/api/';
 
 /**
  * params
- * ship_to_no: string
+ * shipToNo: string
  */
-export const GET_STORE_ROUTE_AND_STOPS: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetStoreRouteAndStops';
+export const GET_STORE_ROUTE_AND_STOPS: string = 'Admin/GetStoreRouteAndStopsWeb';
 
 /**
  * request body
  * username: string
  * password: string
  */
-export const VENDOR_ACCOUNT_LOGIN: string = TRACKING_API_BASE_URL_PROD + 'VendorAccount/Login';
+export const VENDOR_ACCOUNT_LOGIN: string = 'VendorAccount/Login';
+
+/**
+ * token from main service
+ */
+export const GET_TRANSPORTATION_TOKEN: string = 'VendorAccount/NewGetCustomToken';
 
 /**
  * params
  * user_token: string
  */
-export const GET_CUSTOMER_LOCATIONS: string = TRACKING_API_BASE_URL_PROD + 'VendorAccount/GetCustomerLocations';
+export const GET_CUSTOMER_LOCATIONS: string = 'VendorAccount/NewGetCustomerLocations';
 
 /**
  * params
  * size: integer
  */
-export const TEST_GET_TODAY_CUSTOMERS: string = TRACKING_API_BASE_URL_PROD + 'Test/GetTodayCustomers';
+export const TEST_GET_TODAY_CUSTOMERS: string = 'Test/GetTodayCustomers';
 
 /**
  * customerNo
  */
-export const ADMIN_GET_CUSTOMER_LOCATIONS: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetCustomerLocations';
+export const ADMIN_GET_CUSTOMER_LOCATIONS: string = 'Admin/GetCustomerLocations';
+
+/**
+{
+  "errorType": "string",
+  "comments": "string",
+  "email": "string",
+  "errorDate": "Date",
+  "shipToNumber": "string"
+}
+ */
+export const SEND_BUG_REPORT = 'customer/SendBugReport';
 
 // DROPSHIP
 export const ds_create_savedorder: string = 'dssavedorders';
-export const ds_delete_savedorder: string = 'dssavedorders/items';
+export const ds_delete_savedorder: string = 'dssavedorders';
 export const ds_form_details: string = 'dsforms';
 export const ds_form_items: string = 'dsforms/items';
 export const ds_form_list: string = 'dsforms';
@@ -110,7 +146,7 @@ export const onlineDealerMarketCAD: string =
 export const GetGeneralStatistics: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetGeneralStatistics';
 export const GetTrafficStatistics: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetTrafficStatistics';
 export const GetStopsStatistics: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetStopsStatistics';
-export const GetStoreRouteAndStops: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetStoreRouteAndStops';
+export const GetStoreRouteAndStops: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetStoreRouteAndStopsWeb';
 export const GetDcAndRoutes: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetDcAndRoutes';
 export const GetCustomersByDcAndRoute: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetCustomersByDcAndRoute';
 export const GetDeliveriesDashboard: string = TRACKING_API_BASE_URL_PROD + 'Admin/GetDeliveriesDashboard';

@@ -1,0 +1,61 @@
+<ion-header>
+  <navbar title="Market Search"
+          [isBackEnabled]="true"
+          [isMenuEnabled]="true"></navbar>
+</ion-header>
+
+<ion-content>
+  <ng-container *ngIf="isPOG; else palletTemplate">
+    <pog-list [data]="searchData"></pog-list>
+  </ng-container>
+
+  <ion-item no-lines id="quantity-content">
+    <div id="title">
+      <p>{{"product_quantity" | translate}}:</p>
+    </div>
+    <div class="buttons">
+      <div>
+        <button ion-button icon-only small clear (click)="remove()">
+          <ion-icon name="remove" color="OrgillRed"></ion-icon>
+        </button>
+        <label>
+          <input
+            clearInput
+            (keydown.enter)="$event.target.blur()"
+            min="1"
+            maxlength="5"
+            type="tel"
+            inputmode="numeric"
+            pattern="^[0-9]"
+            [(ngModel)]="quantity"
+          />
+        </label>
+        <button ion-button icon-only small clear (click)="add()">
+          <ion-icon name="add" color="OrgillRed"></ion-icon>
+        </button>
+      </div>
+    </div>
+  </ion-item>
+
+  <!-- <ion-item class="total-price" no-lines>
+    <p>{{"order_confirmation_total" | translate}}:</p>
+    <p>{{(isPOG ? searchData?.special_price : searchData?.regprice) * quantity}}</p>
+  </ion-item> -->
+  <ion-item class="total-price">
+    <span #totalLabel>{{"product_total_price" | translate}}:</span>
+    <span
+      >{{"product_currency" | translate}}{{(isPOG ? searchData?.special_price : searchData?.splprice) * quantity |
+      number: '1.2-2'}}</span
+    >
+  </ion-item>
+</ion-content>
+
+<ion-footer class="footer-container">
+  <button (click)="isEdit ? editShoppingList() : addToShoppingList()">
+    {{isEdit ? "Edit list" : "button_add_to_list" | translate}}
+  </button>
+</ion-footer>
+
+<ng-template #palletTemplate>
+  <pallet-list [data]="searchData"></pallet-list>
+</ng-template>

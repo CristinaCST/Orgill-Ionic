@@ -1,0 +1,58 @@
+<ion-header>
+  <navbar [title]="pageTitle" [isMenuEnabled]="true"></navbar>
+</ion-header>
+
+<ion-content>
+  <h3 *ngIf="!listItems.length" class="no-items">No items in cart</h3>
+
+  <ng-container *ngIf="isPOG; else palletTemplate">
+    <ion-list radio-group [(ngModel)]="selectedList">
+      <ion-item class="list-wrapper" *ngFor="let item of listItems">
+        <ion-label>
+<!--          <p><b>Customer number:</b> {{item?.customer_number}}</p>-->
+          <p><b>Planogram name:</b> {{item?.booth_name}} </p>
+          <p><b>Planogram number:</b> {{item?.group_number}}</p>
+          <p><b>Program number:</b> {{item.program_number}}</p>
+          <p><b> Price:</b> $ {{Number(item?.special_price * item?.qty)}}  </p>
+<!--          <p><b>List id:</b> {{item?.list_id}}</p>-->
+          <p><b>Quantity:</b> {{item?.qty}}</p>
+          <!-- <p><b>Username:</b> {{item?.user_name}}</p> -->
+        </ion-label>
+        <ion-radio [value]="item?.group_number"></ion-radio>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+</ion-content>
+
+<ion-footer class="list-footer" *ngIf="listItems.length">
+  <div class="action-wrapper">
+    <button (click)="removeList()" ion-button outline color="danger" icon-start>
+      <ion-icon name="trash"></ion-icon> Delete
+    </button>
+    <button (click)="editList()" ion-button outline color="OrgillRed" icon-start>
+      <ion-icon name="create"></ion-icon> Edit
+    </button>
+  </div>
+  <div class="checkout-button">
+    <button (click)="goToCheckout()" ion-button full color="OrgillRed">Continue to checkout</button>
+  </div>
+</ion-footer>
+
+<ng-template #palletTemplate>
+  <ion-list radio-group [(ngModel)]="selectedList">
+    <ion-item class="list-wrapper" *ngFor="let item of listItems">
+      <ion-label>
+<!--        <p><b>Customer number:</b> {{item?.customer_number}}</p>-->
+        <p><b>Pallet name:</b> {{item?.formname}}</p>
+<!--        <p><b>List id:</b> {{item?.list_id}}</p>-->
+        <p><b>Pallet id:</b> {{item?.palletid}}</p>
+        <p><b>Pallet Type:</b> {{item.pallettype}}</p>
+        <p><b>Vendor name:</b> {{item.vendorname}}</p>
+        <p><b>Special price: </b>$ {{item?.splprice}}</p>
+<!--        <p><b>Quantity:</b> {{item?.qty}}</p>-->
+        <p><b>Total pallet quantity:</b> {{item?.totalpalletqty}}</p>
+        <!-- <p><b>Username:</b> {{item?.user_name}}</p> -->
+      </ion-label>
+      <ion-radio [value]="item?.palletid"></ion-radio> </ion-item
+  ></ion-list>
+</ng-template>

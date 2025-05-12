@@ -22,7 +22,7 @@ export class DateTimeService {
     return moment();
   }
 
-  public static getTimeAfter4Days(date: string | Moment): Moment {
-    return moment(date).add(4, 'days');
+  public static getTimeAfter7Days(date: string | Moment): Moment {
+    return moment(date).add(7, 'days');
   }
 }

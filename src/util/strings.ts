@@ -10,7 +10,7 @@ export const GENERIC_MODAL_TITLE: string = 'generic_modal_title';
  *  =============================================================================================
  */
 
-export const GENERIC_ERROR: string = 'generic_error';
+export const GENERIC_ERROR: string = 'error';
 export const APPLICATION_QUIT_MESSAGE: string = 'application_quit_message';
 
 /**
@@ -91,6 +91,10 @@ export const MENU_ACCOUNT_OFFLINE: string = 'menu_account_offline';
 export const MENU_ABOUT: string = 'menu_about';
 export const MENU_SETTINGS: string = 'menu_settings';
 export const MENU_ACCOUNT_LOGOUT: string = 'menu_account_logout';
+export const PLANOGRAMS_SHOPPING_CART: string = 'planograms_shopping_cart';
+export const PALLETS_SHOPPING_CART: string = 'pallets_shopping_cart';
+export const PLANOGRAMS_PAST_PURCHASES: string = 'planograms_past_purchases';
+export const PALLETS_PAST_PURCHASES: string = 'pallets_past_purchases';
 
 /**
  * Marker : Programs strings
@@ -149,6 +153,7 @@ export const SHOPPING_LIST_EXISTING_PRODUCT: string = 'shopping_list_existing_pr
 export const SHOPPING_LIST_NO_PROGRAM_TITLE: string = 'shopping_list_no_program_title';
 export const SHOPPING_LIST_NO_PROGRAM_MESSAGE: string = 'shopping_list_no_program_message';
 export const SHOPPING_LIST_EMPTY_TITLE: string = 'shopping_list_empty_title';
+export const SHOPPING_LIST_ITEM_IN_ORGILL_CART: string = 'shopping_list_item_in_orgill_cart';
 export const SHOPPING_LIST_EMPTY_MESSAGE: string = 'shopping_list_empty_message';
 
 export const SHOPPING_LIST_NO_ITEMS_TITLE: string = 'shopping_list_no_items_title';

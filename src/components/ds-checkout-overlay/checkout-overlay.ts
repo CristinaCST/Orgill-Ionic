@@ -89,20 +89,21 @@ export class CheckoutOverlayComponent implements OnInit, OnDestroy {
 
     this.dropshipService.customerInfoFormObservable.pipe(take(1)).subscribe(customerInfo => {
       let form_id: number;
-      let form_order_quantity: number;
+      let form_order_quantity: string;
       let form_item_list: any = [];
 
       const item_list: any = this.checkoutItems
         .map(item => {
-          const currentQuantity: number =
-            item.selectedQuantity || item.form_order_quantity || item.order_qty || item.min_qty || 1;
+          const currentQuantity: string = String(
+            item.selectedQuantity || item.form_order_quantity || item.order_qty || item.min_qty || 1
+          );
 
           form_id = item.form_id;
           form_order_quantity = currentQuantity;
 
           if ('item_list' in item) {
             form_item_list = item.item_list.map(currentItem => {
-              currentItem.order_quantity = currentItem.min_qty || 0;
+              currentItem.order_quantity = String(currentItem.min_qty || 0);
               return currentItem;
             });
           }

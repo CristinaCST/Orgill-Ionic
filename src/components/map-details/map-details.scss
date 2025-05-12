@@ -1,0 +1,97 @@
+@import '../../theme/variables.scss';
+
+page-map-details {
+  .map-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+  }
+
+  .map {
+    height: 100%;
+    width: 100%;
+    border-radius: 20px;
+  }
+
+  .map-details-container {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    z-index: 9;
+    width: calc(100% - 40px);
+    padding: 15px;
+    background: color($colors, light);
+    border-radius: 20px;
+    transform: translateX(-50%);
+    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.4);
+  }
+
+  .travel-wrapper,
+  .travel-btns,
+  .more-info-wrapper {
+    display: flex;
+    margin: 15px 0;
+    justify-content: space-between;
+  }
+
+  .more-info-wrapper {
+    margin-bottom: 15px;
+    flex-direction: column;
+
+    .info-customer-wrapper {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .info-shipping {
+      margin: 20px 0;
+    }
+  }
+
+  .order-title {
+    margin: 10px 0 0;
+    color: color($colors, dark);
+    font-size: $font-size-small;
+    font-weight: bold;
+  }
+
+  .order-subtitle {
+    margin: 0;
+    font-size: $font-size-small-extra;
+    color: color($colors, OrgillMediumGray);
+  }
+
+  .order-btn {
+    padding: 10px 15px;
+    font-size: $font-size-small-extra;
+    color: color($colors, light);
+    background: color($colors, OrgillRed);
+    border-radius: 5px;
+
+    &.refresh-map {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 9;
+    }
+
+    &.empty {
+      color: color($colors, dark);
+      background: color($colors, light);
+      border: 2px solid color($colors, OrgillRed);
+    }
+  }
+
+  .map-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    z-index: 8;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+  }
+}

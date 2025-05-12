@@ -1,0 +1,17 @@
+pallet-list {
+  .container {
+    margin: 10px;
+
+    p {
+      margin: 0 0 10px;
+    }
+
+    .details-wrapper {
+      display: flex;
+
+      & > div:first-child {
+        margin: 0 10px 0 0;
+      }
+    }
+  }
+}

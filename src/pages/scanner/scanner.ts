@@ -32,6 +32,7 @@ export class ScannerPage implements OnInit, OnDestroy {
   public products: ShoppingListItem[] = [];
   public noProductFound: boolean = false;
   public fromSearch: boolean = false;
+  public isZebraDevice: boolean = false;
   private readonly simpleLoader: LoadingService;
   private readonly scanClicks: Subject<any> = new Subject();
   private scanSubscription: Subscription;
@@ -44,6 +45,19 @@ export class ScannerPage implements OnInit, OnDestroy {
     private readonly scannerService: ScannerService
   ) {
     this.simpleLoader = this.loadingService.createLoader();
+    this.checkDeviceType();
+  }
+
+  private checkDeviceType(): void {
+    try {
+      // @ts-ignore
+      if (window.Android) {
+        this.isZebraDevice = (window as any).Android.isRunningOnZebraDevice();
+      }
+    } catch (error) {
+      console.error('Error checking device type:', error);
+      this.isZebraDevice = false;
+    }
   }
 
   public ngOnInit(): void {
@@ -74,7 +88,11 @@ export class ScannerPage implements OnInit, OnDestroy {
   }
 
   public clickCb(): void {
-    this.scanClicks.next();
+    // this.scanClicks.next();
+    // this.scannerService.onBarcodeScan("3284601671",false)
+    //at first pass undefined
+    this.scannerService.scan(undefined, undefined);
+    window.ozone.openScanner();
   }
 
   public onSearched($event: any): void {

@@ -120,7 +120,9 @@ export class ShoppingListsProvider {
             sellinG_UNIT: element.selling_unit,
             yourcost: element.price,
             qtY_ROUND_OPTION: element.qty_round_option,
-            shelF_PACK: element.shelf_pack
+            shelF_PACK: element.shelf_pack,
+            discontinueD_REASON_CODE: element.discontinued_reason_code,
+            discontinueD_REASON: element.discontinued_reason
           } as Product,
           program_number: element.program_no,
           item_price: typeof element.price === 'string' ? parseFloat(element.price) : element.price,
